@@ -1,0 +1,62 @@
+/* =========================
+   Card mais compacto
+   ========================= */
+:host ::ng-deep .cs-card-tight .p-card-body {
+  padding: 0.55rem 0.65rem 0.65rem; /* menos espaço em cima */
+}
+
+:host ::ng-deep .cs-card-tight .p-card-content {
+  padding: 0;
+}
+
+/* =========================
+   Form: tira "folga" do topo e controla gaps
+   ========================= */
+.cs-form-tight {
+  margin: 0; /* sem margem extra */
+  padding-top: 0.15rem; /* cola mais no topo do card */
+}
+
+/* ROW: controla espaçamento entre colunas e entre linhas */
+.cs-row-gap {
+  row-gap: 0.4rem; /* espaço vertical (evita linhas coladas) */
+}
+
+/* Colunas: reduz padding padrão do grid */
+.cs-col {
+  padding: 0.15rem !important;
+}
+
+/* Campo: remove “gordura” interna */
+.cs-field {
+  margin: 0;
+}
+
+/* =========================
+   Inputs/Select compactos
+   ========================= */
+:host ::ng-deep .p-inputtext.p-inputtext-sm {
+  height: 2rem !important;
+  padding: 0.25rem 0.5rem !important;
+  font-size: 0.8rem !important;
+}
+
+:host ::ng-deep .p-select.p-select-sm,
+:host ::ng-deep .p-multiselect.p-multiselect-sm {
+  min-height: 2rem !important;
+  font-size: 0.8rem !important;
+}
+
+/* FloatLabel mais compacto (label menor e sem "folga") */
+:host ::ng-deep .p-float-label > label {
+  font-size: 0.75rem;
+  line-height: 1;
+}
+
+/* Actions mais alinhado e com respiro controlado */
+.cs-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  padding-top: 0.35rem;
+}

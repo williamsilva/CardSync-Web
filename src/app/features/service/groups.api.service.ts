@@ -1,0 +1,70 @@
+import { HttpClient } from '@angular/common/http';
+import { Injectable, inject } from '@angular/core';
+
+import { map } from 'rxjs/operators';
+
+import { API } from '@core/api/api.config';
+import { HalPagedResponse } from '@core/api/page.model';
+import { GroupsAdvancedFilters } from '@features/filter/groups.filters';
+import { ListQueryDto } from '@shared/features/list-query/list-query.types';
+import {
+  GroupModel,
+  GroupApiModel,
+  GroupCreateInput,
+  GroupUpdateInput,
+  GroupPermissionsInput,
+  GroupUsersInput,
+  mapGroupApiModel,
+  mapGroupApiModels,
+} from '@models/groups.models';
+
+@Injectable({ providedIn: 'root' })
+export class GroupsApiService {
+  private readonly http = inject(HttpClient);
+  private readonly baseUrl = `${API.bff}/v1/groups`;
+
+  searchPaged(body: ListQueryDto<GroupsAdvancedFilters>) {
+    return this.http.post<HalPagedResponse<GroupApiModel>>(`${this.baseUrl}/search`, body).pipe(
+      map((res) => {
+        const content = mapGroupApiModels(res?._embedded?.content);
+        return {
+          ...res,
+          _embedded: {
+            ...(res?._embedded ?? {}),
+            content,
+          },
+        } as HalPagedResponse<GroupModel>;
+      }),
+    );
+  }
+
+  getAll() {
+    return this.http
+      .get<GroupApiModel[]>(`${this.baseUrl}/options`, { withCredentials: true })
+      .pipe(map((res) => mapGroupApiModels(Array.isArray(res) ? res : [])));
+  }
+
+  getById(id: string) {
+    return this.http.get<GroupApiModel>(`${this.baseUrl}/${id}`).pipe(map(mapGroupApiModel));
+  }
+
+  create(input: GroupCreateInput) {
+    return this.http.post<GroupApiModel>(`${this.baseUrl}`, input).pipe(map(mapGroupApiModel));
+  }
+
+  update(id: string, input: GroupUpdateInput) {
+    return this.http.put<GroupApiModel>(`${this.baseUrl}/${id}`, input).pipe(map(mapGroupApiModel));
+  }
+
+  delete(id: string) {
+    return this.http.delete<void>(`${this.baseUrl}/${id}`);
+  }
+
+  updatePermissions(id: string, input: GroupPermissionsInput) {
+    return this.http.put<GroupApiModel>(`${this.baseUrl}/${id}/permissions`, input).pipe(map(mapGroupApiModel));
+  }
+
+  updateUsers(id: string, input: GroupUsersInput) {
+    return this.http.put<GroupApiModel>(`${this.baseUrl}/${id}/users`, input).pipe(map(mapGroupApiModel));
+  }
+}

@@ -1,0 +1,102 @@
+<aside class="sidebar cs-glass">
+  <a class="sidebar-brand" [routerLink]="'/dashboard'" aria-label="CardSync">
+    <img [src]="brand.markUrl" alt="CardSync" class="sidebar-brand-logo" />
+    <div class="sidebar-brand-text">
+      <div class="sidebar-brand-name">CardSync</div>
+      <div class="sidebar-brand-sub">{{ 'topbar.brandSub' | translate }}</div>
+    </div>
+  </a>
+
+  <nav class="nav">
+    <ng-container *ngFor="let item of menu(); trackBy: trackByLabelKey">
+      <a
+        *ngIf="item.route"
+        class="nav-item"
+        [routerLink]="item.route"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: item.exact ?? false }"
+      >
+        <i
+          class="nav-icon"
+          [class]="
+            isActive(item)
+              ? 'pi pi-map-marker nav-icon nav-icon-active-bounce'
+              : item.icon + ' nav-icon'
+          "
+        ></i>
+
+        <span class="nav-label">{{ item.labelKey | translate }}</span>
+      </a>
+
+      <div *ngIf="!item.route && item.children?.length" class="nav-group">
+        <button
+          type="button"
+          class="nav-group-title"
+          [class.active]="hasActiveChild(item)"
+          (click)="toggleGroup(item)"
+        >
+          <span class="nav-group-left">
+            <i class="nav-icon" [class]="item.icon + ' nav-icon'"></i>
+            <span class="nav-label">{{ item.labelKey | translate }}</span>
+          </span>
+
+          <i
+            class="pi nav-group-chevron"
+            [ngClass]="isExpanded(item) ? 'pi-chevron-down' : 'pi-chevron-right'"
+          ></i>
+        </button>
+
+        <div *ngIf="isExpanded(item)" class="nav-children">
+          <a
+            *ngFor="let child of item.children; trackBy: trackByLabelKey"
+            class="nav-item child"
+            [routerLink]="child.route!"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: child.exact ?? false }"
+          >
+            <i
+              class="nav-icon"
+              [class]="
+                isActive(child)
+                  ? 'pi pi-map-marker nav-icon nav-icon-active-bounce'
+                  : child.icon + ' nav-icon'
+              "
+            ></i>
+
+            <span class="nav-label">{{ child.labelKey | translate }}</span>
+          </a>
+        </div>
+      </div>
+    </ng-container>
+  </nav>
+
+  <div class="sidebar-profile">
+    <div class="profile-card">
+      <div class="avatar">
+        <span class="avatar-text">{{ initials() }}</span>
+      </div>
+
+      <div class="profile-info">
+        <div
+          class="profile-name"
+          [title]="me()?.name || me()?.email || ('sidebar.userFallback' | translate)"
+        >
+          {{ me()?.name || me()?.email || ('sidebar.userFallback' | translate) }}
+        </div>
+      </div>
+
+      <button
+        pButton
+        type="button"
+        showDelay="300"
+        appendTo="body"
+        (click)="logout()"
+        icon="pi pi-sign-out"
+        tooltipPosition="left"
+        [pTooltip]="'sidebar.logout' | translate"
+        class="p-button-rounded p-button-text logout"
+        [attr.aria-label]="'sidebar.logout' | translate"
+      ></button>
+    </div>
+  </div>
+</aside>

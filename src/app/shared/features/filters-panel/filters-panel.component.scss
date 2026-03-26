@@ -1,0 +1,26 @@
+/* Popover ERP técnico */
+.cs-filter-popover {
+  box-shadow: none !important;
+  border: 1px solid var(--surface-border);
+  background: var(--surface-ground);
+  border-radius: 0;
+}
+
+/* Truncate elegante */
+.truncate-value {
+  max-width: 160px; /* ajuste conforme desejar */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cs-filters-header-click {
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.15s ease;
+}
+
+.cs-filters-header-click:hover {
+  background: var(--surface-100);
+  border-radius: 8px;
+}

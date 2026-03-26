@@ -1,0 +1,13 @@
+<app-topbar class="topbar-wrapper"></app-topbar>
+
+<div class="shell" [class.sidebar-collapsed]="!sidebarVisible()">
+  <app-sidebar *ngIf="sidebarVisible()" class="sidebar-host"></app-sidebar>
+
+  <main class="content">
+    <div class="content-inner cs-glass">
+      <router-outlet></router-outlet>
+    </div>
+  </main>
+</div>
+
+<app-footer class="footer-fixed" [class.sidebar-collapsed]="!sidebarVisible()"></app-footer>

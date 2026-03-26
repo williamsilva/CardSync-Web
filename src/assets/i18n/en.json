@@ -1,0 +1,480 @@
+{
+  "app": {
+    "name": "CardSync"
+  },
+  "routes": {
+    "users": {
+      "title": "Users"
+    },
+    "groups": {
+      "title": "Groups"
+    },
+    "audit": {
+      "title": "Email Logs"
+    },
+    "companies": {
+      "title": "Companies"
+    },
+    "dashboard": {
+      "title": "Dashboard"
+    },
+    "accountMe": {
+      "title": "My account"
+    },
+    "forbidden": {
+      "title": "Access denied"
+    },
+    "accountProfile": {
+      "title": "My Account"
+    },
+    "companiesNew": {
+      "title": "New company"
+    },
+    "accountPassword": {
+      "title": "Change password"
+    },
+    "groupDetail": {
+      "title": "Group detail"
+    }
+  },
+  "topbar": {
+    "online": "Online",
+    "brandName": "CardSync",
+    "brandSub": "Simplified Reconciliation",
+    "sidebarToggleAria": "Show/hide menu",
+    "sidebarShowTooltip": "Show menu",
+    "sidebarHideTooltip": "Hide menu",
+    "themeToggleAria": "Toggle theme",
+    "langAria": "Select language",
+    "sessionExpired": "Session expired",
+    "sessionExpireTooltip": "Session expires due to inactivity",
+    "sessionExpiredTooltip": "Please log in again"
+  },
+  "menu": {
+    "me": "My account",
+    "companies": "Companies",
+    "dashboard": "Dashboard",
+    "audit": {
+      "title": "Audit",
+      "mail": "Email Logs"
+    },
+    "security": {
+      "title": "Security",
+      "groups": "Groups",
+      "users": "Users",
+      "myAccount": "My Account",
+      "changePassword": "Change Password"
+    }
+  },
+  "sidebar": {
+    "userFallback": "User",
+    "logout": "Sign out"
+  },
+  "breadcrumb": {
+    "users": "Users",
+    "groups": "Groups",
+    "dashboard": "Dashboard",
+    "audit": {
+      "emailLog": "Email Logs"
+    }
+  },
+  "footer": {
+    "copyright": "CardSync Tech",
+    "madeWith": "All rights reserved."
+  },
+  "filters": {
+    "activeCount": "{count, plural, =0 {No active filters} one {# active filter} other {# active filters}}",
+    "noneActive": "No active filters"
+  },
+  "pagination": {
+    "report": "Showing '{first}' to '{last}' of '{totalRecords}' records"
+  },
+  "validation": {
+    "invalid": "Invalid value",
+    "required": "Required",
+    "minLength": "Minimum {requiredLength} characters",
+    "maxLength": "Maximum {requiredLength} characters",
+    "email": "Invalid email",
+    "pattern": "Invalid format",
+    "min": "Minimum value is {min}",
+    "max": "Maximum value is {max}",
+    "uuid": "Invalid identifier",
+    "document": "Invalid document",
+    "passwordPolicy": "Password does not meet policy requirements",
+    "server": "{message}"
+  },
+  "users": {
+    "newUser": "New User",
+    "subtitle": "Manage users, statuses, and invitations",
+    "new": {
+      "title": "New user",
+      "subtitle": "User registration"
+    },
+    "edit": {
+      "title": "Edit user",
+      "subtitle": "User editing"
+    },
+    "fields": {
+      "name": "Name",
+      "status": "Status",
+      "groups": "Groups",
+      "userName": "User",
+      "document": "Document",
+      "createdAt": "Created at",
+      "lastLoginAt": "Last login",
+      "blockedUntil": "Blocked until",
+      "passwordExpiresAt": "Password expires"
+    },
+    "columns": {
+      "name": "Name",
+      "status": "Status",
+      "userName": "Username",
+      "document": "Document",
+      "createdAt": "Created at",
+      "lastLoginAt": "Last login",
+      "blockedUntil": "Blocked until",
+      "passwordExpiresAt": "Password expires"
+    },
+    "form": {
+      "loadError": "Could not load user data",
+      "saveError": "Could not save the user.",
+      "created": "User created successfully.",
+      "updated": "User updated successfully",
+      "resend": {
+        "button": "Resend password email",
+        "header": "Resend email",
+        "message": "Do you want to resend the password setup email?",
+        "sent": "Email sent successfully.",
+        "error": "Could not resend the email.",
+        "todoServer": "Feature pending on the server."
+      }
+    },
+    "status": {
+      "null": "N/A",
+      "active": "Active",
+      "inactive": "Inactive",
+      "blocked": "Blocked",
+      "disabled": "Disabled",
+      "pending_password": "Pending password",
+      "unknown": "Unknown"
+    },
+    "invite": {
+      "resend": "Resend invitation",
+      "resent": "Invitation resent successfully.",
+      "resendError": "Could not resend the invitation."
+    },
+    "delete": {
+      "header": "Confirm deletion",
+      "success": "User deactivated successfully",
+      "message": "Do you want to delete user {userName}?"
+    },
+    "activate": {
+      "header": "Confirm activation",
+      "selected": "Activate selected",
+      "successSingle": "User activated successfully.",
+      "successBulk": "{count, plural, one {# user activated successfully.} other {# users activated successfully.}}",
+      "messageSingle": "Do you want to activate user {userName}?",
+      "messageBulk": "{count, plural, one {Do you want to activate # selected user?} other {Do you want to activate # selected users?}}"
+    },
+    "deactivate": {
+      "header": "Confirm deactivation",
+      "selected": "Deactivate selected",
+      "successSingle": "User deactivated successfully.",
+      "successBulk": "{count, plural, one {# user deactivated successfully.} other {# users deactivated successfully.}}",
+      "messageSingle": "Do you want to deactivate user {userName}?",
+      "messageBulk": "{count, plural, one {Do you want to deactivate # selected user?} other {Do you want to deactivate # selected users?}}"
+    },
+    "selection": {
+      "currentMode": "Selection mode",
+      "count": "{count, plural, =0 {None selected} one {# selected} other {# selected}}",
+      "pickOneFirst": "First select an eligible user to define the selection context.",
+      "mode": {
+        "none": "None",
+        "activate": "Bulk activation",
+        "deactivate": "Bulk deactivation"
+      }
+    },
+    "action": {
+      "activate": {
+        "label": "Activate",
+        "noPermission": "You do not have permission to activate users.",
+        "protected": "Protected user cannot be activated by this action.",
+        "invalidStatus": "Only inactive users can be activated."
+      },
+      "deactivate": {
+        "label": "Deactivate",
+        "noPermission": "You do not have permission to deactivate users.",
+        "self": "You cannot deactivate your own user.",
+        "protected": "Protected user cannot be deactivated.",
+        "invalidStatus": "Only active users can be deactivated."
+      }
+    },
+    "empty": {
+      "title": "No users found"
+    }
+  },
+  "accountPassword": {
+    "title": "Change password",
+    "currentPassword": "Current password",
+    "newPassword": "New password",
+    "confirmPassword": "Confirm new password",
+    "passwordMismatch": "Passwords must match.",
+    "policyTitle": "Password policy",
+    "submit": "Save password",
+    "successTitle": "Password changed",
+    "successMessage": "Your password was updated successfully.",
+    "footer": "© 2026 CardSync • All rights reserved",
+    "formSubtitle": "Enter your current password and define a new secure password.",
+    "policySubtitle": "The password must meet the security rules below.",
+    "formSectionTitle": "Change details",
+    "userFallback": "User",
+    "usernameFallback": "No username",
+    "summary": {
+      "rules": "Rules",
+      "strength": "Strength",
+      "valid": "Valid rules",
+      "invalid": "Invalid rules",
+      "minLength": "Minimum length"
+    },
+    "strength": {
+      "title": "Password strength",
+      "empty": "Not provided",
+      "weak": "Weak",
+      "medium": "Medium",
+      "strong": "Strong",
+      "rulesSatisfied": "rules satisfied"
+    }
+  },
+  "profile": {
+    "title": "Profile",
+    "subtitle": "View your profile and registration data.",
+    "card": {
+      "userData": "User data",
+      "groups": "Groups",
+      "permissions": "Permissions",
+      "groupsSubtitle": "Organizational profiles linked to the user.",
+      "permissionsSubtitle": "Access available to the authenticated user."
+    },
+    "section": {
+      "identification": "Identification",
+      "security": "Security",
+      "audit": "Audit"
+    },
+    "field": {
+      "id": "ID",
+      "name": "Name",
+      "username": "Username",
+      "document": "Document",
+      "status": "Status",
+      "blocked": "Blocked",
+      "blockedUntil": "Blocked until",
+      "password": "Password",
+      "passwordExpires": "Password expires in",
+      "issuer": "Issuer",
+      "createdAt": "Created at",
+      "lastLogin": "Last login",
+      "groups": "Groups",
+      "permissions": "Permissions"
+    },
+    "button": {
+      "changePassword": "Change password"
+    },
+    "fallback": {
+      "noName": "Unnamed user",
+      "noUsername": "Username not provided"
+    },
+    "items": "{count, plural, =0 {0 items} one {# item} other {# items}}",
+    "empty": {
+      "groups": "No groups provided.",
+      "permissions": "No permissions found."
+    },
+    "loading": "Please wait while we load your profile data.",
+    "error": "Could not load profile."
+  },
+  "session": {
+    "expiring": {
+      "title": "Session is about to expire",
+      "body": "Your session will expire due to inactivity in",
+      "hint": "Click “Renew” to continue without reloading the page."
+    },
+    "expired": {
+      "title": "Session expired",
+      "body": "Your session has expired due to inactivity.",
+      "hint": "To continue, please log in again."
+    }
+  },
+  "common": {
+    "yes": "Yes",
+    "no": "No",
+    "save": "Save",
+    "back": "Back",
+    "cancel": "Cancel",
+    "clear": "Clear",
+    "search": "Search",
+    "new": "New",
+    "activate": "Activate",
+    "deactivate": "Deactivate",
+    "update": "Refresh",
+    "loading": "Loading...",
+    "filter": "Filter",
+    "all": "All",
+    "edit": "Edit",
+    "delete": "Delete",
+    "actions": "Actions",
+    "error": "Error",
+    "success": "Success",
+    "info": "Information",
+    "logout": "Sign out",
+    "notNow": "Not now",
+    "renewSession": "Renew session",
+    "goToLogin": "Go to login",
+    "warning": "Warning",
+    "correlationId": "Correlation ID",
+    "view": "View",
+    "notInformed": "Not informed"
+  },
+  "confirm": {
+    "logoutTitle": "End session",
+    "logoutMessage": "Do you really want to sign out of CardSync?"
+  },
+  "notifications": {
+    "welcome": "Hello, {name}!",
+    "itemsCount": "{count, plural, =0 {No items} one {# item} other {# items}}"
+  },
+  "errors": {
+    "global": {
+      "GENERIC_ERROR": "An unexpected error occurred. Please try again.",
+      "NETWORK_ERROR": "Could not connect to the server.",
+      "ACCESS_DENIED": "You do not have permission to perform this action.",
+      "SESSION_EXPIRED": "Your session has expired. Please log in again.",
+      "VALIDATION_ERROR": "Some fields need to be corrected.",
+      "USER_DOCUMENT_ALREADY_EXISTS": "A user with this document already exists.",
+      "USER_USERNAME_ALREADY_EXISTS": "A user with this username already exists.",
+      "USER_DELETE_SELF_NOT_ALLOWED": "You cannot delete your own user.",
+      "USER_DELETE_PROTECTED_NOT_ALLOWED": "This user is protected and cannot be deleted.",
+      "NOT_FOUND": "Resource not found.",
+      "INTERNAL_ERROR": "An internal error occurred. Please try again.",
+      "GROUP_NAME_ALREADY_EXISTS": "A group with this name already exists.",
+      "GROUP_DELETE_SUPPORT_NOT_ALLOWED": "The SUPPORT group cannot be deleted or changed in this operation.",
+      "GROUP_DELETE_IN_USE": "This group has associated users and cannot be deleted.",
+      "PERMISSION_NOT_FOUND": "One or more informed permissions were not found."
+    },
+    "fields": {
+      "*": {
+        "required": "{label} is required.",
+        "minLength": "{label} must be at least {requiredLength} characters.",
+        "maxLength": "{label} must be at most {requiredLength} characters.",
+        "min": "{label} must be at least {min}.",
+        "max": "{label} must be at most {max}.",
+        "email": "{label} is invalid.",
+        "pattern": "{label} has an invalid format.",
+        "invalid": "{label} is invalid.",
+        "passwordMismatch": "Passwords must match."
+      }
+    }
+  },
+  "groups": {
+    "newGroup": "New Group",
+    "subtitle": "Manage groups and access permissions",
+    "new": {
+      "title": "New group",
+      "subtitle": "Group registration"
+    },
+    "edit": {
+      "title": "Edit group",
+      "subtitle": "Group editing"
+    },
+    "fields": {
+      "name": "Name",
+      "description": "Description"
+    },
+    "columns": {
+      "name": "Name",
+      "description": "Description"
+    },
+    "form": {
+      "loadError": "Could not load group data.",
+      "saveError": "Could not save the group.",
+      "created": "Group created successfully.",
+      "updated": "Group updated successfully.",
+      "permissionDenied": "You do not have permission to save groups."
+    },
+    "empty": {
+      "title": "No groups found"
+    },
+    "action": {
+      "create": {
+        "noPermission": "You do not have permission to create groups."
+      },
+      "edit": {
+        "noPermission": "You do not have permission to edit groups."
+      },
+      "delete": {
+        "noPermission": "You do not have permission to delete groups."
+      }
+    },
+    "detail": {
+      "title": "Group detail",
+      "subtitle": "Group summary, permissions and users",
+      "tabs": {
+        "summary": "Summary",
+        "permissions": "Permissions",
+        "users": "Users"
+      },
+      "permissions": {
+        "title": "Permissions",
+        "subtitle": "Associate or remove permissions from this group.",
+        "placeholder": "Select permissions",
+        "saved": "Permissions updated successfully.",
+        "saveError": "Could not save group permissions.",
+        "empty": "No associated permissions."
+      },
+      "users": {
+        "title": "Users",
+        "subtitle": "Associate or remove users from this group.",
+        "placeholder": "Select users",
+        "saved": "Users updated successfully.",
+        "saveError": "Could not save group users.",
+        "empty": "No associated users."
+      }
+    },
+    "delete": {
+      "header": "Delete group",
+      "message": "Do you really want to delete the group {groupName}?",
+      "success": "Group deleted successfully."
+    }
+  },
+  "audit": {
+    "emailLog": {
+      "subtitle": "Manage email logs",
+      "fields": {
+        "recipient": "Recipient",
+        "subject": "Subject",
+        "template": "Template",
+        "status": "Status",
+        "sentAt": "Sent on",
+        "eventType": "Event Type"
+      },
+      "columns": {
+        "recipient": "Recipient",
+        "subject": "Subject",
+        "template": "Template",
+        "status": "Status",
+        "sentAt": "Sent on",
+        "eventType": "Event Type",
+        "errorMessage": "Error"
+      },
+      "status": {
+        "sent" : "Sent",
+        "failed" : "Sending failed"
+      },
+      "eventType": {
+        "firstPassword" : "Initial password",
+        "passwordReset" : "Password reset"
+      },
+      "empty": {
+        "title": "No log found"
+      }
+    }
+  }
+}

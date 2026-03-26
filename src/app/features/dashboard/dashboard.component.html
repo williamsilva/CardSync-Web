@@ -1,0 +1,57 @@
+<div class="dashboard">
+  <div class="dashboard-header">
+    <h2>Dashboard</h2>
+    <span>{{ today | date: 'fullDate' }}</span>
+  </div>
+
+  <!-- métricas -->
+  <div class="stats-grid">
+    <p-card *ngFor="let stat of stats()" class="stat-card">
+      <div class="stat-content">
+        <div class="stat-icon" [style.background]="stat.color + '20'" [style.color]="stat.color">
+          <i [class]="stat.icon"></i>
+        </div>
+
+        <div class="stat-text">
+          <div class="stat-value">
+            {{ stat.value }}
+          </div>
+
+          <div class="stat-label">
+            {{ stat.label }}
+          </div>
+        </div>
+      </div>
+    </p-card>
+  </div>
+
+  <!-- gráfico -->
+  <div class="chart-row">
+    <p-card header="Conciliações da Semana">
+      <p-chart type="line" [data]="chartData()" [options]="chartOptions()"> </p-chart>
+    </p-card>
+  </div>
+
+  <!-- atividades -->
+  <div class="activity-row">
+    <p-card header="Atividades Recentes">
+      <p-table [value]="activities()" [rows]="5" responsiveLayout="scroll">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Usuário</th>
+            <th>Ação</th>
+            <th>Horário</th>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-row>
+          <tr>
+            <td>{{ row.user }}</td>
+            <td>{{ row.action }}</td>
+            <td>{{ row.time }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </p-card>
+  </div>
+</div>

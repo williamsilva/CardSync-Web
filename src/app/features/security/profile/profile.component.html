@@ -1,0 +1,430 @@
+<div class="p-4 md:p-6">
+  <div class="mb-5">
+    <h1 class="text-2xl md:text-3xl font-semibold m-0">
+      {{ 'profile.title' | translate }}
+    </h1>
+
+    <p class="m-0 mt-2 text-sm opacity-70">
+      {{ 'profile.subtitle' | translate }}
+    </p>
+  </div>
+
+  <ng-container *ngIf="!loading() && profile() as p; else stateTpl">
+    <div class="grid">
+      <!-- HERO -->
+      <div class="col-12 lg:col-4">
+        <p-card class="h-full cs-profile-card">
+          <div class="cs-profile-hero">
+            <div class="cs-avatar cs-avatar-lg shadow-3">
+              <div class="cs-avatar-ring"></div>
+
+              <span class="cs-avatar-text cs-avatar-text-lg">
+                {{ initials(p.name || p.username || '?') }}
+              </span>
+            </div>
+
+            <div class="cs-profile-name">
+              {{ p.name || ('profile.fallback.noName' | translate) }}
+            </div>
+
+            <div class="cs-profile-username">
+              {{ p.username || ('profile.fallback.noUsername' | translate) }}
+            </div>
+
+            <div class="cs-profile-userid">
+              {{ 'profile.field.id' | translate }}:
+              {{ fmtValue(p.userId) }}
+            </div>
+
+            <div class="cs-profile-tags">
+              <p-tag
+                [value]="statusLabel(p.userDetails?.status)"
+                [severity]="statusSeverity(p.userDetails?.status)"
+              ></p-tag>
+            </div>
+          </div>
+
+          <!-- metrics -->
+          <div class="cs-profile-metrics-list">
+            <!-- groups -->
+            <div class="cs-permission-chip-card is-groups">
+              <span class="cs-permission-chip-index">1</span>
+
+              <div class="cs-permission-chip-content">
+                <span class="cs-permission-chip-text">
+                  {{ 'profile.field.groups' | translate }}
+                </span>
+
+                <span class="cs-permission-chip-raw">
+                  <p-badge
+                    class="ml-2"
+                    severity="info"
+                    [value]="'profile.items' | translate: { count: groups().length }"
+                  ></p-badge>
+                </span>
+              </div>
+            </div>
+
+            <!-- permissions -->
+            <div class="cs-permission-chip-card is-users">
+              <span class="cs-permission-chip-index">2</span>
+
+              <div class="cs-permission-chip-content">
+                <span class="cs-permission-chip-text">
+                  {{ 'profile.field.permissions' | translate }}
+                </span>
+
+                <span class="cs-permission-chip-raw">
+                  <p-badge
+                    class="ml-2"
+                    severity="warn"
+                    [value]="'profile.items' | translate: { count: authorities().length }"
+                  ></p-badge>
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <p-divider></p-divider>
+
+          <button
+            pButton
+            type="button"
+            class="w-full"
+            icon="pi pi-lock"
+            [label]="'profile.button.changePassword' | translate"
+            routerLink="/account/password"
+          ></button>
+        </p-card>
+      </div>
+
+      <!-- DATA -->
+      <div class="col-12 lg:col-8">
+        <p-card class="h-full cs-card-compact cs-data-card">
+          <ng-template pTemplate="title">
+            {{ 'profile.card.userData' | translate }}
+          </ng-template>
+
+          <div class="cs-data-sections">
+            <!-- IDENTIFICATION -->
+            <section class="cs-data-section">
+              <div class="cs-section-title">
+                {{ 'profile.section.identification' | translate }}
+              </div>
+
+              <div class="cs-permissions-chip-grid">
+                <div class="cs-permission-chip-card is-default">
+                  <span class="cs-permission-chip-index">1</span>
+
+                  <div class="cs-permission-chip-content">
+                    <span class="cs-permission-chip-text">
+                      {{ 'profile.field.name' | translate }}
+                    </span>
+
+                    <span class="cs-permission-chip-raw">
+                      {{ fmtValue(p.userDetails?.name || p.name) }}
+                    </span>
+                  </div>
+                </div>
+
+                <div class="cs-permission-chip-card is-default">
+                  <span class="cs-permission-chip-index">2</span>
+
+                  <div class="cs-permission-chip-content">
+                    <span class="cs-permission-chip-text">
+                      {{ 'profile.field.username' | translate }}
+                    </span>
+
+                    <span class="cs-permission-chip-raw">
+                      {{ fmtValue(p.userDetails?.userName || p.username) }}
+                    </span>
+                  </div>
+                </div>
+
+                <div class="cs-permission-chip-card is-default">
+                  <span class="cs-permission-chip-index">3</span>
+
+                  <div class="cs-permission-chip-content">
+                    <span class="cs-permission-chip-text">
+                      {{ 'profile.field.document' | translate }}
+                    </span>
+
+                    <span class="cs-permission-chip-raw">
+                      {{ documentMask(p.userDetails?.document) }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <!-- SECURITY -->
+            <section class="cs-data-section">
+              <div class="cs-section-title">
+                {{ 'profile.section.security' | translate }}
+              </div>
+
+              <div class="cs-permissions-chip-grid">
+                <div class="cs-permission-chip-card is-users">
+                  <span class="cs-permission-chip-index">1</span>
+
+                  <div class="cs-permission-chip-content">
+                    <span class="cs-permission-chip-text">
+                      {{ 'profile.field.status' | translate }}
+                    </span>
+
+                    <span class="cs-permission-chip-raw">
+                      {{ statusLabel(p.userDetails?.status) }}
+                    </span>
+                  </div>
+                </div>
+
+                <div class="cs-permission-chip-card is-users">
+                  <span class="cs-permission-chip-index">2</span>
+
+                  <div class="cs-permission-chip-content">
+                    <span class="cs-permission-chip-text">
+                      {{ 'profile.field.blocked' | translate }}
+                    </span>
+
+                    <span class="cs-permission-chip-raw">
+                      {{ blockedStateLabel(p.userDetails?.blockedUntil) }}
+                    </span>
+                  </div>
+                </div>
+
+                <div class="cs-permission-chip-card is-users">
+                  <span class="cs-permission-chip-index">3</span>
+
+                  <div class="cs-permission-chip-content">
+                    <span class="cs-permission-chip-text">
+                      {{ 'profile.field.blockedUntil' | translate }}
+                    </span>
+
+                    <span class="cs-permission-chip-raw">
+                      {{ fmtDateTime(p.userDetails?.blockedUntil) }}
+                    </span>
+                  </div>
+                </div>
+
+                <div class="cs-permission-chip-card is-support">
+                  <span class="cs-permission-chip-index">4</span>
+
+                  <div class="cs-permission-chip-content">
+                    <span class="cs-permission-chip-text">
+                      {{ 'profile.field.password' | translate }}
+                    </span>
+
+                    <span class="cs-permission-chip-raw">
+                      {{ passwordExpiryLabel(p.userDetails?.passwordExpiresAt) }}
+                    </span>
+                  </div>
+                </div>
+
+                <div class="cs-permission-chip-card is-support">
+                  <span class="cs-permission-chip-index">5</span>
+
+                  <div class="cs-permission-chip-content">
+                    <span class="cs-permission-chip-text">
+                      {{ 'profile.field.passwordExpires' | translate }}
+                    </span>
+
+                    <span class="cs-permission-chip-raw">
+                      {{ fmtDateTime(p.userDetails?.passwordExpiresAt) }}
+                    </span>
+                  </div>
+                </div>
+
+                <div class="cs-permission-chip-card is-default">
+                  <span class="cs-permission-chip-index">6</span>
+
+                  <div class="cs-permission-chip-content">
+                    <span class="cs-permission-chip-text">
+                      {{ 'profile.field.issuer' | translate }}
+                    </span>
+
+                    <span class="cs-permission-chip-raw">
+                      {{ fmtValue(p.iss) }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <!-- AUDIT -->
+            <section class="cs-data-section">
+              <div class="cs-section-title">
+                {{ 'profile.section.audit' | translate }}
+              </div>
+
+              <div class="cs-permissions-chip-grid">
+                <div class="cs-permission-chip-card is-default">
+                  <span class="cs-permission-chip-index">1</span>
+
+                  <div class="cs-permission-chip-content">
+                    <span class="cs-permission-chip-text">
+                      {{ 'profile.field.createdAt' | translate }}
+                    </span>
+
+                    <span class="cs-permission-chip-raw">
+                      {{ fmtDateTime(p.userDetails?.createdAt) }}
+                    </span>
+                  </div>
+                </div>
+
+                <div class="cs-permission-chip-card is-default">
+                  <span class="cs-permission-chip-index">2</span>
+
+                  <div class="cs-permission-chip-content">
+                    <span class="cs-permission-chip-text">
+                      {{ 'profile.field.lastLogin' | translate }}
+                    </span>
+
+                    <span class="cs-permission-chip-raw">
+                      {{ fmtDateTime(p.userDetails?.lastLoginAt) }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+        </p-card>
+      </div>
+
+      <!-- GROUPS -->
+      <div class="col-12 lg:col-5">
+        <p-card class="h-full">
+          <ng-template pTemplate="title">
+            <div class="flex items-center justify-between gap-3">
+              <span>
+                {{ 'profile.card.groups' | translate }}
+              </span>
+
+              <div class="flex items-center gap-2">
+                <p-badge
+                  severity="info"
+                  [value]="'profile.items' | translate: { count: groups().length }"
+                ></p-badge>
+              </div>
+            </div>
+          </ng-template>
+
+          <ng-template pTemplate="subtitle">
+            {{ 'profile.card.groupsSubtitle' | translate }}
+          </ng-template>
+
+          <div class="cs-permissions-chip-grid">
+            <div
+              *ngFor="let g of sortedGroups(groups()); let i = index"
+              class="cs-permission-chip-card"
+              [ngClass]="groupClass(g)"
+            >
+              <span class="cs-permission-chip-index">
+                {{ i + 1 }}
+              </span>
+
+              <div class="cs-permission-chip-content">
+                <span class="cs-permission-chip-text">
+                  {{ groupLabel(g) }}
+                </span>
+
+                <span class="cs-permission-chip-raw">
+                  {{ g }}
+                </span>
+              </div>
+            </div>
+
+            <span *ngIf="!groups().length" class="text-sm opacity-60">
+              {{ 'profile.empty.groups' | translate }}
+            </span>
+          </div>
+        </p-card>
+      </div>
+
+      <!-- PERMISSIONS -->
+      <div class="col-12 lg:col-7">
+        <p-card class="h-full">
+          <ng-template pTemplate="title">
+            <div class="flex items-center justify-between gap-3">
+              <span>
+                {{ 'profile.card.permissions' | translate }}
+              </span>
+
+              <div class="flex items-center gap-2">
+                <span class="text-sm opacity-70"> </span>
+
+                <p-badge
+                  severity="warn"
+                  [value]="'profile.items' | translate: { count: authorities().length }"
+                ></p-badge>
+              </div>
+            </div>
+          </ng-template>
+
+          <ng-template pTemplate="subtitle">
+            {{ 'profile.card.permissionsSubtitle' | translate }}
+          </ng-template>
+
+          <div class="cs-permissions-chip-grid">
+            <div
+              *ngFor="let a of sortedAuthorities(authorities()); let i = index"
+              class="cs-permission-chip-card"
+              [ngClass]="permissionClass(a)"
+            >
+              <span class="cs-permission-chip-index">
+                {{ i + 1 }}
+              </span>
+
+              <div class="cs-permission-chip-content">
+                <span class="cs-permission-chip-text">
+                  {{ permissionLabel(a) }}
+                </span>
+
+                <span class="cs-permission-chip-raw">
+                  {{ a }}
+                </span>
+              </div>
+            </div>
+
+            <span *ngIf="!authorities().length" class="text-sm opacity-60">
+              {{ 'profile.empty.permissions' | translate }}
+            </span>
+          </div>
+        </p-card>
+      </div>
+    </div>
+  </ng-container>
+
+  <!-- loading -->
+  <ng-template #stateTpl>
+    <p-card *ngIf="loading(); else errorTpl">
+      <ng-template pTemplate="title">
+        {{ 'profile.title' | translate }}
+      </ng-template>
+
+      <ng-template pTemplate="subtitle">
+        {{ 'profile.loading' | translate }}
+      </ng-template>
+
+      <div class="text-sm opacity-70">
+        {{ 'common.loading' | translate }}
+      </div>
+    </p-card>
+  </ng-template>
+
+  <!-- error -->
+  <ng-template #errorTpl>
+    <p-card>
+      <ng-template pTemplate="title">
+        {{ 'profile.title' | translate }}
+      </ng-template>
+
+      <ng-template pTemplate="subtitle">
+        {{ 'profile.error' | translate }}
+      </ng-template>
+
+      <div class="text-sm opacity-70">
+        {{ loadError() }}
+      </div>
+    </p-card>
+  </ng-template>
+</div>

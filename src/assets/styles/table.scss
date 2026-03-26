@@ -1,0 +1,232 @@
+/* =========================================================
+   CardSync — Ultra Compact Enterprise Table
+   PrimeNG 19 + Sakai compatible
+   ========================================================= */
+
+.cs-admin-table.p-datatable {
+  border: 1px solid var(--surface-border);
+  border-radius: 6px;
+  background: var(--surface-card);
+  overflow: visible;
+}
+
+/* =========================================================
+   TABLE LAYOUT
+   ========================================================= */
+
+.cs-admin-table .p-datatable-table {
+  table-layout: fixed;
+  width: 100%;
+}
+
+.cs-admin-table th,
+.cs-admin-table td {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.cs-admin-table .p-datatable-thead > tr {
+  height: 24px !important;
+}
+
+.cs-admin-table .p-datatable-thead > tr > th {
+  padding: 0.15rem 0.45rem !important;
+  font-size: 0.75rem !important;
+  height: 24px !important;
+  min-height: 24px !important;
+  vertical-align: middle !important;
+  border-right: 1px solid var(--surface-border) !important;
+  transition: background-color 0.15s ease;
+}
+
+.cs-admin-table .p-datatable-thead > tr > th:last-child {
+  border-right: 0 !important;
+}
+
+.cs-admin-table .p-datatable-thead > tr > th:hover {
+  background: rgba(255,255,255,0.04);
+}
+
+/* =========================================================
+   HEADER LAYOUT
+   ========================================================= */
+
+.cs-admin-table .th-flex {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.25rem;
+  height: 16px;
+  width: 100%;
+}
+
+.cs-admin-table .th-label {
+  flex: 1 1 auto;
+  font-weight: 500;
+}
+
+.cs-admin-table .th-icons {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.12rem;
+  flex: 0 0 auto;
+}
+
+/* =========================================================
+   SORT ICON (FORÇA REDUÇÃO REAL)
+   ========================================================= */
+
+.cs-admin-table .p-sortable-column-icon {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  width: 12px !important;
+  height: 12px !important;
+  min-width: 12px !important;
+  min-height: 12px !important;
+  opacity: 0.6;
+}
+
+.cs-admin-table .p-sortable-column-icon svg {
+  width: 12px !important;
+  height: 12px !important;
+}
+
+.cs-admin-table th:hover .p-sortable-column-icon {
+  opacity: 1;
+}
+
+/* =========================================================
+   FILTER BUTTON (MICRO)
+   ========================================================= */
+
+.cs-admin-table .p-column-filter-menu-button {
+  padding: 0 !important;
+  width: 18px !important;
+  height: 18px !important;
+  min-width: 18px !important;
+  min-height: 18px !important;
+  border-radius: 6px;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.cs-admin-table .p-column-filter-menu-button .p-button-icon {
+  font-size: 10px !important;
+  margin: 0 !important;
+}
+
+.cs-admin-table .p-datatable-thead > tr > th:hover
+.p-column-filter-menu-button {
+  opacity: 1;
+}
+
+/* =========================================================
+   BODY
+   ========================================================= */
+
+.cs-admin-table .p-datatable-tbody > tr {
+  height: 26px !important;
+}
+
+.cs-admin-table .p-datatable-tbody > tr > td {
+  padding: 0.25rem 0.45rem !important;
+  font-size: 0.82rem !important;
+  line-height: 1.05 !important;
+  border-right: 1px solid var(--surface-border) !important;
+  border-bottom: 1px solid var(--surface-border) !important;
+}
+
+.cs-admin-table .p-datatable-tbody > tr > td:last-child {
+  border-right: 0 !important;
+}
+
+.cs-admin-table .p-datatable-tbody > tr:last-child > td {
+  border-bottom: 0 !important;
+}
+
+/* Zebra leve */
+.cs-admin-table .p-datatable-tbody > tr:nth-child(even) > td {
+  background: color-mix(in srgb, var(--surface-100) 30%, transparent);
+}
+
+.cs-admin-table .p-datatable-tbody > tr:hover > td {
+  background: color-mix(in srgb, var(--surface-100) 55%, transparent);
+}
+
+/* =========================================================
+   TAG STATUS
+   ========================================================= */
+
+.cs-admin-table .p-tag {
+  padding: 0.05rem 0.35rem !important;
+  font-size: 0.70rem !important;
+  line-height: 1 !important;
+  border-radius: 999px;
+}
+
+/* =========================================================
+   ACTION BUTTONS (ULTRA COMPACT)
+   ========================================================= */
+
+.cs-admin-table .p-button.p-button-sm {
+  padding: 0 !important;
+  width: 24px !important;
+  height: 24px !important;
+  min-width: 24px !important;
+}
+
+.cs-admin-table .p-button .pi {
+  font-size: 0.75rem !important;
+}
+
+/* =========================================================
+   PAGINATOR
+   ========================================================= */
+
+.cs-admin-table .p-paginator {
+  padding: 0.3rem !important;
+  font-size: 0.78rem !important;
+  border-top: 1px solid var(--surface-border);
+}
+
+.cs-admin-table .p-paginator .p-paginator-page,
+.cs-admin-table .p-paginator .p-paginator-first,
+.cs-admin-table .p-paginator .p-paginator-prev,
+.cs-admin-table .p-paginator .p-paginator-next,
+.cs-admin-table .p-paginator .p-paginator-last {
+  min-width: 1.6rem !important;
+  height: 1.6rem !important;
+  padding: 0 !important;
+  border-radius: 8px;
+  transition: transform 120ms ease;
+}
+
+.cs-admin-table .p-paginator .p-paginator-page:hover,
+.cs-admin-table .p-paginator .p-paginator-first:hover,
+.cs-admin-table .p-paginator .p-paginator-prev:hover,
+.cs-admin-table .p-paginator .p-paginator-next:hover,
+.cs-admin-table .p-paginator .p-paginator-last:hover {
+  transform: translateY(-0.5px);
+}
+
+/* =========================================================
+   DARK MODE
+   ========================================================= */
+
+:root.dark .cs-admin-table .p-datatable-thead > tr > th {
+  background: color-mix(in srgb, var(--surface-800) 60%, transparent) !important;
+}
+
+:root.dark .cs-admin-table .p-datatable-tbody > tr:nth-child(even) > td {
+  background: color-mix(in srgb, var(--surface-900) 25%, transparent);
+}
+
+:root.dark .cs-admin-table .p-datatable-tbody > tr:hover > td {
+  background: color-mix(in srgb, var(--surface-900) 35%, transparent);
+}

@@ -1,0 +1,36 @@
+<div
+  *ngIf="visible() && resolvedMessage()"
+  class="cs-banner"
+  role="alert"
+  [attr.data-type]="inferredType()"
+>
+  <div class="left">
+    <div class="iconWrap" [attr.data-type]="inferredType()">
+      <i class="pi icon" [ngClass]="resolvedIcon()"></i>
+    </div>
+
+    <div class="text">
+      <div class="title">{{ resolvedTitle() }}</div>
+      <div class="msg">{{ resolvedMessage() }}</div>
+
+      <div class="metaRow" *ngIf="error?.correlationId">
+        <span class="pill">
+          <strong>{{ 'common.correlationId' | translate }}</strong>
+          {{ error?.correlationId }}
+        </span>
+      </div>
+
+      <div class="technical" *ngIf="showTechnicalDetails && error?.technicalMessage">
+        {{ error?.technicalMessage }}
+      </div>
+
+      <ul class="details" *ngIf="showDetails && details().length">
+        <li *ngFor="let d of details()">{{ d }}</li>
+      </ul>
+    </div>
+  </div>
+
+  <button *ngIf="dismissible" class="close" type="button" (click)="dismiss()">
+    <i class="pi pi-times"></i>
+  </button>
+</div>

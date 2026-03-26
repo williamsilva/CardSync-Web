@@ -1,0 +1,480 @@
+{
+  "app": {
+    "name": "CardSync"
+  },
+  "routes": {
+    "users": {
+      "title": "Usuários"
+    },
+    "groups": {
+      "title": "Grupos"
+    },
+    "companies": {
+      "title": "Empresas"
+    },
+    "audit": {
+      "title": "E-mail Logs"
+    },
+    "dashboard": {
+      "title": "Dashboard"
+    },
+    "accountMe": {
+      "title": "Minha conta"
+    },
+    "forbidden": {
+      "title": "Acesso negado"
+    },
+    "accountProfile": {
+      "title": "Minha Conta"
+    },
+    "companiesNew": {
+      "title": "Nova empresa"
+    },
+    "accountPassword": {
+      "title": "Alterar senha"
+    },
+    "groupDetail": {
+      "title": "Detalhe do grupo"
+    }
+  },
+  "topbar": {
+    "online": "Online",
+    "brandName": "CardSync",
+    "brandSub": "Conciliação Simplificada",
+    "sidebarToggleAria": "Mostrar/ocultar menu",
+    "sidebarShowTooltip": "Mostrar menu",
+    "sidebarHideTooltip": "Ocultar menu",
+    "themeToggleAria": "Alternar tema",
+    "langAria": "Selecionar idioma",
+    "sessionExpired": "Sessão expirada",
+    "sessionExpireTooltip": "Sessão expira por inatividade",
+    "sessionExpiredTooltip": "Faça login novamente"
+  },
+  "menu": {
+    "me": "Minha conta",
+    "companies": "Empresas",
+    "dashboard": "Dashboard",
+    "audit": {
+      "title": "Auditoria",
+      "mail": "E-mail Logs"
+    },
+    "security": {
+      "title": "Segurança",
+      "groups": "Grupos",
+      "users": "Usuários",
+      "myAccount": "Minha Conta",
+      "changePassword": "Alterar Senha"
+    }
+  },
+  "sidebar": {
+    "userFallback": "Usuário",
+    "logout": "Sair"
+  },
+  "breadcrumb": {
+    "groups": "Grupos",
+    "users": "Usuários",
+    "dashboard": "Dashboard",
+    "audit": {
+      "emailLog": "E-mail Logs"
+    }
+  },
+  "footer": {
+    "copyright": "CardSync Tech",
+    "madeWith": "Todos os direitos reservados."
+  },
+  "filters": {
+    "activeCount": "{count, plural, =0 {Nenhum filtro ativo} one {# filtro ativo} other {# filtros ativos}}",
+    "noneActive": "Nenhum filtro ativo"
+  },
+  "pagination": {
+    "report": "Mostrando '{first}' a '{last}' de '{totalRecords}' registros"
+  },
+  "validation": {
+    "invalid": "Valor inválido",
+    "required": "Obrigatório",
+    "minLength": "Mínimo de {requiredLength} caracteres",
+    "maxLength": "Máximo de {requiredLength} caracteres",
+    "email": "E-mail inválido",
+    "pattern": "Formato inválido",
+    "min": "O valor mínimo é {min}",
+    "max": "O valor máximo é {max}",
+    "uuid": "Identificador inválido",
+    "document": "Documento inválido",
+    "passwordPolicy": "Senha não atende à política",
+    "server": "{message}"
+  },
+  "users": {
+    "newUser": "Novo Usuário",
+    "subtitle": "Gerencie usuários, status e convites",
+    "new": {
+      "title": "Novo usuário",
+      "subtitle": "Cadastro de usuário"
+    },
+    "edit": {
+      "title": "Editar usuário",
+      "subtitle": "Edição de usuário"
+    },
+    "fields": {
+      "name": "Nome",
+      "status": "Status",
+      "groups": "Grupos",
+      "userName": "Usuário",
+      "document": "Documento",
+      "createdAt": "Cadastrado em",
+      "lastLoginAt": "Último login",
+      "blockedUntil": "Bloqueado até",
+      "passwordExpiresAt": "Senha expira"
+    },
+    "columns": {
+      "name": "Nome",
+      "status": "Status",
+      "userName": "Username",
+      "document": "Documento",
+      "createdAt": "Cadastrado em",
+      "lastLoginAt": "Último login",
+      "blockedUntil": "Bloqueado até",
+      "passwordExpiresAt": "Senha expira"
+    },
+    "form": {
+      "loadError": "Não foi possível carregar os dados do usuário",
+      "saveError": "Não foi possível salvar o usuário.",
+      "created": "Usuário criado com sucesso.",
+      "updated": "Usuário atualizado com sucesso",
+      "resend": {
+        "button": "Reenviar e-mail de senha",
+        "header": "Reenviar e-mail",
+        "message": "Deseja reenviar o e-mail para cadastro de senha?",
+        "sent": "E-mail enviado com sucesso.",
+        "error": "Não foi possível reenviar o e-mail.",
+        "todoServer": "Funcionalidade pendente no servidor."
+      }
+    },
+    "status": {
+      "null": "N/A",
+      "active": "Ativo",
+      "inactive": "Inativo",
+      "blocked": "Bloqueado",
+      "disabled": "Desabilitado",
+      "pending_password": "Pendente de senha",
+      "unknown": "Desconhecido"
+    },
+    "invite": {
+      "resend": "Reenviar convite",
+      "resent": "Convite reenviado com sucesso.",
+      "resendError": "Não foi possível reenviar o convite."
+    },
+    "delete": {
+      "header": "Confirmar exclusão",
+      "success": "Usuário desativado com sucesso",
+      "message": "Deseja excluir o usuário {userName}?"
+    },
+    "activate": {
+      "header": "Confirmar ativação",
+      "selected": "Ativar selecionados",
+      "successSingle": "Usuário ativado com sucesso.",
+      "successBulk": "{count, plural, one {# usuário ativado com sucesso.} other {# usuários ativados com sucesso.}}",
+      "messageSingle": "Deseja ativar o usuário {userName}?",
+      "messageBulk": "{count, plural, one {Deseja ativar # usuário selecionado?} other {Deseja ativar # usuários selecionados?}}"
+    },
+    "deactivate": {
+      "header": "Confirmar inativação",
+      "selected": "Inativar selecionados",
+      "successSingle": "Usuário inativado com sucesso.",
+      "successBulk": "{count, plural, one {# usuário inativado com sucesso.} other {# usuários inativados com sucesso.}}",
+      "messageSingle": "Deseja inativar o usuário {userName}?",
+      "messageBulk": "{count, plural, one {Deseja inativar # usuário selecionado?} other {Deseja inativar # usuários selecionados?}}"
+    },
+    "selection": {
+      "currentMode": "Modo da seleção",
+      "count": "{count, plural, =0 {Nenhum selecionado} one {# selecionado} other {# selecionados}}",
+      "pickOneFirst": "Selecione primeiro um usuário elegível para definir o contexto da seleção.",
+      "mode": {
+        "none": "Nenhum",
+        "activate": "Ativação em lote",
+        "deactivate": "Inativação em lote"
+      }
+    },
+    "action": {
+      "activate": {
+        "label": "Ativar",
+        "noPermission": "Você não tem permissão para ativar usuários.",
+        "protected": "Usuário protegido não pode ser ativado por esta ação.",
+        "invalidStatus": "Somente usuários inativos podem ser ativados."
+      },
+      "deactivate": {
+        "label": "Inativar",
+        "noPermission": "Você não tem permissão para inativar usuários.",
+        "self": "Você não pode inativar seu próprio usuário.",
+        "protected": "Usuário protegido não pode ser inativado.",
+        "invalidStatus": "Somente usuários ativos podem ser inativados."
+      }
+    },
+    "empty": {
+      "title": "Nenhum usuário encontrado"
+    }
+  },
+  "accountPassword": {
+    "title": "Alterar senha",
+    "currentPassword": "Senha atual",
+    "newPassword": "Nova senha",
+    "confirmPassword": "Confirmar nova senha",
+    "passwordMismatch": "As senhas devem ser iguais.",
+    "policyTitle": "Política de senha",
+    "submit": "Salvar senha",
+    "successTitle": "Senha alterada",
+    "successMessage": "Sua senha foi atualizada com sucesso.",
+    "footer": "© 2026 CardSync • Todos os direitos reservados",
+    "formSubtitle": "Informe sua senha atual e defina uma nova senha segura.",
+    "policySubtitle": "A senha deve atender às regras de segurança abaixo.",
+    "formSectionTitle": "Dados da alteração",
+    "userFallback": "Usuário",
+    "usernameFallback": "Sem usuário",
+    "summary": {
+      "rules": "Regras",
+      "strength": "Força",
+      "valid": "Regras válidas",
+      "invalid": "Regras inválidas",
+      "minLength": "Tamanho mínimo"
+    },
+    "strength": {
+      "title": "Força da senha",
+      "empty": "Não informada",
+      "weak": "Fraca",
+      "medium": "Média",
+      "strong": "Forte",
+      "rulesSatisfied": "regras atendidas"
+    }
+  },
+  "profile": {
+    "title": "Perfil",
+    "subtitle": "Consulte seus dados de perfil e cadastro.",
+    "card": {
+      "userData": "Dados do usuário",
+      "groups": "Grupos",
+      "permissions": "Permissões",
+      "groupsSubtitle": "Perfis organizacionais vinculados ao usuário.",
+      "permissionsSubtitle": "Acessos disponíveis para o usuário autenticado."
+    },
+    "section": {
+      "identification": "Identificação",
+      "security": "Segurança",
+      "audit": "Auditoria"
+    },
+    "field": {
+      "id": "ID",
+      "name": "Nome",
+      "username": "Usuário",
+      "document": "Documento",
+      "status": "Status",
+      "blocked": "Bloqueado",
+      "blockedUntil": "Bloqueado até",
+      "password": "Senha",
+      "passwordExpires": "Senha expira em",
+      "issuer": "Issuer",
+      "createdAt": "Criado em",
+      "lastLogin": "Último login",
+      "groups": "Grupos",
+      "permissions": "Permissões"
+    },
+    "button": {
+      "changePassword": "Alterar senha"
+    },
+    "fallback": {
+      "noName": "Usuário sem nome",
+      "noUsername": "Usuário não informado"
+    },
+    "items": "{count, plural, =0 {0 itens} one {# item} other {# itens}}",
+    "empty": {
+      "groups": "Nenhum grupo informado.",
+      "permissions": "Nenhuma permissão encontrada."
+    },
+    "loading": "Aguarde enquanto carregamos os dados do perfil.",
+    "error": "Não foi possível carregar o perfil."
+  },
+  "session": {
+    "expiring": {
+      "title": "Sessão vai expirar",
+      "body": "Sua sessão vai expirar por inatividade em",
+      "hint": "Clique em “Renovar” para continuar sem recarregar a página."
+    },
+    "expired": {
+      "title": "Sessão expirada",
+      "body": "Sua sessão expirou por inatividade.",
+      "hint": "Para continuar, faça login novamente."
+    }
+  },
+  "common": {
+    "yes": "Sim",
+    "no": "Não",
+    "save": "Salvar",
+    "back": "Voltar",
+    "cancel": "Cancelar",
+    "clear": "Limpar",
+    "search": "Buscar",
+    "new": "Novo",
+    "activate": "Ativar",
+    "deactivate": "Inativar",
+    "update": "Atualizar",
+    "loading": "Carregando...",
+    "filter": "Filtrar",
+    "all": "Todos",
+    "edit": "Editar",
+    "delete": "Excluir",
+    "actions": "Ações",
+    "error": "Erro",
+    "success": "Sucesso",
+    "info": "Informação",
+    "logout": "Sair",
+    "notNow": "Agora não",
+    "renewSession": "Renovar sessão",
+    "goToLogin": "Ir para login",
+    "warning": "Atenção",
+    "correlationId": "ID de correlação",
+    "view": "Visualizar",
+    "notInformed": "Não informado"
+  },
+  "confirm": {
+    "logoutTitle": "Encerrar sessão",
+    "logoutMessage": "Deseja realmente sair do CardSync?"
+  },
+  "notifications": {
+    "welcome": "Olá, {name}!",
+    "itemsCount": "{count, plural, =0 {Nenhum item} one {# item} other {# itens}}"
+  },
+  "errors": {
+    "global": {
+      "GENERIC_ERROR": "Ocorreu um erro inesperado. Tente novamente.",
+      "NETWORK_ERROR": "Não foi possível conectar ao servidor.",
+      "ACCESS_DENIED": "Você não tem permissão para executar esta ação.",
+      "SESSION_EXPIRED": "Sua sessão expirou. Faça login novamente.",
+      "VALIDATION_ERROR": "Alguns campos precisam ser corrigidos.",
+      "USER_DOCUMENT_ALREADY_EXISTS": "Já existe um usuário com este documento.",
+      "USER_USERNAME_ALREADY_EXISTS": "Já existe um usuário com este nome de usuário.",
+      "USER_DELETE_SELF_NOT_ALLOWED": "Você não pode excluir seu próprio usuário.",
+      "USER_DELETE_PROTECTED_NOT_ALLOWED": "Este usuário é protegido e não pode ser excluído.",
+      "NOT_FOUND": "Recurso não encontrado.",
+      "INTERNAL_ERROR": "Ocorreu um erro interno. Tente novamente.",
+      "GROUP_NAME_ALREADY_EXISTS": "Já existe um grupo com este nome.",
+      "GROUP_DELETE_SUPPORT_NOT_ALLOWED": "O grupo SUPPORT não pode ser excluído ou alterado nesta operação.",
+      "GROUP_DELETE_IN_USE": "Este grupo possui usuários associados e não pode ser excluído.",
+      "PERMISSION_NOT_FOUND": "Uma ou mais permissões informadas não foram encontradas."
+    },
+    "fields": {
+      "*": {
+        "required": "{label} é obrigatório.",
+        "minLength": "{label} deve ter no mínimo {requiredLength} caracteres.",
+        "maxLength": "{label} deve ter no máximo {requiredLength} caracteres.",
+        "min": "{label} deve ser no mínimo {min}.",
+        "max": "{label} deve ser no máximo {max}.",
+        "email": "{label} está inválido.",
+        "pattern": "{label} está em formato inválido.",
+        "invalid": "{label} está inválido.",
+        "passwordMismatch": "As senhas devem ser iguais."
+      }
+    }
+  },
+  "groups": {
+    "newGroup": "Novo Grupo",
+    "subtitle": "Gerencie grupos e permissões de acesso",
+    "new": {
+      "title": "Novo grupo",
+      "subtitle": "Cadastro de grupo"
+    },
+    "edit": {
+      "title": "Editar grupo",
+      "subtitle": "Edição de grupo"
+    },
+    "fields": {
+      "name": "Nome",
+      "description": "Descrição"
+    },
+    "columns": {
+      "name": "Nome",
+      "description": "Descrição"
+    },
+    "form": {
+      "loadError": "Não foi possível carregar os dados do grupo.",
+      "saveError": "Não foi possível salvar o grupo.",
+      "created": "Grupo criado com sucesso.",
+      "updated": "Grupo atualizado com sucesso.",
+      "permissionDenied": "Você não tem permissão para salvar grupos."
+    },
+    "empty": {
+      "title": "Nenhum grupo encontrado"
+    },
+    "action": {
+      "create": {
+        "noPermission": "Você não tem permissão para criar grupos."
+      },
+      "edit": {
+        "noPermission": "Você não tem permissão para editar grupos."
+      },
+      "delete": {
+        "noPermission": "Você não tem permissão para excluir grupos."
+      }
+    },
+    "detail": {
+      "title": "Detalhe do grupo",
+      "subtitle": "Resumo, permissões e usuários do grupo",
+      "tabs": {
+        "summary": "Resumo",
+        "permissions": "Permissões",
+        "users": "Usuários"
+      },
+      "permissions": {
+        "title": "Permissões",
+        "subtitle": "Associe ou desassocie permissões deste grupo.",
+        "placeholder": "Selecione as permissões",
+        "saved": "Permissões atualizadas com sucesso.",
+        "saveError": "Não foi possível salvar as permissões do grupo.",
+        "empty": "Nenhuma permissão associada."
+      },
+      "users": {
+        "title": "Usuários",
+        "subtitle": "Associe ou desassocie usuários deste grupo.",
+        "placeholder": "Selecione os usuários",
+        "saved": "Usuários atualizados com sucesso.",
+        "saveError": "Não foi possível salvar os usuários do grupo.",
+        "empty": "Nenhum usuário associado."
+      }
+    },
+    "delete": {
+      "header": "Excluir grupo",
+      "message": "Deseja realmente excluir o grupo {groupName}?",
+      "success": "Grupo excluído com sucesso."
+    }
+  },
+  "audit": {
+    "emailLog": {
+      "subtitle": "Gerencie e-mail logs",
+      "fields": {
+        "recipient": "Recebedor",
+        "subject": "Assunto",
+        "template": "Template",
+        "status": "Status",
+        "sentAt": "Enviado em",
+        "eventType": "Tipo Evento"
+      },
+      "columns": {
+        "recipient": "Recebedor",
+        "subject": "Assunto",
+        "template": "Template",
+        "status": "Status",
+        "sentAt": "Enviado em",
+        "eventType": "Tipo Evento",
+        "errorMessage": "Erro"
+      },
+      "status": {
+        "sent" : "Enviado",
+        "failed" : "Falha no envio"
+      },
+      "eventType": {
+        "firstPassword" : "Primeira senha",
+        "passwordReset" : "Resete de senha"
+      },
+      "empty": {
+        "title": "Nenhum log encontrado"
+      }
+    }
+  }
+}

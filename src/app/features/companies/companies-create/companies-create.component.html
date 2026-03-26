@@ -1,0 +1,182 @@
+<cs-page-header
+  [subtitle]="isEdit() ? ('users.edit.subtitle' | translate) : ('users.new.subtitle' | translate)"
+  [breadcrumb]="[
+    { label: ('breadcrumb.dashboard' | translate), url: '/' },
+    { label: ('breadcrumb.users' | translate), url: '/users' },
+    { label: isEdit() ? ('users.edit.title' | translate) : ('users.new.title' | translate) },
+  ]"
+  [compact]="false"
+>
+  <button
+    pButton
+    type="button"
+    (click)="cancel()"
+    icon="pi pi-arrow-left"
+    class="p-button-text p-button-sm"
+    [label]="'common.back' | translate"
+  ></button>
+
+  <button
+    *ngIf="canResendSetPasswordEmail()"
+    pButton
+    type="button"
+    icon="pi pi-envelope"
+    class="p-button-text p-button-sm"
+    (click)="resendSetPasswordEmail()"
+    [label]="'users.form.resend.button' | translate"
+  ></button>
+
+  <button
+    pButton
+    type="button"
+    (click)="save()"
+    icon="pi pi-save"
+    class="p-button-sm"
+    [loading]="saving()"
+    [disabled]="saving()"
+    [label]="'common.save' | translate"
+  ></button>
+</cs-page-header>
+
+<p-card class="cs-card-tight cs-form-card mt-2">
+  <form [formGroup]="form" class="cs-form-root cs-form-tight">
+    <!-- ===================== -->
+    <!-- ROW 1 (Nome + Username) -->
+    <!-- ===================== -->
+    <div class="cs-form-row grid formgrid cs-row-gap mb-2">
+      <!-- NAME -->
+      <div class="col-12 md:col-7 cs-col">
+        <div class="cs-field">
+          <p-floatlabel class="w-full" variant="on">
+            <input
+              id="name"
+              pInputText
+              type="text"
+              formControlName="name"
+              class="w-full p-inputtext-sm"
+            />
+            <app-error-msg
+              [control]="form.controls.name"
+              [label]="'users.fields.name' | translate"
+            ></app-error-msg>
+          </p-floatlabel>
+        </div>
+      </div>
+
+      <!-- USERNAME -->
+      <div class="col-12 md:col-4 cs-col">
+        <div class="cs-field">
+          <p-floatlabel class="w-full" variant="on">
+            <input
+              pInputText
+              type="text"
+              id="userName"
+              formControlName="userName"
+              class="w-full p-inputtext-sm"
+            />
+            <app-error-msg
+              [control]="form.controls.userName"
+              [label]="'users.fields.userName' | translate"
+            ></app-error-msg>
+          </p-floatlabel>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== -->
+    <!-- ROW 2 (Documento + Status + Grupos) -->
+    <!-- ===================== -->
+    <div class="cs-form-row grid formgrid cs-row-gap mb-3">
+      <!-- DOCUMENT -->
+      <div class="col-12 md:col-4 cs-col">
+        <div class="cs-field">
+          <p-floatlabel class="w-full" variant="on">
+            <input
+              pInputText
+              type="text"
+              id="document"
+              inputmode="numeric"
+              autocomplete="off"
+              csCpfCnpjMask
+              formControlName="document"
+              class="w-full p-inputtext-sm"
+            />
+            <app-error-msg
+              [control]="form.controls.document"
+              [label]="'users.fields.document' | translate"
+            ></app-error-msg>
+          </p-floatlabel>
+        </div>
+      </div>
+
+      <!-- STATUS -->
+      <div class="col-12 md:col-4 cs-col">
+        <div class="cs-field">
+          <p-floatlabel class="w-full" variant="on">
+            <p-select
+              size="small"
+              class="w-full"
+              appendTo="body"
+              inputId="status"
+              optionLabel="label"
+              optionValue="value"
+              formControlName="status"
+              [options]="statusOptions()"
+            ></p-select>
+            <app-error-msg
+              [control]="form.controls.status"
+              [label]="'users.fields.status' | translate"
+            ></app-error-msg>
+          </p-floatlabel>
+        </div>
+      </div>
+
+      <!-- GROUPS -->
+      <div class="col-12 md:col-4 cs-col">
+        <div class="cs-field">
+          <p-floatlabel class="w-full" variant="on">
+            <p-multiSelect
+              size="small"
+              class="w-full"
+              appendTo="body"
+              [filter]="true"
+              [showClear]="true"
+              inputId="groupIds"
+              optionLabel="label"
+              optionValue="value"
+              formControlName="groupIds"
+              [options]="groupOptions()"
+            ></p-multiSelect>
+            <app-error-msg
+              [control]="form.controls.groupIds"
+              [label]="'users.fields.groups' | translate"
+            ></app-error-msg>
+          </p-floatlabel>
+        </div>
+      </div>
+    </div>
+
+    <!-- ACTIONS -->
+    <div class="cs-actions">
+      <button
+        pButton
+        type="button"
+        class="p-button-text p-button-sm"
+        icon="pi pi-times"
+        (click)="cancel()"
+        [label]="'common.cancel' | translate"
+      ></button>
+
+      <button
+        pButton
+        type="button"
+        class="p-button-sm"
+        icon="pi pi-save"
+        (click)="save()"
+        [disabled]="saving()"
+        [loading]="saving()"
+        [label]="'common.save' | translate"
+      ></button>
+    </div>
+  </form>
+</p-card>

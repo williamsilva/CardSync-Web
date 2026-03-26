@@ -1,0 +1,352 @@
+<cs-page-header
+  [subtitle]="'audit.emailLog.subtitle' | translate"
+  [breadcrumb]="[
+    { label: ('breadcrumb.dashboard' | translate), url: '/' },
+    { label: ('breadcrumb.audit.emailLog' | translate) },
+  ]"
+  [compact]="false"
+>
+  <button
+    pButton
+    type="button"
+    (click)="refresh()"
+    icon="pi pi-refresh"
+    class="p-button-text p-button-sm"
+    [label]="'common.update' | translate"
+  ></button>
+</cs-page-header>
+
+<cs-filters-panel
+  [collapsed]="true"
+  (clear)="clear()"
+  (search)="search()"
+  [actionsAlign]="'start'"
+  [activeFilters]="activeFilters()"
+  [activeCount]="activeFiltersCount()"
+  [title]="'common.filter' | translate"
+>
+  <div class="grid formgrid gap-0 align-items-end">
+    <div class="col-12 md:col-4 p-1">
+      <p-floatLabel variant="on" class="w-full">
+        <input
+          id="recipient"
+          pInputText
+          [value]="recipient()"
+          class="w-full p-inputtext-sm"
+          (input)="recipient.set(($any($event.target).value ?? '').toString())"
+        />
+        <label for="recipient">{{ 'audit.emailLog.fields.recipient' | translate }}</label>
+      </p-floatLabel>
+    </div>
+
+    <div class="col-12 md:col-4 p-1">
+      <p-floatLabel variant="on" class="w-full">
+        <input
+          id="subject"
+          pInputText
+          [value]="subject()"
+          class="w-full p-inputtext-sm"
+          (input)="subject.set(($any($event.target).value ?? '').toString())"
+        />
+        <label for="subject">{{ 'audit.emailLog.fields.subject' | translate }}</label>
+      </p-floatLabel>
+    </div>
+
+    <div class="col-12 md:col-4 p-1">
+      <p-floatLabel variant="on" class="w-full">
+        <input
+          id="template"
+          pInputText
+          [value]="template()"
+          class="w-full p-inputtext-sm"
+          (input)="template.set(($any($event.target).value ?? '').toString())"
+        />
+        <label for="template">{{ 'audit.emailLog.fields.template' | translate }}</label>
+      </p-floatLabel>
+    </div>
+
+    <div class="col-12 md:col-4 p-1">
+      <p-floatLabel variant="on" class="w-full">
+        <p-multiSelect
+          size="small"
+          class="w-full"
+          appendTo="body"
+          [filter]="true"
+          inputId="status"
+          [showClear]="true"
+          optionLabel="label"
+          optionValue="value"
+          [ngModel]="status()"
+          [showToggleAll]="false"
+          [options]="statusOptions()"
+          (onChange)="status.set($event.value ?? null)"
+        ></p-multiSelect>
+        <label for="status">{{ 'audit.emailLog.fields.status' | translate }}</label>
+      </p-floatLabel>
+    </div>
+
+    <div class="col-12 md:col-4 p-1">
+      <p-floatLabel variant="on" class="w-full">
+        <p-multiSelect
+          size="small"
+          class="w-full"
+          [filter]="true"
+          appendTo="body"
+          [showClear]="true"
+          inputId="eventType"
+          optionLabel="label"
+          optionValue="value"
+          [ngModel]="eventType()"
+          [showToggleAll]="false"
+          [options]="eventTypeOptions()"
+          (onChange)="eventType.set($event.value ?? null)"
+        ></p-multiSelect>
+        <label for="eventType">{{ 'audit.emailLog.fields.eventType' | translate }}</label>
+      </p-floatLabel>
+    </div>
+
+    <div class="col-12 md:col-3 p-1">
+      <p-floatLabel variant="on" class="w-full">
+        <p-datepicker
+          inputId="sentAt"
+          class="w-full"
+          size="small"
+          appendTo="body"
+          [showIcon]="true"
+          [readonlyInput]="true"
+          selectionMode="range"
+          dateFormat="dd/mm/yy"
+          [ngModel]="sentAtRange()"
+          (ngModelChange)="sentAtRange.set($event ?? null)"
+        ></p-datepicker>
+        <label for="sentAt">{{ 'audit.emailLog.fields.sentAt' | translate }}</label>
+      </p-floatLabel>
+    </div>
+  </div>
+</cs-filters-panel>
+
+<p-table
+  #dt
+  stripedRows
+  dataKey="id"
+  size="small"
+  [rows]="rows"
+  [lazy]="true"
+  showGridlines
+  [rowHover]="true"
+  [paginator]="true"
+  sortMode="multiple"
+  filterDisplay="menu"
+  [value]="EmailLogs()"
+  class="p-datatable-sm mt-1"
+  styleClass="cs-admin-table"
+  [loading]="facade.loading()"
+  [showCurrentPageReport]="true"
+  [totalRecords]="totalRecords()"
+  (onPage)="onPageChange($event)"
+  (onLazyLoad)="onLazyLoad($event)"
+  [paginatorDropdownAppendTo]="'body'"
+  [rowsPerPageOptions]="[10, 20, 50, 100]"
+  [tableStyle]="{ width: '100%', 'min-width': '48rem' }"
+  [currentPageReportTemplate]="'pagination.report' | translate"
+>
+  <ng-template pTemplate="colgroup">
+    <colgroup>
+      <col style="width: auto" />
+      <col style="width: auto" />
+      <col style="width: auto" />
+      <col style="width: auto" />
+      <col style="width: 170px" />
+      <col style="width: 170px" />
+      <col style="width: 170px" />
+    </colgroup>
+  </ng-template>
+
+  <ng-template pTemplate="header">
+    <tr>
+      <th pSortableColumn="subject">
+        <div class="th-flex text-center">
+          <span class="th-label">{{ 'audit.emailLog.columns.subject' | translate }}</span>
+          <span class="th-icons">
+            <p-sortIcon field="subject"></p-sortIcon>
+            <p-columnFilter
+              type="text"
+              display="menu"
+              class="ml-auto"
+              field="subject"
+              matchMode="contains"
+              [useGrouping]="false"
+              [showOperator]="false"
+              [showAddButton]="false"
+              styleClass="cs-colfilter"
+            ></p-columnFilter>
+          </span>
+        </div>
+      </th>
+
+      <th pSortableColumn="recipient">
+        <div class="th-flex text-center">
+          <span class="th-label">{{ 'audit.emailLog.columns.recipient' | translate }}</span>
+          <span class="th-icons">
+            <p-sortIcon field="recipient"></p-sortIcon>
+            <p-columnFilter
+              type="text"
+              display="menu"
+              class="ml-auto"
+              field="recipient"
+              matchMode="contains"
+              [useGrouping]="false"
+              [showOperator]="false"
+              [showAddButton]="false"
+              styleClass="cs-colfilter"
+            ></p-columnFilter>
+          </span>
+        </div>
+      </th>
+
+      <th pSortableColumn="template">
+        <div class="th-flex text-center">
+          <span class="th-label">{{ 'audit.emailLog.columns.template' | translate }}</span>
+          <span class="th-icons">
+            <p-sortIcon field="template"></p-sortIcon>
+            <p-columnFilter
+              type="text"
+              display="menu"
+              class="ml-auto"
+              field="template"
+              matchMode="contains"
+              [useGrouping]="false"
+              [showOperator]="false"
+              [showAddButton]="false"
+              styleClass="cs-colfilter"
+            ></p-columnFilter>
+          </span>
+        </div>
+      </th>
+
+      <th pSortableColumn="errorMessage">
+        <div class="th-flex text-center">
+          <span class="th-label">{{ 'audit.emailLog.columns.errorMessage' | translate }}</span>
+          <span class="th-icons">
+            <p-sortIcon field="errorMessage"></p-sortIcon>
+            <p-columnFilter
+              type="text"
+              display="menu"
+              class="ml-auto"
+              field="errorMessage"
+              matchMode="contains"
+              [useGrouping]="false"
+              [showOperator]="false"
+              [showAddButton]="false"
+              styleClass="cs-colfilter"
+            ></p-columnFilter>
+          </span>
+        </div>
+      </th>
+
+      <th pSortableColumn="sentAt">
+        <div class="th-flex text-center">
+          <span class="th-label">{{ 'audit.emailLog.columns.sentAt' | translate }}</span>
+          <span class="th-icons">
+            <p-sortIcon field="sentAt"></p-sortIcon>
+          </span>
+        </div>
+      </th>
+
+      <th pSortableColumn="status">
+        <div class="th-flex text-center">
+          <span class="th-label">{{ 'audit.emailLog.columns.status' | translate }}</span>
+          <span class="th-icons">
+            <p-sortIcon field="status"></p-sortIcon>
+            <p-columnFilter
+              field="status"
+              display="menu"
+              matchMode="in"
+              [showOperator]="false"
+              [showAddButton]="false"
+              [showMatchModes]="false"
+              styleClass="cs-colfilter"
+            >
+              <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                <p-multiSelect
+                  class="w-full"
+                  appendTo="body"
+                  [ngModel]="value"
+                  [showClear]="true"
+                  optionLabel="label"
+                  optionValue="value"
+                  [options]="statusOptions()"
+                  (onChange)="filter($event.value)"
+                  [placeholder]="'common.all' | translate"
+                ></p-multiSelect>
+              </ng-template>
+            </p-columnFilter>
+          </span>
+        </div>
+      </th>
+
+      <th pSortableColumn="eventType">
+        <div class="th-flex text-center">
+          <span class="th-label">{{ 'audit.emailLog.columns.eventType' | translate }}</span>
+          <span class="th-icons">
+            <p-sortIcon field="eventType"></p-sortIcon>
+            <p-columnFilter
+              display="menu"
+              matchMode="in"
+              field="eventType"
+              [showOperator]="false"
+              [showAddButton]="false"
+              [showMatchModes]="false"
+              styleClass="cs-colfilter"
+            >
+              <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                <p-multiSelect
+                  class="w-full"
+                  appendTo="body"
+                  [ngModel]="value"
+                  [showClear]="true"
+                  optionLabel="label"
+                  optionValue="value"
+                  [options]="eventTypeOptions()"
+                  (onChange)="filter($event.value)"
+                  [placeholder]="'common.all' | translate"
+                ></p-multiSelect>
+              </ng-template>
+            </p-columnFilter>
+          </span>
+        </div>
+      </th></tr
+  ></ng-template>
+
+  <ng-template pTemplate="body" let-row>
+    <tr>
+      <td>{{ row.subject }}</td>
+      <td>{{ row.recipient }}</td>
+      <td>{{ row.template }}</td>
+      <td class="cell-muted text-center">{{ row.errorMessage ? row.errorMessage : '-' }}</td>
+
+      <td class="cell-muted text-center">
+        {{ row.sentAt ? (row.sentAt | csDate: 'short') : '-' }}
+      </td>
+
+      <td class="cell-muted text-center">
+        <p-tag [value]="statusLabel(row.status)" [severity]="severityStatus(row.status)"></p-tag>
+      </td>
+
+      <td class="cell-muted text-center">
+        <p-tag
+          [value]="eventTypeLabel(row.eventType)"
+          [severity]="severityEventType(row.eventType)"
+        ></p-tag>
+      </td>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="emptymessage">
+    <tr>
+      <td colspan="7" class="text-center py-5 opacity-70">
+        {{ 'audit.emailLog.empty.title' | translate }}
+      </td>
+    </tr>
+  </ng-template>
+</p-table>

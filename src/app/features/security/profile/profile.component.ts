@@ -1,0 +1,278 @@
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Component, computed, inject, signal, DestroyRef } from '@angular/core';
+
+import { TagModule } from 'primeng/tag';
+import { CardModule } from 'primeng/card';
+import { ButtonModule } from 'primeng/button';
+import { DividerModule } from 'primeng/divider';
+import { TranslateModule } from '@ngx-translate/core';
+
+import { BadgeModule } from 'primeng/badge';
+import { MeStore } from '@core/auth/me.store';
+import { UserModel } from '@models/users.models';
+import { AuthService } from '@core/auth/auth.service';
+import { I18nService } from '@core/i18n/i18n.service';
+import { UsersFacade } from '@features/facade/users.facade';
+import {
+  UserStatus,
+  userStatusLabel,
+  UserStatusInput,
+  normalizeUserStatus,
+} from '@models/enums/user-status.enum';
+import { BffMeResponse } from '@core/auth/models';
+
+type ProfileView = {
+  authenticated: boolean;
+  iss?: string;
+  groups: string[];
+  userId?: string;
+  name?: string;
+  username?: string;
+  authorities: string[];
+  expiresAt?: string;
+  userDetails?: UserModel | null;
+};
+
+@Component({
+  standalone: true,
+  selector: 'app-profile-page',
+  styleUrl: './profile.component.scss',
+  templateUrl: './profile.component.html',
+  imports: [
+    CommonModule,
+    TagModule,
+    CardModule,
+    BadgeModule,
+    RouterModule,
+    ButtonModule,
+    DividerModule,
+    TranslateModule,
+  ],
+})
+export class ProfilePageComponent {
+  private readonly auth = inject(AuthService);
+  private readonly meStore = inject(MeStore);
+  private readonly usersFacade = inject(UsersFacade);
+  private readonly destroyRef = inject(DestroyRef);
+  readonly i18n = inject(I18nService);
+
+  readonly profile = signal<ProfileView | null>(null);
+  readonly loading = signal(true);
+  readonly loadError = signal<string | null>(null);
+
+  readonly groups = computed(() => this.profile()?.groups ?? []);
+  readonly authorities = computed(() => this.profile()?.authorities ?? []);
+
+  constructor() {
+    void this.load();
+  }
+
+  private async load(): Promise<void> {
+    try {
+      this.loading.set(true);
+      this.loadError.set(null);
+
+      await this.auth.loadMe();
+
+      const me = this.meStore.me() as BffMeResponse | null;
+
+      if (!me) {
+        this.profile.set(null);
+        this.loadError.set('Erro ao carregar sessão');
+        return;
+      }
+
+      const baseProfile: ProfileView = {
+        authenticated: me.authenticated ?? false,
+        iss: me.iss ?? '',
+        groups: me.groups ?? [],
+        userId: me.userId ?? '',
+        name: me.name ?? '',
+        username: me.username ?? '',
+        authorities: me.authorities ?? [],
+        expiresAt: me.expiresAt ?? '',
+        userDetails: null,
+      };
+
+      this.profile.set(baseProfile);
+
+      if (baseProfile.userId) {
+        this.usersFacade
+          .getById(baseProfile.userId)
+          .pipe(takeUntilDestroyed(this.destroyRef))
+          .subscribe({
+            next: (details) => {
+              this.profile.update((current) =>
+                current ? { ...current, userDetails: details } : current,
+              );
+            },
+            error: () => {
+              this.profile.update((current) =>
+                current ? { ...current, userDetails: null } : current,
+              );
+            },
+          });
+      }
+    } finally {
+      this.loading.set(false);
+    }
+  }
+
+  initials(value?: string): string {
+    const text = (value || '').trim();
+    if (!text) return '?';
+
+    const parts = text.split(/\s+/);
+    if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+
+    return `${parts[0][0]}${parts[1][0]}`.toUpperCase();
+  }
+
+  sortedGroups(values?: string[] | null): string[] {
+    return [...(values ?? [])].sort();
+  }
+
+  sortedAuthorities(values?: string[] | null): string[] {
+    return [...(values ?? [])].sort();
+  }
+
+  fmtValue(value?: string | number | null): string {
+    if (!value) return '—';
+    return String(value);
+  }
+
+  fmtDateTime(value?: string | Date | null): string {
+    if (!value) return '—';
+
+    const d = new Date(value);
+    if (Number.isNaN(d.getTime())) return '—';
+
+    return new Intl.DateTimeFormat(this.i18n.getLocale(), {
+      dateStyle: 'short',
+      timeStyle: 'short',
+    }).format(d);
+  }
+
+  documentMask(value?: string | null): string {
+    const raw = (value ?? '').replace(/\D/g, '');
+    if (!raw) return '—';
+
+    if (raw.length === 11) {
+      return raw.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+    }
+
+    if (raw.length === 14) {
+      return raw.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, '$1.$2.$3/$4-$5');
+    }
+
+    return value ?? '—';
+  }
+
+  statusLabel(status?: UserStatusInput): string {
+    return userStatusLabel(status, this.i18n);
+  }
+
+  statusSeverity(status?: UserStatusInput): 'success' | 'info' | 'warn' | 'danger' | 'contrast' {
+    switch (normalizeUserStatus(status)) {
+      case UserStatus.ACTIVE:
+        return 'success';
+      case UserStatus.PENDING_PASSWORD:
+        return 'info';
+      case UserStatus.BLOCKED:
+        return 'warn';
+      case UserStatus.INACTIVE:
+      case UserStatus.DISABLED:
+        return 'danger';
+      default:
+        return 'contrast';
+    }
+  }
+
+  blockedStateLabel(blockedUntil?: string | Date | null): string {
+    const yes = this.i18n.tUi('common.yes' as any, 'Sim');
+    const no = this.i18n.tUi('common.no' as any, 'Não');
+
+    if (!blockedUntil) return no;
+
+    const d = new Date(blockedUntil);
+    if (Number.isNaN(d.getTime())) return no;
+
+    return d.getTime() > Date.now() ? yes : no;
+  }
+
+  passwordExpiryLabel(passwordExpiresAt?: string | Date | null): string {
+    if (!passwordExpiresAt) {
+      return this.i18n.tUi('profile.password.notInformed' as any, 'Não informado');
+    }
+
+    const d = new Date(passwordExpiresAt);
+    if (Number.isNaN(d.getTime())) {
+      return this.i18n.tUi('profile.password.notInformed' as any, 'Não informado');
+    }
+
+    const diff = d.getTime() - Date.now();
+
+    if (diff <= 0) {
+      return this.i18n.tUi('profile.password.expired' as any, 'Expirada');
+    }
+
+    const days = Math.floor(diff / 86400000);
+
+    if (days <= 0) {
+      return this.i18n.tUi('profile.password.today' as any, 'Hoje');
+    }
+
+    if (days === 1) {
+      return `1 ${this.i18n.tUi('profile.password.day' as any, 'dia')}`;
+    }
+
+    return `${days} ${this.i18n.tUi('profile.password.days' as any, 'dias')}`;
+  }
+
+  permissionClass(permission?: string | null): string {
+    const v = (permission ?? '').toUpperCase();
+
+    if (v === 'SUPPORT') return 'is-support';
+    if (v.startsWith('GROUP')) return 'is-groups';
+    if (v.startsWith('USERS')) return 'is-users';
+
+    return 'is-default';
+  }
+
+  permissionLabel(permission?: string | null): string {
+    const value = (permission ?? '').trim().toUpperCase();
+    if (!value) return '—';
+
+    const translated = this.i18n.tUi(
+      `profile.permission.${value}` as any,
+      this.humanizeEnum(value),
+    );
+
+    return translated;
+  }
+
+  groupLabel(group?: string | null): string {
+    const value = (group ?? '').trim().toUpperCase();
+    if (!value) return '—';
+
+    const translated = this.i18n.tUi(`profile.group.${value}` as any, this.humanizeEnum(value));
+
+    return translated;
+  }
+
+  groupClass(group?: string | null): string {
+    const v = (group ?? '').toUpperCase();
+    if (v === 'SUPPORT') return 'is-support';
+    return 'is-groups';
+  }
+
+  private humanizeEnum(value: string): string {
+    return value
+      .toLowerCase()
+      .split('_')
+      .map((p) => p[0].toUpperCase() + p.slice(1))
+      .join(' ');
+  }
+}
