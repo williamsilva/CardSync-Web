@@ -1,5 +1,5 @@
 {
-  "name": "cardsync-spa",
+  "name": "cardsync",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
@@ -12,7 +12,7 @@
     "dev": "npm run validate:i18n && concurrently -k \"ng serve\" \"npm run validate:i18n:watch\"",
     "build:checked": "npm run validate:i18n && npm run build",
     "build:pages": "npm run validate:i18n && ng build --configuration production",
-    "pages:preview": "npx wrangler pages dev dist/cardsync-spa/browser"
+    "pages:preview": "npx wrangler pages dev dist/cardsync/browser"
   },
   "prettier": {
     "printWidth": 100,

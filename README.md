@@ -64,7 +64,7 @@ For more information on using the Angular CLI, including detailed command refere
 Configuração recomendada:
 
 - Build command: `npm run build:pages`
-- Build output directory: `dist/cardsync-spa/browser`
+- Build output directory: `dist/cardsync/browser`
 - Node version: `22`
 
 Arquivos já preparados para o deploy:

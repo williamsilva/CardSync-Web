@@ -6,7 +6,7 @@
   },
   "newProjectRoot": "projects",
   "projects": {
-    "cardsync-spa": {
+    "cardsync": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -82,10 +82,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "cardsync-spa:build:production"
+              "buildTarget": "cardsync:build:production"
             },
             "development": {
-              "buildTarget": "cardsync-spa:build:development"
+              "buildTarget": "cardsync:build:development"
             }
           },
           "defaultConfiguration": "development"
