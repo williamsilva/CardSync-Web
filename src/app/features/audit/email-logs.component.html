@@ -152,9 +152,9 @@
 >
   <ng-template pTemplate="colgroup">
     <colgroup>
-      <col style="width: auto" />
-      <col style="width: auto" />
-      <col style="width: auto" />
+      <col style="width: 220px" />
+      <col style="width: 220px" />
+      <col style="width: 190px" />
       <col style="width: auto" />
       <col style="width: 170px" />
       <col style="width: 170px" />
@@ -320,10 +320,29 @@
 
   <ng-template pTemplate="body" let-row>
     <tr>
-      <td>{{ row.subject }}</td>
-      <td>{{ row.recipient }}</td>
-      <td>{{ row.template }}</td>
-      <td class="cell-muted text-center">{{ row.errorMessage ? row.errorMessage : '-' }}</td>
+      <td>
+        <span [csOverflowTooltip]="row.subject">
+          {{ row.subject || '-' }}
+        </span>
+      </td>
+
+      <td>
+        <span [csOverflowTooltip]="row.recipient">
+          {{ row.recipient || '-' }}
+        </span>
+      </td>
+
+      <td>
+        <span [csOverflowTooltip]="row.template">
+          {{ row.template || '-' }}
+        </span>
+      </td>
+
+      <td class="cell-muted text-center">
+        <span [csOverflowTooltip]="row.errorMessage">
+          {{ row.errorMessage || '-' }}
+        </span>
+      </td>
 
       <td class="cell-muted text-center">
         {{ row.sentAt ? (row.sentAt | csDate: 'short') : '-' }}

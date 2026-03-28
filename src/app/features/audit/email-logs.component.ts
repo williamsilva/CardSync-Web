@@ -22,6 +22,7 @@ import { BaseListPage } from '@shared/features/list-base/base-list-page';
 import { EmailLogModel, EmailLogsFiltersState } from '@models/email-log.models';
 import { buildListQuery } from '@shared/features/list-query/list-query.builder';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
+import { OverflowTooltipDirective } from '@shared/directives/overflow-tooltip.directive';
 import { mapPrimeLazyToTableQuery } from '@shared/features/list-query/primeng-lazy.mapper';
 import { FiltersPanelComponent } from '@shared/features/filters-panel/filters-panel.component';
 import {
@@ -59,6 +60,7 @@ import {
     PageHeaderComponent,
     ReactiveFormsModule,
     FiltersPanelComponent,
+    OverflowTooltipDirective,
   ],
 })
 export class EmailLogsComponent extends BaseListPage<EmailLogsFilters> {
