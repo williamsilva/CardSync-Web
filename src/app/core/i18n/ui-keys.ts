@@ -16,7 +16,7 @@ export const UI_KEYS = {
   menu: {
     me: 'menu.me',
     dashboard: 'menu.dashboard',
-    companies: 'menu.companies',
+    company: 'menu.company',
     audit: {
       title: 'menu.audit.title',
       mail: 'menu.audit.mail',
@@ -28,7 +28,8 @@ export const UI_KEYS = {
       myAccount: 'menu.security.myAccount',
       changePassword: 'menu.security.changePassword',
     },
-    // Ajustar depois
+
+    // TODO: Ajustar depois
     finance: 'menu.finance.title',
     contracts: 'menu.contracts',
     settings: {
@@ -124,7 +125,76 @@ export const UI_KEYS = {
       },
     },
   },
+  enum: {
+    statusEnum: {
+      null: 'enum.statusEnum.null',
+      active: 'enum.statusEnum.active',
+      unknown: 'enum.statusEnum.unknown',
+      blocked: 'enum.statusEnum.blocked',
+      inactive: 'enum.statusEnum.inactive',
+    },
+    typeCompanyEnum: {
+      null: 'enum.typeCompanyEnum.null',
+      filial: 'enum.typeCompanyEnum.filial',
+      matriz: 'enum.typeCompanyEnum.matriz',
+      unknown: 'enum.typeCompanyEnum.unknown',
+    },
+  },
+  company: {
+    form: {
+      created: 'company.form.created',
+      updated: 'company.form.updated',
+      saveError: 'company.form.saveError',
+    },
+    statusEnum: {
+      active: 'company.statusEnum.active',
+      blocked: 'company.statusEnum.blocked',
+      inactive: 'company.statusEnum.inactive',
+    },
 
+    typeEnum: {
+      matriz: 'company.typeEnum.matriz',
+      filial: 'company.typeEnum.filial',
+    },
+    block: {
+      header: 'company.block.header',
+      successBulk: 'company.block.successBulk',
+      messageBulk: 'company.block.messageBulk',
+      messageSingle: 'company.block.messageSingle',
+      successSingle: 'company.block.successSingle',
+    },
+    activate: {
+      header: 'company.activate.header',
+      messageBulk: 'company.activate.messageBulk',
+      successBulk: 'company.activate.successBulk',
+      messageSingle: 'company.activate.messageSingle',
+      successSingle: 'company.activate.successSingle',
+    },
+    deactivate: {
+      header: 'company.deactivate.header',
+      messageBulk: 'company.deactivate.messageBulk',
+      successBulk: 'company.deactivate.successBulk',
+      messageSingle: 'company.deactivate.messageSingle',
+      successSingle: 'company.deactivate.successSingle',
+    },
+    selection: {
+      mode: {
+        none: 'company.selection.mode.none',
+        block: 'company.selection.mode.block',
+        activate: 'company.selection.mode.activate',
+        deactivate: 'company.selection.mode.deactivate',
+      },
+    },
+    fields: {
+      cnpj: 'company.fields.cnpj',
+      typeEnum: 'company.fields.typeEnum',
+      createdAt: 'company.fields.createdAt',
+      createdBy: 'company.fields.createdBy',
+      statusEnum: 'company.fields.statusEnum',
+      fantasyName: 'company.fields.fantasyName',
+      socialReason: 'company.fields.socialReason',
+    },
+  },
   groups: {
     fields: {
       name: 'groups.fields.name',

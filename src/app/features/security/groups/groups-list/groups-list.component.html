@@ -20,23 +20,18 @@
     type="button"
     (click)="goNew()"
     icon="pi pi-plus"
-    class="p-button-sm"
-    [label]="'groups.newGroup' | translate"
-    [disabled]="!canCreate()"
-    [pTooltip]="
-      canCreate()
-        ? ('groups.newGroup' | translate)
-        : ('groups.action.create.noPermission' | translate)
-    "
     tooltipPosition="top"
+    [disabled]="!canCreate()"
+    class="p-button-info p-button-sm"
+    [label]="'groups.new.title' | translate"
   ></button>
 </cs-page-header>
 
 <app-groups-create-dialog
-  [visible]="upsertVisible()"
   [group]="group()"
-  (visibleChange)="onUpsertVisibleChange($event)"
   (saved)="onSaved()"
+  [visible]="upsertVisible()"
+  (visibleChange)="onUpsertVisibleChange($event)"
 ></app-groups-create-dialog>
 
 <cs-filters-panel

@@ -11,11 +11,11 @@ export const APP_MENU: AppMenuItem[] = [
   },
 
   {
-    labelKey: 'menu.companies',
+    labelKey: 'menu.company',
     icon: 'pi pi-building',
-    route: '/companies',
+    route: '/company',
     exact: false,
-    permissions: [PERMISSIONS.USERS.VIEW],
+    permissions: [PERMISSIONS.COMPANIES.VIEW],
   },
 
   {

@@ -1,8 +1,8 @@
 <cs-page-header
-  [subtitle]="'users.subtitle' | translate"
+  [subtitle]="'company.subtitle' | translate"
   [breadcrumb]="[
     { label: ('breadcrumb.dashboard' | translate), url: '/' },
-    { label: ('breadcrumb.users' | translate) },
+    { label: ('breadcrumb.company' | translate) },
   ]"
   [compact]="false"
 >
@@ -20,19 +20,29 @@
     type="button"
     icon="pi pi-check-circle"
     (click)="confirmActivateSelected()"
-    class="p-button-success p-button-sm"
     [disabled]="!canActivateSelected()"
-    [label]="'users.activate.selected' | translate"
+    class="p-button-success p-button-sm"
+    [label]="'company.activate.selected' | translate"
   ></button>
 
   <button
     pButton
     type="button"
-    (click)="confirmDeactivateSelected()"
+    icon="pi pi-lock"
+    (click)="confirmBlockSelected()"
+    [disabled]="!canBlockSelected()"
+    class="p-button-warn p-button-sm"
+    [label]="'company.block.selected' | translate"
+  ></button>
+
+  <button
+    pButton
+    type="button"
     icon="pi pi-ban"
     class="p-button-danger p-button-sm"
+    (click)="confirmDeactivateSelected()"
     [disabled]="!canDeactivateSelected()"
-    [label]="'users.deactivate.selected' | translate"
+    [label]="'company.deactivate.selected' | translate"
   ></button>
 
   <button
@@ -41,20 +51,20 @@
     (click)="goNew()"
     icon="pi pi-plus"
     class="p-button-info p-button-sm"
-    [label]="'users.new.title' | translate"
+    [label]="'company.new.title' | translate"
   ></button>
 </cs-page-header>
 
-<app-users-create-dialog
-  [user]="user()"
+<app-company-create-dialog
   (saved)="onSaved()"
+  [company]="company()"
   [visible]="upsertVisible()"
   (visibleChange)="onUpsertVisibleChange($event)"
-></app-users-create-dialog>
+></app-company-create-dialog>
 
 <cs-filters-panel
-  [collapsed]="true"
   (clear)="clear()"
+  [collapsed]="true"
   (search)="search()"
   [actionsAlign]="'start'"
   [activeFilters]="activeFilters()"
@@ -65,119 +75,85 @@
     <div class="col-12 md:col-3 p-1">
       <p-floatLabel variant="on" class="w-full">
         <input
-          id="name"
           pInputText
-          [value]="name()"
+          id="fantasyName"
+          [value]="fantasyName()"
           class="w-full p-inputtext-sm"
-          (input)="name.set(($any($event.target).value ?? '').toString())"
+          (input)="fantasyName.set(($any($event.target).value ?? '').toString())"
         />
-        <label for="name">{{ 'users.fields.name' | translate }}</label>
+        <label for="fantasyName">{{ 'company.fields.fantasyName' | translate }}</label>
       </p-floatLabel>
     </div>
 
     <div class="col-12 md:col-3 p-1">
       <p-floatLabel variant="on" class="w-full">
         <input
-          id="userName"
           pInputText
-          [value]="userName()"
+          id="socialReason"
+          [value]="socialReason()"
           class="w-full p-inputtext-sm"
-          (input)="userName.set(($any($event.target).value ?? '').toString())"
+          (input)="socialReason.set(($any($event.target).value ?? '').toString())"
         />
-        <label for="userName">{{ 'users.fields.userName' | translate }}</label>
+        <label for="socialReason">{{ 'company.fields.socialReason' | translate }}</label>
       </p-floatLabel>
     </div>
 
     <div class="col-12 md:col-2 p-1">
       <p-floatLabel variant="on" class="w-full">
         <input
-          id="document"
+          id="cnpj"
           pInputText
           csCpfCnpjMask
-          [value]="document()"
+          [value]="cnpj()"
           class="w-full p-inputtext-sm"
-          (input)="document.set(($any($event.target).value ?? '').toString().replace(/\D+/g, ''))"
+          (input)="cnpj.set(($any($event.target).value ?? '').toString().replace(/\D+/g, ''))"
         />
-        <label for="document">{{ 'users.fields.document' | translate }}</label>
+        <label for="cnpj">{{ 'company.fields.cnpj' | translate }}</label>
       </p-floatLabel>
     </div>
 
-    <div class="col-12 md:col-4 p-1">
+    <div class="col-12 md:col-2 p-1">
       <p-floatLabel variant="on" class="w-full">
         <p-multiSelect
-          inputId="status"
-          class="w-full"
           size="small"
+          class="w-full"
+          [filter]="true"
           appendTo="body"
+          [showClear]="true"
           optionLabel="label"
           optionValue="value"
-          [options]="statusOptions()"
-          [ngModel]="status()"
-          [filter]="true"
-          [showClear]="true"
+          inputId="statusEnum"
           [showToggleAll]="false"
-          (onChange)="status.set($event.value ?? null)"
+          [ngModel]="statusEnum()"
+          [options]="statusEnumOptions()"
+          (onChange)="statusEnum.set($event.value ?? null)"
         ></p-multiSelect>
-        <label for="status">{{ 'users.fields.status' | translate }}</label>
+        <label for="statusEnum">{{ 'company.fields.statusEnum' | translate }}</label>
+      </p-floatLabel>
+    </div>
+
+    <div class="col-12 md:col-2 p-1">
+      <p-floatLabel variant="on" class="w-full">
+        <p-multiSelect
+          size="small"
+          class="w-full"
+          [filter]="true"
+          appendTo="body"
+          [showClear]="true"
+          optionLabel="label"
+          optionValue="value"
+          [showToggleAll]="false"
+          inputId="typeCompanyEnum"
+          [ngModel]="typeCompanyEnum()"
+          [options]="typeCompanyEnumOptions()"
+          (onChange)="typeCompanyEnum.set($event.value ?? null)"
+        ></p-multiSelect>
+        <label for="typeCompanyEnum">{{ 'company.fields.typeCompanyEnum' | translate }}</label>
       </p-floatLabel>
     </div>
   </div>
 
-  <div class="grid formgrid gap-0 align-items-end mt-2">
-    <div class="col-12 md:col-3 p-1">
-      <p-floatLabel variant="on" class="w-full">
-        <p-datepicker
-          inputId="lastLoginAt"
-          class="w-full"
-          size="small"
-          appendTo="body"
-          [showIcon]="true"
-          [readonlyInput]="true"
-          selectionMode="range"
-          dateFormat="dd/mm/yy"
-          [ngModel]="lastLoginAtRange()"
-          (ngModelChange)="lastLoginAtRange.set($event ?? null)"
-        ></p-datepicker>
-        <label for="lastLoginAt">{{ 'users.fields.lastLoginAt' | translate }}</label>
-      </p-floatLabel>
-    </div>
-
-    <div class="col-12 md:col-3 p-1">
-      <p-floatLabel variant="on" class="w-full">
-        <p-datepicker
-          inputId="blockedUntil"
-          class="w-full"
-          size="small"
-          appendTo="body"
-          [showIcon]="true"
-          [readonlyInput]="true"
-          selectionMode="range"
-          dateFormat="dd/mm/yy"
-          [ngModel]="blockedUntilRange()"
-          (ngModelChange)="blockedUntilRange.set($event ?? null)"
-        ></p-datepicker>
-        <label for="blockedUntil">{{ 'users.fields.blockedUntil' | translate }}</label>
-      </p-floatLabel>
-    </div>
-
-    <div class="col-12 md:col-3 p-1">
-      <p-floatLabel variant="on" class="w-full">
-        <p-datepicker
-          inputId="passwordExpiresAt"
-          class="w-full"
-          size="small"
-          appendTo="body"
-          [showIcon]="true"
-          [readonlyInput]="true"
-          selectionMode="range"
-          dateFormat="dd/mm/yy"
-          [ngModel]="passwordExpiresAtRange()"
-          (ngModelChange)="passwordExpiresAtRange.set($event ?? null)"
-        ></p-datepicker>
-        <label for="passwordExpiresAt">{{ 'users.fields.passwordExpiresAt' | translate }}</label>
-      </p-floatLabel>
-    </div>
-
+  <div class="grid formgrid gap-0 align-items-end">
     <div class="col-12 md:col-3 p-1">
       <p-floatLabel variant="on" class="w-full">
         <p-datepicker
@@ -193,6 +169,19 @@
           (ngModelChange)="createdAtRange.set($event ?? null)"
         ></p-datepicker>
         <label for="createdAt">{{ 'users.fields.createdAt' | translate }}</label>
+      </p-floatLabel>
+    </div>
+
+    <div class="col-12 md:col-3 p-1">
+      <p-floatLabel variant="on" class="w-full">
+        <input
+          pInputText
+          id="createdBy"
+          [value]="createdBy()"
+          class="w-full p-inputtext-sm"
+          (input)="createdBy.set(($any($event.target).value ?? '').toString())"
+        />
+        <label for="createdBy">{{ 'company.fields.createdBy' | translate }}</label>
       </p-floatLabel>
     </div>
   </div>
@@ -217,11 +206,11 @@
   [rows]="rows"
   [lazy]="true"
   showGridlines
-  [value]="users()"
   [rowHover]="true"
   [paginator]="true"
   sortMode="multiple"
   filterDisplay="menu"
+  [value]="companies()"
   class="p-datatable-sm mt-1"
   styleClass="cs-admin-table"
   [loading]="facade.loading()"
@@ -239,20 +228,19 @@
       <col style="width: 44px" />
       <col style="width: auto" />
       <col style="width: auto" />
-      <col style="width: 130px" />
-      <col style="width: 140px" />
       <col style="width: 170px" />
+      <col style="width: 150px" />
+      <col style="width: 150px" />
       <col style="width: 170px" />
-      <col style="width: 170px" />
-      <col style="width: 170px" />
-      <col style="width: 80px" />
+      <col style="width: 200px" />
+      <col style="width: 100px" />
     </colgroup>
   </ng-template>
 
   <ng-template pTemplate="header">
     <tr>
       <th class="text-center">
-        <ng-container *ngIf="selectionMode(); else selectOneHint">
+        <ng-container *ngIf="selectionStatus(); else selectOneHint">
           <p-checkbox
             [binary]="true"
             [ngModel]="headerChecked()"
@@ -264,22 +252,22 @@
         <ng-template #selectOneHint>
           <i
             class="pi pi-info-circle opacity-70"
-            [pTooltip]="'users.selection.pickOneFirst' | translate"
+            [pTooltip]="'company.selection.pickOneFirst' | translate"
             tooltipPosition="top"
           ></i>
         </ng-template>
       </th>
 
-      <th pSortableColumn="userName">
+      <th pSortableColumn="fantasyName">
         <div class="th-flex text-center">
-          <span class="th-label">{{ 'users.columns.userName' | translate }}</span>
+          <span class="th-label">{{ 'company.columns.fantasyName' | translate }}</span>
           <span class="th-icons">
-            <p-sortIcon field="userName"></p-sortIcon>
+            <p-sortIcon field="fantasyName"></p-sortIcon>
             <p-columnFilter
               type="text"
               display="menu"
               class="ml-auto"
-              field="userName"
+              field="fantasyName"
               matchMode="contains"
               [useGrouping]="false"
               [showOperator]="false"
@@ -290,16 +278,16 @@
         </div>
       </th>
 
-      <th pSortableColumn="name">
+      <th pSortableColumn="socialReason">
         <div class="th-flex text-center">
-          <span class="th-label">{{ 'users.columns.name' | translate }}</span>
+          <span class="th-label">{{ 'company.columns.socialReason' | translate }}</span>
           <span class="th-icons">
-            <p-sortIcon field="name"></p-sortIcon>
+            <p-sortIcon field="socialReason"></p-sortIcon>
             <p-columnFilter
               type="text"
-              field="name"
               display="menu"
               class="ml-auto"
+              field="socialReason"
               matchMode="contains"
               [useGrouping]="false"
               [showOperator]="false"
@@ -310,14 +298,14 @@
         </div>
       </th>
 
-      <th pSortableColumn="document">
+      <th pSortableColumn="cnpj">
         <div class="th-flex text-center">
-          <span class="th-label">{{ 'users.columns.document' | translate }}</span>
+          <span class="th-label">{{ 'company.columns.cnpj' | translate }}</span>
           <span class="th-icons">
-            <p-sortIcon field="document"></p-sortIcon>
+            <p-sortIcon field="cnpj"></p-sortIcon>
             <p-columnFilter
+              field="cnpj"
               display="menu"
-              field="document"
               matchMode="contains"
               [useGrouping]="false"
               [showOperator]="false"
@@ -328,13 +316,13 @@
         </div>
       </th>
 
-      <th pSortableColumn="status">
+      <th pSortableColumn="statusEnum">
         <div class="th-flex text-center">
-          <span class="th-label">{{ 'users.columns.status' | translate }}</span>
+          <span class="th-label">{{ 'company.columns.statusEnum' | translate }}</span>
           <span class="th-icons">
-            <p-sortIcon field="status"></p-sortIcon>
+            <p-sortIcon field="statusEnum"></p-sortIcon>
             <p-columnFilter
-              field="status"
+              field="statusEnum"
               display="menu"
               matchMode="in"
               [showOperator]="false"
@@ -350,7 +338,7 @@
                   [showClear]="true"
                   optionLabel="label"
                   optionValue="value"
-                  [options]="statusOptions()"
+                  [options]="statusEnumOptions()"
                   (onChange)="filter($event.value)"
                   [placeholder]="'common.all' | translate"
                 ></p-multiSelect>
@@ -360,38 +348,87 @@
         </div>
       </th>
 
-      <th pSortableColumn="lastLoginAt">
+      <th pSortableColumn="typeCompanyEnum">
         <div class="th-flex text-center">
-          <span class="th-label">{{ 'users.columns.lastLoginAt' | translate }}</span>
+          <span class="th-label">{{ 'company.columns.typeCompanyEnum' | translate }}</span>
           <span class="th-icons">
-            <p-sortIcon field="lastLoginAt"></p-sortIcon>
-          </span>
-        </div>
-      </th>
-
-      <th pSortableColumn="blockedUntil">
-        <div class="th-flex text-center">
-          <span class="th-label">{{ 'users.columns.blockedUntil' | translate }}</span>
-          <span class="th-icons">
-            <p-sortIcon field="blockedUntil"></p-sortIcon>
-          </span>
-        </div>
-      </th>
-
-      <th pSortableColumn="passwordExpiresAt">
-        <div class="th-flex text-center">
-          <span class="th-label">{{ 'users.columns.passwordExpiresAt' | translate }}</span>
-          <span class="th-icons">
-            <p-sortIcon field="passwordExpiresAt"></p-sortIcon>
+            <p-sortIcon field="typeCompanyEnum"></p-sortIcon>
+            <p-columnFilter
+              display="menu"
+              matchMode="in"
+              [showOperator]="false"
+              [showAddButton]="false"
+              field="typeCompanyEnum"
+              [showMatchModes]="false"
+              styleClass="cs-colfilter"
+            >
+              <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                <p-multiSelect
+                  class="w-full"
+                  appendTo="body"
+                  [ngModel]="value"
+                  [showClear]="true"
+                  optionLabel="label"
+                  optionValue="value"
+                  (onChange)="filter($event.value)"
+                  [options]="typeCompanyEnumOptions()"
+                  [placeholder]="'common.all' | translate"
+                ></p-multiSelect>
+              </ng-template>
+            </p-columnFilter>
           </span>
         </div>
       </th>
 
       <th pSortableColumn="createdAt">
         <div class="th-flex text-center">
-          <span class="th-label">{{ 'users.columns.createdAt' | translate }}</span>
+          <span class="th-label">{{ 'company.columns.createdAt' | translate }}</span>
           <span class="th-icons">
             <p-sortIcon field="createdAt"></p-sortIcon>
+
+            <p-columnFilter
+              field="createdAt"
+              display="menu"
+              matchMode="between"
+              [showOperator]="false"
+              [showAddButton]="false"
+              [showMatchModes]="false"
+              styleClass="cs-colfilter"
+            >
+              <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                <p-datepicker
+                  class="w-full"
+                  appendTo="body"
+                  [showIcon]="true"
+                  [readonlyInput]="true"
+                  selectionMode="range"
+                  dateFormat="dd/mm/yy"
+                  [ngModel]="value"
+                  (ngModelChange)="filter($event)"
+                  [placeholder]="'common.period' | translate"
+                ></p-datepicker>
+              </ng-template>
+            </p-columnFilter>
+          </span>
+        </div>
+      </th>
+
+      <th pSortableColumn="createdBy">
+        <div class="th-flex text-center">
+          <span class="th-label">{{ 'company.columns.createdBy' | translate }}</span>
+          <span class="th-icons">
+            <p-sortIcon field="createdBy"></p-sortIcon>
+            <p-columnFilter
+              type="text"
+              display="menu"
+              class="ml-auto"
+              field="createdBy"
+              matchMode="contains"
+              [useGrouping]="false"
+              [showOperator]="false"
+              [showAddButton]="false"
+              styleClass="cs-colfilter"
+            ></p-columnFilter>
           </span>
         </div>
       </th>
@@ -415,36 +452,35 @@
         ></p-checkbox>
       </td>
 
-      <td class="cell-strong">{{ row.userName }}</td>
+      <td class="cell-strong">{{ row.fantasyName }}</td>
 
       <td class="cell-muted">
-        {{ row.name }}
+        {{ row.socialReason }}
       </td>
 
       <td class="cell-muted text-center">
-        <span [pTooltip]="row.document" tooltipPosition="top">
-          {{ row.document | csDocument }}
+        <span [pTooltip]="row.cnpj" tooltipPosition="top">
+          {{ row.cnpj | csDocument }}
         </span>
       </td>
 
       <td class="cell-muted text-center">
-        <p-tag [value]="statusLabel(row.status)" [severity]="severity(row.status)"></p-tag>
+        <p-tag [value]="statusEnumLabel(row.status)" [severity]="severityEnum(row.status)"></p-tag>
       </td>
 
       <td class="cell-muted text-center">
-        {{ row.lastLoginAt ? (row.lastLoginAt | csDate: 'short') : '-' }}
-      </td>
-
-      <td class="cell-muted text-center">
-        {{ row.blockedUntil ? (row.blockedUntil | csDate: 'short') : '-' }}
-      </td>
-
-      <td class="cell-muted text-center">
-        {{ row.passwordExpiresAt ? (row.passwordExpiresAt | csDate: 'short') : '-' }}
+        <p-tag
+          [value]="typeCompanyEnumLabel(row.type)"
+          [severity]="severityTypeCompanyEnum(row.type)"
+        ></p-tag>
       </td>
 
       <td class="cell-muted text-center">
         {{ row.createdAt ? (row.createdAt | csDate: 'short') : '-' }}
+      </td>
+
+      <td class="cell-muted text-center">
+        {{ row.createdBy?.name }}
       </td>
 
       <td class="text-center">
@@ -469,7 +505,7 @@
             [disabled]="!secPolicy.canActivate(row)"
             [pTooltip]="
               secPolicy.canActivate(row)
-                ? ('users.action.activate.label' | translate)
+                ? ('company.action.activate.label' | translate)
                 : (secPolicy.activateDisabledReason(row) ?? '' | translate)
             "
             (click)="confirmActivate(row)"
@@ -484,10 +520,25 @@
             [disabled]="!secPolicy.canDeactivate(row)"
             [pTooltip]="
               secPolicy.canDeactivate(row)
-                ? ('users.action.deactivate.label' | translate)
+                ? ('company.action.deactivate.label' | translate)
                 : (secPolicy.deactivateDisabledReason(row) ?? '' | translate)
             "
             (click)="confirmDeactivate(row)"
+          ></button>
+
+          <button
+            pButton
+            type="button"
+            icon="pi pi-lock"
+            class="p-button-text p-button-sm"
+            tooltipPosition="top"
+            [disabled]="!secPolicy.canBlock(row)"
+            [pTooltip]="
+              secPolicy.canBlock(row)
+                ? ('company.action.block.label' | translate)
+                : (secPolicy.blockDisabledReason(row) ?? '' | translate)
+            "
+            (click)="confirmBlock(row)"
           ></button>
         </div>
       </td>
@@ -501,7 +552,7 @@
           <div class="empty-title">
             {{
               facade.loadedOnce()
-                ? ('users.empty.title' | translate)
+                ? ('company.empty.title' | translate)
                 : ('common.loading' | translate)
             }}
           </div>

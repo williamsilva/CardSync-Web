@@ -9,7 +9,7 @@
     "groups": {
       "title": "Grupos"
     },
-    "companies": {
+    "company": {
       "title": "Empresas"
     },
     "audit": {
@@ -52,7 +52,7 @@
   },
   "menu": {
     "me": "Minha conta",
-    "companies": "Empresas",
+    "company": "Empresas",
     "dashboard": "Dashboard",
     "audit": {
       "title": "Auditoria",
@@ -74,6 +74,7 @@
     "groups": "Grupos",
     "users": "Usuários",
     "dashboard": "Dashboard",
+    "company": "Empresas",
     "audit": {
       "emailLog": "E-mail Logs"
     }
@@ -104,7 +105,6 @@
     "server": "{message}"
   },
   "users": {
-    "newUser": "Novo Usuário",
     "subtitle": "Gerencie usuários, status e convites",
     "new": {
       "title": "Novo usuário",
@@ -169,16 +169,16 @@
       "message": "Deseja excluir o usuário {userName}?"
     },
     "activate": {
+      "selected": "Ativar",
       "header": "Confirmar ativação",
-      "selected": "Ativar selecionados",
       "successSingle": "Usuário ativado com sucesso.",
       "successBulk": "{count, plural, one {# usuário ativado com sucesso.} other {# usuários ativados com sucesso.}}",
       "messageSingle": "Deseja ativar o usuário {userName}?",
       "messageBulk": "{count, plural, one {Deseja ativar # usuário selecionado?} other {Deseja ativar # usuários selecionados?}}"
     },
     "deactivate": {
+      "selected": "Inativar",
       "header": "Confirmar inativação",
-      "selected": "Inativar selecionados",
       "successSingle": "Usuário inativado com sucesso.",
       "successBulk": "{count, plural, one {# usuário inativado com sucesso.} other {# usuários inativados com sucesso.}}",
       "messageSingle": "Deseja inativar o usuário {userName}?",
@@ -211,6 +211,107 @@
     },
     "empty": {
       "title": "Nenhum usuário encontrado"
+    }
+  },
+  "enum": {
+    "typeCompanyEnum": {
+      "matriz": "Matriz",
+      "filial": "Filial"
+    },
+    "statusEnum": {
+      "active":"Ativo",
+      "inactive":"Inativo",
+      "blocked":"Bloqueado"
+    }
+  },
+  "company": {
+    "subtitle": "Gerencie empresas",
+    "new": {
+      "title": "Nova empresa",
+      "subtitle": "Cadastro de empresa"
+    },
+    "edit": {
+      "title": "Editar empresa",
+      "subtitle": "Edição de empresa"
+    },
+    "columns": {
+      "cnpj":"CNPJ",
+      "statusEnum":"Status",
+      "createdAt":"Cadastrado em",
+      "createdBy":"Cadastrado por",
+      "socialReason":"Razão Social",
+      "fantasyName":"Nome Fantasia",
+      "typeCompanyEnum":"Tipo Empresa"
+    },
+    "action": {
+      "deactivate": {
+        "label": "Inativar",
+        "invalidStatus":"Somente empresas ativas podem ser inativadas.",
+        "noPermission": "Você não tem permissão para desativar empresas."
+      },
+      "activate": {
+        "label": "Ativar",
+        "noPermission":"Você não tem permissão para ativar empresas.",
+        "invalidStatus": "Somente empresas inativas podem ser ativadas."
+      },
+      "block": {
+        "label": "Bloquear",
+        "noPermission":"Você não tem permissão para bloquear empresas.",
+        "invalidStatus": "Somente empresas ativas podem ser bloqueadas."
+      }
+    },
+    "fields": {
+      "cnpj": "CNPJ",
+      "statusEnum": "Status",
+      "createdAt": "Cadastrado em",
+      "createdBy": "Cadastrado por",
+      "socialReason": "Razão Social",
+      "fantasyName": "Nome Fantasia",
+      "typeCompanyEnum": "Tipo Empresa"
+    },
+    "block": {
+      "selected": "Bloquear",
+      "header": "Confirmar bloqueio",
+      "successSingle": "Empresa bloqueada com sucesso.",
+      "messageSingle": "Deseja bloquear a empresa {socialReason}?",
+      "successBulk": "{count, plural, one {# empresa bloqueada com sucesso.} other {# empresas bloqueadas com sucesso.}}",
+      "messageBulk": "{count, plural, one {Deseja bloquear # empresa selecionada?} other {Deseja bloquear # empresas selecionadas?}}"
+    },
+    "activate": {
+      "selected": "Ativar",
+      "header": "Confirmar ativação",
+      "successSingle": "Empresa ativada com sucesso.",
+      "messageSingle": "Deseja ativar a empresa {socialReason}?",
+      "successBulk": "{count, plural, one {# empresa ativada com sucesso.} other {# empresas ativadas com sucesso.}}",
+      "messageBulk": "{count, plural, one {Deseja ativar # empresa selecionada?} other {Deseja ativar # empresas selecionadas?}}"
+    },
+    "deactivate": {
+      "selected": "Inativar",
+      "header": "Confirmar inativação",
+      "successSingle": "Empresa inativada com sucesso.",
+      "messageSingle": "Deseja inativar o empresa {socialReason}?",
+      "successBulk": "{count, plural, one {# empresa inativada com sucesso.} other {# empresas inativadas com sucesso.}}",
+      "messageBulk": "{count, plural, one {Deseja inativar # empresa selecionada?} other {Deseja inativar # empresas selecionadas?}}"
+    },
+    "selection": {
+      "currentMode": "Modo da seleção",
+      "count": "{count, plural, =0 {Nenhum selecionado} one {# selecionado} other {# selecionados}}",
+      "pickOneFirst": "Selecione primeiro uma empesa elegível para definir o contexto da seleção.",
+      "mode": {
+        "none": "Nenhum",
+        "activate": "Ativação em lote",
+        "deactivate": "Inativação em lote"
+      }
+    },
+    "form": {
+      "loadError": "Não foi possível carregar os dados da empresa.",
+      "saveError": "Não foi possível salvar a empresa.",
+      "created": "Empresa criada com sucesso.",
+      "updated": "Empresa atualizada com sucesso.",
+      "permissionDenied": "Você não tem permissão para salvar empresas."
+    },
+    "empty": {
+      "title":"Nenhuma empresa encontrada"
     }
   },
   "accountPassword": {
@@ -312,6 +413,7 @@
     "clear": "Limpar",
     "search": "Buscar",
     "new": "Novo",
+    "period": "Periodo",
     "activate": "Ativar",
     "deactivate": "Inativar",
     "update": "Atualizar",
@@ -366,7 +468,7 @@
         "maxLength": "{label} deve ter no máximo {requiredLength} caracteres.",
         "min": "{label} deve ser no mínimo {min}.",
         "max": "{label} deve ser no máximo {max}.",
-        "email": "{label} está inválido.",
+        "email": "{label} informe um e-mail válido.",
         "pattern": "{label} está em formato inválido.",
         "invalid": "{label} está inválido.",
         "passwordMismatch": "As senhas devem ser iguais."
@@ -374,7 +476,6 @@
     }
   },
   "groups": {
-    "newGroup": "Novo Grupo",
     "subtitle": "Gerencie grupos e permissões de acesso",
     "new": {
       "title": "Novo grupo",

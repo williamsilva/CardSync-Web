@@ -71,9 +71,12 @@ export class UsersCreateDialogComponent {
   readonly groupOptions = this.groups.options;
 
   readonly form = this.fb.nonNullable.group({
-    name: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(80)]],
-    userName: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(255)]],
     document: ['', [Validators.required, cpfCnpjValidator()]],
+    name: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(80)]],
+    userName: [
+      '',
+      [Validators.required, Validators.email, Validators.minLength(3), Validators.maxLength(255)],
+    ],
     groupIds: this.fb.nonNullable.control<string[]>(
       [],
       [Validators.required, Validators.minLength(1)],
@@ -181,7 +184,7 @@ export class UsersCreateDialogComponent {
     const v = this.form.getRawValue();
     const payload: UserCreateInput = {
       name: v.name.trim(),
-      userName: v.userName.trim(),
+      userName: (v.userName ?? '').trim().toLowerCase(),
       document: String(v.document ?? '').replace(/\D+/g, ''),
       groupIds: v.groupIds?.length ? v.groupIds : undefined,
     };

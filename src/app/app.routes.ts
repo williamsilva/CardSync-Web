@@ -81,11 +81,11 @@ export const appRoutes: Routes = [
       },
 
       {
-        path: 'companies',
-        title: 'routes.companies.title',
+        path: 'company',
+        title: 'routes.company.title',
         loadComponent: () =>
-          import('./features/companies/companies-list/companies-list.component').then(
-            (m) => m.CompaniesListComponent,
+          import('./features/company/company-list/company-list.component').then(
+            (m) => m.CompanyListComponent,
           ),
       },
 
@@ -97,11 +97,11 @@ export const appRoutes: Routes = [
       },
 
       {
-        path: 'companies/new',
-        title: 'routes.companiesNew.title',
+        path: 'company/new',
+        title: 'routes.companyNew.title',
         loadComponent: () =>
-          import('./features/companies/companies-create/companies-create.component').then(
-            (m) => m.CompaniesFormComponent,
+          import('./features/company/company-create/company-create-dialog.component').then(
+            (m) => m.CompanyCreateDialogComponent,
           ),
       },
 
