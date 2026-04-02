@@ -10,14 +10,7 @@ export const APP_MENU: AppMenuItem[] = [
     exact: true,
   },
 
-  {
-    labelKey: 'menu.company',
-    icon: 'pi pi-building',
-    route: '/company',
-    exact: false,
-    permissions: [PERMISSIONS.COMPANIES.VIEW],
-  },
-
+  /* Security */
   {
     icon: 'pi pi-shield',
     labelKey: 'menu.security.title',
@@ -38,6 +31,7 @@ export const APP_MENU: AppMenuItem[] = [
     ],
   },
 
+  /* Histotico*/
   {
     icon: 'pi pi-history',
     labelKey: 'menu.audit.title',
@@ -52,6 +46,28 @@ export const APP_MENU: AppMenuItem[] = [
     ],
   },
 
+  /* Cadastros */
+  {
+    icon: 'pi pi-folder-open',
+    labelKey: 'menu.register.title',
+    children: [
+      {
+        labelKey: 'menu.register.company',
+        icon: 'pi pi-building',
+        route: '/company',
+        exact: false,
+        permissions: [PERMISSIONS.COMPANIES.VIEW],
+      },
+      {
+        labelKey: 'menu.register.acquirer',
+        icon: 'pi pi-sitemap',
+        route: '/acquirer',
+        exact: false,
+        //permissions: [PERMISSIONS.REGISTER.VIEW],
+      },
+    ],
+  },
+  /* Outros */
   {
     icon: 'pi pi-credit-card',
     labelKey: 'menu.finance.title',

@@ -71,10 +71,4 @@ export class CompanyApiService {
   deactivateBulk(input: CompanyBulkStatusInput) {
     return this.http.post<void>(`${this.baseUrl}/deactivate`, input);
   }
-
-  resendInvite(id: string) {
-    return this.http.post<void>(`${API.bff}/v1/companies/${id}/resend-invite`, null, {
-      withCredentials: true,
-    });
-  }
 }

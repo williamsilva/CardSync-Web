@@ -22,10 +22,10 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 
 import { I18nService } from '@core/i18n/i18n.service';
 import { CsDatePipe } from '@shared/pipes/cs-date.pipe';
+import { UserMinimalModel } from '@models/user-minimal.models';
 import { CompanyFacade } from '@features/facade/company.facade';
 import { CsDocumentPipe } from '@shared/pipes/cs-document.pipe';
 import { PermissionService } from '@core/auth/permission.service';
-import { UserMinimalModel } from '../../models/user-minimal.models';
 import { BaseListPage } from '@shared/features/list-base/base-list-page';
 import { CompanyAdvancedFilters } from '@features/filter/company.filters';
 import { CompanyModel, CompanyFiltersState } from '@models/company.models';

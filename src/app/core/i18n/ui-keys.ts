@@ -16,10 +16,14 @@ export const UI_KEYS = {
   menu: {
     me: 'menu.me',
     dashboard: 'menu.dashboard',
-    company: 'menu.company',
     audit: {
       title: 'menu.audit.title',
       mail: 'menu.audit.mail',
+    },
+    register: {
+      title: 'menu.register.title',
+      company: 'menu.register.company',
+      acquirer: 'menu.register.acquirer',
     },
     security: {
       title: 'menu.security.title',
@@ -193,6 +197,47 @@ export const UI_KEYS = {
       statusEnum: 'company.fields.statusEnum',
       fantasyName: 'company.fields.fantasyName',
       socialReason: 'company.fields.socialReason',
+    },
+  },
+  acquirer: {
+    form: {
+      created: 'acquirer.form.created',
+      updated: 'acquirer.form.updated',
+      saveError: 'acquirer.form.saveError',
+    },
+    fields: {
+      cnpj: 'acquirer.fields.cnpj',
+      createdAt: 'acquirer.fields.createdAt',
+      createdBy: 'acquirer.fields.createdBy',
+      statusEnum: 'acquirer.fields.statusEnum',
+      fantasyName: 'acquirer.fields.fantasyName',
+      socialReason: 'acquirer.fields.socialReason',
+    },
+    selection: {
+      mode: {
+        none: 'acquirer.selection.mode.none',
+      },
+    },
+    block: {
+      header: 'acquirer.block.header',
+      messageBulk: 'acquirer.block.messageBulk',
+      successBulk: 'acquirer.block.successBulk',
+      messageSingle: 'acquirer.block.messageSingle',
+      successSingle: 'acquirer.block.successSingle',
+    },
+    activate: {
+      header: 'acquirer.activate.header',
+      messageBulk: 'acquirer.activate.messageBulk',
+      successBulk: 'acquirer.activate.successBulk',
+      messageSingle: 'acquirer.activate.messageSingle',
+      successSingle: 'acquirer.activate.successSingle',
+    },
+    deactivate: {
+      header: 'acquirer.deactivate.header',
+      messageBulk: 'acquirer.deactivate.messageBulk',
+      successBulk: 'acquirer.deactivate.successBulk',
+      messageSingle: 'acquirer.deactivate.messageSingle',
+      successSingle: 'acquirer.deactivate.successSingle',
     },
   },
   groups: {

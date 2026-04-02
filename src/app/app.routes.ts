@@ -27,7 +27,6 @@ export const appRoutes: Routes = [
         loadComponent: () =>
           import('./features/dashboard/dashboard.component').then((m) => m.DashboardComponent),
       },
-
       {
         path: 'users',
         title: 'routes.users.title',
@@ -42,7 +41,6 @@ export const appRoutes: Routes = [
             (m) => m.UsersListComponent,
           ),
       },
-
       {
         path: 'groups',
         title: 'routes.groups.title',
@@ -84,8 +82,16 @@ export const appRoutes: Routes = [
         path: 'company',
         title: 'routes.company.title',
         loadComponent: () =>
-          import('./features/company/company-list/company-list.component').then(
+          import('./features/register/company/company-list/company-list.component').then(
             (m) => m.CompanyListComponent,
+          ),
+      },
+      {
+        path: 'acquirer',
+        title: 'routes.acquirer.title',
+        loadComponent: () =>
+          import('./features/register/acquirer/acquirer-list/acquirer-list-component').then(
+            (m) => m.AcquirerListComponent,
           ),
       },
 
@@ -100,7 +106,7 @@ export const appRoutes: Routes = [
         path: 'company/new',
         title: 'routes.companyNew.title',
         loadComponent: () =>
-          import('./features/company/company-create/company-create-dialog.component').then(
+          import('./features/register/company/company-create/company-create-dialog.component').then(
             (m) => m.CompanyCreateDialogComponent,
           ),
       },

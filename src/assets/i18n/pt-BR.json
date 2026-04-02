@@ -12,6 +12,9 @@
     "company": {
       "title": "Empresas"
     },
+    "acquirer": {
+      "title": "Adquirentes"
+    },
     "audit": {
       "title": "E-mail Logs"
     },
@@ -52,11 +55,15 @@
   },
   "menu": {
     "me": "Minha conta",
-    "company": "Empresas",
     "dashboard": "Dashboard",
     "audit": {
       "title": "Auditoria",
       "mail": "E-mail Logs"
+    },
+    "register": {
+      "title": "Cadastros",
+      "company": "Empresas",
+      "acquirer": "Adquirentes"
     },
     "security": {
       "title": "Segurança",
@@ -74,7 +81,10 @@
     "groups": "Grupos",
     "users": "Usuários",
     "dashboard": "Dashboard",
-    "company": "Empresas",
+    "register": {
+      "company": "Empresas",
+      "acquirer": "Adquirentes"
+    },
     "audit": {
       "emailLog": "E-mail Logs"
     }
@@ -312,6 +322,94 @@
     },
     "empty": {
       "title":"Nenhuma empresa encontrada"
+    }
+  },
+  "acquirer":{
+    "subtitle": "Gerencie adquirentes",
+    "new": {
+      "title": "Nova adquirente",
+      "subtitle": "Cadastro de adquirente"
+    },
+    "edit": {
+      "title": "Editar adquirente",
+      "subtitle": "Edição de adquirente"
+    },
+    "columns": {
+      "cnpj":"CNPJ",
+      "statusEnum":"Status",
+      "createdAt":"Cadastrado em",
+      "createdBy":"Cadastrado por",
+      "socialReason":"Razão Social",
+      "fantasyName":"Nome Fantasia"
+    },
+    "action": {
+      "deactivate": {
+        "label": "Inativar",
+        "invalidStatus":"Somente adquirentes ativas podem ser inativadas.",
+        "noPermission": "Você não tem permissão para desativar adquirentes."
+      },
+      "activate": {
+        "label": "Ativar",
+        "noPermission":"Você não tem permissão para ativar adquirentes.",
+        "invalidStatus": "Somente adquirentes inativas podem ser ativadas."
+      },
+      "block": {
+        "label": "Bloquear",
+        "noPermission":"Você não tem permissão para bloquear adquirentes.",
+        "invalidStatus": "Somente adquirentes ativas podem ser bloqueadas."
+      }
+    },
+    "fields": {
+      "cnpj": "CNPJ",
+      "statusEnum": "Status",
+      "createdAt": "Cadastrado em",
+      "createdBy": "Cadastrado por",
+      "socialReason": "Razão Social",
+      "fantasyName": "Nome Fantasia"
+    },
+    "block": {
+      "selected": "Bloquear",
+      "header": "Confirmar bloqueio",
+      "successSingle": "Adquirente bloqueada com sucesso.",
+      "messageSingle": "Deseja bloquear a adquirente {socialReason}?",
+      "successBulk": "{count, plural, one {# adquirente bloqueada com sucesso.} other {# adquirentes bloqueadas com sucesso.}}",
+      "messageBulk": "{count, plural, one {Deseja bloquear # adquirente selecionada?} other {Deseja bloquear # adquirentes selecionadas?}}"
+    },
+    "activate": {
+      "selected": "Ativar",
+      "header": "Confirmar ativação",
+      "successSingle": "Adquirente ativada com sucesso.",
+      "messageSingle": "Deseja ativar a adquirente {socialReason}?",
+      "successBulk": "{count, plural, one {# adquirente ativada com sucesso.} other {# adquirentes ativadas com sucesso.}}",
+      "messageBulk": "{count, plural, one {Deseja ativar # adquirente selecionada?} other {Deseja ativar # adquirentes selecionadas?}}"
+    },
+    "deactivate": {
+      "selected": "Inativar",
+      "header": "Confirmar inativação",
+      "successSingle": "Adquirente inativada com sucesso.",
+      "messageSingle": "Deseja inativar o adquirente {socialReason}?",
+      "successBulk": "{count, plural, one {# adquirente inativada com sucesso.} other {# adquirentes inativadas com sucesso.}}",
+      "messageBulk": "{count, plural, one {Deseja inativar # adquirente selecionada?} other {Deseja inativar # adquirentes selecionadas?}}"
+    },
+    "selection": {
+      "currentMode": "Modo da seleção",
+      "count": "{count, plural, =0 {Nenhum selecionado} one {# selecionado} other {# selecionados}}",
+      "pickOneFirst": "Selecione primeiro uma empesa elegível para definir o contexto da seleção.",
+      "mode": {
+        "none": "Nenhum",
+        "activate": "Ativação em lote",
+        "deactivate": "Inativação em lote"
+      }
+    },
+    "form": {
+      "loadError": "Não foi possível carregar os dados da adquirente.",
+      "saveError": "Não foi possível salvar a adquirente.",
+      "created": "Adquirente criada com sucesso.",
+      "updated": "Adquirente atualizada com sucesso.",
+      "permissionDenied": "Você não tem permissão para salvar adquirentes."
+    },
+    "empty": {
+      "title":"Nenhuma adquirente encontrada"
     }
   },
   "accountPassword": {

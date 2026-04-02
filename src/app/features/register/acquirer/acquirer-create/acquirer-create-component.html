@@ -1,0 +1,126 @@
+<p-dialog
+  [modal]="true"
+  [closable]="false"
+  (onHide)="onHide()"
+  [draggable]="false"
+  [resizable]="false"
+  [visible]="visible()"
+  [contentStyle]="{ overflow: 'visible' }"
+  [style]="{ width: '720px', maxWidth: '95vw' }"
+  [header]="
+    acquirer()?.id ? ('acquirer.edit.title' | translate) : ('acquirer.new.title' | translate)
+  "
+>
+  <form [formGroup]="form" class="cs-dialog-form">
+    <div class="grid formgrid gap-0">
+      <div class="col-12 md:col-6 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <input
+            pInputText
+            type="text"
+            id="fantasyName"
+            formControlName="fantasyName"
+            class="w-full p-inputtext-sm"
+          />
+          <app-error-msg
+            [field]="'fantasyName'"
+            [forId]="'fantasyName'"
+            [showTechnicalDetails]="true"
+            [control]="form.controls.fantasyName"
+            [label]="'acquirer.fields.fantasyName' | translate"
+          />
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 md:col-6 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <input
+            pInputText
+            type="text"
+            id="socialReason"
+            class="w-full p-inputtext-sm"
+            formControlName="socialReason"
+          />
+          <app-error-msg
+            [field]="'socialReason'"
+            [forId]="'socialReason'"
+            [showTechnicalDetails]="false"
+            [control]="form.controls.socialReason"
+            [label]="'acquirer.fields.socialReason' | translate"
+          />
+        </p-floatLabel>
+      </div>
+    </div>
+
+    <div class="grid formgrid gap-0">
+      <div class="col-12 md:col-5 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <input
+            id="cnpj"
+            pInputText
+            type="text"
+            csCpfCnpjMask
+            autocomplete="off"
+            inputmode="numeric"
+            formControlName="cnpj"
+            class="w-full p-inputtext-sm"
+          />
+          <app-error-msg
+            [field]="'cnpj'"
+            [forId]="'cnpj'"
+            [control]="form.controls.cnpj"
+            [label]="'acquirer.fields.cnpj' | translate"
+          />
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 md:col-3 p-2" *ngIf="isEdit()">
+        <p-floatLabel variant="on" class="w-full">
+          <p-select
+            size="small"
+            class="w-full"
+            appendTo="body"
+            inputId="status"
+            [filter]="false"
+            [showClear]="true"
+            optionValue="value"
+            optionLabel="label"
+            formControlName="status"
+            [options]="statusOptions()"
+          ></p-select>
+
+          <app-error-msg
+            [field]="'status'"
+            [forId]="'status'"
+            [required]="false"
+            [control]="form.controls.status"
+            [label]="'acquirer.fields.statusEnum' | translate"
+          />
+        </p-floatLabel>
+      </div>
+    </div>
+  </form>
+
+  <ng-template pTemplate="footer">
+    <button
+      pButton
+      type="button"
+      (click)="close()"
+      icon="pi pi-times"
+      class="p-button-text p-button-sm"
+      [label]="'common.cancel' | translate"
+      [disabled]="saving() || loadingAcquirer()"
+    ></button>
+
+    <button
+      pButton
+      type="button"
+      (click)="save()"
+      icon="pi pi-save"
+      class="p-button-sm"
+      [loading]="saving()"
+      [label]="'common.save' | translate"
+      [disabled]="saving() || loadingAcquirer()"
+    ></button>
+  </ng-template>
+</p-dialog>
