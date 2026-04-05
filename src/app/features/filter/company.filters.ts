@@ -1,5 +1,4 @@
 import { StatusEnum } from '@models/enums/status.enum';
-import { UserMinimalModel } from '@models/user-minimal.models';
 import { TypeCompanyEnum } from '@models/enums/type-company.enum';
 
 export interface CompanyAdvancedFilters {
@@ -10,7 +9,7 @@ export interface CompanyAdvancedFilters {
   createdAtTo?: string;
   createdAtFrom?: string;
 
+  createdBy: string[] | null;
   statusEnum?: StatusEnum[] | null;
-  createdBy: UserMinimalModel | null;
   typeEnum?: TypeCompanyEnum[] | null;
 }

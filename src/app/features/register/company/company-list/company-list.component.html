@@ -67,7 +67,7 @@
   [collapsed]="true"
   (search)="search()"
   [actionsAlign]="'start'"
-  [activeFilters]="activeFilters()"
+  [activeFilterGroups]="activeFilterGroups()"
   [activeCount]="activeFiltersCount()"
   [title]="'common.filter' | translate"
 >
@@ -168,19 +168,26 @@
           [ngModel]="createdAtRange()"
           (ngModelChange)="createdAtRange.set($event ?? null)"
         ></p-datepicker>
-        <label for="createdAt">{{ 'users.fields.createdAt' | translate }}</label>
+        <label for="createdAt">{{ 'company.fields.createdAt' | translate }}</label>
       </p-floatLabel>
     </div>
 
     <div class="col-12 md:col-3 p-1">
       <p-floatLabel variant="on" class="w-full">
-        <input
-          pInputText
-          id="createdBy"
-          [value]="createdBy()"
-          class="w-full p-inputtext-sm"
-          (input)="createdBy.set(($any($event.target).value ?? '').toString())"
-        />
+        <p-multiSelect
+          size="small"
+          class="w-full"
+          [filter]="true"
+          appendTo="body"
+          [showClear]="true"
+          optionLabel="label"
+          optionValue="value"
+          inputId="createdBy"
+          [showToggleAll]="false"
+          [ngModel]="createdBy()"
+          [options]="usersOptions()"
+          (onChange)="createdBy.set($event.value ?? null)"
+        ></p-multiSelect>
         <label for="createdBy">{{ 'company.fields.createdBy' | translate }}</label>
       </p-floatLabel>
     </div>
@@ -210,6 +217,7 @@
   [paginator]="true"
   sortMode="multiple"
   filterDisplay="menu"
+  stateStorage="local"
   [value]="companies()"
   class="p-datatable-sm mt-1"
   styleClass="cs-admin-table"
@@ -220,6 +228,7 @@
   (onLazyLoad)="onLazyLoad($event)"
   [paginatorDropdownAppendTo]="'body'"
   [rowsPerPageOptions]="[10, 20, 50, 100]"
+  stateKey="cardsync.company.table.state.v1"
   [tableStyle]="{ width: '100%', 'min-width': '62rem' }"
   [currentPageReportTemplate]="'pagination.report' | translate"
 >
@@ -419,16 +428,29 @@
           <span class="th-icons">
             <p-sortIcon field="createdBy"></p-sortIcon>
             <p-columnFilter
-              type="text"
               display="menu"
-              class="ml-auto"
+              matchMode="in"
               field="createdBy"
-              matchMode="contains"
-              [useGrouping]="false"
               [showOperator]="false"
               [showAddButton]="false"
+              [showMatchModes]="false"
               styleClass="cs-colfilter"
-            ></p-columnFilter>
+            >
+              <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                <p-multiSelect
+                  class="w-full"
+                  appendTo="body"
+                  [filter]="true"
+                  [ngModel]="value"
+                  [showClear]="true"
+                  optionLabel="label"
+                  optionValue="value"
+                  [options]="usersOptions()"
+                  (onChange)="filter($event.value)"
+                  [placeholder]="'common.all' | translate"
+                ></p-multiSelect>
+              </ng-template>
+            </p-columnFilter>
           </span>
         </div>
       </th>
@@ -515,8 +537,8 @@
             pButton
             type="button"
             icon="pi pi-ban"
-            class="p-button-text p-button-sm"
             tooltipPosition="top"
+            class="p-button-text p-button-sm"
             [disabled]="!secPolicy.canDeactivate(row)"
             [pTooltip]="
               secPolicy.canDeactivate(row)
@@ -530,8 +552,8 @@
             pButton
             type="button"
             icon="pi pi-lock"
-            class="p-button-text p-button-sm"
             tooltipPosition="top"
+            class="p-button-text p-button-sm"
             [disabled]="!secPolicy.canBlock(row)"
             [pTooltip]="
               secPolicy.canBlock(row)
@@ -547,7 +569,7 @@
 
   <ng-template pTemplate="emptymessage">
     <tr>
-      <td [attr.colspan]="10" class="empty-td">
+      <td [attr.colspan]="9" class="empty-td">
         <div class="empty empty-center">
           <div class="empty-title">
             {{

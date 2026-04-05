@@ -1,3 +1,5 @@
+import { UserMinimalModel } from '@models/user-minimal.models';
+
 export interface PermissionOptionModel {
   id: string;
   name: string;
@@ -14,6 +16,8 @@ export interface GroupModel {
   id: string;
   name: string;
   description: string;
+  createdAt?: string | null;
+  createdBy?: UserMinimalModel | null;
   permissionsCount?: number;
   usersCount?: number;
   permissions?: PermissionOptionModel[];
@@ -42,11 +46,20 @@ export interface GroupApiModel {
   id: string;
   name: string;
   description?: string | null;
+  createdAt?: string | null;
+  createdBy?: UserMinimalModel | null;
   permissionsCount?: number | null;
   usersCount?: number | null;
   permissions?: PermissionOptionApiModel[] | null;
   users?: UserOptionApiModel[] | null;
 }
+
+export type GroupsFiltersState = {
+  name: string;
+  description: string;
+  createdBy: string[] | null;
+  createdAtRange: [string, string] | null;
+};
 
 export interface PermissionOptionApiModel {
   id: string;
@@ -83,6 +96,8 @@ export function mapGroupApiModel(input: GroupApiModel): GroupModel {
     id: input.id,
     name: input.name,
     description: input.description ?? '',
+    createdAt: input.createdAt ?? null,
+    createdBy: input.createdBy ?? null,
     permissionsCount: input.permissionsCount ?? input.permissions?.length ?? 0,
     usersCount: input.usersCount ?? input.users?.length ?? 0,
     permissions: (input.permissions ?? []).map(mapPermissionOptionApiModel),

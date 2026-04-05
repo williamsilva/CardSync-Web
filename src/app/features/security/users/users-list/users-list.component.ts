@@ -28,14 +28,17 @@ import { CsDocumentPipe } from '@shared/pipes/cs-document.pipe';
 import { PermissionService } from '@core/auth/permission.service';
 import { UserModel, UsersFiltersState } from '@models/users.models';
 import { UsersAdvancedFilters } from '@features/filter/users.filters';
-import { BaseListPage } from '@shared/features/list-base/base-list-page';
+import { StatefulListPage } from '@features/list-base/stateful-list-page';
+import { BulkActionListPage } from '@features/list-base/bulk-action-list-page';
 import { buildListQuery } from '@shared/features/list-query/list-query.builder';
 import { CpfCnpjMaskDirective } from '@shared/directives/cpf-cnpj-mask.directive';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
-import { mapPrimeLazyToTableQuery } from '@shared/features/list-query/primeng-lazy.mapper';
-import { FiltersPanelComponent } from '@shared/features/filters-panel/filters-panel.component';
 import { DATA_TABLE_SHELL_IMPORTS } from '@shared/features/data-table-shell/data-table-shell.component';
 import { UsersCreateDialogComponent } from '@features/security/users/users-create/users-create-dialog.component';
+import {
+  ActiveFilterItem,
+  FiltersPanelComponent,
+} from '@shared/features/filters-panel/filters-panel.component';
 import {
   UserStatus,
   userStatusLabel,
@@ -46,6 +49,11 @@ import {
   BulkUserActionMode,
   SecurityPermissionPolicy,
 } from '@features/security/policy/security-permission.policy';
+import {
+  readSingleFilterValue,
+  readArrayFilterValues,
+  readDateRangeFilterValue,
+} from '@features/list-base/table-filter-readers';
 
 @Component({
   standalone: true,
@@ -78,27 +86,37 @@ import {
     UsersCreateDialogComponent,
   ],
 })
-export class UsersListComponent extends BaseListPage<UsersFiltersState> {
+export class UsersListComponent extends StatefulListPage<UsersFiltersState, UsersAdvancedFilters> {
   @ViewChild('dt') private dt?: Table;
 
-  readonly i18n = inject(I18nService);
+  protected override readonly i18n = inject(I18nService);
   readonly facade = inject(UsersFacade);
   readonly perms = inject(PermissionService);
-  private readonly toast = inject(MessageService);
-  private readonly confirm = inject(ConfirmationService);
+  readonly usersOptions = this.facade.options;
+  protected readonly toast = inject(MessageService);
+  protected readonly confirm = inject(ConfirmationService);
   protected readonly secPolicy = inject(SecurityPermissionPolicy);
 
-  private searchedOnce = false;
-  private skipNextLazy = false;
-  private lastLazyEvent: any | null = null;
+  private readonly bulk = new (class extends BulkActionListPage {
+    protected override readonly i18n = inject(I18nService);
+    protected override readonly toast = inject(MessageService);
+    protected override readonly confirm = inject(ConfirmationService);
+    constructor(private readonly host: UsersListComponent) {
+      super();
+    }
+    protected override clearSelection(): void {
+      this.host.clearSelection();
+    }
+  })(this);
 
+  override rows = Number(localStorage.getItem('users.table.rows')) || 10;
   skeletonRows = Array.from({ length: 8 });
-  rows = Number(localStorage.getItem('users.table.rows')) || 10;
 
   name = signal('');
   userName = signal('');
   document = signal('');
   status = signal<UserStatus[] | null>(null);
+  createdBy = signal<string[] | null>(null);
   createdAtRange = signal<Date[] | null>(null);
   lastLoginAtRange = signal<Date[] | null>(null);
   blockedUntilRange = signal<Date[] | null>(null);
@@ -106,7 +124,6 @@ export class UsersListComponent extends BaseListPage<UsersFiltersState> {
 
   upsertVisible = signal(false);
   user = signal<UserModel | null>(null);
-
   selectedRows = signal<UserModel[]>([]);
 
   readonly statusOptions = computed(() => {
@@ -173,32 +190,11 @@ export class UsersListComponent extends BaseListPage<UsersFiltersState> {
     return this.i18n.tUi('users.selection.mode.none');
   });
 
-  activeFiltersCount = computed(() => {
-    let c = 0;
-    if (this.name().trim()) c++;
-    if (this.status()?.length) c++;
-    if (this.userName().trim()) c++;
-    if (this.document().trim()) c++;
-
-    const create = this.createdAtRange();
-    if (create?.[0] && create?.[1]) c++;
-
-    const last = this.lastLoginAtRange();
-    if (last?.[0] && last?.[1]) c++;
-
-    const blocked = this.blockedUntilRange();
-    if (blocked?.[0] && blocked?.[1]) c++;
-
-    const expires = this.passwordExpiresAtRange();
-    if (expires?.[0] && expires?.[1]) c++;
-
-    return c;
-  });
-
-  activeFilters = computed(() => {
-    const items: { label: string; value: string }[] = [];
+  protected override readonly advancedActiveFilters = computed<ActiveFilterItem[]>(() => {
+    const items: ActiveFilterItem[] = [];
 
     const statuses = this.status();
+    const createdBy = this.createdBy();
     const name = this.name().trim();
     const userName = this.userName().trim();
     const document = this.document().trim();
@@ -217,43 +213,43 @@ export class UsersListComponent extends BaseListPage<UsersFiltersState> {
       items.push({ label: this.i18n.tUi('users.fields.status'), value: labels });
     }
 
-    if (create?.[0] && create?.[1]) {
-      const fmt = (d: Date) =>
-        new Intl.DateTimeFormat(this.i18n.getLang(), { dateStyle: 'short' }).format(d);
+    if (createdBy?.length) {
+      const labels = this.usersOptions()
+        .filter((opt) => createdBy.includes(opt.value))
+        .map((opt) => opt.label)
+        .join(', ');
 
       items.push({
+        label: this.i18n.tUi('users.fields.createdBy'),
+        value: labels,
+      });
+    }
+
+    if (create?.[0] && create?.[1]) {
+      items.push({
         label: this.i18n.tUi('users.fields.createdAt'),
-        value: `${fmt(create[0])} – ${fmt(create[1])}`,
+        value: `${this.formatDate(create[0])} – ${this.formatDate(create[1])}`,
       });
     }
 
     if (last?.[0] && last?.[1]) {
-      const fmt = (d: Date) =>
-        new Intl.DateTimeFormat(this.i18n.getLang(), { dateStyle: 'short' }).format(d);
-
       items.push({
         label: this.i18n.tUi('users.fields.lastLoginAt'),
-        value: `${fmt(last[0])} – ${fmt(last[1])}`,
+        value: `${this.formatDate(last[0])} – ${this.formatDate(last[1])}`,
       });
     }
 
     if (blocked?.[0] && blocked?.[1]) {
-      const fmt = (d: Date) =>
-        new Intl.DateTimeFormat(this.i18n.getLang(), { dateStyle: 'short' }).format(d);
-
       items.push({
         label: this.i18n.tUi('users.fields.blockedUntil'),
-        value: `${fmt(blocked[0])} – ${fmt(blocked[1])}`,
+        value: `${this.formatDate(blocked[0])} – ${this.formatDate(blocked[1])}`,
       });
     }
 
     if (expires?.[0] && expires?.[1]) {
-      const fmt = (d: Date) =>
-        new Intl.DateTimeFormat(this.i18n.getLang(), { dateStyle: 'short' }).format(d);
-
       items.push({
         label: this.i18n.tUi('users.fields.passwordExpiresAt'),
-        value: `${fmt(expires[0])} – ${fmt(expires[1])}`,
+        value: `${this.formatDate(expires[0])} – ${this.formatDate(expires[1])}`,
       });
     }
 
@@ -261,51 +257,13 @@ export class UsersListComponent extends BaseListPage<UsersFiltersState> {
   });
 
   ngOnInit() {
-    this.loadOnInit();
-
-    const hasAdvanced = this.activeFiltersCount() > 0;
-    if (hasAdvanced) {
-      this.searchedOnce = true;
-    }
-
-    this.skipNextLazy = true;
-    this.lastLazyEvent = { first: 0, rows: this.rows, filters: undefined, globalFilter: null };
-    this.reloadWithCurrentState();
-  }
-
-  search() {
-    this.persistFilters();
-    this.searchedOnce = true;
-
-    if (this.lastLazyEvent) {
-      this.lastLazyEvent = { ...this.lastLazyEvent, first: 0 };
-    }
-
-    this.reloadWithCurrentState();
+    this.facade.loadUsersOptionsFilter();
+    this.initStatefulList();
   }
 
   clear() {
-    this.clearAndPersist();
-    this.searchedOnce = true;
     this.clearSelection();
-    this.dt?.clear();
-
-    this.lastLazyEvent = {
-      first: 0,
-      rows: this.rows,
-      filters: undefined,
-      globalFilter: null,
-      sortField: undefined,
-      sortOrder: undefined,
-      multiSortMeta: undefined,
-    };
-
-    this.reloadWithCurrentState();
-  }
-
-  onPageChange(event: any) {
-    this.rows = event.rows;
-    localStorage.setItem('users.table.rows', this.rows.toString());
+    this.clearTableAndReload(this.dt);
   }
 
   onSaved(): void {
@@ -367,43 +325,21 @@ export class UsersListComponent extends BaseListPage<UsersFiltersState> {
   }
 
   activate(row: UserModel): void {
-    this.clearSelection();
-
-    this.facade.activate(row.id).subscribe({
-      next: () => {
-        this.clearSelection();
-        this.toast.add({
-          severity: 'success',
-          summary: this.i18n.tUi('common.success'),
-          detail: this.i18n.tUi('users.activate.successSingle'),
-        });
-      },
-      error: () => {
-        this.clearSelection();
-      },
-    });
+    this.bulk.executeAction(
+      this.facade.activate(row.id),
+      this.i18n.tUi('users.activate.successSingle'),
+    );
   }
 
   deactivate(row: UserModel): void {
-    this.clearSelection();
-
-    this.facade.deactivate(row.id).subscribe({
-      next: () => {
-        this.clearSelection();
-        this.toast.add({
-          severity: 'success',
-          summary: this.i18n.tUi('common.success'),
-          detail: this.i18n.tUi('users.deactivate.successSingle'),
-        });
-      },
-      error: () => {
-        this.clearSelection();
-      },
-    });
+    this.bulk.executeAction(
+      this.facade.deactivate(row.id),
+      this.i18n.tUi('users.deactivate.successSingle'),
+    );
   }
 
   confirmActivate(row: UserModel): void {
-    this.confirm.confirm({
+    this.bulk.confirmAction({
       header: this.i18n.tUi('users.activate.header'),
       message: this.i18n.tUi('users.activate.messageSingle', {
         userName: row?.name ?? row?.userName ?? row?.id ?? '',
@@ -414,7 +350,7 @@ export class UsersListComponent extends BaseListPage<UsersFiltersState> {
   }
 
   confirmDeactivate(row: UserModel): void {
-    this.confirm.confirm({
+    this.bulk.confirmAction({
       header: this.i18n.tUi('users.deactivate.header'),
       message: this.i18n.tUi('users.deactivate.messageSingle', {
         userName: row?.name ?? row?.userName ?? row?.id ?? '',
@@ -428,49 +364,27 @@ export class UsersListComponent extends BaseListPage<UsersFiltersState> {
     const rows = this.selectedActivatableRows();
     if (!rows.length) return;
 
-    this.clearSelection();
-
-    this.facade.activateBulk(rows.map((row) => row.id)).subscribe({
-      next: () => {
-        this.clearSelection();
-        this.toast.add({
-          severity: 'success',
-          summary: this.i18n.tUi('common.success'),
-          detail: this.i18n.tUi('users.activate.successBulk', { count: rows.length }),
-        });
-      },
-      error: () => {
-        this.clearSelection();
-      },
-    });
+    this.bulk.executeAction(
+      this.facade.activateBulk(rows.map((row) => row.id)),
+      this.i18n.tUi('users.activate.successBulk', { count: rows.length }),
+    );
   }
 
   deactivateSelected(): void {
     const rows = this.selectedDeactivatableRows();
     if (!rows.length) return;
 
-    this.clearSelection();
-
-    this.facade.deactivateBulk(rows.map((row) => row.id)).subscribe({
-      next: () => {
-        this.clearSelection();
-        this.toast.add({
-          severity: 'success',
-          summary: this.i18n.tUi('common.success'),
-          detail: this.i18n.tUi('users.deactivate.successBulk', { count: rows.length }),
-        });
-      },
-      error: () => {
-        this.clearSelection();
-      },
-    });
+    this.bulk.executeAction(
+      this.facade.deactivateBulk(rows.map((row) => row.id)),
+      this.i18n.tUi('users.deactivate.successBulk', { count: rows.length }),
+    );
   }
 
   confirmActivateSelected(): void {
     const rows = this.selectedActivatableRows();
     if (!rows.length) return;
 
-    this.confirm.confirm({
+    this.bulk.confirmAction({
       header: this.i18n.tUi('users.activate.header'),
       message: this.i18n.tUi('users.activate.messageBulk', { count: rows.length }),
       icon: 'pi pi-check-circle',
@@ -482,7 +396,7 @@ export class UsersListComponent extends BaseListPage<UsersFiltersState> {
     const rows = this.selectedDeactivatableRows();
     if (!rows.length) return;
 
-    this.confirm.confirm({
+    this.bulk.confirmAction({
       header: this.i18n.tUi('users.deactivate.header'),
       message: this.i18n.tUi('users.deactivate.messageBulk', { count: rows.length }),
       icon: 'pi pi-exclamation-triangle',
@@ -519,25 +433,12 @@ export class UsersListComponent extends BaseListPage<UsersFiltersState> {
     this.reloadWithCurrentState();
   }
 
-  onLazyLoad(e: any) {
-    this.lastLazyEvent = e;
+  protected override tableStateKey(): string {
+    return 'cardsync.users.table.state.v1';
+  }
 
-    if (this.skipNextLazy) {
-      this.skipNextLazy = false;
-      return;
-    }
-
-    const hasTableInteraction =
-      !!e?.filters ||
-      e?.sortField != null ||
-      (Array.isArray(e?.multiSortMeta) && e.multiSortMeta.length > 0) ||
-      e?.globalFilter != null;
-
-    if (!this.searchedOnce && this.activeFiltersCount() > 0 && !hasTableInteraction) {
-      return;
-    }
-
-    this.reloadWithCurrentState();
+  protected override tableRowsKey(): string {
+    return 'users.table.rows';
   }
 
   protected override filtersKey(): string {
@@ -564,6 +465,7 @@ export class UsersListComponent extends BaseListPage<UsersFiltersState> {
     this.userName.set('');
     this.document.set('');
     this.status.set(null);
+    this.createdBy.set(null);
     this.createdAtRange.set(null);
     this.lastLoginAtRange.set(null);
     this.blockedUntilRange.set(null);
@@ -581,6 +483,7 @@ export class UsersListComponent extends BaseListPage<UsersFiltersState> {
       userName: this.userName(),
       document: this.document(),
       status: this.status()?.length ? this.status() : null,
+      createdBy: this.createdBy()?.length ? this.createdBy() : null,
       lastLoginAtRange:
         last?.[0] && last?.[1] ? [last[0].toISOString(), last[1].toISOString()] : null,
       createdAtRange:
@@ -595,6 +498,7 @@ export class UsersListComponent extends BaseListPage<UsersFiltersState> {
   protected override applyFiltersState(s: UsersFiltersState): void {
     this.name.set(s.name ?? '');
     this.status.set(s.status ?? null);
+    this.createdBy.set(s.createdBy ?? null);
     this.userName.set(s.userName ?? '');
     this.document.set(s.document ?? '');
 
@@ -623,7 +527,7 @@ export class UsersListComponent extends BaseListPage<UsersFiltersState> {
     );
   }
 
-  protected buildAdvancedFilters(): Partial<UsersAdvancedFilters> {
+  protected override buildAdvancedFilters(): Partial<UsersAdvancedFilters> {
     const create = this.createdAtRange();
     const last = this.lastLoginAtRange();
     const blocked = this.blockedUntilRange();
@@ -654,6 +558,7 @@ export class UsersListComponent extends BaseListPage<UsersFiltersState> {
       userName: this.userName().trim() || undefined,
       document: onlyDigits(this.document()) || undefined,
       status: this.status()?.length ? this.status() : undefined,
+      createdBy: this.createdBy()?.length ? this.createdBy() : undefined,
       lastLoginAtTo: lastTo,
       lastLoginAtFrom: lastFrom,
       createdAtTo: createTo,
@@ -665,22 +570,97 @@ export class UsersListComponent extends BaseListPage<UsersFiltersState> {
     };
   }
 
-  protected reloadWithCurrentState() {
-    const tableQuery = mapPrimeLazyToTableQuery(
-      this.lastLazyEvent ?? { first: 0, rows: this.rows },
-      this.rows,
+  protected override mapTableFiltersToActiveItems(filters: any): ActiveFilterItem[] {
+    this.i18n.getAppliedLang();
+
+    const items: ActiveFilterItem[] = [];
+
+    const userName = readSingleFilterValue(filters, 'userName');
+    if (userName) {
+      items.push({ label: this.i18n.tUi('users.fields.userName'), value: userName });
+    }
+
+    const name = readSingleFilterValue(filters, 'name');
+    if (name) {
+      items.push({ label: this.i18n.tUi('users.fields.name'), value: name });
+    }
+
+    const document = readSingleFilterValue(filters, 'document');
+    if (document) {
+      items.push({ label: this.i18n.tUi('users.fields.document'), value: document });
+    }
+
+    const statuses = readArrayFilterValues(filters, 'status');
+    if (statuses.length) {
+      items.push({
+        label: this.i18n.tUi('users.fields.status'),
+        value: statuses.map((value) => userStatusLabel(value as UserStatus, this.i18n)).join(', '),
+      });
+    }
+
+    const lastLoginAt = readDateRangeFilterValue(
+      filters,
+      'lastLoginAt',
+      this.formatDate.bind(this),
     );
+    if (lastLoginAt) {
+      items.push({ label: this.i18n.tUi('users.fields.lastLoginAt'), value: lastLoginAt });
+    }
 
-    const query = buildListQuery<UsersAdvancedFilters>(tableQuery, this.buildAdvancedFilters());
+    const blockedUntil = readDateRangeFilterValue(
+      filters,
+      'blockedUntil',
+      this.formatDate.bind(this),
+    );
+    if (blockedUntil) {
+      items.push({ label: this.i18n.tUi('users.fields.blockedUntil'), value: blockedUntil });
+    }
 
-    this.rows = tableQuery.size;
-    localStorage.setItem('users.table.rows', this.rows.toString());
+    const passwordExpiresAt = readDateRangeFilterValue(
+      filters,
+      'passwordExpiresAt',
+      this.formatDate.bind(this),
+    );
+    if (passwordExpiresAt) {
+      items.push({
+        label: this.i18n.tUi('users.fields.passwordExpiresAt'),
+        value: passwordExpiresAt,
+      });
+    }
 
+    const createdAt = readDateRangeFilterValue(filters, 'createdAt', this.formatDate.bind(this));
+    if (createdAt) {
+      items.push({ label: this.i18n.tUi('users.fields.createdAt'), value: createdAt });
+    }
+
+    const createdByValues = readArrayFilterValues(filters, 'createdBy');
+    if (createdByValues.length) {
+      const labels = this.usersOptions()
+        .filter((option) => createdByValues.includes(option.value))
+        .map((option) => option.label);
+
+      items.push({
+        label: this.i18n.tUi('users.fields.createdBy'),
+        value: (labels.length ? labels : createdByValues).join(', '),
+      });
+    }
+
+    return items;
+  }
+
+  protected override loadPage(
+    query: ReturnType<typeof buildListQuery<UsersAdvancedFilters>>,
+  ): void {
     this.clearSelection();
     this.facade.loadPage(query);
   }
 
   protected clearSelection(): void {
     this.selectedRows.set([]);
+  }
+
+  protected formatDate(value: Date | string): string {
+    const date = value instanceof Date ? value : new Date(value);
+    return new Intl.DateTimeFormat(this.i18n.getLang(), { dateStyle: 'short' }).format(date);
   }
 }

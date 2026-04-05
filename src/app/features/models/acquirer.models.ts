@@ -36,8 +36,8 @@ export type AcquirerFiltersState = {
   socialReason: string;
   createdAtRange: [string, string] | null;
 
+  createdBy: string[] | null;
   statusEnum: StatusEnum[] | null;
-  createdBy: UserMinimalModel | null;
 };
 
 export interface AcquirerBulkStatusInput {

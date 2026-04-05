@@ -22,28 +22,35 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 
 import { I18nService } from '@core/i18n/i18n.service';
 import { CsDatePipe } from '@shared/pipes/cs-date.pipe';
-import { UserMinimalModel } from '@models/user-minimal.models';
-import { AcquirerFacade } from '@features/facade/acquirer.facade';
+import { UsersFacade } from '@features/facade/users.facade';
 import { CsDocumentPipe } from '@shared/pipes/cs-document.pipe';
+import { AcquirerFacade } from '@features/facade/acquirer.facade';
 import { PermissionService } from '@core/auth/permission.service';
-import { BaseListPage } from '@shared/features/list-base/base-list-page';
+import { StatefulListPage } from '@features/list-base/stateful-list-page';
 import { AcquirerAdvancedFilters } from '@features/filter/acquirer.filters';
 import { AcquirerModel, AcquirerFiltersState } from '@models/acquirer.models';
+import { BulkActionListPage } from '@features/list-base/bulk-action-list-page';
 import { buildListQuery } from '@shared/features/list-query/list-query.builder';
 import { CpfCnpjMaskDirective } from '@shared/directives/cpf-cnpj-mask.directive';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
-import { mapPrimeLazyToTableQuery } from '@shared/features/list-query/primeng-lazy.mapper';
-import { AcquirerCreateDialogComponent } from '../acquirer-create/acquirer-create-component';
 import { AcquirerPermissionPolicy } from '@features/security/policy/acquirer-permission.policy';
-import { FiltersPanelComponent } from '@shared/features/filters-panel/filters-panel.component';
 import { DATA_TABLE_SHELL_IMPORTS } from '@shared/features/data-table-shell/data-table-shell.component';
+import {
+  ActiveFilterItem,
+  FiltersPanelComponent,
+} from '@shared/features/filters-panel/filters-panel.component';
+
 import {
   StatusEnum,
   allStatusEnum,
   statusEnumLabel,
   statusEnumSeverity,
-  normalizeStatusEnum,
 } from '@models/enums/status.enum';
+import {
+  readArrayFilterValues,
+  readSingleFilterValue,
+  readDateRangeFilterValue,
+} from '@features/list-base/table-filter-readers';
 
 @Component({
   standalone: true,
@@ -73,37 +80,53 @@ import {
     CpfCnpjMaskDirective,
     FiltersPanelComponent,
     DATA_TABLE_SHELL_IMPORTS,
-    AcquirerCreateDialogComponent,
   ],
 })
-export class AcquirerListComponent extends BaseListPage<AcquirerFiltersState> {
+export class AcquirerListComponent extends StatefulListPage<
+  AcquirerFiltersState,
+  AcquirerAdvancedFilters
+> {
   @ViewChild('dt') private dt?: Table;
 
-  readonly i18n = inject(I18nService);
   readonly facade = inject(AcquirerFacade);
+  readonly userFacade = inject(UsersFacade);
   readonly perms = inject(PermissionService);
-  private readonly toast = inject(MessageService);
-  private readonly confirm = inject(ConfirmationService);
+  readonly usersOptions = this.userFacade.options;
+
+  protected readonly toast = inject(MessageService);
+  protected override readonly i18n = inject(I18nService);
+  protected readonly confirm = inject(ConfirmationService);
   protected readonly secPolicy = inject(AcquirerPermissionPolicy);
 
-  private searchedOnce = false;
-  private skipNextLazy = false;
-  private lastLazyEvent: any | null = null;
+  private readonly bulk = new (class extends BulkActionListPage {
+    protected override readonly i18n = inject(I18nService);
+    protected override readonly toast = inject(MessageService);
+    protected override readonly confirm = inject(ConfirmationService);
+
+    constructor(private readonly host: AcquirerListComponent) {
+      super();
+    }
+
+    protected override clearSelection(): void {
+      this.host.clearSelection();
+    }
+  })(this);
 
   skeletonRows = Array.from({ length: 8 });
-  rows = Number(localStorage.getItem('acquirer.table.rows')) || 10;
+  override rows = Number(localStorage.getItem('acquirer.table.rows')) || 10;
 
   cnpj = signal('');
   fantasyName = signal('');
   socialReason = signal('');
+  createdBy = signal<string[] | null>(null);
   createdAtRange = signal<Date[] | null>(null);
   statusEnum = signal<StatusEnum[] | null>(null);
-  createdBy = signal<UserMinimalModel | null>(null);
 
   upsertVisible = signal(false);
-  acquirer = signal<AcquirerModel | null>(null);
-
   selectedRows = signal<AcquirerModel[]>([]);
+  acquirer = signal<AcquirerModel | null>(null);
+  totalRecords = computed(() => this.facade.totalRecords());
+  companies = computed<AcquirerModel[]>(() => this.facade.acquirer() as AcquirerModel[]);
 
   readonly statusEnumOptions = computed(() => {
     this.i18n.getAppliedLang();
@@ -113,27 +136,72 @@ export class AcquirerListComponent extends BaseListPage<AcquirerFiltersState> {
     }));
   });
 
-  companies = computed<AcquirerModel[]>(() => this.facade.acquirer() as AcquirerModel[]);
-  totalRecords = computed(() => this.facade.totalRecords());
+  protected override readonly advancedActiveFilters = computed<ActiveFilterItem[]>(() => {
+    const items: ActiveFilterItem[] = [];
+
+    const cnpj = this.cnpj().trim();
+    const createdBy = this.createdBy();
+    const statusEnum = this.statusEnum();
+    const fantasyName = this.fantasyName().trim();
+    const socialReason = this.socialReason().trim();
+    const create = this.createdAtRange();
+
+    if (socialReason) {
+      items.push({ label: this.i18n.tUi('acquirer.fields.socialReason'), value: socialReason });
+    }
+
+    if (fantasyName) {
+      items.push({ label: this.i18n.tUi('acquirer.fields.fantasyName'), value: fantasyName });
+    }
+
+    if (cnpj) {
+      items.push({ label: this.i18n.tUi('acquirer.fields.cnpj'), value: cnpj });
+    }
+
+    if (createdBy?.length) {
+      const labels = this.usersOptions()
+        .filter((opt) => createdBy.includes(opt.value))
+        .map((opt) => opt.label)
+        .join(', ');
+
+      items.push({
+        label: this.i18n.tUi('acquirer.fields.createdBy'),
+        value: labels,
+      });
+    }
+
+    if (statusEnum?.length) {
+      items.push({
+        label: this.i18n.tUi('acquirer.fields.statusEnum'),
+        value: statusEnum.map((v) => statusEnumLabel(v, this.i18n)).join(', '),
+      });
+    }
+
+    if (create?.[0] && create?.[1]) {
+      items.push({
+        label: this.i18n.tUi('acquirer.fields.createdAt'),
+        value: `${this.formatDate(create[0])} – ${this.formatDate(create[1])}`,
+      });
+    }
+
+    return items;
+  });
 
   selectionStatus = computed<StatusEnum | null>(() => {
     const selected = this.selectedRows();
     if (!selected.length) return null;
-
     return this.secPolicy.selectableStatus(selected[0]);
   });
 
   headerEligibleRows = computed(() => {
     const selectedStatus = this.selectionStatus();
     if (!selectedStatus) return [];
-
     return this.companies().filter((row) => this.secPolicy.canSelectForStatus(row, selectedStatus));
   });
 
   headerChecked = computed(() => {
     const eligible = this.headerEligibleRows();
     if (!eligible.length) return false;
-
     return eligible.every((row) => this.isRowSelected(row));
   });
 
@@ -144,18 +212,6 @@ export class AcquirerListComponent extends BaseListPage<AcquirerFiltersState> {
     const selectedCount = eligible.filter((row) => this.isRowSelected(row)).length;
     return selectedCount > 0 && selectedCount < eligible.length;
   });
-
-  selectedActiveRows = computed(() =>
-    this.selectedRows().filter((row) => normalizeStatusEnum(row.status) === StatusEnum.ACTIVE),
-  );
-
-  selectedInactiveRows = computed(() =>
-    this.selectedRows().filter((row) => normalizeStatusEnum(row.status) === StatusEnum.INACTIVE),
-  );
-
-  selectedBlockedRows = computed(() =>
-    this.selectedRows().filter((row) => normalizeStatusEnum(row.status) === StatusEnum.BLOCKED),
-  );
 
   canActivateSelected = computed(() => {
     const status = this.selectionStatus();
@@ -177,128 +233,20 @@ export class AcquirerListComponent extends BaseListPage<AcquirerFiltersState> {
 
   selectionModeLabel = computed(() => {
     const status = this.selectionStatus();
-
-    if (status === StatusEnum.ACTIVE) {
-      return this.i18n.tUi('enum.statusEnum.active');
-    }
-
-    if (status === StatusEnum.INACTIVE) {
-      return this.i18n.tUi('enum.statusEnum.inactive');
-    }
-
-    if (status === StatusEnum.BLOCKED) {
-      return this.i18n.tUi('enum.statusEnum.blocked');
-    }
-
+    if (status === StatusEnum.ACTIVE) return this.i18n.tUi('enum.statusEnum.active');
+    if (status === StatusEnum.INACTIVE) return this.i18n.tUi('enum.statusEnum.inactive');
+    if (status === StatusEnum.BLOCKED) return this.i18n.tUi('enum.statusEnum.blocked');
     return this.i18n.tUi('acquirer.selection.mode.none');
   });
 
-  activeFiltersCount = computed(() => {
-    let c = 0;
-    if (this.createdBy()) c++;
-
-    if (this.cnpj().trim()) c++;
-    if (this.statusEnum()?.length) c++;
-    if (this.fantasyName().trim()) c++;
-    if (this.socialReason().trim()) c++;
-
-    const create = this.createdAtRange();
-    if (create?.[0] && create?.[1]) c++;
-
-    return c;
-  });
-
-  activeFilters = computed(() => {
-    const items: { label: string; value: string }[] = [];
-
-    const cnpj = this.cnpj().trim();
-    const createdBy = this.createdBy();
-    const statusEnum = this.statusEnum();
-    const fantasyName = this.fantasyName().trim();
-    const socialReason = this.socialReason().trim();
-
-    const create = this.createdAtRange();
-
-    if (socialReason) {
-      items.push({ label: this.i18n.tUi('acquirer.fields.socialReason'), value: socialReason });
-    }
-
-    if (createdBy) {
-      items.push({ label: this.i18n.tUi('acquirer.fields.createdBy'), value: createdBy.name });
-    }
-
-    if (fantasyName) {
-      items.push({ label: this.i18n.tUi('acquirer.fields.fantasyName'), value: fantasyName });
-    }
-
-    if (cnpj) {
-      items.push({ label: this.i18n.tUi('acquirer.fields.cnpj'), value: cnpj });
-    }
-
-    if (statusEnum?.length) {
-      const labels = statusEnum.map((v) => statusEnumLabel(v, this.i18n)).join(', ');
-      items.push({ label: this.i18n.tUi('acquirer.fields.statusEnum'), value: labels });
-    }
-
-    if (create?.[0] && create?.[1]) {
-      const fmt = (d: Date) =>
-        new Intl.DateTimeFormat(this.i18n.getLang(), { dateStyle: 'short' }).format(d);
-
-      items.push({
-        label: this.i18n.tUi('acquirer.fields.createdAt'),
-        value: `${fmt(create[0])} – ${fmt(create[1])}`,
-      });
-    }
-
-    return items;
-  });
-
   ngOnInit() {
-    this.loadOnInit();
-
-    const hasAdvanced = this.activeFiltersCount() > 0;
-    if (hasAdvanced) {
-      this.searchedOnce = true;
-    }
-
-    this.skipNextLazy = true;
-    this.lastLazyEvent = { first: 0, rows: this.rows, filters: undefined, globalFilter: null };
-    this.reloadWithCurrentState();
-  }
-
-  search() {
-    this.persistFilters();
-    this.searchedOnce = true;
-
-    if (this.lastLazyEvent) {
-      this.lastLazyEvent = { ...this.lastLazyEvent, first: 0 };
-    }
-
-    this.reloadWithCurrentState();
+    this.userFacade.loadUsersOptionsFilter();
+    this.initStatefulList();
   }
 
   clear() {
-    this.clearAndPersist();
-    this.searchedOnce = true;
     this.clearSelection();
-    this.dt?.clear();
-
-    this.lastLazyEvent = {
-      first: 0,
-      rows: this.rows,
-      filters: undefined,
-      globalFilter: null,
-      sortField: undefined,
-      sortOrder: undefined,
-      multiSortMeta: undefined,
-    };
-
-    this.reloadWithCurrentState();
-  }
-
-  onPageChange(event: any) {
-    this.rows = event.rows;
-    localStorage.setItem('acquirer.table.rows', this.rows.toString());
+    this.clearTableAndReload(this.dt);
   }
 
   onSaved(): void {
@@ -307,9 +255,7 @@ export class AcquirerListComponent extends BaseListPage<AcquirerFiltersState> {
 
   isRowCheckboxDisabled(row: AcquirerModel): boolean {
     if (this.isRowSelected(row)) return false;
-
-    const currentStatus = this.selectionStatus();
-    return !this.secPolicy.canSelectForStatus(row, currentStatus);
+    return !this.secPolicy.canSelectForStatus(row, this.selectionStatus());
   }
 
   isRowSelected(row: AcquirerModel): boolean {
@@ -332,9 +278,7 @@ export class AcquirerListComponent extends BaseListPage<AcquirerFiltersState> {
       return;
     }
 
-    const currentStatus = this.selectionStatus();
-    if (rowStatus !== currentStatus) return;
-
+    if (rowStatus !== this.selectionStatus()) return;
     if (this.isRowSelected(row)) return;
 
     this.selectedRows.set([...current, row]);
@@ -342,7 +286,6 @@ export class AcquirerListComponent extends BaseListPage<AcquirerFiltersState> {
 
   toggleHeaderSelection(checked: boolean): void {
     const eligible = this.headerEligibleRows();
-
     if (!eligible.length) return;
 
     if (!checked) {
@@ -354,61 +297,28 @@ export class AcquirerListComponent extends BaseListPage<AcquirerFiltersState> {
   }
 
   activate(row: AcquirerModel): void {
-    this.clearSelection();
-
-    this.facade.activate(row.id).subscribe({
-      next: () => {
-        this.clearSelection();
-        this.toast.add({
-          severity: 'success',
-          summary: this.i18n.tUi('common.success'),
-          detail: this.i18n.tUi('acquirer.activate.successSingle'),
-        });
-      },
-      error: () => {
-        this.clearSelection();
-      },
-    });
+    this.bulk.executeAction(
+      this.facade.activate(row.id),
+      this.i18n.tUi('acquirer.activate.successSingle'),
+    );
   }
 
   deactivate(row: AcquirerModel): void {
-    this.clearSelection();
-
-    this.facade.deactivate(row.id).subscribe({
-      next: () => {
-        this.clearSelection();
-        this.toast.add({
-          severity: 'success',
-          summary: this.i18n.tUi('common.success'),
-          detail: this.i18n.tUi('acquirer.deactivate.successSingle'),
-        });
-      },
-      error: () => {
-        this.clearSelection();
-      },
-    });
+    this.bulk.executeAction(
+      this.facade.deactivate(row.id),
+      this.i18n.tUi('acquirer.deactivate.successSingle'),
+    );
   }
 
   block(row: AcquirerModel): void {
-    this.clearSelection();
-
-    this.facade.block(row.id).subscribe({
-      next: () => {
-        this.clearSelection();
-        this.toast.add({
-          severity: 'success',
-          summary: this.i18n.tUi('common.success'),
-          detail: this.i18n.tUi('acquirer.block.successSingle'),
-        });
-      },
-      error: () => {
-        this.clearSelection();
-      },
-    });
+    this.bulk.executeAction(
+      this.facade.block(row.id),
+      this.i18n.tUi('acquirer.block.successSingle'),
+    );
   }
 
   confirmActivate(row: AcquirerModel): void {
-    this.confirm.confirm({
+    this.bulk.confirmAction({
       header: this.i18n.tUi('acquirer.activate.header'),
       message: this.i18n.tUi('acquirer.activate.messageSingle', {
         socialReason: row?.socialReason ?? row?.fantasyName ?? '',
@@ -419,7 +329,7 @@ export class AcquirerListComponent extends BaseListPage<AcquirerFiltersState> {
   }
 
   confirmDeactivate(row: AcquirerModel): void {
-    this.confirm.confirm({
+    this.bulk.confirmAction({
       header: this.i18n.tUi('acquirer.deactivate.header'),
       message: this.i18n.tUi('acquirer.deactivate.messageSingle', {
         socialReason: row?.socialReason ?? row?.fantasyName ?? row?.id ?? '',
@@ -430,7 +340,7 @@ export class AcquirerListComponent extends BaseListPage<AcquirerFiltersState> {
   }
 
   confirmBlock(row: AcquirerModel): void {
-    this.confirm.confirm({
+    this.bulk.confirmAction({
       header: this.i18n.tUi('acquirer.block.header'),
       message: this.i18n.tUi('acquirer.block.messageSingle', {
         socialReason: row?.socialReason ?? row?.fantasyName ?? row?.id ?? '',
@@ -444,70 +354,37 @@ export class AcquirerListComponent extends BaseListPage<AcquirerFiltersState> {
     const rows = this.selectedRows();
     if (!rows.length) return;
 
-    this.clearSelection();
-
-    this.facade.activateBulk(rows.map((row) => row.id)).subscribe({
-      next: () => {
-        this.clearSelection();
-        this.toast.add({
-          severity: 'success',
-          summary: this.i18n.tUi('common.success'),
-          detail: this.i18n.tUi('acquirer.activate.successBulk', { count: rows.length }),
-        });
-      },
-      error: () => {
-        this.clearSelection();
-      },
-    });
+    this.bulk.executeAction(
+      this.facade.activateBulk(rows.map((row) => row.id)),
+      this.i18n.tUi('acquirer.activate.successBulk', { count: rows.length }),
+    );
   }
 
   deactivateSelected(): void {
     const rows = this.selectedRows();
     if (!rows.length) return;
 
-    this.clearSelection();
-
-    this.facade.deactivateBulk(rows.map((row) => row.id)).subscribe({
-      next: () => {
-        this.clearSelection();
-        this.toast.add({
-          severity: 'success',
-          summary: this.i18n.tUi('common.success'),
-          detail: this.i18n.tUi('acquirer.deactivate.successBulk', { count: rows.length }),
-        });
-      },
-      error: () => {
-        this.clearSelection();
-      },
-    });
+    this.bulk.executeAction(
+      this.facade.deactivateBulk(rows.map((row) => row.id)),
+      this.i18n.tUi('acquirer.deactivate.successBulk', { count: rows.length }),
+    );
   }
 
   blockSelected(): void {
     const rows = this.selectedRows();
     if (!rows.length) return;
 
-    this.clearSelection();
-
-    this.facade.blockBulk(rows.map((row) => row.id)).subscribe({
-      next: () => {
-        this.clearSelection();
-        this.toast.add({
-          severity: 'success',
-          summary: this.i18n.tUi('common.success'),
-          detail: this.i18n.tUi('acquirer.block.successBulk', { count: rows.length }),
-        });
-      },
-      error: () => {
-        this.clearSelection();
-      },
-    });
+    this.bulk.executeAction(
+      this.facade.blockBulk(rows.map((row) => row.id)),
+      this.i18n.tUi('acquirer.block.successBulk', { count: rows.length }),
+    );
   }
 
   confirmActivateSelected(): void {
     const rows = this.selectedRows();
     if (!rows.length) return;
 
-    this.confirm.confirm({
+    this.bulk.confirmAction({
       header: this.i18n.tUi('acquirer.activate.header'),
       message: this.i18n.tUi('acquirer.activate.messageBulk', { count: rows.length }),
       icon: 'pi pi-check-circle',
@@ -519,7 +396,7 @@ export class AcquirerListComponent extends BaseListPage<AcquirerFiltersState> {
     const rows = this.selectedRows();
     if (!rows.length) return;
 
-    this.confirm.confirm({
+    this.bulk.confirmAction({
       header: this.i18n.tUi('acquirer.deactivate.header'),
       message: this.i18n.tUi('acquirer.deactivate.messageBulk', { count: rows.length }),
       icon: 'pi pi-exclamation-triangle',
@@ -531,7 +408,7 @@ export class AcquirerListComponent extends BaseListPage<AcquirerFiltersState> {
     const rows = this.selectedRows();
     if (!rows.length) return;
 
-    this.confirm.confirm({
+    this.bulk.confirmAction({
       header: this.i18n.tUi('acquirer.block.header'),
       message: this.i18n.tUi('acquirer.block.messageBulk', { count: rows.length }),
       icon: 'pi pi-lock',
@@ -559,34 +436,19 @@ export class AcquirerListComponent extends BaseListPage<AcquirerFiltersState> {
 
   onUpsertVisibleChange(v: boolean) {
     this.upsertVisible.set(v);
-    if (!v) {
-      this.acquirer.set(null);
-    }
+    if (!v) this.acquirer.set(null);
   }
 
   onCreated() {
     this.reloadWithCurrentState();
   }
 
-  onLazyLoad(e: any) {
-    this.lastLazyEvent = e;
+  protected override tableStateKey(): string {
+    return 'cardsync.acquirer.table.state.v1';
+  }
 
-    if (this.skipNextLazy) {
-      this.skipNextLazy = false;
-      return;
-    }
-
-    const hasTableInteraction =
-      !!e?.filters ||
-      e?.sortField != null ||
-      (Array.isArray(e?.multiSortMeta) && e.multiSortMeta.length > 0) ||
-      e?.globalFilter != null;
-
-    if (!this.searchedOnce && this.activeFiltersCount() > 0 && !hasTableInteraction) {
-      return;
-    }
-
-    this.reloadWithCurrentState();
+  protected override tableRowsKey(): string {
+    return 'acquirer.table.rows';
   }
 
   protected override filtersKey(): string {
@@ -612,7 +474,6 @@ export class AcquirerListComponent extends BaseListPage<AcquirerFiltersState> {
     this.cnpj.set('');
     this.fantasyName.set('');
     this.socialReason.set('');
-
     this.createdBy.set(null);
     this.statusEnum.set(null);
     this.createdAtRange.set(null);
@@ -620,14 +481,13 @@ export class AcquirerListComponent extends BaseListPage<AcquirerFiltersState> {
 
   protected override toFiltersState(): AcquirerFiltersState {
     const create = this.createdAtRange();
+
     return {
       cnpj: this.cnpj(),
       fantasyName: this.fantasyName(),
       socialReason: this.socialReason(),
-      createdBy: this.createdBy(),
-
+      createdBy: this.createdBy()?.length ? this.createdBy() : null,
       statusEnum: this.statusEnum()?.length ? this.statusEnum() : null,
-
       createdAtRange:
         create?.[0] && create?.[1] ? [create[0].toISOString(), create[1].toISOString()] : null,
     };
@@ -638,7 +498,6 @@ export class AcquirerListComponent extends BaseListPage<AcquirerFiltersState> {
     this.createdBy.set(s.createdBy ?? null);
     this.fantasyName.set(s.fantasyName ?? '');
     this.socialReason.set(s.socialReason ?? '');
-
     this.statusEnum.set(s.statusEnum ?? null);
 
     this.createdAtRange.set(
@@ -648,7 +507,7 @@ export class AcquirerListComponent extends BaseListPage<AcquirerFiltersState> {
     );
   }
 
-  protected buildAdvancedFilters(): Partial<AcquirerAdvancedFilters> {
+  protected override buildAdvancedFilters(): Partial<AcquirerAdvancedFilters> {
     const create = this.createdAtRange();
 
     const [createFrom, createTo] =
@@ -661,30 +520,73 @@ export class AcquirerListComponent extends BaseListPage<AcquirerFiltersState> {
       createdBy: this.createdBy() || null,
       fantasyName: this.fantasyName().trim() || undefined,
       socialReason: this.socialReason().trim() || undefined,
-
       statusEnum: this.statusEnum()?.length ? this.statusEnum() : undefined,
-
       createdAtTo: createTo,
       createdAtFrom: createFrom,
     };
   }
 
-  protected reloadWithCurrentState() {
-    const tableQuery = mapPrimeLazyToTableQuery(
-      this.lastLazyEvent ?? { first: 0, rows: this.rows },
-      this.rows,
-    );
+  protected override mapTableFiltersToActiveItems(filters: any): ActiveFilterItem[] {
+    this.i18n.getAppliedLang();
 
-    const query = buildListQuery<AcquirerAdvancedFilters>(tableQuery, this.buildAdvancedFilters());
+    const items: ActiveFilterItem[] = [];
 
-    this.rows = tableQuery.size;
-    localStorage.setItem('acquirer.table.rows', this.rows.toString());
+    const fantasyName = readSingleFilterValue(filters, 'fantasyName');
+    if (fantasyName) {
+      items.push({ label: this.i18n.tUi('acquirer.fields.fantasyName'), value: fantasyName });
+    }
 
+    const socialReason = readSingleFilterValue(filters, 'socialReason');
+    if (socialReason) {
+      items.push({ label: this.i18n.tUi('acquirer.fields.socialReason'), value: socialReason });
+    }
+
+    const cnpj = readSingleFilterValue(filters, 'cnpj');
+    if (cnpj) {
+      items.push({ label: this.i18n.tUi('acquirer.fields.cnpj'), value: cnpj });
+    }
+
+    const statuses = readArrayFilterValues(filters, 'statusEnum');
+    if (statuses.length) {
+      items.push({
+        label: this.i18n.tUi('acquirer.fields.statusEnum'),
+        value: statuses.map((value) => statusEnumLabel(value as StatusEnum, this.i18n)).join(', '),
+      });
+    }
+
+    const createdAt = readDateRangeFilterValue(filters, 'createdAt', this.formatDate.bind(this));
+    if (createdAt) {
+      items.push({ label: this.i18n.tUi('acquirer.fields.createdAt'), value: createdAt });
+    }
+
+    const createdByValues = readArrayFilterValues(filters, 'createdBy');
+    if (createdByValues.length) {
+      const labels = this.usersOptions()
+        .filter((option) => createdByValues.includes(option.value))
+        .map((option) => option.label);
+
+      items.push({
+        label: this.i18n.tUi('acquirer.fields.createdBy'),
+        value: (labels.length ? labels : createdByValues).join(', '),
+      });
+    }
+
+    return items;
+  }
+
+  protected override loadPage(
+    query: ReturnType<typeof buildListQuery<AcquirerAdvancedFilters>>,
+  ): void {
     this.clearSelection();
     this.facade.loadPage(query);
   }
 
   protected clearSelection(): void {
     this.selectedRows.set([]);
+  }
+
+  protected formatDate(value: Date | string): string {
+    const date = value instanceof Date ? value : new Date(value);
+    return new Intl.DateTimeFormat(this.i18n.getLang(), { dateStyle: 'short' }).format(date);
   }
 }

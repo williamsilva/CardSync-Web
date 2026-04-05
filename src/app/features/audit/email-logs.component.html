@@ -21,7 +21,7 @@
   (clear)="clear()"
   (search)="search()"
   [actionsAlign]="'start'"
-  [activeFilters]="activeFilters()"
+  [activeFilterGroups]="activeFilterGroups()"
   [activeCount]="activeFiltersCount()"
   [title]="'common.filter' | translate"
 >
@@ -135,9 +135,11 @@
   showGridlines
   [rowHover]="true"
   [paginator]="true"
+  stateStorage="local"
+  stateKey="cardsync.audit.emailLog.table.state.v1"
   sortMode="multiple"
   filterDisplay="menu"
-  [value]="EmailLogs()"
+  [value]="emailLogs()"
   class="p-datatable-sm mt-1"
   styleClass="cs-admin-table"
   [loading]="facade.loading()"
@@ -249,6 +251,28 @@
           <span class="th-label">{{ 'audit.emailLog.columns.sentAt' | translate }}</span>
           <span class="th-icons">
             <p-sortIcon field="sentAt"></p-sortIcon>
+            <p-columnFilter
+              field="sentAt"
+              display="menu"
+              matchMode="between"
+              [showOperator]="false"
+              [showAddButton]="false"
+              [showMatchModes]="false"
+              styleClass="cs-colfilter"
+            >
+              <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                <p-datepicker
+                  class="w-full"
+                  appendTo="body"
+                  [showIcon]="true"
+                  [readonlyInput]="true"
+                  selectionMode="range"
+                  dateFormat="dd/mm/yy"
+                  [ngModel]="value"
+                  (ngModelChange)="filter($event)"
+                ></p-datepicker>
+              </ng-template>
+            </p-columnFilter>
           </span>
         </div>
       </th>
@@ -315,8 +339,9 @@
             </p-columnFilter>
           </span>
         </div>
-      </th></tr
-  ></ng-template>
+      </th>
+    </tr>
+  </ng-template>
 
   <ng-template pTemplate="body" let-row>
     <tr>

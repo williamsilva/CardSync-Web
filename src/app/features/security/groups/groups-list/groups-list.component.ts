@@ -9,26 +9,33 @@ import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
 import { FloatLabel } from 'primeng/floatlabel';
 import { InputTextModule } from 'primeng/inputtext';
+import { DatePickerModule } from 'primeng/datepicker';
 import { TranslateModule } from '@ngx-translate/core';
+import { MultiSelectModule } from 'primeng/multiselect';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService, MessageService } from 'primeng/api';
 
-import { GroupModel } from '@models/groups.models';
 import { I18nService } from '@core/i18n/i18n.service';
+import { CsDatePipe } from '@shared/pipes/cs-date.pipe';
+import { UsersFacade } from '@features/facade/users.facade';
 import { GroupsFacade } from '@features/facade/groups.facade';
+import { GroupModel, GroupsFiltersState } from '@models/groups.models';
 import { GroupsAdvancedFilters } from '@features/filter/groups.filters';
-import { BaseListPage } from '@shared/features/list-base/base-list-page';
+import { StatefulListPage } from '@features/list-base/stateful-list-page';
+import { BulkActionListPage } from '@features/list-base/bulk-action-list-page';
 import { buildListQuery } from '@shared/features/list-query/list-query.builder';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
-import { mapPrimeLazyToTableQuery } from '@shared/features/list-query/primeng-lazy.mapper';
 import { GroupsPermissionPolicy } from '@features/security/policy/groups-permission.policy';
-import { FiltersPanelComponent } from '@shared/features/filters-panel/filters-panel.component';
 import { GroupsCreateDialogComponent } from '@features/security/groups/groups-create/groups-create-dialog.component';
-
-type GroupsFiltersState = {
-  name: string;
-  description: string;
-};
+import {
+  ActiveFilterItem,
+  FiltersPanelComponent,
+} from '@shared/features/filters-panel/filters-panel.component';
+import {
+  readSingleFilterValue,
+  readArrayFilterValues,
+  readDateRangeFilterValue,
+} from '@features/list-base/table-filter-readers';
 
 @Component({
   standalone: true,
@@ -37,74 +44,112 @@ type GroupsFiltersState = {
   imports: [
     CommonModule,
     FloatLabel,
+    CsDatePipe,
     FormsModule,
     TableModule,
     ButtonModule,
     TooltipModule,
     InputTextModule,
     TranslateModule,
+    DatePickerModule,
+    MultiSelectModule,
     PageHeaderComponent,
     ConfirmDialogModule,
     FiltersPanelComponent,
     GroupsCreateDialogComponent,
   ],
 })
-export class GroupsListComponent extends BaseListPage<GroupsFiltersState> {
+export class GroupsListComponent extends StatefulListPage<
+  GroupsFiltersState,
+  GroupsAdvancedFilters
+> {
   @ViewChild('dt') private dt?: Table;
 
-  readonly i18n = inject(I18nService);
+  protected override readonly i18n = inject(I18nService);
   readonly facade = inject(GroupsFacade);
   private readonly router = inject(Router);
-  private readonly toast = inject(MessageService);
-  private readonly confirm = inject(ConfirmationService);
+  readonly userFacade = inject(UsersFacade);
+  readonly usersOptions = this.userFacade.options;
+  protected readonly toast = inject(MessageService);
+  protected readonly confirm = inject(ConfirmationService);
   protected readonly secPolicy = inject(GroupsPermissionPolicy);
 
-  private searchedOnce = false;
-  private skipNextLazy = false;
-  private lastLazyEvent: any | null = null;
+  private readonly bulk = new (class extends BulkActionListPage {
+    protected override readonly i18n = inject(I18nService);
+    protected override readonly toast = inject(MessageService);
+    protected override readonly confirm = inject(ConfirmationService);
 
-  rows = Number(localStorage.getItem('groups.table.rows')) || 10;
+    constructor(private readonly host: GroupsListComponent) {
+      super();
+    }
+
+    protected override clearSelection(): void {}
+
+    confirmDelete(row: GroupModel): void {
+      this.confirmAction({
+        header: this.i18n.tUi('groups.delete.header' as never),
+        message: this.i18n.tUi('groups.delete.message' as never, { groupName: row.name }),
+        icon: 'pi pi-exclamation-triangle',
+        accept: () =>
+          this.executeAction(
+            this.host.facade.delete(row.id),
+            this.i18n.tUi('groups.delete.success' as never),
+          ),
+      });
+    }
+  })(this);
+
+  override rows = Number(localStorage.getItem('groups.table.rows')) || 10;
 
   name = signal('');
   description = signal('');
   upsertVisible = signal(false);
   group = signal<GroupModel | null>(null);
+  createdBy = signal<string[] | null>(null);
+  createdAtRange = signal<Date[] | null>(null);
 
   readonly canCreate = computed(() => this.secPolicy.canCreate());
   readonly totalRecords = computed(() => this.facade.totalRecords());
   readonly groups = computed<GroupModel[]>(() => this.facade.groups());
 
-  readonly activeFiltersCount = computed(() => {
-    let c = 0;
-    if (this.name().trim()) c++;
-    if (this.description().trim()) c++;
-    return c;
-  });
-
-  readonly activeFilters = computed(() => {
-    const items: { label: string; value: string }[] = [];
+  protected override readonly advancedActiveFilters = computed<ActiveFilterItem[]>(() => {
+    const items: ActiveFilterItem[] = [];
 
     const name = this.name().trim();
     const description = this.description().trim();
+    const createdBy = this.createdBy();
+    const createdAtRange = this.createdAtRange();
 
-    if (name) items.push({ label: this.i18n.tUi('groups.fields.name'), value: name });
+    if (name) {
+      items.push({ label: this.i18n.tUi('groups.fields.name'), value: name });
+    }
+
     if (description) {
       items.push({ label: this.i18n.tUi('groups.fields.description'), value: description });
+    }
+
+    if (createdBy?.length) {
+      const labels = this.usersOptions()
+        .filter((opt) => createdBy.includes(opt.value))
+        .map((opt) => opt.label)
+        .join(', ');
+
+      items.push({ label: this.i18n.tUi('groups.fields.createdBy'), value: labels });
+    }
+
+    if (createdAtRange?.[0] && createdAtRange?.[1]) {
+      items.push({
+        label: this.i18n.tUi('groups.fields.createdAt'),
+        value: `${this.formatDate(createdAtRange[0])} – ${this.formatDate(createdAtRange[1])}`,
+      });
     }
 
     return items;
   });
 
   ngOnInit() {
-    this.loadOnInit();
-
-    if (this.activeFiltersCount() > 0) {
-      this.searchedOnce = true;
-    }
-
-    this.skipNextLazy = true;
-    this.lastLazyEvent = { first: 0, rows: this.rows, filters: undefined, globalFilter: null };
-    this.reloadWithCurrentState();
+    this.userFacade.loadUsersOptionsFilter();
+    this.initStatefulList();
   }
 
   goNew() {
@@ -124,25 +169,7 @@ export class GroupsListComponent extends BaseListPage<GroupsFiltersState> {
 
   confirmDelete(row: GroupModel) {
     if (!this.secPolicy.canDelete(row)) return;
-
-    this.confirm.confirm({
-      header: this.i18n.tUi('groups.delete.header' as never),
-      message: this.i18n.tUi('groups.delete.message' as never, { groupName: row.name }),
-      icon: 'pi pi-exclamation-triangle',
-      accept: () => this.delete(row),
-    });
-  }
-
-  private delete(row: GroupModel) {
-    this.facade.delete(row.id).subscribe({
-      next: () => {
-        this.toast.add({
-          severity: 'success',
-          summary: this.i18n.tUi('common.success'),
-          detail: this.i18n.tUi('groups.delete.success' as never),
-        });
-      },
-    });
+    this.bulk.confirmDelete(row);
   }
 
   onSaved(): void {
@@ -156,59 +183,16 @@ export class GroupsListComponent extends BaseListPage<GroupsFiltersState> {
     }
   }
 
-  search() {
-    this.persistFilters();
-    this.searchedOnce = true;
-
-    if (this.lastLazyEvent) {
-      this.lastLazyEvent = { ...this.lastLazyEvent, first: 0 };
-    }
-
-    this.reloadWithCurrentState();
-  }
-
   clear() {
-    this.clearAndPersist();
-    this.searchedOnce = true;
-    this.dt?.clear();
-
-    this.lastLazyEvent = {
-      first: 0,
-      rows: this.rows,
-      filters: undefined,
-      globalFilter: null,
-      sortField: undefined,
-      sortOrder: undefined,
-      multiSortMeta: undefined,
-    };
-
-    this.reloadWithCurrentState();
+    this.clearTableAndReload(this.dt);
   }
 
-  onPageChange(event: any) {
-    this.rows = event.rows;
-    localStorage.setItem('groups.table.rows', this.rows.toString());
+  protected override tableStateKey(): string {
+    return 'cardsync.groups.table.state.v1';
   }
 
-  onLazyLoad(e: any) {
-    this.lastLazyEvent = e;
-
-    if (this.skipNextLazy) {
-      this.skipNextLazy = false;
-      return;
-    }
-
-    const hasTableInteraction =
-      !!e?.filters ||
-      e?.sortField != null ||
-      (Array.isArray(e?.multiSortMeta) && e.multiSortMeta.length > 0) ||
-      e?.globalFilter != null;
-
-    if (!this.searchedOnce && this.activeFiltersCount() > 0 && !hasTableInteraction) {
-      return;
-    }
-
-    this.reloadWithCurrentState();
+  protected override tableRowsKey(): string {
+    return 'groups.table.rows';
   }
 
   protected override filtersKey(): string {
@@ -222,38 +206,94 @@ export class GroupsListComponent extends BaseListPage<GroupsFiltersState> {
   protected override resetFilters(): void {
     this.name.set('');
     this.description.set('');
+    this.createdBy.set(null);
+    this.createdAtRange.set(null);
   }
 
   protected override toFiltersState(): GroupsFiltersState {
+    const createdAtRange = this.createdAtRange();
+
     return {
       name: this.name(),
       description: this.description(),
+      createdBy: this.createdBy()?.length ? this.createdBy() : null,
+      createdAtRange:
+        createdAtRange?.[0] && createdAtRange?.[1]
+          ? [createdAtRange[0].toISOString(), createdAtRange[1].toISOString()]
+          : null,
     };
   }
 
   protected override applyFiltersState(state: GroupsFiltersState): void {
     this.name.set(state.name ?? '');
     this.description.set(state.description ?? '');
+    this.createdBy.set(state.createdBy ?? null);
+    this.createdAtRange.set(
+      state.createdAtRange?.[0] && state.createdAtRange?.[1]
+        ? [new Date(state.createdAtRange[0]), new Date(state.createdAtRange[1])]
+        : null,
+    );
   }
 
-  private buildAdvancedFilters(): Partial<GroupsAdvancedFilters> {
+  protected override buildAdvancedFilters(): Partial<GroupsAdvancedFilters> {
+    const createdAtRange = this.createdAtRange();
+    const [createdAtFrom, createdAtTo] =
+      createdAtRange?.[0] && createdAtRange?.[1]
+        ? [createdAtRange[0].toISOString(), createdAtRange[1].toISOString()]
+        : [undefined, undefined];
+
     return {
       name: this.name().trim() || undefined,
       description: this.description().trim() || undefined,
+      createdBy: this.createdBy()?.length ? this.createdBy() : undefined,
+      createdAtFrom,
+      createdAtTo,
     };
   }
 
-  private reloadWithCurrentState() {
-    const tableQuery = mapPrimeLazyToTableQuery(
-      this.lastLazyEvent ?? { first: 0, rows: this.rows },
-      this.rows,
-    );
+  protected override mapTableFiltersToActiveItems(filters: any): ActiveFilterItem[] {
+    this.i18n.getAppliedLang();
 
-    const query = buildListQuery<GroupsAdvancedFilters>(tableQuery, this.buildAdvancedFilters());
+    const items: ActiveFilterItem[] = [];
 
-    this.rows = tableQuery.size;
-    localStorage.setItem('groups.table.rows', this.rows.toString());
+    const name = readSingleFilterValue(filters, 'name');
+    if (name) {
+      items.push({ label: this.i18n.tUi('groups.fields.name'), value: name });
+    }
 
+    const description = readSingleFilterValue(filters, 'description');
+    if (description) {
+      items.push({ label: this.i18n.tUi('groups.fields.description'), value: description });
+    }
+
+    const createdAt = readDateRangeFilterValue(filters, 'createdAt', this.formatDate.bind(this));
+    if (createdAt) {
+      items.push({ label: this.i18n.tUi('groups.fields.createdAt'), value: createdAt });
+    }
+
+    const createdByValues = readArrayFilterValues(filters, 'createdBy');
+    if (createdByValues.length) {
+      const labels = this.usersOptions()
+        .filter((option) => createdByValues.includes(option.value))
+        .map((option) => option.label);
+
+      items.push({
+        label: this.i18n.tUi('groups.fields.createdBy'),
+        value: (labels.length ? labels : createdByValues).join(', '),
+      });
+    }
+
+    return items;
+  }
+
+  protected override loadPage(
+    query: ReturnType<typeof buildListQuery<GroupsAdvancedFilters>>,
+  ): void {
     this.facade.loadPage(query);
+  }
+
+  protected formatDate(value: Date | string): string {
+    const date = value instanceof Date ? value : new Date(value);
+    return new Intl.DateTimeFormat(this.i18n.getLang(), { dateStyle: 'short' }).format(date);
   }
 }

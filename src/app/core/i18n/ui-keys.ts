@@ -108,6 +108,7 @@ export const UI_KEYS = {
       userName: 'users.fields.userName',
       document: 'users.fields.document',
       createdAt: 'users.fields.createdAt',
+      createdBy: 'users.fields.createdBy',
 
       lastLoginAt: 'users.fields.lastLoginAt',
       blockedUntil: 'users.fields.blockedUntil',
@@ -191,12 +192,12 @@ export const UI_KEYS = {
     },
     fields: {
       cnpj: 'company.fields.cnpj',
-      typeEnum: 'company.fields.typeEnum',
       createdAt: 'company.fields.createdAt',
       createdBy: 'company.fields.createdBy',
       statusEnum: 'company.fields.statusEnum',
       fantasyName: 'company.fields.fantasyName',
       socialReason: 'company.fields.socialReason',
+      typeCompanyEnum: 'company.fields.typeCompanyEnum',
     },
   },
   acquirer: {
@@ -244,6 +245,8 @@ export const UI_KEYS = {
     fields: {
       name: 'groups.fields.name',
       description: 'groups.fields.description',
+      createdAt: 'groups.fields.createdAt',
+      createdBy: 'groups.fields.createdBy',
     },
     form: {
       updated: 'groups.form.updated',
@@ -261,6 +264,9 @@ export const UI_KEYS = {
         recipient: 'audit.emailLog.fields.recipient',
         eventType: 'audit.emailLog.fields.eventType',
         sentAt: 'audit.emailLog.fields.sentAt',
+      },
+      columns: {
+        errorMessage: 'audit.emailLog.columns.errorMessage',
       },
       status: {
         null: 'audit.emailLog.status.null',
@@ -300,6 +306,8 @@ export const UI_KEYS = {
     warning: 'common.warning',
     success: 'common.success',
     notInformed: 'common.notInformed',
+    tableFilters: 'common.tableFilters',
+    advancedFilters: 'common.advancedFilters',
   },
 
   confirm: {

@@ -7,6 +7,7 @@ import { API } from '@core/api/api.config';
 import { HalPagedResponse } from '@core/api/page.model';
 import { UsersAdvancedFilters } from '@features/filter/users.filters';
 import { ListQueryDto } from '@shared/features/list-query/list-query.types';
+import { UserOptionApiModel, UserOptionModel, mapUserOptionApiModel } from '@models/groups.models';
 import {
   UserModel,
   UserApiModel,
@@ -16,12 +17,23 @@ import {
   mapUserApiModels,
   UserBulkStatusInput,
 } from '@models/users.models';
-import { UserOptionApiModel, UserOptionModel, mapUserOptionApiModel } from '@models/groups.models';
 
 @Injectable({ providedIn: 'root' })
 export class UsersApiService {
   private readonly http = inject(HttpClient);
   private readonly baseUrl = `${API.bff}/v1/users`;
+
+  getOptions() {
+    return this.http
+      .get<UserOptionApiModel[]>(`${this.baseUrl}/options`)
+      .pipe(map((items) => (items ?? []).map(mapUserOptionApiModel) as UserOptionModel[]));
+  }
+
+  getOptionsFilter() {
+    return this.http
+      .get<UserOptionApiModel[]>(`${this.baseUrl}/options-filter`)
+      .pipe(map((items) => (items ?? []).map(mapUserOptionApiModel) as UserOptionModel[]));
+  }
 
   searchPaged(body: ListQueryDto<UsersAdvancedFilters>) {
     return this.http.post<HalPagedResponse<UserApiModel>>(`${this.baseUrl}/search`, body).pipe(
@@ -33,12 +45,6 @@ export class UsersApiService {
           }) as HalPagedResponse<UserModel>,
       ),
     );
-  }
-
-  getOptions() {
-    return this.http
-      .get<UserOptionApiModel[]>(`${this.baseUrl}/options`)
-      .pipe(map((items) => (items ?? []).map(mapUserOptionApiModel) as UserOptionModel[]));
   }
 
   getById(id: string) {

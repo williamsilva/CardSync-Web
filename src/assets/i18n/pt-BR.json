@@ -133,7 +133,8 @@
       "createdAt": "Cadastrado em",
       "lastLoginAt": "Último login",
       "blockedUntil": "Bloqueado até",
-      "passwordExpiresAt": "Senha expira"
+      "passwordExpiresAt": "Senha expira",
+      "createdBy": "Cadastrado por"
     },
     "columns": {
       "name": "Nome",
@@ -143,7 +144,8 @@
       "createdAt": "Cadastrado em",
       "lastLoginAt": "Último login",
       "blockedUntil": "Bloqueado até",
-      "passwordExpiresAt": "Senha expira"
+      "passwordExpiresAt": "Senha expira",
+      "createdBy": "Cadastrado por"
     },
     "form": {
       "loadError": "Não foi possível carregar os dados do usuário",
@@ -229,9 +231,9 @@
       "filial": "Filial"
     },
     "statusEnum": {
-      "active":"Ativo",
-      "inactive":"Inativo",
-      "blocked":"Bloqueado"
+      "active": "Ativo",
+      "inactive": "Inativo",
+      "blocked": "Bloqueado"
     }
   },
   "company": {
@@ -245,28 +247,28 @@
       "subtitle": "Edição de empresa"
     },
     "columns": {
-      "cnpj":"CNPJ",
-      "statusEnum":"Status",
-      "createdAt":"Cadastrado em",
-      "createdBy":"Cadastrado por",
-      "socialReason":"Razão Social",
-      "fantasyName":"Nome Fantasia",
-      "typeCompanyEnum":"Tipo Empresa"
+      "cnpj": "CNPJ",
+      "statusEnum": "Status",
+      "createdAt": "Cadastrado em",
+      "createdBy": "Cadastrado por",
+      "socialReason": "Razão Social",
+      "fantasyName": "Nome Fantasia",
+      "typeCompanyEnum": "Tipo Empresa"
     },
     "action": {
       "deactivate": {
         "label": "Inativar",
-        "invalidStatus":"Somente empresas ativas podem ser inativadas.",
+        "invalidStatus": "Somente empresas ativas podem ser inativadas.",
         "noPermission": "Você não tem permissão para desativar empresas."
       },
       "activate": {
         "label": "Ativar",
-        "noPermission":"Você não tem permissão para ativar empresas.",
+        "noPermission": "Você não tem permissão para ativar empresas.",
         "invalidStatus": "Somente empresas inativas podem ser ativadas."
       },
       "block": {
         "label": "Bloquear",
-        "noPermission":"Você não tem permissão para bloquear empresas.",
+        "noPermission": "Você não tem permissão para bloquear empresas.",
         "invalidStatus": "Somente empresas ativas podem ser bloqueadas."
       }
     },
@@ -321,10 +323,10 @@
       "permissionDenied": "Você não tem permissão para salvar empresas."
     },
     "empty": {
-      "title":"Nenhuma empresa encontrada"
+      "title": "Nenhuma empresa encontrada"
     }
   },
-  "acquirer":{
+  "acquirer": {
     "subtitle": "Gerencie adquirentes",
     "new": {
       "title": "Nova adquirente",
@@ -335,27 +337,27 @@
       "subtitle": "Edição de adquirente"
     },
     "columns": {
-      "cnpj":"CNPJ",
-      "statusEnum":"Status",
-      "createdAt":"Cadastrado em",
-      "createdBy":"Cadastrado por",
-      "socialReason":"Razão Social",
-      "fantasyName":"Nome Fantasia"
+      "cnpj": "CNPJ",
+      "statusEnum": "Status",
+      "createdAt": "Cadastrado em",
+      "createdBy": "Cadastrado por",
+      "socialReason": "Razão Social",
+      "fantasyName": "Nome Fantasia"
     },
     "action": {
       "deactivate": {
         "label": "Inativar",
-        "invalidStatus":"Somente adquirentes ativas podem ser inativadas.",
+        "invalidStatus": "Somente adquirentes ativas podem ser inativadas.",
         "noPermission": "Você não tem permissão para desativar adquirentes."
       },
       "activate": {
         "label": "Ativar",
-        "noPermission":"Você não tem permissão para ativar adquirentes.",
+        "noPermission": "Você não tem permissão para ativar adquirentes.",
         "invalidStatus": "Somente adquirentes inativas podem ser ativadas."
       },
       "block": {
         "label": "Bloquear",
-        "noPermission":"Você não tem permissão para bloquear adquirentes.",
+        "noPermission": "Você não tem permissão para bloquear adquirentes.",
         "invalidStatus": "Somente adquirentes ativas podem ser bloqueadas."
       }
     },
@@ -409,7 +411,7 @@
       "permissionDenied": "Você não tem permissão para salvar adquirentes."
     },
     "empty": {
-      "title":"Nenhuma adquirente encontrada"
+      "title": "Nenhuma adquirente encontrada"
     }
   },
   "accountPassword": {
@@ -531,7 +533,9 @@
     "warning": "Atenção",
     "correlationId": "ID de correlação",
     "view": "Visualizar",
-    "notInformed": "Não informado"
+    "notInformed": "Não informado",
+    "advancedFilters": "Filtros avançados",
+    "tableFilters": "Filtros tabela"
   },
   "confirm": {
     "logoutTitle": "Encerrar sessão",
@@ -585,11 +589,17 @@
     },
     "fields": {
       "name": "Nome",
-      "description": "Descrição"
+      "description": "Descrição",
+      "createdAt": "Cadastrado em",
+      "createdBy": "Cadastrado por"
     },
     "columns": {
       "name": "Nome",
-      "description": "Descrição"
+      "usersCount": "Usuários",
+      "description": "Descrição",
+      "createdAt": "Cadastrado em",
+      "createdBy": "Cadastrado por",
+      "permissionsCount": "Permissões"
     },
     "form": {
       "loadError": "Não foi possível carregar os dados do grupo.",
@@ -664,12 +674,12 @@
         "errorMessage": "Erro"
       },
       "status": {
-        "sent" : "Enviado",
-        "failed" : "Falha no envio"
+        "sent": "Enviado",
+        "failed": "Falha no envio"
       },
       "eventType": {
-        "firstPassword" : "Primeira senha",
-        "passwordReset" : "Resete de senha"
+        "firstPassword": "Primeira senha",
+        "passwordReset": "Resete de senha"
       },
       "empty": {
         "title": "Nenhum log encontrado"

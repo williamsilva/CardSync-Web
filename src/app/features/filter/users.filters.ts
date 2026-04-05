@@ -12,6 +12,8 @@ export interface UsersAdvancedFilters {
   createdAtTo?: string;
   createdAtFrom?: string;
 
+  createdBy?: string[] | null;
+
   blockedUntilTo?: string;
   blockedUntilFrom?: string;
 

@@ -13,6 +13,11 @@ export interface ActiveFilterItem {
   value: string;
 }
 
+export interface ActiveFilterGroup {
+  title: string;
+  filters: ActiveFilterItem[];
+}
+
 @Component({
   standalone: true,
   selector: 'cs-filters-panel',
@@ -27,6 +32,7 @@ export class FiltersPanelComponent {
   @Output() collapsedChange = new EventEmitter<boolean>();
 
   @Input() activeFilters: ActiveFilterItem[] = [];
+  @Input() activeFilterGroups: ActiveFilterGroup[] = [];
   @Input() actionsAlign: 'start' | 'center' | 'end' = 'end';
 
   @Output() clear = new EventEmitter<void>();

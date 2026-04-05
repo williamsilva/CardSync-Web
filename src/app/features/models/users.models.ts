@@ -1,4 +1,5 @@
 import { GroupModel } from '@models/groups.models';
+import { UserMinimalModel } from '@models/user-minimal.models';
 import { normalizeUserStatus, UserStatus, UserStatusInput } from '@models/enums/user-status.enum';
 
 export interface UserModel {
@@ -10,6 +11,7 @@ export interface UserModel {
   status: UserStatus | null;
 
   createdAt?: string | null;
+  createdBy?: UserMinimalModel | null;
   lastLoginAt?: string | null;
   blockedUntil?: string | null;
   passwordChangedAt?: string | null;
@@ -43,6 +45,7 @@ export type UsersFiltersState = {
   document: string;
   status: UserStatus[] | null;
   createdAtRange: [string, string] | null;
+  createdBy: string[] | null;
   lastLoginAtRange: [string, string] | null;
   blockedUntilRange: [string, string] | null;
   passwordExpiresAtRange: [string, string] | null;
@@ -62,6 +65,7 @@ export interface UserApiModel {
   hasPassword?: boolean;
 
   createdAt?: string | null;
+  createdBy?: UserMinimalModel | null;
   blockedUntil?: string | null;
   lastLoginAt?: string | null;
   passwordChangedAt?: string | null;

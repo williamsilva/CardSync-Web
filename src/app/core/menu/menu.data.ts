@@ -31,21 +31,6 @@ export const APP_MENU: AppMenuItem[] = [
     ],
   },
 
-  /* Histotico*/
-  {
-    icon: 'pi pi-history',
-    labelKey: 'menu.audit.title',
-    children: [
-      {
-        labelKey: 'menu.audit.mail',
-        route: '/audit',
-        exact: false,
-        icon: 'pi pi-envelope',
-        permissions: [PERMISSIONS.AUDIT.VIEW],
-      },
-    ],
-  },
-
   /* Cadastros */
   {
     icon: 'pi pi-folder-open',
@@ -67,6 +52,22 @@ export const APP_MENU: AppMenuItem[] = [
       },
     ],
   },
+
+  /* Histotico*/
+  {
+    icon: 'pi pi-history',
+    labelKey: 'menu.audit.title',
+    children: [
+      {
+        labelKey: 'menu.audit.mail',
+        route: '/audit',
+        exact: false,
+        icon: 'pi pi-envelope',
+        permissions: [PERMISSIONS.AUDIT.VIEW],
+      },
+    ],
+  },
+
   /* Outros */
   {
     icon: 'pi pi-credit-card',

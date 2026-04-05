@@ -3,7 +3,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Component, computed, inject, signal, ViewChild } from '@angular/core';
 
 import { TagModule } from 'primeng/tag';
-import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { SelectModule } from 'primeng/select';
 import { FloatLabel } from 'primeng/floatlabel';
@@ -18,13 +17,20 @@ import { I18nService } from '@core/i18n/i18n.service';
 import { CsDatePipe } from '@shared/pipes/cs-date.pipe';
 import { EmailLogsFacade } from '@features/facade/email-logs.facade';
 import { EmailLogsFilters } from '@features/filter/email-logs.filters';
-import { BaseListPage } from '@shared/features/list-base/base-list-page';
 import { EmailLogModel, EmailLogsFiltersState } from '@models/email-log.models';
 import { buildListQuery } from '@shared/features/list-query/list-query.builder';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
 import { OverflowTooltipDirective } from '@shared/directives/overflow-tooltip.directive';
-import { mapPrimeLazyToTableQuery } from '@shared/features/list-query/primeng-lazy.mapper';
-import { FiltersPanelComponent } from '@shared/features/filters-panel/filters-panel.component';
+import {
+  ActiveFilterItem,
+  FiltersPanelComponent,
+} from '@shared/features/filters-panel/filters-panel.component';
+import { StatefulListPage } from '@features/list-base/stateful-list-page';
+import {
+  readSingleFilterValue,
+  readArrayFilterValues,
+  readDateRangeFilterValue,
+} from '@features/list-base/table-filter-readers';
 import {
   EmailLogStatus,
   allEmailLogStatus,
@@ -47,7 +53,6 @@ import {
     TagModule,
     FloatLabel,
     CsDatePipe,
-    CardModule,
     TableModule,
     FormsModule,
     ButtonModule,
@@ -63,12 +68,11 @@ import {
     OverflowTooltipDirective,
   ],
 })
-export class EmailLogsComponent extends BaseListPage<EmailLogsFilters> {
+export class EmailLogsComponent extends StatefulListPage<EmailLogsFiltersState, EmailLogsFilters> {
   @ViewChild('dt') private dt?: Table;
 
-  private searchedOnce = false;
-  private skipNextLazy = false;
-  private lastLazyEvent: any | null = null;
+  protected override readonly i18n = inject(I18nService);
+  readonly facade = inject(EmailLogsFacade);
 
   subject = signal('');
   template = signal('');
@@ -76,12 +80,11 @@ export class EmailLogsComponent extends BaseListPage<EmailLogsFilters> {
   sentAtRange = signal<Date[] | null>(null);
   status = signal<EmailLogStatus[] | null>(null);
   eventType = signal<EmailLogEventType[] | null>(null);
-  rows = Number(localStorage.getItem('audit.emailLog.table.rows')) || 10;
 
-  readonly i18n = inject(I18nService);
-  readonly facade = inject(EmailLogsFacade);
+  override rows = Number(localStorage.getItem('audit.emailLog.table.rows')) || 10;
+
   readonly totalRecords = computed(() => this.facade.totalRecords());
-  readonly EmailLogs = computed<EmailLogModel[]>(() => this.facade.emailLogs());
+  readonly emailLogs = computed<EmailLogModel[]>(() => this.facade.emailLogs());
 
   readonly statusOptions = computed(() => {
     this.i18n.getAppliedLang();
@@ -99,53 +102,55 @@ export class EmailLogsComponent extends BaseListPage<EmailLogsFilters> {
     }));
   });
 
-  readonly activeFiltersCount = computed(() => {
-    let c = 0;
-    if (this.recipient().trim()) c++;
-    if (this.subject().trim()) c++;
-    if (this.template().trim()) c++;
-    if (this.status()?.length) c++;
-    if (this.eventType()?.length) c++;
+  protected override readonly advancedActiveFilters = computed<ActiveFilterItem[]>(() => {
+    const items: ActiveFilterItem[] = [];
 
-    const create = this.sentAtRange();
-    if (create?.[0] && create?.[1]) c++;
-    return c;
-  });
-
-  readonly activeFilters = computed(() => {
-    const items: { label: string; value: string }[] = [];
-
-    const status = this.status();
+    const recipient = this.recipient().trim();
     const subject = this.subject().trim();
     const template = this.template().trim();
+    const status = this.status();
     const eventType = this.eventType();
-    const recipient = this.recipient().trim();
+    const sentAtRange = this.sentAtRange();
 
-    if (recipient)
-      items.push({ label: this.i18n.tUi('audit.emailLog.fields.recipient'), value: recipient });
-    if (subject)
-      items.push({ label: this.i18n.tUi('audit.emailLog.fields.subject'), value: subject });
-    if (template)
-      items.push({ label: this.i18n.tUi('audit.emailLog.fields.template'), value: template });
+    if (recipient) {
+      items.push({
+        label: this.i18n.tUi('audit.emailLog.fields.recipient'),
+        value: recipient,
+      });
+    }
+
+    if (subject) {
+      items.push({
+        label: this.i18n.tUi('audit.emailLog.fields.subject'),
+        value: subject,
+      });
+    }
+
+    if (template) {
+      items.push({
+        label: this.i18n.tUi('audit.emailLog.fields.template'),
+        value: template,
+      });
+    }
 
     if (status?.length) {
-      const labels = status.map((v) => emailLogStatusLabel(v, this.i18n)).join(', ');
-      items.push({ label: this.i18n.tUi('audit.emailLog.fields.status'), value: labels });
+      items.push({
+        label: this.i18n.tUi('audit.emailLog.fields.status'),
+        value: status.map((v) => emailLogStatusLabel(v, this.i18n)).join(', '),
+      });
     }
 
     if (eventType?.length) {
-      const labels = eventType.map((v) => emailLogEventTypeStatusLabel(v, this.i18n)).join(', ');
-      items.push({ label: this.i18n.tUi('audit.emailLog.fields.eventType'), value: labels });
+      items.push({
+        label: this.i18n.tUi('audit.emailLog.fields.eventType'),
+        value: eventType.map((v) => emailLogEventTypeStatusLabel(v, this.i18n)).join(', '),
+      });
     }
 
-    const create = this.sentAtRange();
-    if (create?.[0] && create?.[1]) {
-      const fmt = (d: Date) =>
-        new Intl.DateTimeFormat(this.i18n.getLang(), { dateStyle: 'short' }).format(d);
-
+    if (sentAtRange?.[0] && sentAtRange?.[1]) {
       items.push({
         label: this.i18n.tUi('audit.emailLog.fields.sentAt'),
-        value: `${fmt(create[0])} – ${fmt(create[1])}`,
+        value: `${this.formatDate(sentAtRange[0])} – ${this.formatDate(sentAtRange[1])}`,
       });
     }
 
@@ -153,70 +158,164 @@ export class EmailLogsComponent extends BaseListPage<EmailLogsFilters> {
   });
 
   ngOnInit() {
-    this.loadOnInit();
-
-    if (this.activeFiltersCount() > 0) {
-      this.searchedOnce = true;
-    }
-
-    this.skipNextLazy = true;
-    this.lastLazyEvent = { first: 0, rows: this.rows, filters: undefined, globalFilter: null };
-    this.reloadWithCurrentState();
+    this.initStatefulList();
   }
 
   clear() {
-    this.clearAndPersist();
-    this.searchedOnce = true;
-    this.dt?.clear();
+    this.clearTableAndReload(this.dt);
+  }
 
-    this.lastLazyEvent = {
-      first: 0,
-      rows: this.rows,
-      filters: undefined,
-      globalFilter: null,
-      sortField: undefined,
-      sortOrder: undefined,
-      multiSortMeta: undefined,
+  protected override tableStateKey(): string {
+    return 'cardsync.audit.emailLog.table.state.v1';
+  }
+
+  protected override tableRowsKey(): string {
+    return 'audit.emailLog.table.rows';
+  }
+
+  protected override filtersKey(): string {
+    return 'cardsync.audit.mailLog.filters.v1';
+  }
+
+  protected override refresh(): void {
+    this.reloadWithCurrentState();
+  }
+
+  protected loadFirstPage() {
+    const tableQuery = { page: 0, size: this.rows };
+    const query = buildListQuery<EmailLogsFilters>(tableQuery as any, this.buildAdvancedFilters());
+
+    this.facade.loadPage(query);
+  }
+
+  protected override resetFilters(): void {
+    this.subject.set('');
+    this.template.set('');
+    this.recipient.set('');
+    this.status.set(null);
+    this.eventType.set(null);
+    this.sentAtRange.set(null);
+  }
+
+  protected override toFiltersState(): EmailLogsFiltersState {
+    const sentAtRange = this.sentAtRange();
+
+    return {
+      subject: this.subject(),
+      template: this.template(),
+      recipient: this.recipient(),
+      status: this.status()?.length ? this.status() : null,
+      eventType: this.eventType()?.length ? this.eventType() : null,
+      sentAtRange:
+        sentAtRange?.[0] && sentAtRange?.[1]
+          ? [sentAtRange[0].toISOString(), sentAtRange[1].toISOString()]
+          : null,
     };
-
-    this.reloadWithCurrentState();
   }
 
-  search() {
-    this.persistFilters();
-    this.searchedOnce = true;
+  protected override applyFiltersState(s: EmailLogsFiltersState): void {
+    this.subject.set(s.subject ?? '');
+    this.template.set(s.template ?? '');
+    this.recipient.set(s.recipient ?? '');
+    this.status.set(s.status ?? null);
+    this.eventType.set(s.eventType ?? null);
 
-    if (this.lastLazyEvent) {
-      this.lastLazyEvent = { ...this.lastLazyEvent, first: 0 };
-    }
-
-    this.reloadWithCurrentState();
+    this.sentAtRange.set(
+      s.sentAtRange?.[0] && s.sentAtRange?.[1]
+        ? [new Date(s.sentAtRange[0]), new Date(s.sentAtRange[1])]
+        : null,
+    );
   }
 
-  onPageChange(event: any) {
-    this.rows = event.rows;
-    localStorage.setItem('audit.emailLog.table.rows', this.rows.toString());
+  protected override buildAdvancedFilters(): Partial<EmailLogsFilters> {
+    const sentAtRange = this.sentAtRange();
+
+    const [sentAtFrom, sentAtTo] =
+      sentAtRange?.[0] && sentAtRange?.[1]
+        ? [sentAtRange[0].toISOString(), sentAtRange[1].toISOString()]
+        : [undefined, undefined];
+
+    return {
+      subject: this.subject().trim() || undefined,
+      template: this.template().trim() || undefined,
+      recipient: this.recipient().trim() || undefined,
+      status: this.status()?.length ? this.status() : undefined,
+      eventType: this.eventType()?.length ? this.eventType() : undefined,
+      sentAtFrom,
+      sentAtTo,
+    };
   }
 
-  onLazyLoad(e: any) {
-    this.lastLazyEvent = e;
+  protected override mapTableFiltersToActiveItems(filters: any): ActiveFilterItem[] {
+    this.i18n.getAppliedLang();
 
-    if (this.skipNextLazy) {
-      this.skipNextLazy = false;
-      return;
+    const items: ActiveFilterItem[] = [];
+
+    const subject = readSingleFilterValue(filters, 'subject');
+    if (subject) {
+      items.push({
+        label: this.i18n.tUi('audit.emailLog.fields.subject'),
+        value: subject,
+      });
     }
 
-    const hasTableInteraction =
-      !!e?.filters ||
-      e?.sortField != null ||
-      (Array.isArray(e?.multiSortMeta) && e.multiSortMeta.length > 0) ||
-      e?.globalFilter != null;
-
-    if (!this.searchedOnce && this.activeFiltersCount() > 0 && !hasTableInteraction) {
-      return;
+    const recipient = readSingleFilterValue(filters, 'recipient');
+    if (recipient) {
+      items.push({
+        label: this.i18n.tUi('audit.emailLog.fields.recipient'),
+        value: recipient,
+      });
     }
 
-    this.reloadWithCurrentState();
+    const template = readSingleFilterValue(filters, 'template');
+    if (template) {
+      items.push({
+        label: this.i18n.tUi('audit.emailLog.fields.template'),
+        value: template,
+      });
+    }
+
+    const errorMessage = readSingleFilterValue(filters, 'errorMessage');
+    if (errorMessage) {
+      items.push({
+        label: this.i18n.tUi('audit.emailLog.columns.errorMessage'),
+        value: errorMessage,
+      });
+    }
+
+    const statuses = readArrayFilterValues(filters, 'status');
+    if (statuses.length) {
+      items.push({
+        label: this.i18n.tUi('audit.emailLog.fields.status'),
+        value: statuses
+          .map((value) => emailLogStatusLabel(value as EmailLogStatus, this.i18n))
+          .join(', '),
+      });
+    }
+
+    const eventTypes = readArrayFilterValues(filters, 'eventType');
+    if (eventTypes.length) {
+      items.push({
+        label: this.i18n.tUi('audit.emailLog.fields.eventType'),
+        value: eventTypes
+          .map((value) => emailLogEventTypeStatusLabel(value as EmailLogEventType, this.i18n))
+          .join(', '),
+      });
+    }
+
+    const sentAt = readDateRangeFilterValue(filters, 'sentAt', this.formatDate.bind(this));
+    if (sentAt) {
+      items.push({
+        label: this.i18n.tUi('audit.emailLog.fields.sentAt'),
+        value: sentAt,
+      });
+    }
+
+    return items;
+  }
+
+  protected override loadPage(query: ReturnType<typeof buildListQuery<EmailLogsFilters>>): void {
+    this.facade.loadPage(query);
   }
 
   statusLabel(status: EmailLogStatus | null) {
@@ -235,82 +334,8 @@ export class EmailLogsComponent extends BaseListPage<EmailLogsFilters> {
     return emailLogEventTypeSeverity(eventType);
   }
 
-  protected override refresh(): void {
-    this.reloadWithCurrentState();
-  }
-
-  protected reloadWithCurrentState() {
-    const tableQuery = mapPrimeLazyToTableQuery(
-      this.lastLazyEvent ?? { first: 0, rows: this.rows },
-      this.rows,
-    );
-
-    const query = buildListQuery<EmailLogsFilters>(tableQuery, this.buildAdvancedFilters());
-
-    this.rows = tableQuery.size;
-    localStorage.setItem('groups.table.rows', this.rows.toString());
-
-    this.facade.loadPage(query);
-  }
-
-  protected buildAdvancedFilters(): Partial<EmailLogsFilters> {
-    const create = this.sentAtRange();
-
-    const [createFrom, createTo] =
-      create?.[0] && create?.[1]
-        ? [create[0].toISOString(), create[1].toISOString()]
-        : [undefined, undefined];
-    return {
-      subject: this.subject().trim() || undefined,
-      template: this.template().trim() || undefined,
-      recipient: this.recipient().trim() || undefined,
-      status: this.status()?.length ? this.status() : undefined,
-      eventType: this.eventType()?.length ? this.eventType() : undefined,
-
-      sentAtTo: createTo,
-      sentAtFrom: createFrom,
-    };
-  }
-
-  protected override filtersKey(): string {
-    return 'cardsync.audit.mailLog.filters.v1';
-  }
-
-  protected override resetFilters(): void {
-    this.subject.set('');
-    this.template.set('');
-    this.recipient.set('');
-
-    this.status.set(null);
-    this.eventType.set(null);
-    this.sentAtRange.set(null);
-  }
-
-  protected override toFiltersState(): EmailLogsFiltersState {
-    const create = this.sentAtRange();
-    return {
-      subject: this.subject(),
-      template: this.template(),
-      recipient: this.recipient(),
-      status: this.status()?.length ? this.status() : null,
-      eventType: this.eventType()?.length ? this.eventType() : null,
-
-      sentAtRange:
-        create?.[0] && create?.[1] ? [create[0].toISOString(), create[1].toISOString()] : null,
-    };
-  }
-
-  protected override applyFiltersState(s: EmailLogsFiltersState): void {
-    this.subject.set(s.subject ?? '');
-    this.status.set(s.status ?? null);
-    this.eventType.set(s.eventType ?? null);
-    this.template.set(s.template ?? '');
-    this.recipient.set(s.recipient ?? '');
-
-    this.sentAtRange.set(
-      s.sentAtRange?.[0] && s.sentAtRange?.[1]
-        ? [new Date(s.sentAtRange[0]), new Date(s.sentAtRange[1])]
-        : null,
-    );
+  protected formatDate(value: Date | string): string {
+    const date = value instanceof Date ? value : new Date(value);
+    return new Intl.DateTimeFormat(this.i18n.getLang(), { dateStyle: 'short' }).format(date);
   }
 }

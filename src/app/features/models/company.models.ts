@@ -37,8 +37,8 @@ export type CompanyFiltersState = {
   socialReason: string;
   createdAtRange: [string, string] | null;
 
+  createdBy: string[] | null;
   statusEnum: StatusEnum[] | null;
-  createdBy: UserMinimalModel | null;
   typeEnum: TypeCompanyEnum[] | null;
 };
 

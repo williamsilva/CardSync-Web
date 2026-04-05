@@ -1,4 +1,3 @@
-import { CompanyModel } from '@models/company.models';
 import { StatusEnum } from '@models/enums/status.enum';
 import { UserMinimalModel } from '@models/user-minimal.models';
 
@@ -15,5 +14,5 @@ export interface AcquirerAdvancedFilters {
   //flags: Flags[];
   //companies: CompanyModel[];
   //establishments: Establishment[];
-  createdBy: UserMinimalModel | null;
+  createdBy: string[] | null;
 }

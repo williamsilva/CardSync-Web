@@ -2,6 +2,7 @@ import { Injectable, inject, signal } from '@angular/core';
 
 import { Observable, finalize, tap } from 'rxjs';
 
+import { SelectOption } from '@models/select-option.model';
 import { UsersAdvancedFilters } from '@features/filter/users.filters';
 import { UsersApiService } from '@features/service/users.api.service';
 import { ListQueryDto } from '@shared/features/list-query/list-query.types';
@@ -17,12 +18,74 @@ export class UsersFacade {
   private readonly _loading = signal(false);
   private readonly _loadedOnce = signal(false);
   private readonly _data = signal<UserModel[]>([]);
+  private readonly _optionsLoading = signal(false);
+  private readonly _optionsLoadedOnce = signal(false);
   private readonly _lastQuery = signal<LastQuery | null>(null);
+  private readonly _options = signal<SelectOption<string>[]>([]);
 
   readonly users = this._data.asReadonly();
   readonly loading = this._loading.asReadonly();
+  readonly options = this._options.asReadonly();
   readonly totalRecords = this._total.asReadonly();
   readonly loadedOnce = this._loadedOnce.asReadonly();
+
+  loadUsersOptions(force = false): void {
+    if (this._optionsLoading()) return;
+    if (!force && this._optionsLoadedOnce()) return;
+
+    this._optionsLoading.set(true);
+
+    this.api
+      .getOptions()
+      .pipe(
+        finalize(() => {
+          this._optionsLoading.set(false);
+          this._optionsLoadedOnce.set(true);
+        }),
+      )
+      .subscribe({
+        next: (list) => {
+          this._options.set(
+            (list ?? []).map((g) => ({
+              label: g.name,
+              value: g.id,
+            })),
+          );
+        },
+        error: () => {
+          this._options.set([]);
+        },
+      });
+  }
+
+  loadUsersOptionsFilter(force = false): void {
+    if (this._optionsLoading()) return;
+    if (!force && this._optionsLoadedOnce()) return;
+
+    this._optionsLoading.set(true);
+
+    this.api
+      .getOptionsFilter()
+      .pipe(
+        finalize(() => {
+          this._optionsLoading.set(false);
+          this._optionsLoadedOnce.set(true);
+        }),
+      )
+      .subscribe({
+        next: (list) => {
+          this._options.set(
+            (list ?? []).map((g) => ({
+              label: g.name,
+              value: g.id,
+            })),
+          );
+        },
+        error: () => {
+          this._options.set([]);
+        },
+      });
+  }
 
   loadPage(q: LastQuery): void {
     if (this._loading()) return;
@@ -55,6 +118,11 @@ export class UsersFacade {
     if (!last) return;
 
     this.loadPage(last);
+  }
+
+  reloadOptions(): void {
+    this._optionsLoadedOnce.set(false);
+    this.loadUsersOptions(true);
   }
 
   resendInvite(id: string): Observable<void> {

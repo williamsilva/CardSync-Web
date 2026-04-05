@@ -22,21 +22,25 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 
 import { I18nService } from '@core/i18n/i18n.service';
 import { CsDatePipe } from '@shared/pipes/cs-date.pipe';
-import { UserMinimalModel } from '@models/user-minimal.models';
+import { UsersFacade } from '@features/facade/users.facade';
 import { CompanyFacade } from '@features/facade/company.facade';
 import { CsDocumentPipe } from '@shared/pipes/cs-document.pipe';
 import { PermissionService } from '@core/auth/permission.service';
-import { BaseListPage } from '@shared/features/list-base/base-list-page';
 import { CompanyAdvancedFilters } from '@features/filter/company.filters';
+import { StatefulListPage } from '@features/list-base/stateful-list-page';
 import { CompanyModel, CompanyFiltersState } from '@models/company.models';
+import { BulkActionListPage } from '@features/list-base/bulk-action-list-page';
 import { buildListQuery } from '@shared/features/list-query/list-query.builder';
 import { CpfCnpjMaskDirective } from '@shared/directives/cpf-cnpj-mask.directive';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
-import { mapPrimeLazyToTableQuery } from '@shared/features/list-query/primeng-lazy.mapper';
 import { CompanyPermissionPolicy } from '@features/security/policy/company-permission.policy';
-import { FiltersPanelComponent } from '@shared/features/filters-panel/filters-panel.component';
 import { CompanyCreateDialogComponent } from '../company-create/company-create-dialog.component';
 import { DATA_TABLE_SHELL_IMPORTS } from '@shared/features/data-table-shell/data-table-shell.component';
+import {
+  ActiveFilterItem,
+  FiltersPanelComponent,
+} from '@shared/features/filters-panel/filters-panel.component';
+
 import {
   TypeCompanyEnum,
   allTypeCompanyEnum,
@@ -50,6 +54,11 @@ import {
   statusEnumSeverity,
   normalizeStatusEnum,
 } from '@models/enums/status.enum';
+import {
+  readArrayFilterValues,
+  readSingleFilterValue,
+  readDateRangeFilterValue,
+} from '@features/list-base/table-filter-readers';
 
 @Component({
   standalone: true,
@@ -82,35 +91,51 @@ import {
     CompanyCreateDialogComponent,
   ],
 })
-export class CompanyListComponent extends BaseListPage<CompanyFiltersState> {
+export class CompanyListComponent extends StatefulListPage<
+  CompanyFiltersState,
+  CompanyAdvancedFilters
+> {
   @ViewChild('dt') private dt?: Table;
 
-  readonly i18n = inject(I18nService);
+  protected override readonly i18n = inject(I18nService);
   readonly facade = inject(CompanyFacade);
+  readonly userFacade = inject(UsersFacade);
   readonly perms = inject(PermissionService);
-  private readonly toast = inject(MessageService);
-  private readonly confirm = inject(ConfirmationService);
+  readonly usersOptions = this.userFacade.options;
+  protected readonly toast = inject(MessageService);
+  protected readonly confirm = inject(ConfirmationService);
   protected readonly secPolicy = inject(CompanyPermissionPolicy);
 
-  private searchedOnce = false;
-  private skipNextLazy = false;
-  private lastLazyEvent: any | null = null;
+  private readonly bulk = new (class extends BulkActionListPage {
+    protected override readonly i18n = inject(I18nService);
+    protected override readonly toast = inject(MessageService);
+    protected override readonly confirm = inject(ConfirmationService);
 
+    constructor(private readonly host: CompanyListComponent) {
+      super();
+    }
+
+    protected override clearSelection(): void {
+      this.host.clearSelection();
+    }
+  })(this);
+
+  override rows = Number(localStorage.getItem('company.table.rows')) || 10;
   skeletonRows = Array.from({ length: 8 });
-  rows = Number(localStorage.getItem('company.table.rows')) || 10;
 
   cnpj = signal('');
   fantasyName = signal('');
   socialReason = signal('');
+  createdBy = signal<string[] | null>(null);
   createdAtRange = signal<Date[] | null>(null);
   statusEnum = signal<StatusEnum[] | null>(null);
-  createdBy = signal<UserMinimalModel | null>(null);
   typeCompanyEnum = signal<TypeCompanyEnum[] | null>(null);
 
   upsertVisible = signal(false);
-  company = signal<CompanyModel | null>(null);
-
   selectedRows = signal<CompanyModel[]>([]);
+  company = signal<CompanyModel | null>(null);
+  totalRecords = computed(() => this.facade.totalRecords());
+  companies = computed<CompanyModel[]>(() => this.facade.company() as CompanyModel[]);
 
   readonly statusEnumOptions = computed(() => {
     this.i18n.getAppliedLang();
@@ -128,27 +153,80 @@ export class CompanyListComponent extends BaseListPage<CompanyFiltersState> {
     }));
   });
 
-  companies = computed<CompanyModel[]>(() => this.facade.company() as CompanyModel[]);
-  totalRecords = computed(() => this.facade.totalRecords());
+  protected override readonly advancedActiveFilters = computed<ActiveFilterItem[]>(() => {
+    const items: ActiveFilterItem[] = [];
+
+    const cnpj = this.cnpj().trim();
+    const createdBy = this.createdBy();
+    const statusEnum = this.statusEnum();
+    const fantasyName = this.fantasyName().trim();
+    const typeCompanyEnum = this.typeCompanyEnum();
+    const socialReason = this.socialReason().trim();
+    const create = this.createdAtRange();
+
+    if (socialReason) {
+      items.push({ label: this.i18n.tUi('company.fields.socialReason'), value: socialReason });
+    }
+
+    if (fantasyName) {
+      items.push({ label: this.i18n.tUi('company.fields.fantasyName'), value: fantasyName });
+    }
+
+    if (cnpj) {
+      items.push({ label: this.i18n.tUi('company.fields.cnpj'), value: cnpj });
+    }
+
+    if (statusEnum?.length) {
+      items.push({
+        label: this.i18n.tUi('company.fields.statusEnum'),
+        value: statusEnum.map((v) => statusEnumLabel(v, this.i18n)).join(', '),
+      });
+    }
+
+    if (typeCompanyEnum?.length) {
+      items.push({
+        label: this.i18n.tUi('company.fields.typeCompanyEnum'),
+        value: typeCompanyEnum.map((v) => typeCompanyEnumLabel(v, this.i18n)).join(', '),
+      });
+    }
+
+    if (create?.[0] && create?.[1]) {
+      items.push({
+        label: this.i18n.tUi('company.fields.createdAt'),
+        value: `${this.formatDate(create[0])} – ${this.formatDate(create[1])}`,
+      });
+    }
+
+    if (createdBy?.length) {
+      const labels = this.usersOptions()
+        .filter((opt) => createdBy.includes(opt.value))
+        .map((opt) => opt.label)
+        .join(', ');
+
+      items.push({
+        label: this.i18n.tUi('company.fields.createdBy'),
+        value: labels,
+      });
+    }
+
+    return items;
+  });
 
   selectionStatus = computed<StatusEnum | null>(() => {
     const selected = this.selectedRows();
     if (!selected.length) return null;
-
     return this.secPolicy.selectableStatus(selected[0]);
   });
 
   headerEligibleRows = computed(() => {
     const selectedStatus = this.selectionStatus();
     if (!selectedStatus) return [];
-
     return this.companies().filter((row) => this.secPolicy.canSelectForStatus(row, selectedStatus));
   });
 
   headerChecked = computed(() => {
     const eligible = this.headerEligibleRows();
     if (!eligible.length) return false;
-
     return eligible.every((row) => this.isRowSelected(row));
   });
 
@@ -162,14 +240,6 @@ export class CompanyListComponent extends BaseListPage<CompanyFiltersState> {
 
   selectedActiveRows = computed(() =>
     this.selectedRows().filter((row) => normalizeStatusEnum(row.status) === StatusEnum.ACTIVE),
-  );
-
-  selectedInactiveRows = computed(() =>
-    this.selectedRows().filter((row) => normalizeStatusEnum(row.status) === StatusEnum.INACTIVE),
-  );
-
-  selectedBlockedRows = computed(() =>
-    this.selectedRows().filter((row) => normalizeStatusEnum(row.status) === StatusEnum.BLOCKED),
   );
 
   canActivateSelected = computed(() => {
@@ -192,135 +262,20 @@ export class CompanyListComponent extends BaseListPage<CompanyFiltersState> {
 
   selectionModeLabel = computed(() => {
     const status = this.selectionStatus();
-
-    if (status === StatusEnum.ACTIVE) {
-      return this.i18n.tUi('enum.statusEnum.active');
-    }
-
-    if (status === StatusEnum.INACTIVE) {
-      return this.i18n.tUi('enum.statusEnum.inactive');
-    }
-
-    if (status === StatusEnum.BLOCKED) {
-      return this.i18n.tUi('enum.statusEnum.blocked');
-    }
-
+    if (status === StatusEnum.ACTIVE) return this.i18n.tUi('enum.statusEnum.active');
+    if (status === StatusEnum.INACTIVE) return this.i18n.tUi('enum.statusEnum.inactive');
+    if (status === StatusEnum.BLOCKED) return this.i18n.tUi('enum.statusEnum.blocked');
     return this.i18n.tUi('company.selection.mode.none');
   });
 
-  activeFiltersCount = computed(() => {
-    let c = 0;
-    if (this.createdBy()) c++;
-
-    if (this.cnpj().trim()) c++;
-    if (this.statusEnum()?.length) c++;
-    if (this.fantasyName().trim()) c++;
-    if (this.socialReason().trim()) c++;
-    if (this.typeCompanyEnum()?.length) c++;
-
-    const create = this.createdAtRange();
-    if (create?.[0] && create?.[1]) c++;
-
-    return c;
-  });
-
-  activeFilters = computed(() => {
-    const items: { label: string; value: string }[] = [];
-
-    const cnpj = this.cnpj().trim();
-    const createdBy = this.createdBy();
-    const statusEnum = this.statusEnum();
-    const fantasyName = this.fantasyName().trim();
-    const typeCompanyEnum = this.typeCompanyEnum();
-    const socialReason = this.socialReason().trim();
-
-    const create = this.createdAtRange();
-
-    if (socialReason) {
-      items.push({ label: this.i18n.tUi('company.fields.socialReason'), value: socialReason });
-    }
-
-    if (createdBy) {
-      items.push({ label: this.i18n.tUi('company.fields.createdBy'), value: createdBy.name });
-    }
-
-    if (fantasyName) {
-      items.push({ label: this.i18n.tUi('company.fields.fantasyName'), value: fantasyName });
-    }
-
-    if (cnpj) {
-      items.push({ label: this.i18n.tUi('company.fields.cnpj'), value: cnpj });
-    }
-
-    if (statusEnum?.length) {
-      const labels = statusEnum.map((v) => statusEnumLabel(v, this.i18n)).join(', ');
-      items.push({ label: this.i18n.tUi('company.fields.statusEnum'), value: labels });
-    }
-
-    if (typeCompanyEnum?.length) {
-      const labels = typeCompanyEnum.map((v) => typeCompanyEnumLabel(v, this.i18n)).join(', ');
-      items.push({ label: this.i18n.tUi('company.fields.typeEnum'), value: labels });
-    }
-
-    if (create?.[0] && create?.[1]) {
-      const fmt = (d: Date) =>
-        new Intl.DateTimeFormat(this.i18n.getLang(), { dateStyle: 'short' }).format(d);
-
-      items.push({
-        label: this.i18n.tUi('company.fields.createdAt'),
-        value: `${fmt(create[0])} – ${fmt(create[1])}`,
-      });
-    }
-
-    return items;
-  });
-
   ngOnInit() {
-    this.loadOnInit();
-
-    const hasAdvanced = this.activeFiltersCount() > 0;
-    if (hasAdvanced) {
-      this.searchedOnce = true;
-    }
-
-    this.skipNextLazy = true;
-    this.lastLazyEvent = { first: 0, rows: this.rows, filters: undefined, globalFilter: null };
-    this.reloadWithCurrentState();
-  }
-
-  search() {
-    this.persistFilters();
-    this.searchedOnce = true;
-
-    if (this.lastLazyEvent) {
-      this.lastLazyEvent = { ...this.lastLazyEvent, first: 0 };
-    }
-
-    this.reloadWithCurrentState();
+    this.userFacade.loadUsersOptionsFilter();
+    this.initStatefulList();
   }
 
   clear() {
-    this.clearAndPersist();
-    this.searchedOnce = true;
     this.clearSelection();
-    this.dt?.clear();
-
-    this.lastLazyEvent = {
-      first: 0,
-      rows: this.rows,
-      filters: undefined,
-      globalFilter: null,
-      sortField: undefined,
-      sortOrder: undefined,
-      multiSortMeta: undefined,
-    };
-
-    this.reloadWithCurrentState();
-  }
-
-  onPageChange(event: any) {
-    this.rows = event.rows;
-    localStorage.setItem('company.table.rows', this.rows.toString());
+    this.clearTableAndReload(this.dt);
   }
 
   onSaved(): void {
@@ -329,9 +284,7 @@ export class CompanyListComponent extends BaseListPage<CompanyFiltersState> {
 
   isRowCheckboxDisabled(row: CompanyModel): boolean {
     if (this.isRowSelected(row)) return false;
-
-    const currentStatus = this.selectionStatus();
-    return !this.secPolicy.canSelectForStatus(row, currentStatus);
+    return !this.secPolicy.canSelectForStatus(row, this.selectionStatus());
   }
 
   isRowSelected(row: CompanyModel): boolean {
@@ -354,9 +307,7 @@ export class CompanyListComponent extends BaseListPage<CompanyFiltersState> {
       return;
     }
 
-    const currentStatus = this.selectionStatus();
-    if (rowStatus !== currentStatus) return;
-
+    if (rowStatus !== this.selectionStatus()) return;
     if (this.isRowSelected(row)) return;
 
     this.selectedRows.set([...current, row]);
@@ -364,7 +315,6 @@ export class CompanyListComponent extends BaseListPage<CompanyFiltersState> {
 
   toggleHeaderSelection(checked: boolean): void {
     const eligible = this.headerEligibleRows();
-
     if (!eligible.length) return;
 
     if (!checked) {
@@ -376,61 +326,28 @@ export class CompanyListComponent extends BaseListPage<CompanyFiltersState> {
   }
 
   activate(row: CompanyModel): void {
-    this.clearSelection();
-
-    this.facade.activate(row.id).subscribe({
-      next: () => {
-        this.clearSelection();
-        this.toast.add({
-          severity: 'success',
-          summary: this.i18n.tUi('common.success'),
-          detail: this.i18n.tUi('company.activate.successSingle'),
-        });
-      },
-      error: () => {
-        this.clearSelection();
-      },
-    });
+    this.bulk.executeAction(
+      this.facade.activate(row.id),
+      this.i18n.tUi('company.activate.successSingle'),
+    );
   }
 
   deactivate(row: CompanyModel): void {
-    this.clearSelection();
-
-    this.facade.deactivate(row.id).subscribe({
-      next: () => {
-        this.clearSelection();
-        this.toast.add({
-          severity: 'success',
-          summary: this.i18n.tUi('common.success'),
-          detail: this.i18n.tUi('company.deactivate.successSingle'),
-        });
-      },
-      error: () => {
-        this.clearSelection();
-      },
-    });
+    this.bulk.executeAction(
+      this.facade.deactivate(row.id),
+      this.i18n.tUi('company.deactivate.successSingle'),
+    );
   }
 
   block(row: CompanyModel): void {
-    this.clearSelection();
-
-    this.facade.block(row.id).subscribe({
-      next: () => {
-        this.clearSelection();
-        this.toast.add({
-          severity: 'success',
-          summary: this.i18n.tUi('common.success'),
-          detail: this.i18n.tUi('company.block.successSingle'),
-        });
-      },
-      error: () => {
-        this.clearSelection();
-      },
-    });
+    this.bulk.executeAction(
+      this.facade.block(row.id),
+      this.i18n.tUi('company.block.successSingle'),
+    );
   }
 
   confirmActivate(row: CompanyModel): void {
-    this.confirm.confirm({
+    this.bulk.confirmAction({
       header: this.i18n.tUi('company.activate.header'),
       message: this.i18n.tUi('company.activate.messageSingle', {
         socialReason: row?.socialReason ?? row?.fantasyName ?? '',
@@ -441,7 +358,7 @@ export class CompanyListComponent extends BaseListPage<CompanyFiltersState> {
   }
 
   confirmDeactivate(row: CompanyModel): void {
-    this.confirm.confirm({
+    this.bulk.confirmAction({
       header: this.i18n.tUi('company.deactivate.header'),
       message: this.i18n.tUi('company.deactivate.messageSingle', {
         socialReason: row?.socialReason ?? row?.fantasyName ?? row?.id ?? '',
@@ -452,7 +369,7 @@ export class CompanyListComponent extends BaseListPage<CompanyFiltersState> {
   }
 
   confirmBlock(row: CompanyModel): void {
-    this.confirm.confirm({
+    this.bulk.confirmAction({
       header: this.i18n.tUi('company.block.header'),
       message: this.i18n.tUi('company.block.messageSingle', {
         socialReason: row?.socialReason ?? row?.fantasyName ?? row?.id ?? '',
@@ -466,70 +383,37 @@ export class CompanyListComponent extends BaseListPage<CompanyFiltersState> {
     const rows = this.selectedRows();
     if (!rows.length) return;
 
-    this.clearSelection();
-
-    this.facade.activateBulk(rows.map((row) => row.id)).subscribe({
-      next: () => {
-        this.clearSelection();
-        this.toast.add({
-          severity: 'success',
-          summary: this.i18n.tUi('common.success'),
-          detail: this.i18n.tUi('company.activate.successBulk', { count: rows.length }),
-        });
-      },
-      error: () => {
-        this.clearSelection();
-      },
-    });
+    this.bulk.executeAction(
+      this.facade.activateBulk(rows.map((row) => row.id)),
+      this.i18n.tUi('company.activate.successBulk', { count: rows.length }),
+    );
   }
 
   deactivateSelected(): void {
     const rows = this.selectedRows();
     if (!rows.length) return;
 
-    this.clearSelection();
-
-    this.facade.deactivateBulk(rows.map((row) => row.id)).subscribe({
-      next: () => {
-        this.clearSelection();
-        this.toast.add({
-          severity: 'success',
-          summary: this.i18n.tUi('common.success'),
-          detail: this.i18n.tUi('company.deactivate.successBulk', { count: rows.length }),
-        });
-      },
-      error: () => {
-        this.clearSelection();
-      },
-    });
+    this.bulk.executeAction(
+      this.facade.deactivateBulk(rows.map((row) => row.id)),
+      this.i18n.tUi('company.deactivate.successBulk', { count: rows.length }),
+    );
   }
 
   blockSelected(): void {
     const rows = this.selectedRows();
     if (!rows.length) return;
 
-    this.clearSelection();
-
-    this.facade.blockBulk(rows.map((row) => row.id)).subscribe({
-      next: () => {
-        this.clearSelection();
-        this.toast.add({
-          severity: 'success',
-          summary: this.i18n.tUi('common.success'),
-          detail: this.i18n.tUi('company.block.successBulk', { count: rows.length }),
-        });
-      },
-      error: () => {
-        this.clearSelection();
-      },
-    });
+    this.bulk.executeAction(
+      this.facade.blockBulk(rows.map((row) => row.id)),
+      this.i18n.tUi('company.block.successBulk', { count: rows.length }),
+    );
   }
 
   confirmActivateSelected(): void {
     const rows = this.selectedRows();
     if (!rows.length) return;
 
-    this.confirm.confirm({
+    this.bulk.confirmAction({
       header: this.i18n.tUi('company.activate.header'),
       message: this.i18n.tUi('company.activate.messageBulk', { count: rows.length }),
       icon: 'pi pi-check-circle',
@@ -541,7 +425,7 @@ export class CompanyListComponent extends BaseListPage<CompanyFiltersState> {
     const rows = this.selectedRows();
     if (!rows.length) return;
 
-    this.confirm.confirm({
+    this.bulk.confirmAction({
       header: this.i18n.tUi('company.deactivate.header'),
       message: this.i18n.tUi('company.deactivate.messageBulk', { count: rows.length }),
       icon: 'pi pi-exclamation-triangle',
@@ -553,7 +437,7 @@ export class CompanyListComponent extends BaseListPage<CompanyFiltersState> {
     const rows = this.selectedRows();
     if (!rows.length) return;
 
-    this.confirm.confirm({
+    this.bulk.confirmAction({
       header: this.i18n.tUi('company.block.header'),
       message: this.i18n.tUi('company.block.messageBulk', { count: rows.length }),
       icon: 'pi pi-lock',
@@ -589,34 +473,19 @@ export class CompanyListComponent extends BaseListPage<CompanyFiltersState> {
 
   onUpsertVisibleChange(v: boolean) {
     this.upsertVisible.set(v);
-    if (!v) {
-      this.company.set(null);
-    }
+    if (!v) this.company.set(null);
   }
 
   onCreated() {
     this.reloadWithCurrentState();
   }
 
-  onLazyLoad(e: any) {
-    this.lastLazyEvent = e;
+  protected override tableStateKey(): string {
+    return 'cardsync.company.table.state.v1';
+  }
 
-    if (this.skipNextLazy) {
-      this.skipNextLazy = false;
-      return;
-    }
-
-    const hasTableInteraction =
-      !!e?.filters ||
-      e?.sortField != null ||
-      (Array.isArray(e?.multiSortMeta) && e.multiSortMeta.length > 0) ||
-      e?.globalFilter != null;
-
-    if (!this.searchedOnce && this.activeFiltersCount() > 0 && !hasTableInteraction) {
-      return;
-    }
-
-    this.reloadWithCurrentState();
+  protected override tableRowsKey(): string {
+    return 'company.table.rows';
   }
 
   protected override filtersKey(): string {
@@ -642,7 +511,6 @@ export class CompanyListComponent extends BaseListPage<CompanyFiltersState> {
     this.cnpj.set('');
     this.fantasyName.set('');
     this.socialReason.set('');
-
     this.createdBy.set(null);
     this.statusEnum.set(null);
     this.createdAtRange.set(null);
@@ -651,15 +519,14 @@ export class CompanyListComponent extends BaseListPage<CompanyFiltersState> {
 
   protected override toFiltersState(): CompanyFiltersState {
     const create = this.createdAtRange();
+
     return {
       cnpj: this.cnpj(),
       fantasyName: this.fantasyName(),
       socialReason: this.socialReason(),
-      createdBy: this.createdBy(),
-
+      createdBy: this.createdBy()?.length ? this.createdBy() : null,
       statusEnum: this.statusEnum()?.length ? this.statusEnum() : null,
       typeEnum: this.typeCompanyEnum()?.length ? this.typeCompanyEnum() : null,
-
       createdAtRange:
         create?.[0] && create?.[1] ? [create[0].toISOString(), create[1].toISOString()] : null,
     };
@@ -670,7 +537,6 @@ export class CompanyListComponent extends BaseListPage<CompanyFiltersState> {
     this.createdBy.set(s.createdBy ?? null);
     this.fantasyName.set(s.fantasyName ?? '');
     this.socialReason.set(s.socialReason ?? '');
-
     this.statusEnum.set(s.statusEnum ?? null);
     this.typeCompanyEnum.set(s.typeEnum ?? null);
 
@@ -681,7 +547,7 @@ export class CompanyListComponent extends BaseListPage<CompanyFiltersState> {
     );
   }
 
-  protected buildAdvancedFilters(): Partial<CompanyAdvancedFilters> {
+  protected override buildAdvancedFilters(): Partial<CompanyAdvancedFilters> {
     const create = this.createdAtRange();
 
     const [createFrom, createTo] =
@@ -694,31 +560,84 @@ export class CompanyListComponent extends BaseListPage<CompanyFiltersState> {
       createdBy: this.createdBy() || null,
       fantasyName: this.fantasyName().trim() || undefined,
       socialReason: this.socialReason().trim() || undefined,
-
       statusEnum: this.statusEnum()?.length ? this.statusEnum() : undefined,
       typeEnum: this.typeCompanyEnum()?.length ? this.typeCompanyEnum() : undefined,
-
       createdAtTo: createTo,
       createdAtFrom: createFrom,
     };
   }
 
-  protected reloadWithCurrentState() {
-    const tableQuery = mapPrimeLazyToTableQuery(
-      this.lastLazyEvent ?? { first: 0, rows: this.rows },
-      this.rows,
-    );
+  protected override mapTableFiltersToActiveItems(filters: any): ActiveFilterItem[] {
+    this.i18n.getAppliedLang();
 
-    const query = buildListQuery<CompanyAdvancedFilters>(tableQuery, this.buildAdvancedFilters());
+    const items: ActiveFilterItem[] = [];
 
-    this.rows = tableQuery.size;
-    localStorage.setItem('company.table.rows', this.rows.toString());
+    const fantasyName = readSingleFilterValue(filters, 'fantasyName');
+    if (fantasyName) {
+      items.push({ label: this.i18n.tUi('company.fields.fantasyName'), value: fantasyName });
+    }
 
+    const socialReason = readSingleFilterValue(filters, 'socialReason');
+    if (socialReason) {
+      items.push({ label: this.i18n.tUi('company.fields.socialReason'), value: socialReason });
+    }
+
+    const cnpj = readSingleFilterValue(filters, 'cnpj');
+    if (cnpj) {
+      items.push({ label: this.i18n.tUi('company.fields.cnpj'), value: cnpj });
+    }
+
+    const statuses = readArrayFilterValues(filters, 'statusEnum');
+    if (statuses.length) {
+      items.push({
+        label: this.i18n.tUi('company.fields.statusEnum'),
+        value: statuses.map((value) => statusEnumLabel(value as StatusEnum, this.i18n)).join(', '),
+      });
+    }
+
+    const types = readArrayFilterValues(filters, 'typeCompanyEnum');
+    if (types.length) {
+      items.push({
+        label: this.i18n.tUi('company.fields.typeCompanyEnum'),
+        value: types
+          .map((value) => typeCompanyEnumLabel(value as TypeCompanyEnum, this.i18n))
+          .join(', '),
+      });
+    }
+
+    const createdAt = readDateRangeFilterValue(filters, 'createdAt', this.formatDate.bind(this));
+    if (createdAt) {
+      items.push({ label: this.i18n.tUi('company.fields.createdAt'), value: createdAt });
+    }
+
+    const createdByValues = readArrayFilterValues(filters, 'createdBy');
+    if (createdByValues.length) {
+      const labels = this.usersOptions()
+        .filter((option) => createdByValues.includes(option.value))
+        .map((option) => option.label);
+
+      items.push({
+        label: this.i18n.tUi('company.fields.createdBy'),
+        value: (labels.length ? labels : createdByValues).join(', '),
+      });
+    }
+
+    return items;
+  }
+
+  protected override loadPage(
+    query: ReturnType<typeof buildListQuery<CompanyAdvancedFilters>>,
+  ): void {
     this.clearSelection();
     this.facade.loadPage(query);
   }
 
   protected clearSelection(): void {
     this.selectedRows.set([]);
+  }
+
+  protected formatDate(value: Date | string): string {
+    const date = value instanceof Date ? value : new Date(value);
+    return new Intl.DateTimeFormat(this.i18n.getLang(), { dateStyle: 'short' }).format(date);
   }
 }

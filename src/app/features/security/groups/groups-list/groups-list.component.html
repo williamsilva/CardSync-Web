@@ -39,12 +39,12 @@
   (clear)="clear()"
   (search)="search()"
   [actionsAlign]="'start'"
-  [activeFilters]="activeFilters()"
+  [activeFilterGroups]="activeFilterGroups()"
   [activeCount]="activeFiltersCount()"
   [title]="'common.filter' | translate"
 >
   <div class="grid formgrid gap-0 align-items-end">
-    <div class="col-12 md:col-4 p-1">
+    <div class="col-12 md:col-3 p-1">
       <p-floatLabel variant="on" class="w-full">
         <input
           id="name"
@@ -57,7 +57,7 @@
       </p-floatLabel>
     </div>
 
-    <div class="col-12 md:col-8 p-1">
+    <div class="col-12 md:col-4 p-1">
       <p-floatLabel variant="on" class="w-full">
         <input
           id="description"
@@ -67,6 +67,44 @@
           (input)="description.set(($any($event.target).value ?? '').toString())"
         />
         <label for="description">{{ 'groups.fields.description' | translate }}</label>
+      </p-floatLabel>
+    </div>
+
+    <div class="col-12 md:col-2 p-1">
+      <p-floatLabel variant="on" class="w-full">
+        <p-datepicker
+          inputId="createdAt"
+          class="w-full"
+          size="small"
+          appendTo="body"
+          [showIcon]="true"
+          [readonlyInput]="true"
+          selectionMode="range"
+          dateFormat="dd/mm/yy"
+          [ngModel]="createdAtRange()"
+          (ngModelChange)="createdAtRange.set($event ?? null)"
+        ></p-datepicker>
+        <label for="createdAt">{{ 'groups.fields.createdAt' | translate }}</label>
+      </p-floatLabel>
+    </div>
+
+    <div class="col-12 md:col-3 p-1">
+      <p-floatLabel variant="on" class="w-full">
+        <p-multiSelect
+          inputId="createdBy"
+          class="w-full"
+          size="small"
+          appendTo="body"
+          optionLabel="label"
+          optionValue="value"
+          [options]="usersOptions()"
+          [ngModel]="createdBy()"
+          [filter]="true"
+          [showClear]="true"
+          [showToggleAll]="false"
+          (onChange)="createdBy.set($event.value ?? null)"
+        ></p-multiSelect>
+        <label for="createdBy">{{ 'groups.fields.createdBy' | translate }}</label>
       </p-floatLabel>
     </div>
   </div>
@@ -85,6 +123,7 @@
   [paginator]="true"
   sortMode="multiple"
   filterDisplay="menu"
+  stateStorage="local"
   class="p-datatable-sm mt-1"
   styleClass="cs-admin-table"
   [loading]="facade.loading()"
@@ -94,6 +133,7 @@
   (onLazyLoad)="onLazyLoad($event)"
   [paginatorDropdownAppendTo]="'body'"
   [rowsPerPageOptions]="[10, 20, 50, 100]"
+  stateKey="cardsync.groups.table.state.v1"
   [tableStyle]="{ width: '100%', 'min-width': '48rem' }"
   [currentPageReportTemplate]="'pagination.report' | translate"
 >
@@ -101,6 +141,10 @@
     <colgroup>
       <col style="width: auto" />
       <col style="width: auto" />
+      <col style="width: 170px" />
+      <col style="width: 170px" />
+      <col style="width: 90px" />
+      <col style="width: 90px" />
       <col style="width: 90px" />
     </colgroup>
   </ng-template>
@@ -147,6 +191,82 @@
         </div>
       </th>
 
+      <th pSortableColumn="createdAt">
+        <div class="th-flex text-center">
+          <span class="th-label">{{ 'groups.columns.createdAt' | translate }}</span>
+          <span class="th-icons">
+            <p-sortIcon field="createdAt"></p-sortIcon>
+            <p-columnFilter
+              display="menu"
+              field="createdAt"
+              matchMode="between"
+              [showOperator]="false"
+              [showAddButton]="false"
+              [showMatchModes]="false"
+              styleClass="cs-colfilter"
+            >
+              <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                <p-datepicker
+                  class="w-full"
+                  appendTo="body"
+                  [showIcon]="true"
+                  [ngModel]="value"
+                  selectionMode="range"
+                  dateFormat="dd/mm/yy"
+                  [readonlyInput]="true"
+                  (ngModelChange)="filter($event)"
+                  [placeholder]="'common.period' | translate"
+                ></p-datepicker>
+              </ng-template>
+            </p-columnFilter>
+          </span>
+        </div>
+      </th>
+
+      <th pSortableColumn="createdBy">
+        <div class="th-flex text-center">
+          <span class="th-label">{{ 'groups.columns.createdBy' | translate }}</span>
+          <span class="th-icons">
+            <p-sortIcon field="createdBy"></p-sortIcon>
+            <p-columnFilter
+              display="menu"
+              matchMode="in"
+              field="createdBy"
+              [showOperator]="false"
+              [showAddButton]="false"
+              [showMatchModes]="false"
+              styleClass="cs-colfilter"
+            >
+              <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                <p-multiSelect
+                  class="w-full"
+                  appendTo="body"
+                  [filter]="true"
+                  [ngModel]="value"
+                  [showClear]="true"
+                  optionLabel="label"
+                  optionValue="value"
+                  [options]="usersOptions()"
+                  (onChange)="filter($event.value)"
+                  [placeholder]="'common.all' | translate"
+                ></p-multiSelect>
+              </ng-template>
+            </p-columnFilter>
+          </span>
+        </div>
+      </th>
+
+      <th>
+        <div class="th-flex text-center">
+          <span class="th-label">{{ 'groups.columns.usersCount' | translate }}</span>
+        </div>
+      </th>
+      <th>
+        <div class="th-flex text-center">
+          <span class="th-label">{{ 'groups.columns.permissionsCount' | translate }}</span>
+        </div>
+      </th>
+
       <th class="text-center">
         <div class="th-flex text-center justify-content-center">
           <span class="th-label">{{ 'common.actions' | translate }}</span>
@@ -159,6 +279,10 @@
     <tr>
       <td>{{ row.name }}</td>
       <td>{{ row.description }}</td>
+      <td class="text-center">{{ row.createdAt ? (row.createdAt | csDate: 'short') : '-' }}</td>
+      <td class="text-center">{{ row.createdBy?.name ?? '-' }}</td>
+      <td class="text-center">{{ row.usersCount ?? '-' }}</td>
+      <td class="text-center">{{ row.permissionsCount ?? '-' }}</td>
       <td class="text-center">
         <button
           pButton
@@ -206,7 +330,7 @@
 
   <ng-template pTemplate="emptymessage">
     <tr>
-      <td colspan="3" class="text-center py-5 opacity-70">
+      <td colspan="7" class="text-center py-5 opacity-70">
         {{ 'groups.empty.title' | translate }}
       </td>
     </tr>
