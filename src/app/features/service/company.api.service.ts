@@ -7,6 +7,7 @@ import { API } from '@core/api/api.config';
 import { HalPagedResponse } from '@core/api/page.model';
 import { CompanyAdvancedFilters } from '@features/filter/company.filters';
 import { ListQueryDto } from '@shared/features/list-query/list-query.types';
+import { CompanyMinimalModel, mapCompanyMinimalModels } from '@models/company-minimal.models';
 import {
   CompanyModel,
   CompanyApiModel,
@@ -21,6 +22,20 @@ import {
 export class CompanyApiService {
   private readonly http = inject(HttpClient);
   private readonly baseUrl = `${API.bff}/v1/company`;
+
+  getOptions() {
+    return this.http
+      .get<HalPagedResponse<CompanyMinimalModel>>(`${this.baseUrl}/options-filter`)
+      .pipe(
+        map(
+          (res) =>
+            ({
+              ...res,
+              content: mapCompanyMinimalModels(res?._embedded?.content),
+            }) as HalPagedResponse<CompanyMinimalModel>,
+        ),
+      );
+  }
 
   searchPaged(body: ListQueryDto<CompanyAdvancedFilters>) {
     return this.http.post<HalPagedResponse<CompanyApiModel>>(`${this.baseUrl}/search`, body).pipe(

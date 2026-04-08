@@ -24,6 +24,7 @@ export const UI_KEYS = {
       title: 'menu.register.title',
       company: 'menu.register.company',
       acquirer: 'menu.register.acquirer',
+      establishment: 'menu.register.establishment',
     },
     security: {
       title: 'menu.security.title',
@@ -54,7 +55,48 @@ export const UI_KEYS = {
     successMessage: 'accountPassword.successMessage',
     usernameFallback: 'accountPassword.usernameFallback',
   },
-
+  establishment: {
+    form: {
+      created: 'establishment.form.created',
+      updated: 'establishment.form.updated',
+      saveError: 'establishment.form.saveError',
+    },
+    fields: {
+      company: 'establishment.fields.company',
+      typeEnum: 'establishment.fields.typeEnum',
+      acquirer: 'establishment.fields.acquirer',
+      pvNumber: 'establishment.fields.pvNumber',
+      createdAt: 'establishment.fields.createdAt',
+      createdBy: 'establishment.fields.createdBy',
+      statusEnum: 'establishment.fields.statusEnum',
+    },
+    selection: {
+      mode: {
+        none: 'establishment.selection.mode.none',
+      },
+    },
+    activate: {
+      header: 'establishment.activate.header',
+      messageBulk: 'establishment.activate.messageBulk',
+      successBulk: 'establishment.activate.successBulk',
+      messageSingle: 'establishment.activate.messageSingle',
+      successSingle: 'establishment.activate.successSingle',
+    },
+    deactivate: {
+      header: 'establishment.deactivate.header',
+      messageBulk: 'establishment.deactivate.messageBulk',
+      successBulk: 'establishment.deactivate.successBulk',
+      messageSingle: 'establishment.deactivate.messageSingle',
+      successSingle: 'establishment.deactivate.successSingle',
+    },
+    block: {
+      header: 'establishment.block.header',
+      messageBulk: 'establishment.block.messageBulk',
+      successBulk: 'establishment.block.successBulk',
+      messageSingle: 'establishment.block.messageSingle',
+      successSingle: 'establishment.block.successSingle',
+    },
+  },
   users: {
     status: {
       active: 'users.status.active',
@@ -143,6 +185,12 @@ export const UI_KEYS = {
       filial: 'enum.typeCompanyEnum.filial',
       matriz: 'enum.typeCompanyEnum.matriz',
       unknown: 'enum.typeCompanyEnum.unknown',
+    },
+    typeEstablishmentEnum: {
+      null: 'enum.typeEstablishmentEnum.null',
+      pdvTef: 'enum.typeEstablishmentEnum.pdvTef',
+      ecommerce: 'enum.typeEstablishmentEnum.ecommerce',
+      unknown: 'enum.typeEstablishmentEnum.unknown',
     },
   },
   company: {

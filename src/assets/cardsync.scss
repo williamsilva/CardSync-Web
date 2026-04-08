@@ -2,3 +2,20 @@
 @use './styles/datepicker.scss';
 @use './styles/inputs-error.scss';
 @use './styles/confirm-dialog.scss';
+
+/* Style select and multSelect*/
+.cs-option-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  line-height: 1.2;
+}
+
+.cs-option-item__label {
+  font-weight: 700;
+}
+
+.cs-option-item__subtext {
+  font-size: 0.65rem;
+  color: var(--text-color-secondary);
+}

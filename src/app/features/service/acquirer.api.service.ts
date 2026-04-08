@@ -7,6 +7,7 @@ import { API } from '@core/api/api.config';
 import { HalPagedResponse } from '@core/api/page.model';
 import { AcquirerAdvancedFilters } from '@features/filter/acquirer.filters';
 import { ListQueryDto } from '@shared/features/list-query/list-query.types';
+import { AcquirerMinimalModel, mapAcquirerMinimalModels } from '@models/acquirer-minimal.models';
 import {
   AcquirerModel,
   AcquirerApiModel,
@@ -21,6 +22,20 @@ import {
 export class AcquirerApiService {
   private readonly http = inject(HttpClient);
   private readonly baseUrl = `${API.bff}/v1/acquirer`;
+
+  getOptions() {
+    return this.http
+      .get<HalPagedResponse<AcquirerMinimalModel>>(`${this.baseUrl}/options-filter`)
+      .pipe(
+        map(
+          (res) =>
+            ({
+              ...res,
+              content: mapAcquirerMinimalModels(res?._embedded?.content),
+            }) as HalPagedResponse<AcquirerMinimalModel>,
+        ),
+      );
+  }
 
   searchPaged(body: ListQueryDto<AcquirerAdvancedFilters>) {
     return this.http.post<HalPagedResponse<AcquirerApiModel>>(`${this.baseUrl}/search`, body).pipe(

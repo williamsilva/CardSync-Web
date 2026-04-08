@@ -2,56 +2,31 @@ import { Injectable, inject, signal } from '@angular/core';
 
 import { finalize, Observable, tap } from 'rxjs';
 
-import { AcquirerMinimalModel } from '@models/acquirer-minimal.models';
-import { AcquirerAdvancedFilters } from '@features/filter/acquirer.filters';
 import { ListQueryDto } from '@shared/features/list-query/list-query.types';
-import { AcquirerApiService } from '@features/service/acquirer.api.service';
-import { AcquirerCreateInput, AcquirerModel, AcquirerUpdateInput } from '@models/acquirer.models';
+import { EstablishmentAdvancedFilters } from '@features/filter/establishment.filters';
+import { EstablishmentApiService } from '@features/service/establishment.api.service';
+import {
+  EstablishmentModel,
+  EstablishmentCreateInput,
+  EstablishmentUpdateInput,
+} from '@models/establishment.models';
 
-type LastQuery = ListQueryDto<AcquirerAdvancedFilters>;
+type LastQuery = ListQueryDto<EstablishmentAdvancedFilters>;
 
 @Injectable({ providedIn: 'root' })
-export class AcquirerFacade {
-  private readonly api = inject(AcquirerApiService);
+export class EstablishmentFacade {
+  private readonly api = inject(EstablishmentApiService);
 
   private readonly _total = signal(0);
   private readonly _loading = signal(false);
   private readonly _loadedOnce = signal(false);
-  private readonly _optionsLoading = signal(false);
-  private readonly _optionsLoadedOnce = signal(false);
-  private readonly _data = signal<AcquirerModel[]>([]);
+  private readonly _data = signal<EstablishmentModel[]>([]);
   private readonly _lastQuery = signal<LastQuery | null>(null);
-  private readonly _options = signal<AcquirerMinimalModel[]>([]);
 
-  readonly acquirer = this._data.asReadonly();
-  readonly options = this._options.asReadonly();
   readonly loading = this._loading.asReadonly();
+  readonly establishment = this._data.asReadonly();
   readonly totalRecords = this._total.asReadonly();
   readonly loadedOnce = this._loadedOnce.asReadonly();
-
-  loadAcquirerOptionsFilter(force = false): void {
-    if (this._optionsLoading()) return;
-    if (!force && this._optionsLoadedOnce()) return;
-
-    this._optionsLoading.set(true);
-
-    this.api
-      .getOptions()
-      .pipe(
-        finalize(() => {
-          this._optionsLoading.set(false);
-          this._optionsLoadedOnce.set(true);
-        }),
-      )
-      .subscribe({
-        next: (res) => {
-          this._options.set(res?._embedded?.content ?? []);
-        },
-        error: () => {
-          this._options.set([]);
-        },
-      });
-  }
 
   loadPage(q: LastQuery): void {
     if (this._loading()) return;
@@ -86,11 +61,11 @@ export class AcquirerFacade {
     this.loadPage(last);
   }
 
-  getById(id: string): Observable<AcquirerModel> {
+  getById(id: string): Observable<EstablishmentModel> {
     return this.api.getById(id);
   }
 
-  create(input: AcquirerCreateInput): Observable<AcquirerModel> {
+  create(input: EstablishmentCreateInput): Observable<EstablishmentModel> {
     this._loading.set(true);
     return this.api.create(input).pipe(
       tap((created) => {
@@ -102,7 +77,7 @@ export class AcquirerFacade {
     );
   }
 
-  update(id: string, input: AcquirerUpdateInput): Observable<AcquirerModel> {
+  update(id: string, input: EstablishmentUpdateInput): Observable<EstablishmentModel> {
     this._loading.set(true);
     return this.api.update(id, input).pipe(
       tap((updated) => {

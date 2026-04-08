@@ -1,5 +1,4 @@
 import { StatusEnum } from '@models/enums/status.enum';
-import { UserMinimalModel } from '@models/user-minimal.models';
 
 export interface AcquirerAdvancedFilters {
   cnpj: string;
@@ -11,8 +10,5 @@ export interface AcquirerAdvancedFilters {
 
   statusEnum?: StatusEnum[] | null;
 
-  //flags: Flags[];
-  //companies: CompanyModel[];
-  //establishments: Establishment[];
   createdBy: string[] | null;
 }

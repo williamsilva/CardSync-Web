@@ -94,6 +94,14 @@ export const appRoutes: Routes = [
             (m) => m.AcquirerListComponent,
           ),
       },
+      {
+        path: 'establishment',
+        title: 'routes.establishment.title',
+        loadComponent: () =>
+          import('./features/register/establishment/establishment-list/establishment-list-component').then(
+            (m) => m.EstablishmentListComponent,
+          ),
+      },
 
       {
         path: 'audit',

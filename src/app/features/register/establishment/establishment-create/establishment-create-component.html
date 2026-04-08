@@ -1,0 +1,182 @@
+<p-dialog
+  [modal]="true"
+  [closable]="false"
+  (onHide)="onHide()"
+  [draggable]="false"
+  [resizable]="false"
+  [visible]="visible()"
+  [contentStyle]="{ overflow: 'visible' }"
+  [style]="{ width: '720px', maxWidth: '95vw' }"
+  [header]="
+    establishment()?.id
+      ? ('establishment.edit.title' | translate)
+      : ('establishment.new.title' | translate)
+  "
+>
+  <form [formGroup]="form" class="cs-dialog-form">
+    <div class="grid formgrid gap-0">
+      <div class="col-12 md:col-6 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-select
+            size="small"
+            class="w-full"
+            appendTo="body"
+            [filter]="false"
+            optionValue="id"
+            inputId="company"
+            [showClear]="true"
+            optionLabel="fantasyName"
+            formControlName="company"
+            [options]="companyOptions()"
+          >
+            <ng-template let-option pTemplate="item">
+              <div class="cs-option-item">
+                <div class="cs-option-item__label">{{ option.fantasyName }}</div>
+                <div class="cs-option-item__subtext">
+                  N° Inscrição: {{ option.cnpj | csDocument }}
+                </div>
+              </div>
+            </ng-template>
+          </p-select>
+
+          <app-error-msg
+            [required]="false"
+            [field]="'company'"
+            [forId]="'company'"
+            [control]="form.controls.company"
+            [label]="'establishment.fields.company' | translate"
+          />
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 md:col-6 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-select
+            size="small"
+            class="w-full"
+            appendTo="body"
+            optionValue="id"
+            [filter]="false"
+            inputId="acquirer"
+            [showClear]="true"
+            optionLabel="fantasyName"
+            formControlName="acquirer"
+            [options]="acquirerOptions()"
+          >
+            <ng-template let-option pTemplate="item">
+              <div class="cs-option-item">
+                <div class="cs-option-item__label">{{ option.fantasyName }}</div>
+                <div class="cs-option-item__subtext">
+                  N° Inscrição: {{ option.cnpj | csDocument }}
+                </div>
+              </div>
+            </ng-template>
+          </p-select>
+
+          <app-error-msg
+            [required]="false"
+            [field]="'acquirer'"
+            [forId]="'acquirer'"
+            [control]="form.controls.acquirer"
+            [label]="'establishment.fields.acquirer' | translate"
+          />
+        </p-floatLabel>
+      </div>
+    </div>
+
+    <div class="grid formgrid gap-0">
+      <div class="col-12 md:col-4 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-select
+            size="small"
+            class="w-full"
+            appendTo="body"
+            inputId="status"
+            [filter]="false"
+            [showClear]="true"
+            optionValue="value"
+            optionLabel="label"
+            formControlName="status"
+            [options]="statusOptions()"
+          ></p-select>
+
+          <app-error-msg
+            [field]="'status'"
+            [forId]="'status'"
+            [required]="false"
+            [control]="form.controls.status"
+            [label]="'establishment.fields.statusEnum' | translate"
+          />
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 md:col-4 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-select
+            size="small"
+            class="w-full"
+            inputId="type"
+            appendTo="body"
+            [filter]="false"
+            [showClear]="true"
+            optionValue="value"
+            optionLabel="label"
+            formControlName="type"
+            [options]="typeEstablishmentOptions()"
+          ></p-select>
+
+          <app-error-msg
+            [field]="'type'"
+            [forId]="'type'"
+            [required]="false"
+            [control]="form.controls.type"
+            [label]="'establishment.fields.typeEnum' | translate"
+          />
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 md:col-4 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <input
+            pInputText
+            type="text"
+            id="pvNumber"
+            autocomplete="off"
+            inputmode="numeric"
+            formControlName="pvNumber"
+            class="w-full p-inputtext-sm"
+          />
+          <app-error-msg
+            [field]="'pvNumber'"
+            [forId]="'pvNumber'"
+            [control]="form.controls.pvNumber"
+            [label]="'establishment.fields.pvNumber' | translate"
+          />
+        </p-floatLabel>
+      </div>
+    </div>
+  </form>
+
+  <ng-template pTemplate="footer">
+    <button
+      pButton
+      type="button"
+      (click)="close()"
+      icon="pi pi-times"
+      class="p-button-text p-button-sm"
+      [label]="'common.cancel' | translate"
+      [disabled]="saving() || loadingEstablishment()"
+    ></button>
+
+    <button
+      pButton
+      type="button"
+      (click)="save()"
+      icon="pi pi-save"
+      class="p-button-sm"
+      [loading]="saving()"
+      [label]="'common.save' | translate"
+      [disabled]="saving() || loadingEstablishment()"
+    ></button>
+  </ng-template>
+</p-dialog>

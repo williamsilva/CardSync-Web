@@ -15,6 +15,9 @@
     "acquirer": {
       "title": "Adquirentes"
     },
+    "establishment": {
+      "title": "Estabelecimentos"
+    },
     "audit": {
       "title": "E-mail Logs"
     },
@@ -63,7 +66,8 @@
     "register": {
       "title": "Cadastros",
       "company": "Empresas",
-      "acquirer": "Adquirentes"
+      "acquirer": "Adquirentes",
+      "establishment": "Estabelecimentos"
     },
     "security": {
       "title": "Segurança",
@@ -83,7 +87,8 @@
     "dashboard": "Dashboard",
     "register": {
       "company": "Empresas",
-      "acquirer": "Adquirentes"
+      "acquirer": "Adquirentes",
+      "establishment": "Estabelecimentos"
     },
     "audit": {
       "emailLog": "E-mail Logs"
@@ -230,6 +235,10 @@
       "matriz": "Matriz",
       "filial": "Filial"
     },
+    "typeEstablishmentEnum": {
+      "pdvTef": "Pdv/Tef",
+      "ecommerce": "E-commerce"
+    },
     "statusEnum": {
       "active": "Ativo",
       "inactive": "Inativo",
@@ -308,7 +317,7 @@
     "selection": {
       "currentMode": "Modo da seleção",
       "count": "{count, plural, =0 {Nenhum selecionado} one {# selecionado} other {# selecionados}}",
-      "pickOneFirst": "Selecione primeiro uma empesa elegível para definir o contexto da seleção.",
+      "pickOneFirst": "Selecione primeiro uma empresa elegível para definir o contexto da seleção.",
       "mode": {
         "none": "Nenhum",
         "activate": "Ativação em lote",
@@ -396,7 +405,7 @@
     "selection": {
       "currentMode": "Modo da seleção",
       "count": "{count, plural, =0 {Nenhum selecionado} one {# selecionado} other {# selecionados}}",
-      "pickOneFirst": "Selecione primeiro uma empesa elegível para definir o contexto da seleção.",
+      "pickOneFirst": "Selecione primeiro uma adquirente elegível para definir o contexto da seleção.",
       "mode": {
         "none": "Nenhum",
         "activate": "Ativação em lote",
@@ -412,6 +421,97 @@
     },
     "empty": {
       "title": "Nenhuma adquirente encontrada"
+    }
+  },
+  "establishment": {
+    "subtitle": "Gerencie estabelecimentos",
+    "new": {
+      "title": "Novo estabelecimento",
+      "subtitle": "Cadastro de estabelecimento"
+    },
+    "edit": {
+      "title": "Editar estabelecimento",
+      "subtitle": "Edição de estabelecimento"
+    },
+    "columns": {
+      "typeEnum": "Tipo",
+      "company": "Empresa",
+      "statusEnum": "Status",
+      "pvNumber": "Número Pv",
+      "acquirer": "Adquirente",
+      "createdAt": "Cadastrado em",
+      "createdBy": "Cadastrado por"
+    },
+    "fields": {
+      "typeEnum":"Tipo",
+      "company":"Empresa",
+      "pvNumber":"Número Pv",
+      "statusEnum": "Status",
+      "acquirer":"Adquirente",
+      "createdAt": "Cadastrado em",
+      "createdBy": "Cadastrado por"
+    },
+    "action": {
+      "deactivate": {
+        "label": "Inativar",
+        "invalidStatus": "Somente estabelecimentos ativas podem ser inativadas.",
+        "noPermission": "Você não tem permissão para desativar estabelecimentos."
+      },
+      "activate": {
+        "label": "Ativar",
+        "noPermission": "Você não tem permissão para ativar estabelecimentos.",
+        "invalidStatus": "Somente estabelecimentos inativas podem ser ativadas."
+      },
+      "block": {
+        "label": "Bloquear",
+        "noPermission": "Você não tem permissão para bloquear estabelecimentos.",
+        "invalidStatus": "Somente estabelecimentos ativas podem ser bloqueadas."
+      }
+    },
+
+    "block": {
+      "selected": "Bloquear",
+      "header": "Confirmar bloqueio",
+      "successSingle": "Estabelecimento bloqueado com sucesso.",
+      "messageSingle": "Deseja bloquear o estabelecimento {pvNumber}?",
+      "successBulk": "{count, plural, one {# estabelecimento bloqueado com sucesso.} other {# estabelecimentos bloqueados com sucesso.}}",
+      "messageBulk": "{count, plural, one {Deseja bloquear # estabelecimento selecionado?} other {Deseja bloquear # estabelecimentos selecionados?}}"
+    },
+    "activate": {
+      "selected": "Ativar",
+      "header": "Confirmar ativação",
+      "successSingle": "Estabelecimento ativado com sucesso.",
+      "messageSingle": "Deseja ativar o estabelecimento {pvNumber}?",
+      "successBulk": "{count, plural, one {# estabelecimento ativado com sucesso.} other {# estabelecimentos ativados com sucesso.}}",
+      "messageBulk": "{count, plural, one {Deseja ativar # estabelecimento selecionado?} other {Deseja ativar # estabelecimentos selecionados?}}"
+    },
+    "deactivate": {
+      "selected": "Inativar",
+      "header": "Confirmar inativação",
+      "successSingle": "Estabelecimento inativado com sucesso.",
+      "messageSingle": "Deseja inativar o estabelecimento {pvNumber}?",
+      "successBulk": "{count, plural, one {# estabelecimento inativado com sucesso.} other {# estabelecimentos inativados com sucesso.}}",
+      "messageBulk": "{count, plural, one {Deseja inativar # estabelecimento selecionado?} other {Deseja inativar # estabelecimentos selecionados?}}"
+    },
+    "selection": {
+      "currentMode": "Modo da seleção",
+      "count": "{count, plural, =0 {Nenhum selecionado} one {# selecionado} other {# selecionados}}",
+      "pickOneFirst": "Selecione primeiro um estabelecimento elegível para definir o contexto da seleção.",
+      "mode": {
+        "none": "Nenhum",
+        "activate": "Ativação em lote",
+        "deactivate": "Inativação em lote"
+      }
+    },
+    "form": {
+      "loadError": "Não foi possível carregar os dados do estabelecimento.",
+      "saveError": "Não foi possível salvar a estabelecimento.",
+      "created": "Estabelecimento criada com sucesso.",
+      "updated": "Estabelecimento atualizado com sucesso.",
+      "permissionDenied": "Você não tem permissão para salvar estabelecimentos."
+    },
+    "empty": {
+      "title": "Nenhuma estabelecimento encontrado"
     }
   },
   "accountPassword": {
@@ -561,7 +661,8 @@
       "GROUP_NAME_ALREADY_EXISTS": "Já existe um grupo com este nome.",
       "GROUP_DELETE_SUPPORT_NOT_ALLOWED": "O grupo SUPPORT não pode ser excluído ou alterado nesta operação.",
       "GROUP_DELETE_IN_USE": "Este grupo possui usuários associados e não pode ser excluído.",
-      "PERMISSION_NOT_FOUND": "Uma ou mais permissões informadas não foram encontradas."
+      "PERMISSION_NOT_FOUND": "Uma ou mais permissões informadas não foram encontradas.",
+      "ESTABLISHMENT_ALREADY_EXISTS": "Já existe um estabelecimento com o mesmo PV, empresa e adquirente."
     },
     "fields": {
       "*": {
