@@ -3,44 +3,51 @@
     "name": "CardSync"
   },
   "routes": {
-    "users": {
-      "title": "Usuários"
+    "register": {
+      "company": {
+        "title": "Empresas"
+      },
+      "acquirer": {
+        "title": "Adquirentes"
+      },
+      "establishment": {
+        "title": "Estabelecimentos"
+      },
+      "flags": {
+        "title": "Bandeiras"
+      },
+      "contracts": {
+        "title": "Contratos"
+      }
     },
-    "groups": {
-      "title": "Grupos"
+
+    "security": {
+      "users": {
+        "title": "Usuários"
+      },
+      "groups": {
+        "title": "Grupos"
+      },
+      "accountProfile": {
+        "title": "Minha Conta"
+      },
+      "accountPassword": {
+        "title": "Alterar senha"
+      },
+      "groupDetail": {
+        "title": "Detalhe do grupo"
+      }
     },
-    "company": {
-      "title": "Empresas"
-    },
-    "acquirer": {
-      "title": "Adquirentes"
-    },
-    "establishment": {
-      "title": "Estabelecimentos"
-    },
+
     "audit": {
       "title": "E-mail Logs"
     },
     "dashboard": {
       "title": "Dashboard"
     },
-    "accountMe": {
-      "title": "Minha conta"
-    },
+
     "forbidden": {
       "title": "Acesso negado"
-    },
-    "accountProfile": {
-      "title": "Minha Conta"
-    },
-    "companiesNew": {
-      "title": "Nova empresa"
-    },
-    "accountPassword": {
-      "title": "Alterar senha"
-    },
-    "groupDetail": {
-      "title": "Detalhe do grupo"
     }
   },
   "topbar": {
@@ -65,7 +72,9 @@
     },
     "register": {
       "title": "Cadastros",
+      "flags": "Bandeiras",
       "company": "Empresas",
+      "contracts": "Contratos",
       "acquirer": "Adquirentes",
       "establishment": "Estabelecimentos"
     },
@@ -86,8 +95,10 @@
     "users": "Usuários",
     "dashboard": "Dashboard",
     "register": {
+      "flag": "Bandeiras",
       "company": "Empresas",
       "acquirer": "Adquirentes",
+      "contract": "Contratos",
       "establishment": "Estabelecimentos"
     },
     "audit": {
@@ -325,10 +336,10 @@
       }
     },
     "form": {
-      "loadError": "Não foi possível carregar os dados da empresa.",
-      "saveError": "Não foi possível salvar a empresa.",
       "created": "Empresa criada com sucesso.",
       "updated": "Empresa atualizada com sucesso.",
+      "saveError": "Não foi possível salvar a empresa.",
+      "loadError": "Não foi possível carregar os dados da empresa.",
       "permissionDenied": "Você não tem permissão para salvar empresas."
     },
     "empty": {
@@ -348,6 +359,7 @@
     "columns": {
       "cnpj": "CNPJ",
       "statusEnum": "Status",
+      "adqCode": "Código ADQ",
       "createdAt": "Cadastrado em",
       "createdBy": "Cadastrado por",
       "socialReason": "Razão Social",
@@ -454,18 +466,18 @@
     "action": {
       "deactivate": {
         "label": "Inativar",
-        "invalidStatus": "Somente estabelecimentos ativas podem ser inativadas.",
+        "invalidStatus": "Somente estabelecimentos ativos podem ser inativados.",
         "noPermission": "Você não tem permissão para desativar estabelecimentos."
       },
       "activate": {
         "label": "Ativar",
         "noPermission": "Você não tem permissão para ativar estabelecimentos.",
-        "invalidStatus": "Somente estabelecimentos inativas podem ser ativadas."
+        "invalidStatus": "Somente estabelecimentos inativos podem ser ativados."
       },
       "block": {
         "label": "Bloquear",
         "noPermission": "Você não tem permissão para bloquear estabelecimentos.",
-        "invalidStatus": "Somente estabelecimentos ativas podem ser bloqueadas."
+        "invalidStatus": "Somente estabelecimentos ativos podem ser bloqueados."
       }
     },
 
@@ -506,12 +518,200 @@
     "form": {
       "loadError": "Não foi possível carregar os dados do estabelecimento.",
       "saveError": "Não foi possível salvar a estabelecimento.",
-      "created": "Estabelecimento criada com sucesso.",
+      "created": "Estabelecimento criado com sucesso.",
       "updated": "Estabelecimento atualizado com sucesso.",
-      "permissionDenied": "Você não tem permissão para salvar estabelecimentos."
+      "permissionDenied": "Você não tem permissão para salvar estabelecimento."
     },
     "empty": {
-      "title": "Nenhuma estabelecimento encontrado"
+      "title": "Nenhum estabelecimento encontrado"
+    }
+  },
+  "contract": {
+    "subtitle": "Gerencie contratos",
+    "new": {
+      "title": "Novo contrato",
+      "subtitle": "Cadastro de contrato"
+    },
+    "edit": {
+      "title": "Editar contrato",
+      "subtitle": "Edição de contrato"
+    },
+    "columns": {
+
+    },
+    "fields": {
+
+    },
+    "action": {
+      "deactivate": {
+        "label": "Inativar",
+        "invalidStatus": "Somente contratos ativos podem ser inativados.",
+        "noPermission": "Você não tem permissão para desativar contratos."
+      },
+      "activate": {
+        "label": "Ativar",
+        "noPermission": "Você não tem permissão para ativar contratos.",
+        "invalidStatus": "Somente contratos inativos podem ser ativados."
+      },
+      "block": {
+        "label": "Bloquear",
+        "noPermission": "Você não tem permissão para bloquear contratos.",
+        "invalidStatus": "Somente contratos ativos podem ser bloqueados."
+      }
+    },
+
+    "block": {
+      "selected": "Bloquear",
+      "header": "Confirmar bloqueio",
+      "successSingle": "Contrato bloqueado com sucesso.",
+      "messageSingle": "Deseja bloquear o contrato {name}?",
+      "successBulk": "{count, plural, one {# contrato bloqueado com sucesso.} other {# contratos bloqueados com sucesso.}}",
+      "messageBulk": "{count, plural, one {Deseja bloquear # contrato selecionado?} other {Deseja bloquear # contratos selecionados?}}"
+    },
+    "activate": {
+      "selected": "Ativar",
+      "header": "Confirmar ativação",
+      "successSingle": "Contrato ativado com sucesso.",
+      "messageSingle": "Deseja ativar o contrato {name}?",
+      "successBulk": "{count, plural, one {# contrato ativado com sucesso.} other {# contratos ativados com sucesso.}}",
+      "messageBulk": "{count, plural, one {Deseja ativar # contrato selecionado?} other {Deseja ativar # contratos selecionados?}}"
+    },
+    "deactivate": {
+      "selected": "Inativar",
+      "header": "Confirmar inativação",
+      "successSingle": "Contrato inativado com sucesso.",
+      "messageSingle": "Deseja inativar o contrato {name}?",
+      "successBulk": "{count, plural, one {# contrato inativado com sucesso.} other {# contratos inativados com sucesso.}}",
+      "messageBulk": "{count, plural, one {Deseja inativar # contrato selecionado?} other {Deseja inativar # contratos selecionados?}}"
+    },
+    "selection": {
+      "currentMode": "Modo da seleção",
+      "count": "{count, plural, =0 {Nenhum selecionado} one {# selecionado} other {# selecionados}}",
+      "pickOneFirst": "Selecione primeiro um contrato elegível para definir o contexto da seleção.",
+      "mode": {
+        "none": "Nenhum",
+        "activate": "Ativação em lote",
+        "deactivate": "Inativação em lote"
+      }
+    },
+    "form": {
+      "loadError": "Não foi possível carregar os dados do contrato.",
+      "saveError": "Não foi possível salvar a contrato.",
+      "created": "Contrato criado com sucesso.",
+      "updated": "Contrato atualizado com sucesso.",
+      "permissionDenied": "Você não tem permissão para salvar contrato."
+    },
+    "empty": {
+      "title": "Nenhum contrato encontrado"
+    }
+  },
+  "flag": {
+    "subtitle": "Gerencie bandeiras",
+    "relationships":{
+      "add": "Adicionar",
+      "companies": "Empresas",
+      "acquirers": "Adquirentes",
+      "saveLinks": "Salvar vínculos",
+      "linkedCompanies": "Empresas vinculadas",
+      "linkedAcquirers": "Adquirentes vinculadas",
+      "addCompanyToFlag": "Adicionar Empresa à bandeira",
+      "addAcquirerToFlag": "Adicionar Adquirente à bandeira",
+      "removeCompany": {
+        "header": "Remover vínculo",
+        "message": "Deseja remover a empresa {company} da bandeira {flag}?",
+        "success": "Empresa {company} removida da bandeira {flag} com sucesso."
+      },
+      "removeAcquirer": {
+        "header": "Remover vínculo",
+        "message": "Deseja remover a adquirente {acquirer} da bandeira {flag}?",
+        "success": "Adquirente {acquirer} removida da bandeira {flag} com sucesso."
+      }
+    },
+    "new": {
+      "title": "Nova bandeira",
+      "subtitle": "Cadastro de bandeira"
+    },
+    "edit": {
+      "title": "Editar bandeira",
+      "subtitle": "Edição de bandeira"
+    },
+    "columns": {
+      "cnpj": "CNPJ",
+      "name": "Bandeira",
+      "statusEnum":"Status",
+      "company": "Empresas",
+      "erpCode": "Código ERP",
+      "acquirer": "Adquirentes",
+      "acquirerCode": "Código Adquirente"
+    },
+    "fields": {
+      "name": "Bandeira",
+      "erpCode": "Código",
+      "statusEnum":"Status",
+      "company": "Empresas",
+      "acquirer": "Adquirentes"
+    },
+    "action": {
+      "deactivate": {
+        "label": "Inativar",
+        "invalidStatus": "Somente bandeiras ativas podem ser inativadas.",
+        "noPermission": "Você não tem permissão para desativar bandeiras."
+      },
+      "activate": {
+        "label": "Ativar",
+        "noPermission": "Você não tem permissão para ativar bandeiras.",
+        "invalidStatus": "Somente bandeiras inativas podem ser ativadas."
+      },
+      "block": {
+        "label": "Bloquear",
+        "noPermission": "Você não tem permissão para bloquear bandeirad.",
+        "invalidStatus": "Somente bandeirad ativas podem ser bloqueadas."
+      }
+    },
+
+    "block": {
+      "selected": "Bloquear",
+      "header": "Confirmar bloqueio",
+      "successSingle": "Bandeira bloqueada com sucesso.",
+      "messageSingle": "Deseja bloquear bandeira {name}?",
+      "successBulk": "{count, plural, one {# bandeira bloqueada com sucesso.} other {# bandeiras bloqueadas com sucesso.}}",
+      "messageBulk": "{count, plural, one {Deseja bloquear # bandeira selecionado?} other {Deseja bloquear # bandeiras selecionadas?}}"
+    },
+    "activate": {
+      "selected": "Ativar",
+      "header": "Confirmar ativação",
+      "successSingle": "Bandeira ativada com sucesso.",
+      "messageSingle": "Deseja ativar a bandeira {name}?",
+      "successBulk": "{count, plural, one {# bandeira ativada com sucesso.} other {# bandeiras ativadas com sucesso.}}",
+      "messageBulk": "{count, plural, one {Deseja ativar # bandeira selecionada?} other {Deseja ativar # bandeiras selecionadas?}}"
+    },
+    "deactivate": {
+      "selected": "Inativar",
+      "header": "Confirmar inativação",
+      "successSingle": "Bandeira inativada com sucesso.",
+      "messageSingle": "Deseja inativar a bandeira {name}?",
+      "successBulk": "{count, plural, one {# bandeira inativada com sucesso.} other {# bandeiras inativadas com sucesso.}}",
+      "messageBulk": "{count, plural, one {Deseja inativar # bandeira selecionada?} other {Deseja inativar # bandeiras selecionadas?}}"
+    },
+    "selection": {
+      "currentMode": "Modo da seleção",
+      "count": "{count, plural, =0 {Nenhum selecionado} one {# selecionado} other {# selecionados}}",
+      "pickOneFirst": "Selecione primeiro uma bandeira elegível para definir o contexto da seleção.",
+      "mode": {
+        "none": "Nenhum",
+        "activate": "Ativação em lote",
+        "deactivate": "Inativação em lote"
+      }
+    },
+    "form": {
+      "created": "Bandeira criada com sucesso.",
+      "updated": "Bandeira atualizado com sucesso.",
+      "saveError": "Não foi possível salvar a bandeira.",
+      "loadError": "Não foi possível carregar os dados da bandeira.",
+      "permissionDenied": "Você não tem permissão para salvar bandeiras."
+    },
+    "empty": {
+      "title": "Nenhuma bandeira encontrada"
     }
   },
   "accountPassword": {

@@ -252,13 +252,13 @@
   [value]="establishments()"
   class="p-datatable-sm mt-1"
   styleClass="cs-admin-table"
-  [loading]="facade.loading()"
   [showCurrentPageReport]="true"
   [totalRecords]="totalRecords()"
   (onPage)="onPageChange($event)"
   (onLazyLoad)="onLazyLoad($event)"
   [paginatorDropdownAppendTo]="'body'"
   [rowsPerPageOptions]="[10, 20, 50, 100]"
+  [loading]="establishmentFacade.loading()"
   stateKey="cardsync.establishment.table.state.v1"
   [tableStyle]="{ width: '100%', 'min-width': '62rem' }"
   [currentPageReportTemplate]="'pagination.report' | translate"
@@ -513,7 +513,7 @@
 
       <td class="cell-muted text-center">
         <span [pTooltip]="row.pvNumber" tooltipPosition="top">
-          {{ row.pvNumber | csDocument }}
+          {{ row.pvNumber }}
         </span>
       </td>
 
@@ -604,7 +604,7 @@
         <div class="empty empty-center">
           <div class="empty-title">
             {{
-              facade.loadedOnce()
+              establishmentFacade.loadedOnce()
                 ? ('establishment.empty.title' | translate)
                 : ('common.loading' | translate)
             }}

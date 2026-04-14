@@ -74,6 +74,8 @@ export class GroupsListComponent extends StatefulListPage<
   protected readonly confirm = inject(ConfirmationService);
   protected readonly secPolicy = inject(GroupsPermissionPolicy);
 
+  override rows = Number(localStorage.getItem(this.tableRowsKey())) || 10;
+
   private readonly bulk = new (class extends BulkActionListPage {
     protected override readonly i18n = inject(I18nService);
     protected override readonly toast = inject(MessageService);
@@ -98,8 +100,6 @@ export class GroupsListComponent extends StatefulListPage<
       });
     }
   })(this);
-
-  override rows = Number(localStorage.getItem('groups.table.rows')) || 10;
 
   name = signal('');
   description = signal('');
@@ -158,7 +158,7 @@ export class GroupsListComponent extends StatefulListPage<
   }
 
   view(row: GroupModel) {
-    this.router.navigate(['/groups', row.id]);
+    this.router.navigate(['/security/groups', row.id]);
   }
 
   edit(row: GroupModel) {
@@ -185,6 +185,11 @@ export class GroupsListComponent extends StatefulListPage<
 
   clear() {
     this.clearTableAndReload(this.dt);
+  }
+
+  protected formatDate(value: Date | string): string {
+    const date = value instanceof Date ? value : new Date(value);
+    return new Intl.DateTimeFormat(this.i18n.getLang(), { dateStyle: 'short' }).format(date);
   }
 
   protected override tableStateKey(): string {
@@ -292,8 +297,5 @@ export class GroupsListComponent extends StatefulListPage<
     this.facade.loadPage(query);
   }
 
-  protected formatDate(value: Date | string): string {
-    const date = value instanceof Date ? value : new Date(value);
-    return new Intl.DateTimeFormat(this.i18n.getLang(), { dateStyle: 'short' }).format(date);
-  }
+  protected override loadFirstPage(): void {}
 }

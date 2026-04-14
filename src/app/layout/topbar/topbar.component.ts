@@ -144,12 +144,12 @@ export class TopbarComponent {
       {
         label: this.i18n.tUi('menu.me'),
         icon: 'pi pi-user',
-        command: () => this.router.navigateByUrl('/account/profile'),
+        command: () => this.router.navigateByUrl('/security/account/profile'),
       },
       {
         label: this.i18n.tUi('menu.security.changePassword'),
         icon: 'pi pi-key',
-        command: () => this.router.navigateByUrl('/account/password'),
+        command: () => this.router.navigateByUrl('/security/account/password'),
       },
       {
         separator: true,

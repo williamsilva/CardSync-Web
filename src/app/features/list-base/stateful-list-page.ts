@@ -17,6 +17,8 @@ export abstract class StatefulListPage<
 > extends BaseListPage<TState> {
   protected abstract readonly i18n: I18nService;
 
+  protected static readonly DEFAULT_ROWS = 10;
+
   protected searchedOnce = false;
   protected skipNextLazy = false;
   protected lastLazyEvent: any | null = null;
@@ -29,13 +31,18 @@ export abstract class StatefulListPage<
 
   abstract rows: number;
 
-  protected abstract tableStateKey(): string;
   protected abstract tableRowsKey(): string;
+  protected abstract tableStateKey(): string;
+
+  protected abstract loadFirstPage(): void;
 
   protected abstract buildAdvancedFilters(): Partial<TAdvancedFilter>;
   protected abstract mapTableFiltersToActiveItems(filters: any): ActiveFilterItem[];
   protected abstract loadPage(query: ReturnType<typeof buildListQuery<TAdvancedFilter>>): void;
   protected abstract advancedActiveFilters: () => ActiveFilterItem[];
+
+  protected onAfterClear(): void {}
+  protected clearCustomTableState(_defaultRows: number): void {}
 
   readonly activeFilterGroups = computed<ActiveFilterGroup[]>(() => {
     const groups: ActiveFilterGroup[] = [];
@@ -57,27 +64,6 @@ export abstract class StatefulListPage<
     () => this.advancedActiveFilters().length + this.tableActiveFilters().length,
   );
 
-  protected cloneTableFilters(filters: any): any | null {
-    if (!filters) return null;
-
-    try {
-      return structuredClone(filters);
-    } catch {
-      return JSON.parse(JSON.stringify(filters));
-    }
-  }
-
-  protected initStatefulList(): void {
-    this.restoreTableStateFromStorage();
-    this.loadOnInit();
-
-    if (this.advancedActiveFilters().length > 0 || this.hasRestoredTableState()) {
-      this.searchedOnce = true;
-    }
-
-    this.skipNextLazy = true;
-  }
-
   search(): void {
     this.persistFilters();
     this.searchedOnce = true;
@@ -93,7 +79,26 @@ export abstract class StatefulListPage<
     this.clearAndPersist();
     this.searchedOnce = true;
 
-    dt?.clear();
+    this.rows = StatefulListPage.DEFAULT_ROWS;
+    localStorage.setItem(this.tableRowsKey(), String(this.rows));
+
+    if (dt) {
+      dt.first = 0;
+      dt.rows = this.rows;
+
+      if (typeof dt.reset === 'function') {
+        dt.reset();
+      } else {
+        dt.clear();
+      }
+
+      const tableAny = dt as any;
+      if (typeof tableAny.clearState === 'function') {
+        tableAny.clearState();
+      }
+    } else {
+      this.clearCustomTableState(this.rows);
+    }
 
     localStorage.removeItem(this.tableStateKey());
 
@@ -109,6 +114,7 @@ export abstract class StatefulListPage<
       multiSortMeta: undefined,
     };
 
+    this.onAfterClear();
     this.reloadWithCurrentState();
   }
 
@@ -137,6 +143,27 @@ export abstract class StatefulListPage<
     }
 
     this.reloadWithCurrentState();
+  }
+
+  protected cloneTableFilters(filters: any): any | null {
+    if (!filters) return null;
+
+    try {
+      return structuredClone(filters);
+    } catch {
+      return JSON.parse(JSON.stringify(filters));
+    }
+  }
+
+  protected initStatefulList(): void {
+    this.restoreTableStateFromStorage();
+    this.loadOnInit();
+
+    if (this.advancedActiveFilters().length > 0 || this.hasRestoredTableState()) {
+      this.searchedOnce = true;
+    }
+
+    this.skipNextLazy = true;
   }
 
   protected hasRestoredTableState(): boolean {

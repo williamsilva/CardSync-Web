@@ -1,0 +1,57 @@
+<div class="table-actions justify-content-center">
+  <button
+    pButton
+    type="button"
+    icon="pi pi-pencil"
+    class="p-button-text p-button-sm"
+    tooltipPosition="top"
+    [disabled]="!secPolicy().canEdit(row())"
+    [pTooltip]="!secPolicy().canEdit(row()) ? undefined : ('common.edit' | translate)"
+    (click)="onEdit()"
+  ></button>
+
+  <button
+    pButton
+    type="button"
+    icon="pi pi-check-circle"
+    class="p-button-text p-button-sm"
+    tooltipPosition="top"
+    [disabled]="!secPolicy().canActivate(row())"
+    [pTooltip]="
+      secPolicy().canActivate(row())
+        ? ('flag.action.activate.label' | translate)
+        : (secPolicy().activateDisabledReason(row()) ?? '' | translate)
+    "
+    (click)="onActivate()"
+  ></button>
+
+  <button
+    pButton
+    type="button"
+    icon="pi pi-ban"
+    class="p-button-text p-button-sm"
+    tooltipPosition="top"
+    [disabled]="!secPolicy().canDeactivate(row())"
+    [pTooltip]="
+      secPolicy().canDeactivate(row())
+        ? ('flag.action.deactivate.label' | translate)
+        : (secPolicy().deactivateDisabledReason(row()) ?? '' | translate)
+    "
+    (click)="onDeactivate()"
+  ></button>
+
+  <button
+    pButton
+    type="button"
+    icon="pi pi-lock"
+    class="p-button-text p-button-sm"
+    tooltipPosition="top"
+    [disabled]="!secPolicy().canBlock(row())"
+    [pTooltip]="
+      secPolicy().canBlock(row())
+        ? ('flag.action.block.label' | translate)
+        : (secPolicy().blockDisabledReason(row()) ?? '' | translate)
+    "
+    (click)="onBlock()"
+  ></button>
+</div>

@@ -1,111 +1,80 @@
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { Component, ViewChild, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal, ViewChild } from '@angular/core';
 
-import { Table } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
-import { TableModule } from 'primeng/table';
-import { PanelModule } from 'primeng/panel';
 import { ButtonModule } from 'primeng/button';
-import { SelectModule } from 'primeng/select';
-import { DialogModule } from 'primeng/dialog';
 import { FloatLabel } from 'primeng/floatlabel';
 import { TooltipModule } from 'primeng/tooltip';
 import { CheckboxModule } from 'primeng/checkbox';
-import { SkeletonModule } from 'primeng/skeleton';
+import { Table, TableModule } from 'primeng/table';
 import { InputTextModule } from 'primeng/inputtext';
-import { DatePickerModule } from 'primeng/datepicker';
 import { TranslateModule } from '@ngx-translate/core';
 import { MultiSelectModule } from 'primeng/multiselect';
-import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService, MessageService } from 'primeng/api';
 
 import { I18nService } from '@core/i18n/i18n.service';
-import { CsDatePipe } from '@shared/pipes/cs-date.pipe';
-import { UsersFacade } from '@features/facade/users.facade';
-import { CsDocumentPipe } from '@shared/pipes/cs-document.pipe';
-import { AcquirerFacade } from '@features/facade/acquirer.facade';
-import { PermissionService } from '@core/auth/permission.service';
+import { ContractFacade } from '@features/facade/contract.facade';
 import { StatefulListPage } from '@features/list-base/stateful-list-page';
-import { AcquirerAdvancedFilters } from '@features/filter/acquirer.filters';
-import { AcquirerModel, AcquirerFiltersState } from '@models/acquirer.models';
+import { ContractAdvancedFilters } from '@features/filter/contract.filters';
+import { ContractFiltersState, ContractModel } from '@models/contract.models';
 import { BulkActionListPage } from '@features/list-base/bulk-action-list-page';
 import { buildListQuery } from '@shared/features/list-query/list-query.builder';
-import { CpfCnpjMaskDirective } from '@shared/directives/cpf-cnpj-mask.directive';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
-import { AcquirerPermissionPolicy } from '@features/security/policy/acquirer-permission.policy';
-import { DATA_TABLE_SHELL_IMPORTS } from '@shared/features/data-table-shell/data-table-shell.component';
+import { ContractPermissionPolicy } from '@features/security/policy/contract-permission.policy';
 import {
   ActiveFilterItem,
   FiltersPanelComponent,
 } from '@shared/features/filters-panel/filters-panel.component';
-
+import {
+  readArrayFilterValues,
+  readSingleFilterValue,
+} from '@features/list-base/table-filter-readers';
 import {
   StatusEnum,
   allStatusEnum,
   statusEnumLabel,
   statusEnumSeverity,
 } from '@models/enums/status.enum';
-import {
-  readArrayFilterValues,
-  readSingleFilterValue,
-  readDateRangeFilterValue,
-} from '@features/list-base/table-filter-readers';
 
 @Component({
-  standalone: true,
-  selector: 'app-acquirer-list',
-  templateUrl: './acquirer-list-component.html',
+  selector: 'app-contract-list',
+  templateUrl: './contract-list.html',
   imports: [
     CommonModule,
     TagModule,
     FloatLabel,
-    CsDatePipe,
     FormsModule,
     TableModule,
-    PanelModule,
-    DialogModule,
     ButtonModule,
-    SelectModule,
     TooltipModule,
     CheckboxModule,
-    CsDocumentPipe,
-    SkeletonModule,
     InputTextModule,
     TranslateModule,
-    DatePickerModule,
     MultiSelectModule,
     PageHeaderComponent,
-    ConfirmDialogModule,
-    CpfCnpjMaskDirective,
     FiltersPanelComponent,
-    DATA_TABLE_SHELL_IMPORTS,
   ],
 })
-export class AcquirerListComponent extends StatefulListPage<
-  AcquirerFiltersState,
-  AcquirerAdvancedFilters
+export class ContractListComponent extends StatefulListPage<
+  ContractFiltersState,
+  ContractAdvancedFilters
 > {
   @ViewChild('dt') private dt?: Table;
 
-  readonly facade = inject(AcquirerFacade);
-  readonly userFacade = inject(UsersFacade);
-  readonly perms = inject(PermissionService);
-  readonly usersOptions = this.userFacade.options;
+  readonly facade = inject(ContractFacade);
 
   protected readonly toast = inject(MessageService);
   protected override readonly i18n = inject(I18nService);
   protected readonly confirm = inject(ConfirmationService);
-  protected readonly secPolicy = inject(AcquirerPermissionPolicy);
-
-  override rows = Number(localStorage.getItem(this.tableRowsKey())) || 10;
+  protected readonly secPolicy = inject(ContractPermissionPolicy);
 
   private readonly bulk = new (class extends BulkActionListPage {
     protected override readonly i18n = inject(I18nService);
     protected override readonly toast = inject(MessageService);
     protected override readonly confirm = inject(ConfirmationService);
 
-    constructor(private readonly host: AcquirerListComponent) {
+    constructor(private readonly host: ContractListComponent) {
       super();
     }
 
@@ -115,19 +84,17 @@ export class AcquirerListComponent extends StatefulListPage<
   })(this);
 
   skeletonRows = Array.from({ length: 8 });
+  override rows = Number(localStorage.getItem('contract.table.rows')) || 10;
 
-  cnpj = signal('');
-  fantasyName = signal('');
-  socialReason = signal('');
-  createdBy = signal<string[] | null>(null);
-  createdAtRange = signal<Date[] | null>(null);
+  name = signal('');
+
   statusEnum = signal<StatusEnum[] | null>(null);
 
   upsertVisible = signal(false);
-  selectedRows = signal<AcquirerModel[]>([]);
-  acquirer = signal<AcquirerModel | null>(null);
+  selectedRows = signal<ContractModel[]>([]);
+  contract = signal<ContractModel | null>(null);
   totalRecords = computed(() => this.facade.totalRecords());
-  acquirers = computed<AcquirerModel[]>(() => this.facade.acquirer() as AcquirerModel[]);
+  contracts = computed<ContractModel[]>(() => this.facade.contract() as ContractModel[]);
 
   readonly statusEnumOptions = computed(() => {
     this.i18n.getAppliedLang();
@@ -139,51 +106,6 @@ export class AcquirerListComponent extends StatefulListPage<
 
   protected override readonly advancedActiveFilters = computed<ActiveFilterItem[]>(() => {
     const items: ActiveFilterItem[] = [];
-
-    const cnpj = this.cnpj().trim();
-    const createdBy = this.createdBy();
-    const statusEnum = this.statusEnum();
-    const fantasyName = this.fantasyName().trim();
-    const socialReason = this.socialReason().trim();
-    const create = this.createdAtRange();
-
-    if (socialReason) {
-      items.push({ label: this.i18n.tUi('acquirer.fields.socialReason'), value: socialReason });
-    }
-
-    if (fantasyName) {
-      items.push({ label: this.i18n.tUi('acquirer.fields.fantasyName'), value: fantasyName });
-    }
-
-    if (cnpj) {
-      items.push({ label: this.i18n.tUi('acquirer.fields.cnpj'), value: cnpj });
-    }
-
-    if (createdBy?.length) {
-      const labels = this.usersOptions()
-        .filter((opt) => createdBy.includes(opt.value))
-        .map((opt) => opt.label)
-        .join(', ');
-
-      items.push({
-        label: this.i18n.tUi('acquirer.fields.createdBy'),
-        value: labels,
-      });
-    }
-
-    if (statusEnum?.length) {
-      items.push({
-        label: this.i18n.tUi('acquirer.fields.statusEnum'),
-        value: statusEnum.map((v) => statusEnumLabel(v, this.i18n)).join(', '),
-      });
-    }
-
-    if (create?.[0] && create?.[1]) {
-      items.push({
-        label: this.i18n.tUi('acquirer.fields.createdAt'),
-        value: `${this.formatDate(create[0])} – ${this.formatDate(create[1])}`,
-      });
-    }
 
     return items;
   });
@@ -197,7 +119,7 @@ export class AcquirerListComponent extends StatefulListPage<
   headerEligibleRows = computed(() => {
     const selectedStatus = this.selectionStatus();
     if (!selectedStatus) return [];
-    return this.acquirers().filter((row) => this.secPolicy.canSelectForStatus(row, selectedStatus));
+    return this.contracts().filter((row) => this.secPolicy.canSelectForStatus(row, selectedStatus));
   });
 
   headerChecked = computed(() => {
@@ -237,15 +159,15 @@ export class AcquirerListComponent extends StatefulListPage<
     if (status === StatusEnum.ACTIVE) return this.i18n.tUi('enum.statusEnum.active');
     if (status === StatusEnum.INACTIVE) return this.i18n.tUi('enum.statusEnum.inactive');
     if (status === StatusEnum.BLOCKED) return this.i18n.tUi('enum.statusEnum.blocked');
-    return this.i18n.tUi('acquirer.selection.mode.none');
+    return this.i18n.tUi('contract.selection.mode.none');
   });
 
   ngOnInit() {
-    this.userFacade.loadUsersOptionsFilter();
     this.initStatefulList();
   }
 
   clear() {
+    this.clearSelection();
     this.clearTableAndReload(this.dt);
   }
 
@@ -253,16 +175,16 @@ export class AcquirerListComponent extends StatefulListPage<
     this.refresh();
   }
 
-  isRowCheckboxDisabled(row: AcquirerModel): boolean {
+  isRowCheckboxDisabled(row: ContractModel): boolean {
     if (this.isRowSelected(row)) return false;
     return !this.secPolicy.canSelectForStatus(row, this.selectionStatus());
   }
 
-  isRowSelected(row: AcquirerModel): boolean {
+  isRowSelected(row: ContractModel): boolean {
     return this.selectedRows().some((item) => item.id === row.id);
   }
 
-  toggleRowSelection(row: AcquirerModel, checked: boolean): void {
+  toggleRowSelection(row: ContractModel, checked: boolean): void {
     const current = this.selectedRows();
 
     if (!checked) {
@@ -296,54 +218,54 @@ export class AcquirerListComponent extends StatefulListPage<
     this.selectedRows.set([...eligible]);
   }
 
-  activate(row: AcquirerModel): void {
+  activate(row: ContractModel): void {
     this.bulk.executeAction(
       this.facade.activate(row.id),
-      this.i18n.tUi('acquirer.activate.successSingle'),
+      this.i18n.tUi('contract.activate.successSingle'),
     );
   }
 
-  deactivate(row: AcquirerModel): void {
+  deactivate(row: ContractModel): void {
     this.bulk.executeAction(
       this.facade.deactivate(row.id),
-      this.i18n.tUi('acquirer.deactivate.successSingle'),
+      this.i18n.tUi('contract.deactivate.successSingle'),
     );
   }
 
-  block(row: AcquirerModel): void {
+  block(row: ContractModel): void {
     this.bulk.executeAction(
       this.facade.block(row.id),
-      this.i18n.tUi('acquirer.block.successSingle'),
+      this.i18n.tUi('contract.block.successSingle'),
     );
   }
 
-  confirmActivate(row: AcquirerModel): void {
+  confirmActivate(row: ContractModel): void {
     this.bulk.confirmAction({
-      header: this.i18n.tUi('acquirer.activate.header'),
-      message: this.i18n.tUi('acquirer.activate.messageSingle', {
-        socialReason: row?.socialReason ?? row?.fantasyName ?? '',
+      header: this.i18n.tUi('contract.activate.header'),
+      message: this.i18n.tUi('contract.activate.messageSingle', {
+        name: row?.name ?? row?.name ?? '',
       }),
       icon: 'pi pi-check-circle',
       accept: () => this.activate(row),
     });
   }
 
-  confirmDeactivate(row: AcquirerModel): void {
+  confirmDeactivate(row: ContractModel): void {
     this.bulk.confirmAction({
-      header: this.i18n.tUi('acquirer.deactivate.header'),
-      message: this.i18n.tUi('acquirer.deactivate.messageSingle', {
-        socialReason: row?.socialReason ?? row?.fantasyName ?? row?.id ?? '',
+      header: this.i18n.tUi('contract.deactivate.header'),
+      message: this.i18n.tUi('contract.deactivate.messageSingle', {
+        name: row?.name ?? row?.name ?? row?.id ?? '',
       }),
       icon: 'pi pi-exclamation-triangle',
       accept: () => this.deactivate(row),
     });
   }
 
-  confirmBlock(row: AcquirerModel): void {
+  confirmBlock(row: ContractModel): void {
     this.bulk.confirmAction({
-      header: this.i18n.tUi('acquirer.block.header'),
-      message: this.i18n.tUi('acquirer.block.messageSingle', {
-        socialReason: row?.socialReason ?? row?.fantasyName ?? row?.id ?? '',
+      header: this.i18n.tUi('contract.block.header'),
+      message: this.i18n.tUi('contract.block.messageSingle', {
+        name: row?.name ?? row?.name ?? row?.id ?? '',
       }),
       icon: 'pi pi-lock',
       accept: () => this.block(row),
@@ -356,7 +278,7 @@ export class AcquirerListComponent extends StatefulListPage<
 
     this.bulk.executeAction(
       this.facade.activateBulk(rows.map((row) => row.id)),
-      this.i18n.tUi('acquirer.activate.successBulk', { count: rows.length }),
+      this.i18n.tUi('contract.activate.successBulk', { count: rows.length }),
     );
   }
 
@@ -366,7 +288,7 @@ export class AcquirerListComponent extends StatefulListPage<
 
     this.bulk.executeAction(
       this.facade.deactivateBulk(rows.map((row) => row.id)),
-      this.i18n.tUi('acquirer.deactivate.successBulk', { count: rows.length }),
+      this.i18n.tUi('contract.deactivate.successBulk', { count: rows.length }),
     );
   }
 
@@ -376,7 +298,7 @@ export class AcquirerListComponent extends StatefulListPage<
 
     this.bulk.executeAction(
       this.facade.blockBulk(rows.map((row) => row.id)),
-      this.i18n.tUi('acquirer.block.successBulk', { count: rows.length }),
+      this.i18n.tUi('contract.block.successBulk', { count: rows.length }),
     );
   }
 
@@ -385,8 +307,8 @@ export class AcquirerListComponent extends StatefulListPage<
     if (!rows.length) return;
 
     this.bulk.confirmAction({
-      header: this.i18n.tUi('acquirer.activate.header'),
-      message: this.i18n.tUi('acquirer.activate.messageBulk', { count: rows.length }),
+      header: this.i18n.tUi('contract.activate.header'),
+      message: this.i18n.tUi('contract.activate.messageBulk', { count: rows.length }),
       icon: 'pi pi-check-circle',
       accept: () => this.activateSelected(),
     });
@@ -397,8 +319,8 @@ export class AcquirerListComponent extends StatefulListPage<
     if (!rows.length) return;
 
     this.bulk.confirmAction({
-      header: this.i18n.tUi('acquirer.deactivate.header'),
-      message: this.i18n.tUi('acquirer.deactivate.messageBulk', { count: rows.length }),
+      header: this.i18n.tUi('contract.deactivate.header'),
+      message: this.i18n.tUi('contract.deactivate.messageBulk', { count: rows.length }),
       icon: 'pi pi-exclamation-triangle',
       accept: () => this.deactivateSelected(),
     });
@@ -409,8 +331,8 @@ export class AcquirerListComponent extends StatefulListPage<
     if (!rows.length) return;
 
     this.bulk.confirmAction({
-      header: this.i18n.tUi('acquirer.block.header'),
-      message: this.i18n.tUi('acquirer.block.messageBulk', { count: rows.length }),
+      header: this.i18n.tUi('contract.block.header'),
+      message: this.i18n.tUi('contract.block.messageBulk', { count: rows.length }),
       icon: 'pi pi-lock',
       accept: () => this.blockSelected(),
     });
@@ -425,18 +347,18 @@ export class AcquirerListComponent extends StatefulListPage<
   }
 
   goNew() {
-    this.acquirer.set(null);
+    this.contract.set(null);
     this.upsertVisible.set(true);
   }
 
-  edit(row: AcquirerModel) {
-    this.acquirer.set(row);
+  edit(row: ContractModel) {
+    this.contract.set(row);
     this.upsertVisible.set(true);
   }
 
   onUpsertVisibleChange(v: boolean) {
     this.upsertVisible.set(v);
-    if (!v) this.acquirer.set(null);
+    if (!v) this.contract.set(null);
   }
 
   onCreated() {
@@ -444,15 +366,15 @@ export class AcquirerListComponent extends StatefulListPage<
   }
 
   protected override tableStateKey(): string {
-    return 'cardsync.acquirer.table.state.v1';
+    return 'cardsync.contract.table.state.v1';
   }
 
   protected override tableRowsKey(): string {
-    return 'acquirer.table.rows';
+    return 'contract.table.rows';
   }
 
   protected override filtersKey(): string {
-    return 'cardsync.acquirer.filters.v1';
+    return 'cardsync.contract.filters.v1';
   }
 
   protected override refresh(): void {
@@ -461,7 +383,7 @@ export class AcquirerListComponent extends StatefulListPage<
 
   protected loadFirstPage() {
     const tableQuery = { page: 0, size: this.rows };
-    const query = buildListQuery<AcquirerAdvancedFilters>(
+    const query = buildListQuery<ContractAdvancedFilters>(
       tableQuery as any,
       this.buildAdvancedFilters(),
     );
@@ -471,58 +393,28 @@ export class AcquirerListComponent extends StatefulListPage<
   }
 
   protected override resetFilters(): void {
-    this.cnpj.set('');
-    this.fantasyName.set('');
-    this.socialReason.set('');
-    this.createdBy.set(null);
+    this.name.set('');
+
     this.statusEnum.set(null);
-    this.createdAtRange.set(null);
   }
 
-  protected override toFiltersState(): AcquirerFiltersState {
-    const create = this.createdAtRange();
-
+  protected override toFiltersState(): ContractFiltersState {
     return {
-      cnpj: this.cnpj(),
-      fantasyName: this.fantasyName(),
-      socialReason: this.socialReason(),
-      createdBy: this.createdBy()?.length ? this.createdBy() : null,
+      name: this.name(),
       statusEnum: this.statusEnum()?.length ? this.statusEnum() : null,
-      createdAtRange:
-        create?.[0] && create?.[1] ? [create[0].toISOString(), create[1].toISOString()] : null,
     };
   }
 
-  protected override applyFiltersState(s: AcquirerFiltersState): void {
-    this.cnpj.set(s.cnpj ?? '');
-    this.createdBy.set(s.createdBy ?? null);
-    this.fantasyName.set(s.fantasyName ?? '');
-    this.socialReason.set(s.socialReason ?? '');
-    this.statusEnum.set(s.statusEnum ?? null);
+  protected override applyFiltersState(s: ContractFiltersState): void {
+    this.name.set(s.name ?? '');
 
-    this.createdAtRange.set(
-      s.createdAtRange?.[0] && s.createdAtRange?.[1]
-        ? [new Date(s.createdAtRange[0]), new Date(s.createdAtRange[1])]
-        : null,
-    );
+    this.statusEnum.set(s.statusEnum ?? null);
   }
 
-  protected override buildAdvancedFilters(): Partial<AcquirerAdvancedFilters> {
-    const create = this.createdAtRange();
-
-    const [createFrom, createTo] =
-      create?.[0] && create?.[1]
-        ? [create[0].toISOString(), create[1].toISOString()]
-        : [undefined, undefined];
-
+  protected override buildAdvancedFilters(): Partial<ContractAdvancedFilters> {
     return {
-      cnpj: this.cnpj().trim() || undefined,
-      createdBy: this.createdBy() || null,
-      fantasyName: this.fantasyName().trim() || undefined,
-      socialReason: this.socialReason().trim() || undefined,
+      name: this.name().trim() || undefined,
       statusEnum: this.statusEnum()?.length ? this.statusEnum() : undefined,
-      createdAtTo: createTo,
-      createdAtFrom: createFrom,
     };
   }
 
@@ -531,43 +423,16 @@ export class AcquirerListComponent extends StatefulListPage<
 
     const items: ActiveFilterItem[] = [];
 
-    const fantasyName = readSingleFilterValue(filters, 'fantasyName');
-    if (fantasyName) {
-      items.push({ label: this.i18n.tUi('acquirer.fields.fantasyName'), value: fantasyName });
-    }
-
-    const socialReason = readSingleFilterValue(filters, 'socialReason');
-    if (socialReason) {
-      items.push({ label: this.i18n.tUi('acquirer.fields.socialReason'), value: socialReason });
-    }
-
-    const cnpj = readSingleFilterValue(filters, 'cnpj');
-    if (cnpj) {
-      items.push({ label: this.i18n.tUi('acquirer.fields.cnpj'), value: cnpj });
+    const name = readSingleFilterValue(filters, 'name');
+    if (name) {
+      items.push({ label: this.i18n.tUi('contract.fields.name'), value: name });
     }
 
     const statuses = readArrayFilterValues(filters, 'statusEnum');
     if (statuses.length) {
       items.push({
-        label: this.i18n.tUi('acquirer.fields.statusEnum'),
+        label: this.i18n.tUi('contract.fields.statusEnum'),
         value: statuses.map((value) => statusEnumLabel(value as StatusEnum, this.i18n)).join(', '),
-      });
-    }
-
-    const createdAt = readDateRangeFilterValue(filters, 'createdAt', this.formatDate.bind(this));
-    if (createdAt) {
-      items.push({ label: this.i18n.tUi('acquirer.fields.createdAt'), value: createdAt });
-    }
-
-    const createdByValues = readArrayFilterValues(filters, 'createdBy');
-    if (createdByValues.length) {
-      const labels = this.usersOptions()
-        .filter((option) => createdByValues.includes(option.value))
-        .map((option) => option.label);
-
-      items.push({
-        label: this.i18n.tUi('acquirer.fields.createdBy'),
-        value: (labels.length ? labels : createdByValues).join(', '),
       });
     }
 
@@ -575,7 +440,7 @@ export class AcquirerListComponent extends StatefulListPage<
   }
 
   protected override loadPage(
-    query: ReturnType<typeof buildListQuery<AcquirerAdvancedFilters>>,
+    query: ReturnType<typeof buildListQuery<ContractAdvancedFilters>>,
   ): void {
     this.clearSelection();
     this.facade.loadPage(query);

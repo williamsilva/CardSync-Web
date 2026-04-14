@@ -1,0 +1,94 @@
+<p-dialog
+  [modal]="true"
+  [closable]="false"
+  [draggable]="false"
+  [resizable]="false"
+  (onHide)="onHide()"
+  [visible]="visible()"
+  [contentStyle]="{ overflow: 'visible' }"
+  [style]="{ width: '760px', maxWidth: '95vw' }"
+  [header]="flag()?.id ? ('flag.edit.title' | translate) : ('flag.new.title' | translate)"
+>
+  <form [formGroup]="form" class="cs-dialog-form">
+    <div class="grid formgrid gap-0">
+      <div class="col-12 md:col-3 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <input
+            pInputText
+            id="erpCode"
+            type="number"
+            formControlName="erpCode"
+            class="w-full p-inputtext-sm"
+          />
+
+          <app-error-msg
+            [field]="'erpCode'"
+            [forId]="'erpCode'"
+            [control]="form.controls.erpCode"
+            [label]="'flag.fields.erpCode' | translate"
+          />
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 md:col-5 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <input
+            id="name"
+            pInputText
+            type="text"
+            formControlName="name"
+            class="w-full p-inputtext-sm"
+          />
+          <app-error-msg
+            [field]="'name'"
+            [forId]="'name'"
+            [control]="form.controls.name"
+            [label]="'flag.fields.name' | translate"
+          />
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 md:col-4 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-select
+            size="small"
+            class="w-full"
+            appendTo="body"
+            inputId="status"
+            optionLabel="label"
+            optionValue="value"
+            formControlName="status"
+            [options]="statusOptions()"
+          />
+          <label for="status">{{ 'flag.fields.statusEnum' | translate }}</label>
+          <app-error-msg
+            [field]="'status'"
+            [forId]="'status'"
+            [control]="form.controls.status"
+            [label]="'flag.fields.statusEnum' | translate"
+          />
+        </p-floatLabel>
+      </div>
+    </div>
+  </form>
+
+  <ng-template pTemplate="footer">
+    <div class="flex justify-content-end gap-2">
+      <button
+        pButton
+        type="button"
+        class="p-button-text"
+        [label]="'common.cancel' | translate"
+        (click)="close()"
+      ></button>
+
+      <button
+        pButton
+        type="button"
+        (click)="save()"
+        [loading]="saving()"
+        [label]="'common.save' | translate"
+      ></button>
+    </div>
+  </ng-template>
+</p-dialog>

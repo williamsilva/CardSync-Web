@@ -103,16 +103,16 @@
       pButton
       type="button"
       class="p-button-sm"
-      (click)="$event.stopPropagation(); search.emit()"
       [label]="'common.search' | translate"
+      (click)="$event.stopPropagation(); search.emit()"
     ></button>
 
     <button
       pButton
       type="button"
       class="p-button-text p-button-sm"
-      (click)="$event.stopPropagation(); clear.emit()"
       [label]="'common.clear' | translate"
+      (click)="$event.stopPropagation(); clear.emit()"
     ></button>
   </div>
 </p-panel>

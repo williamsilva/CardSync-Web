@@ -1,0 +1,245 @@
+<p-table
+  #dt
+  stripedRows
+  dataKey="id"
+  size="small"
+  [lazy]="true"
+  showGridlines
+  [rows]="rows()"
+  [rowHover]="true"
+  [value]="flags()"
+  [paginator]="true"
+  sortMode="multiple"
+  stateStorage="local"
+  filterDisplay="menu"
+  [loading]="loading()"
+  (onPage)="onPage($event)"
+  class="p-datatable-sm mt-1"
+  styleClass="cs-admin-table"
+  [showCurrentPageReport]="true"
+  [totalRecords]="totalRecords()"
+  (onLazyLoad)="onLazyLoad($event)"
+  [paginatorDropdownAppendTo]="'body'"
+  stateKey="cardsync.flag.table.state.v1"
+  [rowsPerPageOptions]="[10, 20, 50, 100]"
+  [tableStyle]="{ width: '100%', 'min-width': '62rem' }"
+  [currentPageReportTemplate]="'pagination.report' | translate"
+>
+  <ng-template pTemplate="colgroup">
+    <colgroup>
+      <col style="width: 44px" />
+      <col style="width: 150px" />
+      <col style="width: auto" />
+      <col style="width: 180px" />
+      <col style="width: 80px" />
+      <col style="width: 80px" />
+      <col style="width: 100px" />
+    </colgroup>
+  </ng-template>
+
+  <ng-template pTemplate="header">
+    <tr>
+      <th class="text-center">
+        <ng-container *ngIf="selectionStatus(); else selectOneHint">
+          <p-checkbox
+            [binary]="true"
+            [ngModel]="headerChecked()"
+            [indeterminate]="headerIndeterminate()"
+            (onChange)="toggleHeaderSelection(!!$event.checked)"
+          ></p-checkbox>
+        </ng-container>
+
+        <ng-template #selectOneHint>
+          <i
+            tooltipPosition="top"
+            class="pi pi-info-circle opacity-70"
+            [pTooltip]="'flag.selection.pickOneFirst' | translate"
+          ></i>
+        </ng-template>
+      </th>
+
+      <th pSortableColumn="erpCode">
+        <div class="th-flex text-center">
+          <span class="th-label">{{ 'flag.columns.erpCode' | translate }}</span>
+          <span class="th-icons">
+            <p-sortIcon field="erpCode"></p-sortIcon>
+            <p-columnFilter
+              display="menu"
+              field="erpCode"
+              matchMode="contains"
+              [useGrouping]="false"
+              [showOperator]="false"
+              [showAddButton]="false"
+              styleClass="cs-colfilter"
+            ></p-columnFilter>
+          </span>
+        </div>
+      </th>
+
+      <th pSortableColumn="name">
+        <div class="th-flex text-center">
+          <span class="th-label">{{ 'flag.columns.name' | translate }}</span>
+          <span class="th-icons">
+            <p-sortIcon field="name"></p-sortIcon>
+            <p-columnFilter
+              field="name"
+              display="menu"
+              matchMode="contains"
+              [useGrouping]="false"
+              [showOperator]="false"
+              [showAddButton]="false"
+              styleClass="cs-colfilter"
+            ></p-columnFilter>
+          </span>
+        </div>
+      </th>
+
+      <th pSortableColumn="status">
+        <div class="th-flex text-center">
+          <span class="th-label">{{ 'flag.columns.statusEnum' | translate }}</span>
+          <span class="th-icons">
+            <p-sortIcon field="status"></p-sortIcon>
+            <p-columnFilter
+              display="menu"
+              matchMode="in"
+              field="statusEnum"
+              [showOperator]="false"
+              [showAddButton]="false"
+              [showMatchModes]="false"
+              styleClass="cs-colfilter"
+            >
+              <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                <p-multiSelect
+                  class="w-full"
+                  appendTo="body"
+                  [ngModel]="value"
+                  [showClear]="true"
+                  optionLabel="label"
+                  optionValue="value"
+                  [options]="statusEnumOptions()"
+                  (onChange)="filter($event.value)"
+                  [placeholder]="'common.all' | translate"
+                ></p-multiSelect>
+              </ng-template>
+            </p-columnFilter>
+          </span>
+        </div>
+      </th>
+
+      <th class="text-center">{{ 'flag.columns.company' | translate }}</th>
+      <th class="text-center">{{ 'flag.columns.acquirer' | translate }}</th>
+      <th class="text-center">{{ 'common.actions' | translate }}</th>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="body" let-row>
+    <tr>
+      <td class="text-center">
+        <p-checkbox
+          [binary]="true"
+          [ngModel]="isRowSelected(row)"
+          [disabled]="isRowCheckboxDisabled(row)"
+          (onChange)="toggleRowSelection(row, !!$event.checked)"
+        ></p-checkbox>
+      </td>
+
+      <td class="cell-muted text-center">
+        <span [pTooltip]="row.erpCode" tooltipPosition="top">
+          {{ row.erpCode }}
+        </span>
+      </td>
+
+      <td class="text-center">
+        <span
+          class="cs-flag-row-name"
+          [class.cs-flag-row-name-active]="expandedFlagId() === row.id"
+          [class.cs-flag-row-name-companies]="
+            expandedFlagId() === row.id && expandedRelationType() === 'companies'
+          "
+          [class.cs-flag-row-name-acquirers]="
+            expandedFlagId() === row.id && expandedRelationType() === 'acquirers'
+          "
+        >
+          {{ row.name }}
+          <span *ngIf="expandedFlagId() === row.id">▼</span>
+        </span>
+      </td>
+
+      <td class="cell-muted text-center">
+        <p-tag
+          [value]="statusLabel()(row.status)"
+          [severity]="statusSeverity()(row.status)"
+        ></p-tag>
+      </td>
+
+      <td class="text-center">
+        <div class="table-actions justify-content-center">
+          <button
+            pButton
+            type="button"
+            icon="pi pi-building"
+            class="p-button-text p-button-sm"
+            (click)="toggleCompanies.emit(row)"
+            [pTooltip]="'flag.relationships.companies' | translate"
+          ></button>
+        </div>
+      </td>
+
+      <td class="text-center">
+        <div class="table-actions justify-content-center">
+          <button
+            pButton
+            type="button"
+            icon="pi pi-briefcase"
+            class="p-button-text p-button-sm"
+            (click)="toggleAcquirers.emit(row)"
+            [pTooltip]="'flag.relationships.acquirers' | translate"
+          ></button>
+        </div>
+      </td>
+
+      <td class="text-center">
+        <app-flag-row-actions
+          [row]="row"
+          [secPolicy]="secPolicy()"
+          (edit)="edit.emit($event)"
+          (block)="block.emit($event)"
+          (activate)="activate.emit($event)"
+          (deactivate)="deactivate.emit($event)"
+        ></app-flag-row-actions>
+      </td>
+    </tr>
+
+    <tr *ngIf="expandedFlagId() === row.id">
+      <td colspan="7" class="p-3 surface-ground flag-expanded-cell">
+        <div class="flag-expanded-wrap">
+          <ng-container [ngSwitch]="expandedRelationType()">
+            <app-flag-company-relations
+              [flag]="row"
+              *ngSwitchCase="'companies'"
+              (changed)="refreshRelations.emit()"
+            ></app-flag-company-relations>
+
+            <app-flag-acquirer-relations
+              [flag]="row"
+              *ngSwitchCase="'acquirers'"
+              (changed)="refreshRelations.emit()"
+            ></app-flag-acquirer-relations>
+          </ng-container>
+        </div>
+      </td>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="emptymessage">
+    <tr>
+      <td [attr.colspan]="7" class="empty-td">
+        <div class="empty empty-center">
+          <div class="empty-title">
+            {{ loadedOnce() ? ('flag.empty.title' | translate) : ('common.loading' | translate) }}
+          </div>
+        </div>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>

@@ -3,17 +3,39 @@
     "name": "CardSync"
   },
   "routes": {
-    "users": {
-      "title": "Users"
+    "register": {
+      "company": {
+        "title": "Companies"
+      },
+      "acquirer": {
+        "title": "Acquirers"
+      },
+      "establishment": {
+        "title": "Establishments"
+      },
+      "flags": {
+        "title": "Brands"
+      },
+      "contracts": {
+        "title": "Contracts"
+      }
     },
-    "groups": {
-      "title": "Groups"
-    },
-    "company": {
-      "title": "Companies"
-    },
-    "acquirer": {
-      "title": "Acquirers"
+    "security": {
+      "users": {
+        "title": "Users"
+      },
+      "groups": {
+        "title": "Groups"
+      },
+      "accountProfile": {
+        "title": "My Account"
+      },
+      "accountPassword": {
+        "title": "Change Password"
+      },
+      "groupDetail": {
+        "title": "Group Details"
+      }
     },
     "audit": {
       "title": "Email Logs"
@@ -21,23 +43,8 @@
     "dashboard": {
       "title": "Dashboard"
     },
-    "accountMe": {
-      "title": "My account"
-    },
     "forbidden": {
       "title": "Access denied"
-    },
-    "accountProfile": {
-      "title": "My Account"
-    },
-    "companiesNew": {
-      "title": "New company"
-    },
-    "accountPassword": {
-      "title": "Change password"
-    },
-    "groupDetail": {
-      "title": "Group detail"
     }
   },
   "topbar": {
@@ -51,7 +58,7 @@
     "langAria": "Select language",
     "sessionExpired": "Session expired",
     "sessionExpireTooltip": "Session expires due to inactivity",
-    "sessionExpiredTooltip": "Log in again"
+    "sessionExpiredTooltip": "Sign in again"
   },
   "menu": {
     "me": "My account",
@@ -62,8 +69,11 @@
     },
     "register": {
       "title": "Registrations",
+      "flags": "Brands",
       "company": "Companies",
-      "acquirer": "Acquirers"
+      "contracts": "Contracts",
+      "acquirer": "Acquirers",
+      "establishment": "Establishments"
     },
     "security": {
       "title": "Security",
@@ -75,15 +85,18 @@
   },
   "sidebar": {
     "userFallback": "User",
-    "logout": "Logout"
+    "logout": "Sign out"
   },
   "breadcrumb": {
     "groups": "Groups",
     "users": "Users",
     "dashboard": "Dashboard",
     "register": {
+      "flag": "Brands",
       "company": "Companies",
-      "acquirer": "Acquirers"
+      "acquirer": "Acquirers",
+      "contract": "Contracts",
+      "establishment": "Establishments"
     },
     "audit": {
       "emailLog": "Email Logs"
@@ -103,19 +116,19 @@
   "validation": {
     "invalid": "Invalid value",
     "required": "Required",
-    "minLength": "Minimum of {requiredLength} characters",
-    "maxLength": "Maximum of {requiredLength} characters",
+    "minLength": "Minimum {requiredLength} characters",
+    "maxLength": "Maximum {requiredLength} characters",
     "email": "Invalid email",
     "pattern": "Invalid format",
-    "min": "The minimum value is {min}",
-    "max": "The maximum value is {max}",
+    "min": "Minimum value is {min}",
+    "max": "Maximum value is {max}",
     "uuid": "Invalid identifier",
     "document": "Invalid document",
-    "passwordPolicy": "Password does not meet the policy",
+    "passwordPolicy": "Password does not meet policy requirements",
     "server": "{message}"
   },
   "users": {
-    "subtitle": "Manage users, statuses, and invitations",
+    "subtitle": "Manage users, status, and invitations",
     "new": {
       "title": "New user",
       "subtitle": "User registration"
@@ -128,7 +141,7 @@
       "name": "Name",
       "status": "Status",
       "groups": "Groups",
-      "userName": "User",
+      "userName": "Username",
       "document": "Document",
       "createdAt": "Created at",
       "lastLoginAt": "Last login",
@@ -149,7 +162,7 @@
     },
     "form": {
       "loadError": "Could not load user data",
-      "saveError": "Could not save the user.",
+      "saveError": "Could not save user.",
       "created": "User created successfully.",
       "updated": "User updated successfully",
       "resend": {
@@ -167,25 +180,25 @@
       "inactive": "Inactive",
       "blocked": "Blocked",
       "disabled": "Disabled",
-      "pending_password": "Pending password",
+      "pending_password": "Password pending",
       "unknown": "Unknown"
     },
     "invite": {
-      "resend": "Resend invitation",
-      "resent": "Invitation resent successfully.",
-      "resendError": "Could not resend the invitation."
+      "resend": "Resend invite",
+      "resent": "Invite resent successfully.",
+      "resendError": "Could not resend invite."
     },
     "delete": {
       "header": "Confirm deletion",
       "success": "User deactivated successfully",
-      "message": "Do you want to delete the user {userName}?"
+      "message": "Do you want to delete user {userName}?"
     },
     "activate": {
       "selected": "Activate",
       "header": "Confirm activation",
       "successSingle": "User activated successfully.",
       "successBulk": "{count, plural, one {# user activated successfully.} other {# users activated successfully.}}",
-      "messageSingle": "Do you want to activate the user {userName}?",
+      "messageSingle": "Do you want to activate user {userName}?",
       "messageBulk": "{count, plural, one {Do you want to activate # selected user?} other {Do you want to activate # selected users?}}"
     },
     "deactivate": {
@@ -193,13 +206,13 @@
       "header": "Confirm deactivation",
       "successSingle": "User deactivated successfully.",
       "successBulk": "{count, plural, one {# user deactivated successfully.} other {# users deactivated successfully.}}",
-      "messageSingle": "Do you want to deactivate the user {userName}?",
+      "messageSingle": "Do you want to deactivate user {userName}?",
       "messageBulk": "{count, plural, one {Do you want to deactivate # selected user?} other {Do you want to deactivate # selected users?}}"
     },
     "selection": {
       "currentMode": "Selection mode",
       "count": "{count, plural, =0 {None selected} one {# selected} other {# selected}}",
-      "pickOneFirst": "First select an eligible user to define the selection context.",
+      "pickOneFirst": "Select an eligible user first to define the selection context.",
       "mode": {
         "none": "None",
         "activate": "Bulk activation",
@@ -227,8 +240,12 @@
   },
   "enum": {
     "typeCompanyEnum": {
-      "matriz": "Headquarters",
+      "matriz": "Head office",
       "filial": "Branch"
+    },
+    "typeEstablishmentEnum": {
+      "pdvTef": "POS/TEF",
+      "ecommerce": "E-commerce"
     },
     "statusEnum": {
       "active": "Active",
@@ -247,7 +264,7 @@
       "subtitle": "Company editing"
     },
     "columns": {
-      "cnpj": "CNPJ",
+      "cnpj": "Tax ID",
       "statusEnum": "Status",
       "createdAt": "Created at",
       "createdBy": "Created by",
@@ -273,7 +290,7 @@
       }
     },
     "fields": {
-      "cnpj": "CNPJ",
+      "cnpj": "Tax ID",
       "statusEnum": "Status",
       "createdAt": "Created at",
       "createdBy": "Created by",
@@ -285,7 +302,7 @@
       "selected": "Block",
       "header": "Confirm block",
       "successSingle": "Company blocked successfully.",
-      "messageSingle": "Do you want to block the company {socialReason}?",
+      "messageSingle": "Do you want to block company {socialReason}?",
       "successBulk": "{count, plural, one {# company blocked successfully.} other {# companies blocked successfully.}}",
       "messageBulk": "{count, plural, one {Do you want to block # selected company?} other {Do you want to block # selected companies?}}"
     },
@@ -293,7 +310,7 @@
       "selected": "Activate",
       "header": "Confirm activation",
       "successSingle": "Company activated successfully.",
-      "messageSingle": "Do you want to activate the company {socialReason}?",
+      "messageSingle": "Do you want to activate company {socialReason}?",
       "successBulk": "{count, plural, one {# company activated successfully.} other {# companies activated successfully.}}",
       "messageBulk": "{count, plural, one {Do you want to activate # selected company?} other {Do you want to activate # selected companies?}}"
     },
@@ -301,14 +318,14 @@
       "selected": "Deactivate",
       "header": "Confirm deactivation",
       "successSingle": "Company deactivated successfully.",
-      "messageSingle": "Do you want to deactivate the company {socialReason}?",
+      "messageSingle": "Do you want to deactivate company {socialReason}?",
       "successBulk": "{count, plural, one {# company deactivated successfully.} other {# companies deactivated successfully.}}",
       "messageBulk": "{count, plural, one {Do you want to deactivate # selected company?} other {Do you want to deactivate # selected companies?}}"
     },
     "selection": {
       "currentMode": "Selection mode",
       "count": "{count, plural, =0 {None selected} one {# selected} other {# selected}}",
-      "pickOneFirst": "First select an eligible company to define the selection context.",
+      "pickOneFirst": "Select an eligible company first to define the selection context.",
       "mode": {
         "none": "None",
         "activate": "Bulk activation",
@@ -316,10 +333,10 @@
       }
     },
     "form": {
-      "loadError": "Could not load company data.",
-      "saveError": "Could not save the company.",
       "created": "Company created successfully.",
       "updated": "Company updated successfully.",
+      "saveError": "Could not save company.",
+      "loadError": "Could not load company data.",
       "permissionDenied": "You do not have permission to save companies."
     },
     "empty": {
@@ -337,8 +354,9 @@
       "subtitle": "Acquirer editing"
     },
     "columns": {
-      "cnpj": "CNPJ",
+      "cnpj": "Tax ID",
       "statusEnum": "Status",
+      "adqCode": "ADQ Code",
       "createdAt": "Created at",
       "createdBy": "Created by",
       "socialReason": "Legal Name",
@@ -362,7 +380,7 @@
       }
     },
     "fields": {
-      "cnpj": "CNPJ",
+      "cnpj": "Tax ID",
       "statusEnum": "Status",
       "createdAt": "Created at",
       "createdBy": "Created by",
@@ -373,7 +391,7 @@
       "selected": "Block",
       "header": "Confirm block",
       "successSingle": "Acquirer blocked successfully.",
-      "messageSingle": "Do you want to block the acquirer {socialReason}?",
+      "messageSingle": "Do you want to block acquirer {socialReason}?",
       "successBulk": "{count, plural, one {# acquirer blocked successfully.} other {# acquirers blocked successfully.}}",
       "messageBulk": "{count, plural, one {Do you want to block # selected acquirer?} other {Do you want to block # selected acquirers?}}"
     },
@@ -381,7 +399,7 @@
       "selected": "Activate",
       "header": "Confirm activation",
       "successSingle": "Acquirer activated successfully.",
-      "messageSingle": "Do you want to activate the acquirer {socialReason}?",
+      "messageSingle": "Do you want to activate acquirer {socialReason}?",
       "successBulk": "{count, plural, one {# acquirer activated successfully.} other {# acquirers activated successfully.}}",
       "messageBulk": "{count, plural, one {Do you want to activate # selected acquirer?} other {Do you want to activate # selected acquirers?}}"
     },
@@ -389,14 +407,14 @@
       "selected": "Deactivate",
       "header": "Confirm deactivation",
       "successSingle": "Acquirer deactivated successfully.",
-      "messageSingle": "Do you want to deactivate the acquirer {socialReason}?",
+      "messageSingle": "Do you want to deactivate acquirer {socialReason}?",
       "successBulk": "{count, plural, one {# acquirer deactivated successfully.} other {# acquirers deactivated successfully.}}",
       "messageBulk": "{count, plural, one {Do you want to deactivate # selected acquirer?} other {Do you want to deactivate # selected acquirers?}}"
     },
     "selection": {
       "currentMode": "Selection mode",
       "count": "{count, plural, =0 {None selected} one {# selected} other {# selected}}",
-      "pickOneFirst": "First select an eligible company to define the selection context.",
+      "pickOneFirst": "Select an eligible acquirer first to define the selection context.",
       "mode": {
         "none": "None",
         "activate": "Bulk activation",
@@ -405,13 +423,275 @@
     },
     "form": {
       "loadError": "Could not load acquirer data.",
-      "saveError": "Could not save the acquirer.",
+      "saveError": "Could not save acquirer.",
       "created": "Acquirer created successfully.",
       "updated": "Acquirer updated successfully.",
       "permissionDenied": "You do not have permission to save acquirers."
     },
     "empty": {
       "title": "No acquirers found"
+    }
+  },
+  "establishment": {
+    "subtitle": "Manage establishments",
+    "new": {
+      "title": "New establishment",
+      "subtitle": "Establishment registration"
+    },
+    "edit": {
+      "title": "Edit establishment",
+      "subtitle": "Establishment editing"
+    },
+    "columns": {
+      "typeEnum": "Type",
+      "company": "Company",
+      "statusEnum": "Status",
+      "pvNumber": "PV Number",
+      "acquirer": "Acquirer",
+      "createdAt": "Created at",
+      "createdBy": "Created by"
+    },
+    "fields": {
+      "typeEnum": "Type",
+      "company": "Company",
+      "pvNumber": "PV Number",
+      "statusEnum": "Status",
+      "acquirer": "Acquirer",
+      "createdAt": "Created at",
+      "createdBy": "Created by"
+    },
+    "action": {
+      "deactivate": {
+        "label": "Deactivate",
+        "invalidStatus": "Only active establishments can be deactivated.",
+        "noPermission": "You do not have permission to deactivate establishments."
+      },
+      "activate": {
+        "label": "Activate",
+        "noPermission": "You do not have permission to activate establishments.",
+        "invalidStatus": "Only inactive establishments can be activated."
+      },
+      "block": {
+        "label": "Block",
+        "noPermission": "You do not have permission to block establishments.",
+        "invalidStatus": "Only active establishments can be blocked."
+      }
+    },
+    "block": {
+      "selected": "Block",
+      "header": "Confirm block",
+      "successSingle": "Establishment blocked successfully.",
+      "messageSingle": "Do you want to block establishment {pvNumber}?",
+      "successBulk": "{count, plural, one {# establishment blocked successfully.} other {# establishments blocked successfully.}}",
+      "messageBulk": "{count, plural, one {Do you want to block # selected establishment?} other {Do you want to block # selected establishments?}}"
+    },
+    "activate": {
+      "selected": "Activate",
+      "header": "Confirm activation",
+      "successSingle": "Establishment activated successfully.",
+      "messageSingle": "Do you want to activate establishment {pvNumber}?",
+      "successBulk": "{count, plural, one {# establishment activated successfully.} other {# establishments activated successfully.}}",
+      "messageBulk": "{count, plural, one {Do you want to activate # selected establishment?} other {Do you want to activate # selected establishments?}}"
+    },
+    "deactivate": {
+      "selected": "Deactivate",
+      "header": "Confirm deactivation",
+      "successSingle": "Establishment deactivated successfully.",
+      "messageSingle": "Do you want to deactivate establishment {pvNumber}?",
+      "successBulk": "{count, plural, one {# establishment deactivated successfully.} other {# establishments deactivated successfully.}}",
+      "messageBulk": "{count, plural, one {Do you want to deactivate # selected establishment?} other {Do you want to deactivate # selected establishments?}}"
+    },
+    "selection": {
+      "currentMode": "Selection mode",
+      "count": "{count, plural, =0 {None selected} one {# selected} other {# selected}}",
+      "pickOneFirst": "Select an eligible establishment first to define the selection context.",
+      "mode": {
+        "none": "None",
+        "activate": "Bulk activation",
+        "deactivate": "Bulk deactivation"
+      }
+    },
+    "form": {
+      "loadError": "Could not load establishment data.",
+      "saveError": "Could not save establishment.",
+      "created": "Establishment created successfully.",
+      "updated": "Establishment updated successfully.",
+      "permissionDenied": "You do not have permission to save establishment."
+    },
+    "empty": {
+      "title": "No establishments found"
+    }
+  },
+  "contract": {
+    "subtitle": "Manage contracts",
+    "new": {
+      "title": "New contract",
+      "subtitle": "Contract registration"
+    },
+    "edit": {
+      "title": "Edit contract",
+      "subtitle": "Contract editing"
+    },
+    "columns": {},
+    "fields": {},
+    "action": {
+      "deactivate": {
+        "label": "Deactivate",
+        "invalidStatus": "Only active contracts can be deactivated.",
+        "noPermission": "You do not have permission to deactivate contracts."
+      },
+      "activate": {
+        "label": "Activate",
+        "noPermission": "You do not have permission to activate contracts.",
+        "invalidStatus": "Only inactive contracts can be activated."
+      },
+      "block": {
+        "label": "Block",
+        "noPermission": "You do not have permission to block contracts.",
+        "invalidStatus": "Only active contracts can be blocked."
+      }
+    },
+    "block": {
+      "selected": "Block",
+      "header": "Confirm block",
+      "successSingle": "Contract blocked successfully.",
+      "messageSingle": "Do you want to block contract {name}?",
+      "successBulk": "{count, plural, one {# contract blocked successfully.} other {# contracts blocked successfully.}}",
+      "messageBulk": "{count, plural, one {Do you want to block # selected contract?} other {Do you want to block # selected contracts?}}"
+    },
+    "activate": {
+      "selected": "Activate",
+      "header": "Confirm activation",
+      "successSingle": "Contract activated successfully.",
+      "messageSingle": "Do you want to activate contract {name}?",
+      "successBulk": "{count, plural, one {# contract activated successfully.} other {# contracts activated successfully.}}",
+      "messageBulk": "{count, plural, one {Do you want to activate # selected contract?} other {Do you want to activate # selected contracts?}}"
+    },
+    "deactivate": {
+      "selected": "Deactivate",
+      "header": "Confirm deactivation",
+      "successSingle": "Contract deactivated successfully.",
+      "messageSingle": "Do you want to deactivate contract {name}?",
+      "successBulk": "{count, plural, one {# contract deactivated successfully.} other {# contracts deactivated successfully.}}",
+      "messageBulk": "{count, plural, one {Do you want to deactivate # selected contract?} other {Do you want to deactivate # selected contracts?}}"
+    },
+    "selection": {
+      "currentMode": "Selection mode",
+      "count": "{count, plural, =0 {None selected} one {# selected} other {# selected}}",
+      "pickOneFirst": "Select an eligible contract first to define the selection context.",
+      "mode": {
+        "none": "None",
+        "activate": "Bulk activation",
+        "deactivate": "Bulk deactivation"
+      }
+    },
+    "form": {
+      "loadError": "Could not load contract data.",
+      "saveError": "Could not save contract.",
+      "created": "Contract created successfully.",
+      "updated": "Contract updated successfully.",
+      "permissionDenied": "You do not have permission to save contract."
+    },
+    "empty": {
+      "title": "No contracts found"
+    }
+  },
+  "flag": {
+    "subtitle": "Manage brands",
+    "relationships": {
+      "add": "Add",
+      "companies": "Companies",
+      "acquirers": "Acquirers",
+      "saveLinks": "Save links",
+      "linkedCompanies": "Linked companies",
+      "linkedAcquirers": "Linked acquirers",
+      "addCompanyToFlag": "Add company to brand",
+      "addAcquirerToFlag": "Add acquirer to brand"
+    },
+    "new": {
+      "title": "New brand",
+      "subtitle": "Brand registration"
+    },
+    "edit": {
+      "title": "Edit brand",
+      "subtitle": "Brand editing"
+    },
+    "columns": {
+      "cnpj": "Tax ID",
+      "name": "Brand",
+      "statusEnum": "Status",
+      "company": "Companies",
+      "erpCode": "ERP Code",
+      "acquirer": "Acquirers",
+      "acquirerCode": "Acquirer Code"
+    },
+    "fields": {
+      "name": "Brand",
+      "erpCode": "Code",
+      "statusEnum": "Status",
+      "company": "Companies",
+      "acquirer": "Acquirers"
+    },
+    "action": {
+      "deactivate": {
+        "label": "Deactivate",
+        "invalidStatus": "Only active brands can be deactivated.",
+        "noPermission": "You do not have permission to deactivate brands."
+      },
+      "activate": {
+        "label": "Activate",
+        "noPermission": "You do not have permission to activate brands.",
+        "invalidStatus": "Only inactive brands can be activated."
+      },
+      "block": {
+        "label": "Block",
+        "noPermission": "You do not have permission to block brands.",
+        "invalidStatus": "Only active brands can be blocked."
+      }
+    },
+    "block": {
+      "selected": "Block",
+      "header": "Confirm block",
+      "successSingle": "Brand blocked successfully.",
+      "messageSingle": "Do you want to block brand {name}?",
+      "successBulk": "{count, plural, one {# brand blocked successfully.} other {# brands blocked successfully.}}",
+      "messageBulk": "{count, plural, one {Do you want to block # selected brand?} other {Do you want to block # selected brands?}}"
+    },
+    "activate": {
+      "selected": "Activate",
+      "header": "Confirm activation",
+      "successSingle": "Brand activated successfully.",
+      "messageSingle": "Do you want to activate brand {name}?",
+      "successBulk": "{count, plural, one {# brand activated successfully.} other {# brands activated successfully.}}",
+      "messageBulk": "{count, plural, one {Do you want to activate # selected brand?} other {Do you want to activate # selected brands?}}"
+    },
+    "deactivate": {
+      "selected": "Deactivate",
+      "header": "Confirm deactivation",
+      "successSingle": "Brand deactivated successfully.",
+      "messageSingle": "Do you want to deactivate brand {name}?",
+      "successBulk": "{count, plural, one {# brand deactivated successfully.} other {# brands deactivated successfully.}}",
+      "messageBulk": "{count, plural, one {Do you want to deactivate # selected brand?} other {Do you want to deactivate # selected brands?}}"
+    },
+    "selection": {
+      "currentMode": "Selection mode",
+      "count": "{count, plural, =0 {None selected} one {# selected} other {# selected}}",
+      "pickOneFirst": "Select an eligible brand first to define the selection context.",
+      "mode": {
+        "none": "None",
+        "activate": "Bulk activation",
+        "deactivate": "Bulk deactivation"
+      }
+    },
+    "form": {
+      "created": "Brand created successfully.",
+      "updated": "Brand updated successfully.",
+      "saveError": "Could not save brand.",
+      "loadError": "Could not load brand data.",
+      "permissionDenied": "You do not have permission to save brands."
+    },
+    "empty": {
+      "title": "No brands found"
     }
   },
   "accountPassword": {
@@ -429,7 +709,7 @@
     "policySubtitle": "The password must meet the security rules below.",
     "formSectionTitle": "Change details",
     "userFallback": "User",
-    "usernameFallback": "No user",
+    "usernameFallback": "No username",
     "summary": {
       "rules": "Rules",
       "strength": "Strength",
@@ -439,11 +719,11 @@
     },
     "strength": {
       "title": "Password strength",
-      "empty": "Not provided",
+      "empty": "Not informed",
       "weak": "Weak",
       "medium": "Medium",
       "strong": "Strong",
-      "rulesSatisfied": "rules met"
+      "rulesSatisfied": "rules satisfied"
     }
   },
   "profile": {
@@ -454,7 +734,7 @@
       "groups": "Groups",
       "permissions": "Permissions",
       "groupsSubtitle": "Organizational profiles linked to the user.",
-      "permissionsSubtitle": "Available access permissions for the authenticated user."
+      "permissionsSubtitle": "Available permissions for the authenticated user."
     },
     "section": {
       "identification": "Identification",
@@ -464,13 +744,13 @@
     "field": {
       "id": "ID",
       "name": "Name",
-      "username": "User",
+      "username": "Username",
       "document": "Document",
       "status": "Status",
       "blocked": "Blocked",
       "blockedUntil": "Blocked until",
       "password": "Password",
-      "passwordExpires": "Password expires on",
+      "passwordExpires": "Password expires in",
       "issuer": "Issuer",
       "createdAt": "Created at",
       "lastLogin": "Last login",
@@ -482,7 +762,7 @@
     },
     "fallback": {
       "noName": "Unnamed user",
-      "noUsername": "User not provided"
+      "noUsername": "Username not provided"
     },
     "items": "{count, plural, =0 {0 items} one {# item} other {# items}}",
     "empty": {
@@ -490,7 +770,7 @@
       "permissions": "No permissions found."
     },
     "loading": "Please wait while we load your profile data.",
-    "error": "Could not load the profile."
+    "error": "Could not load profile."
   },
   "session": {
     "expiring": {
@@ -501,7 +781,7 @@
     "expired": {
       "title": "Session expired",
       "body": "Your session expired due to inactivity.",
-      "hint": "To continue, log in again."
+      "hint": "To continue, sign in again."
     }
   },
   "common": {
@@ -526,20 +806,20 @@
     "error": "Error",
     "success": "Success",
     "info": "Information",
-    "logout": "Logout",
+    "logout": "Sign out",
     "notNow": "Not now",
     "renewSession": "Renew session",
     "goToLogin": "Go to login",
     "warning": "Warning",
     "correlationId": "Correlation ID",
     "view": "View",
-    "notInformed": "Not provided",
+    "notInformed": "Not informed",
     "advancedFilters": "Advanced filters",
     "tableFilters": "Table filters"
   },
   "confirm": {
-    "logoutTitle": "End session",
-    "logoutMessage": "Do you really want to leave CardSync?"
+    "logoutTitle": "Sign out",
+    "logoutMessage": "Do you really want to sign out of CardSync?"
   },
   "notifications": {
     "welcome": "Hello, {name}!",
@@ -550,7 +830,7 @@
       "GENERIC_ERROR": "An unexpected error occurred. Please try again.",
       "NETWORK_ERROR": "Could not connect to the server.",
       "ACCESS_DENIED": "You do not have permission to perform this action.",
-      "SESSION_EXPIRED": "Your session expired. Log in again.",
+      "SESSION_EXPIRED": "Your session has expired. Please sign in again.",
       "VALIDATION_ERROR": "Some fields need to be corrected.",
       "USER_DOCUMENT_ALREADY_EXISTS": "A user with this document already exists.",
       "USER_USERNAME_ALREADY_EXISTS": "A user with this username already exists.",
@@ -561,16 +841,17 @@
       "GROUP_NAME_ALREADY_EXISTS": "A group with this name already exists.",
       "GROUP_DELETE_SUPPORT_NOT_ALLOWED": "The SUPPORT group cannot be deleted or changed in this operation.",
       "GROUP_DELETE_IN_USE": "This group has associated users and cannot be deleted.",
-      "PERMISSION_NOT_FOUND": "One or more provided permissions were not found."
+      "PERMISSION_NOT_FOUND": "One or more provided permissions were not found.",
+      "ESTABLISHMENT_ALREADY_EXISTS": "An establishment with the same PV, company, and acquirer already exists."
     },
     "fields": {
       "*": {
         "required": "{label} is required.",
-        "minLength": "{label} must have at least {requiredLength} characters.",
-        "maxLength": "{label} must have at most {requiredLength} characters.",
+        "minLength": "{label} must be at least {requiredLength} characters.",
+        "maxLength": "{label} must be at most {requiredLength} characters.",
         "min": "{label} must be at least {min}.",
         "max": "{label} must be at most {max}.",
-        "email": "{label} enter a valid email.",
+        "email": "{label} please enter a valid email.",
         "pattern": "{label} has an invalid format.",
         "invalid": "{label} is invalid.",
         "passwordMismatch": "Passwords must match."
@@ -595,7 +876,7 @@
     },
     "columns": {
       "name": "Name",
-      "usersCount": "User",
+      "usersCount": "Users",
       "description": "Description",
       "createdAt": "Created at",
       "createdBy": "Created by",
@@ -603,7 +884,7 @@
     },
     "form": {
       "loadError": "Could not load group data.",
-      "saveError": "Could not save the group.",
+      "saveError": "Could not save group.",
       "created": "Group created successfully.",
       "updated": "Group updated successfully.",
       "permissionDenied": "You do not have permission to save groups."
@@ -623,7 +904,7 @@
       }
     },
     "detail": {
-      "title": "Group detail",
+      "title": "Group details",
       "subtitle": "Summary, permissions, and group users",
       "tabs": {
         "summary": "Summary",
@@ -632,7 +913,7 @@
       },
       "permissions": {
         "title": "Permissions",
-        "subtitle": "Associate or disassociate permissions from this group.",
+        "subtitle": "Associate or disassociate permissions for this group.",
         "placeholder": "Select permissions",
         "saved": "Permissions updated successfully.",
         "saveError": "Could not save group permissions.",
@@ -640,7 +921,7 @@
       },
       "users": {
         "title": "Users",
-        "subtitle": "Associate or disassociate users from this group.",
+        "subtitle": "Associate or disassociate users for this group.",
         "placeholder": "Select users",
         "saved": "Users updated successfully.",
         "saveError": "Could not save group users.",
@@ -649,7 +930,7 @@
     },
     "delete": {
       "header": "Delete group",
-      "message": "Do you really want to delete the group {groupName}?",
+      "message": "Do you really want to delete group {groupName}?",
       "success": "Group deleted successfully."
     }
   },
@@ -675,7 +956,7 @@
       },
       "status": {
         "sent": "Sent",
-        "failed": "Sending failed"
+        "failed": "Send failed"
       },
       "eventType": {
         "firstPassword": "First password",

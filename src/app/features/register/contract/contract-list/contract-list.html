@@ -1,0 +1,336 @@
+<cs-page-header
+  [subtitle]="'contract.subtitle' | translate"
+  [breadcrumb]="[
+    { label: ('breadcrumb.dashboard' | translate), url: '/' },
+    { label: ('breadcrumb.register.contract' | translate) },
+  ]"
+  [compact]="false"
+>
+  <button
+    pButton
+    type="button"
+    (click)="refresh()"
+    icon="pi pi-refresh"
+    class="p-button-text p-button-sm"
+    [label]="'common.update' | translate"
+  ></button>
+
+  <button
+    pButton
+    type="button"
+    icon="pi pi-check-circle"
+    (click)="confirmActivateSelected()"
+    [disabled]="!canActivateSelected()"
+    class="p-button-success p-button-sm"
+    [label]="'contract.activate.selected' | translate"
+  ></button>
+
+  <button
+    pButton
+    type="button"
+    icon="pi pi-lock"
+    (click)="confirmBlockSelected()"
+    [disabled]="!canBlockSelected()"
+    class="p-button-warn p-button-sm"
+    [label]="'contract.block.selected' | translate"
+  ></button>
+
+  <button
+    pButton
+    type="button"
+    icon="pi pi-ban"
+    class="p-button-danger p-button-sm"
+    (click)="confirmDeactivateSelected()"
+    [disabled]="!canDeactivateSelected()"
+    [label]="'contract.deactivate.selected' | translate"
+  ></button>
+
+  <button
+    pButton
+    type="button"
+    (click)="goNew()"
+    icon="pi pi-plus"
+    class="p-button-info p-button-sm"
+    [label]="'contract.new.title' | translate"
+  ></button>
+</cs-page-header>
+
+<!-- <app-contract-create-dialog
+  (saved)="onSaved()"
+  [visible]="upsertVisible()"
+  [contract]="contract()"
+  (visibleChange)="onUpsertVisibleChange($event)"
+></app-contract-create-dialog> -->
+
+<cs-filters-panel
+  (clear)="clear()"
+  [collapsed]="true"
+  (search)="search()"
+  [actionsAlign]="'start'"
+  [activeCount]="activeFiltersCount()"
+  [title]="'common.filter' | translate"
+  [activeFilterGroups]="activeFilterGroups()"
+>
+  <div class="grid formgrid gap-0 align-items-end">
+    <div class="col-12 md:col-2 p-1">
+      <p-floatLabel variant="on" class="w-full">
+        <input
+          id="name"
+          pInputText
+          [value]="name()"
+          class="w-full p-inputtext-sm"
+          (input)="name.set(($any($event.target).value ?? '').toString())"
+        />
+        <label for="name">{{ 'contract.fields.name' | translate }}</label>
+      </p-floatLabel>
+    </div>
+
+    <div class="col-12 md:col-2 p-1">
+      <p-floatLabel variant="on" class="w-full">
+        <p-multiSelect
+          size="small"
+          class="w-full"
+          [filter]="true"
+          appendTo="body"
+          [showClear]="true"
+          optionLabel="label"
+          optionValue="value"
+          inputId="statusEnum"
+          [showToggleAll]="false"
+          [ngModel]="statusEnum()"
+          [options]="statusEnumOptions()"
+          (onChange)="statusEnum.set($event.value ?? null)"
+        ></p-multiSelect>
+        <label for="statusEnum">{{ 'contract.fields.statusEnum' | translate }}</label>
+      </p-floatLabel>
+    </div>
+  </div>
+
+  <div class="grid formgrid gap-0 align-items-end"></div>
+</cs-filters-panel>
+
+<div class="flex align-items-center justify-content-between mb-2 px-1">
+  <small class="opacity-80">
+    {{ 'contract.selection.currentMode' | translate }}:
+    {{ selectionModeLabel() }}
+  </small>
+
+  <small class="opacity-80" *ngIf="selectedRows().length">
+    {{ 'contract.selection.count' | translate: { count: selectedRows().length } }}
+  </small>
+</div>
+
+<p-table
+  #dt
+  stripedRows
+  dataKey="id"
+  size="small"
+  [rows]="rows"
+  [lazy]="true"
+  showGridlines
+  [rowHover]="true"
+  [value]="contracts()"
+  [paginator]="true"
+  sortMode="multiple"
+  stateStorage="local"
+  filterDisplay="menu"
+  class="p-datatable-sm mt-1"
+  styleClass="cs-admin-table"
+  [loading]="facade.loading()"
+  [showCurrentPageReport]="true"
+  [totalRecords]="totalRecords()"
+  (onPage)="onPageChange($event)"
+  (onLazyLoad)="onLazyLoad($event)"
+  [paginatorDropdownAppendTo]="'body'"
+  stateKey="cardsync.contract.table.state.v1"
+  [rowsPerPageOptions]="[10, 20, 50, 100]"
+  [tableStyle]="{ width: '100%', 'min-width': '62rem' }"
+  [currentPageReportTemplate]="'pagination.report' | translate"
+>
+  <ng-template pTemplate="colgroup">
+    <colgroup>
+      <col style="width: 44px" />
+      <col style="width: auto" />
+      <col style="width: auto" />
+      <col style="width: 100px" />
+    </colgroup>
+  </ng-template>
+
+  <ng-template pTemplate="header">
+    <tr>
+      <th class="text-center">
+        <ng-container *ngIf="selectionStatus(); else selectOneHint">
+          <p-checkbox
+            [binary]="true"
+            [ngModel]="headerChecked()"
+            [indeterminate]="headerIndeterminate()"
+            (onChange)="toggleHeaderSelection(!!$event.checked)"
+          ></p-checkbox>
+        </ng-container>
+
+        <ng-template #selectOneHint>
+          <i
+            class="pi pi-info-circle opacity-70"
+            [pTooltip]="'contract.selection.pickOneFirst' | translate"
+            tooltipPosition="top"
+          ></i>
+        </ng-template>
+      </th>
+
+      <th pSortableColumn="name">
+        <div class="th-flex text-center">
+          <span class="th-label">{{ 'contract.columns.name' | translate }}</span>
+          <span class="th-icons">
+            <p-sortIcon field="name"></p-sortIcon>
+            <p-columnFilter
+              field="name"
+              display="menu"
+              matchMode="contains"
+              [useGrouping]="false"
+              [showOperator]="false"
+              [showAddButton]="false"
+              styleClass="cs-colfilter"
+            ></p-columnFilter>
+          </span>
+        </div>
+      </th>
+
+      <th pSortableColumn="status">
+        <div class="th-flex text-center">
+          <span class="th-label">{{ 'contract.columns.statusEnum' | translate }}</span>
+          <span class="th-icons">
+            <p-sortIcon field="status"></p-sortIcon>
+            <p-columnFilter
+              display="menu"
+              matchMode="in"
+              field="statusEnum"
+              [showOperator]="false"
+              [showAddButton]="false"
+              [showMatchModes]="false"
+              styleClass="cs-colfilter"
+            >
+              <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                <p-multiSelect
+                  class="w-full"
+                  appendTo="body"
+                  [ngModel]="value"
+                  [showClear]="true"
+                  optionLabel="label"
+                  optionValue="value"
+                  [options]="statusEnumOptions()"
+                  (onChange)="filter($event.value)"
+                  [placeholder]="'common.all' | translate"
+                ></p-multiSelect>
+              </ng-template>
+            </p-columnFilter>
+          </span>
+        </div>
+      </th>
+
+      <th class="text-center">
+        <div class="th-flex text-center justify-content-center">
+          <span class="th-label">{{ 'common.actions' | translate }}</span>
+        </div>
+      </th>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="body" let-row>
+    <tr>
+      <td class="text-center">
+        <p-checkbox
+          [binary]="true"
+          [ngModel]="isRowSelected(row)"
+          [disabled]="isRowCheckboxDisabled(row)"
+          (onChange)="toggleRowSelection(row, !!$event.checked)"
+        ></p-checkbox>
+      </td>
+
+      <td class="cell-muted text-center">
+        <span [pTooltip]="row.name" tooltipPosition="top">
+          {{ row.name }}
+        </span>
+      </td>
+
+      <td class="cell-muted text-center">
+        <p-tag [value]="statusEnumLabel(row.status)" [severity]="severityEnum(row.status)"></p-tag>
+      </td>
+
+      <td class="text-center">
+        <div class="table-actions">
+          <button
+            pButton
+            type="button"
+            icon="pi pi-pencil"
+            (click)="edit(row)"
+            tooltipPosition="top"
+            class="p-button-text p-button-sm"
+            [disabled]="!secPolicy.canEdit(row)"
+            [pTooltip]="!secPolicy.canEdit(row) ? undefined : ('common.edit' | translate)"
+          ></button>
+
+          <button
+            pButton
+            type="button"
+            tooltipPosition="top"
+            icon="pi pi-check-circle"
+            class="p-button-text p-button-sm"
+            [disabled]="!secPolicy.canActivate(row)"
+            [pTooltip]="
+              secPolicy.canActivate(row)
+                ? ('contract.action.activate.label' | translate)
+                : (secPolicy.activateDisabledReason(row) ?? '' | translate)
+            "
+            (click)="confirmActivate(row)"
+          ></button>
+
+          <button
+            pButton
+            type="button"
+            icon="pi pi-ban"
+            class="p-button-text p-button-sm"
+            tooltipPosition="top"
+            [disabled]="!secPolicy.canDeactivate(row)"
+            [pTooltip]="
+              secPolicy.canDeactivate(row)
+                ? ('contract.action.deactivate.label' | translate)
+                : (secPolicy.deactivateDisabledReason(row) ?? '' | translate)
+            "
+            (click)="confirmDeactivate(row)"
+          ></button>
+
+          <button
+            pButton
+            type="button"
+            icon="pi pi-lock"
+            class="p-button-text p-button-sm"
+            tooltipPosition="top"
+            [disabled]="!secPolicy.canBlock(row)"
+            [pTooltip]="
+              secPolicy.canBlock(row)
+                ? ('contract.action.block.label' | translate)
+                : (secPolicy.blockDisabledReason(row) ?? '' | translate)
+            "
+            (click)="confirmBlock(row)"
+          ></button>
+        </div>
+      </td>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="emptymessage">
+    <tr>
+      <td [attr.colspan]="9" class="empty-td">
+        <div class="empty empty-center">
+          <div class="empty-title">
+            {{
+              facade.loadedOnce()
+                ? ('contract.empty.title' | translate)
+                : ('common.loading' | translate)
+            }}
+          </div>
+        </div>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>

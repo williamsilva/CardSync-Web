@@ -25,7 +25,6 @@ import { CsDatePipe } from '@shared/pipes/cs-date.pipe';
 import { UsersFacade } from '@features/facade/users.facade';
 import { CsDocumentPipe } from '@shared/pipes/cs-document.pipe';
 import { CompanyFacade } from '@features/facade/company.facade';
-import { PermissionService } from '@core/auth/permission.service';
 import { AcquirerFacade } from '@features/facade/acquirer.facade';
 import { StatefulListPage } from '@features/list-base/stateful-list-page';
 import { EstablishmentFacade } from '@features/facade/establishment.facade';
@@ -35,7 +34,6 @@ import { EstablishmentAdvancedFilters } from '@features/filter/establishment.fil
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
 import { EstablishmentFiltersState, EstablishmentModel } from '@models/establishment.models';
 import { typeEstablishmentEnumSeverity } from '../../../models/enums/type-establishment.enum';
-import { DATA_TABLE_SHELL_IMPORTS } from '@shared/features/data-table-shell/data-table-shell.component';
 import { EstablishmentPermissionPolicy } from '@features/security/policy/establishment-permission.policy';
 import { EstablishmentCreateDialogComponent } from '../establishment-create/establishment-create-component';
 import {
@@ -86,7 +84,6 @@ import {
     PageHeaderComponent,
     ConfirmDialogModule,
     FiltersPanelComponent,
-    DATA_TABLE_SHELL_IMPORTS,
     EstablishmentCreateDialogComponent,
   ],
 })
@@ -97,10 +94,9 @@ export class EstablishmentListComponent extends StatefulListPage<
   @ViewChild('dt') private dt?: Table;
 
   readonly userFacade = inject(UsersFacade);
-  readonly perms = inject(PermissionService);
-  readonly facade = inject(EstablishmentFacade);
   readonly companyFacade = inject(CompanyFacade);
   readonly acquirerFacade = inject(AcquirerFacade);
+  readonly establishmentFacade = inject(EstablishmentFacade);
 
   readonly usersOptions = this.userFacade.options;
   readonly companiesOptions = this.companyFacade.options;
@@ -110,6 +106,13 @@ export class EstablishmentListComponent extends StatefulListPage<
   protected override readonly i18n = inject(I18nService);
   protected readonly confirm = inject(ConfirmationService);
   protected readonly secPolicy = inject(EstablishmentPermissionPolicy);
+
+  override rows = Number(localStorage.getItem(this.tableRowsKey())) || 10;
+  readonly totalRecords = computed(() => this.establishmentFacade.totalRecords());
+
+  readonly establishments = computed<EstablishmentModel[]>(
+    () => this.establishmentFacade.establishment() as EstablishmentModel[],
+  );
 
   private readonly bulk = new (class extends BulkActionListPage {
     protected override readonly i18n = inject(I18nService);
@@ -126,7 +129,6 @@ export class EstablishmentListComponent extends StatefulListPage<
   })(this);
 
   skeletonRows = Array.from({ length: 8 });
-  override rows = Number(localStorage.getItem('establishment.table.rows')) || 10;
 
   pvNumber = signal('');
   createdBy = signal<string[] | null>(null);
@@ -139,10 +141,6 @@ export class EstablishmentListComponent extends StatefulListPage<
   upsertVisible = signal(false);
   selectedRows = signal<EstablishmentModel[]>([]);
   establishment = signal<EstablishmentModel | null>(null);
-  totalRecords = computed(() => this.facade.totalRecords());
-  establishments = computed<EstablishmentModel[]>(
-    () => this.facade.establishment() as EstablishmentModel[],
-  );
 
   readonly statusEnumOptions = computed(() => {
     this.i18n.getAppliedLang();
@@ -158,81 +156,6 @@ export class EstablishmentListComponent extends StatefulListPage<
       label: typeEstablishmentEnumLabel(value, this.i18n),
       value,
     }));
-  });
-
-  protected override readonly advancedActiveFilters = computed<ActiveFilterItem[]>(() => {
-    const items: ActiveFilterItem[] = [];
-
-    const typeEnum = this.typeEnum();
-    const createdBy = this.createdBy();
-    const acquirers = this.acquirers();
-    const companies = this.companies();
-    const statusEnum = this.statusEnum();
-    const create = this.createdAtRange();
-    const pvNumber = this.pvNumber().trim();
-
-    if (pvNumber) {
-      items.push({ label: this.i18n.tUi('establishment.fields.pvNumber'), value: pvNumber });
-    }
-
-    if (createdBy?.length) {
-      const labels = this.usersOptions()
-        .filter((opt) => createdBy.includes(opt.value))
-        .map((opt) => opt.label)
-        .join(', ');
-
-      items.push({
-        label: this.i18n.tUi('establishment.fields.createdBy'),
-        value: labels,
-      });
-    }
-
-    if (acquirers?.length) {
-      const labels = this.acquirersOptions()
-        .filter((opt) => acquirers.includes(opt.id))
-        .map((opt) => opt.fantasyName)
-        .join(', ');
-
-      items.push({
-        label: this.i18n.tUi('establishment.fields.acquirer'),
-        value: labels,
-      });
-    }
-
-    if (companies?.length) {
-      const labels = this.companiesOptions()
-        .filter((opt) => companies.includes(opt.id))
-        .map((opt) => opt.fantasyName)
-        .join(', ');
-
-      items.push({
-        label: this.i18n.tUi('establishment.fields.company'),
-        value: labels,
-      });
-    }
-
-    if (typeEnum?.length) {
-      items.push({
-        label: this.i18n.tUi('establishment.fields.typeEnum'),
-        value: typeEnum.map((v) => typeEstablishmentEnumLabel(v, this.i18n)).join(', '),
-      });
-    }
-
-    if (statusEnum?.length) {
-      items.push({
-        label: this.i18n.tUi('establishment.fields.statusEnum'),
-        value: statusEnum.map((v) => statusEnumLabel(v, this.i18n)).join(', '),
-      });
-    }
-
-    if (create?.[0] && create?.[1]) {
-      items.push({
-        label: this.i18n.tUi('establishment.fields.createdAt'),
-        value: `${this.formatDate(create[0])} – ${this.formatDate(create[1])}`,
-      });
-    }
-
-    return items;
   });
 
   selectionStatus = computed<StatusEnum | null>(() => {
@@ -350,21 +273,21 @@ export class EstablishmentListComponent extends StatefulListPage<
 
   activate(row: EstablishmentModel): void {
     this.bulk.executeAction(
-      this.facade.activate(row.id),
+      this.establishmentFacade.activate(row.id),
       this.i18n.tUi('establishment.activate.successSingle'),
     );
   }
 
   deactivate(row: EstablishmentModel): void {
     this.bulk.executeAction(
-      this.facade.deactivate(row.id),
+      this.establishmentFacade.deactivate(row.id),
       this.i18n.tUi('establishment.deactivate.successSingle'),
     );
   }
 
   block(row: EstablishmentModel): void {
     this.bulk.executeAction(
-      this.facade.block(row.id),
+      this.establishmentFacade.block(row.id),
       this.i18n.tUi('establishment.block.successSingle'),
     );
   }
@@ -407,7 +330,7 @@ export class EstablishmentListComponent extends StatefulListPage<
     if (!rows.length) return;
 
     this.bulk.executeAction(
-      this.facade.activateBulk(rows.map((row) => row.id)),
+      this.establishmentFacade.activateBulk(rows.map((row) => row.id)),
       this.i18n.tUi('establishment.activate.successBulk', { count: rows.length }),
     );
   }
@@ -417,7 +340,7 @@ export class EstablishmentListComponent extends StatefulListPage<
     if (!rows.length) return;
 
     this.bulk.executeAction(
-      this.facade.deactivateBulk(rows.map((row) => row.id)),
+      this.establishmentFacade.deactivateBulk(rows.map((row) => row.id)),
       this.i18n.tUi('establishment.deactivate.successBulk', { count: rows.length }),
     );
   }
@@ -427,7 +350,7 @@ export class EstablishmentListComponent extends StatefulListPage<
     if (!rows.length) return;
 
     this.bulk.executeAction(
-      this.facade.blockBulk(rows.map((row) => row.id)),
+      this.establishmentFacade.blockBulk(rows.map((row) => row.id)),
       this.i18n.tUi('establishment.block.successBulk', { count: rows.length }),
     );
   }
@@ -503,6 +426,101 @@ export class EstablishmentListComponent extends StatefulListPage<
     this.reloadWithCurrentState();
   }
 
+  protected clearSelection(): void {
+    this.selectedRows.set([]);
+  }
+
+  protected formatDate(value: Date | string): string {
+    const date = value instanceof Date ? value : new Date(value);
+    return new Intl.DateTimeFormat(this.i18n.getLang(), { dateStyle: 'short' }).format(date);
+  }
+
+  protected override readonly advancedActiveFilters = computed<ActiveFilterItem[]>(() => {
+    const items: ActiveFilterItem[] = [];
+
+    const typeEnum = this.typeEnum();
+    const createdBy = this.createdBy();
+    const acquirers = this.acquirers();
+    const companies = this.companies();
+    const statusEnum = this.statusEnum();
+    const create = this.createdAtRange();
+    const pvNumber = this.pvNumber().trim();
+
+    if (pvNumber) {
+      items.push({ label: this.i18n.tUi('establishment.fields.pvNumber'), value: pvNumber });
+    }
+
+    if (createdBy?.length) {
+      const labels = this.usersOptions()
+        .filter((opt) => createdBy.includes(opt.value))
+        .map((opt) => opt.label)
+        .join(', ');
+
+      items.push({
+        label: this.i18n.tUi('establishment.fields.createdBy'),
+        value: labels,
+      });
+    }
+
+    if (acquirers?.length) {
+      const labels = this.acquirersOptions()
+        .filter((opt) => acquirers.includes(opt.id))
+        .map((opt) => opt.fantasyName)
+        .join(', ');
+
+      items.push({
+        label: this.i18n.tUi('establishment.fields.acquirer'),
+        value: labels,
+      });
+    }
+
+    if (companies?.length) {
+      const labels = this.companiesOptions()
+        .filter((opt) => companies.includes(opt.id))
+        .map((opt) => opt.fantasyName)
+        .join(', ');
+
+      items.push({
+        label: this.i18n.tUi('establishment.fields.company'),
+        value: labels,
+      });
+    }
+
+    if (typeEnum?.length) {
+      items.push({
+        label: this.i18n.tUi('establishment.fields.typeEnum'),
+        value: typeEnum.map((v) => typeEstablishmentEnumLabel(v, this.i18n)).join(', '),
+      });
+    }
+
+    if (statusEnum?.length) {
+      items.push({
+        label: this.i18n.tUi('establishment.fields.statusEnum'),
+        value: statusEnum.map((v) => statusEnumLabel(v, this.i18n)).join(', '),
+      });
+    }
+
+    if (create?.[0] && create?.[1]) {
+      items.push({
+        label: this.i18n.tUi('establishment.fields.createdAt'),
+        value: `${this.formatDate(create[0])} – ${this.formatDate(create[1])}`,
+      });
+    }
+
+    return items;
+  });
+
+  protected override loadFirstPage() {
+    const tableQuery = { page: 0, size: this.rows };
+    const query = buildListQuery<EstablishmentAdvancedFilters>(
+      tableQuery as any,
+      this.buildAdvancedFilters(),
+    );
+
+    this.clearSelection();
+    this.establishmentFacade.loadPage(query);
+  }
+
   protected override tableStateKey(): string {
     return 'cardsync.establishment.table.state.v1';
   }
@@ -517,17 +535,6 @@ export class EstablishmentListComponent extends StatefulListPage<
 
   protected override refresh(): void {
     this.reloadWithCurrentState();
-  }
-
-  protected loadFirstPage() {
-    const tableQuery = { page: 0, size: this.rows };
-    const query = buildListQuery<EstablishmentAdvancedFilters>(
-      tableQuery as any,
-      this.buildAdvancedFilters(),
-    );
-
-    this.clearSelection();
-    this.facade.loadPage(query);
   }
 
   protected override resetFilters(): void {
@@ -668,15 +675,6 @@ export class EstablishmentListComponent extends StatefulListPage<
     query: ReturnType<typeof buildListQuery<EstablishmentAdvancedFilters>>,
   ): void {
     this.clearSelection();
-    this.facade.loadPage(query);
-  }
-
-  protected clearSelection(): void {
-    this.selectedRows.set([]);
-  }
-
-  protected formatDate(value: Date | string): string {
-    const date = value instanceof Date ? value : new Date(value);
-    return new Intl.DateTimeFormat(this.i18n.getLang(), { dateStyle: 'short' }).format(date);
+    this.establishmentFacade.loadPage(query);
   }
 }

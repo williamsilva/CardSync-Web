@@ -22,8 +22,10 @@ export const UI_KEYS = {
     },
     register: {
       title: 'menu.register.title',
+      flags: 'menu.register.flags',
       company: 'menu.register.company',
       acquirer: 'menu.register.acquirer',
+      contracts: 'menu.register.contracts',
       establishment: 'menu.register.establishment',
     },
     security: {
@@ -95,6 +97,93 @@ export const UI_KEYS = {
       successBulk: 'establishment.block.successBulk',
       messageSingle: 'establishment.block.messageSingle',
       successSingle: 'establishment.block.successSingle',
+    },
+  },
+  contract: {
+    fields: {
+      name: 'contract.fields.name',
+      statusEnum: 'contract.fields.statusEnum',
+    },
+    selection: {
+      mode: {
+        none: 'contract.selection.mode.none',
+      },
+    },
+    activate: {
+      header: 'contract.activate.header',
+      successBulk: 'contract.activate.successBulk',
+      messageBulk: 'contract.activate.messageBulk',
+      messageSingle: 'contract.activate.messageSingle',
+      successSingle: 'contract.activate.successSingle',
+    },
+    block: {
+      header: 'contract.block.header',
+      successBulk: 'contract.block.successBulk',
+      messageBulk: 'contract.block.messageBulk',
+      messageSingle: 'contract.block.messageSingle',
+      successSingle: 'contract.block.successSingle',
+    },
+    deactivate: {
+      header: 'contract.deactivate.header',
+      successBulk: 'contract.deactivate.successBulk',
+      messageBulk: 'contract.deactivate.messageBulk',
+      messageSingle: 'contract.deactivate.messageSingle',
+      successSingle: 'contract.deactivate.successSingle',
+    },
+  },
+  flag: {
+    form: {
+      created: 'flag.form.created',
+      updated: 'flag.form.updated',
+      saveError: 'flag.form.saveError',
+    },
+    fields: {
+      name: 'flag.fields.name',
+      erpCode: 'flag.fields.erpCode',
+      statusEnum: 'flag.fields.statusEnum',
+    },
+    columns: {
+      name: 'flag.columns.name',
+      erpCode: 'flag.columns.erpCode',
+      statusEnum: 'flag.columns.statusEnum',
+    },
+    relationships: {
+      removeAcquirer: {
+        header: 'flag.relationships.removeAcquirer.header',
+        success: 'flag.relationships.removeAcquirer.success',
+        message: 'flag.relationships.removeAcquirer.message',
+      },
+      removeCompany: {
+        header: 'flag.relationships.removeCompany.header',
+        success: 'flag.relationships.removeCompany.success',
+        message: 'flag.relationships.removeCompany.message',
+      },
+    },
+    selection: {
+      mode: {
+        none: 'flag.selection.mode.none',
+      },
+    },
+    activate: {
+      header: 'flag.activate.header',
+      successBulk: 'flag.activate.successBulk',
+      messageBulk: 'flag.activate.messageBulk',
+      messageSingle: 'flag.activate.messageSingle',
+      successSingle: 'flag.activate.successSingle',
+    },
+    block: {
+      header: 'flag.block.header',
+      successBulk: 'flag.block.successBulk',
+      messageBulk: 'flag.block.messageBulk',
+      messageSingle: 'flag.block.messageSingle',
+      successSingle: 'flag.block.successSingle',
+    },
+    deactivate: {
+      header: 'flag.deactivate.header',
+      successBulk: 'flag.deactivate.successBulk',
+      messageBulk: 'flag.deactivate.messageBulk',
+      messageSingle: 'flag.deactivate.messageSingle',
+      successSingle: 'flag.deactivate.successSingle',
     },
   },
   users: {

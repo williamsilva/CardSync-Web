@@ -97,6 +97,8 @@ export class UsersListComponent extends StatefulListPage<UsersFiltersState, User
   protected readonly confirm = inject(ConfirmationService);
   protected readonly secPolicy = inject(SecurityPermissionPolicy);
 
+  override rows = Number(localStorage.getItem(this.tableRowsKey())) || 10;
+
   private readonly bulk = new (class extends BulkActionListPage {
     protected override readonly i18n = inject(I18nService);
     protected override readonly toast = inject(MessageService);
@@ -109,7 +111,6 @@ export class UsersListComponent extends StatefulListPage<UsersFiltersState, User
     }
   })(this);
 
-  override rows = Number(localStorage.getItem('users.table.rows')) || 10;
   skeletonRows = Array.from({ length: 8 });
 
   name = signal('');
@@ -262,7 +263,6 @@ export class UsersListComponent extends StatefulListPage<UsersFiltersState, User
   }
 
   clear() {
-    this.clearSelection();
     this.clearTableAndReload(this.dt);
   }
 

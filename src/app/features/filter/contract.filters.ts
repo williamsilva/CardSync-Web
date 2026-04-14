@@ -1,8 +1,7 @@
 import { StatusEnum } from '@models/enums/status.enum';
 
-export interface FlagAdvancedFilters {
-  name: string | null;
-  erpCode: number | null;
+export interface ContractAdvancedFilters {
+  name: string;
 
   statusEnum?: StatusEnum[] | null;
 }

@@ -106,6 +106,8 @@ export class CompanyListComponent extends StatefulListPage<
   protected readonly confirm = inject(ConfirmationService);
   protected readonly secPolicy = inject(CompanyPermissionPolicy);
 
+  override rows = Number(localStorage.getItem(this.tableRowsKey())) || 10;
+
   private readonly bulk = new (class extends BulkActionListPage {
     protected override readonly i18n = inject(I18nService);
     protected override readonly toast = inject(MessageService);
@@ -120,7 +122,6 @@ export class CompanyListComponent extends StatefulListPage<
     }
   })(this);
 
-  override rows = Number(localStorage.getItem('company.table.rows')) || 10;
   skeletonRows = Array.from({ length: 8 });
 
   cnpj = signal('');
@@ -274,7 +275,6 @@ export class CompanyListComponent extends StatefulListPage<
   }
 
   clear() {
-    this.clearSelection();
     this.clearTableAndReload(this.dt);
   }
 
