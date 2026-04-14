@@ -19,6 +19,7 @@ import { CsDocumentPipe } from '@shared/pipes/cs-document.pipe';
 import { AcquirerFacade } from '@features/facade/acquirer.facade';
 import { ErrorMsgComponent } from '@shared/error-msg/error-msg.component';
 import { FlagRelationsFacade } from '@features/facade/flag-relations.facade';
+import { FlagPermissionPolicy } from '@features/security/policy/flag-permission.policy';
 import { StatusEnum, statusEnumLabel, statusEnumSeverity } from '@models/enums/status.enum';
 
 type PendingAcquirerRelation = {
@@ -58,6 +59,7 @@ export class FlagAcquirerRelationsComponent {
   readonly acquirerFacade = inject(AcquirerFacade);
   private readonly messageService = inject(MessageService);
   readonly flagRelationsFacade = inject(FlagRelationsFacade);
+  protected readonly secPolicy = inject(FlagPermissionPolicy);
 
   readonly addVisible = signal(false);
   readonly pendingRelations = signal<PendingAcquirerRelation[]>([]);
@@ -89,6 +91,10 @@ export class FlagAcquirerRelationsComponent {
     return this.options().filter((item) => !linkedIds.has(item.id) && !pendingIds.has(item.id));
   });
 
+  readonly canRemoveRelations = computed(() => {
+    return this.secPolicy.canRemoveRelations();
+  });
+
   constructor() {
     this.acquirerFacade.loadAcquirerOptionsFilter();
   }
@@ -110,6 +116,7 @@ export class FlagAcquirerRelationsComponent {
   }
 
   openAddDialog() {
+    if (!this.secPolicy.canManageRelations()) return;
     this.pendingRelations.set([]);
     this.form.reset({ acquirerId: '', acquirerCode: '' });
     this.form.markAsPristine();
@@ -126,6 +133,7 @@ export class FlagAcquirerRelationsComponent {
   }
 
   addRelationToList() {
+    if (!this.secPolicy.canManageRelations()) return;
     this.form.markAllAsTouched();
     if (this.form.invalid) return;
 
@@ -154,6 +162,7 @@ export class FlagAcquirerRelationsComponent {
   }
 
   saveRelations() {
+    if (!this.secPolicy.canManageRelations()) return;
     const items = this.pendingRelations().map((item) => ({
       acquirerId: item.acquirerId,
       acquirerCode: item.acquirerCode,
@@ -168,6 +177,7 @@ export class FlagAcquirerRelationsComponent {
   }
 
   confirmRemoveAcquirer(acquirerId: string, acquirerName: string) {
+    if (!this.secPolicy.canRemoveRelations()) return;
     this.confirm.confirm({
       header: this.i18n.tUi('flag.relationships.removeAcquirer.header'),
       message: this.i18n.tUi('flag.relationships.removeAcquirer.message', {

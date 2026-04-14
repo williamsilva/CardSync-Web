@@ -11,27 +11,27 @@ export class GroupsPermissionPolicy {
   private readonly perms = inject(PermissionService);
 
   canView(): boolean {
-    return this.perms.has(PERMISSIONS.GROUPS.VIEW);
+    return this.perms.hasSupportOr(PERMISSIONS.GROUPS.VIEW);
   }
 
   canCreate(): boolean {
-    return this.perms.has(PERMISSIONS.GROUPS.CREATE) || this.perms.has(PERMISSIONS.GROUPS.CHANGE);
+    return this.perms.hasSupportOr(PERMISSIONS.GROUPS.CREATE);
   }
 
   canEdit(_row: GroupPermissionTarget): boolean {
-    return this.perms.has(PERMISSIONS.GROUPS.UPDATE) || this.perms.has(PERMISSIONS.GROUPS.CHANGE);
+    return this.perms.hasSupportOr(PERMISSIONS.GROUPS.UPDATE);
   }
 
   canDelete(_row: GroupPermissionTarget): boolean {
-    return this.perms.has(PERMISSIONS.GROUPS.DELETE) || this.perms.has(PERMISSIONS.GROUPS.CHANGE);
+    return this.perms.hasSupportOr(PERMISSIONS.GROUPS.DELETE);
   }
 
   canManagePermissions(_row: GroupPermissionTarget): boolean {
-    return this.perms.has(PERMISSIONS.GROUPS.MANAGE_PERMISSIONS) || this.perms.has(PERMISSIONS.GROUPS.CHANGE);
+    return this.perms.hasSupportOr(PERMISSIONS.GROUPS.MANAGE_PERMISSIONS);
   }
 
   canManageUsers(_row: GroupPermissionTarget): boolean {
-    return this.perms.has(PERMISSIONS.GROUPS.MANAGE_USERS) || this.perms.has(PERMISSIONS.GROUPS.CHANGE);
+    return this.perms.hasSupportOr(PERMISSIONS.GROUPS.MANAGE_USERS);
   }
 
   createDisabledReason(): string | null {

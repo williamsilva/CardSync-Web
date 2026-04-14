@@ -10,6 +10,7 @@
       type="button"
       icon="pi pi-plus-circle"
       (click)="openAddDialog()"
+      [disabled]="!secPolicy.canManageRelations()"
       [label]="'flag.relationships.add' | translate"
       class="p-button-success p-button-sm relation-add-btn"
     ></button>
@@ -58,6 +59,7 @@
             pButton
             type="button"
             icon="pi pi-trash"
+            [disabled]="!canRemoveRelations()"
             class="p-button-text p-button-sm p-button-danger"
             (click)="confirmRemoveCompany(item.companyId, item.fantasyName)"
           ></button>
@@ -123,6 +125,7 @@
         [disabled]="form.invalid"
         (click)="addCompanyToList()"
         class="w-full p-button-success"
+        [disabled]="!secPolicy.canManageRelations()"
         [label]="'flag.relationships.add' | translate"
       ></button>
     </div>
@@ -171,6 +174,7 @@
         icon="pi pi-save"
         [loading]="saving()"
         (click)="saveRelations()"
+        [disabled]="!secPolicy.canManageRelations()"
         [label]="'flag.relationships.saveLinks' | translate"
       ></button>
     </div>

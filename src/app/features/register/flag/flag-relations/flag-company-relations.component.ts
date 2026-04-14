@@ -20,6 +20,7 @@ import { CsDocumentPipe } from '@shared/pipes/cs-document.pipe';
 import { CompanyMinimalModel } from '@models/company-minimal.models';
 import { ErrorMsgComponent } from '@shared/error-msg/error-msg.component';
 import { FlagRelationsFacade } from '@features/facade/flag-relations.facade';
+import { FlagPermissionPolicy } from '@features/security/policy/flag-permission.policy';
 import { StatusEnum, statusEnumLabel, statusEnumSeverity } from '@models/enums/status.enum';
 
 @Component({
@@ -55,6 +56,7 @@ export class FlagCompanyRelationsComponent {
   readonly flagRelationsFacade = inject(FlagRelationsFacade);
 
   readonly addVisible = signal(false);
+  protected readonly secPolicy = inject(FlagPermissionPolicy);
   readonly pendingCompanies = signal<CompanyMinimalModel[]>([]);
 
   readonly options = this.companyFacade.options;
@@ -80,6 +82,10 @@ export class FlagCompanyRelationsComponent {
     return this.options().filter((item) => !linkedIds.has(item.id) && !pendingIds.has(item.id));
   });
 
+  readonly canRemoveRelations = computed(() => {
+    return this.secPolicy.canRemoveRelations();
+  });
+
   constructor() {
     this.companyFacade.loadCompanyOptionsFilter();
   }
@@ -97,6 +103,7 @@ export class FlagCompanyRelationsComponent {
   }
 
   openAddDialog() {
+    if (!this.secPolicy.canManageRelations()) return;
     this.pendingCompanies.set([]);
     this.form.reset({ companyId: '' });
     this.form.markAsPristine();
@@ -113,6 +120,7 @@ export class FlagCompanyRelationsComponent {
   }
 
   addCompanyToList() {
+    if (!this.secPolicy.canManageRelations()) return;
     this.form.markAllAsTouched();
     if (this.form.invalid) return;
 
@@ -132,6 +140,7 @@ export class FlagCompanyRelationsComponent {
   }
 
   saveRelations() {
+    if (!this.secPolicy.canManageRelations()) return;
     const ids = this.pendingCompanies().map((item) => item.id);
     if (!ids.length) return;
 
@@ -142,6 +151,7 @@ export class FlagCompanyRelationsComponent {
   }
 
   confirmRemoveCompany(companyId: string, companyName: string) {
+    if (!this.secPolicy.canRemoveRelations()) return;
     this.confirm.confirm({
       header: this.i18n.tUi('flag.relationships.removeCompany.header'),
       message: this.i18n.tUi('flag.relationships.removeCompany.message', {

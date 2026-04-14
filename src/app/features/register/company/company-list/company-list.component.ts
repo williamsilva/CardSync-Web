@@ -462,11 +462,13 @@ export class CompanyListComponent extends StatefulListPage<
   }
 
   goNew() {
+    if (!this.secPolicy.canCreate()) return;
     this.company.set(null);
     this.upsertVisible.set(true);
   }
 
   edit(row: CompanyModel) {
+    if (!this.secPolicy.canEdit(row)) return;
     this.company.set(row);
     this.upsertVisible.set(true);
   }

@@ -10,7 +10,6 @@ export const APP_MENU: AppMenuItem[] = [
     exact: true,
   },
 
-  /* Security */
   {
     icon: 'pi pi-shield',
     labelKey: 'menu.security.title',
@@ -20,18 +19,17 @@ export const APP_MENU: AppMenuItem[] = [
         icon: 'pi pi-user',
         route: '/security/users',
         exact: false,
-        permissions: [PERMISSIONS.USERS.VIEW],
+        permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.USERS.VIEW],
       },
       {
         labelKey: 'menu.security.groups',
         icon: 'pi pi-id-card',
         route: '/security/groups',
-        permissions: [PERMISSIONS.GROUPS.VIEW],
+        permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.GROUPS.VIEW],
       },
     ],
   },
 
-  /* Cadastros */
   {
     icon: 'pi pi-folder-open',
     labelKey: 'menu.register.title',
@@ -41,40 +39,39 @@ export const APP_MENU: AppMenuItem[] = [
         icon: 'pi pi-building',
         route: '/register/company',
         exact: false,
-        permissions: [PERMISSIONS.COMPANIES.VIEW],
+        permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.COMPANIES.VIEW],
       },
       {
         labelKey: 'menu.register.acquirer',
         icon: 'pi pi-sitemap',
         route: '/register/acquirer',
         exact: false,
-        permissions: [PERMISSIONS.ACQUIRER.VIEW],
+        permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.ACQUIRER.VIEW],
       },
       {
         labelKey: 'menu.register.establishment',
         icon: 'pi pi-shop',
         route: '/register/establishment',
         exact: false,
-        permissions: [PERMISSIONS.ESTABLISHMENT.VIEW],
+        permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.ESTABLISHMENT.VIEW],
       },
       {
         labelKey: 'menu.register.flags',
         icon: 'pi pi-flag',
         route: '/register/flags',
         exact: false,
-        permissions: [PERMISSIONS.FLAGS.VIEW],
+        permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.FLAGS.VIEW],
       },
       {
         labelKey: 'menu.register.contracts',
         icon: 'pi pi-file-edit',
         route: '/register/contract',
         exact: false,
-        permissions: [PERMISSIONS.CONTRACTS.VIEW],
+        permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.CONTRACTS.VIEW],
       },
     ],
   },
 
-  /* Histotico*/
   {
     icon: 'pi pi-history',
     labelKey: 'menu.audit.title',
@@ -84,12 +81,11 @@ export const APP_MENU: AppMenuItem[] = [
         route: '/audit',
         exact: false,
         icon: 'pi pi-envelope',
-        permissions: [PERMISSIONS.AUDIT.VIEW],
+        permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.AUDIT.VIEW],
       },
     ],
   },
 
-  /* Outros */
   {
     icon: 'pi pi-credit-card',
     labelKey: 'menu.finance.title',

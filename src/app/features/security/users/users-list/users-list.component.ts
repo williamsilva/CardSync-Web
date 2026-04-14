@@ -413,11 +413,13 @@ export class UsersListComponent extends StatefulListPage<UsersFiltersState, User
   }
 
   goNew() {
+    if (!this.secPolicy.canCreate()) return;
     this.user.set(null);
     this.upsertVisible.set(true);
   }
 
   edit(row: UserModel) {
+    if (!this.secPolicy.canEdit(row)) return;
     this.user.set(row);
     this.upsertVisible.set(true);
   }

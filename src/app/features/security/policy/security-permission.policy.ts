@@ -17,15 +17,15 @@ export class SecurityPermissionPolicy {
   private readonly perms = inject(PermissionService);
 
   canView(): boolean {
-    return this.perms.has(PERMISSIONS.USERS.VIEW);
+    return this.perms.hasSupportOr(PERMISSIONS.USERS.VIEW);
   }
 
   canCreate(): boolean {
-    return this.perms.has(PERMISSIONS.USERS.CHANGE);
+    return this.perms.hasSupportOr(PERMISSIONS.USERS.CREATE);
   }
 
   canEdit(row: UserRowPermissionTarget): boolean {
-    if (!this.perms.has(PERMISSIONS.USERS.CHANGE)) {
+    if (!this.perms.hasSupportOr(PERMISSIONS.USERS.UPDATE)) {
       return false;
     }
 
@@ -37,7 +37,7 @@ export class SecurityPermissionPolicy {
   }
 
   canActivate(row: UserRowPermissionTarget): boolean {
-    if (!this.perms.has(PERMISSIONS.USERS.CHANGE)) {
+    if (!this.perms.hasSupportOr(PERMISSIONS.USERS.ACTIVE_OR_INACTIVE)) {
       return false;
     }
 
@@ -51,7 +51,7 @@ export class SecurityPermissionPolicy {
   }
 
   canDeactivate(row: UserRowPermissionTarget): boolean {
-    if (!this.perms.has(PERMISSIONS.USERS.CHANGE)) {
+    if (!this.perms.hasSupportOr(PERMISSIONS.USERS.ACTIVE_OR_INACTIVE)) {
       return false;
     }
 
@@ -69,7 +69,7 @@ export class SecurityPermissionPolicy {
   }
 
   activateDisabledReason(row: UserRowPermissionTarget): string | null {
-    if (!this.perms.has(PERMISSIONS.USERS.CHANGE)) {
+    if (!this.perms.hasSupportOr(PERMISSIONS.USERS.ACTIVE_OR_INACTIVE)) {
       return 'users.action.activate.noPermission';
     }
 
@@ -87,7 +87,7 @@ export class SecurityPermissionPolicy {
   }
 
   deactivateDisabledReason(row: UserRowPermissionTarget): string | null {
-    if (!this.perms.has(PERMISSIONS.USERS.CHANGE)) {
+    if (!this.perms.hasSupportOr(PERMISSIONS.USERS.ACTIVE_OR_INACTIVE)) {
       return 'users.action.deactivate.noPermission';
     }
 
@@ -108,16 +108,8 @@ export class SecurityPermissionPolicy {
     return null;
   }
 
-  /**
-   * Regras do modo em lote:
-   * ACTIVE => deactivate
-   * INACTIVE / DISABLED => activate
-   * BLOCKED / PENDING_PASSWORD / NULL => null
-   * current user ativo => null (não pode se auto-desativar)
-   * owner/system => null
-   */
   modeForRow(row: UserRowPermissionTarget): BulkUserActionMode | null {
-    if (!this.perms.has(PERMISSIONS.USERS.CHANGE)) {
+    if (!this.perms.hasSupportOr(PERMISSIONS.USERS.ACTIVE_OR_INACTIVE)) {
       return null;
     }
 

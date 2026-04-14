@@ -10,19 +10,19 @@ export class CompanyPermissionPolicy {
   private readonly perms = inject(PermissionService);
 
   canView(): boolean {
-    return this.perms.has(PERMISSIONS.COMPANIES.VIEW);
+    return this.perms.hasSupportOr(PERMISSIONS.COMPANIES.VIEW);
   }
 
   canCreate(): boolean {
-    return this.perms.has(PERMISSIONS.COMPANIES.CHANGE);
+    return this.perms.hasSupportOr(PERMISSIONS.COMPANIES.CREATE);
   }
 
   canEdit(_row: CompanyModel): boolean {
-    return this.perms.has(PERMISSIONS.COMPANIES.CHANGE);
+    return this.perms.hasSupportOr(PERMISSIONS.COMPANIES.UPDATE);
   }
 
   canActivate(row: CompanyModel): boolean {
-    if (!this.perms.has(PERMISSIONS.COMPANIES.CHANGE)) {
+    if (!this.perms.hasSupportOr(PERMISSIONS.COMPANIES.ACTIVE_OR_INACTIVE)) {
       return false;
     }
 
@@ -31,7 +31,7 @@ export class CompanyPermissionPolicy {
   }
 
   canDeactivate(row: CompanyModel): boolean {
-    if (!this.perms.has(PERMISSIONS.COMPANIES.CHANGE)) {
+    if (!this.perms.hasSupportOr(PERMISSIONS.COMPANIES.ACTIVE_OR_INACTIVE)) {
       return false;
     }
 
@@ -40,7 +40,7 @@ export class CompanyPermissionPolicy {
   }
 
   canBlock(row: CompanyModel): boolean {
-    if (!this.perms.has(PERMISSIONS.COMPANIES.CHANGE)) {
+    if (!this.perms.hasSupportOr(PERMISSIONS.COMPANIES.ACTIVE_OR_INACTIVE)) {
       return false;
     }
 
@@ -49,7 +49,7 @@ export class CompanyPermissionPolicy {
   }
 
   activateDisabledReason(row: CompanyModel): string | null {
-    if (!this.perms.has(PERMISSIONS.COMPANIES.CHANGE)) {
+    if (!this.perms.hasSupportOr(PERMISSIONS.COMPANIES.ACTIVE_OR_INACTIVE)) {
       return 'company.action.activate.noPermission';
     }
 
@@ -63,7 +63,7 @@ export class CompanyPermissionPolicy {
   }
 
   deactivateDisabledReason(row: CompanyModel): string | null {
-    if (!this.perms.has(PERMISSIONS.COMPANIES.CHANGE)) {
+    if (!this.perms.hasSupportOr(PERMISSIONS.COMPANIES.ACTIVE_OR_INACTIVE)) {
       return 'company.action.deactivate.noPermission';
     }
 
@@ -77,7 +77,7 @@ export class CompanyPermissionPolicy {
   }
 
   blockDisabledReason(row: CompanyModel): string | null {
-    if (!this.perms.has(PERMISSIONS.COMPANIES.CHANGE)) {
+    if (!this.perms.hasSupportOr(PERMISSIONS.COMPANIES.ACTIVE_OR_INACTIVE)) {
       return 'company.action.block.noPermission';
     }
 
@@ -91,7 +91,7 @@ export class CompanyPermissionPolicy {
   }
 
   selectableStatus(row: CompanyModel): StatusEnum | null {
-    if (!this.perms.has(PERMISSIONS.COMPANIES.CHANGE)) {
+    if (!this.perms.hasSupportOr(PERMISSIONS.COMPANIES.ACTIVE_OR_INACTIVE)) {
       return null;
     }
 

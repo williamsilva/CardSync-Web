@@ -408,11 +408,13 @@ export class EstablishmentListComponent extends StatefulListPage<
   }
 
   goNew() {
+    if (!this.secPolicy.canCreate()) return;
     this.establishment.set(null);
     this.upsertVisible.set(true);
   }
 
   edit(row: EstablishmentModel) {
+    if (!this.secPolicy.canEdit(row)) return;
     this.establishment.set(row);
     this.upsertVisible.set(true);
   }

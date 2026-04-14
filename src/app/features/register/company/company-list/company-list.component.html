@@ -51,6 +51,7 @@
     (click)="goNew()"
     icon="pi pi-plus"
     class="p-button-info p-button-sm"
+    [disabled]="!secPolicy.canCreate()"
     [label]="'company.new.title' | translate"
   ></button>
 </cs-page-header>

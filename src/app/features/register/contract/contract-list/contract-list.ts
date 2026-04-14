@@ -347,11 +347,13 @@ export class ContractListComponent extends StatefulListPage<
   }
 
   goNew() {
+    if (!this.secPolicy.canCreate()) return;
     this.contract.set(null);
     this.upsertVisible.set(true);
   }
 
   edit(row: ContractModel) {
+    if (!this.secPolicy.canEdit(row)) return;
     this.contract.set(row);
     this.upsertVisible.set(true);
   }

@@ -43,6 +43,7 @@ export const PERMISSIONS = {
     UPDATE: 'FLAGS_UPDATE',
     DELETE: 'FLAGS_DELETE',
     CHANGE: 'FLAGS_CHANGE',
+    MANAGE_RELATIONS: 'FLAGS_MANAGE_RELATIONS',
     ACTIVE_OR_INACTIVE: 'FLAGS_ACTIVE_OR_INACTIVE',
   },
 
@@ -65,6 +66,7 @@ export const PERMISSIONS = {
     ACTIVE_OR_INACTIVE: 'GROUPS_ACTIVE_OR_INACTIVE',
     MANAGE_PERMISSIONS: 'GROUP_MANAGEMENT_PERMISSION',
   },
+
   AUDIT: {
     VIEW: 'AUDIT_MAIL_CONSULT',
   },
@@ -78,5 +80,11 @@ export type Permission = DeepValueOf<typeof PERMISSIONS>;
 export const ALL_PERMISSIONS: Permission[] = [
   PERMISSIONS.SUPPORT,
   ...Object.values(PERMISSIONS.USERS),
+  ...Object.values(PERMISSIONS.COMPANIES),
+  ...Object.values(PERMISSIONS.ACQUIRER),
+  ...Object.values(PERMISSIONS.ESTABLISHMENT),
+  ...Object.values(PERMISSIONS.FLAGS),
+  ...Object.values(PERMISSIONS.CONTRACTS),
   ...Object.values(PERMISSIONS.GROUPS),
+  ...Object.values(PERMISSIONS.AUDIT),
 ];

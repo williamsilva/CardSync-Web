@@ -153,6 +153,7 @@ export class GroupsListComponent extends StatefulListPage<
   }
 
   goNew() {
+    if (!this.secPolicy.canCreate()) return;
     this.group.set(null);
     this.upsertVisible.set(true);
   }

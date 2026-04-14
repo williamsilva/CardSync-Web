@@ -10,19 +10,19 @@ export class AcquirerPermissionPolicy {
   private readonly perms = inject(PermissionService);
 
   canView(): boolean {
-    return this.perms.has(PERMISSIONS.ACQUIRER.VIEW);
+    return this.perms.hasSupportOr(PERMISSIONS.ACQUIRER.VIEW);
   }
 
   canCreate(): boolean {
-    return this.perms.has(PERMISSIONS.ACQUIRER.CHANGE);
+    return this.perms.hasSupportOr(PERMISSIONS.ACQUIRER.CREATE);
   }
 
   canEdit(_row: AcquirerModel): boolean {
-    return this.perms.has(PERMISSIONS.ACQUIRER.CHANGE);
+    return this.perms.hasSupportOr(PERMISSIONS.ACQUIRER.UPDATE);
   }
 
   canActivate(row: AcquirerModel): boolean {
-    if (!this.perms.has(PERMISSIONS.ACQUIRER.CHANGE)) {
+    if (!this.perms.hasSupportOr(PERMISSIONS.ACQUIRER.ACTIVE_OR_INACTIVE)) {
       return false;
     }
 
@@ -31,7 +31,7 @@ export class AcquirerPermissionPolicy {
   }
 
   canDeactivate(row: AcquirerModel): boolean {
-    if (!this.perms.has(PERMISSIONS.ACQUIRER.CHANGE)) {
+    if (!this.perms.hasSupportOr(PERMISSIONS.ACQUIRER.ACTIVE_OR_INACTIVE)) {
       return false;
     }
 
@@ -40,7 +40,7 @@ export class AcquirerPermissionPolicy {
   }
 
   canBlock(row: AcquirerModel): boolean {
-    if (!this.perms.has(PERMISSIONS.ACQUIRER.CHANGE)) {
+    if (!this.perms.hasSupportOr(PERMISSIONS.ACQUIRER.ACTIVE_OR_INACTIVE)) {
       return false;
     }
 
@@ -49,7 +49,7 @@ export class AcquirerPermissionPolicy {
   }
 
   activateDisabledReason(row: AcquirerModel): string | null {
-    if (!this.perms.has(PERMISSIONS.ACQUIRER.CHANGE)) {
+    if (!this.perms.hasSupportOr(PERMISSIONS.ACQUIRER.ACTIVE_OR_INACTIVE)) {
       return 'acquirer.action.activate.noPermission';
     }
 
@@ -63,7 +63,7 @@ export class AcquirerPermissionPolicy {
   }
 
   deactivateDisabledReason(row: AcquirerModel): string | null {
-    if (!this.perms.has(PERMISSIONS.ACQUIRER.CHANGE)) {
+    if (!this.perms.hasSupportOr(PERMISSIONS.ACQUIRER.ACTIVE_OR_INACTIVE)) {
       return 'acquirer.action.deactivate.noPermission';
     }
 
@@ -77,7 +77,7 @@ export class AcquirerPermissionPolicy {
   }
 
   blockDisabledReason(row: AcquirerModel): string | null {
-    if (!this.perms.has(PERMISSIONS.ACQUIRER.CHANGE)) {
+    if (!this.perms.hasSupportOr(PERMISSIONS.ACQUIRER.ACTIVE_OR_INACTIVE)) {
       return 'acquirer.action.block.noPermission';
     }
 
@@ -91,7 +91,7 @@ export class AcquirerPermissionPolicy {
   }
 
   selectableStatus(row: AcquirerModel): StatusEnum | null {
-    if (!this.perms.has(PERMISSIONS.ACQUIRER.CHANGE)) {
+    if (!this.perms.hasSupportOr(PERMISSIONS.ACQUIRER.ACTIVE_OR_INACTIVE)) {
       return null;
     }
 

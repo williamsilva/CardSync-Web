@@ -1,7 +1,7 @@
 import { Injectable, computed, inject } from '@angular/core';
 
 import { MeStore } from './me.store';
-import { Permission } from './permissions.constants';
+import { PERMISSIONS, Permission } from './permissions.constants';
 
 @Injectable({ providedIn: 'root' })
 export class PermissionService {
@@ -36,6 +36,22 @@ export class PermissionService {
     return permissions.every((permission) => this.has(permission));
   }
 
+  hasSupport(): boolean {
+    return this.has(PERMISSIONS.SUPPORT);
+  }
+
+  hasSupportOr(permission: Permission | string | null | undefined): boolean {
+    return this.hasSupport() || this.has(permission);
+  }
+
+  hasSupportOrAny(...permissions: Array<Permission | string | null | undefined>): boolean {
+    return this.hasSupport() || this.hasAny(...permissions);
+  }
+
+  hasSupportOrAll(...permissions: Array<Permission | string | null | undefined>): boolean {
+    return this.hasSupport() || this.hasAll(...permissions);
+  }
+
   can(permission: Permission | string | null | undefined): boolean {
     return this.has(permission);
   }
@@ -56,7 +72,7 @@ export class PermissionService {
       return true;
     }
 
-    return requireAll ? this.canAll(...permissions) : this.canAny(...permissions);
+    return requireAll ? this.hasSupportOrAll(...permissions) : this.hasSupportOrAny(...permissions);
   }
 
   hasMenuAccess(

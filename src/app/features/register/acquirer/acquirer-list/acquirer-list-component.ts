@@ -425,11 +425,13 @@ export class AcquirerListComponent extends StatefulListPage<
   }
 
   goNew() {
+    if (!this.secPolicy.canCreate()) return;
     this.acquirer.set(null);
     this.upsertVisible.set(true);
   }
 
   edit(row: AcquirerModel) {
+    if (!this.secPolicy.canEdit(row)) return;
     this.acquirer.set(row);
     this.upsertVisible.set(true);
   }

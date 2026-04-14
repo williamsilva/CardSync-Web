@@ -10,19 +10,19 @@ export class ContractPermissionPolicy {
   private readonly perms = inject(PermissionService);
 
   canView(): boolean {
-    return this.perms.has(PERMISSIONS.CONTRACTS.VIEW);
+    return this.perms.hasSupportOr(PERMISSIONS.CONTRACTS.VIEW);
   }
 
   canCreate(): boolean {
-    return this.perms.has(PERMISSIONS.CONTRACTS.CHANGE);
+    return this.perms.hasSupportOr(PERMISSIONS.CONTRACTS.CREATE);
   }
 
   canEdit(_row: ContractModel): boolean {
-    return this.perms.has(PERMISSIONS.CONTRACTS.CHANGE);
+    return this.perms.hasSupportOr(PERMISSIONS.CONTRACTS.UPDATE);
   }
 
   canActivate(row: ContractModel): boolean {
-    if (!this.perms.has(PERMISSIONS.CONTRACTS.CHANGE)) {
+    if (!this.perms.hasSupportOr(PERMISSIONS.CONTRACTS.ACTIVE_OR_INACTIVE)) {
       return false;
     }
 
@@ -31,7 +31,7 @@ export class ContractPermissionPolicy {
   }
 
   canDeactivate(row: ContractModel): boolean {
-    if (!this.perms.has(PERMISSIONS.CONTRACTS.CHANGE)) {
+    if (!this.perms.hasSupportOr(PERMISSIONS.CONTRACTS.ACTIVE_OR_INACTIVE)) {
       return false;
     }
 
@@ -40,7 +40,7 @@ export class ContractPermissionPolicy {
   }
 
   canBlock(row: ContractModel): boolean {
-    if (!this.perms.has(PERMISSIONS.CONTRACTS.CHANGE)) {
+    if (!this.perms.hasSupportOr(PERMISSIONS.CONTRACTS.ACTIVE_OR_INACTIVE)) {
       return false;
     }
 
@@ -49,7 +49,7 @@ export class ContractPermissionPolicy {
   }
 
   activateDisabledReason(row: ContractModel): string | null {
-    if (!this.perms.has(PERMISSIONS.CONTRACTS.CHANGE)) {
+    if (!this.perms.hasSupportOr(PERMISSIONS.CONTRACTS.ACTIVE_OR_INACTIVE)) {
       return 'contract.action.activate.noPermission';
     }
 
@@ -63,7 +63,7 @@ export class ContractPermissionPolicy {
   }
 
   deactivateDisabledReason(row: ContractModel): string | null {
-    if (!this.perms.has(PERMISSIONS.CONTRACTS.CHANGE)) {
+    if (!this.perms.hasSupportOr(PERMISSIONS.CONTRACTS.ACTIVE_OR_INACTIVE)) {
       return 'contract.action.deactivate.noPermission';
     }
 
@@ -77,7 +77,7 @@ export class ContractPermissionPolicy {
   }
 
   blockDisabledReason(row: ContractModel): string | null {
-    if (!this.perms.has(PERMISSIONS.CONTRACTS.CHANGE)) {
+    if (!this.perms.hasSupportOr(PERMISSIONS.CONTRACTS.ACTIVE_OR_INACTIVE)) {
       return 'contract.action.block.noPermission';
     }
 
@@ -91,7 +91,7 @@ export class ContractPermissionPolicy {
   }
 
   selectableStatus(row: ContractModel): StatusEnum | null {
-    if (!this.perms.has(PERMISSIONS.CONTRACTS.CHANGE)) {
+    if (!this.perms.hasSupportOr(PERMISSIONS.CONTRACTS.ACTIVE_OR_INACTIVE)) {
       return null;
     }
 

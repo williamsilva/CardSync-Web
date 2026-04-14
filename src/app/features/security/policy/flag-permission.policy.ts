@@ -10,19 +10,27 @@ export class FlagPermissionPolicy {
   private readonly perms = inject(PermissionService);
 
   canView(): boolean {
-    return this.perms.has(PERMISSIONS.FLAGS.VIEW);
+    return this.perms.hasSupportOr(PERMISSIONS.FLAGS.VIEW);
   }
 
   canCreate(): boolean {
-    return this.perms.has(PERMISSIONS.FLAGS.CHANGE);
+    return this.perms.hasSupportOr(PERMISSIONS.FLAGS.CREATE);
+  }
+
+  canManageRelations(): boolean {
+    return this.perms.hasSupportOr(PERMISSIONS.FLAGS.MANAGE_RELATIONS);
+  }
+
+  canRemoveRelations(): boolean {
+    return this.canManageRelations();
   }
 
   canEdit(_row: FlagModel): boolean {
-    return this.perms.has(PERMISSIONS.FLAGS.CHANGE);
+    return this.perms.hasSupportOr(PERMISSIONS.FLAGS.UPDATE);
   }
 
   canActivate(row: FlagModel): boolean {
-    if (!this.perms.has(PERMISSIONS.FLAGS.CHANGE)) {
+    if (!this.perms.hasSupportOr(PERMISSIONS.FLAGS.ACTIVE_OR_INACTIVE)) {
       return false;
     }
 
@@ -31,7 +39,7 @@ export class FlagPermissionPolicy {
   }
 
   canDeactivate(row: FlagModel): boolean {
-    if (!this.perms.has(PERMISSIONS.FLAGS.CHANGE)) {
+    if (!this.perms.hasSupportOr(PERMISSIONS.FLAGS.ACTIVE_OR_INACTIVE)) {
       return false;
     }
 
@@ -40,7 +48,7 @@ export class FlagPermissionPolicy {
   }
 
   canBlock(row: FlagModel): boolean {
-    if (!this.perms.has(PERMISSIONS.FLAGS.CHANGE)) {
+    if (!this.perms.hasSupportOr(PERMISSIONS.FLAGS.ACTIVE_OR_INACTIVE)) {
       return false;
     }
 
@@ -49,7 +57,7 @@ export class FlagPermissionPolicy {
   }
 
   activateDisabledReason(row: FlagModel): string | null {
-    if (!this.perms.has(PERMISSIONS.FLAGS.CHANGE)) {
+    if (!this.perms.hasSupportOr(PERMISSIONS.FLAGS.ACTIVE_OR_INACTIVE)) {
       return 'flag.action.activate.noPermission';
     }
 
@@ -97,7 +105,7 @@ export class FlagPermissionPolicy {
   }
 
   deactivateDisabledReason(row: FlagModel): string | null {
-    if (!this.perms.has(PERMISSIONS.FLAGS.CHANGE)) {
+    if (!this.perms.hasSupportOr(PERMISSIONS.FLAGS.ACTIVE_OR_INACTIVE)) {
       return 'flag.action.deactivate.noPermission';
     }
 
@@ -111,7 +119,7 @@ export class FlagPermissionPolicy {
   }
 
   blockDisabledReason(row: FlagModel): string | null {
-    if (!this.perms.has(PERMISSIONS.FLAGS.CHANGE)) {
+    if (!this.perms.hasSupportOr(PERMISSIONS.FLAGS.ACTIVE_OR_INACTIVE)) {
       return 'flag.action.block.noPermission';
     }
 
@@ -125,7 +133,7 @@ export class FlagPermissionPolicy {
   }
 
   selectableStatus(row: FlagModel): StatusEnum | null {
-    if (!this.perms.has(PERMISSIONS.FLAGS.CHANGE)) {
+    if (!this.perms.hasSupportOr(PERMISSIONS.FLAGS.ACTIVE_OR_INACTIVE)) {
       return null;
     }
 

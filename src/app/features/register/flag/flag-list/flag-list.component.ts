@@ -118,11 +118,13 @@ export class FlagListComponent extends StatefulListPage<FlagFiltersState, FlagAd
   }
 
   goNew() {
+    if (!this.secPolicy.canCreate()) return;
     this.flag.set(null);
     this.upsertVisible.set(true);
   }
 
   edit(row: FlagModel) {
+    if (!this.secPolicy.canEdit(row)) return;
     this.flag.set(row);
     this.upsertVisible.set(true);
   }

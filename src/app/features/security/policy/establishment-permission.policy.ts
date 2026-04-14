@@ -10,19 +10,19 @@ export class EstablishmentPermissionPolicy {
   private readonly perms = inject(PermissionService);
 
   canView(): boolean {
-    return this.perms.has(PERMISSIONS.ESTABLISHMENT.VIEW);
+    return this.perms.hasSupportOr(PERMISSIONS.ESTABLISHMENT.VIEW);
   }
 
   canCreate(): boolean {
-    return this.perms.has(PERMISSIONS.ESTABLISHMENT.CHANGE);
+    return this.perms.hasSupportOr(PERMISSIONS.ESTABLISHMENT.CREATE);
   }
 
   canEdit(_row: EstablishmentModel): boolean {
-    return this.perms.has(PERMISSIONS.ESTABLISHMENT.CHANGE);
+    return this.perms.hasSupportOr(PERMISSIONS.ESTABLISHMENT.UPDATE);
   }
 
   canActivate(row: EstablishmentModel): boolean {
-    if (!this.perms.has(PERMISSIONS.ESTABLISHMENT.CHANGE)) {
+    if (!this.perms.hasSupportOr(PERMISSIONS.ESTABLISHMENT.ACTIVE_OR_INACTIVE)) {
       return false;
     }
 
@@ -31,7 +31,7 @@ export class EstablishmentPermissionPolicy {
   }
 
   canDeactivate(row: EstablishmentModel): boolean {
-    if (!this.perms.has(PERMISSIONS.ESTABLISHMENT.CHANGE)) {
+    if (!this.perms.hasSupportOr(PERMISSIONS.ESTABLISHMENT.ACTIVE_OR_INACTIVE)) {
       return false;
     }
 
@@ -40,7 +40,7 @@ export class EstablishmentPermissionPolicy {
   }
 
   canBlock(row: EstablishmentModel): boolean {
-    if (!this.perms.has(PERMISSIONS.ESTABLISHMENT.CHANGE)) {
+    if (!this.perms.hasSupportOr(PERMISSIONS.ESTABLISHMENT.ACTIVE_OR_INACTIVE)) {
       return false;
     }
 
@@ -49,7 +49,7 @@ export class EstablishmentPermissionPolicy {
   }
 
   activateDisabledReason(row: EstablishmentModel): string | null {
-    if (!this.perms.has(PERMISSIONS.ESTABLISHMENT.CHANGE)) {
+    if (!this.perms.hasSupportOr(PERMISSIONS.ESTABLISHMENT.ACTIVE_OR_INACTIVE)) {
       return 'establishment.action.activate.noPermission';
     }
 
@@ -63,7 +63,7 @@ export class EstablishmentPermissionPolicy {
   }
 
   deactivateDisabledReason(row: EstablishmentModel): string | null {
-    if (!this.perms.has(PERMISSIONS.ESTABLISHMENT.CHANGE)) {
+    if (!this.perms.hasSupportOr(PERMISSIONS.ESTABLISHMENT.ACTIVE_OR_INACTIVE)) {
       return 'establishment.action.deactivate.noPermission';
     }
 
@@ -77,7 +77,7 @@ export class EstablishmentPermissionPolicy {
   }
 
   blockDisabledReason(row: EstablishmentModel): string | null {
-    if (!this.perms.has(PERMISSIONS.ESTABLISHMENT.CHANGE)) {
+    if (!this.perms.hasSupportOr(PERMISSIONS.ESTABLISHMENT.ACTIVE_OR_INACTIVE)) {
       return 'establishment.action.block.noPermission';
     }
 
@@ -91,7 +91,7 @@ export class EstablishmentPermissionPolicy {
   }
 
   selectableStatus(row: EstablishmentModel): StatusEnum | null {
-    if (!this.perms.has(PERMISSIONS.ESTABLISHMENT.CHANGE)) {
+    if (!this.perms.hasSupportOr(PERMISSIONS.ESTABLISHMENT.ACTIVE_OR_INACTIVE)) {
       return null;
     }
 
