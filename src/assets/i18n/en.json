@@ -532,8 +532,48 @@
       "title": "Edit contract",
       "subtitle": "Contract editing"
     },
-    "columns": {},
-    "fields": {},
+    "columns": {
+      "name": "Description",
+      "description": "Description",
+      "company": "Company",
+      "acquirer": "Acquirer",
+      "establishment": "Establishment",
+      "period": "Term",
+      "flags": "Flags",
+      "statusEnum": "Status"
+    },
+    "fields": {
+      "name": "Description",
+      "description": "Description",
+      "company": "Company",
+      "acquirer": "Acquirer",
+      "establishment": "Establishment",
+      "startDate": "Start date",
+      "endDate": "End date",
+      "flag": "Flag",
+      "modality": "Modality",
+      "rate": "Store fee",
+      "rateEcommerce": "E-commerce fee",
+      "paymentTermDays": "Store term (days)",
+      "paymentTermDaysEcommerce": "E-commerce term (days)",
+      "statusEnum": "Status"
+    },
+    "modality": {
+      "CASH_DEBIT": "Cash debit",
+      "CASH_CREDIT": "Cash credit",
+      "INSTALLMENT_CREDIT_2_6": "Installment credit 2 to 6",
+      "INSTALLMENT_CREDIT_7_12": "Installment credit 7 to 12"
+    },
+    "flags": {
+      "title": "Flags and rates",
+      "add": "Add flag"
+    },
+    "rates": {
+      "add": "Add rate"
+    },
+    "validation": {
+      "invalidDateRange": "End date must be greater than or equal to start date."
+    },
     "action": {
       "deactivate": {
         "label": "Deactivate",
@@ -543,7 +583,7 @@
       "activate": {
         "label": "Activate",
         "noPermission": "You do not have permission to activate contracts.",
-        "invalidStatus": "Only inactive contracts can be activated."
+        "invalidStatus": "Only inactive or blocked contracts can be activated."
       },
       "block": {
         "label": "Block",

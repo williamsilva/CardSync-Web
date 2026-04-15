@@ -1,16 +1,18 @@
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { Component, computed, inject, signal, ViewChild } from '@angular/core';
+import { Component, ViewChild, computed, inject, signal } from '@angular/core';
 
+import { Table } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
+import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { FloatLabel } from 'primeng/floatlabel';
 import { TooltipModule } from 'primeng/tooltip';
 import { CheckboxModule } from 'primeng/checkbox';
-import { Table, TableModule } from 'primeng/table';
 import { InputTextModule } from 'primeng/inputtext';
 import { TranslateModule } from '@ngx-translate/core';
 import { MultiSelectModule } from 'primeng/multiselect';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService, MessageService } from 'primeng/api';
 
 import { I18nService } from '@core/i18n/i18n.service';
@@ -21,6 +23,7 @@ import { ContractFiltersState, ContractModel } from '@models/contract.models';
 import { BulkActionListPage } from '@features/list-base/bulk-action-list-page';
 import { buildListQuery } from '@shared/features/list-query/list-query.builder';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
+import { ContractCreateDialogComponent } from '../contract-create/contract-create-dialog';
 import { ContractPermissionPolicy } from '@features/security/policy/contract-permission.policy';
 import {
   ActiveFilterItem,
@@ -38,6 +41,7 @@ import {
 } from '@models/enums/status.enum';
 
 @Component({
+  standalone: true,
   selector: 'app-contract-list',
   templateUrl: './contract-list.html',
   imports: [
@@ -52,8 +56,10 @@ import {
     InputTextModule,
     TranslateModule,
     MultiSelectModule,
+    ConfirmDialogModule,
     PageHeaderComponent,
     FiltersPanelComponent,
+    ContractCreateDialogComponent,
   ],
 })
 export class ContractListComponent extends StatefulListPage<
@@ -63,9 +69,9 @@ export class ContractListComponent extends StatefulListPage<
   @ViewChild('dt') private dt?: Table;
 
   readonly facade = inject(ContractFacade);
+  readonly i18n = inject(I18nService);
 
   protected readonly toast = inject(MessageService);
-  protected override readonly i18n = inject(I18nService);
   protected readonly confirm = inject(ConfirmationService);
   protected readonly secPolicy = inject(ContractPermissionPolicy);
 
@@ -83,20 +89,19 @@ export class ContractListComponent extends StatefulListPage<
     }
   })(this);
 
-  skeletonRows = Array.from({ length: 8 });
-  override rows = Number(localStorage.getItem('contract.table.rows')) || 10;
+  override rows =
+    Number(localStorage.getItem(this.tableRowsKey())) || StatefulListPage.DEFAULT_ROWS;
 
-  name = signal('');
+  readonly description = signal('');
+  readonly statusEnum = signal<StatusEnum[] | null>(null);
+  readonly upsertVisible = signal(false);
+  readonly selectedRows = signal<ContractModel[]>([]);
+  readonly contract = signal<ContractModel | null>(null);
 
-  statusEnum = signal<StatusEnum[] | null>(null);
+  readonly totalRecords = computed(() => this.facade.totalRecords());
+  readonly contracts = computed<ContractModel[]>(() => this.facade.contract() as ContractModel[]);
 
-  upsertVisible = signal(false);
-  selectedRows = signal<ContractModel[]>([]);
-  contract = signal<ContractModel | null>(null);
-  totalRecords = computed(() => this.facade.totalRecords());
-  contracts = computed<ContractModel[]>(() => this.facade.contract() as ContractModel[]);
-
-  readonly statusEnumOptions = computed(() => {
+  readonly statusOptions = computed(() => {
     this.i18n.getAppliedLang();
     return allStatusEnum().map((value) => ({
       label: statusEnumLabel(value, this.i18n),
@@ -104,31 +109,26 @@ export class ContractListComponent extends StatefulListPage<
     }));
   });
 
-  protected override readonly advancedActiveFilters = computed<ActiveFilterItem[]>(() => {
-    const items: ActiveFilterItem[] = [];
+  protected override readonly advancedActiveFilters = computed<ActiveFilterItem[]>(() => []);
 
-    return items;
-  });
-
-  selectionStatus = computed<StatusEnum | null>(() => {
+  readonly selectionStatus = computed<StatusEnum | null>(() => {
     const selected = this.selectedRows();
     if (!selected.length) return null;
     return this.secPolicy.selectableStatus(selected[0]);
   });
 
-  headerEligibleRows = computed(() => {
+  readonly headerEligibleRows = computed(() => {
     const selectedStatus = this.selectionStatus();
     if (!selectedStatus) return [];
     return this.contracts().filter((row) => this.secPolicy.canSelectForStatus(row, selectedStatus));
   });
 
-  headerChecked = computed(() => {
+  readonly headerChecked = computed(() => {
     const eligible = this.headerEligibleRows();
-    if (!eligible.length) return false;
-    return eligible.every((row) => this.isRowSelected(row));
+    return !!eligible.length && eligible.every((row) => this.isRowSelected(row));
   });
 
-  headerIndeterminate = computed(() => {
+  readonly headerIndeterminate = computed(() => {
     const eligible = this.headerEligibleRows();
     if (!eligible.length) return false;
 
@@ -136,7 +136,7 @@ export class ContractListComponent extends StatefulListPage<
     return selectedCount > 0 && selectedCount < eligible.length;
   });
 
-  canActivateSelected = computed(() => {
+  readonly canActivateSelected = computed(() => {
     const status = this.selectionStatus();
     return (
       (status === StatusEnum.INACTIVE || status === StatusEnum.BLOCKED) &&
@@ -144,17 +144,17 @@ export class ContractListComponent extends StatefulListPage<
     );
   });
 
-  canDeactivateSelected = computed(() => {
+  readonly canDeactivateSelected = computed(() => {
     const status = this.selectionStatus();
     return status === StatusEnum.ACTIVE && this.secPolicy.canDeactivateBulk(this.selectedRows());
   });
 
-  canBlockSelected = computed(() => {
+  readonly canBlockSelected = computed(() => {
     const status = this.selectionStatus();
     return status === StatusEnum.ACTIVE && this.secPolicy.canBlockBulk(this.selectedRows());
   });
 
-  selectionModeLabel = computed(() => {
+  readonly selectionModeLabel = computed(() => {
     const status = this.selectionStatus();
     if (status === StatusEnum.ACTIVE) return this.i18n.tUi('enum.statusEnum.active');
     if (status === StatusEnum.INACTIVE) return this.i18n.tUi('enum.statusEnum.inactive');
@@ -166,13 +166,40 @@ export class ContractListComponent extends StatefulListPage<
     this.initStatefulList();
   }
 
+  goNew() {
+    if (!this.secPolicy.canCreate()) return;
+    this.contract.set(null);
+    this.upsertVisible.set(true);
+  }
+
+  edit(row: ContractModel) {
+    if (!this.secPolicy.canEdit(row)) return;
+    this.contract.set(row);
+    this.upsertVisible.set(true);
+  }
+
+  onSaved() {
+    this.upsertVisible.set(false);
+    this.contract.set(null);
+    this.facade.reloadLast();
+  }
+
+  onUpsertVisibleChange(value: boolean) {
+    this.upsertVisible.set(value);
+    if (!value) this.contract.set(null);
+  }
+
   clear() {
     this.clearSelection();
     this.clearTableAndReload(this.dt);
   }
 
-  onSaved(): void {
-    this.refresh();
+  statusLabel(status: StatusEnum | null) {
+    return statusEnumLabel(status, this.i18n);
+  }
+
+  statusSeverity(status: StatusEnum | null) {
+    return statusEnumSeverity(status);
   }
 
   isRowCheckboxDisabled(row: ContractModel): boolean {
@@ -243,7 +270,7 @@ export class ContractListComponent extends StatefulListPage<
     this.bulk.confirmAction({
       header: this.i18n.tUi('contract.activate.header'),
       message: this.i18n.tUi('contract.activate.messageSingle', {
-        name: row?.name ?? row?.name ?? '',
+        name: row?.description ?? row?.id ?? '',
       }),
       icon: 'pi pi-check-circle',
       accept: () => this.activate(row),
@@ -254,7 +281,7 @@ export class ContractListComponent extends StatefulListPage<
     this.bulk.confirmAction({
       header: this.i18n.tUi('contract.deactivate.header'),
       message: this.i18n.tUi('contract.deactivate.messageSingle', {
-        name: row?.name ?? row?.name ?? row?.id ?? '',
+        name: row?.description ?? row?.id ?? '',
       }),
       icon: 'pi pi-exclamation-triangle',
       accept: () => this.deactivate(row),
@@ -265,41 +292,11 @@ export class ContractListComponent extends StatefulListPage<
     this.bulk.confirmAction({
       header: this.i18n.tUi('contract.block.header'),
       message: this.i18n.tUi('contract.block.messageSingle', {
-        name: row?.name ?? row?.name ?? row?.id ?? '',
+        name: row?.description ?? row?.id ?? '',
       }),
       icon: 'pi pi-lock',
       accept: () => this.block(row),
     });
-  }
-
-  activateSelected(): void {
-    const rows = this.selectedRows();
-    if (!rows.length) return;
-
-    this.bulk.executeAction(
-      this.facade.activateBulk(rows.map((row) => row.id)),
-      this.i18n.tUi('contract.activate.successBulk', { count: rows.length }),
-    );
-  }
-
-  deactivateSelected(): void {
-    const rows = this.selectedRows();
-    if (!rows.length) return;
-
-    this.bulk.executeAction(
-      this.facade.deactivateBulk(rows.map((row) => row.id)),
-      this.i18n.tUi('contract.deactivate.successBulk', { count: rows.length }),
-    );
-  }
-
-  blockSelected(): void {
-    const rows = this.selectedRows();
-    if (!rows.length) return;
-
-    this.bulk.executeAction(
-      this.facade.blockBulk(rows.map((row) => row.id)),
-      this.i18n.tUi('contract.block.successBulk', { count: rows.length }),
-    );
   }
 
   confirmActivateSelected(): void {
@@ -338,33 +335,34 @@ export class ContractListComponent extends StatefulListPage<
     });
   }
 
-  statusEnumLabel(status: StatusEnum | null) {
-    return statusEnumLabel(status, this.i18n);
+  activateSelected(): void {
+    const rows = this.selectedRows();
+    if (!rows.length) return;
+
+    this.bulk.executeAction(
+      this.facade.activateBulk(rows.map((row) => row.id)),
+      this.i18n.tUi('contract.activate.successBulk', { count: rows.length }),
+    );
   }
 
-  severityEnum(status: StatusEnum | null) {
-    return statusEnumSeverity(status);
+  deactivateSelected(): void {
+    const rows = this.selectedRows();
+    if (!rows.length) return;
+
+    this.bulk.executeAction(
+      this.facade.deactivateBulk(rows.map((row) => row.id)),
+      this.i18n.tUi('contract.deactivate.successBulk', { count: rows.length }),
+    );
   }
 
-  goNew() {
-    if (!this.secPolicy.canCreate()) return;
-    this.contract.set(null);
-    this.upsertVisible.set(true);
-  }
+  blockSelected(): void {
+    const rows = this.selectedRows();
+    if (!rows.length) return;
 
-  edit(row: ContractModel) {
-    if (!this.secPolicy.canEdit(row)) return;
-    this.contract.set(row);
-    this.upsertVisible.set(true);
-  }
-
-  onUpsertVisibleChange(v: boolean) {
-    this.upsertVisible.set(v);
-    if (!v) this.contract.set(null);
-  }
-
-  onCreated() {
-    this.reloadWithCurrentState();
+    this.bulk.executeAction(
+      this.facade.blockBulk(rows.map((row) => row.id)),
+      this.i18n.tUi('contract.block.successBulk', { count: rows.length }),
+    );
   }
 
   protected override tableStateKey(): string {
@@ -380,7 +378,7 @@ export class ContractListComponent extends StatefulListPage<
   }
 
   protected override refresh(): void {
-    this.reloadWithCurrentState();
+    this.facade.reloadLast();
   }
 
   protected loadFirstPage() {
@@ -389,45 +387,44 @@ export class ContractListComponent extends StatefulListPage<
       tableQuery as any,
       this.buildAdvancedFilters(),
     );
-
     this.clearSelection();
     this.facade.loadPage(query);
   }
 
   protected override resetFilters(): void {
-    this.name.set('');
-
+    this.description.set('');
     this.statusEnum.set(null);
   }
 
   protected override toFiltersState(): ContractFiltersState {
     return {
-      name: this.name(),
+      description: this.description(),
       statusEnum: this.statusEnum()?.length ? this.statusEnum() : null,
     };
   }
 
   protected override applyFiltersState(s: ContractFiltersState): void {
-    this.name.set(s.name ?? '');
-
+    this.description.set(s.description ?? '');
     this.statusEnum.set(s.statusEnum ?? null);
   }
 
   protected override buildAdvancedFilters(): Partial<ContractAdvancedFilters> {
     return {
-      name: this.name().trim() || undefined,
+      description: this.description().trim() || undefined,
       statusEnum: this.statusEnum()?.length ? this.statusEnum() : undefined,
     };
   }
 
   protected override mapTableFiltersToActiveItems(filters: any): ActiveFilterItem[] {
     this.i18n.getAppliedLang();
-
     const items: ActiveFilterItem[] = [];
 
-    const name = readSingleFilterValue(filters, 'name');
-    if (name) {
-      items.push({ label: this.i18n.tUi('contract.fields.name'), value: name });
+    const description = readSingleFilterValue(filters, 'description');
+    if (description) {
+      items.push({
+        label: this.i18n.tUi('contract.fields.description' as never, 'Descrição'),
+        value: description,
+      });
     }
 
     const statuses = readArrayFilterValues(filters, 'statusEnum');
@@ -450,10 +447,5 @@ export class ContractListComponent extends StatefulListPage<
 
   protected clearSelection(): void {
     this.selectedRows.set([]);
-  }
-
-  protected formatDate(value: Date | string): string {
-    const date = value instanceof Date ? value : new Date(value);
-    return new Intl.DateTimeFormat(this.i18n.getLang(), { dateStyle: 'short' }).format(date);
   }
 }

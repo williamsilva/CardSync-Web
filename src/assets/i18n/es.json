@@ -532,8 +532,48 @@
       "title": "Editar contrato",
       "subtitle": "Edición de contrato"
     },
-    "columns": {},
-    "fields": {},
+    "columns": {
+      "name": "Descripción",
+      "description": "Descripción",
+      "company": "Empresa",
+      "acquirer": "Adquirente",
+      "establishment": "Establecimiento",
+      "period": "Vigencia",
+      "flags": "Banderas",
+      "statusEnum": "Estado"
+    },
+    "fields": {
+      "name": "Descripción",
+      "description": "Descripción",
+      "company": "Empresa",
+      "acquirer": "Adquirente",
+      "establishment": "Establecimiento",
+      "startDate": "Fecha inicial",
+      "endDate": "Fecha final",
+      "flag": "Bandera",
+      "modality": "Modalidad",
+      "rate": "Tarifa tienda",
+      "rateEcommerce": "Tarifa e-commerce",
+      "paymentTermDays": "Plazo tienda (días)",
+      "paymentTermDaysEcommerce": "Plazo e-commerce (días)",
+      "statusEnum": "Estado"
+    },
+    "modality": {
+      "CASH_DEBIT": "Débito al contado",
+      "CASH_CREDIT": "Crédito al contado",
+      "INSTALLMENT_CREDIT_2_6": "Crédito en cuotas 2 a 6",
+      "INSTALLMENT_CREDIT_7_12": "Crédito en cuotas 7 a 12"
+    },
+    "flags": {
+      "title": "Banderas y tarifas",
+      "add": "Agregar bandera"
+    },
+    "rates": {
+      "add": "Agregar tarifa"
+    },
+    "validation": {
+      "invalidDateRange": "La fecha final debe ser mayor o igual a la fecha inicial."
+    },
     "action": {
       "deactivate": {
         "label": "Desactivar",
@@ -543,7 +583,7 @@
       "activate": {
         "label": "Activar",
         "noPermission": "No tiene permiso para activar contratos.",
-        "invalidStatus": "Solo se pueden activar contratos inactivos."
+        "invalidStatus": "Solo se pueden activar contratos inactivos o bloqueados."
       },
       "block": {
         "label": "Bloquear",

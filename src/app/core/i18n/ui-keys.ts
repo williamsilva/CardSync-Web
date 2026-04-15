@@ -100,8 +100,26 @@ export const UI_KEYS = {
     },
   },
   contract: {
+    form: {
+      created: 'contract.form.created',
+      updated: 'contract.form.updated',
+      loadError: 'contract.form.loadError',
+      saveError: 'contract.form.saveError',
+    },
     fields: {
       name: 'contract.fields.name',
+      description: 'contract.fields.description',
+      company: 'contract.fields.company',
+      acquirer: 'contract.fields.acquirer',
+      establishment: 'contract.fields.establishment',
+      startDate: 'contract.fields.startDate',
+      endDate: 'contract.fields.endDate',
+      flag: 'contract.fields.flag',
+      modality: 'contract.fields.modality',
+      rate: 'contract.fields.rate',
+      rateEcommerce: 'contract.fields.rateEcommerce',
+      paymentTermDays: 'contract.fields.paymentTermDays',
+      paymentTermDaysEcommerce: 'contract.fields.paymentTermDaysEcommerce',
       statusEnum: 'contract.fields.statusEnum',
     },
     selection: {
@@ -425,11 +443,9 @@ export const UI_KEYS = {
     maxLength: 'validation.maxLength',
     invalid: 'validation.invalid',
   },
-
   pagination: {
     report: 'pagination.report',
   },
-
   common: {
     no: 'common.no',
     yes: 'common.yes',
@@ -446,7 +462,6 @@ export const UI_KEYS = {
     tableFilters: 'common.tableFilters',
     advancedFilters: 'common.advancedFilters',
   },
-
   confirm: {
     logoutTitle: 'confirm.logoutTitle',
     logoutMessage: 'confirm.logoutMessage',

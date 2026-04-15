@@ -1,19 +1,86 @@
-import { normalizeStatusEnum, StatusEnum } from '@models/enums/status.enum';
+import { UserMinimalModel } from './user-minimal.models';
+import { EstablishmentModel } from './establishment.models';
+import { CompanyMinimalModel } from './company-minimal.models';
+import { AcquirerMinimalModel } from './acquirer-minimal.models';
+import { normalizeStatusEnum, StatusEnum } from './enums/status.enum';
+import { ModalityEnum, normalizeModalityEnum } from './modality.enum';
 
-export interface ContractModel {
+export interface ContractFlagMinimalModel {
   id: string;
   name: string;
-
+  erpCode?: number | null;
   status?: StatusEnum | null;
 }
 
-export interface ContractCreateInput {}
+export interface ContractRateModel {
+  id?: string;
+  modality: ModalityEnum | null;
+  rate: number | null;
+  paymentTermDays: number | null;
+  rateEcommerce: number | null;
+  paymentTermDaysEcommerce: number | null;
+}
 
-export interface ContractUpdateInput {}
+export interface ContractFlagModel {
+  id?: string;
+  flag: ContractFlagMinimalModel | null;
+  contractRates: ContractRateModel[];
+}
+
+export interface ContractModel {
+  id: string;
+  description: string;
+  startDate: string;
+  endDate?: string | null;
+  createdAt?: string | null;
+  updatedAt?: string | null;
+
+  status?: StatusEnum | null;
+  createdBy?: UserMinimalModel | null;
+  updatedBy?: UserMinimalModel | null;
+  company?: CompanyMinimalModel | null;
+  acquirer?: AcquirerMinimalModel | null;
+  establishment?: Pick<EstablishmentModel, 'id' | 'pvNumber' | 'status' | 'type'> | null;
+  contractFlags?: ContractFlagModel[] | null;
+}
+
+export interface ContractRateInput {
+  modality: ModalityEnum;
+  rate?: number | null;
+  paymentTermDays?: number | null;
+  rateEcommerce?: number | null;
+  paymentTermDaysEcommerce?: number | null;
+}
+
+export interface ContractFlagInput {
+  flagId: string;
+  contractRates: ContractRateInput[];
+}
+
+export interface ContractCreateInput {
+  description: string;
+  startDate: string;
+  endDate?: string | null;
+  companyId?: string | null;
+  acquirerId: string;
+  establishmentId?: string | null;
+  status?: StatusEnum | null;
+  contractFlags: ContractFlagInput[];
+}
+
+export interface ContractUpdateInput {
+  description?: string;
+  startDate?: string;
+  endDate?: string | null;
+  companyId?: string | null;
+  acquirerId?: string;
+  establishmentId?: string | null;
+  status?: StatusEnum | null;
+  contractFlags?: ContractFlagInput[];
+}
 
 export type ContractFiltersState = {
-  name: string;
-
+  description: string;
   statusEnum: StatusEnum[] | null;
 };
 
@@ -21,21 +88,73 @@ export interface ContractBulkStatusInput {
   ids: string[];
 }
 
-/**
- * Payload bruto vindo da API.
- * Aceita status numérico ou string para tolerar mudanças no backend.
- */
+export interface ContractRateApiModel {
+  id?: string;
+  modality: ModalityEnum | string | null;
+  rate?: number | null;
+  paymentTermDays?: number | null;
+  rateEcommerce?: number | null;
+  paymentTermDaysEcommerce?: number | null;
+}
+
+export interface ContractFlagApiModel {
+  id?: string;
+  flag: ContractFlagMinimalModel | null;
+  contractRates?: ContractRateApiModel[] | null;
+}
+
 export interface ContractApiModel {
   id: string;
-  name: string;
+  description: string;
+  startDate: string;
+  endDate?: string | null;
+  createdAt?: string | null;
+  updatedAt?: string | null;
 
   status?: StatusEnum | null;
+  createdBy?: UserMinimalModel | null;
+  updatedBy?: UserMinimalModel | null;
+  company?: CompanyMinimalModel | null;
+  acquirer?: AcquirerMinimalModel | null;
+  establishment?: Pick<EstablishmentModel, 'id' | 'pvNumber' | 'status' | 'type'> | null;
+  contractFlags?: ContractFlagApiModel[] | null;
+}
+
+function mapContractFlagMinimalModel(
+  input: ContractFlagMinimalModel | null | undefined,
+): ContractFlagMinimalModel | null {
+  if (!input) return null;
+
+  return {
+    ...input,
+    status: normalizeStatusEnum(input.status),
+  };
+}
+
+function mapContractRateApiModel(input: ContractRateApiModel): ContractRateModel {
+  return {
+    ...input,
+    modality: normalizeModalityEnum(input.modality),
+    rate: input.rate ?? null,
+    paymentTermDays: input.paymentTermDays ?? null,
+    rateEcommerce: input.rateEcommerce ?? null,
+    paymentTermDaysEcommerce: input.paymentTermDaysEcommerce ?? null,
+  };
+}
+
+function mapContractFlagApiModel(input: ContractFlagApiModel): ContractFlagModel {
+  return {
+    ...input,
+    flag: mapContractFlagMinimalModel(input.flag),
+    contractRates: (input.contractRates ?? []).map(mapContractRateApiModel),
+  };
 }
 
 export function mapContractApiModel(input: ContractApiModel): ContractModel {
   return {
     ...input,
     status: normalizeStatusEnum(input.status),
+    contractFlags: (input.contractFlags ?? []).map(mapContractFlagApiModel),
   };
 }
 

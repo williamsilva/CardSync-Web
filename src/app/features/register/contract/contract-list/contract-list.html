@@ -56,12 +56,12 @@
   ></button>
 </cs-page-header>
 
-<!-- <app-contract-create-dialog
+<app-contract-create-dialog
   (saved)="onSaved()"
-  [visible]="upsertVisible()"
   [contract]="contract()"
+  [visible]="upsertVisible()"
   (visibleChange)="onUpsertVisibleChange($event)"
-></app-contract-create-dialog> -->
+></app-contract-create-dialog>
 
 <cs-filters-panel
   (clear)="clear()"
@@ -73,16 +73,16 @@
   [activeFilterGroups]="activeFilterGroups()"
 >
   <div class="grid formgrid gap-0 align-items-end">
-    <div class="col-12 md:col-2 p-1">
+    <div class="col-12 md:col-3 p-1">
       <p-floatLabel variant="on" class="w-full">
         <input
-          id="name"
+          id="description"
           pInputText
-          [value]="name()"
+          [value]="description()"
           class="w-full p-inputtext-sm"
-          (input)="name.set(($any($event.target).value ?? '').toString())"
+          (input)="description.set(($any($event.target).value ?? '').toString())"
         />
-        <label for="name">{{ 'contract.fields.name' | translate }}</label>
+        <label for="description">{{ 'contract.fields.description' | translate }}</label>
       </p-floatLabel>
     </div>
 
@@ -99,15 +99,13 @@
           inputId="statusEnum"
           [showToggleAll]="false"
           [ngModel]="statusEnum()"
-          [options]="statusEnumOptions()"
+          [options]="statusOptions()"
           (onChange)="statusEnum.set($event.value ?? null)"
         ></p-multiSelect>
         <label for="statusEnum">{{ 'contract.fields.statusEnum' | translate }}</label>
       </p-floatLabel>
     </div>
   </div>
-
-  <div class="grid formgrid gap-0 align-items-end"></div>
 </cs-filters-panel>
 
 <div class="flex align-items-center justify-content-between mb-2 px-1">
@@ -145,21 +143,12 @@
   [paginatorDropdownAppendTo]="'body'"
   stateKey="cardsync.contract.table.state.v1"
   [rowsPerPageOptions]="[10, 20, 50, 100]"
-  [tableStyle]="{ width: '100%', 'min-width': '62rem' }"
+  [tableStyle]="{ width: '100%', 'min-width': '90rem' }"
   [currentPageReportTemplate]="'pagination.report' | translate"
 >
-  <ng-template pTemplate="colgroup">
-    <colgroup>
-      <col style="width: 44px" />
-      <col style="width: auto" />
-      <col style="width: auto" />
-      <col style="width: 100px" />
-    </colgroup>
-  </ng-template>
-
   <ng-template pTemplate="header">
     <tr>
-      <th class="text-center">
+      <th class="text-center" style="width: 44px">
         <ng-container *ngIf="selectionStatus(); else selectOneHint">
           <p-checkbox
             [binary]="true"
@@ -178,13 +167,13 @@
         </ng-template>
       </th>
 
-      <th pSortableColumn="name">
+      <th pSortableColumn="description">
         <div class="th-flex text-center">
-          <span class="th-label">{{ 'contract.columns.name' | translate }}</span>
+          <span class="th-label">{{ 'contract.columns.description' | translate }}</span>
           <span class="th-icons">
-            <p-sortIcon field="name"></p-sortIcon>
+            <p-sortIcon field="description"></p-sortIcon>
             <p-columnFilter
-              field="name"
+              field="description"
               display="menu"
               matchMode="contains"
               [useGrouping]="false"
@@ -195,6 +184,12 @@
           </span>
         </div>
       </th>
+
+      <th>{{ 'contract.columns.company' | translate }}</th>
+      <th>{{ 'contract.columns.acquirer' | translate }}</th>
+      <th>{{ 'contract.columns.establishment' | translate }}</th>
+      <th>{{ 'contract.columns.period' | translate }}</th>
+      <th>{{ 'contract.columns.flags' | translate }}</th>
 
       <th pSortableColumn="status">
         <div class="th-flex text-center">
@@ -218,7 +213,7 @@
                   [showClear]="true"
                   optionLabel="label"
                   optionValue="value"
-                  [options]="statusEnumOptions()"
+                  [options]="statusOptions()"
                   (onChange)="filter($event.value)"
                   [placeholder]="'common.all' | translate"
                 ></p-multiSelect>
@@ -228,11 +223,7 @@
         </div>
       </th>
 
-      <th class="text-center">
-        <div class="th-flex text-center justify-content-center">
-          <span class="th-label">{{ 'common.actions' | translate }}</span>
-        </div>
-      </th>
+      <th class="text-center" style="width: 170px">{{ 'common.actions' | translate }}</th>
     </tr>
   </ng-template>
 
@@ -247,14 +238,21 @@
         ></p-checkbox>
       </td>
 
-      <td class="cell-muted text-center">
-        <span [pTooltip]="row.name" tooltipPosition="top">
-          {{ row.name }}
-        </span>
+      <td>
+        <div class="font-medium">{{ row.description }}</div>
       </td>
+      <td>{{ row.company?.fantasyName || ('common.notInformed' | translate) }}</td>
+      <td>{{ row.acquirer?.fantasyName || ('common.notInformed' | translate) }}</td>
+      <td>{{ row.establishment?.pvNumber || ('common.notInformed' | translate) }}</td>
+      <td>
+        {{ row.startDate | date: 'shortDate' }}
+        <span class="opacity-70">-</span>
+        {{ row.endDate ? (row.endDate | date: 'shortDate') : ('common.notInformed' | translate) }}
+      </td>
+      <td>{{ row.contractFlags?.length ?? 0 }}</td>
 
-      <td class="cell-muted text-center">
-        <p-tag [value]="statusEnumLabel(row.status)" [severity]="severityEnum(row.status)"></p-tag>
+      <td class="text-center">
+        <p-tag [value]="statusLabel(row.status)" [severity]="statusSeverity(row.status)"></p-tag>
       </td>
 
       <td class="text-center">

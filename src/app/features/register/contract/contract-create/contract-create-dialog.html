@@ -1,1 +1,385 @@
-<p>contract-create-dialog works!</p>
+<p-dialog
+  [modal]="true"
+  appendTo="body"
+  [closable]="false"
+  (onHide)="onHide()"
+  [draggable]="false"
+  [resizable]="false"
+  [visible]="visible()"
+  [contentStyle]="{ overflow: 'hidden', height: '100%' }"
+  [style]="{ width: '1100px', maxWidth: '95vw', height: '90vh' }"
+  [breakpoints]="{ '1400px': '95vw', '992px': '98vw', '768px': '100vw' }"
+  [header]="
+    contract()?.id ? ('contract.edit.title' | translate) : ('contract.new.title' | translate)
+  "
+>
+  <form [formGroup]="form" class="cs-dialog-form">
+    <div class="cs-dialog-body">
+      <div class="grid formgrid">
+        <div class="col-12 md:col-6 lg:col-4 p-2">
+          <p-floatLabel variant="on" class="w-full">
+            <p-select
+              size="small"
+              class="w-full"
+              appendTo="body"
+              optionValue="id"
+              [showClear]="true"
+              inputId="companyId"
+              optionLabel="fantasyName"
+              formControlName="companyId"
+              [options]="companyOptions()"
+            >
+              <ng-template let-option pTemplate="item">
+                <div class="cs-option-item">
+                  <div class="cs-option-item__label">{{ option.fantasyName }}</div>
+                  <div class="cs-option-item__subtext">{{ option.cnpj | csDocument }}</div>
+                </div>
+              </ng-template>
+            </p-select>
+
+            <app-error-msg
+              [required]="false"
+              [field]="'companyId'"
+              [forId]="'companyId'"
+              [control]="form.controls.companyId"
+              [label]="'contract.fields.company' | translate"
+            />
+          </p-floatLabel>
+        </div>
+
+        <div class="col-12 md:col-6 lg:col-3 p-2">
+          <p-floatLabel variant="on" class="w-full">
+            <p-select
+              size="small"
+              class="w-full"
+              appendTo="body"
+              optionValue="id"
+              [showClear]="true"
+              inputId="acquirerId"
+              optionLabel="fantasyName"
+              formControlName="acquirerId"
+              [options]="acquirerOptions()"
+            >
+              <ng-template let-option pTemplate="item">
+                <div class="cs-option-item">
+                  <div class="cs-option-item__label">{{ option.fantasyName }}</div>
+                  <div class="cs-option-item__subtext">{{ option.cnpj | csDocument }}</div>
+                </div>
+              </ng-template>
+            </p-select>
+
+            <app-error-msg
+              [field]="'acquirerId'"
+              [forId]="'acquirerId'"
+              [control]="form.controls.acquirerId"
+              [label]="'contract.fields.acquirer' | translate"
+            />
+          </p-floatLabel>
+        </div>
+
+        <div class="col-12 md:col-6 lg:col-3 p-2">
+          <p-floatLabel variant="on" class="w-full">
+            <p-select
+              size="small"
+              class="w-full"
+              appendTo="body"
+              optionValue="id"
+              [showClear]="true"
+              optionLabel="pvNumber"
+              inputId="establishmentId"
+              formControlName="establishmentId"
+              [options]="establishmentOptions()"
+            ></p-select>
+
+            <app-error-msg
+              [field]="'establishmentId'"
+              [forId]="'establishmentId'"
+              [control]="form.controls.establishmentId"
+              [label]="'contract.fields.establishment' | translate"
+            />
+          </p-floatLabel>
+        </div>
+
+        <div class="col-12 md:col-6 lg:col-2 p-2">
+          <p-floatLabel variant="on" class="w-full">
+            <p-select
+              size="small"
+              class="w-full"
+              appendTo="body"
+              inputId="status"
+              optionLabel="label"
+              optionValue="value"
+              formControlName="status"
+              [options]="statusOptions()"
+            ></p-select>
+
+            <app-error-msg
+              [field]="'status'"
+              [forId]="'status'"
+              [control]="form.controls.status"
+              [label]="'contract.fields.statusEnum' | translate"
+            />
+          </p-floatLabel>
+        </div>
+      </div>
+
+      <div class="grid formgrid">
+        <div class="col-12 md:col-6 lg:col-3 p-2">
+          <p-floatLabel variant="on" class="w-full">
+            <p-datepicker
+              inputId="startDate"
+              class="w-full"
+              [showIcon]="true"
+              [showTime]="false"
+              dataType="date"
+              dateFormat="dd/mm/yy"
+              formControlName="startDate"
+            ></p-datepicker>
+
+            <app-error-msg
+              [field]="'startDate'"
+              [forId]="'startDate'"
+              [control]="form.controls.startDate"
+              [label]="'contract.fields.startDate' | translate"
+            />
+          </p-floatLabel>
+        </div>
+
+        <div class="col-12 md:col-6 lg:col-3 p-2">
+          <p-floatLabel variant="on" class="w-full">
+            <p-datepicker
+              inputId="endDate"
+              class="w-full"
+              [showIcon]="true"
+              [showTime]="false"
+              dataType="date"
+              dateFormat="dd/mm/yy"
+              formControlName="endDate"
+            ></p-datepicker>
+
+            <app-error-msg
+              [field]="'endDate'"
+              [forId]="'endDate'"
+              [control]="form.controls.endDate"
+              [label]="'contract.fields.endDate' | translate"
+            />
+          </p-floatLabel>
+        </div>
+
+        <div class="col-12 lg:col-6 p-2">
+          <p-floatLabel variant="on" class="w-full">
+            <input
+              pInputText
+              type="text"
+              inputId="description"
+              formControlName="description"
+              class="w-full p-inputtext-sm"
+            />
+
+            <app-error-msg
+              [field]="'description'"
+              [forId]="'description'"
+              [control]="form.controls.description"
+              [label]="'contract.fields.description' | translate"
+            />
+          </p-floatLabel>
+        </div>
+      </div>
+
+      <p-divider align="left">
+        <span class="font-semibold">{{ 'contract.flags.title' | translate }}</span>
+      </p-divider>
+
+      <div formArrayName="contractFlags" class="flex flex-column gap-3">
+        <div
+          class="contract-flag-card"
+          *ngFor="let flagGroup of contractFlags.controls; let flagIndex = index"
+          [formGroupName]="flagIndex"
+        >
+          <div class="grid formgrid align-items-end">
+            <div class="col-12 lg:col-5 p-2">
+              <p-floatLabel variant="on" class="w-full">
+                <p-select
+                  size="small"
+                  class="w-full"
+                  appendTo="body"
+                  [filter]="true"
+                  optionValue="id"
+                  optionLabel="name"
+                  [options]="flagOptions()"
+                  formControlName="flagId"
+                  inputId="flagId-{{ flagIndex }}"
+                ></p-select>
+
+                <label for="flagId-{{ flagIndex }}">{{ 'contract.fields.flag' | translate }}</label>
+              </p-floatLabel>
+            </div>
+
+            <div class="col-12 lg:col-7 p-2">
+              <div class="flex flex-wrap align-items-center justify-content-end gap-2">
+                <p-tag [value]="selectedFlagName(flagGroup.get('flagId')?.value)"></p-tag>
+
+                <button
+                  pButton
+                  type="button"
+                  icon="pi pi-plus"
+                  (click)="addRate(flagIndex)"
+                  class="p-button-text p-button-sm"
+                  [label]="'contract.rates.add' | translate"
+                ></button>
+
+                <button
+                  pButton
+                  type="button"
+                  icon="pi pi-trash"
+                  (click)="removeFlag(flagIndex)"
+                  [label]="'common.remove' | translate"
+                  [disabled]="contractFlags.length === 1"
+                  class="p-button-text p-button-sm p-button-danger"
+                ></button>
+              </div>
+            </div>
+          </div>
+
+          <div formArrayName="contractRates" class="flex flex-column gap-2 p-2">
+            <div
+              class="contract-rate-row grid formgrid align-items-end"
+              *ngFor="let rateGroup of ratesAt(flagIndex).controls; let rateIndex = index"
+              [formGroupName]="rateIndex"
+            >
+              <div class="col-12 md:col-6 lg:col-3 p-1">
+                <p-floatLabel variant="on" class="w-full">
+                  <p-select
+                    size="small"
+                    class="w-full"
+                    appendTo="body"
+                    optionLabel="label"
+                    optionValue="value"
+                    formControlName="modality"
+                    [options]="modalityOptions()"
+                    inputId="modality-{{ flagIndex }}-{{ rateIndex }}"
+                  ></p-select>
+
+                  <label for="modality-{{ flagIndex }}-{{ rateIndex }}">
+                    {{ 'contract.fields.modality' | translate }}
+                  </label>
+                </p-floatLabel>
+              </div>
+
+              <div class="col-6 md:col-3 lg:col-2 p-1">
+                <p-floatLabel variant="on" class="w-full">
+                  <input
+                    min="0"
+                    step="0.01"
+                    pInputText
+                    type="number"
+                    formControlName="rate"
+                    class="w-full p-inputtext-sm"
+                    id="rate-{{ flagIndex }}-{{ rateIndex }}"
+                  />
+                  <label for="rate-{{ flagIndex }}-{{ rateIndex }}">
+                    {{ 'contract.fields.rate' | translate }}
+                  </label>
+                </p-floatLabel>
+              </div>
+
+              <div class="col-6 md:col-3 lg:col-2 p-1">
+                <p-floatLabel variant="on" class="w-full">
+                  <input
+                    min="0"
+                    pInputText
+                    type="number"
+                    class="w-full p-inputtext-sm"
+                    formControlName="paymentTermDays"
+                    id="paymentTermDays-{{ flagIndex }}-{{ rateIndex }}"
+                  />
+                  <label for="paymentTermDays-{{ flagIndex }}-{{ rateIndex }}">
+                    {{ 'contract.fields.paymentTermDays' | translate }}
+                  </label>
+                </p-floatLabel>
+              </div>
+
+              <div class="col-6 md:col-3 lg:col-2 p-1">
+                <p-floatLabel variant="on" class="w-full">
+                  <input
+                    min="0"
+                    step="0.01"
+                    pInputText
+                    type="number"
+                    class="w-full p-inputtext-sm"
+                    formControlName="rateEcommerce"
+                    id="rateEcommerce-{{ flagIndex }}-{{ rateIndex }}"
+                  />
+                  <label for="rateEcommerce-{{ flagIndex }}-{{ rateIndex }}">
+                    {{ 'contract.fields.rateEcommerce' | translate }}
+                  </label>
+                </p-floatLabel>
+              </div>
+
+              <div class="col-6 md:col-3 lg:col-2 p-1">
+                <p-floatLabel variant="on" class="w-full">
+                  <input
+                    min="0"
+                    pInputText
+                    type="number"
+                    class="w-full p-inputtext-sm"
+                    formControlName="paymentTermDaysEcommerce"
+                    id="paymentTermDaysEcommerce-{{ flagIndex }}-{{ rateIndex }}"
+                  />
+                  <label for="paymentTermDaysEcommerce-{{ flagIndex }}-{{ rateIndex }}">
+                    {{ 'contract.fields.paymentTermDaysEcommerce' | translate }}
+                  </label>
+                </p-floatLabel>
+              </div>
+
+              <div class="col-12 lg:col-1 p-1 flex align-items-center justify-content-end">
+                <button
+                  pButton
+                  type="button"
+                  icon="pi pi-trash"
+                  class="p-button-text p-button-sm p-button-danger"
+                  (click)="removeRate(flagIndex, rateIndex)"
+                  [disabled]="ratesAt(flagIndex).length === 1"
+                ></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-3 flex justify-content-start">
+        <button
+          pButton
+          type="button"
+          icon="pi pi-plus"
+          (click)="addFlag()"
+          class="p-button-outlined p-button-sm"
+          [label]="'contract.flags.add' | translate"
+          [disabled]="form.controls.acquirerId.disabled"
+        ></button>
+      </div>
+    </div>
+  </form>
+
+  <ng-template pTemplate="footer">
+    <div class="cs-dialog-footer-actions">
+      <button
+        pButton
+        type="button"
+        (click)="close()"
+        class="p-button-text"
+        [label]="'common.cancel' | translate"
+        [disabled]="saving() || loadingContract()"
+      ></button>
+
+      <button
+        pButton
+        type="button"
+        (click)="save()"
+        [loading]="saving()"
+        [label]="'common.save' | translate"
+        [disabled]="saving() || loadingContract()"
+      ></button>
+    </div>
+  </ng-template>
+</p-dialog>

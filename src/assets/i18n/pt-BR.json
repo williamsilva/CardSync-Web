@@ -20,7 +20,6 @@
         "title": "Contratos"
       }
     },
-
     "security": {
       "users": {
         "title": "Usuários"
@@ -38,14 +37,12 @@
         "title": "Detalhe do grupo"
       }
     },
-
     "audit": {
       "title": "E-mail Logs"
     },
     "dashboard": {
       "title": "Dashboard"
     },
-
     "forbidden": {
       "title": "Acesso negado"
     }
@@ -455,11 +452,11 @@
       "createdBy": "Cadastrado por"
     },
     "fields": {
-      "typeEnum":"Tipo",
-      "company":"Empresa",
-      "pvNumber":"Número Pv",
+      "typeEnum": "Tipo",
+      "company": "Empresa",
+      "pvNumber": "Número Pv",
       "statusEnum": "Status",
-      "acquirer":"Adquirente",
+      "acquirer": "Adquirente",
       "createdAt": "Cadastrado em",
       "createdBy": "Cadastrado por"
     },
@@ -480,7 +477,6 @@
         "invalidStatus": "Somente estabelecimentos ativos podem ser bloqueados."
       }
     },
-
     "block": {
       "selected": "Bloquear",
       "header": "Confirmar bloqueio",
@@ -537,10 +533,46 @@
       "subtitle": "Edição de contrato"
     },
     "columns": {
-
+      "name": "Descrição",
+      "description": "Descrição",
+      "company": "Empresa",
+      "acquirer": "Adquirente",
+      "establishment": "Estabelecimento",
+      "period": "Vigência",
+      "flags": "Bandeiras",
+      "statusEnum": "Status"
     },
     "fields": {
-
+      "name": "Descrição",
+      "description": "Descrição",
+      "company": "Empresa",
+      "acquirer": "Adquirente",
+      "establishment": "Estabelecimento",
+      "startDate": "Data inicial",
+      "endDate": "Data final",
+      "flag": "Bandeira",
+      "modality": "Modalidade",
+      "rate": "Taxa loja",
+      "rateEcommerce": "Taxa e-commerce",
+      "paymentTermDays": "Prazo loja (dias)",
+      "paymentTermDaysEcommerce": "Prazo e-commerce (dias)",
+      "statusEnum": "Status"
+    },
+    "modality": {
+      "CASH_DEBIT": "Débito à vista",
+      "CASH_CREDIT": "Crédito à vista",
+      "INSTALLMENT_CREDIT_2_6": "Crédito parcelado 2 a 6x",
+      "INSTALLMENT_CREDIT_7_12": "Crédito parcelado 7 a 12x"
+    },
+    "flags": {
+      "title": "Bandeiras e taxas",
+      "add": "Adicionar bandeira"
+    },
+    "rates": {
+      "add": "Adicionar taxa"
+    },
+    "validation": {
+      "invalidDateRange": "A data final deve ser maior ou igual à data inicial."
     },
     "action": {
       "deactivate": {
@@ -551,7 +583,7 @@
       "activate": {
         "label": "Ativar",
         "noPermission": "Você não tem permissão para ativar contratos.",
-        "invalidStatus": "Somente contratos inativos podem ser ativados."
+        "invalidStatus": "Somente contratos inativos ou bloqueados podem ser ativados."
       },
       "block": {
         "label": "Bloquear",
@@ -559,7 +591,6 @@
         "invalidStatus": "Somente contratos ativos podem ser bloqueados."
       }
     },
-
     "block": {
       "selected": "Bloquear",
       "header": "Confirmar bloqueio",
@@ -596,7 +627,7 @@
     },
     "form": {
       "loadError": "Não foi possível carregar os dados do contrato.",
-      "saveError": "Não foi possível salvar a contrato.",
+      "saveError": "Não foi possível salvar o contrato.",
       "created": "Contrato criado com sucesso.",
       "updated": "Contrato atualizado com sucesso.",
       "permissionDenied": "Você não tem permissão para salvar contrato."
@@ -607,7 +638,7 @@
   },
   "flag": {
     "subtitle": "Gerencie bandeiras",
-    "relationships":{
+    "relationships": {
       "add": "Adicionar",
       "companies": "Empresas",
       "acquirers": "Adquirentes",
@@ -638,7 +669,7 @@
     "columns": {
       "cnpj": "CNPJ",
       "name": "Bandeira",
-      "statusEnum":"Status",
+      "statusEnum": "Status",
       "company": "Empresas",
       "erpCode": "Código ERP",
       "acquirer": "Adquirentes",
@@ -647,7 +678,7 @@
     "fields": {
       "name": "Bandeira",
       "erpCode": "Código",
-      "statusEnum":"Status",
+      "statusEnum": "Status",
       "company": "Empresas",
       "acquirer": "Adquirentes"
     },
@@ -668,7 +699,6 @@
         "invalidStatus": "Somente bandeirad ativas podem ser bloqueadas."
       }
     },
-
     "block": {
       "selected": "Bloquear",
       "header": "Confirmar bloqueio",
