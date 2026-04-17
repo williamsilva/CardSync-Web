@@ -35,6 +35,8 @@ import { CpfCnpjMaskDirective } from '@shared/directives/cpf-cnpj-mask.directive
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
 import { AcquirerPermissionPolicy } from '@features/security/policy/acquirer-permission.policy';
 import { DATA_TABLE_SHELL_IMPORTS } from '@shared/features/data-table-shell/data-table-shell.component';
+import { AcquirerCompanyRelationsComponent } from '../acquirer-relations/acquirer-company-relations.component';
+import { AcquirerEstablishmentRelationsComponent } from '../acquirer-relations/acquirer-establishment-relations.component';
 import {
   ActiveFilterItem,
   FiltersPanelComponent,
@@ -80,6 +82,8 @@ import {
     CpfCnpjMaskDirective,
     FiltersPanelComponent,
     DATA_TABLE_SHELL_IMPORTS,
+    AcquirerCompanyRelationsComponent,
+    AcquirerEstablishmentRelationsComponent,
   ],
 })
 export class AcquirerListComponent extends StatefulListPage<
@@ -92,6 +96,9 @@ export class AcquirerListComponent extends StatefulListPage<
   readonly userFacade = inject(UsersFacade);
   readonly perms = inject(PermissionService);
   readonly usersOptions = this.userFacade.options;
+
+  readonly expandedAcquirerId = signal<string | null>(null);
+  readonly expandedRelationType = signal<'companies' | 'establishments' | null>(null);
 
   protected readonly toast = inject(MessageService);
   protected override readonly i18n = inject(I18nService);
@@ -187,6 +194,12 @@ export class AcquirerListComponent extends StatefulListPage<
 
     return items;
   });
+
+  protected override onAfterClear(): void {
+    this.clearSelection();
+    this.expandedAcquirerId.set(null);
+    this.expandedRelationType.set(null);
+  }
 
   selectionStatus = computed<StatusEnum | null>(() => {
     const selected = this.selectedRows();
@@ -443,6 +456,28 @@ export class AcquirerListComponent extends StatefulListPage<
 
   onCreated() {
     this.reloadWithCurrentState();
+  }
+
+  toggleCompanies(row: AcquirerModel) {
+    if (this.expandedAcquirerId() === row.id && this.expandedRelationType() === 'companies') {
+      this.expandedAcquirerId.set(null);
+      this.expandedRelationType.set(null);
+      return;
+    }
+
+    this.expandedAcquirerId.set(row.id);
+    this.expandedRelationType.set('companies');
+  }
+
+  toggleEstablishments(row: AcquirerModel) {
+    if (this.expandedAcquirerId() === row.id && this.expandedRelationType() === 'establishments') {
+      this.expandedAcquirerId.set(null);
+      this.expandedRelationType.set(null);
+      return;
+    }
+
+    this.expandedAcquirerId.set(row.id);
+    this.expandedRelationType.set('establishments');
   }
 
   protected override tableStateKey(): string {

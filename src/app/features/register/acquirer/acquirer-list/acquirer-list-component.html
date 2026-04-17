@@ -206,6 +206,8 @@
       <col style="width: 150px" />
       <col style="width: 170px" />
       <col style="width: 80px" />
+      <col style="width: 80px" />
+      <col style="width: 80px" />
     </colgroup>
   </ng-template>
 
@@ -386,6 +388,9 @@
         </div>
       </th>
 
+      <th class="text-center">{{ 'acquirer.columns.company' | translate }}</th>
+      <th class="text-center">{{ 'acquirer.columns.establishment' | translate }}</th>
+
       <th class="text-center">
         <div class="th-flex text-center justify-content-center">
           <span class="th-label">{{ 'common.actions' | translate }}</span>
@@ -427,6 +432,32 @@
 
       <td class="cell-muted text-center">
         {{ row.createdBy?.name }}
+      </td>
+
+      <td class="text-center">
+        <div class="table-actions justify-content-center">
+          <button
+            pButton
+            type="button"
+            icon="pi pi-building"
+            (click)="toggleCompanies(row)"
+            class="p-button-text p-button-sm"
+            [pTooltip]="'flag.relationships.companies' | translate"
+          ></button>
+        </div>
+      </td>
+
+      <td class="text-center">
+        <div class="table-actions justify-content-center">
+          <button
+            pButton
+            type="button"
+            icon="pi pi-briefcase"
+            class="p-button-text p-button-sm"
+            (click)="toggleEstablishments(row)"
+            [pTooltip]="'flag.relationships.acquirers' | translate"
+          ></button>
+        </div>
       </td>
 
       <td class="text-center">
@@ -475,6 +506,26 @@
             "
             (click)="confirmBlock(row)"
           ></button>
+        </div>
+      </td>
+    </tr>
+
+    <tr *ngIf="expandedAcquirerId() === row.id">
+      <td colspan="10" class="p-3 surface-ground flag-expanded-cell">
+        <div class="flag-expanded-wrap">
+          <ng-container [ngSwitch]="expandedRelationType()">
+            <app-acquirer-company-relations
+              [acquirer]="row"
+              (changed)="refresh()"
+              *ngSwitchCase="'companies'"
+            ></app-acquirer-company-relations>
+
+            <app-acquirer-establishment-relations
+              [acquirer]="row"
+              (changed)="refresh()"
+              *ngSwitchCase="'establishments'"
+            ></app-acquirer-establishment-relations>
+          </ng-container>
         </div>
       </td>
     </tr>

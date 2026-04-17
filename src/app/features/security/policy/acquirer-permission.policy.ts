@@ -13,6 +13,14 @@ export class AcquirerPermissionPolicy {
     return this.perms.hasSupportOr(PERMISSIONS.ACQUIRER.VIEW);
   }
 
+  canManageRelations(): boolean {
+    return this.perms.hasSupportOr(PERMISSIONS.ACQUIRER.MANAGE_RELATIONS);
+  }
+
+  canRemoveRelations(): boolean {
+    return this.canManageRelations();
+  }
+
   canCreate(): boolean {
     return this.perms.hasSupportOr(PERMISSIONS.ACQUIRER.CREATE);
   }

@@ -355,12 +355,17 @@
     },
     "columns": {
       "cnpj": "CNPJ",
+      "typeEnum": "Tipo",
+      "name": "Adquirente",
+      "company": "Empresas",
       "statusEnum": "Status",
+      "pvNumber":"Número Pv",
       "adqCode": "Código ADQ",
       "createdAt": "Cadastrado em",
       "createdBy": "Cadastrado por",
       "socialReason": "Razão Social",
-      "fantasyName": "Nome Fantasia"
+      "fantasyName": "Nome Fantasia",
+      "establishment": "Estabelecimentos"
     },
     "action": {
       "deactivate": {
@@ -421,11 +426,31 @@
         "deactivate": "Inativação em lote"
       }
     },
+    "relationships": {
+      "add": "Adicionar",
+      "companies": "Empresas",
+      "acquirers": "Adquirentes",
+      "saveLinks": "Salvar vínculos",
+      "linkedCompanies": "Empresas vinculadas",
+      "linkedEstablishments": "Estabelecimentos vinculados",
+      "addCompanyToAcquirer": "Adicionar Empresa à adquirente",
+      "addEstablishmentToAcquirer": "Adicionar Adquirente à adquirente",
+      "removeCompany": {
+        "header": "Remover vínculo",
+        "message": "Deseja remover a empresa {company} da adquirente {acquirer}?",
+        "success": "Empresa {company} removida da adquirente {acquirer} com sucesso."
+      },
+      "removeEstablishment": {
+        "header": "Remover vínculo",
+        "message": "Deseja remover o estabelecimento {establishment} da adquirente {acquirer}?",
+        "success": "Estabelecimento {establishment} removido da adquirente {acquirer} com sucesso."
+      }
+    },
     "form": {
-      "loadError": "Não foi possível carregar os dados da adquirente.",
-      "saveError": "Não foi possível salvar a adquirente.",
       "created": "Adquirente criada com sucesso.",
       "updated": "Adquirente atualizada com sucesso.",
+      "saveError": "Não foi possível salvar a adquirente.",
+      "loadError": "Não foi possível carregar os dados da adquirente.",
       "permissionDenied": "Você não tem permissão para salvar adquirentes."
     },
     "empty": {
@@ -449,7 +474,8 @@
       "pvNumber": "Número Pv",
       "acquirer": "Adquirente",
       "createdAt": "Cadastrado em",
-      "createdBy": "Cadastrado por"
+      "createdBy": "Cadastrado por",
+      "establishment": "Estabelecimento"
     },
     "fields": {
       "typeEnum": "Tipo",
@@ -512,10 +538,10 @@
       }
     },
     "form": {
-      "loadError": "Não foi possível carregar os dados do estabelecimento.",
-      "saveError": "Não foi possível salvar a estabelecimento.",
       "created": "Estabelecimento criado com sucesso.",
       "updated": "Estabelecimento atualizado com sucesso.",
+      "saveError": "Não foi possível salvar a estabelecimento.",
+      "loadError": "Não foi possível carregar os dados do estabelecimento.",
       "permissionDenied": "Você não tem permissão para salvar estabelecimento."
     },
     "empty": {

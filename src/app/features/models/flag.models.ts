@@ -17,8 +17,8 @@ export interface FlagModel {
   erpCode: number;
   status: StatusEnum | null;
 
-  acquirers?: FlagAcquirerRelationModel[] | null;
   companies?: FlagCompanyRelationModel[] | null;
+  acquirers?: FlagAcquirerRelationModel[] | null;
 }
 
 export interface FlagCreateInput {

@@ -395,6 +395,18 @@ export const UI_KEYS = {
       messageSingle: 'acquirer.deactivate.messageSingle',
       successSingle: 'acquirer.deactivate.successSingle',
     },
+    relationships: {
+      removeCompany: {
+        header: 'acquirer.relationships.removeCompany.header',
+        message: 'acquirer.relationships.removeCompany.message',
+        success: 'acquirer.relationships.removeCompany.success',
+      },
+      removeEstablishment: {
+        header: 'acquirer.relationships.removeEstablishment.header',
+        message: 'acquirer.relationships.removeEstablishment.message',
+        success: 'acquirer.relationships.removeEstablishment.success',
+      },
+    },
   },
   groups: {
     fields: {

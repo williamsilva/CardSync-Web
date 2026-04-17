@@ -8,6 +8,10 @@ import { HalPagedResponse } from '@core/api/page.model';
 import { ListQueryDto } from '@shared/features/list-query/list-query.types';
 import { EstablishmentAdvancedFilters } from '@features/filter/establishment.filters';
 import {
+  EstablishmentMinimalModel,
+  mapEstablishmentMinimalModels,
+} from '@models/establishment-minimal.models';
+import {
   EstablishmentModel,
   EstablishmentApiModel,
   EstablishmentCreateInput,
@@ -21,6 +25,20 @@ import {
 export class EstablishmentApiService {
   private readonly http = inject(HttpClient);
   private readonly baseUrl = `${API.bff}/v1/establishments`;
+
+  getOptions() {
+    return this.http
+      .get<HalPagedResponse<EstablishmentMinimalModel>>(`${this.baseUrl}/options-filter`)
+      .pipe(
+        map(
+          (res) =>
+            ({
+              ...res,
+              content: mapEstablishmentMinimalModels(res?._embedded?.content),
+            }) as HalPagedResponse<EstablishmentMinimalModel>,
+        ),
+      );
+  }
 
   searchPaged(body: ListQueryDto<EstablishmentAdvancedFilters>) {
     return this.http

@@ -1,5 +1,15 @@
 import { UserMinimalModel } from './user-minimal.models';
+import { CompanyMinimalModel } from './company-minimal.models';
 import { normalizeStatusEnum, StatusEnum } from './enums/status.enum';
+import { EstablishmentMinimalModel } from './establishment-minimal.models';
+
+export interface AcquirerCompanyRelationModel extends Omit<CompanyMinimalModel, 'id'> {
+  companyId: string;
+}
+
+export interface AcquirerEstablishmentRelationModel extends Omit<EstablishmentMinimalModel, 'id'> {
+  establishmentId: string;
+}
 
 export interface AcquirerModel {
   id: string;
@@ -10,10 +20,9 @@ export interface AcquirerModel {
 
   status: StatusEnum | null;
 
-  //flags: Company[];
-  //companies: Company[];
-  //establishments: Establishment[];
   createdBy: UserMinimalModel | null;
+  companies?: AcquirerCompanyRelationModel[] | null;
+  establishments?: AcquirerEstablishmentRelationModel[] | null;
 }
 
 export interface AcquirerCreateInput {

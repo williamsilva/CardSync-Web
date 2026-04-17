@@ -1,0 +1,225 @@
+<div class="flag-rel-card border-1 surface-border border-round p-3 mx-auto">
+  <div class="flex align-items-center justify-content-between gap-3 mb-3">
+    <div class="flex align-items-center gap-2 text-primary font-semibold">
+      <i class="pi pi-briefcase"></i>
+      <span>{{ 'acquirer.relationships.linkedEstablishments' | translate }}</span>
+    </div>
+
+    <button
+      pButton
+      type="button"
+      icon="pi pi-plus-circle"
+      (click)="openAddDialog()"
+      [disabled]="!secPolicy.canManageRelations()"
+      [label]="'acquirer.relationships.add' | translate"
+      class="p-button-success p-button-sm relation-add-btn"
+    ></button>
+  </div>
+
+  <p-table
+    size="small"
+    showGridlines
+    styleClass="cs-admin-table"
+    class="p-datatable-sm mt-1"
+    [tableStyle]="{ width: '100%' }"
+    [value]="acquirer().establishments ?? []"
+  >
+    <ng-template pTemplate="colgroup">
+      <colgroup>
+        <col style="width: auto" />
+        <col style="width: auto" />
+        <col style="width: 120px" />
+        <col style="width: 100px" />
+        <col style="width: 100px" />
+        <col style="width: 80px" />
+      </colgroup>
+    </ng-template>
+
+    <ng-template pTemplate="header">
+      <tr>
+        <th class="text-center">{{ 'acquirer.columns.company' | translate }}</th>
+        <th class="text-center">{{ 'acquirer.columns.cnpj' | translate }}</th>
+        <th class="text-center">{{ 'acquirer.columns.pvNumber' | translate }}</th>
+        <th class="text-center">{{ 'acquirer.columns.typeEnum' | translate }}</th>
+        <th class="text-center">{{ 'acquirer.columns.statusEnum' | translate }}</th>
+        <th class="text-center">{{ 'common.actions' | translate }}</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-item>
+      <tr>
+        <td class="text-center">{{ item.company?.fantasyName }}</td>
+        <td class="text-center">{{ item.company?.cnpj | csDocument }}</td>
+        <td class="text-center">{{ item.pvNumber | csDocument }}</td>
+
+        <td class="text-center">
+          <p-tag
+            [value]="typeEstablishmentEnumLabel(item.type)"
+            [severity]="severityTypeEstablishmentEnum(item.type)"
+          ></p-tag>
+        </td>
+
+        <td class="text-center">
+          <p-tag
+            [value]="statusLabel(item.status)"
+            [severity]="statusSeverity(item.status)"
+          ></p-tag>
+        </td>
+
+        <td class="text-center">
+          <button
+            pButton
+            type="button"
+            icon="pi pi-trash"
+            [disabled]="!canRemoveRelations()"
+            class="p-button-text p-button-sm p-button-danger"
+            (click)="confirmRemoveEstablishment(item.acquirerId, item.fantasyName)"
+          ></button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+
+<p-dialog
+  [modal]="true"
+  appendTo="body"
+  [closable]="false"
+  [draggable]="false"
+  [resizable]="false"
+  [visible]="addVisible()"
+  (onHide)="closeAddDialog()"
+  [style]="{ width: '1100px', maxWidth: '95vw' }"
+  [contentStyle]="{ overflow: 'visible', height: '100%' }"
+  [breakpoints]="{ '1400px': '95vw', '992px': '98vw', '768px': '100vw' }"
+>
+  <ng-template pTemplate="header">
+    <div class="flex align-items-center gap-2">
+      <i class="pi pi-briefcase text-primary"></i>
+      <span>{{ 'acquirer.relationships.addEstablishmentToAcquirer' | translate }}</span>
+      <span class="cs-flag-highlight">{{ acquirer().fantasyName }}</span>
+    </div>
+  </ng-template>
+
+  <div class="grid formgrid align-items-start mb-4" [formGroup]="form">
+    <div class="col-12 md:col-3">
+      <p-floatLabel variant="on" class="w-full">
+        <input disabled pInputText [value]="acquirer().fantasyName" class="w-full p-inputtext-sm" />
+      </p-floatLabel>
+    </div>
+
+    <div class="col-12 md:col-4">
+      <p-floatLabel variant="on" class="w-full">
+        <p-select
+          size="small"
+          class="w-full"
+          appendTo="body"
+          optionValue="id"
+          optionLabel="pvNumber"
+          [options]="availableOptions()"
+          formControlName="establishmentId"
+        >
+          <ng-template let-option pTemplate="item">
+            <div class="cs-option-item">
+              <div class="cs-option-item__label">{{ option.pvNumber }}</div>
+              <div class="cs-option-item__subtext">
+                {{ typeEstablishmentEnumLabel(option.type) }}
+              </div>
+              <div class="cs-option-item__subtext">
+                Adquirente: {{ option.acquirer?.fantasyName }}
+              </div>
+              <div class="cs-option-item__subtext">Empresa: {{ option.company?.fantasyName }}</div>
+            </div>
+          </ng-template>
+        </p-select>
+
+        <label>{{ 'establishment.columns.establishment' | translate }}</label>
+      </p-floatLabel>
+    </div>
+
+    <div class="col-12 md:col-2">
+      <button
+        pButton
+        type="button"
+        icon="pi pi-plus"
+        [disabled]="form.invalid"
+        (click)="addRelationToList()"
+        class="w-full p-button-success"
+        [disabled]="!secPolicy.canManageRelations()"
+        [label]="'acquirer.relationships.add' | translate"
+      ></button>
+    </div>
+  </div>
+
+  <p-table
+    size="small"
+    showGridlines
+    styleClass="cs-admin-table"
+    class="p-datatable-sm mt-1"
+    [value]="pendingRelations()"
+    [tableStyle]="{ width: '100%' }"
+  >
+    <ng-template pTemplate="colgroup">
+      <colgroup>
+        <col style="width: 140px" />
+        <col style="width: auto" />
+        <col style="width: 180px" />
+        <col style="width: 130px" />
+        <col style="width: 130px" />
+        <col style="width: 80px" />
+      </colgroup>
+    </ng-template>
+    <ng-template pTemplate="header">
+      <tr>
+        <th class="text-center">{{ 'acquirer.columns.name' | translate }}</th>
+        <th class="text-center">{{ 'acquirer.columns.company' | translate }}</th>
+        <th class="text-center">{{ 'acquirer.columns.cnpj' | translate }}</th>
+        <th class="text-center">{{ 'acquirer.columns.typeEnum' | translate }}</th>
+        <th class="text-center">{{ 'acquirer.columns.pvNumber' | translate }}</th>
+        <th class="text-center">{{ 'common.actions' | translate }}</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-item>
+      <tr>
+        <td class="text-center">{{ acquirer().fantasyName }}</td>
+        <td class="text-center">{{ item.company?.fantasyName }}</td>
+        <td class="text-center">{{ item.company?.cnpj | csDocument }}</td>
+        <td class="text-center">{{ typeEstablishmentEnumLabel(item.type) }}</td>
+        <td class="text-center">{{ item.pvNumber }}</td>
+        <td class="text-center">
+          <button
+            pButton
+            type="button"
+            icon="pi pi-trash"
+            (click)="removePendingRelation(item.establishmentId)"
+            class="p-button-text p-button-sm p-button-danger"
+          ></button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+
+  <ng-template pTemplate="footer">
+    <div class="flex justify-content-end gap-3">
+      <button
+        pButton
+        type="button"
+        icon="pi pi-times"
+        class="p-button-text"
+        (click)="closeAddDialog()"
+        [label]="'common.cancel' | translate"
+      ></button>
+
+      <button
+        pButton
+        type="button"
+        icon="pi pi-save"
+        [loading]="saving()"
+        (click)="saveRelations()"
+        [disabled]="!secPolicy.canManageRelations()"
+        [label]="'acquirer.relationships.saveLinks' | translate"
+      ></button>
+    </div>
+  </ng-template>
+</p-dialog>
