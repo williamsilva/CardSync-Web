@@ -118,7 +118,7 @@ export class AcquirerCompanyRelationsComponent {
     this.addVisible.set(false);
   }
 
-  addCompanyToList() {
+  addRelationToList() {
     if (!this.secPolicy.canManageRelations()) return;
     this.form.markAllAsTouched();
     if (this.form.invalid) return;

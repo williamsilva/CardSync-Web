@@ -434,7 +434,7 @@
       "linkedCompanies": "Empresas vinculadas",
       "linkedEstablishments": "Estabelecimentos vinculados",
       "addCompanyToAcquirer": "Adicionar Empresa à adquirente",
-      "addEstablishmentToAcquirer": "Adicionar Adquirente à adquirente",
+      "addEstablishmentToAcquirer": "Adicionar estabelecimento à adquirente",
       "removeCompany": {
         "header": "Remover vínculo",
         "message": "Deseja remover a empresa {company} da adquirente {acquirer}?",

@@ -2,7 +2,10 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 
 import { API } from '@core/api/api.config';
-import { AcquirerRelationsModel } from '@models/acquirer-relations.models';
+import {
+  AcquirerRelationsModel,
+  RelationAcquirerEstablishmentCreateInput,
+} from '@models/acquirer-relations.models';
 
 @Injectable({ providedIn: 'root' })
 export class AcquirerRelationsApiService {
@@ -23,13 +26,13 @@ export class AcquirerRelationsApiService {
     return this.http.delete<void>(`${this.baseUrl}/${acquirerId}/companies/${companyId}`);
   }
 
-  addEstablishmentRelations(acquirerId: string, establishmentIds: string[]) {
-    return this.http.post<void>(`${this.baseUrl}/${acquirerId}/establishment-relations`, {
-      establishmentIds,
-    });
+  addEstablishmentRelations(acquirerId: string, input: RelationAcquirerEstablishmentCreateInput) {
+    return this.http.post<void>(`${this.baseUrl}/${acquirerId}/establishment-relations`, input);
   }
 
-  removeEstablishment(flagId: string, acquirerId: string) {
-    return this.http.delete<void>(`${this.baseUrl}/${flagId}/acquirers/${acquirerId}`);
+  removeEstablishment(acquirerId: string, establishmentId: string) {
+    return this.http.delete<void>(
+      `${this.baseUrl}/${acquirerId}/establishments/${establishmentId}`,
+    );
   }
 }

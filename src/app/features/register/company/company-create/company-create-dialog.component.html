@@ -85,6 +85,9 @@
             optionLabel="label"
             formControlName="type"
             [options]="typeOptions()"
+            [invalid]="
+              form.controls.type.invalid && (form.controls.type.dirty || form.controls.type.touched)
+            "
           ></p-select>
 
           <app-error-msg

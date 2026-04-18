@@ -49,14 +49,14 @@ export class FlagCompanyRelationsComponent {
 
   private readonly fb = inject(FormBuilder);
   private readonly confirm = inject(ConfirmationService);
+  private readonly messageService = inject(MessageService);
+  protected readonly secPolicy = inject(FlagPermissionPolicy);
 
   readonly i18n = inject(I18nService);
   readonly companyFacade = inject(CompanyFacade);
-  private readonly messageService = inject(MessageService);
   readonly flagRelationsFacade = inject(FlagRelationsFacade);
 
   readonly addVisible = signal(false);
-  protected readonly secPolicy = inject(FlagPermissionPolicy);
   readonly pendingCompanies = signal<CompanyMinimalModel[]>([]);
 
   readonly options = this.companyFacade.options;

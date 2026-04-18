@@ -1,6 +1,6 @@
 <div class="flag-rel-card border-1 surface-border border-round p-3 mx-auto">
-  <div class="flex align-items-center justify-content-between gap-3 mb-3">
-    <div class="flex align-items-center gap-2 text-primary font-semibold">
+  <div class="cs-relation-card-header flex align-items-center justify-content-between gap-3 mb-3">
+    <div class="cs-relation-card-title flex align-items-center gap-2 text-primary font-semibold">
       <i class="pi pi-building"></i>
       <span>{{ 'acquirer.relationships.linkedCompanies' | translate }}</span>
     </div>
@@ -29,9 +29,9 @@
     <ng-template pTemplate="colgroup">
       <colgroup>
         <col style="width: auto" />
-        <col style="width: 170px" />
         <col style="width: 150px" />
-        <col style="width: 100px" />
+        <col style="width: 150px" />
+        <col style="width: 60px" />
       </colgroup>
     </ng-template>
 
@@ -89,48 +89,72 @@
     </div>
   </ng-template>
 
-  <div class="grid formgrid align-items-start mb-4" [formGroup]="form">
-    <div class="col-12 md:col-3">
-      <p-floatLabel variant="on" class="w-full">
-        <input disabled pInputText [value]="acquirer().fantasyName" class="w-full p-inputtext-sm" />
-      </p-floatLabel>
+  <form [formGroup]="form" class="cs-dialog-form">
+    <div class="grid formgrid gap-0">
+      <div class="col-12 md:col-6 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <input
+            readonly
+            pInputText
+            type="text"
+            id="relationAcquirer"
+            class="w-full p-inputtext-sm"
+            [value]="acquirer().fantasyName"
+          />
+          <label for="relationAcquirer">
+            {{ 'establishment.fields.acquirer' | translate }}
+          </label>
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 md:col-6 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-select
+            size="small"
+            class="w-full"
+            appendTo="body"
+            optionValue="id"
+            inputId="companyId"
+            optionLabel="fantasyName"
+            formControlName="companyId"
+            [options]="availableOptions()"
+            [invalid]="
+              form.controls.companyId.invalid &&
+              (form.controls.companyId.dirty || form.controls.companyId.touched)
+            "
+          >
+            <ng-template let-option pTemplate="item">
+              <div class="cs-option-item">
+                <div class="cs-option-item__label">{{ option.fantasyName }}</div>
+                <div class="cs-option-item__subtext">
+                  N° Inscrição: {{ option.cnpj | csDocument }}
+                </div>
+              </div>
+            </ng-template>
+          </p-select>
+
+          <app-error-msg
+            [field]="'company'"
+            [forId]="'companyId'"
+            [control]="form.controls.companyId"
+            [label]="'establishment.fields.company' | translate"
+          />
+        </p-floatLabel>
+      </div>
     </div>
 
-    <div class="col-12 md:col-7">
-      <p-floatLabel variant="on" class="w-full">
-        <p-select
-          size="small"
-          class="w-full"
-          appendTo="body"
-          optionValue="id"
-          optionLabel="fantasyName"
-          formControlName="companyId"
-          [options]="availableOptions()"
-        />
-
-        <app-error-msg
-          [required]="false"
-          [field]="'companyId'"
-          [forId]="'companyId'"
-          [control]="form.controls.companyId"
-          [label]="'company.columns.fantasyName' | translate"
-        />
-      </p-floatLabel>
-    </div>
-
-    <div class="col-12 md:col-2">
+    <div class="flex justify-content-end p-2 pt-0">
       <button
         pButton
         type="button"
         icon="pi pi-plus"
-        [disabled]="form.invalid"
-        (click)="addCompanyToList()"
-        class="w-full p-button-success"
-        [disabled]="!secPolicy.canManageRelations()"
+        (click)="addRelationToList()"
+        class="p-button-success p-button-sm"
         [label]="'acquirer.relationships.add' | translate"
+        [disabled]="!secPolicy.canManageRelations() || form.invalid"
       ></button>
     </div>
-  </div>
+  </form>
 
   <p-table
     size="small"

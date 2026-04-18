@@ -1,6 +1,6 @@
 <div class="flag-rel-card border-1 surface-border border-round p-3 mx-auto">
-  <div class="flex align-items-center justify-content-between gap-3 mb-3">
-    <div class="flex align-items-center gap-2 text-primary font-semibold">
+  <div class="cs-relation-card-header flex align-items-center justify-content-between gap-3 mb-3">
+    <div class="cs-relation-card-title flex align-items-center gap-2 text-primary font-semibold">
       <i class="pi pi-briefcase"></i>
       <span>{{ 'acquirer.relationships.linkedEstablishments' | translate }}</span>
     </div>
@@ -27,11 +27,11 @@
     <ng-template pTemplate="colgroup">
       <colgroup>
         <col style="width: auto" />
-        <col style="width: auto" />
+        <col style="width: 150px" />
         <col style="width: 120px" />
         <col style="width: 100px" />
         <col style="width: 100px" />
-        <col style="width: 80px" />
+        <col style="width: 60px" />
       </colgroup>
     </ng-template>
 
@@ -73,7 +73,7 @@
             icon="pi pi-trash"
             [disabled]="!canRemoveRelations()"
             class="p-button-text p-button-sm p-button-danger"
-            (click)="confirmRemoveEstablishment(item.acquirerId, item.fantasyName)"
+            (click)="confirmRemoveEstablishment(item.establishmentId, item.pvNumber)"
           ></button>
         </td>
       </tr>
@@ -89,9 +89,9 @@
   [resizable]="false"
   [visible]="addVisible()"
   (onHide)="closeAddDialog()"
-  [style]="{ width: '1100px', maxWidth: '95vw' }"
-  [contentStyle]="{ overflow: 'visible', height: '100%' }"
-  [breakpoints]="{ '1400px': '95vw', '992px': '98vw', '768px': '100vw' }"
+  [style]="{ width: '820px', maxWidth: '95vw' }"
+  [contentStyle]="{ overflow: 'visible' }"
+  [breakpoints]="{ '992px': '95vw', '768px': '100vw' }"
 >
   <ng-template pTemplate="header">
     <div class="flex align-items-center gap-2">
@@ -101,74 +101,165 @@
     </div>
   </ng-template>
 
-  <div class="grid formgrid align-items-start mb-4" [formGroup]="form">
-    <div class="col-12 md:col-3">
-      <p-floatLabel variant="on" class="w-full">
-        <input disabled pInputText [value]="acquirer().fantasyName" class="w-full p-inputtext-sm" />
-      </p-floatLabel>
+  <form [formGroup]="form" class="cs-dialog-form">
+    <div class="grid formgrid gap-0">
+      <div class="col-12 md:col-6 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-select
+            size="small"
+            class="w-full"
+            appendTo="body"
+            optionValue="id"
+            inputId="companyId"
+            optionLabel="fantasyName"
+            formControlName="companyId"
+            [options]="companyOptions()"
+            [invalid]="
+              form.controls.companyId.invalid &&
+              (form.controls.companyId.dirty || form.controls.companyId.touched)
+            "
+          >
+            <ng-template let-option pTemplate="item">
+              <div class="cs-option-item">
+                <div class="cs-option-item__label">{{ option.fantasyName }}</div>
+                <div class="cs-option-item__subtext">
+                  N° Inscrição: {{ option.cnpj | csDocument }}
+                </div>
+              </div>
+            </ng-template>
+          </p-select>
+
+          <app-error-msg
+            [field]="'company'"
+            [forId]="'companyId'"
+            [control]="form.controls.companyId"
+            [label]="'establishment.fields.company' | translate"
+          />
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 md:col-6 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <input
+            readonly
+            pInputText
+            type="text"
+            id="relationAcquirer"
+            class="w-full p-inputtext-sm"
+            [value]="acquirer().fantasyName"
+          />
+          <label for="relationAcquirer">
+            {{ 'establishment.fields.acquirer' | translate }}
+          </label>
+        </p-floatLabel>
+      </div>
     </div>
 
-    <div class="col-12 md:col-4">
-      <p-floatLabel variant="on" class="w-full">
-        <p-select
-          size="small"
-          class="w-full"
-          appendTo="body"
-          optionValue="id"
-          optionLabel="pvNumber"
-          [options]="availableOptions()"
-          formControlName="establishmentId"
-        >
-          <ng-template let-option pTemplate="item">
-            <div class="cs-option-item">
-              <div class="cs-option-item__label">{{ option.pvNumber }}</div>
-              <div class="cs-option-item__subtext">
-                {{ typeEstablishmentEnumLabel(option.type) }}
-              </div>
-              <div class="cs-option-item__subtext">
-                Adquirente: {{ option.acquirer?.fantasyName }}
-              </div>
-              <div class="cs-option-item__subtext">Empresa: {{ option.company?.fantasyName }}</div>
-            </div>
-          </ng-template>
-        </p-select>
+    <div class="grid formgrid gap-0">
+      <div class="col-12 md:col-4 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-select
+            size="small"
+            class="w-full"
+            appendTo="body"
+            inputId="status"
+            optionValue="value"
+            optionLabel="label"
+            formControlName="status"
+            [options]="statusOptions()"
+            [invalid]="
+              form.controls.status.invalid &&
+              (form.controls.status.dirty || form.controls.status.touched)
+            "
+          ></p-select>
 
-        <label>{{ 'establishment.columns.establishment' | translate }}</label>
-      </p-floatLabel>
+          <app-error-msg
+            [field]="'status'"
+            [forId]="'status'"
+            [control]="form.controls.status"
+            [label]="'establishment.fields.statusEnum' | translate"
+          />
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 md:col-4 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-select
+            size="small"
+            class="w-full"
+            appendTo="body"
+            inputId="type"
+            optionValue="value"
+            optionLabel="label"
+            formControlName="type"
+            [options]="typeEstablishmentOptions()"
+            [invalid]="
+              form.controls.type.invalid && (form.controls.type.dirty || form.controls.type.touched)
+            "
+          ></p-select>
+
+          <app-error-msg
+            [field]="'type'"
+            [forId]="'type'"
+            [control]="form.controls.type"
+            [label]="'establishment.fields.typeEnum' | translate"
+          />
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 md:col-4 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <input
+            pInputText
+            type="text"
+            id="pvNumber"
+            autocomplete="off"
+            inputmode="numeric"
+            formControlName="pvNumber"
+            class="w-full p-inputtext-sm"
+          />
+          <app-error-msg
+            [field]="'pvNumber'"
+            [forId]="'pvNumber'"
+            [control]="form.controls.pvNumber"
+            [label]="'establishment.fields.pvNumber' | translate"
+          />
+        </p-floatLabel>
+      </div>
     </div>
 
-    <div class="col-12 md:col-2">
+    <div class="flex justify-content-end p-2 pt-0">
       <button
         pButton
         type="button"
         icon="pi pi-plus"
-        [disabled]="form.invalid"
         (click)="addRelationToList()"
-        class="w-full p-button-success"
-        [disabled]="!secPolicy.canManageRelations()"
+        class="p-button-success p-button-sm"
         [label]="'acquirer.relationships.add' | translate"
+        [disabled]="!secPolicy.canManageRelations() || form.invalid"
       ></button>
     </div>
-  </div>
+  </form>
 
   <p-table
     size="small"
     showGridlines
     styleClass="cs-admin-table"
-    class="p-datatable-sm mt-1"
+    class="p-datatable-sm mt-2"
     [value]="pendingRelations()"
     [tableStyle]="{ width: '100%' }"
   >
     <ng-template pTemplate="colgroup">
       <colgroup>
-        <col style="width: 140px" />
+        <col style="width: 130px" />
         <col style="width: auto" />
-        <col style="width: 180px" />
-        <col style="width: 130px" />
-        <col style="width: 130px" />
+        <col style="width: 150px" />
+        <col style="width: 100px" />
+        <col style="width: 100px" />
         <col style="width: 80px" />
       </colgroup>
     </ng-template>
+
     <ng-template pTemplate="header">
       <tr>
         <th class="text-center">{{ 'acquirer.columns.name' | translate }}</th>
@@ -192,8 +283,8 @@
             pButton
             type="button"
             icon="pi pi-trash"
-            (click)="removePendingRelation(item.establishmentId)"
             class="p-button-text p-button-sm p-button-danger"
+            (click)="removePendingRelation(item.pvNumber)"
           ></button>
         </td>
       </tr>
@@ -201,25 +292,24 @@
   </p-table>
 
   <ng-template pTemplate="footer">
-    <div class="flex justify-content-end gap-3">
-      <button
-        pButton
-        type="button"
-        icon="pi pi-times"
-        class="p-button-text"
-        (click)="closeAddDialog()"
-        [label]="'common.cancel' | translate"
-      ></button>
+    <button
+      pButton
+      type="button"
+      (click)="closeAddDialog()"
+      icon="pi pi-times"
+      class="p-button-text p-button-sm"
+      [label]="'common.cancel' | translate"
+    ></button>
 
-      <button
-        pButton
-        type="button"
-        icon="pi pi-save"
-        [loading]="saving()"
-        (click)="saveRelations()"
-        [disabled]="!secPolicy.canManageRelations()"
-        [label]="'acquirer.relationships.saveLinks' | translate"
-      ></button>
-    </div>
+    <button
+      pButton
+      type="button"
+      (click)="saveRelations()"
+      icon="pi pi-save"
+      class="p-button-sm"
+      [loading]="saving()"
+      [label]="'common.save' | translate"
+      [disabled]="saving() || !pendingRelations().length"
+    ></button>
   </ng-template>
 </p-dialog>

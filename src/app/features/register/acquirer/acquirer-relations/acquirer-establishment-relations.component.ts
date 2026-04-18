@@ -16,16 +16,33 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { I18nService } from '@core/i18n/i18n.service';
 import { AcquirerModel } from '@models/acquirer.models';
 import { CsDocumentPipe } from '@shared/pipes/cs-document.pipe';
+import { CompanyFacade } from '@features/facade/company.facade';
+import { CompanyMinimalModel } from '@models/company-minimal.models';
+import { AcquirerMinimalModel } from '@models/acquirer-minimal.models';
+import { ErrorMsgComponent } from '@shared/error-msg/error-msg.component';
 import { EstablishmentFacade } from '@features/facade/establishment.facade';
-import { EstablishmentMinimalModel } from '@models/establishment-minimal.models';
 import { AcquirerRelationsFacade } from '@features/facade/acquirer-relations.facade';
-import { StatusEnum, statusEnumLabel, statusEnumSeverity } from '@models/enums/status.enum';
 import { AcquirerPermissionPolicy } from '@features/security/policy/acquirer-permission.policy';
 import {
+  StatusEnum,
+  allStatusEnum,
+  statusEnumLabel,
+  statusEnumSeverity,
+} from '@models/enums/status.enum';
+import {
   TypeEstablishmentEnum,
+  allTypeEstablishmentEnum,
   typeEstablishmentEnumLabel,
   typeEstablishmentEnumSeverity,
 } from '@models/enums/type-establishment.enum';
+
+type PendingEstablishmentRelation = {
+  pvNumber: number;
+  status: StatusEnum | null;
+  type: TypeEstablishmentEnum | null;
+  company: CompanyMinimalModel;
+  acquirer: AcquirerMinimalModel;
+};
 
 @Component({
   standalone: true,
@@ -42,6 +59,7 @@ import {
     TranslateModule,
     InputTextModule,
     FloatLabelModule,
+    ErrorMsgComponent,
     ReactiveFormsModule,
     ConfirmDialogModule,
   ],
@@ -56,32 +74,43 @@ export class AcquirerEstablishmentRelationsComponent {
   protected readonly secPolicy = inject(AcquirerPermissionPolicy);
 
   readonly i18n = inject(I18nService);
+  readonly companyFacade = inject(CompanyFacade);
   readonly establishmentFacade = inject(EstablishmentFacade);
   readonly acquirerRelationsFacade = inject(AcquirerRelationsFacade);
-  readonly pendingRelations = signal<EstablishmentMinimalModel[]>([]);
+  readonly pendingRelations = signal<PendingEstablishmentRelation[]>([]);
 
   readonly addVisible = signal(false);
   readonly options = this.establishmentFacade.options;
+  readonly companyOptions = this.companyFacade.options;
   readonly saving = this.acquirerRelationsFacade.loading;
 
-  readonly form = this.fb.nonNullable.group({
-    establishmentId: ['', Validators.required],
+  readonly typeEstablishmentOptions = computed(() => {
+    this.i18n.getAppliedLang();
+    return allTypeEstablishmentEnum().map((value) => ({
+      label: typeEstablishmentEnumLabel(value, this.i18n),
+      value,
+    }));
   });
 
-  readonly availableOptions = computed(() => {
-    const linkedIds = new Set(
-      (this.acquirer().establishments ?? [])
-        .map((item) => item.establishmentId)
-        .filter((id): id is string => !!id),
-    );
+  readonly statusOptions = computed(() => {
+    this.i18n.getAppliedLang();
+    return allStatusEnum().map((value) => ({
+      label: statusEnumLabel(value, this.i18n),
+      value,
+    }));
+  });
 
-    const pendingIds = new Set(
-      this.pendingRelations()
-        .map((item) => item.id)
-        .filter((id): id is string => !!id),
-    );
+  readonly form = this.fb.group({
+    acquirer: this.fb.control<AcquirerMinimalModel | null>(null),
+    companyId: this.fb.control<string | null>(null, [Validators.required]),
+    status: this.fb.control<StatusEnum | null>(null, [Validators.required]),
+    type: this.fb.control<TypeEstablishmentEnum | null>(null, [Validators.required]),
 
-    return this.options().filter((item) => !linkedIds.has(item.id) && !pendingIds.has(item.id));
+    pvNumber: this.fb.nonNullable.control<number | null>(null, [
+      Validators.required,
+      Validators.minLength(2),
+      Validators.maxLength(20),
+    ]),
   });
 
   readonly canRemoveRelations = computed(() => {
@@ -89,11 +118,8 @@ export class AcquirerEstablishmentRelationsComponent {
   });
 
   constructor() {
+    this.companyFacade.loadCompanyOptionsFilter();
     this.establishmentFacade.loadEstablishmentOptionsFilter();
-  }
-
-  get establishmentIdCtrl() {
-    return this.form.controls.establishmentId;
   }
 
   statusLabel(status: StatusEnum | null) {
@@ -115,7 +141,13 @@ export class AcquirerEstablishmentRelationsComponent {
   openAddDialog() {
     if (!this.secPolicy.canManageRelations()) return;
     this.pendingRelations.set([]);
-    this.form.reset({ establishmentId: '' });
+    this.form.reset({
+      type: null,
+      status: null,
+      pvNumber: null,
+      acquirer: null,
+      companyId: null,
+    });
     this.form.markAsPristine();
     this.form.markAsUntouched();
     this.addVisible.set(true);
@@ -123,7 +155,13 @@ export class AcquirerEstablishmentRelationsComponent {
 
   closeAddDialog() {
     this.pendingRelations.set([]);
-    this.form.reset({ establishmentId: '' });
+    this.form.reset({
+      type: null,
+      status: null,
+      pvNumber: null,
+      acquirer: null,
+      companyId: null,
+    });
     this.form.markAsPristine();
     this.form.markAsUntouched();
     this.addVisible.set(false);
@@ -131,31 +169,63 @@ export class AcquirerEstablishmentRelationsComponent {
 
   addRelationToList() {
     if (!this.secPolicy.canManageRelations()) return;
+
     this.form.markAllAsTouched();
     if (this.form.invalid) return;
 
-    const establishmentId = this.establishmentIdCtrl.value;
-    const establishment = this.availableOptions().find((item) => item.id === establishmentId);
-    if (!establishment) return;
+    const type = this.typeCtrl.value;
+    const status = this.statusCtrl.value;
+    const pvNumber = this.pvNumberCtrl.value;
+    const companyId = this.companyIdCtrl.value;
 
-    this.pendingRelations.update((items) => [...items, establishment]);
+    const company = this.companyOptions().find((item) => item.id === companyId) ?? null;
+    if (!company || !pvNumber) return;
 
-    this.form.reset({ establishmentId: '' });
+    this.pendingRelations.update((items) => [
+      ...items,
+      {
+        type,
+        status,
+        company,
+        acquirer: {
+          cnpj: '',
+          status: null,
+          socialReason: '',
+          id: this.acquirer().id,
+          fantasyName: this.acquirer().fantasyName,
+        },
+        pvNumber,
+      },
+    ]);
+
+    this.form.reset({
+      type: null,
+      status: null,
+      acquirer: null,
+      pvNumber: null,
+      companyId: null,
+    });
+
     this.form.markAsPristine();
     this.form.markAsUntouched();
   }
 
-  removePendingRelation(establishmentId: string) {
-    this.pendingRelations.update((items) => items.filter((item) => item.id !== establishmentId));
+  removePendingRelation(pvNumber: number) {
+    this.pendingRelations.update((items) => items.filter((item) => item.pvNumber !== pvNumber));
   }
 
   saveRelations() {
     if (!this.secPolicy.canManageRelations()) return;
-    const ids = this.pendingRelations().map((item) => item.id);
+    const items = this.pendingRelations().map((item) => ({
+      type: item.type,
+      status: item.status,
+      pvNumber: item.pvNumber,
+      companyId: item.company?.id,
+    }));
 
-    if (!ids.length) return;
+    if (!items.length) return;
 
-    this.acquirerRelationsFacade.addEstablishmentRelations(this.acquirer().id, ids, () => {
+    this.acquirerRelationsFacade.addEstablishmentRelations(this.acquirer().id, { items }, () => {
       this.closeAddDialog();
       this.changed.emit();
     });
@@ -191,5 +261,25 @@ export class AcquirerEstablishmentRelationsComponent {
         );
       },
     });
+  }
+
+  get typeCtrl() {
+    return this.form.controls.type;
+  }
+
+  get statusCtrl() {
+    return this.form.controls.status;
+  }
+
+  get pvNumberCtrl() {
+    return this.form.controls.pvNumber;
+  }
+
+  get acquirerCtrl() {
+    return this.form.controls.acquirer;
+  }
+
+  get companyIdCtrl() {
+    return this.form.controls.companyId;
   }
 }

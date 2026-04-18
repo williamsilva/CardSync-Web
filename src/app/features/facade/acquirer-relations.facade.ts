@@ -2,8 +2,11 @@ import { Injectable, inject, signal } from '@angular/core';
 
 import { finalize } from 'rxjs';
 
-import { AcquirerRelationsModel } from '@models/acquirer-relations.models';
 import { AcquirerRelationsApiService } from '@features/service/acquirer-relations.api.service';
+import {
+  AcquirerRelationsModel,
+  RelationAcquirerEstablishmentCreateInput,
+} from '@models/acquirer-relations.models';
 
 @Injectable({ providedIn: 'root' })
 export class AcquirerRelationsFacade {
@@ -57,10 +60,10 @@ export class AcquirerRelationsFacade {
 
   addEstablishmentRelations(
     acquirerId: string,
-    establishmentIds: string[],
+    input: RelationAcquirerEstablishmentCreateInput,
     onSuccess?: () => void,
   ) {
-    return this.api.addEstablishmentRelations(acquirerId, establishmentIds).subscribe({
+    return this.api.addEstablishmentRelations(acquirerId, input).subscribe({
       next: () => {
         this.refresh(acquirerId);
         onSuccess?.();

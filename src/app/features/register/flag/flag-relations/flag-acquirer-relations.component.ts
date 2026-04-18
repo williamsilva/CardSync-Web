@@ -99,14 +99,6 @@ export class FlagAcquirerRelationsComponent {
     this.acquirerFacade.loadAcquirerOptionsFilter();
   }
 
-  get acquirerIdCtrl() {
-    return this.form.controls.acquirerId;
-  }
-
-  get acquirerCodeCtrl() {
-    return this.form.controls.acquirerCode;
-  }
-
   statusLabel(status: StatusEnum | null) {
     return statusEnumLabel(status, this.i18n);
   }
@@ -202,5 +194,13 @@ export class FlagAcquirerRelationsComponent {
         });
       },
     });
+  }
+
+  get acquirerIdCtrl() {
+    return this.form.controls.acquirerId;
+  }
+
+  get acquirerCodeCtrl() {
+    return this.form.controls.acquirerCode;
   }
 }
