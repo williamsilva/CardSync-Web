@@ -107,7 +107,9 @@ export class EstablishmentListComponent extends StatefulListPage<
   protected readonly confirm = inject(ConfirmationService);
   protected readonly secPolicy = inject(EstablishmentPermissionPolicy);
 
-  override rows = Number(localStorage.getItem(this.tableRowsKey())) || 10;
+  override rows =
+    Number(localStorage.getItem(this.tableRowsKey())) || StatefulListPage.DEFAULT_ROWS;
+
   readonly totalRecords = computed(() => this.establishmentFacade.totalRecords());
 
   readonly establishments = computed<EstablishmentModel[]>(
@@ -292,6 +294,13 @@ export class EstablishmentListComponent extends StatefulListPage<
     );
   }
 
+  delete(row: EstablishmentModel): void {
+    this.bulk.executeAction(
+      this.establishmentFacade.delete(row.id),
+      this.i18n.tUi('establishment.delete.successSingle'),
+    );
+  }
+
   confirmActivate(row: EstablishmentModel): void {
     this.bulk.confirmAction({
       header: this.i18n.tUi('establishment.activate.header'),
@@ -322,6 +331,17 @@ export class EstablishmentListComponent extends StatefulListPage<
       }),
       icon: 'pi pi-lock',
       accept: () => this.block(row),
+    });
+  }
+
+  confirmDelete(row: EstablishmentModel): void {
+    this.bulk.confirmAction({
+      header: this.i18n.tUi('establishment.delete.header'),
+      message: this.i18n.tUi('establishment.delete.messageSingle', {
+        pvNumber: row?.pvNumber ?? row?.pvNumber ?? row?.id ?? '',
+      }),
+      icon: 'pi pi-lock',
+      accept: () => this.delete(row),
     });
   }
 

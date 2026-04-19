@@ -258,7 +258,7 @@
   (onPage)="onPageChange($event)"
   (onLazyLoad)="onLazyLoad($event)"
   [paginatorDropdownAppendTo]="'body'"
-  [rowsPerPageOptions]="[10, 20, 50, 100]"
+  [rowsPerPageOptions]="rowsPerPageOptions"
   [loading]="establishmentFacade.loading()"
   stateKey="cardsync.establishment.table.state.v1"
   [tableStyle]="{ width: '100%', 'min-width': '62rem' }"
@@ -274,7 +274,7 @@
       <col style="width: 150px" />
       <col style="width: 150px" />
       <col style="width: 170px" />
-      <col style="width: 100px" />
+      <col style="width: 120px" />
     </colgroup>
   </ng-template>
 
@@ -555,6 +555,7 @@
             type="button"
             tooltipPosition="top"
             icon="pi pi-check-circle"
+            (click)="confirmActivate(row)"
             class="p-button-text p-button-sm"
             [disabled]="!secPolicy.canActivate(row)"
             [pTooltip]="
@@ -562,37 +563,51 @@
                 ? ('establishment.action.activate.label' | translate)
                 : (secPolicy.activateDisabledReason(row) ?? '' | translate)
             "
-            (click)="confirmActivate(row)"
           ></button>
 
           <button
             pButton
             type="button"
             icon="pi pi-ban"
-            class="p-button-text p-button-sm"
             tooltipPosition="top"
+            (click)="confirmDeactivate(row)"
+            class="p-button-text p-button-sm"
             [disabled]="!secPolicy.canDeactivate(row)"
             [pTooltip]="
               secPolicy.canDeactivate(row)
                 ? ('establishment.action.deactivate.label' | translate)
                 : (secPolicy.deactivateDisabledReason(row) ?? '' | translate)
             "
-            (click)="confirmDeactivate(row)"
           ></button>
 
           <button
             pButton
             type="button"
             icon="pi pi-lock"
-            class="p-button-text p-button-sm"
             tooltipPosition="top"
+            (click)="confirmBlock(row)"
+            class="p-button-text p-button-sm"
             [disabled]="!secPolicy.canBlock(row)"
             [pTooltip]="
               secPolicy.canBlock(row)
                 ? ('establishment.action.block.label' | translate)
                 : (secPolicy.blockDisabledReason(row) ?? '' | translate)
             "
-            (click)="confirmBlock(row)"
+          ></button>
+
+          <button
+            pButton
+            type="button"
+            icon="pi pi-trash"
+            tooltipPosition="top"
+            (click)="confirmDelete(row)"
+            class="p-button-text p-button-sm"
+            [disabled]="!secPolicy.canDelete(row)"
+            [pTooltip]="
+              secPolicy.canDelete(row)
+                ? ('establishment.action.delete.label' | translate)
+                : (secPolicy.deleteDisabledReason(row) ?? '' | translate)
+            "
           ></button>
         </div>
       </td>

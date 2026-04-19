@@ -26,7 +26,7 @@ export class AcquirerPermissionPolicy {
   }
 
   canEdit(_row: AcquirerModel): boolean {
-    return this.perms.hasSupportOr(PERMISSIONS.ACQUIRER.UPDATE);
+    return this.perms.hasSupportOr(PERMISSIONS.ACQUIRER.CHANGE);
   }
 
   canActivate(row: AcquirerModel): boolean {

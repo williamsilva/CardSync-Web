@@ -74,7 +74,8 @@ export class GroupsListComponent extends StatefulListPage<
   protected readonly confirm = inject(ConfirmationService);
   protected readonly secPolicy = inject(GroupsPermissionPolicy);
 
-  override rows = Number(localStorage.getItem(this.tableRowsKey())) || 10;
+  override rows =
+    Number(localStorage.getItem(this.tableRowsKey())) || StatefulListPage.DEFAULT_ROWS;
 
   private readonly bulk = new (class extends BulkActionListPage {
     protected override readonly i18n = inject(I18nService);

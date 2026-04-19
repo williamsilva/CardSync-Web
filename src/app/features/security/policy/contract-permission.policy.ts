@@ -18,7 +18,7 @@ export class ContractPermissionPolicy {
   }
 
   canEdit(_row: ContractModel): boolean {
-    return this.perms.hasSupportOr(PERMISSIONS.CONTRACTS.UPDATE);
+    return this.perms.hasSupportOr(PERMISSIONS.CONTRACTS.CHANGE);
   }
 
   canActivate(row: ContractModel): boolean {

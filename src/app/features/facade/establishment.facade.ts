@@ -151,6 +151,17 @@ export class EstablishmentFacade {
     );
   }
 
+  delete(id: string): Observable<void> {
+    this._loading.set(true);
+    return this.api.delete(id).pipe(
+      tap(() => {
+        this._loading.set(false);
+        this.reloadLast();
+      }),
+      finalize(() => this._loading.set(false)),
+    );
+  }
+
   blockBulk(ids: string[]): Observable<void> {
     this._loading.set(true);
     return this.api.blockBulk({ ids }).pipe(

@@ -97,7 +97,8 @@ export class UsersListComponent extends StatefulListPage<UsersFiltersState, User
   protected readonly confirm = inject(ConfirmationService);
   protected readonly secPolicy = inject(SecurityPermissionPolicy);
 
-  override rows = Number(localStorage.getItem(this.tableRowsKey())) || 10;
+  override rows =
+    Number(localStorage.getItem(this.tableRowsKey())) || StatefulListPage.DEFAULT_ROWS;
 
   private readonly bulk = new (class extends BulkActionListPage {
     protected override readonly i18n = inject(I18nService);

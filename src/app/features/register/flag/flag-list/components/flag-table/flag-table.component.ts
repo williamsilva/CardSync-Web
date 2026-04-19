@@ -61,6 +61,7 @@ export class FlagTableComponent {
   totalRecords = input.required<number>();
   expandedFlagId = input<string | null>(null);
   selectedRows = input.required<FlagModel[]>();
+  rowsPerPageOptions = input.required<number[]>();
   secPolicy = input.required<FlagPermissionPolicy>();
   expandedRelationType = input<'companies' | 'acquirers' | null>(null);
   statusLabel = input.required<(status: StatusEnum | null) => string>();

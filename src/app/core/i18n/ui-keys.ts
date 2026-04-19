@@ -98,6 +98,13 @@ export const UI_KEYS = {
       messageSingle: 'establishment.block.messageSingle',
       successSingle: 'establishment.block.successSingle',
     },
+    delete: {
+      header: 'establishment.delete.header',
+      messageBulk: 'establishment.delete.messageBulk',
+      successBulk: 'establishment.delete.successBulk',
+      messageSingle: 'establishment.delete.messageSingle',
+      successSingle: 'establishment.delete.successSingle',
+    },
   },
   contract: {
     form: {

@@ -88,66 +88,91 @@
     </div>
   </ng-template>
 
-  <div class="grid formgrid align-items-start mb-4" [formGroup]="form">
-    <div class="col-12 md:col-3">
-      <p-floatLabel variant="on" class="w-full">
-        <input disabled pInputText [value]="flag().name" class="w-full p-inputtext-sm" />
-        <!--  <label>{{ 'flag.columns.name' | translate }}</label> -->
-      </p-floatLabel>
+  <form [formGroup]="form" class="cs-dialog-form">
+    <div class="grid formgrid gap-0">
+      <div class="col-12 md:col-4 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <input
+            readonly
+            pInputText
+            type="text"
+            [value]="flag().name"
+            id="relationAcquirers"
+            class="w-full p-inputtext-sm"
+          />
+          <label for="relationAcquirers">
+            {{ 'flag.columns.name' | translate }}
+          </label>
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 md:col-5 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-select
+            size="small"
+            class="w-full"
+            appendTo="body"
+            optionValue="id"
+            inputId="acquirerId"
+            optionLabel="fantasyName"
+            formControlName="acquirerId"
+            [options]="availableOptions()"
+            [invalid]="
+              form.controls.acquirerId.invalid &&
+              (form.controls.acquirerId.dirty || form.controls.acquirerId.touched)
+            "
+          >
+            <ng-template let-option pTemplate="item">
+              <div class="cs-option-item">
+                <div class="cs-option-item__label">{{ option.fantasyName }}</div>
+                <div class="cs-option-item__subtext">
+                  N° Inscrição: {{ option.cnpj | csDocument }}
+                </div>
+              </div>
+            </ng-template>
+          </p-select>
+
+          <app-error-msg
+            [field]="'acquirer'"
+            [forId]="'acquirerId'"
+            [control]="form.controls.acquirerId"
+            [label]="'flag.fields.acquirer' | translate"
+          />
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 md:col-3 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <input
+            pInputText
+            type="text"
+            maxlength="2"
+            id="acquirerCode"
+            class="w-full p-inputtext-sm"
+            formControlName="acquirerCode"
+          />
+          <app-error-msg
+            [field]="'acquirerCode'"
+            [forId]="'acquirerCode'"
+            [control]="form.controls.acquirerCode"
+            [label]="'flag.columns.acquirerCode' | translate"
+          />
+        </p-floatLabel>
+      </div>
     </div>
 
-    <div class="col-12 md:col-4">
-      <p-floatLabel variant="on" class="w-full">
-        <p-select
-          size="small"
-          class="w-full"
-          appendTo="body"
-          optionValue="id"
-          optionLabel="fantasyName"
-          formControlName="acquirerId"
-          [options]="availableOptions()"
-        />
-        <app-error-msg
-          [required]="false"
-          [field]="'acquirerId'"
-          [forId]="'acquirerId'"
-          [control]="form.controls.acquirerId"
-          [label]="'flag.columns.acquirer' | translate"
-        />
-      </p-floatLabel>
-    </div>
-
-    <div class="col-12 md:col-3">
-      <p-floatLabel variant="on" class="w-full">
-        <input
-          pInputText
-          maxlength="2"
-          class="w-full p-inputtext-sm"
-          formControlName="acquirerCode"
-        />
-        <app-error-msg
-          [required]="false"
-          [field]="'acquirerCode'"
-          [forId]="'acquirerCode'"
-          [control]="form.controls.acquirerCode"
-          [label]="'flag.columns.acquirerCode' | translate"
-        />
-      </p-floatLabel>
-    </div>
-
-    <div class="col-12 md:col-2">
+    <div class="flex justify-content-end p-2 pt-0">
       <button
         pButton
         type="button"
         icon="pi pi-plus"
-        [disabled]="form.invalid"
         (click)="addRelationToList()"
-        class="w-full p-button-success"
-        [disabled]="!secPolicy.canManageRelations()"
         [label]="'flag.relationships.add' | translate"
+        class="p-button-success p-button-sm relation-add-btn"
+        [disabled]="!secPolicy.canManageRelations() || form.invalid"
       ></button>
     </div>
-  </div>
+  </form>
 
   <p-table [value]="pendingRelations()" size="small" showGridlines [tableStyle]="{ width: '100%' }">
     <ng-template pTemplate="colgroup">

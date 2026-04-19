@@ -19,7 +19,7 @@ export class GroupsPermissionPolicy {
   }
 
   canEdit(_row: GroupPermissionTarget): boolean {
-    return this.perms.hasSupportOr(PERMISSIONS.GROUPS.UPDATE);
+    return this.perms.hasSupportOr(PERMISSIONS.GROUPS.CHANGE);
   }
 
   canDelete(_row: GroupPermissionTarget): boolean {

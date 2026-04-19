@@ -26,7 +26,7 @@ export class FlagPermissionPolicy {
   }
 
   canEdit(_row: FlagModel): boolean {
-    return this.perms.hasSupportOr(PERMISSIONS.FLAGS.UPDATE);
+    return this.perms.hasSupportOr(PERMISSIONS.FLAGS.CHANGE);
   }
 
   canActivate(row: FlagModel): boolean {

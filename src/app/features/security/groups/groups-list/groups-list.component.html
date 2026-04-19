@@ -132,7 +132,7 @@
   (onPage)="onPageChange($event)"
   (onLazyLoad)="onLazyLoad($event)"
   [paginatorDropdownAppendTo]="'body'"
-  [rowsPerPageOptions]="[10, 20, 50, 100]"
+  [rowsPerPageOptions]="rowsPerPageOptions"
   stateKey="cardsync.groups.table.state.v1"
   [tableStyle]="{ width: '100%', 'min-width': '48rem' }"
   [currentPageReportTemplate]="'pagination.report' | translate"

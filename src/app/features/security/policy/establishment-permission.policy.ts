@@ -18,7 +18,7 @@ export class EstablishmentPermissionPolicy {
   }
 
   canEdit(_row: EstablishmentModel): boolean {
-    return this.perms.hasSupportOr(PERMISSIONS.ESTABLISHMENT.UPDATE);
+    return this.perms.hasSupportOr(PERMISSIONS.ESTABLISHMENT.CHANGE);
   }
 
   canActivate(row: EstablishmentModel): boolean {
@@ -41,6 +41,15 @@ export class EstablishmentPermissionPolicy {
 
   canBlock(row: EstablishmentModel): boolean {
     if (!this.perms.hasSupportOr(PERMISSIONS.ESTABLISHMENT.ACTIVE_OR_INACTIVE)) {
+      return false;
+    }
+
+    const status = normalizeStatusEnum(row.status);
+    return status === StatusEnum.ACTIVE;
+  }
+
+  canDelete(row: EstablishmentModel): boolean {
+    if (!this.perms.hasSupportOr(PERMISSIONS.ESTABLISHMENT.DELETE)) {
       return false;
     }
 
@@ -85,6 +94,20 @@ export class EstablishmentPermissionPolicy {
 
     if (status !== StatusEnum.ACTIVE) {
       return 'establishment.action.block.invalidStatus';
+    }
+
+    return null;
+  }
+
+  deleteDisabledReason(row: EstablishmentModel): string | null {
+    if (!this.perms.hasSupportOr(PERMISSIONS.ESTABLISHMENT.DELETE)) {
+      return 'establishment.action.delete.noPermission';
+    }
+
+    const status = normalizeStatusEnum(row.status);
+
+    if (status !== StatusEnum.ACTIVE) {
+      return 'establishment.action.delete.invalidStatus';
     }
 
     return null;

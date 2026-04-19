@@ -386,6 +386,7 @@
     },
     "fields": {
       "cnpj": "CNPJ",
+      "company": "Empresa",
       "statusEnum": "Status",
       "createdAt": "Cadastrado em",
       "createdBy": "Cadastrado por",
@@ -501,7 +502,20 @@
         "label": "Bloquear",
         "noPermission": "Você não tem permissão para bloquear estabelecimentos.",
         "invalidStatus": "Somente estabelecimentos ativos podem ser bloqueados."
+      },
+      "delete": {
+        "label": "Excluir",
+        "noPermission": "Você não tem permissão para excluir estabelecimentos.",
+        "invalidStatus": "Somente estabelecimentos ativos podem ser excluidos."
       }
+    },
+    "delete": {
+      "selected": "Deletar",
+      "header": "Confirmar exclusão",
+      "successSingle": "Estabelecimento excluido com sucesso.",
+      "messageSingle": "Deseja excluir o estabelecimento {pvNumber}?",
+      "successBulk": "{count, plural, one {# estabelecimento excluido com sucesso.} other {# estabelecimentos excluidos com sucesso.}}",
+      "messageBulk": "{count, plural, one {Deseja excluir # estabelecimento selecionado?} other {Deseja excluir # estabelecimentos selecionados?}}"
     },
     "block": {
       "selected": "Bloquear",

@@ -25,7 +25,7 @@ export class SecurityPermissionPolicy {
   }
 
   canEdit(row: UserRowPermissionTarget): boolean {
-    if (!this.perms.hasSupportOr(PERMISSIONS.USERS.UPDATE)) {
+    if (!this.perms.hasSupportOr(PERMISSIONS.USERS.CHANGE)) {
       return false;
     }
 

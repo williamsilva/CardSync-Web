@@ -84,6 +84,10 @@ export class EstablishmentApiService {
     return this.http.post<void>(`${this.baseUrl}/${id}/block`, null);
   }
 
+  delete(id: string) {
+    return this.http.post<void>(`${this.baseUrl}/${id}/delete`, null);
+  }
+
   blockBulk(input: EstablishmentBulkStatusInput) {
     return this.http.post<void>(`${this.baseUrl}/block`, input);
   }

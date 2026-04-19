@@ -136,7 +136,6 @@
   [rowHover]="true"
   [paginator]="true"
   stateStorage="local"
-  stateKey="cardsync.audit.emailLog.table.state.v1"
   sortMode="multiple"
   filterDisplay="menu"
   [value]="emailLogs()"
@@ -148,7 +147,8 @@
   (onPage)="onPageChange($event)"
   (onLazyLoad)="onLazyLoad($event)"
   [paginatorDropdownAppendTo]="'body'"
-  [rowsPerPageOptions]="[10, 20, 50, 100]"
+  [rowsPerPageOptions]="rowsPerPageOptions"
+  stateKey="cardsync.audit.emailLog.table.state.v1"
   [tableStyle]="{ width: '100%', 'min-width': '48rem' }"
   [currentPageReportTemplate]="'pagination.report' | translate"
 >

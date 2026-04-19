@@ -18,7 +18,7 @@ export class CompanyPermissionPolicy {
   }
 
   canEdit(_row: CompanyModel): boolean {
-    return this.perms.hasSupportOr(PERMISSIONS.COMPANIES.UPDATE);
+    return this.perms.hasSupportOr(PERMISSIONS.COMPANIES.CHANGE);
   }
 
   canActivate(row: CompanyModel): boolean {

@@ -17,7 +17,7 @@ export abstract class StatefulListPage<
 > extends BaseListPage<TState> {
   protected abstract readonly i18n: I18nService;
 
-  protected static readonly DEFAULT_ROWS = 10;
+  protected static readonly DEFAULT_ROWS = 15;
 
   protected searchedOnce = false;
   protected skipNextLazy = false;
@@ -30,6 +30,7 @@ export abstract class StatefulListPage<
   );
 
   abstract rows: number;
+  public rowsPerPageOptions: number[] = [10, 15, 20, 30, 50, 100];
 
   protected abstract tableRowsKey(): string;
   protected abstract tableStateKey(): string;
