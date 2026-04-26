@@ -22,31 +22,32 @@ import {
   EventEmitter,
 } from '@angular/core';
 
-import { of } from 'rxjs';
+import { of, forkJoin } from 'rxjs';
 import { TagModule } from 'primeng/tag';
-import { catchError } from 'rxjs/operators';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { SelectModule } from 'primeng/select';
+import { TooltipModule } from 'primeng/tooltip';
 import { DividerModule } from 'primeng/divider';
 import { InputTextModule } from 'primeng/inputtext';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { TranslateModule } from '@ngx-translate/core';
 import { DatePickerModule } from 'primeng/datepicker';
 
-import { FlagModel } from '@models/flag.models';
 import { I18nService } from '@core/i18n/i18n.service';
 import { CompanyFacade } from '@features/facade/company.facade';
 import { CsDocumentPipe } from '@shared/pipes/cs-document.pipe';
-import { AcquirerFacade } from '@features/facade/acquirer.facade';
-import { EstablishmentModel } from '@models/establishment.models';
 import { ContractFacade } from '@features/facade/contract.facade';
-import { FlagApiService } from '@features/service/flag.api.service';
 import { ErrorMsgComponent } from '@shared/error-msg/error-msg.component';
-import { EstablishmentApiService } from '@features/service/establishment.api.service';
-import { allModalityEnum, modalityEnumLabel, ModalityEnum } from '@models/modality.enum';
+import { ContractLookupFacade } from '@features/facade/contract-lookup.facade';
+import {
+  ModalityEnum,
+  allModalityEnum,
+  modalityEnumLabel,
+  modalityEnumSeverity,
+} from '@models/enums/modality.enum';
 import {
   ContractModel,
   ContractRateInput,
@@ -56,17 +57,22 @@ import {
 } from '@models/contract.models';
 
 import {
-  StatusEnum,
-  allStatusEnum,
-  statusEnumLabel,
-  normalizeStatusEnum,
-} from '@models/enums/status.enum';
+  TypeEstablishmentEnum,
+  typeEstablishmentEnumLabel,
+  typeEstablishmentEnumSeverity,
+} from '@models/enums/type-establishment.enum';
+import {
+  ContractEnum,
+  allContractEnum,
+  contractEnumLabel,
+  normalizeContractEnum,
+} from '@models/enums/contract.enum';
 
 type ContractRateForm = FormGroup<{
-  modality: FormControl<ModalityEnum | null>;
   rate: FormControl<number | null>;
-  paymentTermDays: FormControl<number | null>;
   rateEcommerce: FormControl<number | null>;
+  modality: FormControl<ModalityEnum | null>;
+  paymentTermDays: FormControl<number | null>;
   paymentTermDaysEcommerce: FormControl<number | null>;
 }>;
 
@@ -76,15 +82,15 @@ type ContractFlagForm = FormGroup<{
 }>;
 
 type ContractForm = FormGroup<{
+  endDate: FormControl<string>;
   id: FormControl<string | null>;
+  startDate: FormControl<string>;
   description: FormControl<string>;
+  status: FormControl<ContractEnum>;
   companyId: FormControl<string | null>;
   acquirerId: FormControl<string | null>;
-  establishmentId: FormControl<string | null>;
-  startDate: FormControl<string>;
-  endDate: FormControl<string | null>;
-  status: FormControl<StatusEnum>;
   contractFlags: FormArray<ContractFlagForm>;
+  establishmentId: FormControl<string | null>;
 }>;
 
 type ContractFlagFormValue = {
@@ -105,6 +111,7 @@ type ContractFlagFormValue = {
     ButtonModule,
     SelectModule,
     DividerModule,
+    TooltipModule,
     CsDocumentPipe,
     InputTextModule,
     TranslateModule,
@@ -123,45 +130,54 @@ export class ContractCreateDialogComponent {
   @Output() readonly created = new EventEmitter<void>();
   @Output() readonly visibleChange = new EventEmitter<boolean>();
 
+  readonly isEditMode = computed(() => !!this.contract()?.id);
+
   private readonly fb = inject(FormBuilder);
   private readonly toast = inject(MessageService);
   private readonly destroyRef = inject(DestroyRef);
-  private readonly flagApi = inject(FlagApiService);
-  private readonly contractFacade = inject(ContractFacade);
+  private readonly i18nService = inject(I18nService);
   private readonly companyFacade = inject(CompanyFacade);
-  private readonly acquirerFacade = inject(AcquirerFacade);
-  private readonly establishmentApi = inject(EstablishmentApiService);
-
-  readonly i18n = inject(I18nService);
+  private readonly contractFacade = inject(ContractFacade);
+  private readonly contractLookupFacade = inject(ContractLookupFacade);
 
   readonly saving = signal(false);
+  readonly i18n = this.i18nService;
   readonly submitted = signal(false);
   readonly loadingContract = signal(false);
-  readonly allFlags = signal<FlagModel[]>([]);
-  readonly allEstablishments = signal<EstablishmentModel[]>([]);
 
+  private companyLookupVersion = 0;
   private dialogInitialized = false;
-  private lastLoadedId: string | null = null;
-  private descriptionTouchedByUser = false;
+  private dependentLookupVersion = 0;
   private patchingDescription = false;
   private suppressCascadeReset = false;
+  private descriptionTouchedByUser = false;
+  private lastLoadedId: string | null = null;
+  private suppressDescriptionTracking = false;
+
+  private expandedFlagCards = new Set<number>();
 
   readonly companyOptions = this.companyFacade.options;
-  readonly allAcquirerOptions = this.acquirerFacade.options;
-  readonly isEditMode = computed(() => !!this.contract()?.id);
+  readonly flagOptions = this.contractLookupFacade.flagOptions;
+  readonly acquirerOptions = this.contractLookupFacade.acquirerOptions;
+  readonly establishmentOptions = this.contractLookupFacade.establishmentOptions;
+
+  readonly newFlagIdControl = new FormControl<string | null>({
+    value: null,
+    disabled: true,
+  });
 
   readonly form: ContractForm = this.fb.group(
     {
       id: this.fb.control<string | null>(null),
       description: this.fb.nonNullable.control('', [Validators.required]),
-      companyId: this.fb.control<string | null>(null),
+      companyId: this.fb.control<string | null>(null, [Validators.required]),
       acquirerId: this.fb.control<string | null>({ value: null, disabled: true }, [
         Validators.required,
       ]),
       establishmentId: this.fb.control<string | null>({ value: null, disabled: true }),
+      endDate: this.fb.nonNullable.control('', [Validators.required]),
       startDate: this.fb.nonNullable.control('', [Validators.required]),
-      endDate: this.fb.control<string | null>(null),
-      status: this.fb.nonNullable.control(StatusEnum.ACTIVE),
+      status: this.fb.nonNullable.control(ContractEnum.VALIDITY),
       contractFlags: this.fb.array<ContractFlagForm>([]),
     },
     {
@@ -171,8 +187,8 @@ export class ContractCreateDialogComponent {
 
   readonly statusOptions = computed(() => {
     this.i18n.getAppliedLang();
-    return allStatusEnum().map((value) => ({
-      label: statusEnumLabel(value, this.i18n),
+    return allContractEnum().map((value) => ({
+      label: contractEnumLabel(value, this.i18n),
       value,
     }));
   });
@@ -194,7 +210,7 @@ export class ContractCreateDialogComponent {
   readonly selectedAcquirer = computed(() => {
     const acquirerId = this.form.controls.acquirerId.value;
     if (!acquirerId) return null;
-    return this.allAcquirerOptions().find((item: any) => item.id === acquirerId) ?? null;
+    return this.acquirerOptions().find((item) => item.id === acquirerId) ?? null;
   });
 
   readonly selectedEstablishment = computed(() => {
@@ -203,73 +219,8 @@ export class ContractCreateDialogComponent {
     return this.establishmentOptions().find((item) => item.id === establishmentId) ?? null;
   });
 
-  readonly acquirerOptions = computed(() => {
-    const companyId = this.form.controls.companyId.value;
-    if (!companyId) return [];
-
-    return this.allAcquirerOptions().filter((item: any) => {
-      const isActive = normalizeStatusEnum(item?.status) === StatusEnum.ACTIVE;
-
-      const linkedCompanyIds = this.extractLinkedIds(item, [
-        'companies',
-        'companyRelations',
-        'acquirerCompanies',
-      ]);
-
-      const matchesCompany =
-        !linkedCompanyIds.length ||
-        linkedCompanyIds.includes(companyId) ||
-        item?.company?.id === companyId ||
-        item?.companyId === companyId;
-
-      return isActive && matchesCompany;
-    });
-  });
-
-  readonly establishmentOptions = computed(() => {
-    const companyId = this.form.controls.companyId.value;
-    const acquirerId = this.form.controls.acquirerId.value;
-
-    if (!companyId || !acquirerId) return [];
-
-    return this.allEstablishments().filter((item) => {
-      const companyMatches = item.company?.id === companyId;
-      const acquirerMatches = item.acquirer?.id === acquirerId;
-      return companyMatches && acquirerMatches;
-    });
-  });
-
-  readonly flagOptions = computed(() => {
-    const companyId = this.form.controls.companyId.value;
-    const acquirerId = this.form.controls.acquirerId.value;
-
-    if (!companyId || !acquirerId) return [];
-
-    return this.allFlags().filter((flag: any) => {
-      const relationCompanyIds = this.extractLinkedIds(flag, ['companies', 'companyRelations']);
-      const relationAcquirerIds = this.extractLinkedIds(flag, ['acquirers', 'acquirerRelations']);
-
-      const matchesCompany =
-        !relationCompanyIds.length ||
-        relationCompanyIds.includes(companyId) ||
-        flag?.company?.id === companyId ||
-        flag?.companyId === companyId;
-
-      const matchesAcquirer =
-        !relationAcquirerIds.length ||
-        relationAcquirerIds.includes(acquirerId) ||
-        flag?.acquirer?.id === acquirerId ||
-        flag?.acquirerId === acquirerId;
-
-      return matchesCompany && matchesAcquirer;
-    });
-  });
-
   constructor() {
     this.companyFacade.loadCompanyOptionsFilter();
-    this.acquirerFacade.loadAcquirerOptionsFilter();
-    this.loadFlags();
-    this.loadEstablishments();
 
     effect(() => {
       const visible = this.visible();
@@ -295,7 +246,7 @@ export class ContractCreateDialogComponent {
     this.form.controls.description.valueChanges
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => {
-        if (this.patchingDescription) return;
+        if (this.patchingDescription || this.suppressDescriptionTracking) return;
         this.descriptionTouchedByUser = true;
       });
 
@@ -318,8 +269,52 @@ export class ContractCreateDialogComponent {
       });
   }
 
-  get contractFlags(): FormArray<ContractFlagForm> {
-    return this.form.controls.contractFlags;
+  modalityEnumLabel(modality: ModalityEnum | null | undefined) {
+    return modalityEnumLabel(modality, this.i18n);
+  }
+
+  severityModalityEnum(modality: ModalityEnum | null) {
+    return modalityEnumSeverity(modality);
+  }
+
+  typeEstablishmentEnumLabel(status: TypeEstablishmentEnum | null) {
+    return typeEstablishmentEnumLabel(status, this.i18n);
+  }
+
+  severityTypeEstablishmentEnum(status: TypeEstablishmentEnum | null) {
+    return typeEstablishmentEnumSeverity(status);
+  }
+
+  isFlagCardExpanded(flagIndex: number): boolean {
+    return this.expandedFlagCards.has(flagIndex);
+  }
+
+  toggleFlagCard(flagIndex: number): void {
+    if (this.expandedFlagCards.has(flagIndex)) {
+      this.expandedFlagCards.delete(flagIndex);
+      return;
+    }
+
+    this.expandedFlagCards.add(flagIndex);
+  }
+
+  onFlagHeaderSpace(event: Event, flagIndex: number): void {
+    event.preventDefault();
+    this.toggleFlagCard(flagIndex);
+  }
+
+  collapsedRateSummary(flagIndex: number): { visible: string[]; remaining: number } {
+    const labels = this.ratesAt(flagIndex)
+      .controls.map((group) => this.modalityEnumLabel(group.controls.modality.value))
+      .filter((label): label is string => !!label && label.trim().length > 0);
+
+    const uniqueLabels = Array.from(new Set(labels));
+    const visible = uniqueLabels.slice(0, 3);
+
+    return {
+      visible,
+      remaining: Math.max(uniqueLabels.length - visible.length, 0),
+    };
   }
 
   onHide(): void {
@@ -332,21 +327,58 @@ export class ContractCreateDialogComponent {
     this.submitted.set(false);
     this.saving.set(false);
     this.loadingContract.set(false);
+    this.contractLookupFacade.clearAll();
     this.resetFormForCreate();
     this.visibleChange.emit(false);
   }
 
-  addFlag(): void {
-    if (this.form.controls.acquirerId.disabled) return;
-    this.contractFlags.push(this.createFlagGroup());
+  canManageFlags(): boolean {
+    const companyId = this.form.controls.companyId.value;
+    const acquirerId = this.form.controls.acquirerId.value;
+    return !!companyId && !!acquirerId;
+  }
+
+  canAddSelectedFlag(): boolean {
+    return this.canManageFlags() && !!this.newFlagIdControl.value;
+  }
+
+  addSelectedFlag(): void {
+    const flagId = this.newFlagIdControl.value;
+    if (!flagId || !this.canManageFlags()) return;
+
+    this.contractFlags.push(
+      this.createFlagGroup({
+        flagId,
+        contractRates: [],
+      }),
+    );
+
+    const newIndex = this.contractFlags.length - 1;
+    this.expandedFlagCards.add(newIndex);
+    this.newFlagIdControl.setValue(null, { emitEvent: false });
   }
 
   removeFlag(index: number): void {
     this.contractFlags.removeAt(index);
+    this.syncExpandedFlagCards();
   }
 
   addRate(flagIndex: number): void {
-    this.ratesAt(flagIndex).push(this.createRateGroup());
+    if (!this.canAddRate(flagIndex)) {
+      return;
+    }
+
+    this.ratesAt(flagIndex).push(
+      this.createRateGroup({
+        modality: undefined,
+        rate: null,
+        paymentTermDays: null,
+        rateEcommerce: null,
+        paymentTermDaysEcommerce: null,
+      }),
+    );
+
+    this.expandedFlagCards.add(flagIndex);
   }
 
   removeRate(flagIndex: number, rateIndex: number): void {
@@ -357,10 +389,40 @@ export class ContractCreateDialogComponent {
     return this.contractFlags.at(flagIndex).controls.contractRates;
   }
 
+  availableFlags(currentIndex?: number) {
+    const selectedFlagIds = this.contractFlags.controls
+      .map((group, index) => (index === currentIndex ? null : group.controls.flagId.value))
+      .filter((flagId): flagId is string => !!flagId);
+
+    return this.flagOptions().filter((flag) => !selectedFlagIds.includes(flag.id));
+  }
+
+  availableModalities(flagIndex: number, currentRateIndex?: number) {
+    const selectedModalities = this.ratesAt(flagIndex)
+      .controls.map((group, index) =>
+        index === currentRateIndex ? null : group.controls.modality.value,
+      )
+      .filter((modality): modality is ModalityEnum => !!modality);
+
+    return this.availableModalitiesForRates(selectedModalities);
+  }
+
+  canAddRate(flagIndex: number): boolean {
+    const hasEmptyRate = this.ratesAt(flagIndex).controls.some(
+      (group) => !group.controls.modality.value,
+    );
+
+    if (hasEmptyRate) {
+      return false;
+    }
+
+    return this.availableModalities(flagIndex).length > 0;
+  }
+
   selectedFlagName(flagId: string | null | undefined): string {
     if (!flagId) return this.i18n.tUi('common.notInformed');
     return (
-      this.allFlags().find((item) => item.id === flagId)?.name ??
+      this.flagOptions().find((item) => item.id === flagId)?.name ??
       this.i18n.tUi('common.notInformed')
     );
   }
@@ -402,11 +464,6 @@ export class ContractCreateDialogComponent {
       },
       error: () => {
         this.saving.set(false);
-        this.toast.add({
-          severity: 'error',
-          summary: this.i18n.tUi('common.error'),
-          detail: this.i18n.tUi('contract.form.saveError'),
-        });
       },
     });
   }
@@ -417,102 +474,93 @@ export class ContractCreateDialogComponent {
     const acquirerControl = this.form.controls.acquirerId;
     const establishmentControl = this.form.controls.establishmentId;
 
+    this.companyLookupVersion += 1;
+    const requestVersion = this.companyLookupVersion;
+
+    acquirerControl.setValue(null, { emitEvent: false });
+    establishmentControl.setValue(null, { emitEvent: false });
+    acquirerControl.disable({ emitEvent: false });
+    establishmentControl.disable({ emitEvent: false });
+
+    this.contractLookupFacade.clearAcquirers();
+    this.contractLookupFacade.clearEstablishments();
+    this.contractLookupFacade.clearFlags();
+    this.contractFlags.clear();
+
+    this.newFlagIdControl.setValue(null, { emitEvent: false });
+    this.newFlagIdControl.disable({ emitEvent: false });
+
+    this.expandedFlagCards.clear();
+    this.suggestDescription();
+
     if (!companyId) {
-      acquirerControl.setValue(null, { emitEvent: false });
-      acquirerControl.disable({ emitEvent: false });
-
-      establishmentControl.setValue(null, { emitEvent: false });
-      establishmentControl.disable({ emitEvent: false });
-
-      this.setFlagsDisabled(true);
-      this.clearFlagSelections();
-      this.suggestDescription();
       return;
     }
 
-    acquirerControl.enable({ emitEvent: false });
-
-    const currentAcquirerId = acquirerControl.value;
-    const validAcquirer = this.acquirerOptions().some((item: any) => item.id === currentAcquirerId);
-
-    if (!validAcquirer) {
-      acquirerControl.setValue(null, { emitEvent: false });
-    }
-
-    if (!acquirerControl.value) {
-      establishmentControl.setValue(null, { emitEvent: false });
-      establishmentControl.disable({ emitEvent: false });
-      this.setFlagsDisabled(true);
-      this.clearFlagSelections();
-    } else {
-      establishmentControl.enable({ emitEvent: false });
-      this.setFlagsDisabled(false);
-    }
-
-    const selectedEstablishment = establishmentControl.value;
-    const validEstablishment = this.establishmentOptions().some(
-      (item) => item.id === selectedEstablishment,
-    );
-
-    if (!validEstablishment) {
-      establishmentControl.setValue(null, { emitEvent: false });
-    }
-
-    this.removeInvalidFlagSelections();
-    this.suggestDescription();
+    this.contractLookupFacade
+      .loadAcquirersByCompany(companyId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          if (requestVersion !== this.companyLookupVersion) return;
+          acquirerControl.enable({ emitEvent: false });
+        },
+        error: () => {
+          if (requestVersion !== this.companyLookupVersion) return;
+          this.toast.add({
+            severity: 'error',
+            summary: this.i18n.tUi('common.error'),
+            detail: this.i18n.tUi('contract.form.loadError'),
+          });
+        },
+      });
   }
 
   private handleAcquirerChange(acquirerId: string | null): void {
     if (this.suppressCascadeReset) return;
 
+    const companyId = this.form.controls.companyId.value;
     const establishmentControl = this.form.controls.establishmentId;
 
-    if (!acquirerId) {
-      establishmentControl.setValue(null, { emitEvent: false });
-      establishmentControl.disable({ emitEvent: false });
-      this.setFlagsDisabled(true);
-      this.clearFlagSelections();
-      this.suggestDescription();
+    this.dependentLookupVersion += 1;
+    const requestVersion = this.dependentLookupVersion;
+
+    establishmentControl.setValue(null, { emitEvent: false });
+    establishmentControl.disable({ emitEvent: false });
+
+    this.contractLookupFacade.clearEstablishments();
+    this.contractLookupFacade.clearFlags();
+    this.contractFlags.clear();
+
+    this.newFlagIdControl.setValue(null, { emitEvent: false });
+    this.newFlagIdControl.disable({ emitEvent: false });
+
+    this.expandedFlagCards.clear();
+    this.suggestDescription();
+
+    if (!companyId || !acquirerId) {
       return;
     }
 
-    establishmentControl.enable({ emitEvent: false });
-    this.setFlagsDisabled(false);
-
-    const selectedEstablishment = establishmentControl.value;
-    const validEstablishment = this.establishmentOptions().some(
-      (item) => item.id === selectedEstablishment,
-    );
-
-    if (!validEstablishment) {
-      establishmentControl.setValue(null, { emitEvent: false });
-    }
-
-    this.removeInvalidFlagSelections();
-    this.suggestDescription();
-  }
-
-  private loadFlags(): void {
-    this.flagApi
-      .searchPaged({ page: 0, size: 300, sort: [{ field: 'name', order: 1 }] })
-      .pipe(
-        catchError(() => of({ _embedded: { content: [] } })),
-        takeUntilDestroyed(this.destroyRef),
-      )
-      .subscribe((res: any) => {
-        this.allFlags.set(res?._embedded?.content ?? []);
-      });
-  }
-
-  private loadEstablishments(): void {
-    this.establishmentApi
-      .searchPaged({ page: 0, size: 500, sort: [{ field: 'pvNumber', order: 1 }] })
-      .pipe(
-        catchError(() => of({ _embedded: { content: [] } })),
-        takeUntilDestroyed(this.destroyRef),
-      )
-      .subscribe((res: any) => {
-        this.allEstablishments.set(res?._embedded?.content ?? []);
+    forkJoin({
+      establishments: this.contractLookupFacade.loadEstablishments(companyId, acquirerId),
+      flags: this.contractLookupFacade.loadFlags(companyId, acquirerId),
+    })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          if (requestVersion !== this.dependentLookupVersion) return;
+          establishmentControl.enable({ emitEvent: false });
+          this.newFlagIdControl.enable({ emitEvent: false });
+        },
+        error: () => {
+          if (requestVersion !== this.dependentLookupVersion) return;
+          this.toast.add({
+            severity: 'error',
+            summary: this.i18n.tUi('common.error'),
+            detail: this.i18n.tUi('contract.form.loadError'),
+          });
+        },
       });
   }
 
@@ -521,69 +569,100 @@ export class ContractCreateDialogComponent {
 
     this.lastLoadedId = id;
     this.loadingContract.set(true);
+    this.contractLookupFacade.clearAll();
 
     this.contractFacade
       .getById(id)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (row) => {
-          this.descriptionTouchedByUser = true;
-          this.suppressCascadeReset = true;
+          const companyId = row.company?.id ?? null;
+          const acquirerId = row.acquirer?.id ?? null;
 
-          this.form.reset({
-            id: row.id ?? null,
-            description: row.description ?? '',
-            startDate: this.toInputDate(row.startDate),
-            endDate: this.toNullableInputDate(row.endDate),
-            companyId: row.company?.id ?? null,
-            acquirerId: row.acquirer?.id ?? null,
-            establishmentId: row.establishment?.id ?? null,
-            status: normalizeStatusEnum(row.status) ?? StatusEnum.ACTIVE,
-          });
+          forkJoin({
+            acquirers: companyId
+              ? this.contractLookupFacade.loadAcquirersByCompany(companyId)
+              : of([]),
+            establishments:
+              companyId && acquirerId
+                ? this.contractLookupFacade.loadEstablishments(companyId, acquirerId)
+                : of([]),
+            flags:
+              companyId && acquirerId
+                ? this.contractLookupFacade.loadFlags(companyId, acquirerId)
+                : of([]),
+          })
+            .pipe(takeUntilDestroyed(this.destroyRef))
+            .subscribe({
+              next: () => {
+                this.suppressCascadeReset = true;
+                this.suppressDescriptionTracking = true;
 
-          if (row.company?.id) {
-            this.form.controls.acquirerId.enable({ emitEvent: false });
-          } else {
-            this.form.controls.acquirerId.disable({ emitEvent: false });
-          }
+                this.form.reset({
+                  id: row.id ?? null,
+                  description: row.description ?? '',
+                  startDate: this.toInputDate(row.startDate),
+                  endDate: this.toInputDate(row.endDate),
+                  companyId,
+                  acquirerId,
+                  establishmentId: row.establishment?.id ?? null,
+                  status: normalizeContractEnum(row.status) ?? ContractEnum.VALIDITY,
+                });
 
-          if (row.company?.id && row.acquirer?.id) {
-            this.form.controls.establishmentId.enable({ emitEvent: false });
-            this.setFlagsDisabled(false);
-          } else {
-            this.form.controls.establishmentId.disable({ emitEvent: false });
-            this.setFlagsDisabled(true);
-          }
+                this.descriptionTouchedByUser = !!row.description?.trim();
 
-          this.contractFlags.clear();
+                if (companyId) {
+                  this.form.controls.acquirerId.enable({ emitEvent: false });
+                } else {
+                  this.form.controls.acquirerId.disable({ emitEvent: false });
+                }
 
-          (row.contractFlags ?? []).forEach((flag) => {
-            const flagGroup = this.createFlagGroup(
-              {
-                flagId: flag.flag?.id ?? null,
-                contractRates: (flag.contractRates ?? []).map((rate) => ({
-                  modality: rate.modality ?? undefined,
-                  rate: rate.rate ?? null,
-                  paymentTermDays: rate.paymentTermDays ?? null,
-                  rateEcommerce: rate.rateEcommerce ?? null,
-                  paymentTermDaysEcommerce: rate.paymentTermDaysEcommerce ?? null,
-                })),
+                if (companyId && acquirerId) {
+                  this.form.controls.establishmentId.enable({ emitEvent: false });
+                } else {
+                  this.form.controls.establishmentId.disable({ emitEvent: false });
+                }
+
+                this.contractFlags.clear();
+
+                (row.contractFlags ?? []).forEach((flag) => {
+                  const flagGroup = this.createFlagGroup({
+                    flagId: flag.flag?.id ?? null,
+                    contractRates: (flag.contractRates ?? []).map((rate) => ({
+                      modality: rate.modality ?? undefined,
+                      rate: rate.rate ?? null,
+                      paymentTermDays: rate.paymentTermDays ?? null,
+                      rateEcommerce: rate.rateEcommerce ?? null,
+                      paymentTermDaysEcommerce: rate.paymentTermDaysEcommerce ?? null,
+                    })),
+                  });
+
+                  this.contractFlags.push(flagGroup);
+                });
+
+                this.syncExpandedFlagCards();
+                this.newFlagIdControl.setValue(null, { emitEvent: false });
+
+                this.suppressCascadeReset = false;
+
+                if (!row.description?.trim()) {
+                  this.suggestDescription(true);
+                }
+
+                this.submitted.set(false);
+                this.loadingContract.set(false);
+                this.suppressDescriptionTracking = false;
               },
-              !(row.company?.id && row.acquirer?.id),
-            );
-
-            this.contractFlags.push(flagGroup);
-          });
-
-          if (!this.contractFlags.length) {
-            this.contractFlags.push(
-              this.createFlagGroup(undefined, !(row.company?.id && row.acquirer?.id)),
-            );
-          }
-
-          this.suppressCascadeReset = false;
-          this.submitted.set(false);
-          this.loadingContract.set(false);
+              error: () => {
+                this.suppressCascadeReset = false;
+                this.loadingContract.set(false);
+                this.toast.add({
+                  severity: 'error',
+                  summary: this.i18n.tUi('common.error'),
+                  detail: this.i18n.tUi('contract.form.loadError'),
+                });
+              },
+            });
         },
         error: () => {
           this.suppressCascadeReset = false;
@@ -598,8 +677,9 @@ export class ContractCreateDialogComponent {
   }
 
   private resetFormForCreate(): void {
-    this.descriptionTouchedByUser = false;
     this.suppressCascadeReset = true;
+    this.suppressDescriptionTracking = true;
+    this.contractLookupFacade.clearAll();
 
     this.form.reset({
       id: null,
@@ -608,32 +688,33 @@ export class ContractCreateDialogComponent {
       acquirerId: null,
       establishmentId: null,
       startDate: '',
-      endDate: null,
-      status: StatusEnum.ACTIVE,
+      endDate: '',
+      status: ContractEnum.VALIDITY,
     });
+
+    this.descriptionTouchedByUser = false;
 
     this.form.controls.acquirerId.disable({ emitEvent: false });
     this.form.controls.establishmentId.disable({ emitEvent: false });
 
     this.contractFlags.clear();
-    this.contractFlags.push(this.createFlagGroup(undefined, true));
+    this.newFlagIdControl.setValue(null, { emitEvent: false });
+    this.expandedFlagCards.clear();
 
+    this.suppressDescriptionTracking = false;
     this.suppressCascadeReset = false;
     this.submitted.set(false);
   }
 
-  private createFlagGroup(
-    value?: ContractFlagFormValue,
-    disabled = this.form.controls.acquirerId.disabled,
-  ): ContractFlagForm {
+  private createFlagGroup(value?: ContractFlagFormValue): ContractFlagForm {
+    const rates: Partial<ContractRateInput>[] = value?.contractRates?.length
+      ? value.contractRates
+      : [];
+
     return this.fb.group({
-      flagId: this.fb.control<string | null>({ value: value?.flagId ?? null, disabled }, [
-        Validators.required,
-      ]),
+      flagId: this.fb.control<string | null>(value?.flagId ?? null, [Validators.required]),
       contractRates: this.fb.array<ContractRateForm>(
-        (value?.contractRates?.length ? value.contractRates : [undefined]).map((rate) =>
-          this.createRateGroup(rate),
-        ),
+        rates.map((rate) => this.createRateGroup(rate)),
       ),
     });
   }
@@ -657,14 +738,8 @@ export class ContractCreateDialogComponent {
     });
   }
 
-  private setFlagsDisabled(disabled: boolean): void {
-    this.contractFlags.controls.forEach((group) => {
-      if (disabled) {
-        group.controls.flagId.disable({ emitEvent: false });
-      } else {
-        group.controls.flagId.enable({ emitEvent: false });
-      }
-    });
+  private availableModalitiesForRates(selectedModalities: ModalityEnum[]) {
+    return this.modalityOptions().filter((option) => !selectedModalities.includes(option.value));
   }
 
   private buildPayload(): ContractCreateInput | ContractUpdateInput | null {
@@ -698,68 +773,18 @@ export class ContractCreateDialogComponent {
       companyId: value.companyId ?? null,
       acquirerId: value.acquirerId ?? '',
       establishmentId: value.establishmentId ?? null,
-      status: value.status ?? StatusEnum.ACTIVE,
+      status: value.status ?? ContractEnum.VALIDITY,
       contractFlags,
     };
-  }
-
-  private suggestDescription(): void {
-    if (this.descriptionTouchedByUser) return;
-    if (this.isEditMode()) return;
-
-    const company = this.selectedCompany();
-    const acquirer = this.selectedAcquirer();
-    const establishment = this.selectedEstablishment();
-
-    const parts = [
-      this.extractFirstName(company?.fantasyName),
-      acquirer?.fantasyName?.trim(),
-      establishment?.pvNumber?.trim(),
-    ].filter((value): value is string => !!value);
-
-    this.patchingDescription = true;
-    this.form.controls.description.setValue(parts.join(' ').trim(), { emitEvent: false });
-    this.patchingDescription = false;
   }
 
   private extractFirstName(value?: string | null): string {
     return (value ?? '').trim().split(/\s+/).filter(Boolean)[0] ?? '';
   }
 
-  private clearFlagSelections(): void {
-    this.contractFlags.controls.forEach((group) => {
-      group.controls.flagId.setValue(null, { emitEvent: false });
-    });
-  }
-
-  private removeInvalidFlagSelections(): void {
-    const validFlagIds = new Set(this.flagOptions().map((item) => item.id));
-
-    this.contractFlags.controls.forEach((group) => {
-      const currentFlagId = group.controls.flagId.value;
-      if (currentFlagId && !validFlagIds.has(currentFlagId)) {
-        group.controls.flagId.setValue(null, { emitEvent: false });
-      }
-    });
-  }
-
-  private extractLinkedIds(source: any, keys: string[]): string[] {
-    const ids = new Set<string>();
-
-    for (const key of keys) {
-      const value = source?.[key];
-      if (!Array.isArray(value)) continue;
-
-      value.forEach((item: any) => {
-        if (item?.id) ids.add(item.id);
-        if (item?.company?.id) ids.add(item.company.id);
-        if (item?.acquirer?.id) ids.add(item.acquirer.id);
-        if (item?.companyId) ids.add(item.companyId);
-        if (item?.acquirerId) ids.add(item.acquirerId);
-      });
-    }
-
-    return [...ids];
+  private syncExpandedFlagCards(): void {
+    const indexes = this.contractFlags.controls.map((_, index) => index);
+    this.expandedFlagCards = new Set(indexes);
   }
 
   private dateRangeValidator(control: AbstractControl): ValidationErrors | null {
@@ -777,14 +802,50 @@ export class ContractCreateDialogComponent {
     return String(value).slice(0, 10);
   }
 
-  private toNullableInputDate(value?: string | null): string | null {
-    if (!value) return null;
-    return String(value).slice(0, 10);
-  }
-
   private numberOrNull(value: unknown): number | null {
     if (value === null || value === undefined || value === '') return null;
     const num = Number(value);
     return Number.isFinite(num) ? num : null;
+  }
+
+  private suggestDescription(force = false): void {
+    const control = this.form.controls.description;
+    const currentValue = (control.value ?? '').trim();
+
+    if (!force && this.descriptionTouchedByUser) return;
+    if (!force && this.isEditMode() && currentValue) return;
+
+    const companyId = this.form.controls.companyId.value;
+    const acquirerId = this.form.controls.acquirerId.value;
+    const establishmentId = this.form.controls.establishmentId.value;
+
+    const company = companyId
+      ? (this.companyOptions().find((item) => item.id === companyId) ?? null)
+      : null;
+
+    const acquirer = acquirerId
+      ? (this.acquirerOptions().find((item) => item.id === acquirerId) ?? null)
+      : null;
+
+    const establishment = establishmentId
+      ? (this.establishmentOptions().find((item) => item.id === establishmentId) ?? null)
+      : null;
+
+    const companyName = this.extractFirstName(
+      company?.fantasyName?.trim() || company?.socialReason?.trim() || '',
+    );
+
+    const acquirerName = acquirer?.fantasyName?.trim() || acquirer?.socialReason?.trim() || '';
+    const pvNumber = establishment?.pvNumber?.trim() || '';
+
+    const parts = [companyName, acquirerName, pvNumber].filter(Boolean);
+
+    this.patchingDescription = true;
+    control.setValue(parts.join(' - '), { emitEvent: false });
+    this.patchingDescription = false;
+  }
+
+  get contractFlags(): FormArray<ContractFlagForm> {
+    return this.form.controls.contractFlags;
   }
 }

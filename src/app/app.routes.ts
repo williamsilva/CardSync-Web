@@ -2,8 +2,8 @@ import { Routes } from '@angular/router';
 
 import { authGuard } from './core/auth/auth.guard';
 import { LayoutComponent } from './layout/layout.component';
-import { PERMISSIONS } from './core/auth/permissions.constants';
 import { permissionGuard } from './core/auth/permission.guard';
+import { PERMISSIONS } from './core/auth/permissions.constants';
 
 export const appRoutes: Routes = [
   {
@@ -13,6 +13,15 @@ export const appRoutes: Routes = [
     children: [
       { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
 
+      {
+        path: 'erp',
+        loadChildren: () => import('./features/erp/erp.routes').then((m) => m.ERP_ROUTES),
+      },
+      {
+        path: 'conciliation',
+        loadChildren: () =>
+          import('./features/conciliation/conciliation.routes').then((m) => m.CONCILIATION_ROUTES),
+      },
       {
         path: 'register',
         loadChildren: () =>

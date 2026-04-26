@@ -6,6 +6,7 @@ import {
   TypeEstablishmentEnum,
   normalizeTypeEstablishmentEnum,
 } from './enums/type-establishment.enum';
+import { PeriodEnum } from './enums/period.enum';
 
 export interface EstablishmentModel {
   id: string;
@@ -38,13 +39,15 @@ export interface EstablishmentUpdateInput {
 
 export type EstablishmentFiltersState = {
   pvNumber: string | null;
-  createdAtRange: [string, string] | null;
 
   company: string[] | null;
   acquirer: string[] | null;
   createdBy: string[] | null;
   statusEnum: StatusEnum[] | null;
   typeEnum: TypeEstablishmentEnum[] | null;
+
+  periodCreatedAt: PeriodEnum | null;
+  createdAt: string | string[] | null;
 };
 
 export interface EstablishmentBulkStatusInput {

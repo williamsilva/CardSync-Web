@@ -538,82 +538,83 @@
       "company": "Company",
       "acquirer": "Acquirer",
       "establishment": "Establishment",
-      "period": "Term",
-      "flags": "Flags",
+      "period": "Validity",
+      "flags": "Brands",
       "statusEnum": "Status"
     },
     "fields": {
+      "rate": "Rate",
+      "flag": "Brand",
       "name": "Description",
-      "description": "Description",
       "company": "Company",
-      "acquirer": "Acquirer",
-      "establishment": "Establishment",
-      "startDate": "Start date",
+      "flags": "Brands",
+      "statusEnum": "Status",
       "endDate": "End date",
-      "flag": "Flag",
       "modality": "Modality",
-      "rate": "Store fee",
-      "rateEcommerce": "E-commerce fee",
-      "paymentTermDays": "Store term (days)",
-      "paymentTermDaysEcommerce": "E-commerce term (days)",
-      "statusEnum": "Status"
+      "acquirer": "Acquirer",
+      "description": "Description",
+      "startDate": "Start date",
+      "paymentTermDays": "Settlement",
+      "rateEcommerce": "E-commerce",
+      "establishment": "Establishment",
+      "paymentTermDaysEcommerce": "E-commerce settlement"
     },
     "modality": {
-      "CASH_DEBIT": "Cash debit",
-      "CASH_CREDIT": "Cash credit",
-      "INSTALLMENT_CREDIT_2_6": "Installment credit 2 to 6",
-      "INSTALLMENT_CREDIT_7_12": "Installment credit 7 to 12"
+      "CASH_DEBIT": "Debit",
+      "CASH_CREDIT": "Single-payment credit",
+      "INSTALLMENT_CREDIT_2_6": "Installment credit 2 to 6x",
+      "INSTALLMENT_CREDIT_7_12": "Installment credit 7 to 12x"
     },
     "flags": {
-      "title": "Flags and rates",
-      "add": "Add flag"
+      "title": "Brands and rates",
+      "add": "Add brand"
     },
     "rates": {
       "add": "Add rate"
     },
     "validation": {
-      "invalidDateRange": "End date must be greater than or equal to start date."
+      "invalidDateRange": "The end date must be greater than or equal to the start date."
     },
     "action": {
-      "deactivate": {
-        "label": "Deactivate",
-        "invalidStatus": "Only active contracts can be deactivated.",
-        "noPermission": "You do not have permission to deactivate contracts."
+      "expired": {
+        "label": "Expire",
+        "invalidStatus": "Only valid contracts can be expired.",
+        "noPermission": "You do not have permission to expire contracts."
       },
-      "activate": {
+      "validity": {
         "label": "Activate",
         "noPermission": "You do not have permission to activate contracts.",
-        "invalidStatus": "Only inactive or blocked contracts can be activated."
+        "invalidStatus": "Only expired contracts can be activated."
       },
-      "block": {
-        "label": "Block",
-        "noPermission": "You do not have permission to block contracts.",
-        "invalidStatus": "Only active contracts can be blocked."
+      "closed": {
+        "label": "Close",
+        "noPermission": "You do not have permission to close contracts.",
+        "invalidStatus": "Only valid contracts can be closed."
       }
     },
-    "block": {
-      "selected": "Block",
-      "header": "Confirm block",
-      "successSingle": "Contract blocked successfully.",
-      "messageSingle": "Do you want to block contract {name}?",
-      "successBulk": "{count, plural, one {# contract blocked successfully.} other {# contracts blocked successfully.}}",
-      "messageBulk": "{count, plural, one {Do you want to block # selected contract?} other {Do you want to block # selected contracts?}}"
+    "closed": {
+      "selected": "Close",
+      "header": "Confirm closure",
+      "successSingle": "Contract closed successfully.",
+      "messageSingle": "Do you want to close contract {description}?",
+      "successBulk": "{count, plural, one {# contract closed successfully.} other {# contracts closed successfully.}}",
+      "messageBulk": "{count, plural, one {Do you want to close # selected contract?} other {Do you want to close # selected contracts?}}"
     },
-    "activate": {
+    "validity": {
       "selected": "Activate",
       "header": "Confirm activation",
       "successSingle": "Contract activated successfully.",
-      "messageSingle": "Do you want to activate contract {name}?",
+      "messageSingle": "Do you want to activate contract {description}?",
       "successBulk": "{count, plural, one {# contract activated successfully.} other {# contracts activated successfully.}}",
       "messageBulk": "{count, plural, one {Do you want to activate # selected contract?} other {Do you want to activate # selected contracts?}}"
     },
-    "deactivate": {
-      "selected": "Deactivate",
-      "header": "Confirm deactivation",
-      "successSingle": "Contract deactivated successfully.",
-      "messageSingle": "Do you want to deactivate contract {name}?",
-      "successBulk": "{count, plural, one {# contract deactivated successfully.} other {# contracts deactivated successfully.}}",
-      "messageBulk": "{count, plural, one {Do you want to deactivate # selected contract?} other {Do you want to deactivate # selected contracts?}}"
+    "expired": {
+      "selected": "Expired",
+      "header": "Confirm expiration",
+      "successSingle": "Contract expired successfully.",
+      "messageSingle": "Do you want to expire contract {description}?",
+      "successBulk": "{count, plural, one {# contract expired successfully.} other {# contracts expired successfully.}}",
+      "messageBulk": "{count, plural, one {Do you want to expire # selected contract?} other {Do you want to expire # selected contracts?}}"
     },
     "selection": {
       "currentMode": "Selection mode",
@@ -630,10 +631,26 @@
       "saveError": "Could not save contract.",
       "created": "Contract created successfully.",
       "updated": "Contract updated successfully.",
-      "permissionDenied": "You do not have permission to save contract."
+      "permissionDenied": "You do not have permission to save contracts."
     },
     "empty": {
       "title": "No contracts found"
+    },
+    "view": {
+      "title": "Contract Rates:",
+      "emptyRates": "No rates registered for this brand.",
+      "days": "{count, plural, =0 {0 days} one {# day} other {# days}}",
+      "emptyFlags": "No brands/rates registered for this contract.",
+      "flag": {
+        "defaultName": "Brand",
+        "modalitiesCount": "{count, plural, =0 {No modalities} one {# modality} other {# modalities}}"
+      },
+      "validity": {
+        "until": "until",
+        "since": "Valid since",
+        "rangePrefix": "Valid from:",
+        "openEnded": "open-ended validity"
+      }
     }
   },
   "flag": {

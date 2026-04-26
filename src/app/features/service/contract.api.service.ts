@@ -50,27 +50,27 @@ export class ContractApiService {
       .pipe(map(mapContractApiModel));
   }
 
-  activate(id: string) {
-    return this.http.post<void>(`${this.baseUrl}/${id}/activate`, null);
+  validity(id: string) {
+    return this.http.post<void>(`${this.baseUrl}/${id}/validity`, null);
   }
 
-  deactivate(id: string) {
-    return this.http.post<void>(`${this.baseUrl}/${id}/deactivate`, null);
+  expired(id: string) {
+    return this.http.post<void>(`${this.baseUrl}/${id}/expired`, null);
   }
 
-  block(id: string) {
-    return this.http.post<void>(`${this.baseUrl}/${id}/block`, null);
+  closed(id: string) {
+    return this.http.post<void>(`${this.baseUrl}/${id}/closed`, null);
   }
 
-  blockBulk(input: ContractBulkStatusInput) {
-    return this.http.post<void>(`${this.baseUrl}/block`, input);
+  closedBulk(input: ContractBulkStatusInput) {
+    return this.http.post<void>(`${this.baseUrl}/closed`, input);
   }
 
-  activateBulk(input: ContractBulkStatusInput) {
-    return this.http.post<void>(`${this.baseUrl}/activate`, input);
+  validityBulk(input: ContractBulkStatusInput) {
+    return this.http.post<void>(`${this.baseUrl}/validity`, input);
   }
 
-  deactivateBulk(input: ContractBulkStatusInput) {
-    return this.http.post<void>(`${this.baseUrl}/deactivate`, input);
+  expiredBulk(input: ContractBulkStatusInput) {
+    return this.http.post<void>(`${this.baseUrl}/expired`, input);
   }
 }

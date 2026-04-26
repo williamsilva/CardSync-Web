@@ -175,11 +175,6 @@ export class GroupsCreateDialogComponent {
       },
       error: () => {
         this.saving.set(false);
-        this.toast.add({
-          severity: 'error',
-          summary: this.i18n.tUi('common.error'),
-          detail: this.i18n.tUi('groups.form.saveError'),
-        });
       },
     });
   }

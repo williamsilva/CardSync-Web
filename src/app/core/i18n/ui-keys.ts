@@ -12,7 +12,6 @@ export const UI_KEYS = {
     sessionExpireTooltip: 'topbar.sessionExpireTooltip',
     sessionExpiredTooltip: 'topbar.sessionExpiredTooltip',
   },
-
   menu: {
     me: 'menu.me',
     dashboard: 'menu.dashboard',
@@ -27,6 +26,16 @@ export const UI_KEYS = {
       acquirer: 'menu.register.acquirer',
       contracts: 'menu.register.contracts',
       establishment: 'menu.register.establishment',
+    },
+    erp: {
+      sales: 'menu.erp.sales',
+      title: 'menu.erp.title',
+      parcels: 'menu.erp.parcels',
+    },
+    conciliation: {
+      fees: 'menu.conciliation.fees',
+      sales: 'menu.conciliation.sales',
+      title: 'menu.conciliation.title',
     },
     security: {
       title: 'menu.security.title',
@@ -45,12 +54,10 @@ export const UI_KEYS = {
     },
     reconciliation: 'menu.reconciliation',
   },
-
   sidebar: {
     userFallback: 'sidebar.userFallback',
     logout: 'sidebar.logout',
   },
-
   accountPassword: {
     successTitle: 'accountPassword.successTitle',
     userFallback: 'accountPassword.userFallback',
@@ -71,6 +78,7 @@ export const UI_KEYS = {
       createdAt: 'establishment.fields.createdAt',
       createdBy: 'establishment.fields.createdBy',
       statusEnum: 'establishment.fields.statusEnum',
+      periodCreatedAt: 'establishment.fields.periodCreatedAt',
     },
     selection: {
       mode: {
@@ -114,46 +122,51 @@ export const UI_KEYS = {
       saveError: 'contract.form.saveError',
     },
     fields: {
+      rate: 'contract.fields.rate',
       name: 'contract.fields.name',
-      description: 'contract.fields.description',
+      flag: 'contract.fields.flag',
+      endDate: 'contract.fields.endDate',
       company: 'contract.fields.company',
       acquirer: 'contract.fields.acquirer',
-      establishment: 'contract.fields.establishment',
-      startDate: 'contract.fields.startDate',
-      endDate: 'contract.fields.endDate',
-      flag: 'contract.fields.flag',
       modality: 'contract.fields.modality',
-      rate: 'contract.fields.rate',
+      createdBy: 'contract.fields.createdBy',
+      createdAt: 'contract.fields.createdAt',
+      startDate: 'contract.fields.startDate',
+      description: 'contract.fields.description',
+      contractEnum: 'contract.fields.contractEnum',
+      establishment: 'contract.fields.establishment',
+      periodEndDate: 'contract.fields.periodEndDate',
       rateEcommerce: 'contract.fields.rateEcommerce',
+      periodValidity: 'contract.fields.periodValidity',
+      periodStartDate: 'contract.fields.periodStartDate',
       paymentTermDays: 'contract.fields.paymentTermDays',
       paymentTermDaysEcommerce: 'contract.fields.paymentTermDaysEcommerce',
-      statusEnum: 'contract.fields.statusEnum',
     },
     selection: {
       mode: {
         none: 'contract.selection.mode.none',
       },
     },
-    activate: {
-      header: 'contract.activate.header',
-      successBulk: 'contract.activate.successBulk',
-      messageBulk: 'contract.activate.messageBulk',
-      messageSingle: 'contract.activate.messageSingle',
-      successSingle: 'contract.activate.successSingle',
+    closed: {
+      header: 'contract.closed.header',
+      successBulk: 'contract.closed.successBulk',
+      messageBulk: 'contract.closed.messageBulk',
+      messageSingle: 'contract.closed.messageSingle',
+      successSingle: 'contract.closed.successSingle',
     },
-    block: {
-      header: 'contract.block.header',
-      successBulk: 'contract.block.successBulk',
-      messageBulk: 'contract.block.messageBulk',
-      messageSingle: 'contract.block.messageSingle',
-      successSingle: 'contract.block.successSingle',
+    expired: {
+      header: 'contract.expired.header',
+      successBulk: 'contract.expired.successBulk',
+      messageBulk: 'contract.expired.messageBulk',
+      messageSingle: 'contract.expired.messageSingle',
+      successSingle: 'contract.expired.successSingle',
     },
-    deactivate: {
-      header: 'contract.deactivate.header',
-      successBulk: 'contract.deactivate.successBulk',
-      messageBulk: 'contract.deactivate.messageBulk',
-      messageSingle: 'contract.deactivate.messageSingle',
-      successSingle: 'contract.deactivate.successSingle',
+    validity: {
+      header: 'contract.validity.header',
+      successBulk: 'contract.validity.successBulk',
+      messageBulk: 'contract.validity.messageBulk',
+      messageSingle: 'contract.validity.messageSingle',
+      successSingle: 'contract.validity.successSingle',
     },
   },
   flag: {
@@ -293,6 +306,34 @@ export const UI_KEYS = {
       unknown: 'enum.statusEnum.unknown',
       blocked: 'enum.statusEnum.blocked',
       inactive: 'enum.statusEnum.inactive',
+    },
+    periodEnum: {
+      day: 'enum.periodEnum.day',
+      end: 'enum.periodEnum.end',
+      null: 'enum.periodEnum.null',
+      year: 'enum.periodEnum.year',
+      start: 'enum.periodEnum.start',
+      month: 'enum.periodEnum.month',
+      unknown: 'enum.periodEnum.unknown',
+      interval: 'enum.periodEnum.interval',
+    },
+    contractEnum: {
+      null: 'enum.contractEnum.null',
+      active: 'enum.contractEnum.validity',
+      unknown: 'enum.contractEnum.unknown',
+      blocked: 'enum.contractEnum.expired',
+      inactive: 'enum.contractEnum.closed',
+    },
+    modalityEnum: {
+      null: 'enum.modalityEnum.null',
+      outros: 'enum.modalityEnum.outros',
+      unknown: 'enum.modalityEnum.unknown',
+      cash_debit: 'enum.modalityEnum.cash_debit',
+      cash_credit: 'enum.modalityEnum.cash_credit',
+      digital_wallet: 'enum.modalityEnum.digital_wallet',
+      installment_2_6: 'enum.modalityEnum.installment_2_6',
+      installment_7_12: 'enum.modalityEnum.installment_7_12',
+      installment_13_18: 'enum.modalityEnum.installment_13_18',
     },
     typeCompanyEnum: {
       null: 'enum.typeCompanyEnum.null',

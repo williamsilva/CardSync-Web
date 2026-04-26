@@ -1,8 +1,11 @@
-import { Pipe, PipeTransform, inject, signal } from '@angular/core';
 import { formatDate } from '@angular/common';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Pipe, PipeTransform, DestroyRef, inject, signal } from '@angular/core';
+
 import { TranslateService } from '@ngx-translate/core';
-import { I18nService } from '../../core/i18n/i18n.service';
+
 import { Lang } from '../../core/i18n/i18n.types';
+import { I18nService } from '../../core/i18n/i18n.service';
 
 type CsDatePreset = 'short' | 'medium' | 'date' | 'datetime' | 'time';
 
@@ -14,10 +17,11 @@ type CsDatePreset = 'short' | 'medium' | 'date' | 'datetime' | 'time';
 export class CsDatePipe implements PipeTransform {
   private readonly i18n = inject(I18nService);
   private readonly translate = inject(TranslateService);
+  private readonly destroyRef = inject(DestroyRef);
   private readonly tick = signal(0);
 
   constructor() {
-    this.translate.onLangChange.subscribe(() => {
+    this.translate.onLangChange.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
       this.tick.update((v) => v + 1);
     });
   }
@@ -67,7 +71,54 @@ export class CsDatePipe implements PipeTransform {
         return null;
       }
 
+      const parsedLocal = this.parseLocalDateString(raw);
+      if (parsedLocal) {
+        return parsedLocal;
+      }
+
       const d = new Date(raw);
+      return Number.isNaN(d.getTime()) ? null : d;
+    }
+
+    return null;
+  }
+
+  private parseLocalDateString(raw: string): Date | null {
+    // yyyy-MM-dd
+    const dateOnlyMatch = raw.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+    if (dateOnlyMatch) {
+      const [, year, month, day] = dateOnlyMatch;
+
+      const d = new Date(Number(year), Number(month) - 1, Number(day), 0, 0, 0, 0);
+
+      return Number.isNaN(d.getTime()) ? null : d;
+    }
+
+    // yyyy-MM-dd HH:mm
+    // yyyy-MM-ddTHH:mm
+    // yyyy-MM-dd HH:mm:ss
+    // yyyy-MM-ddTHH:mm:ss
+    // yyyy-MM-dd HH:mm:ss.SSSSSS
+    // yyyy-MM-ddTHH:mm:ss.SSSSSS
+    const localDateTimeMatch = raw.match(
+      /^(\d{4})-(\d{2})-(\d{2})[ T](\d{2}):(\d{2})(?::(\d{2})(?:\.(\d+))?)?$/,
+    );
+
+    if (localDateTimeMatch) {
+      const [, year, month, day, hour, minute, second = '0', fraction = '0'] = localDateTimeMatch;
+
+      const milliseconds = Number((fraction + '000').slice(0, 3));
+
+      const d = new Date(
+        Number(year),
+        Number(month) - 1,
+        Number(day),
+        Number(hour),
+        Number(minute),
+        Number(second),
+        milliseconds,
+      );
+
       return Number.isNaN(d.getTime()) ? null : d;
     }
 

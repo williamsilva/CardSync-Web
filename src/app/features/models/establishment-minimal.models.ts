@@ -1,4 +1,5 @@
 import { CompanyMinimalModel } from './company-minimal.models';
+import { AcquirerMinimalModel } from './acquirer-minimal.models';
 import { normalizeStatusEnum, StatusEnum } from './enums/status.enum';
 import {
   TypeEstablishmentEnum,
@@ -12,6 +13,7 @@ export interface EstablishmentMinimalModel {
   status: StatusEnum | null;
   type: TypeEstablishmentEnum | null;
   company: CompanyMinimalModel | null;
+  acquirer?: AcquirerMinimalModel | null;
 }
 
 export function mapEstablishmentMinimalModel(

@@ -1,6 +1,6 @@
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { Component, ViewChild, computed, inject, signal } from '@angular/core';
+import { AfterViewInit, Component, ViewChild, computed, inject, signal } from '@angular/core';
 
 import { Table } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
@@ -31,11 +31,19 @@ import { EstablishmentFacade } from '@features/facade/establishment.facade';
 import { BulkActionListPage } from '@features/list-base/bulk-action-list-page';
 import { buildListQuery } from '@shared/features/list-query/list-query.builder';
 import { EstablishmentAdvancedFilters } from '@features/filter/establishment.filters';
+import { allPeriodEnum, PeriodEnum, periodEnumLabel } from '@models/enums/period.enum';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
 import { EstablishmentFiltersState, EstablishmentModel } from '@models/establishment.models';
 import { typeEstablishmentEnumSeverity } from '../../../models/enums/type-establishment.enum';
+import { SelectableStatefulListPage } from '@features/list-base/selectable-stateful-list-page';
+import { CsRowActionButtonComponent } from '@features/list-base/cs-row-action-button.component';
+import { CsColumnFilterShellComponent } from '@features/list-base/cs-column-filter-shell.component';
+import { CsAdvancedTextFilterComponent } from '@features/list-base/cs-advanced-text-filter.component';
 import { EstablishmentPermissionPolicy } from '@features/security/policy/establishment-permission.policy';
 import { EstablishmentCreateDialogComponent } from '../establishment-create/establishment-create-component';
+import { CsAdvancedPeriodDateFilterComponent } from '@features/list-base/cs-advanced-period-date-filter.component';
+import { CsAdvancedMultiselectFilterComponent } from '@features/list-base/cs-advanced-multiselect-filter.component';
+import { CsAdvancedFilterItemTemplateDirective } from '@features/list-base/cs-advanced-filter-item-template.directive';
 import {
   ActiveFilterItem,
   FiltersPanelComponent,
@@ -47,11 +55,13 @@ import {
   statusEnumLabel,
   statusEnumSeverity,
 } from '@models/enums/status.enum';
+
 import {
   readArrayFilterValues,
   readSingleFilterValue,
-  readDateRangeFilterValue,
+  readPeriodFilterValue,
 } from '@features/list-base/table-filter-readers';
+
 import {
   TypeEstablishmentEnum,
   allTypeEstablishmentEnum,
@@ -84,13 +94,24 @@ import {
     PageHeaderComponent,
     ConfirmDialogModule,
     FiltersPanelComponent,
+    CsRowActionButtonComponent,
+    CsColumnFilterShellComponent,
+    CsAdvancedTextFilterComponent,
     EstablishmentCreateDialogComponent,
+    CsAdvancedPeriodDateFilterComponent,
+    CsAdvancedMultiselectFilterComponent,
+    CsAdvancedFilterItemTemplateDirective,
   ],
 })
-export class EstablishmentListComponent extends StatefulListPage<
-  EstablishmentFiltersState,
-  EstablishmentAdvancedFilters
-> {
+export class EstablishmentListComponent
+  extends SelectableStatefulListPage<
+    EstablishmentModel,
+    StatusEnum,
+    EstablishmentFiltersState,
+    EstablishmentAdvancedFilters
+  >
+  implements AfterViewInit
+{
   @ViewChild('dt') private dt?: Table;
 
   readonly userFacade = inject(UsersFacade);
@@ -105,7 +126,7 @@ export class EstablishmentListComponent extends StatefulListPage<
   protected readonly toast = inject(MessageService);
   protected override readonly i18n = inject(I18nService);
   protected readonly confirm = inject(ConfirmationService);
-  protected readonly secPolicy = inject(EstablishmentPermissionPolicy);
+  protected override readonly secPolicy = inject(EstablishmentPermissionPolicy);
 
   override rows =
     Number(localStorage.getItem(this.tableRowsKey())) || StatefulListPage.DEFAULT_ROWS;
@@ -115,6 +136,10 @@ export class EstablishmentListComponent extends StatefulListPage<
   readonly establishments = computed<EstablishmentModel[]>(
     () => this.establishmentFacade.establishment() as EstablishmentModel[],
   );
+
+  protected override currentRows(): EstablishmentModel[] {
+    return this.establishments();
+  }
 
   private readonly bulk = new (class extends BulkActionListPage {
     protected override readonly i18n = inject(I18nService);
@@ -136,13 +161,36 @@ export class EstablishmentListComponent extends StatefulListPage<
   createdBy = signal<string[] | null>(null);
   companies = signal<string[] | null>(null);
   acquirers = signal<string[] | null>(null);
-  createdAtRange = signal<Date[] | null>(null);
   statusEnum = signal<StatusEnum[] | null>(null);
   typeEnum = signal<TypeEstablishmentEnum[] | null>(null);
 
   upsertVisible = signal(false);
-  selectedRows = signal<EstablishmentModel[]>([]);
   establishment = signal<EstablishmentModel | null>(null);
+
+  periodCreatedAt = signal<PeriodEnum | null>(null);
+  createdAt = signal<string | string[] | null>(null);
+
+  createdAtColumnPeriod = signal<PeriodEnum | null>(null);
+  createdAtColumnDraft = signal<string | string[] | null>(null);
+
+  pvNumberColumnDraft = signal('');
+  typeColumnDraft = signal<string[] | null>(null);
+  statusColumnDraft = signal<string[] | null>(null);
+  companyColumnDraft = signal<string[] | null>(null);
+  acquirerColumnDraft = signal<string[] | null>(null);
+  createdByColumnDraft = signal<string[] | null>(null);
+
+  readonly isCreatedAtDisabled = computed(() => !this.periodCreatedAt());
+  readonly isCreatedAtColumnDisabled = computed(() => !this.createdAtColumnPeriod());
+
+  readonly periodEnumOptions = computed(() => {
+    this.i18n.getAppliedLang();
+
+    return allPeriodEnum().map((value) => ({
+      label: periodEnumLabel(value, this.i18n),
+      value,
+    }));
+  });
 
   readonly statusEnumOptions = computed(() => {
     this.i18n.getAppliedLang();
@@ -158,34 +206,6 @@ export class EstablishmentListComponent extends StatefulListPage<
       label: typeEstablishmentEnumLabel(value, this.i18n),
       value,
     }));
-  });
-
-  selectionStatus = computed<StatusEnum | null>(() => {
-    const selected = this.selectedRows();
-    if (!selected.length) return null;
-    return this.secPolicy.selectableStatus(selected[0]);
-  });
-
-  headerEligibleRows = computed(() => {
-    const selectedStatus = this.selectionStatus();
-    if (!selectedStatus) return [];
-    return this.establishments().filter((row) =>
-      this.secPolicy.canSelectForStatus(row, selectedStatus),
-    );
-  });
-
-  headerChecked = computed(() => {
-    const eligible = this.headerEligibleRows();
-    if (!eligible.length) return false;
-    return eligible.every((row) => this.isRowSelected(row));
-  });
-
-  headerIndeterminate = computed(() => {
-    const eligible = this.headerEligibleRows();
-    if (!eligible.length) return false;
-
-    const selectedCount = eligible.filter((row) => this.isRowSelected(row)).length;
-    return selectedCount > 0 && selectedCount < eligible.length;
   });
 
   canActivateSelected = computed(() => {
@@ -221,56 +241,33 @@ export class EstablishmentListComponent extends StatefulListPage<
     this.initStatefulList();
   }
 
+  ngAfterViewInit(): void {
+    queueMicrotask(() => {
+      this.syncColumnDraftsFromTableState();
+    });
+  }
+
   clear() {
     this.clearSelection();
+    this.resetFilters();
+
+    this.pvNumberColumnDraft.set('');
+
+    this.typeColumnDraft.set(null);
+    this.statusColumnDraft.set(null);
+    this.companyColumnDraft.set(null);
+    this.acquirerColumnDraft.set(null);
+    this.createdByColumnDraft.set(null);
+
+    this.createdAtColumnDraft.set(null);
+    this.createdAtColumnPeriod.set(null);
+
+    this.dt?.clear();
     this.clearTableAndReload(this.dt);
   }
 
   onSaved(): void {
     this.refresh();
-  }
-
-  isRowCheckboxDisabled(row: EstablishmentModel): boolean {
-    if (this.isRowSelected(row)) return false;
-    return !this.secPolicy.canSelectForStatus(row, this.selectionStatus());
-  }
-
-  isRowSelected(row: EstablishmentModel): boolean {
-    return this.selectedRows().some((item) => item.id === row.id);
-  }
-
-  toggleRowSelection(row: EstablishmentModel, checked: boolean): void {
-    const current = this.selectedRows();
-
-    if (!checked) {
-      this.selectedRows.set(current.filter((item) => item.id !== row.id));
-      return;
-    }
-
-    const rowStatus = this.secPolicy.selectableStatus(row);
-    if (!rowStatus) return;
-
-    if (!current.length) {
-      this.selectedRows.set([row]);
-      return;
-    }
-
-    if (rowStatus !== this.selectionStatus()) return;
-    if (this.isRowSelected(row)) return;
-
-    this.selectedRows.set([...current, row]);
-  }
-
-  toggleHeaderSelection(checked: boolean): void {
-    const eligible = this.headerEligibleRows();
-    if (!eligible.length) return;
-
-    if (!checked) {
-      this.clearSelection();
-      return;
-    }
-
-    this.selectedRows.set([...eligible]);
   }
 
   activate(row: EstablishmentModel): void {
@@ -448,8 +445,77 @@ export class EstablishmentListComponent extends StatefulListPage<
     this.reloadWithCurrentState();
   }
 
-  protected clearSelection(): void {
-    this.selectedRows.set([]);
+  createdAtFilterLabel(value: unknown): string {
+    const filterValue = value as { period?: PeriodEnum; value?: string | string[] } | null;
+
+    if (!filterValue?.period || !filterValue.value) {
+      return '';
+    }
+
+    const periodLabel = periodEnumLabel(filterValue.period, this.i18n);
+    const dateLabel = Array.isArray(filterValue.value)
+      ? filterValue.value.filter(Boolean).join(' - ')
+      : filterValue.value;
+
+    return `${periodLabel}: ${dateLabel}`;
+  }
+
+  protected syncColumnDraftsFromTableState(): void {
+    const filters = this.dt?.filters;
+
+    if (!filters) {
+      return;
+    }
+
+    this.syncTextColumnDraftFromTableState(
+      filters,
+      'pvNumber',
+      this.pvNumberColumnDraft,
+      readSingleFilterValue,
+    );
+
+    this.syncArrayColumnDraftFromTableState(
+      filters,
+      'company',
+      this.companyColumnDraft,
+      readArrayFilterValues,
+    );
+
+    this.syncArrayColumnDraftFromTableState(
+      filters,
+      'acquirer',
+      this.acquirerColumnDraft,
+      readArrayFilterValues,
+    );
+
+    this.syncArrayColumnDraftFromTableState(
+      filters,
+      'statusEnum',
+      this.statusColumnDraft,
+      readArrayFilterValues,
+    );
+
+    this.syncArrayColumnDraftFromTableState(
+      filters,
+      'typeEnum',
+      this.typeColumnDraft,
+      readArrayFilterValues,
+    );
+
+    this.syncArrayColumnDraftFromTableState(
+      filters,
+      'createdBy',
+      this.createdByColumnDraft,
+      readArrayFilterValues,
+    );
+
+    this.syncPeriodColumnDraftFromTableState(
+      filters,
+      'createdAt',
+      this.createdAtColumnPeriod,
+      this.createdAtColumnDraft,
+      readPeriodFilterValue,
+    );
   }
 
   protected formatDate(value: Date | string): string {
@@ -465,8 +531,10 @@ export class EstablishmentListComponent extends StatefulListPage<
     const acquirers = this.acquirers();
     const companies = this.companies();
     const statusEnum = this.statusEnum();
-    const create = this.createdAtRange();
     const pvNumber = this.pvNumber().trim();
+
+    const createdAt = this.createdAt();
+    const periodCreatedAt = this.periodCreatedAt();
 
     if (pvNumber) {
       items.push({ label: this.i18n.tUi('establishment.fields.pvNumber'), value: pvNumber });
@@ -522,10 +590,17 @@ export class EstablishmentListComponent extends StatefulListPage<
       });
     }
 
-    if (create?.[0] && create?.[1]) {
+    if (periodCreatedAt) {
+      items.push({
+        label: this.i18n.tUi('establishment.fields.periodCreatedAt'),
+        value: periodEnumLabel(periodCreatedAt, this.i18n),
+      });
+    }
+
+    if (createdAt) {
       items.push({
         label: this.i18n.tUi('establishment.fields.createdAt'),
-        value: `${this.formatDate(create[0])} – ${this.formatDate(create[1])}`,
+        value: Array.isArray(createdAt) ? createdAt.join(' - ') : createdAt,
       });
     }
 
@@ -567,12 +642,12 @@ export class EstablishmentListComponent extends StatefulListPage<
     this.acquirers.set(null);
     this.companies.set(null);
     this.statusEnum.set(null);
-    this.createdAtRange.set(null);
+
+    this.createdAt.set(null);
+    this.periodCreatedAt.set(null);
   }
 
   protected override toFiltersState(): EstablishmentFiltersState {
-    const create = this.createdAtRange();
-
     return {
       pvNumber: this.pvNumber(),
       typeEnum: this.typeEnum()?.length ? this.typeEnum() : null,
@@ -580,8 +655,9 @@ export class EstablishmentListComponent extends StatefulListPage<
       acquirer: this.acquirers()?.length ? this.acquirers() : null,
       createdBy: this.createdBy()?.length ? this.createdBy() : null,
       statusEnum: this.statusEnum()?.length ? this.statusEnum() : null,
-      createdAtRange:
-        create?.[0] && create?.[1] ? [create[0].toISOString(), create[1].toISOString()] : null,
+
+      createdAt: this.createdAt(),
+      periodCreatedAt: this.periodCreatedAt(),
     };
   }
 
@@ -594,21 +670,11 @@ export class EstablishmentListComponent extends StatefulListPage<
     this.typeEnum.set(s.typeEnum ?? null);
     this.statusEnum.set(s.statusEnum ?? null);
 
-    this.createdAtRange.set(
-      s.createdAtRange?.[0] && s.createdAtRange?.[1]
-        ? [new Date(s.createdAtRange[0]), new Date(s.createdAtRange[1])]
-        : null,
-    );
+    this.createdAt.set(s.createdAt ?? null);
+    this.periodCreatedAt.set(s.periodCreatedAt ?? null);
   }
 
   protected override buildAdvancedFilters(): Partial<EstablishmentAdvancedFilters> {
-    const create = this.createdAtRange();
-
-    const [createFrom, createTo] =
-      create?.[0] && create?.[1]
-        ? [create[0].toISOString(), create[1].toISOString()]
-        : [undefined, undefined];
-
     return {
       company: this.companies() || null,
       acquirer: this.acquirers() || null,
@@ -617,8 +683,9 @@ export class EstablishmentListComponent extends StatefulListPage<
 
       typeEnum: this.typeEnum()?.length ? this.typeEnum() : undefined,
       statusEnum: this.statusEnum()?.length ? this.statusEnum() : undefined,
-      createdAtTo: createTo,
-      createdAtFrom: createFrom,
+
+      periodCreatedAt: this.periodCreatedAt() ?? undefined,
+      createdAt: this.createdAt() ?? undefined,
     };
   }
 
@@ -629,30 +696,10 @@ export class EstablishmentListComponent extends StatefulListPage<
 
     const pvNumber = readSingleFilterValue(filters, 'pvNumber');
     if (pvNumber) {
-      items.push({ label: this.i18n.tUi('establishment.fields.pvNumber'), value: pvNumber });
-    }
-
-    const statuses = readArrayFilterValues(filters, 'statusEnum');
-    if (statuses.length) {
       items.push({
-        label: this.i18n.tUi('establishment.fields.statusEnum'),
-        value: statuses.map((value) => statusEnumLabel(value as StatusEnum, this.i18n)).join(', '),
+        label: this.i18n.tUi('establishment.fields.pvNumber'),
+        value: pvNumber,
       });
-    }
-
-    const typeEnum = readArrayFilterValues(filters, 'typeEnum');
-    if (typeEnum.length) {
-      items.push({
-        label: this.i18n.tUi('establishment.fields.typeEnum'),
-        value: typeEnum
-          .map((value) => typeEstablishmentEnumLabel(value as TypeEstablishmentEnum, this.i18n))
-          .join(', '),
-      });
-    }
-
-    const createdAt = readDateRangeFilterValue(filters, 'createdAt', this.formatDate.bind(this));
-    if (createdAt) {
-      items.push({ label: this.i18n.tUi('establishment.fields.createdAt'), value: createdAt });
     }
 
     const companiesValues = readArrayFilterValues(filters, 'company');
@@ -678,15 +725,42 @@ export class EstablishmentListComponent extends StatefulListPage<
         value: (labels.length ? labels : acquirersValues).join(', '),
       });
     }
-    const createdByValues = readArrayFilterValues(filters, 'createdBy');
-    if (createdByValues.length) {
+
+    const statuses = readArrayFilterValues(filters, 'statusEnum');
+    if (statuses.length) {
+      items.push({
+        label: this.i18n.tUi('establishment.fields.statusEnum'),
+        value: statuses.map((value) => statusEnumLabel(value as StatusEnum, this.i18n)).join(', '),
+      });
+    }
+
+    const typeEnum = readArrayFilterValues(filters, 'typeEnum');
+    if (typeEnum.length) {
+      items.push({
+        label: this.i18n.tUi('establishment.fields.typeEnum'),
+        value: typeEnum
+          .map((value) => typeEstablishmentEnumLabel(value as TypeEstablishmentEnum, this.i18n))
+          .join(', '),
+      });
+    }
+
+    const createdBy = readArrayFilterValues(filters, 'createdBy');
+    if (createdBy.length) {
       const labels = this.usersOptions()
-        .filter((option) => createdByValues.includes(option.value))
+        .filter((option) => createdBy.includes(option.value))
         .map((option) => option.label);
 
       items.push({
         label: this.i18n.tUi('establishment.fields.createdBy'),
-        value: (labels.length ? labels : createdByValues).join(', '),
+        value: (labels.length ? labels : createdBy).join(', '),
+      });
+    }
+
+    const createdAt = readPeriodFilterValue(filters, 'createdAt');
+    if (createdAt?.period && createdAt.value) {
+      items.push({
+        label: this.i18n.tUi('establishment.fields.createdAt'),
+        value: this.createdAtFilterLabel(createdAt),
       });
     }
 

@@ -7,6 +7,7 @@ import { API } from '@core/api/api.config';
 import { HalPagedResponse } from '@core/api/page.model';
 import { FlagAdvancedFilters } from '@features/filter/flag.filters';
 import { ListQueryDto } from '@shared/features/list-query/list-query.types';
+import { FlagMinimalModel, mapFlagMinimalModels } from '@models/flag-minimal.models';
 import {
   FlagModel,
   FlagApiModel,
@@ -21,6 +22,18 @@ import {
 export class FlagApiService {
   private readonly http = inject(HttpClient);
   private readonly baseUrl = `${API.bff}/v1/flags`;
+
+  getOptions() {
+    return this.http.get<HalPagedResponse<FlagMinimalModel>>(`${this.baseUrl}/options-filter`).pipe(
+      map(
+        (res) =>
+          ({
+            ...res,
+            content: mapFlagMinimalModels(res?._embedded?.content),
+          }) as HalPagedResponse<FlagMinimalModel>,
+      ),
+    );
+  }
 
   searchPaged(body: ListQueryDto<FlagAdvancedFilters>) {
     return this.http.post<HalPagedResponse<FlagApiModel>>(`${this.baseUrl}/search`, body).pipe(

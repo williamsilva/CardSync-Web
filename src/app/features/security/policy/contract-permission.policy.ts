@@ -3,7 +3,7 @@ import { Injectable, inject } from '@angular/core';
 import { ContractModel } from '@models/contract.models';
 import { PERMISSIONS } from '@core/auth/permissions.constants';
 import { PermissionService } from '@core/auth/permission.service';
-import { normalizeStatusEnum, StatusEnum } from '@models/enums/status.enum';
+import { ContractEnum, normalizeContractEnum } from '@models/enums/contract.enum';
 
 @Injectable({ providedIn: 'root' })
 export class ContractPermissionPolicy {
@@ -21,86 +21,86 @@ export class ContractPermissionPolicy {
     return this.perms.hasSupportOr(PERMISSIONS.CONTRACTS.CHANGE);
   }
 
-  canActivate(row: ContractModel): boolean {
+  canValidity(row: ContractModel): boolean {
     if (!this.perms.hasSupportOr(PERMISSIONS.CONTRACTS.ACTIVE_OR_INACTIVE)) {
       return false;
     }
 
-    const status = normalizeStatusEnum(row.status);
-    return status === StatusEnum.INACTIVE || status === StatusEnum.BLOCKED;
+    const status = normalizeContractEnum(row.status);
+    return status === ContractEnum.EXPIRED || status === ContractEnum.CLOSED;
   }
 
-  canDeactivate(row: ContractModel): boolean {
+  canExpired(row: ContractModel): boolean {
     if (!this.perms.hasSupportOr(PERMISSIONS.CONTRACTS.ACTIVE_OR_INACTIVE)) {
       return false;
     }
 
-    const status = normalizeStatusEnum(row.status);
-    return status === StatusEnum.ACTIVE;
+    const status = normalizeContractEnum(row.status);
+    return status === ContractEnum.VALIDITY;
   }
 
-  canBlock(row: ContractModel): boolean {
+  canClosed(row: ContractModel): boolean {
     if (!this.perms.hasSupportOr(PERMISSIONS.CONTRACTS.ACTIVE_OR_INACTIVE)) {
       return false;
     }
 
-    const status = normalizeStatusEnum(row.status);
-    return status === StatusEnum.ACTIVE;
+    const status = normalizeContractEnum(row.status);
+    return status === ContractEnum.VALIDITY;
   }
 
-  activateDisabledReason(row: ContractModel): string | null {
+  validityDisabledReason(row: ContractModel): string | null {
     if (!this.perms.hasSupportOr(PERMISSIONS.CONTRACTS.ACTIVE_OR_INACTIVE)) {
-      return 'contract.action.activate.noPermission';
+      return 'contract.action.validity.noPermission';
     }
 
-    const status = normalizeStatusEnum(row.status);
+    const status = normalizeContractEnum(row.status);
 
-    if (status !== StatusEnum.INACTIVE && status !== StatusEnum.BLOCKED) {
-      return 'contract.action.activate.invalidStatus';
+    if (status !== ContractEnum.EXPIRED && status !== ContractEnum.CLOSED) {
+      return 'contract.action.validity.invalidStatus';
     }
 
     return null;
   }
 
-  deactivateDisabledReason(row: ContractModel): string | null {
+  expiredDisabledReason(row: ContractModel): string | null {
     if (!this.perms.hasSupportOr(PERMISSIONS.CONTRACTS.ACTIVE_OR_INACTIVE)) {
-      return 'contract.action.deactivate.noPermission';
+      return 'contract.action.expired.noPermission';
     }
 
-    const status = normalizeStatusEnum(row.status);
+    const status = normalizeContractEnum(row.status);
 
-    if (status !== StatusEnum.ACTIVE) {
-      return 'contract.action.deactivate.invalidStatus';
+    if (status !== ContractEnum.VALIDITY) {
+      return 'contract.action.expired.invalidStatus';
     }
 
     return null;
   }
 
-  blockDisabledReason(row: ContractModel): string | null {
+  closedDisabledReason(row: ContractModel): string | null {
     if (!this.perms.hasSupportOr(PERMISSIONS.CONTRACTS.ACTIVE_OR_INACTIVE)) {
-      return 'contract.action.block.noPermission';
+      return 'contract.action.closed.noPermission';
     }
 
-    const status = normalizeStatusEnum(row.status);
+    const status = normalizeContractEnum(row.status);
 
-    if (status !== StatusEnum.ACTIVE) {
-      return 'contract.action.block.invalidStatus';
+    if (status !== ContractEnum.VALIDITY) {
+      return 'contract.action.closed.invalidStatus';
     }
 
     return null;
   }
 
-  selectableStatus(row: ContractModel): StatusEnum | null {
+  selectableStatus(row: ContractModel): ContractEnum | null {
     if (!this.perms.hasSupportOr(PERMISSIONS.CONTRACTS.ACTIVE_OR_INACTIVE)) {
       return null;
     }
 
-    const status = normalizeStatusEnum(row.status);
+    const status = normalizeContractEnum(row.status);
 
     if (
-      status === StatusEnum.ACTIVE ||
-      status === StatusEnum.INACTIVE ||
-      status === StatusEnum.BLOCKED
+      status === ContractEnum.VALIDITY ||
+      status === ContractEnum.EXPIRED ||
+      status === ContractEnum.CLOSED
     ) {
       return status;
     }
@@ -112,7 +112,7 @@ export class ContractPermissionPolicy {
     return this.selectableStatus(row) !== null;
   }
 
-  canSelectForStatus(row: ContractModel, status: StatusEnum | null): boolean {
+  canSelectForStatus(row: ContractModel, status: ContractEnum | null): boolean {
     if (!status) {
       return this.canSelectForAnyBulk(row);
     }
@@ -120,25 +120,27 @@ export class ContractPermissionPolicy {
     return this.selectableStatus(row) === status;
   }
 
-  canActivateBulk(rows: ReadonlyArray<ContractModel> | null | undefined): boolean {
+  canValidityBulk(rows: ReadonlyArray<ContractModel> | null | undefined): boolean {
     return (
       !!rows?.length &&
       rows.every((row) => {
-        const status = normalizeStatusEnum(row.status);
-        return status === StatusEnum.INACTIVE || status === StatusEnum.BLOCKED;
+        const status = normalizeContractEnum(row.status);
+        return status === ContractEnum.EXPIRED || status === ContractEnum.CLOSED;
       })
     );
   }
 
-  canDeactivateBulk(rows: ReadonlyArray<ContractModel> | null | undefined): boolean {
+  canExpiredBulk(rows: ReadonlyArray<ContractModel> | null | undefined): boolean {
     return (
-      !!rows?.length && rows.every((row) => normalizeStatusEnum(row.status) === StatusEnum.ACTIVE)
+      !!rows?.length &&
+      rows.every((row) => normalizeContractEnum(row.status) === ContractEnum.VALIDITY)
     );
   }
 
-  canBlockBulk(rows: ReadonlyArray<ContractModel> | null | undefined): boolean {
+  canClosedBulk(rows: ReadonlyArray<ContractModel> | null | undefined): boolean {
     return (
-      !!rows?.length && rows.every((row) => normalizeStatusEnum(row.status) === StatusEnum.ACTIVE)
+      !!rows?.length &&
+      rows.every((row) => normalizeContractEnum(row.status) === ContractEnum.VALIDITY)
     );
   }
 }

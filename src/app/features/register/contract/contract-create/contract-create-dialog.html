@@ -7,7 +7,7 @@
   [resizable]="false"
   [visible]="visible()"
   [contentStyle]="{ overflow: 'hidden', height: '100%' }"
-  [style]="{ width: '1100px', maxWidth: '95vw', height: '90vh' }"
+  [style]="{ width: '1120px', maxWidth: '95vw', height: '90vh' }"
   [breakpoints]="{ '1400px': '95vw', '992px': '98vw', '768px': '100vw' }"
   [header]="
     contract()?.id ? ('contract.edit.title' | translate) : ('contract.new.title' | translate)
@@ -38,7 +38,6 @@
             </p-select>
 
             <app-error-msg
-              [required]="false"
               [field]="'companyId'"
               [forId]="'companyId'"
               [control]="form.controls.companyId"
@@ -89,7 +88,22 @@
               inputId="establishmentId"
               formControlName="establishmentId"
               [options]="establishmentOptions()"
-            ></p-select>
+            >
+              <ng-template let-option pTemplate="item">
+                <div class="cs-option-item">
+                  <div class="cs-option-item__label">{{ option.pvNumber }}</div>
+                  <div class="cs-option-item__subtext">
+                    {{ typeEstablishmentEnumLabel(option.type) }}
+                  </div>
+                  <div class="cs-option-item__subtext">
+                    Adquirente: {{ option.acquirer?.fantasyName }}
+                  </div>
+                  <div class="cs-option-item__subtext">
+                    Empresa: {{ option.company?.fantasyName }}
+                  </div>
+                </div>
+              </ng-template>
+            </p-select>
 
             <app-error-msg
               [field]="'establishmentId'"
@@ -117,7 +131,7 @@
               [field]="'status'"
               [forId]="'status'"
               [control]="form.controls.status"
-              [label]="'contract.fields.statusEnum' | translate"
+              [label]="'contract.fields.contractEnum' | translate"
             />
           </p-floatLabel>
         </div>
@@ -127,11 +141,11 @@
         <div class="col-12 md:col-6 lg:col-3 p-2">
           <p-floatLabel variant="on" class="w-full">
             <p-datepicker
-              inputId="startDate"
               class="w-full"
+              dataType="date"
               [showIcon]="true"
               [showTime]="false"
-              dataType="date"
+              inputId="startDate"
               dateFormat="dd/mm/yy"
               formControlName="startDate"
             ></p-datepicker>
@@ -139,7 +153,7 @@
             <app-error-msg
               [field]="'startDate'"
               [forId]="'startDate'"
-              [control]="form.controls.startDate"
+              [control]="'startDate' in form.controls ? form.controls.startDate : null"
               [label]="'contract.fields.startDate' | translate"
             />
           </p-floatLabel>
@@ -148,11 +162,11 @@
         <div class="col-12 md:col-6 lg:col-3 p-2">
           <p-floatLabel variant="on" class="w-full">
             <p-datepicker
-              inputId="endDate"
               class="w-full"
+              dataType="date"
+              inputId="endDate"
               [showIcon]="true"
               [showTime]="false"
-              dataType="date"
               dateFormat="dd/mm/yy"
               formControlName="endDate"
             ></p-datepicker>
@@ -169,6 +183,7 @@
         <div class="col-12 lg:col-6 p-2">
           <p-floatLabel variant="on" class="w-full">
             <input
+              readonly
               pInputText
               type="text"
               inputId="description"
@@ -190,173 +205,281 @@
         <span class="font-semibold">{{ 'contract.flags.title' | translate }}</span>
       </p-divider>
 
-      <div formArrayName="contractFlags" class="flex flex-column gap-3">
-        <div
-          class="contract-flag-card"
-          *ngFor="let flagGroup of contractFlags.controls; let flagIndex = index"
-          [formGroupName]="flagIndex"
-        >
-          <div class="grid formgrid align-items-end">
-            <div class="col-12 lg:col-5 p-2">
-              <p-floatLabel variant="on" class="w-full">
-                <p-select
-                  size="small"
-                  class="w-full"
-                  appendTo="body"
-                  [filter]="true"
-                  optionValue="id"
-                  optionLabel="name"
-                  [options]="flagOptions()"
-                  formControlName="flagId"
-                  inputId="flagId-{{ flagIndex }}"
-                ></p-select>
+      <div class="contract-flag-addbar">
+        <div class="grid formgrid align-items-end">
+          <div class="col-12 lg:col-8 p-2">
+            <p-floatLabel variant="on" class="w-full">
+              <p-select
+                size="small"
+                class="w-full"
+                appendTo="body"
+                [filter]="true"
+                inputId="newFlagId"
+                optionValue="id"
+                optionLabel="name"
+                [showClear]="true"
+                [options]="availableFlags()"
+                [formControl]="newFlagIdControl"
+              ></p-select>
 
-                <label for="flagId-{{ flagIndex }}">{{ 'contract.fields.flag' | translate }}</label>
-              </p-floatLabel>
-            </div>
-
-            <div class="col-12 lg:col-7 p-2">
-              <div class="flex flex-wrap align-items-center justify-content-end gap-2">
-                <p-tag [value]="selectedFlagName(flagGroup.get('flagId')?.value)"></p-tag>
-
-                <button
-                  pButton
-                  type="button"
-                  icon="pi pi-plus"
-                  (click)="addRate(flagIndex)"
-                  class="p-button-text p-button-sm"
-                  [label]="'contract.rates.add' | translate"
-                ></button>
-
-                <button
-                  pButton
-                  type="button"
-                  icon="pi pi-trash"
-                  (click)="removeFlag(flagIndex)"
-                  [label]="'common.remove' | translate"
-                  [disabled]="contractFlags.length === 1"
-                  class="p-button-text p-button-sm p-button-danger"
-                ></button>
-              </div>
-            </div>
+              <label for="newFlagId">
+                {{ 'contract.fields.flag' | translate }}
+              </label>
+            </p-floatLabel>
           </div>
 
-          <div formArrayName="contractRates" class="flex flex-column gap-2 p-2">
-            <div
-              class="contract-rate-row grid formgrid align-items-end"
-              *ngFor="let rateGroup of ratesAt(flagIndex).controls; let rateIndex = index"
-              [formGroupName]="rateIndex"
-            >
-              <div class="col-12 md:col-6 lg:col-3 p-1">
-                <p-floatLabel variant="on" class="w-full">
-                  <p-select
-                    size="small"
-                    class="w-full"
-                    appendTo="body"
-                    optionLabel="label"
-                    optionValue="value"
-                    formControlName="modality"
-                    [options]="modalityOptions()"
-                    inputId="modality-{{ flagIndex }}-{{ rateIndex }}"
-                  ></p-select>
-
-                  <label for="modality-{{ flagIndex }}-{{ rateIndex }}">
-                    {{ 'contract.fields.modality' | translate }}
-                  </label>
-                </p-floatLabel>
-              </div>
-
-              <div class="col-6 md:col-3 lg:col-2 p-1">
-                <p-floatLabel variant="on" class="w-full">
-                  <input
-                    min="0"
-                    step="0.01"
-                    pInputText
-                    type="number"
-                    formControlName="rate"
-                    class="w-full p-inputtext-sm"
-                    id="rate-{{ flagIndex }}-{{ rateIndex }}"
-                  />
-                  <label for="rate-{{ flagIndex }}-{{ rateIndex }}">
-                    {{ 'contract.fields.rate' | translate }}
-                  </label>
-                </p-floatLabel>
-              </div>
-
-              <div class="col-6 md:col-3 lg:col-2 p-1">
-                <p-floatLabel variant="on" class="w-full">
-                  <input
-                    min="0"
-                    pInputText
-                    type="number"
-                    class="w-full p-inputtext-sm"
-                    formControlName="paymentTermDays"
-                    id="paymentTermDays-{{ flagIndex }}-{{ rateIndex }}"
-                  />
-                  <label for="paymentTermDays-{{ flagIndex }}-{{ rateIndex }}">
-                    {{ 'contract.fields.paymentTermDays' | translate }}
-                  </label>
-                </p-floatLabel>
-              </div>
-
-              <div class="col-6 md:col-3 lg:col-2 p-1">
-                <p-floatLabel variant="on" class="w-full">
-                  <input
-                    min="0"
-                    step="0.01"
-                    pInputText
-                    type="number"
-                    class="w-full p-inputtext-sm"
-                    formControlName="rateEcommerce"
-                    id="rateEcommerce-{{ flagIndex }}-{{ rateIndex }}"
-                  />
-                  <label for="rateEcommerce-{{ flagIndex }}-{{ rateIndex }}">
-                    {{ 'contract.fields.rateEcommerce' | translate }}
-                  </label>
-                </p-floatLabel>
-              </div>
-
-              <div class="col-6 md:col-3 lg:col-2 p-1">
-                <p-floatLabel variant="on" class="w-full">
-                  <input
-                    min="0"
-                    pInputText
-                    type="number"
-                    class="w-full p-inputtext-sm"
-                    formControlName="paymentTermDaysEcommerce"
-                    id="paymentTermDaysEcommerce-{{ flagIndex }}-{{ rateIndex }}"
-                  />
-                  <label for="paymentTermDaysEcommerce-{{ flagIndex }}-{{ rateIndex }}">
-                    {{ 'contract.fields.paymentTermDaysEcommerce' | translate }}
-                  </label>
-                </p-floatLabel>
-              </div>
-
-              <div class="col-12 lg:col-1 p-1 flex align-items-center justify-content-end">
-                <button
-                  pButton
-                  type="button"
-                  icon="pi pi-trash"
-                  class="p-button-text p-button-sm p-button-danger"
-                  (click)="removeRate(flagIndex, rateIndex)"
-                  [disabled]="ratesAt(flagIndex).length === 1"
-                ></button>
-              </div>
+          <div class="col-12 lg:col-4 p-2">
+            <div class="contract-flag-addbar__actions">
+              <button
+                pButton
+                type="button"
+                icon="pi pi-plus"
+                class="p-button-outlined p-button-sm"
+                [label]="'contract.flags.add' | translate"
+                (click)="addSelectedFlag()"
+                [disabled]="!canAddSelectedFlag()"
+              ></button>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="mt-3 flex justify-content-start">
-        <button
-          pButton
-          type="button"
-          icon="pi pi-plus"
-          (click)="addFlag()"
-          class="p-button-outlined p-button-sm"
-          [label]="'contract.flags.add' | translate"
-          [disabled]="form.controls.acquirerId.disabled"
-        ></button>
+      <div formArrayName="contractFlags" class="contract-flags-list">
+        <div
+          class="contract-flag-wrapper"
+          *ngFor="let flagGroup of contractFlags.controls; let flagIndex = index"
+          [formGroupName]="flagIndex"
+        >
+          <section class="contract-flag-card">
+            <header
+              class="contract-flag-card__header contract-flag-card__header--clickable"
+              role="button"
+              tabindex="0"
+              (click)="toggleFlagCard(flagIndex)"
+              (keydown.enter)="toggleFlagCard(flagIndex)"
+              (keydown.space)="onFlagHeaderSpace($event, flagIndex)"
+            >
+              <div class="contract-flag-card__identity">
+                <div class="contract-flag-card__icon">
+                  <i class="pi pi-credit-card"></i>
+                </div>
+
+                <div class="contract-flag-card__texts">
+                  <div class="contract-flag-card__title">
+                    {{
+                      selectedFlagName(flagGroup.get('flagId')?.value) ||
+                        ('contract.fields.flag' | translate)
+                    }}
+                  </div>
+                  <div class="contract-flag-card__subtitle">
+                    {{
+                      ratesAt(flagIndex).length === 1
+                        ? '1 modalidade cadastrada'
+                        : ratesAt(flagIndex).length + ' modalidades cadastradas'
+                    }}
+                  </div>
+
+                  <div
+                    class="contract-flag-card__summary"
+                    *ngIf="!isFlagCardExpanded(flagIndex) && ratesAt(flagIndex).length > 0"
+                  >
+                    <span
+                      class="contract-flag-card__summary-chip"
+                      *ngFor="let label of collapsedRateSummary(flagIndex).visible"
+                    >
+                      {{ label }}
+                    </span>
+
+                    <span
+                      class="contract-flag-card__summary-chip contract-flag-card__summary-chip--more"
+                      *ngIf="collapsedRateSummary(flagIndex).remaining > 0"
+                    >
+                      +{{ collapsedRateSummary(flagIndex).remaining }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="contract-flag-card__header-actions" (click)="$event.stopPropagation()">
+                <p-tag
+                  severity="contrast"
+                  [value]="
+                    ratesAt(flagIndex).length === 1
+                      ? '1 taxa'
+                      : ratesAt(flagIndex).length + ' taxas'
+                  "
+                ></p-tag>
+
+                <button
+                  pButton
+                  type="button"
+                  tooltipPosition="top"
+                  pTooltip="Expandir / recolher"
+                  (click)="toggleFlagCard(flagIndex)"
+                  class="p-button-text p-button-sm contract-flag-card__toggle"
+                  [icon]="
+                    isFlagCardExpanded(flagIndex) ? 'pi pi-chevron-down' : 'pi pi-chevron-right'
+                  "
+                ></button>
+
+                <button
+                  pButton
+                  type="button"
+                  icon="pi pi-plus"
+                  tooltipPosition="top"
+                  pTooltip="Adicionar taxa"
+                  (click)="addRate(flagIndex)"
+                  [disabled]="!canAddRate(flagIndex)"
+                  class="p-button-sm p-button-outlined contract-flag-card__icon-action"
+                ></button>
+
+                <button
+                  pButton
+                  type="button"
+                  icon="pi pi-trash"
+                  tooltipPosition="top"
+                  pTooltip="Remover bandeira"
+                  (click)="removeFlag(flagIndex)"
+                  class="p-button-text p-button-sm p-button-danger contract-flag-card__icon-action"
+                ></button>
+              </div>
+            </header>
+
+            <div
+              formArrayName="contractRates"
+              class="contract-rates-list"
+              [class.contract-rates-list--collapsed]="!isFlagCardExpanded(flagIndex)"
+            >
+              <div class="contract-rates-empty-state" *ngIf="ratesAt(flagIndex).length === 0">
+                <i class="pi pi-percentage"></i>
+                <span>Nenhuma taxa adicionada</span>
+              </div>
+
+              <div
+                class="contract-rate-row"
+                *ngFor="let rateGroup of ratesAt(flagIndex).controls; let rateIndex = index"
+                [formGroupName]="rateIndex"
+              >
+                <div class="contract-rate-row__top">
+                  <div class="contract-rate-row__badge">
+                    <i class="pi pi-percentage"></i>
+                    <span>
+                      {{
+                        rateGroup.get('modality')?.value
+                          ? modalityEnumLabel(rateGroup.get('modality')?.value)
+                          : ('contract.fields.modality' | translate)
+                      }}
+                    </span>
+                  </div>
+
+                  <button
+                    pButton
+                    type="button"
+                    icon="pi pi-trash"
+                    (click)="removeRate(flagIndex, rateIndex)"
+                    [disabled]="false"
+                    class="p-button-text p-button-sm p-button-danger"
+                  ></button>
+                </div>
+
+                <div class="grid formgrid align-items-end">
+                  <div class="col-12 md:col-6 lg:col-3 p-1">
+                    <p-floatLabel variant="on" class="w-full">
+                      <p-select
+                        size="small"
+                        class="w-full"
+                        appendTo="body"
+                        optionLabel="label"
+                        optionValue="value"
+                        formControlName="modality"
+                        inputId="modality-{{ flagIndex }}-{{ rateIndex }}"
+                        [options]="availableModalities(flagIndex, rateIndex)"
+                      ></p-select>
+
+                      <label for="modality-{{ flagIndex }}-{{ rateIndex }}">
+                        {{ 'contract.fields.modality' | translate }}
+                      </label>
+                    </p-floatLabel>
+                  </div>
+
+                  <div class="col-6 md:col-3 lg:col-2 p-1">
+                    <p-floatLabel variant="on" class="w-full">
+                      <input
+                        min="0"
+                        step="0.01"
+                        pInputText
+                        type="number"
+                        formControlName="rate"
+                        class="w-full p-inputtext-sm"
+                        id="rate-{{ flagIndex }}-{{ rateIndex }}"
+                      />
+                      <label for="rate-{{ flagIndex }}-{{ rateIndex }}">
+                        {{ 'contract.fields.rate' | translate }}
+                      </label>
+                    </p-floatLabel>
+                  </div>
+
+                  <div class="col-6 md:col-3 lg:col-2 p-1">
+                    <p-floatLabel variant="on" class="w-full">
+                      <input
+                        min="0"
+                        pInputText
+                        type="number"
+                        class="w-full p-inputtext-sm"
+                        formControlName="paymentTermDays"
+                        id="paymentTermDays-{{ flagIndex }}-{{ rateIndex }}"
+                      />
+                      <label for="paymentTermDays-{{ flagIndex }}-{{ rateIndex }}">
+                        {{ 'contract.fields.paymentTermDays' | translate }}
+                      </label>
+                    </p-floatLabel>
+                  </div>
+
+                  <div class="col-6 md:col-3 lg:col-2 p-1">
+                    <p-floatLabel variant="on" class="w-full">
+                      <input
+                        min="0"
+                        step="0.01"
+                        pInputText
+                        type="number"
+                        class="w-full p-inputtext-sm"
+                        formControlName="rateEcommerce"
+                        id="rateEcommerce-{{ flagIndex }}-{{ rateIndex }}"
+                      />
+                      <label for="rateEcommerce-{{ flagIndex }}-{{ rateIndex }}">
+                        {{ 'contract.fields.rateEcommerce' | translate }}
+                      </label>
+                    </p-floatLabel>
+                  </div>
+
+                  <div class="col-6 md:col-3 lg:col-2 p-1">
+                    <p-floatLabel variant="on" class="w-full">
+                      <input
+                        min="0"
+                        pInputText
+                        type="number"
+                        class="w-full p-inputtext-sm"
+                        formControlName="paymentTermDaysEcommerce"
+                        id="paymentTermDaysEcommerce-{{ flagIndex }}-{{ rateIndex }}"
+                      />
+                      <label for="paymentTermDaysEcommerce-{{ flagIndex }}-{{ rateIndex }}">
+                        {{ 'contract.fields.paymentTermDaysEcommerce' | translate }}
+                      </label>
+                    </p-floatLabel>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <div *ngIf="contractFlags.length === 0" class="contract-flags-empty-state">
+          <i class="pi pi-credit-card"></i>
+          <div class="contract-flags-empty-state__title">Nenhuma bandeira adicionada</div>
+          <div class="contract-flags-empty-state__subtitle">
+            Selecione uma bandeira acima para começar a configurar as taxas.
+          </div>
+        </div>
       </div>
     </div>
   </form>

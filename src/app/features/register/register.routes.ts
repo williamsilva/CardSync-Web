@@ -66,6 +66,8 @@ export const REGISTER_ROUTES: Routes = [
       permissions: [PERMISSIONS.CONTRACTS.VIEW],
     },
     loadComponent: () =>
-      import('./contract/contract-list/contract-list').then((m) => m.ContractListComponent),
+      import('./contract/contract-list/contract-list-component').then(
+        (m) => m.ContractListComponent,
+      ),
   },
 ];

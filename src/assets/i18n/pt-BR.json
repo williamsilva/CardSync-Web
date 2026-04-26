@@ -7,6 +7,9 @@
       "company": {
         "title": "Empresas"
       },
+      "contract": {
+        "title": "Contratos"
+      },
       "acquirer": {
         "title": "Adquirentes"
       },
@@ -74,6 +77,16 @@
       "contracts": "Contratos",
       "acquirer": "Adquirentes",
       "establishment": "Estabelecimentos"
+    },
+    "erp": {
+      "title": "ERP",
+      "sales": "Vendas",
+      "parcels": "Parcelas"
+    },
+    "conciliation": {
+      "fees": "taxas",
+      "sales": "Vendas",
+      "title": "Conciliação"
     },
     "security": {
       "title": "Segurança",
@@ -251,6 +264,28 @@
       "active": "Ativo",
       "inactive": "Inativo",
       "blocked": "Bloqueado"
+    },
+    "contractEnum": {
+      "expired": "Vencido",
+      "closed": "Encerrado",
+      "validity": "Em Virgência"
+    },
+    "modalityEnum": {
+      "outros": "Outros",
+      "cash_debit": "Débito",
+      "cash_credit": "Crédito à vista",
+      "digital_wallet": "Carteira digital",
+      "installment_2_6": "Parcelado 2 a 6X",
+      "installment_7_12":  "Parcelado 7 a 12X",
+      "installment_13_18": "Parcelado 13 a 18X"
+    },
+    "periodEnum": {
+      "day": "Dia",
+      "year": "Ano",
+      "month": "Mês",
+      "end": "Final",
+      "start": "Inicio",
+      "interval": "Intervalo"
     }
   },
   "company": {
@@ -574,29 +609,35 @@
     },
     "columns": {
       "name": "Descrição",
-      "description": "Descrição",
       "company": "Empresa",
-      "acquirer": "Adquirente",
-      "establishment": "Estabelecimento",
       "period": "Vigência",
       "flags": "Bandeiras",
-      "statusEnum": "Status"
+      "statusEnum": "Status",
+      "acquirer": "Adquirente",
+      "description": "Descrição",
+      "createdAt": "Cadastrado em",
+      "createdBy": "Cadastrado por",
+      "establishment": "Estabelecimento"
     },
     "fields": {
-      "name": "Descrição",
-      "description": "Descrição",
-      "company": "Empresa",
-      "acquirer": "Adquirente",
-      "establishment": "Estabelecimento",
-      "startDate": "Data inicial",
-      "endDate": "Data final",
+      "rate": "Taxa",
       "flag": "Bandeira",
+      "name": "Descrição",
+      "company": "Empresa",
+      "flags": "Bandeiras",
+      "contractEnum": "Status",
       "modality": "Modalidade",
-      "rate": "Taxa loja",
-      "rateEcommerce": "Taxa e-commerce",
-      "paymentTermDays": "Prazo loja (dias)",
-      "paymentTermDaysEcommerce": "Prazo e-commerce (dias)",
-      "statusEnum": "Status"
+      "acquirer": "Adquirente",
+      "description": "Descrição",
+      "endDate": "Virgência final",
+      "createdBy":"Cadastrado por",
+      "paymentTermDays": "Repasse",
+      "rateEcommerce": "E-commerce",
+      "periodEndDate": "Período Final",
+      "startDate": "Virgência inicial",
+      "establishment": "Estabelecimento",
+      "periodStartDate": "Período Inicial",
+      "paymentTermDaysEcommerce": "Repasse e-commerce"
     },
     "modality": {
       "CASH_DEBIT": "Débito à vista",
@@ -615,45 +656,45 @@
       "invalidDateRange": "A data final deve ser maior ou igual à data inicial."
     },
     "action": {
-      "deactivate": {
-        "label": "Inativar",
-        "invalidStatus": "Somente contratos ativos podem ser inativados.",
-        "noPermission": "Você não tem permissão para desativar contratos."
+      "expired": {
+        "label": "Expirar",
+        "invalidStatus": "Somente contratos validos podem ser expirados.",
+        "noPermission": "Você não tem permissão para expirar contratos."
       },
-      "activate": {
-        "label": "Ativar",
+      "validity": {
+        "label": "Válido",
         "noPermission": "Você não tem permissão para ativar contratos.",
-        "invalidStatus": "Somente contratos inativos ou bloqueados podem ser ativados."
+        "invalidStatus": "Somente contratos vencidos  podem ser validados."
       },
-      "block": {
-        "label": "Bloquear",
-        "noPermission": "Você não tem permissão para bloquear contratos.",
-        "invalidStatus": "Somente contratos ativos podem ser bloqueados."
+      "closed": {
+        "label": "Encerrar",
+        "noPermission": "Você não tem permissão para encerrar contratos.",
+        "invalidStatus": "Somente contratos validos podem ser encerrados."
       }
     },
-    "block": {
-      "selected": "Bloquear",
-      "header": "Confirmar bloqueio",
-      "successSingle": "Contrato bloqueado com sucesso.",
-      "messageSingle": "Deseja bloquear o contrato {name}?",
-      "successBulk": "{count, plural, one {# contrato bloqueado com sucesso.} other {# contratos bloqueados com sucesso.}}",
-      "messageBulk": "{count, plural, one {Deseja bloquear # contrato selecionado?} other {Deseja bloquear # contratos selecionados?}}"
+    "closed": {
+      "selected": "Encerrar",
+      "header": "Confirmar encerramento",
+      "successSingle": "Contrato encerado com sucesso.",
+      "messageSingle": "Deseja encerrar o contrato {description}?",
+      "successBulk": "{count, plural, one {# contrato encerado com sucesso.} other {# contratos encerados com sucesso.}}",
+      "messageBulk": "{count, plural, one {Deseja encerrar # contrato selecionado?} other {Deseja encerrar # contratos selecionados?}}"
     },
-    "activate": {
+    "validity": {
       "selected": "Ativar",
       "header": "Confirmar ativação",
       "successSingle": "Contrato ativado com sucesso.",
-      "messageSingle": "Deseja ativar o contrato {name}?",
+      "messageSingle": "Deseja ativar o contrato {description}?",
       "successBulk": "{count, plural, one {# contrato ativado com sucesso.} other {# contratos ativados com sucesso.}}",
       "messageBulk": "{count, plural, one {Deseja ativar # contrato selecionado?} other {Deseja ativar # contratos selecionados?}}"
     },
-    "deactivate": {
-      "selected": "Inativar",
-      "header": "Confirmar inativação",
-      "successSingle": "Contrato inativado com sucesso.",
-      "messageSingle": "Deseja inativar o contrato {name}?",
-      "successBulk": "{count, plural, one {# contrato inativado com sucesso.} other {# contratos inativados com sucesso.}}",
-      "messageBulk": "{count, plural, one {Deseja inativar # contrato selecionado?} other {Deseja inativar # contratos selecionados?}}"
+    "expired": {
+      "selected": "Expirado",
+      "header": "Confirmar expiração",
+      "successSingle": "Contrato expirado com sucesso.",
+      "messageSingle": "Deseja expirar o contrato {description}?",
+      "successBulk": "{count, plural, one {# contrato expirado com sucesso.} other {# contratos expirados com sucesso.}}",
+      "messageBulk": "{count, plural, one {Deseja expirar # contrato selecionado?} other {Deseja expirar # contratos selecionados?}}"
     },
     "selection": {
       "currentMode": "Modo da seleção",
@@ -674,6 +715,22 @@
     },
     "empty": {
       "title": "Nenhum contrato encontrado"
+    },
+     "view": {
+      "title": "Taxas do Contrato:",
+      "emptyRates": "Nenhuma taxa cadastrada para esta bandeira.",
+      "days": "{count, plural, =0 {0 dias} one {# dia} other {# dias}}",
+      "emptyFlags": "Nenhuma bandeira/taxa cadastrada para este contrato.",
+      "flag": {
+        "defaultName": "Bandeira",
+        "modalitiesCount": "{count, plural, =0 {Nenhuma modalidade} one {# modalidade} other {# modalidades}}"
+      },
+      "validity": {
+        "until": "até",
+        "since": "Vigente desde",
+        "rangePrefix": "Em vigência de:",
+        "openEnded": "vigência indeterminada"
+      }
     }
   },
   "flag": {
@@ -875,37 +932,47 @@
     }
   },
   "common": {
-    "yes": "Sim",
     "no": "Não",
+    "yes": "Sim",
+    "new": "Novo",
+    "all": "Todos",
+    "error": "Erro",
     "save": "Salvar",
+    "edit": "Editar",
     "back": "Voltar",
-    "cancel": "Cancelar",
+    "logout": "Sair",
+    "close": "Fechar",
     "clear": "Limpar",
     "search": "Buscar",
-    "new": "Novo",
-    "period": "Periodo",
-    "activate": "Ativar",
-    "deactivate": "Inativar",
-    "update": "Atualizar",
-    "loading": "Carregando...",
-    "filter": "Filtrar",
-    "all": "Todos",
-    "edit": "Editar",
-    "delete": "Excluir",
+    "apply": "Aplicar",
     "actions": "Ações",
-    "error": "Erro",
+    "filter": "Filtrar",
+    "remove": "Remover",
+    "period": "Periodo",
+    "delete": "Excluir",
+    "cancel": "Cancelar",
+    "activate": "Ativar",
     "success": "Sucesso",
     "info": "Informação",
-    "logout": "Sair",
-    "notNow": "Agora não",
-    "renewSession": "Renovar sessão",
-    "goToLogin": "Ir para login",
     "warning": "Atenção",
-    "correlationId": "ID de correlação",
     "view": "Visualizar",
+    "company": "Empresa",
+    "notNow": "Agora não",
+    "update": "Atualizar",
+    "confirm": "Confirmar",
+    "acquirer": "Adquirente",
+    "deactivate": "Inativar",
+    "loading": "Carregando...",
+    "goToLogin": "Ir para login",
     "notInformed": "Não informado",
+    "tableFilters": "Filtros tabela",
+    "renewSession": "Renovar sessão",
+    "correlationId": "ID de correlação",
+    "registrationNumber": "N° Inscrição",
     "advancedFilters": "Filtros avançados",
-    "tableFilters": "Filtros tabela"
+
+    "selected": "{count, plural, =0 {Nenhum selecionado} one {# selecionado} other {# selecionados}}",
+    "selectedFemale": "{count, plural, =0 {Nenhuma selecionada} one {# selecionada} other {# selecionadas}}"
   },
   "confirm": {
     "logoutTitle": "Encerrar sessão",

@@ -222,11 +222,6 @@ export class CompanyCreateDialogComponent {
       },
       error: () => {
         this.saving.set(false);
-        this.toast.add({
-          severity: 'error',
-          summary: this.i18n.tUi('common.error'),
-          detail: this.i18n.tUi('company.form.saveError'),
-        });
       },
     });
   }

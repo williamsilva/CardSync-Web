@@ -523,7 +523,7 @@
     }
   },
   "contract": {
-    "subtitle": "Administra contratos",
+    "subtitle": "Administre contratos",
     "new": {
       "title": "Nuevo contrato",
       "subtitle": "Registro de contrato"
@@ -543,26 +543,27 @@
       "statusEnum": "Estado"
     },
     "fields": {
-      "name": "Descripción",
-      "description": "Descripción",
-      "company": "Empresa",
-      "acquirer": "Adquirente",
-      "establishment": "Establecimiento",
-      "startDate": "Fecha inicial",
-      "endDate": "Fecha final",
+      "rate": "Tarifa",
       "flag": "Bandera",
+      "name": "Descripción",
+      "company": "Empresa",
+      "flags": "Banderas",
+      "statusEnum": "Estado",
+      "endDate": "Fecha final",
       "modality": "Modalidad",
-      "rate": "Tarifa tienda",
-      "rateEcommerce": "Tarifa e-commerce",
-      "paymentTermDays": "Plazo tienda (días)",
-      "paymentTermDaysEcommerce": "Plazo e-commerce (días)",
-      "statusEnum": "Estado"
+      "acquirer": "Adquirente",
+      "description": "Descripción",
+      "startDate": "Fecha inicial",
+      "paymentTermDays": "Plazo de pago",
+      "rateEcommerce": "E-commerce",
+      "establishment": "Establecimiento",
+      "paymentTermDaysEcommerce": "Plazo de pago e-commerce"
     },
     "modality": {
-      "CASH_DEBIT": "Débito al contado",
+      "CASH_DEBIT": "Débito",
       "CASH_CREDIT": "Crédito al contado",
-      "INSTALLMENT_CREDIT_2_6": "Crédito en cuotas 2 a 6",
-      "INSTALLMENT_CREDIT_7_12": "Crédito en cuotas 7 a 12"
+      "INSTALLMENT_CREDIT_2_6": "Crédito en cuotas de 2 a 6x",
+      "INSTALLMENT_CREDIT_7_12": "Crédito en cuotas de 7 a 12x"
     },
     "flags": {
       "title": "Banderas y tarifas",
@@ -575,65 +576,81 @@
       "invalidDateRange": "La fecha final debe ser mayor o igual a la fecha inicial."
     },
     "action": {
-      "deactivate": {
-        "label": "Desactivar",
-        "invalidStatus": "Solo se pueden desactivar contratos activos.",
-        "noPermission": "No tiene permiso para desactivar contratos."
+      "expired": {
+        "label": "Expirar",
+        "invalidStatus": "Solo los contratos vigentes pueden expirar.",
+        "noPermission": "No tiene permiso para expirar contratos."
       },
-      "activate": {
+      "validity": {
         "label": "Activar",
         "noPermission": "No tiene permiso para activar contratos.",
-        "invalidStatus": "Solo se pueden activar contratos inactivos o bloqueados."
+        "invalidStatus": "Solo los contratos vencidos pueden activarse."
       },
-      "block": {
-        "label": "Bloquear",
-        "noPermission": "No tiene permiso para bloquear contratos.",
-        "invalidStatus": "Solo se pueden bloquear contratos activos."
+      "closed": {
+        "label": "Cerrar",
+        "noPermission": "No tiene permiso para cerrar contratos.",
+        "invalidStatus": "Solo los contratos vigentes pueden cerrarse."
       }
     },
-    "block": {
-      "selected": "Bloquear",
-      "header": "Confirmar bloqueo",
-      "successSingle": "Contrato bloqueado con éxito.",
-      "messageSingle": "¿Desea bloquear el contrato {name}?",
-      "successBulk": "{count, plural, one {# contrato bloqueado con éxito.} other {# contratos bloqueados con éxito.}}",
-      "messageBulk": "{count, plural, one {¿Desea bloquear # contrato seleccionado?} other {¿Desea bloquear # contratos seleccionados?}}"
+    "closed": {
+      "selected": "Cerrar",
+      "header": "Confirmar cierre",
+      "successSingle": "Contrato cerrado con éxito.",
+      "messageSingle": "¿Desea cerrar el contrato {description}?",
+      "successBulk": "{count, plural, one {# contrato cerrado con éxito.} other {# contratos cerrados con éxito.}}",
+      "messageBulk": "{count, plural, one {¿Desea cerrar # contrato seleccionado?} other {¿Desea cerrar # contratos seleccionados?}}"
     },
-    "activate": {
+    "validity": {
       "selected": "Activar",
       "header": "Confirmar activación",
       "successSingle": "Contrato activado con éxito.",
-      "messageSingle": "¿Desea activar el contrato {name}?",
+      "messageSingle": "¿Desea activar el contrato {description}?",
       "successBulk": "{count, plural, one {# contrato activado con éxito.} other {# contratos activados con éxito.}}",
       "messageBulk": "{count, plural, one {¿Desea activar # contrato seleccionado?} other {¿Desea activar # contratos seleccionados?}}"
     },
-    "deactivate": {
-      "selected": "Desactivar",
-      "header": "Confirmar desactivación",
-      "successSingle": "Contrato desactivado con éxito.",
-      "messageSingle": "¿Desea desactivar el contrato {name}?",
-      "successBulk": "{count, plural, one {# contrato desactivado con éxito.} other {# contratos desactivados con éxito.}}",
-      "messageBulk": "{count, plural, one {¿Desea desactivar # contrato seleccionado?} other {¿Desea desactivar # contratos seleccionados?}}"
+    "expired": {
+      "selected": "Expirado",
+      "header": "Confirmar expiración",
+      "successSingle": "Contrato expirado con éxito.",
+      "messageSingle": "¿Desea expirar el contrato {description}?",
+      "successBulk": "{count, plural, one {# contrato expirado con éxito.} other {# contratos expirados con éxito.}}",
+      "messageBulk": "{count, plural, one {¿Desea expirar # contrato seleccionado?} other {¿Desea expirar # contratos seleccionados?}}"
     },
     "selection": {
       "currentMode": "Modo de selección",
       "count": "{count, plural, =0 {Ninguno seleccionado} one {# seleccionado} other {# seleccionados}}",
-      "pickOneFirst": "Seleccione primero un contrato elegible para definir el contexto de la selección.",
+      "pickOneFirst": "Seleccione primero un contrato elegible para definir el contexto de selección.",
       "mode": {
         "none": "Ninguno",
-        "activate": "Activación masiva",
-        "deactivate": "Desactivación masiva"
+        "activate": "Activación en lote",
+        "deactivate": "Desactivación en lote"
       }
     },
     "form": {
-      "loadError": "No se pudieron cargar los datos del contrato.",
-      "saveError": "No se pudo guardar el contrato.",
+      "loadError": "No fue posible cargar los datos del contrato.",
+      "saveError": "No fue posible guardar el contrato.",
       "created": "Contrato creado con éxito.",
       "updated": "Contrato actualizado con éxito.",
       "permissionDenied": "No tiene permiso para guardar contratos."
     },
     "empty": {
       "title": "No se encontraron contratos"
+    },
+    "view": {
+      "title": "Tarifas del Contrato:",
+      "emptyRates": "No hay tarifas registradas para esta bandera.",
+      "days": "{count, plural, =0 {0 días} one {# día} other {# días}}",
+      "emptyFlags": "No hay banderas/tarifas registradas para este contrato.",
+      "flag": {
+        "defaultName": "Bandera",
+        "modalitiesCount": "{count, plural, =0 {Ninguna modalidad} one {# modalidad} other {# modalidades}}"
+      },
+      "validity": {
+        "until": "hasta",
+        "since": "Vigente desde",
+        "rangePrefix": "En vigencia de:",
+        "openEnded": "vigencia indefinida"
+      }
     }
   },
   "flag": {

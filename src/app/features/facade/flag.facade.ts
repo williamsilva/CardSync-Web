@@ -2,6 +2,7 @@ import { Injectable, inject, signal } from '@angular/core';
 
 import { finalize, Observable, tap } from 'rxjs';
 
+import { FlagMinimalModel } from '@models/flag-minimal.models';
 import { FlagAdvancedFilters } from '@features/filter/flag.filters';
 import { FlagApiService } from '@features/service/flag.api.service';
 import { ListQueryDto } from '@shared/features/list-query/list-query.types';
@@ -16,13 +17,42 @@ export class FlagFacade {
   private readonly _total = signal(0);
   private readonly _loading = signal(false);
   private readonly _loadedOnce = signal(false);
+  private readonly _optionsLoading = signal(false);
+  private readonly _optionsLoadedOnce = signal(false);
+
   private readonly _data = signal<FlagModel[]>([]);
+  private readonly _options = signal<FlagMinimalModel[]>([]);
   private readonly _lastQuery = signal<LastQuery | null>(null);
 
   readonly flag = this._data.asReadonly();
+  readonly options = this._options.asReadonly();
   readonly loading = this._loading.asReadonly();
   readonly totalRecords = this._total.asReadonly();
   readonly loadedOnce = this._loadedOnce.asReadonly();
+
+  loadCompanyOptionsFilter(force = false): void {
+    if (this._optionsLoading()) return;
+    if (!force && this._optionsLoadedOnce()) return;
+
+    this._optionsLoading.set(true);
+
+    this.api
+      .getOptions()
+      .pipe(
+        finalize(() => {
+          this._optionsLoading.set(false);
+          this._optionsLoadedOnce.set(true);
+        }),
+      )
+      .subscribe({
+        next: (res) => {
+          this._options.set(res?._embedded?.content ?? []);
+        },
+        error: () => {
+          this._options.set([]);
+        },
+      });
+  }
 
   loadPage(q: LastQuery): void {
     if (this._loading()) return;

@@ -1,0 +1,214 @@
+:host ::ng-deep .cs-contract-view-dialog {
+  .p-dialog-header {
+    padding: 1rem 1.25rem 0.75rem;
+    border-bottom: 1px solid var(--surface-border);
+  }
+
+  .p-dialog-content {
+    background: var(--surface-ground);
+  }
+
+  .p-dialog-footer {
+    padding: 0.85rem 1.25rem 1rem;
+    border-top: 1px solid var(--surface-border);
+  }
+}
+
+.cs-view-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.cs-view-title {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--text-color);
+  line-height: 1.2;
+}
+
+.cs-view-subtitle {
+  margin-top: 0.4rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #0f9d8a;
+  font-size: 0.95rem;
+
+  i {
+    font-size: 1rem;
+  }
+}
+
+.cs-view-body {
+  padding: 1rem 1.25rem 1.25rem;
+  max-height: 74vh;
+  overflow: auto;
+}
+
+.cs-view-meta {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(180px, 1fr));
+  gap: 0.85rem;
+  margin-bottom: 1rem;
+}
+
+.cs-meta-card {
+  background: var(--surface-card);
+  border: 1px solid var(--surface-border);
+  border-radius: 14px;
+  padding: 0.9rem 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.cs-meta-label {
+  display: block;
+  font-size: 0.78rem;
+  color: var(--text-color-secondary);
+  margin-bottom: 0.35rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.cs-flags-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.cs-flag-card {
+  background: var(--surface-card);
+  border: 1px solid var(--surface-border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.cs-flag-card__header {
+  padding: 0.95rem 1rem 0.75rem;
+  border-bottom: 1px solid var(--surface-border);
+  background: var(--surface-section);
+}
+
+.cs-flag-card__title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.cs-flag-card__body {
+  padding: 0.85rem 1rem 1rem;
+}
+
+:host ::ng-deep .cs-rates-table {
+  .p-datatable-thead > tr > th {
+    background: #0c3c73;
+    color: #fff;
+    text-align: center;
+    font-weight: 700;
+    padding: 0.8rem 0.7rem;
+    border-right: 1px solid rgba(255, 255, 255, 0.15);
+  }
+
+  .p-datatable-tbody > tr > td {
+    text-align: center;
+    padding: 0.85rem 0.7rem;
+  }
+
+  .p-datatable-tbody > tr > td:first-child {
+    text-align: center;
+  }
+}
+
+.cs-empty-state {
+  padding: 2rem 1rem;
+  text-align: center;
+  color: var(--text-color-secondary);
+  background: var(--surface-card);
+  border: 1px dashed var(--surface-border);
+  border-radius: 12px;
+}
+
+@media (max-width: 1100px) {
+  .cs-view-meta {
+    grid-template-columns: repeat(2, minmax(180px, 1fr));
+  }
+}
+
+@media (max-width: 700px) {
+  .cs-view-meta {
+    grid-template-columns: 1fr;
+  }
+
+  .cs-view-title {
+    font-size: 1.1rem;
+  }
+
+  .cs-view-subtitle {
+    font-size: 0.85rem;
+    align-items: flex-start;
+  }
+}
+
+.cs-flag-card {
+  background: var(--surface-card);
+  border: 1px solid var(--surface-border);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+}
+
+.cs-flag-card__toggle {
+  width: 100%;
+  border: 0;
+  background: var(--surface-section);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1rem;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.2s ease;
+}
+
+.cs-flag-card__toggle:hover {
+  background: color-mix(in srgb, var(--surface-section) 88%, var(--primary-color) 12%);
+}
+
+.cs-flag-card__title-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.cs-flag-card__title {
+  font-size: 1.02rem;
+  font-weight: 700;
+  color: var(--text-color);
+}
+
+.cs-flag-card__subtitle {
+  color: var(--text-color-secondary);
+  font-size: 0.82rem;
+}
+
+.cs-flag-card__toggle .pi {
+  font-size: 0.95rem;
+  color: var(--text-color-secondary);
+}
+
+.cs-flag-card__body {
+  padding: 0.9rem 1rem 1rem;
+  border-top: 1px solid var(--surface-border);
+}
+
+.cs-view-separator {
+  margin: 0 0.35rem;
+  opacity: 0.7;
+}
+
+.cs-open-validity {
+  margin-left: 0.45rem;
+  font-weight: 600;
+  color: var(--primary-color);
+}

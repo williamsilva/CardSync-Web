@@ -85,9 +85,9 @@ export class ContractFacade {
     );
   }
 
-  activate(id: string): Observable<void> {
+  validity(id: string): Observable<void> {
     this._loading.set(true);
-    return this.api.activate(id).pipe(
+    return this.api.validity(id).pipe(
       tap(() => {
         this._loading.set(false);
         this.reloadLast();
@@ -96,9 +96,9 @@ export class ContractFacade {
     );
   }
 
-  deactivate(id: string): Observable<void> {
+  expired(id: string): Observable<void> {
     this._loading.set(true);
-    return this.api.deactivate(id).pipe(
+    return this.api.expired(id).pipe(
       tap(() => {
         this._loading.set(false);
         this.reloadLast();
@@ -107,9 +107,9 @@ export class ContractFacade {
     );
   }
 
-  block(id: string): Observable<void> {
+  closed(id: string): Observable<void> {
     this._loading.set(true);
-    return this.api.block(id).pipe(
+    return this.api.closed(id).pipe(
       tap(() => {
         this._loading.set(false);
         this.reloadLast();
@@ -118,9 +118,9 @@ export class ContractFacade {
     );
   }
 
-  blockBulk(ids: string[]): Observable<void> {
+  closedBulk(ids: string[]): Observable<void> {
     this._loading.set(true);
-    return this.api.blockBulk({ ids }).pipe(
+    return this.api.closedBulk({ ids }).pipe(
       tap(() => {
         this._loading.set(false);
         this.reloadLast();
@@ -129,9 +129,9 @@ export class ContractFacade {
     );
   }
 
-  activateBulk(ids: string[]): Observable<void> {
+  validityBulk(ids: string[]): Observable<void> {
     this._loading.set(true);
-    return this.api.activateBulk({ ids }).pipe(
+    return this.api.validityBulk({ ids }).pipe(
       tap(() => {
         this._loading.set(false);
         this.reloadLast();
@@ -140,9 +140,9 @@ export class ContractFacade {
     );
   }
 
-  deactivateBulk(ids: string[]): Observable<void> {
+  expiredBulk(ids: string[]): Observable<void> {
     this._loading.set(true);
-    return this.api.deactivateBulk({ ids }).pipe(
+    return this.api.expiredBulk({ ids }).pipe(
       tap(() => {
         this._loading.set(false);
         this.reloadLast();

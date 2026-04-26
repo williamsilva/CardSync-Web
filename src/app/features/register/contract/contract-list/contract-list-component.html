@@ -1,0 +1,783 @@
+<cs-page-header
+  [subtitle]="'contract.subtitle' | translate"
+  [breadcrumb]="[
+    { label: ('breadcrumb.dashboard' | translate), url: '/' },
+    { label: ('breadcrumb.register.contract' | translate) },
+  ]"
+  [compact]="false"
+>
+  <button
+    pButton
+    type="button"
+    (click)="refresh()"
+    icon="pi pi-refresh"
+    class="p-button-text p-button-sm"
+    [label]="'common.update' | translate"
+  ></button>
+
+  <button
+    pButton
+    type="button"
+    icon="pi pi-check-circle"
+    (click)="confirmValiditySelected()"
+    [disabled]="!canValiditySelected()"
+    class="p-button-success p-button-sm"
+    [label]="'contract.validity.selected' | translate"
+  ></button>
+
+  <button
+    pButton
+    type="button"
+    icon="pi pi-lock"
+    (click)="confirmExpiredSelected()"
+    [disabled]="!canExpiredSelected()"
+    class="p-button-warn p-button-sm"
+    [label]="'contract.expired.selected' | translate"
+  ></button>
+
+  <button
+    pButton
+    type="button"
+    icon="pi pi-ban"
+    (click)="confirmClosedSelected()"
+    [disabled]="!canClosedSelected()"
+    class="p-button-danger p-button-sm"
+    [label]="'contract.closed.selected' | translate"
+  ></button>
+
+  <button
+    pButton
+    type="button"
+    (click)="goNew()"
+    icon="pi pi-plus"
+    class="p-button-info p-button-sm"
+    [disabled]="!secPolicy.canCreate()"
+    [label]="'contract.new.title' | translate"
+  ></button>
+</cs-page-header>
+
+<app-contract-create-dialog
+  (saved)="onSaved()"
+  [contract]="contract()"
+  [visible]="upsertVisible()"
+  (visibleChange)="onUpsertVisibleChange($event)"
+></app-contract-create-dialog>
+
+@if (viewVisible()) {
+  <app-contract-view-dialog
+    [visible]="viewVisible()"
+    [contract]="viewContract()"
+    (visibleChange)="onViewVisibleChange($event)"
+  ></app-contract-view-dialog>
+}
+
+<cs-filters-panel
+  (clear)="clear()"
+  [collapsed]="true"
+  (search)="search()"
+  [actionsAlign]="'start'"
+  [activeCount]="activeFiltersCount()"
+  [title]="'common.filter' | translate"
+  [activeFilterGroups]="activeFilterGroups()"
+>
+  <div class="grid formgrid gap-0 align-items-end">
+    <cs-advanced-period-date-filter
+      [value]="startDate()"
+      dateInputId="startDate"
+      [period]="periodStartDate()"
+      periodInputId="periodStartDate"
+      [disabled]="isStartDateDisabled()"
+      (valueChange)="startDate.set($event)"
+      [periodOptions]="periodEnumOptions()"
+      [view]="setViewFormat(periodStartDate())"
+      [periodLabel]="'common.period' | translate"
+      [dateFormat]="setDateFormat(periodStartDate())"
+      [selectionMode]="setSelectionMode(periodStartDate())"
+      [dateLabel]="'contract.fields.startDate' | translate"
+      (periodChange)="onPeriodColumnChange(periodStartDate, startDate, $event)"
+    ></cs-advanced-period-date-filter>
+
+    <cs-advanced-period-date-filter
+      [value]="endDate()"
+      dateInputId="endDate"
+      [period]="periodEndDate()"
+      periodInputId="periodEndDate"
+      [disabled]="isEndDateDisabled()"
+      (valueChange)="endDate.set($event)"
+      [periodOptions]="periodEnumOptions()"
+      [view]="setViewFormat(periodEndDate())"
+      [periodLabel]="'common.period' | translate"
+      [dateFormat]="setDateFormat(periodEndDate())"
+      [selectionMode]="setSelectionMode(periodEndDate())"
+      [dateLabel]="'contract.fields.endDate' | translate"
+      (periodChange)="onPeriodColumnChange(periodEndDate, endDate, $event)"
+    ></cs-advanced-period-date-filter>
+
+    <cs-advanced-text-filter
+      inputId="description"
+      [value]="description()"
+      class="col-12 md:col-4 p-1"
+      (valueChange)="description.set($event)"
+      [label]="'contract.fields.description' | translate"
+    ></cs-advanced-text-filter>
+  </div>
+
+  <div class="grid formgrid gap-0 align-items-end">
+    <cs-advanced-multiselect-filter
+      optionValue="value"
+      optionLabel="label"
+      inputId="contractEnum"
+      [value]="contractEnum()"
+      class="col-12 md:col-3 p-1"
+      [options]="statusEnumOptions()"
+      (valueChange)="contractEnum.set($event)"
+      [label]="'contract.fields.contractEnum' | translate"
+    ></cs-advanced-multiselect-filter>
+
+    <cs-advanced-multiselect-filter
+      optionValue="id"
+      inputId="company"
+      [value]="companies()"
+      optionLabel="fantasyName"
+      class="col-12 md:col-3 p-1"
+      [options]="companiesOptions()"
+      (valueChange)="companies.set($event)"
+      [label]="'contract.fields.company' | translate"
+    >
+      <ng-template csAdvancedFilterItem let-option>
+        <div class="cs-option-item">
+          <div class="cs-option-item__label">{{ $any(option).fantasyName }}</div>
+          <div class="cs-option-item__subtext">
+            {{ 'common.registrationNumber' | translate }}: {{ $any(option).cnpj | csDocument }}
+          </div>
+        </div>
+      </ng-template>
+    </cs-advanced-multiselect-filter>
+
+    <cs-advanced-multiselect-filter
+      optionValue="id"
+      inputId="acquirer"
+      [value]="acquirers()"
+      optionLabel="fantasyName"
+      class="col-12 md:col-3 p-1"
+      [options]="acquirersOptions()"
+      (valueChange)="acquirers.set($event)"
+      [label]="'contract.fields.acquirer' | translate"
+    >
+      <ng-template csAdvancedFilterItem let-option>
+        <div class="cs-option-item">
+          <div class="cs-option-item__label">{{ $any(option).fantasyName }}</div>
+          <div class="cs-option-item__subtext">
+            {{ 'common.registrationNumber' | translate }}: {{ $any(option).cnpj | csDocument }}
+          </div>
+        </div>
+      </ng-template>
+    </cs-advanced-multiselect-filter>
+
+    <cs-advanced-multiselect-filter
+      optionValue="id"
+      [showClear]="true"
+      optionLabel="pvNumber"
+      inputId="establishment"
+      [value]="establishments()"
+      class="col-12 md:col-3 p-1"
+      [options]="establishmentsOptions()"
+      (valueChange)="establishments.set($event)"
+      [label]="'contract.fields.establishment' | translate"
+    >
+      <ng-template csAdvancedFilterItem let-option>
+        <div class="cs-option-item">
+          <div class="cs-option-item__label">{{ $any(option).pvNumber }}</div>
+          <div class="cs-option-item__subtext">
+            {{ typeEstablishmentEnumLabel($any(option).type) }}
+          </div>
+          <div class="cs-option-item__subtext">
+            {{ 'common.acquirer' | translate }}:
+            {{ $any(option).acquirer?.fantasyName }}
+          </div>
+          <div class="cs-option-item__subtext">
+            {{ 'common.company' | translate }}:
+            {{ $any(option).company?.fantasyName }}
+          </div>
+        </div>
+      </ng-template>
+    </cs-advanced-multiselect-filter>
+  </div>
+
+  <div class="grid formgrid gap-0 align-items-end">
+    <cs-advanced-multiselect-filter
+      inputId="createdBy"
+      optionLabel="label"
+      optionValue="value"
+      [value]="createdBy()"
+      [options]="usersOptions()"
+      class="col-12 md:col-4 p-1"
+      (valueChange)="createdBy.set($event)"
+      [label]="'contract.fields.createdBy' | translate"
+    ></cs-advanced-multiselect-filter>
+  </div>
+</cs-filters-panel>
+
+<div class="flex align-items-center justify-content-between mb-2 px-1">
+  <small class="opacity-80">
+    {{ 'contract.selection.currentMode' | translate }}:
+    {{ selectionModeLabel() }}
+  </small>
+
+  @if (selectedRows().length) {
+    <small class="opacity-80">
+      {{ 'contract.selection.count' | translate: { count: selectedRows().length } }}
+    </small>
+  }
+</div>
+
+<p-table
+  #dt
+  stripedRows
+  dataKey="id"
+  size="small"
+  [rows]="rows"
+  [lazy]="true"
+  showGridlines
+  [rowHover]="true"
+  [paginator]="true"
+  sortMode="multiple"
+  stateStorage="local"
+  filterDisplay="menu"
+  [value]="contracts()"
+  class="p-datatable-sm mt-1"
+  styleClass="cs-admin-table"
+  [showCurrentPageReport]="true"
+  [totalRecords]="totalRecords()"
+  (onPage)="onPageChange($event)"
+  (onLazyLoad)="onLazyLoad($event)"
+  [loading]="facadeContract.loading()"
+  [paginatorDropdownAppendTo]="'body'"
+  [rowsPerPageOptions]="rowsPerPageOptions"
+  stateKey="cardsync.contract.table.state.v1"
+  [tableStyle]="{ width: '100%', 'min-width': '90rem' }"
+  [currentPageReportTemplate]="'pagination.report' | translate"
+>
+  <ng-template pTemplate="colgroup">
+    <colgroup>
+      <col style="width: 44px" />
+      <col style="width: auto" />
+      <col style="width: auto" />
+      <col style="width: 170px" />
+      <col style="width: 170px" />
+      <col style="width: 100px" />
+      <col style="width: 170px" />
+      <col style="width: 150px" />
+      <col style="width: 170px" />
+      <col style="width: 100px" />
+      <col style="width: 120px" />
+    </colgroup>
+  </ng-template>
+
+  <ng-template pTemplate="header">
+    <tr>
+      <th
+        cs-selection-header
+        class="text-center"
+        style="width: 44px"
+        [checked]="headerChecked()"
+        [enabled]="!!selectionStatus()"
+        [indeterminate]="headerIndeterminate()"
+        (toggle)="toggleHeaderSelection($event)"
+        [hintTooltip]="'contract.selection.pickOneFirst' | translate"
+      ></th>
+
+      <th
+        matchMode="contains"
+        [useGrouping]="false"
+        cs-table-column-header
+        [showMatchModes]="true"
+        sortField="description"
+        filterField="description"
+        pSortableColumn="description"
+        [label]="'contract.columns.description' | translate"
+      >
+        <ng-template csColumnFilterContent let-filter="filter" let-columnFilter="columnFilter">
+          <cs-column-filter-shell
+            [clearLabel]="'common.clear' | translate"
+            [applyLabel]="'common.apply' | translate"
+            (clear)="clearTextColumnFilter(descriptionColumnDraft, filter, columnFilter)"
+            (apply)="applyTextColumnFilter(descriptionColumnDraft, filter, columnFilter)"
+          >
+            <input
+              pInputText
+              type="text"
+              class="w-full p-inputtext-sm"
+              [ngModel]="descriptionColumnDraft()"
+              [placeholder]="'contract.fields.description' | translate"
+              (ngModelChange)="descriptionColumnDraft.set($event ?? '')"
+            />
+          </cs-column-filter-shell>
+        </ng-template>
+      </th>
+
+      <th
+        matchMode="in"
+        sortField="company"
+        filterField="company"
+        cs-table-column-header
+        pSortableColumn="company"
+        [label]="'contract.columns.company' | translate"
+      >
+        <ng-template csColumnFilterContent let-filter="filter" let-columnFilter="columnFilter">
+          <cs-column-filter-shell
+            minWidth="20rem"
+            [clearLabel]="'common.clear' | translate"
+            [applyLabel]="'common.apply' | translate"
+            (clear)="clearArrayColumnFilter(companyColumnDraft, filter, columnFilter)"
+            (apply)="applyArrayColumnFilter(companyColumnDraft, filter, columnFilter)"
+          >
+            <p-multiSelect
+              class="w-full"
+              [filter]="true"
+              optionValue="id"
+              [showClear]="true"
+              [showToggleAll]="false"
+              optionLabel="fantasyName"
+              [options]="companiesOptions()"
+              [ngModel]="companyColumnDraft()"
+              [placeholder]="'common.all' | translate"
+              (ngModelChange)="setArrayColumnDraft(companyColumnDraft, $event)"
+            >
+              <ng-template let-option pTemplate="item">
+                <div class="cs-option-item">
+                  <div class="cs-option-item__label">{{ option.fantasyName }}</div>
+                  <div class="cs-option-item__subtext">
+                    {{ 'common.registrationNumber' | translate }}: {{ option.cnpj | csDocument }}
+                  </div>
+                </div>
+              </ng-template>
+
+              <ng-template let-selectedOptions pTemplate="selectedItems">
+                @if (selectedOptions?.length === 1) {
+                  <span>
+                    {{ selectedOptions[0]?.fantasyName }}
+                  </span>
+                }
+
+                @if ((selectedOptions?.length ?? 0) > 1) {
+                  <span>
+                    {{ 'common.selectedFemale' | translate: { count: selectedOptions.length } }}
+                  </span>
+                }
+              </ng-template>
+            </p-multiSelect>
+          </cs-column-filter-shell>
+        </ng-template>
+      </th>
+
+      <th
+        matchMode="in"
+        sortField="acquirer"
+        filterField="acquirer"
+        cs-table-column-header
+        pSortableColumn="acquirer"
+        [label]="'contract.columns.acquirer' | translate"
+      >
+        <ng-template csColumnFilterContent let-filter="filter" let-columnFilter="columnFilter">
+          <cs-column-filter-shell
+            minWidth="20rem"
+            [clearLabel]="'common.clear' | translate"
+            [applyLabel]="'common.apply' | translate"
+            (clear)="clearArrayColumnFilter(acquirerColumnDraft, filter, columnFilter)"
+            (apply)="applyArrayColumnFilter(acquirerColumnDraft, filter, columnFilter)"
+          >
+            <p-multiSelect
+              class="w-full"
+              [filter]="true"
+              optionValue="id"
+              [showClear]="true"
+              [showToggleAll]="false"
+              optionLabel="fantasyName"
+              [options]="acquirersOptions()"
+              [ngModel]="acquirerColumnDraft()"
+              [placeholder]="'common.all' | translate"
+              (ngModelChange)="setArrayColumnDraft(acquirerColumnDraft, $event)"
+            >
+              <ng-template let-option pTemplate="item">
+                <div class="cs-option-item">
+                  <div class="cs-option-item__label">{{ option.fantasyName }}</div>
+                  <div class="cs-option-item__subtext">
+                    {{ 'common.registrationNumber' | translate }}: {{ option.cnpj | csDocument }}
+                  </div>
+                </div>
+              </ng-template>
+
+              <ng-template let-selectedOptions pTemplate="selectedItems">
+                @if (selectedOptions?.length === 1) {
+                  <span>
+                    {{ selectedOptions[0]?.fantasyName }}
+                  </span>
+                }
+
+                @if ((selectedOptions?.length ?? 0) > 1) {
+                  <span>
+                    {{ 'common.selectedFemale' | translate: { count: selectedOptions.length } }}
+                  </span>
+                }
+              </ng-template>
+            </p-multiSelect>
+          </cs-column-filter-shell>
+        </ng-template>
+      </th>
+
+      <th
+        matchMode="in"
+        cs-table-column-header
+        sortField="establishment"
+        filterField="establishment"
+        pSortableColumn="establishment"
+        [label]="'contract.columns.establishment' | translate"
+      >
+        <ng-template csColumnFilterContent let-filter="filter" let-columnFilter="columnFilter">
+          <cs-column-filter-shell
+            minWidth="22rem"
+            [clearLabel]="'common.clear' | translate"
+            [applyLabel]="'common.apply' | translate"
+            (clear)="clearArrayColumnFilter(establishmentColumnDraft, filter, columnFilter)"
+            (apply)="applyArrayColumnFilter(establishmentColumnDraft, filter, columnFilter)"
+          >
+            <p-multiSelect
+              class="w-full"
+              [filter]="true"
+              optionValue="id"
+              [showClear]="true"
+              optionLabel="pvNumber"
+              [showToggleAll]="false"
+              [options]="establishmentsOptions()"
+              [ngModel]="establishmentColumnDraft()"
+              [placeholder]="'common.all' | translate"
+              (ngModelChange)="setArrayColumnDraft(establishmentColumnDraft, $event)"
+            >
+              <ng-template let-option pTemplate="item">
+                <div class="cs-option-item">
+                  <div class="cs-option-item__label">{{ option.pvNumber }}</div>
+                  <div class="cs-option-item__subtext">
+                    {{ typeEstablishmentEnumLabel(option.type) }}
+                  </div>
+                  <div class="cs-option-item__subtext">
+                    {{ 'common.acquirer' | translate }}:
+                    {{ option.acquirer?.fantasyName }}
+                  </div>
+                  <div class="cs-option-item__subtext">
+                    {{ 'common.company' | translate }}:
+                    {{ option.company?.fantasyName }}
+                  </div>
+                </div>
+              </ng-template>
+
+              <ng-template let-selectedOptions pTemplate="selectedItems">
+                @if (selectedOptions?.length === 1) {
+                  <span>
+                    {{ selectedOptions[0]?.pvNumber }}
+                  </span>
+                }
+
+                @if ((selectedOptions?.length ?? 0) > 1) {
+                  <span>
+                    {{ 'common.selected' | translate: { count: selectedOptions.length } }}
+                  </span>
+                }
+              </ng-template>
+            </p-multiSelect>
+          </cs-column-filter-shell>
+        </ng-template>
+      </th>
+
+      <th
+        matchMode="in"
+        sortField="status"
+        cs-table-column-header
+        pSortableColumn="status"
+        filterField="statusEnum"
+        [label]="'contract.columns.statusEnum' | translate"
+      >
+        <ng-template csColumnFilterContent let-filter="filter" let-columnFilter="columnFilter">
+          <cs-column-filter-shell
+            [clearLabel]="'common.clear' | translate"
+            [applyLabel]="'common.apply' | translate"
+            (clear)="clearArrayColumnFilter(statusColumnDraft, filter, columnFilter)"
+            (apply)="applyArrayColumnFilter(statusColumnDraft, filter, columnFilter)"
+          >
+            <p-multiSelect
+              class="w-full"
+              [filter]="true"
+              [showClear]="true"
+              optionLabel="label"
+              optionValue="value"
+              [showToggleAll]="false"
+              [ngModel]="statusColumnDraft()"
+              [options]="statusEnumOptions()"
+              [placeholder]="'common.all' | translate"
+              (ngModelChange)="setArrayColumnDraft(statusColumnDraft, $event)"
+            >
+              <ng-template let-selectedOptions pTemplate="selectedItems">
+                @if (selectedOptions?.length === 1) {
+                  <span>
+                    {{ selectedOptions[0]?.label }}
+                  </span>
+                }
+
+                @if ((selectedOptions?.length ?? 0) > 1) {
+                  <span>
+                    {{ 'common.selected' | translate: { count: selectedOptions.length } }}
+                  </span>
+                }
+              </ng-template>
+            </p-multiSelect>
+          </cs-column-filter-shell>
+        </ng-template>
+      </th>
+
+      <th cs-table-column-header [label]="'contract.columns.period' | translate"></th>
+
+      <th
+        matchMode="equals"
+        sortField="createdAt"
+        cs-table-column-header
+        filterField="createdAt"
+        pSortableColumn="createdAt"
+        [label]="'contract.columns.createdAt' | translate"
+      >
+        <ng-template csColumnFilterContent let-filter="filter" let-columnFilter="columnFilter">
+          <cs-column-filter-shell
+            [clearLabel]="'common.clear' | translate"
+            [applyLabel]="'common.apply' | translate"
+            [applyDisabled]="
+              !canApplyPeriodColumnFilter(createdAtColumnPeriod, createdAtColumnDraft)
+            "
+            (clear)="
+              clearPeriodColumnFilter(
+                createdAtColumnPeriod,
+                createdAtColumnDraft,
+                filter,
+                columnFilter
+              )
+            "
+            (apply)="
+              applyPeriodColumnFilter(
+                createdAtColumnPeriod,
+                createdAtColumnDraft,
+                filter,
+                columnFilter
+              )
+            "
+          >
+            <p-floatLabel variant="on" class="w-full">
+              <p-select
+                size="small"
+                class="w-full"
+                [showClear]="true"
+                optionValue="value"
+                optionLabel="label"
+                inputId="createdAtColumnPeriod"
+                [options]="periodEnumOptions()"
+                [ngModel]="createdAtColumnPeriod()"
+                (ngModelChange)="
+                  onPeriodColumnChange(createdAtColumnPeriod, createdAtColumnDraft, $event ?? null)
+                "
+              ></p-select>
+
+              <label for="createdAtColumnPeriod">{{ 'common.period' | translate }}</label>
+            </p-floatLabel>
+
+            <p-floatLabel variant="on" class="w-full">
+              <p-datepicker
+                size="small"
+                class="w-full"
+                dataType="string"
+                [showIcon]="true"
+                [readonlyInput]="true"
+                inputId="createdAtColumnDraft"
+                [ngModel]="createdAtColumnDraft()"
+                [disabled]="isCreatedAtColumnDisabled()"
+                [view]="setViewFormat(createdAtColumnPeriod())"
+                [dateFormat]="setDateFormat(createdAtColumnPeriod())"
+                [selectionMode]="setSelectionMode(createdAtColumnPeriod())"
+                (ngModelChange)="onPeriodColumnDraftChange(createdAtColumnDraft, $event ?? null)"
+              ></p-datepicker>
+
+              <label for="createdAtColumnDraft">
+                {{ 'contract.columns.createdAt' | translate }}
+              </label>
+            </p-floatLabel>
+          </cs-column-filter-shell>
+        </ng-template>
+      </th>
+
+      <th
+        matchMode="in"
+        sortField="createdBy"
+        cs-table-column-header
+        filterField="createdBy"
+        pSortableColumn="createdBy"
+        [label]="'contract.columns.createdBy' | translate"
+      >
+        <ng-template csColumnFilterContent let-filter="filter" let-columnFilter="columnFilter">
+          <cs-column-filter-shell
+            [clearLabel]="'common.clear' | translate"
+            [applyLabel]="'common.apply' | translate"
+            (clear)="clearArrayColumnFilter(createdByColumnDraft, filter, columnFilter)"
+            (apply)="applyArrayColumnFilter(createdByColumnDraft, filter, columnFilter)"
+          >
+            <p-multiSelect
+              class="w-full"
+              [filter]="true"
+              [showClear]="true"
+              optionLabel="label"
+              optionValue="value"
+              [showToggleAll]="false"
+              [options]="usersOptions()"
+              [ngModel]="createdByColumnDraft()"
+              [placeholder]="'common.all' | translate"
+              (ngModelChange)="setArrayColumnDraft(createdByColumnDraft, $event)"
+            >
+              <ng-template let-selectedOptions pTemplate="selectedItems">
+                @if (selectedOptions?.length === 1) {
+                  <span>
+                    {{ selectedOptions[0]?.label }}
+                  </span>
+                }
+
+                @if ((selectedOptions?.length ?? 0) > 1) {
+                  <span>
+                    {{ 'common.selected' | translate: { count: selectedOptions.length } }}
+                  </span>
+                }
+              </ng-template>
+            </p-multiSelect>
+          </cs-column-filter-shell>
+        </ng-template>
+      </th>
+
+      <th
+        [center]="true"
+        class="text-center"
+        cs-table-column-header
+        [label]="'contract.columns.flags' | translate"
+      ></th>
+
+      <th
+        [center]="true"
+        class="text-center"
+        style="width: 170px"
+        cs-table-column-header
+        [label]="'common.actions' | translate"
+      ></th>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="body" let-row>
+    <tr>
+      <td class="text-center">
+        <p-checkbox
+          [binary]="true"
+          [ngModel]="isRowSelected(row)"
+          [disabled]="isRowCheckboxDisabled(row)"
+          (onChange)="toggleRowSelection(row, !!$event.checked)"
+        ></p-checkbox>
+      </td>
+
+      <td>
+        <div class="font-medium">{{ row.description }}</div>
+      </td>
+
+      <td>{{ row.company?.fantasyName || ('common.notInformed' | translate) }}</td>
+
+      <td>{{ row.acquirer?.fantasyName || ('common.notInformed' | translate) }}</td>
+
+      <td>{{ row.establishment?.pvNumber || ('common.notInformed' | translate) }}</td>
+
+      <td class="text-center">
+        <p-tag [value]="statusLabel(row.status)" [severity]="statusSeverity(row.status)"></p-tag>
+      </td>
+
+      <td>
+        {{ row.startDate | csDate: 'date' }}
+        <span class="opacity-70">-</span>
+        {{ row.endDate ? (row.endDate | csDate: 'date') : ('common.notInformed' | translate) }}
+      </td>
+
+      <td class="cell-muted text-center">
+        {{ row.createdAt ? (row.createdAt | csDate: 'short') : '-' }}
+      </td>
+
+      <td class="cell-muted text-center">
+        {{ row.createdBy?.name }}
+      </td>
+
+      <td class="text-center">{{ row.contractFlags?.length ?? 0 }}</td>
+
+      <td class="text-center">
+        <div class="table-actions justify-content-center">
+          <cs-row-action-button
+            icon="pi pi-eye"
+            (clicked)="view(row)"
+            [tooltip]="'common.view' | translate"
+          ></cs-row-action-button>
+
+          <cs-row-action-button
+            icon="pi pi-pencil"
+            (clicked)="edit(row)"
+            [disabled]="!secPolicy.canEdit(row)"
+            [tooltip]="!secPolicy.canEdit(row) ? undefined : ('common.edit' | translate)"
+          ></cs-row-action-button>
+
+          <cs-row-action-button
+            icon="pi pi-check-circle"
+            [disabled]="!secPolicy.canValidity(row)"
+            [tooltip]="
+              secPolicy.canValidity(row)
+                ? ('contract.action.validity.label' | translate)
+                : (secPolicy.validityDisabledReason(row) ?? '' | translate)
+            "
+            (clicked)="confirmValidity(row)"
+          ></cs-row-action-button>
+
+          <cs-row-action-button
+            icon="pi pi-ban"
+            [disabled]="!secPolicy.canExpired(row)"
+            [tooltip]="
+              secPolicy.canExpired(row)
+                ? ('contract.action.expired.label' | translate)
+                : (secPolicy.expiredDisabledReason(row) ?? '' | translate)
+            "
+            (clicked)="confirmExpired(row)"
+          ></cs-row-action-button>
+
+          <cs-row-action-button
+            icon="pi pi-lock"
+            [disabled]="!secPolicy.canClosed(row)"
+            [tooltip]="
+              secPolicy.canClosed(row)
+                ? ('contract.action.closed.label' | translate)
+                : (secPolicy.closedDisabledReason(row) ?? '' | translate)
+            "
+            (clicked)="confirmClosed(row)"
+          ></cs-row-action-button>
+        </div>
+      </td>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="emptymessage">
+    <tr>
+      <td [attr.colspan]="11" class="empty-td">
+        <div class="empty empty-center">
+          <div class="empty-title">
+            {{
+              facadeContract.loadedOnce()
+                ? ('contract.empty.title' | translate)
+                : ('common.loading' | translate)
+            }}
+          </div>
+        </div>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>

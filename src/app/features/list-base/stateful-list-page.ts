@@ -1,8 +1,10 @@
-import { computed, signal } from '@angular/core';
+import { computed, signal, WritableSignal } from '@angular/core';
 
 import { Table } from 'primeng/table';
 
 import { I18nService } from '@core/i18n/i18n.service';
+import { PeriodEnum } from '@models/enums/period.enum';
+import { DatePickerTypeView } from 'primeng/datepicker';
 import { BaseListPage } from '@shared/features/list-base/base-list-page';
 import { buildListQuery } from '@shared/features/list-query/list-query.builder';
 import { mapPrimeLazyToTableQuery } from '@shared/features/list-query/primeng-lazy.mapper';
@@ -144,6 +146,228 @@ export abstract class StatefulListPage<
     }
 
     this.reloadWithCurrentState();
+  }
+
+  setViewFormat(period: PeriodEnum | null): DatePickerTypeView {
+    switch (period) {
+      case PeriodEnum.MONTH:
+        return 'month';
+      case PeriodEnum.YEAR:
+        return 'year';
+      default:
+        return 'date';
+    }
+  }
+
+  setDateFormat(period: PeriodEnum | null): string {
+    switch (period) {
+      case PeriodEnum.DAY:
+        return 'dd/mm/yy';
+      case PeriodEnum.MONTH:
+        return 'mm/yy';
+      case PeriodEnum.YEAR:
+        return 'yy';
+      default:
+        return 'dd/mm/yy';
+    }
+  }
+
+  setSelectionMode(period: PeriodEnum | null): 'single' | 'range' {
+    return period === PeriodEnum.INTERVAL ? 'range' : 'single';
+  }
+
+  setArrayColumnDraft(
+    draft: WritableSignal<string[] | null>,
+    value: string[] | null | undefined,
+  ): void {
+    draft.set(value?.length ? value : null);
+  }
+
+  applyArrayColumnFilter(
+    draft: WritableSignal<string[] | null>,
+    filter: (value: unknown) => void,
+    columnFilter: unknown,
+  ): void {
+    const value = draft();
+
+    filter(value?.length ? value : null);
+
+    this.closeColumnFilter(columnFilter);
+  }
+
+  clearArrayColumnFilter(
+    draft: WritableSignal<string[] | null>,
+    filter: (value: unknown) => void,
+    columnFilter: unknown,
+  ): void {
+    draft.set(null);
+
+    filter(null);
+
+    this.closeColumnFilter(columnFilter);
+  }
+
+  syncArrayColumnDraftFromTableState(
+    filters: any,
+    field: string,
+    draft: WritableSignal<string[] | null>,
+    reader: (filters: any, field: string) => string[],
+  ): void {
+    const values = reader(filters, field);
+    draft.set(values.length ? values : null);
+  }
+
+  onPeriodColumnChange(
+    periodDraft: WritableSignal<PeriodEnum | null>,
+    valueDraft: WritableSignal<string | string[] | null>,
+    period: PeriodEnum | null,
+  ): void {
+    periodDraft.set(period);
+    valueDraft.set(null);
+  }
+
+  onPeriodColumnDraftChange(
+    valueDraft: WritableSignal<string | string[] | null>,
+    value: string | string[] | null,
+  ): void {
+    valueDraft.set(value);
+  }
+
+  canApplyPeriodColumnFilter(
+    periodDraft: WritableSignal<PeriodEnum | null>,
+    valueDraft: WritableSignal<string | string[] | null>,
+  ): boolean {
+    const period = periodDraft();
+    const value = valueDraft();
+
+    if (!period || !value) {
+      return false;
+    }
+
+    if (Array.isArray(value)) {
+      return value.filter(Boolean).length === 2;
+    }
+
+    return true;
+  }
+
+  applyPeriodColumnFilter(
+    periodDraft: WritableSignal<PeriodEnum | null>,
+    valueDraft: WritableSignal<string | string[] | null>,
+    filter: (value: unknown) => void,
+    columnFilter: unknown,
+  ): void {
+    const period = periodDraft();
+    const value = valueDraft();
+
+    if (!period || !value) {
+      filter(null);
+      this.closeColumnFilter(columnFilter);
+      return;
+    }
+
+    if (Array.isArray(value)) {
+      const normalized = value.filter(Boolean);
+
+      if (normalized.length !== 2) {
+        return;
+      }
+
+      filter({
+        period,
+        value: normalized,
+      });
+
+      this.closeColumnFilter(columnFilter);
+      return;
+    }
+
+    filter({
+      period,
+      value,
+    });
+
+    this.closeColumnFilter(columnFilter);
+  }
+
+  clearPeriodColumnFilter(
+    periodDraft: WritableSignal<PeriodEnum | null>,
+    valueDraft: WritableSignal<string | string[] | null>,
+    filter: (value: unknown) => void,
+    columnFilter: unknown,
+  ): void {
+    periodDraft.set(null);
+    valueDraft.set(null);
+
+    filter(null);
+
+    this.closeColumnFilter(columnFilter);
+  }
+
+  syncPeriodColumnDraftFromTableState(
+    filters: any,
+    field: string,
+    periodDraft: WritableSignal<PeriodEnum | null>,
+    valueDraft: WritableSignal<string | string[] | null>,
+    reader: (
+      filters: any,
+      field: string,
+    ) => { period?: PeriodEnum; value?: string | string[] } | null,
+  ): void {
+    const value = reader(filters, field);
+
+    periodDraft.set(value?.period ?? null);
+    valueDraft.set(value?.value ?? null);
+  }
+
+  setTextColumnDraft(
+    draft: WritableSignal<string>,
+    value: string | null | undefined,
+  ): void {
+    draft.set((value ?? '').toString());
+  }
+
+  applyTextColumnFilter(
+    draft: WritableSignal<string>,
+    filter: (value: unknown) => void,
+    columnFilter: unknown,
+  ): void {
+    const value = draft().trim();
+
+    filter(value || null);
+
+    this.closeColumnFilter(columnFilter);
+  }
+
+  clearTextColumnFilter(
+    draft: WritableSignal<string>,
+    filter: (value: unknown) => void,
+    columnFilter: unknown,
+  ): void {
+    draft.set('');
+
+    filter(null);
+
+    this.closeColumnFilter(columnFilter);
+  }
+
+  syncTextColumnDraftFromTableState(
+    filters: any,
+    field: string,
+    draft: WritableSignal<string>,
+    reader: (filters: any, field: string) => string | null,
+  ): void {
+    draft.set(reader(filters, field) ?? '');
+  }
+
+  protected closeColumnFilter(columnFilter: unknown): void {
+    const filter = columnFilter as {
+      hide?: () => void;
+      overlayVisible?: boolean;
+    };
+
+    filter.hide?.();
+    filter.overlayVisible = false;
   }
 
   protected cloneTableFilters(filters: any): any | null {

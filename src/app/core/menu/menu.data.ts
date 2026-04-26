@@ -9,7 +9,42 @@ export const APP_MENU: AppMenuItem[] = [
     route: '/dashboard',
     exact: true,
   },
-
+  {
+    icon: 'pi pi-sync text-purple-400',
+    labelKey: 'menu.conciliation.title',
+    children: [
+      {
+        exact: false,
+        route: '/conciliation/sales',
+        labelKey: 'menu.conciliation.sales',
+        icon: 'pi pi-shopping-cart text-purple-500',
+      },
+      {
+        exact: false,
+        route: '/conciliation/fees',
+        labelKey: 'menu.conciliation.fees',
+        icon: 'pi pi-percentage text-purple-500',
+      },
+    ],
+  },
+  {
+    icon: 'pi pi-briefcase text-teal-500',
+    labelKey: 'menu.erp.title',
+    children: [
+      {
+        exact: false,
+        route: '/erp/sales',
+        labelKey: 'menu.erp.sales',
+        icon: 'pi pi-shopping-bag text-teal-400',
+      },
+      {
+        exact: false,
+        route: '/erp/parcels',
+        labelKey: 'menu.erp.parcels',
+        icon: 'pi pi-list-check text-teal-400',
+      },
+    ],
+  },
   {
     icon: 'pi pi-shield',
     labelKey: 'menu.security.title',

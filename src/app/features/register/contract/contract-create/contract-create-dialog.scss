@@ -6,7 +6,7 @@
 
 :host ::ng-deep .p-dialog-header {
   flex: 0 0 auto;
-  padding: 1.25rem 1.5rem 1rem 1.5rem;
+  padding: 1.25rem 1.5rem 1rem;
 }
 
 :host ::ng-deep .p-dialog-content {
@@ -20,7 +20,7 @@
 
 :host ::ng-deep .p-dialog-footer {
   flex: 0 0 auto;
-  padding: 1rem 1.5rem 1.25rem 1.5rem !important;
+  padding: 1rem 1.5rem 1.25rem !important;
   border-top: 1px solid var(--surface-border);
   background: var(--surface-overlay);
 }
@@ -55,21 +55,394 @@
   width: 100%;
 }
 
+.contract-flag-addbar {
+  margin-bottom: 0.65rem;
+  padding: 0.2rem 0 0;
+}
+
+.contract-flag-addbar__actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.contract-flags-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.contract-flag-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.22rem;
+}
+
 .contract-flag-card {
-  border: 1px solid var(--surface-border);
-  border-radius: 12px;
-  padding: 0.75rem;
-  background: var(--surface-card);
+  position: relative;
+  border: 1px solid color-mix(in srgb, var(--surface-border) 82%, transparent);
+  border-radius: 14px;
+  padding: 0.58rem 0.65rem;
+  background:
+    radial-gradient(circle at top right, rgba(16, 185, 129, 0.07), transparent 22%),
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--surface-card) 97%, white 3%) 0%,
+      var(--surface-card) 100%
+    );
+  box-shadow:
+    0 4px 14px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+.contract-flag-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.55rem;
+  flex-wrap: wrap;
+  padding-bottom: 0.45rem;
+  margin-bottom: 0.45rem;
+  border-bottom: 1px solid color-mix(in srgb, var(--surface-border) 72%, transparent);
+}
+
+.contract-flag-card__header--clickable {
+  cursor: pointer;
+  user-select: none;
+  transition:
+    background-color 0.18s ease,
+    border-color 0.18s ease,
+    transform 0.18s ease,
+    box-shadow 0.18s ease;
+  border-radius: 10px;
+  margin: -0.12rem -0.12rem 0.45rem;
+  padding: 0.12rem 0.12rem 0.45rem;
+}
+
+.contract-flag-card__header--clickable:hover {
+  background: color-mix(in srgb, var(--primary-color) 5%, transparent);
+}
+
+.contract-flag-card__header--clickable:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--primary-color) 55%, white 0%);
+  outline-offset: 2px;
+}
+
+.contract-flag-card__identity {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-width: 0;
+}
+
+.contract-flag-card__icon {
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: color-mix(in srgb, var(--primary-color) 16%, transparent);
+  color: var(--primary-color);
+  border: 1px solid color-mix(in srgb, var(--primary-color) 18%, transparent);
+  flex: 0 0 auto;
+}
+
+.contract-flag-card__icon i {
+  font-size: 0.8rem;
+}
+
+.contract-flag-card__texts {
+  min-width: 0;
+}
+
+.contract-flag-card__title {
+  font-size: 0.86rem;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--text-color);
+}
+
+.contract-flag-card__subtitle {
+  margin-top: 0.08rem;
+  font-size: 0.7rem;
+  color: var(--text-color-secondary);
+}
+
+.contract-flag-card__summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  margin-top: 0.28rem;
+}
+
+.contract-flag-card__summary-chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.28rem;
+  padding: 0.08rem 0.42rem;
+  border-radius: 999px;
+  font-size: 0.66rem;
+  font-weight: 600;
+  color: var(--text-color-secondary);
+  background: color-mix(in srgb, var(--surface-ground) 82%, transparent);
+  border: 1px solid color-mix(in srgb, var(--surface-border) 78%, transparent);
+}
+
+.contract-flag-card__summary-chip--more {
+  color: var(--primary-color);
+  border-color: color-mix(in srgb, var(--primary-color) 24%, transparent);
+  background: color-mix(in srgb, var(--primary-color) 10%, transparent);
+}
+
+.contract-flag-card__header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  flex-wrap: wrap;
+}
+
+.contract-flag-card__toggle,
+.contract-flag-card__icon-action {
+  width: 1.9rem;
+  height: 1.9rem;
+  min-width: 1.9rem;
+  padding: 0 !important;
+  border-radius: 999px;
+  flex: 0 0 auto;
+}
+
+:host ::ng-deep .contract-flag-card__toggle.p-button,
+:host ::ng-deep .contract-flag-card__icon-action.p-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+:host ::ng-deep .contract-flag-card__toggle.p-button {
+  color: var(--text-color-secondary);
+}
+
+:host ::ng-deep .contract-flag-card__toggle.p-button:hover {
+  background: color-mix(in srgb, var(--primary-color) 12%, transparent);
+  color: var(--primary-color);
+}
+
+.contract-rates-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.22rem;
+  overflow: hidden;
+  max-height: 2000px;
+  opacity: 1;
+  transition:
+    max-height 0.25s ease,
+    opacity 0.2s ease,
+    margin-top 0.2s ease;
+}
+
+.contract-rates-list--collapsed {
+  max-height: 0;
+  opacity: 0;
+  margin-top: 0;
+  pointer-events: none;
+}
+
+.contract-rates-empty-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  min-height: 2.2rem;
+  border: 1px dashed color-mix(in srgb, var(--surface-border) 78%, transparent);
+  border-radius: 10px;
+  padding: 0.45rem 0.55rem;
+  color: var(--text-color-secondary);
+  background: color-mix(in srgb, var(--surface-ground) 60%, transparent);
+  font-size: 0.72rem;
+  font-weight: 500;
+}
+
+.contract-rates-empty-state i {
+  color: var(--primary-color);
+  font-size: 0.72rem;
 }
 
 .contract-rate-row {
-  border-top: 1px dashed var(--surface-border);
-  padding-top: 0.75rem;
+  border: 1px solid color-mix(in srgb, var(--surface-border) 70%, transparent);
+  border-radius: 10px;
+  padding: 0.4rem;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--surface-ground) 55%, transparent) 0%,
+    color-mix(in srgb, var(--surface-ground) 78%, transparent) 100%
+  );
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    border-color 0.18s ease;
 }
 
-.contract-rate-row:first-child {
-  border-top: 0;
-  padding-top: 0;
+.contract-rate-row:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.07);
+  border-color: color-mix(in srgb, var(--primary-color) 28%, var(--surface-border));
+}
+
+.contract-rate-row__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.35rem;
+  margin-bottom: 0.22rem;
+}
+
+.contract-rate-row__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  min-height: 1.5rem;
+  padding: 0.18rem 0.5rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--primary-color) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--primary-color) 18%, transparent);
+  color: var(--text-color);
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+.contract-rate-row__badge i {
+  color: var(--primary-color);
+  font-size: 0.66rem;
+}
+
+.contract-flags-empty-state {
+  border: 1px dashed color-mix(in srgb, var(--surface-border) 80%, transparent);
+  border-radius: 12px;
+  padding: 0.85rem 0.75rem;
+  text-align: center;
+  background: color-mix(in srgb, var(--surface-ground) 70%, transparent);
+  color: var(--text-color-secondary);
+}
+
+.contract-flags-empty-state i {
+  font-size: 1rem;
+  margin-bottom: 0.45rem;
+  color: var(--primary-color);
+}
+
+.contract-flags-empty-state__title {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-color);
+}
+
+.contract-flags-empty-state__subtitle {
+  margin-top: 0.2rem;
+  font-size: 0.74rem;
+}
+
+:host ::ng-deep .contract-flag-card .p-tag {
+  border-radius: 999px;
+  padding-inline: 0.5rem;
+  padding-block: 0.14rem;
+  font-weight: 700;
+  font-size: 0.68rem;
+}
+
+:host ::ng-deep .contract-rate-row .p-button.p-button-text.p-button-danger {
+  width: 1.65rem;
+  height: 1.65rem;
+}
+
+/* Melhor contraste no tema escuro */
+:host-context(.app-dark),
+:host-context(.dark),
+:host-context([data-theme='dark']),
+:host-context(body.app-dark),
+:host-context(body.dark) {
+  .contract-flag-card {
+    border-color: color-mix(in srgb, var(--primary-color) 24%, var(--surface-border));
+    background:
+      radial-gradient(circle at top right, rgba(59, 130, 246, 0.12), transparent 24%),
+      linear-gradient(
+        180deg,
+        color-mix(in srgb, var(--surface-card) 92%, #ffffff 8%) 0%,
+        color-mix(in srgb, var(--surface-card) 98%, #000000 2%) 100%
+      );
+    box-shadow:
+      0 10px 24px rgba(0, 0, 0, 0.32),
+      0 0 0 1px rgba(255, 255, 255, 0.03) inset;
+  }
+
+  .contract-flag-card__header {
+    border-bottom-color: color-mix(in srgb, var(--primary-color) 16%, var(--surface-border));
+  }
+
+  .contract-flag-card__header--clickable:hover {
+    background: color-mix(in srgb, var(--primary-color) 10%, transparent);
+  }
+
+  .contract-flag-card__icon {
+    background: color-mix(in srgb, var(--primary-color) 22%, transparent);
+    border-color: color-mix(in srgb, var(--primary-color) 30%, transparent);
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.03) inset;
+  }
+
+  .contract-rates-empty-state {
+    border-color: color-mix(in srgb, var(--primary-color) 18%, var(--surface-border));
+    background: color-mix(in srgb, var(--surface-ground) 84%, #000000 16%);
+  }
+
+  .contract-rate-row {
+    border-color: color-mix(in srgb, var(--primary-color) 14%, var(--surface-border));
+    background: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--surface-ground) 78%, #ffffff 4%) 0%,
+      color-mix(in srgb, var(--surface-ground) 88%, #000000 4%) 100%
+    );
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02);
+  }
+
+  .contract-rate-row:hover {
+    box-shadow:
+      0 8px 18px rgba(0, 0, 0, 0.26),
+      0 0 0 1px color-mix(in srgb, var(--primary-color) 12%, transparent);
+  }
+
+  .contract-rate-row__badge {
+    background: color-mix(in srgb, var(--primary-color) 18%, transparent);
+    border-color: color-mix(in srgb, var(--primary-color) 26%, transparent);
+  }
+
+  .contract-flag-card__summary-chip {
+    background: color-mix(in srgb, var(--surface-ground) 72%, #000000 28%);
+    border-color: color-mix(in srgb, var(--primary-color) 10%, var(--surface-border));
+    color: var(--text-color);
+  }
+
+  .contract-flag-card__summary-chip--more {
+    background: color-mix(in srgb, var(--primary-color) 16%, transparent);
+    border-color: color-mix(in srgb, var(--primary-color) 28%, transparent);
+    color: color-mix(in srgb, var(--primary-color) 72%, white 28%);
+  }
+
+  .contract-flags-empty-state {
+    border-color: color-mix(in srgb, var(--primary-color) 18%, var(--surface-border));
+    background: color-mix(in srgb, var(--surface-ground) 84%, #000000 16%);
+  }
+}
+
+@media (max-width: 992px) {
+  .contract-flag-addbar__actions {
+    justify-content: flex-start;
+  }
+
+  .contract-flag-card__header {
+    align-items: flex-start;
+  }
 }
 
 @media (max-width: 768px) {
@@ -90,5 +463,23 @@
 
   .cs-dialog-footer-actions > * {
     flex: 1 1 auto;
+  }
+
+  .contract-flags-list {
+    gap: 0.38rem;
+  }
+
+  .contract-flag-card {
+    padding: 0.55rem 0.58rem;
+    border-radius: 12px;
+  }
+
+  .contract-rate-row {
+    padding: 0.38rem;
+    border-radius: 10px;
+  }
+
+  .contract-rate-row__top {
+    margin-bottom: 0.2rem;
   }
 }

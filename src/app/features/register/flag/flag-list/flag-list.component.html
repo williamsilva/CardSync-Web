@@ -116,7 +116,7 @@
           [showToggleAll]="false"
           [ngModel]="statusEnum()"
           [options]="statusOptions()"
-          (onChange)="statusEnum.set($event.value ?? null)"
+          (ngModelChange)="statusEnum.set($event?.length ? $event : null)"
         />
         <label for="statusEnum">{{ 'flag.fields.statusEnum' | translate }}</label>
       </p-floatLabel>

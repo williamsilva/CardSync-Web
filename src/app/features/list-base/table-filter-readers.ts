@@ -1,3 +1,5 @@
+import { PeriodEnum } from '@models/enums/period.enum';
+
 export function readFilterValues(filters: any, field: string): any[] {
   const metadata = filters?.[field];
   if (!metadata) return [];
@@ -45,4 +47,24 @@ export function readDateRangeFilterValue(
   if (!range) return null;
 
   return `${formatDate(range[0])} – ${formatDate(range[1])}`;
+}
+
+export function readPeriodFilterValue(
+  filters: any,
+  field: string,
+): { period?: PeriodEnum; value?: string | string[] } | null {
+  const raw = filters?.[field];
+
+  if (!raw) {
+    return null;
+  }
+
+  const constraint = Array.isArray(raw) ? raw[0] : raw;
+  const value = constraint?.value;
+
+  if (!value || typeof value !== 'object') {
+    return null;
+  }
+
+  return value as { period?: PeriodEnum; value?: string | string[] };
 }

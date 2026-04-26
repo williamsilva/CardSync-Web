@@ -106,18 +106,18 @@
     <div class="col-12 md:col-4 p-1">
       <p-floatLabel variant="on" class="w-full">
         <p-multiSelect
-          inputId="status"
-          class="w-full"
           size="small"
+          [filter]="true"
+          class="w-full"
           appendTo="body"
+          inputId="status"
+          [showClear]="true"
           optionLabel="label"
           optionValue="value"
-          [options]="statusOptions()"
           [ngModel]="status()"
-          [filter]="true"
-          [showClear]="true"
           [showToggleAll]="false"
-          (onChange)="status.set($event.value ?? null)"
+          [options]="statusOptions()"
+          (ngModelChange)="status.set($event?.length ? $event : null)"
         ></p-multiSelect>
         <label for="status">{{ 'users.fields.status' | translate }}</label>
       </p-floatLabel>
@@ -211,7 +211,7 @@
           [ngModel]="createdBy()"
           [showToggleAll]="false"
           [options]="usersOptions()"
-          (onChange)="createdBy.set($event.value ?? null)"
+          (ngModelChange)="createdBy.set($event?.length ? $event : null)"
         ></p-multiSelect>
         <label for="createdBy">{{ 'users.fields.createdBy' | translate }}</label>
       </p-floatLabel>

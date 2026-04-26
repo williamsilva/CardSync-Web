@@ -127,7 +127,7 @@
           [showToggleAll]="false"
           [ngModel]="statusEnum()"
           [options]="statusEnumOptions()"
-          (onChange)="statusEnum.set($event.value ?? null)"
+          (ngModelChange)="statusEnum.set($event?.length ? $event : null)"
         ></p-multiSelect>
         <label for="statusEnum">{{ 'company.fields.statusEnum' | translate }}</label>
       </p-floatLabel>
@@ -147,7 +147,7 @@
           inputId="typeCompanyEnum"
           [ngModel]="typeCompanyEnum()"
           [options]="typeCompanyEnumOptions()"
-          (onChange)="typeCompanyEnum.set($event.value ?? null)"
+          (ngModelChange)="typeCompanyEnum.set($event?.length ? $event : null)"
         ></p-multiSelect>
         <label for="typeCompanyEnum">{{ 'company.fields.typeCompanyEnum' | translate }}</label>
       </p-floatLabel>
@@ -187,7 +187,7 @@
           [showToggleAll]="false"
           [ngModel]="createdBy()"
           [options]="usersOptions()"
-          (onChange)="createdBy.set($event.value ?? null)"
+          (ngModelChange)="createdBy.set($event?.length ? $event : null)"
         ></p-multiSelect>
         <label for="createdBy">{{ 'company.fields.createdBy' | translate }}</label>
       </p-floatLabel>

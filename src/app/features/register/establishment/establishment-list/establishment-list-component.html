@@ -73,156 +73,104 @@
   [activeFilterGroups]="activeFilterGroups()"
 >
   <div class="grid formgrid gap-0 align-items-end">
-    <div class="col-12 md:col-2 p-1">
-      <p-floatLabel variant="on" class="w-full">
-        <input
-          pInputText
-          id="pvNumber"
-          [value]="pvNumber()"
-          class="w-full p-inputtext-sm"
-          (input)="pvNumber.set(($any($event.target).value ?? '').toString())"
-        />
-        <label for="pvNumber">{{ 'establishment.fields.pvNumber' | translate }}</label>
-      </p-floatLabel>
-    </div>
+    <cs-advanced-text-filter
+      inputId="pvNumber"
+      [value]="pvNumber()"
+      class="col-12 md:col-2 p-1"
+      (valueChange)="pvNumber.set($event)"
+      [label]="'establishment.fields.pvNumber' | translate"
+    ></cs-advanced-text-filter>
 
-    <div class="col-12 md:col-2 p-1">
-      <p-floatLabel variant="on" class="w-full">
-        <p-multiSelect
-          size="small"
-          class="w-full"
-          [filter]="true"
-          appendTo="body"
-          [showClear]="true"
-          optionLabel="label"
-          optionValue="value"
-          inputId="statusEnum"
-          [showToggleAll]="false"
-          [ngModel]="statusEnum()"
-          [options]="statusEnumOptions()"
-          (onChange)="statusEnum.set($event.value ?? null)"
-        ></p-multiSelect>
-        <label for="statusEnum">{{ 'establishment.fields.statusEnum' | translate }}</label>
-      </p-floatLabel>
-    </div>
+    <cs-advanced-multiselect-filter
+      optionValue="value"
+      optionLabel="label"
+      inputId="statusEnum"
+      [value]="statusEnum()"
+      class="col-12 md:col-3 p-1"
+      [options]="statusEnumOptions()"
+      (valueChange)="statusEnum.set($event)"
+      [label]="'establishment.fields.statusEnum' | translate"
+    ></cs-advanced-multiselect-filter>
 
-    <div class="col-12 md:col-2 p-1">
-      <p-floatLabel variant="on" class="w-full">
-        <p-multiSelect
-          size="small"
-          class="w-full"
-          [filter]="true"
-          appendTo="body"
-          [showClear]="true"
-          optionLabel="label"
-          optionValue="value"
-          [ngModel]="typeEnum()"
-          [showToggleAll]="false"
-          [options]="typeEnumOptions()"
-          inputId="typeEstablishmentEnum"
-          (onChange)="typeEnum.set($event.value ?? null)"
-        ></p-multiSelect>
-        <label for="statusEnum">{{ 'establishment.fields.typeEnum' | translate }}</label>
-      </p-floatLabel>
-    </div>
+    <cs-advanced-multiselect-filter
+      optionLabel="label"
+      optionValue="value"
+      [value]="typeEnum()"
+      class="col-12 md:col-3 p-1"
+      [options]="typeEnumOptions()"
+      inputId="typeEstablishmentEnum"
+      (valueChange)="typeEnum.set($event)"
+      [label]="'establishment.fields.typeEnum' | translate"
+    ></cs-advanced-multiselect-filter>
 
-    <div class="col-12 md:col-2 p-1">
-      <p-floatLabel variant="on" class="w-full">
-        <p-datepicker
-          size="small"
-          class="w-full"
-          appendTo="body"
-          [showIcon]="true"
-          inputId="createdAt"
-          selectionMode="range"
-          dateFormat="dd/mm/yy"
-          [readonlyInput]="true"
-          [ngModel]="createdAtRange()"
-          (ngModelChange)="createdAtRange.set($event ?? null)"
-        ></p-datepicker>
-        <label for="createdAt">{{ 'users.fields.createdAt' | translate }}</label>
-      </p-floatLabel>
-    </div>
-
-    <div class="col-12 md:col-4 p-1">
-      <p-floatLabel variant="on" class="w-full">
-        <p-multiSelect
-          size="small"
-          class="w-full"
-          [filter]="true"
-          appendTo="body"
-          optionValue="id"
-          inputId="company"
-          [showClear]="true"
-          [showToggleAll]="false"
-          [ngModel]="companies()"
-          optionLabel="fantasyName"
-          [options]="companiesOptions()"
-          (onChange)="companies.set($event.value ?? null)"
-        >
-          <ng-template let-option pTemplate="item">
-            <div class="cs-option-item">
-              <div class="cs-option-item__label">{{ option.fantasyName }}</div>
-              <div class="cs-option-item__subtext">
-                N° Inscrição: {{ option.cnpj | csDocument }}
-              </div>
-            </div>
-          </ng-template>
-        </p-multiSelect>
-        <label for="company">{{ 'establishment.fields.company' | translate }}</label>
-      </p-floatLabel>
-    </div>
+    <cs-advanced-period-date-filter
+      [value]="createdAt()"
+      dateInputId="createdAt"
+      [period]="periodCreatedAt()"
+      periodInputId="periodCreatedAt"
+      [disabled]="isCreatedAtDisabled()"
+      (valueChange)="createdAt.set($event)"
+      [periodOptions]="periodEnumOptions()"
+      [view]="setViewFormat(periodCreatedAt())"
+      [periodLabel]="'common.period' | translate"
+      [dateFormat]="setDateFormat(periodCreatedAt())"
+      [selectionMode]="setSelectionMode(periodCreatedAt())"
+      [dateLabel]="'establishment.fields.createdAt' | translate"
+      (periodChange)="onPeriodColumnChange(periodCreatedAt, createdAt, $event)"
+    ></cs-advanced-period-date-filter>
   </div>
 
   <div class="grid formgrid gap-0 align-items-end">
-    <div class="col-12 md:col-4 p-1">
-      <p-floatLabel variant="on" class="w-full">
-        <p-multiSelect
-          size="small"
-          class="w-full"
-          [filter]="true"
-          appendTo="body"
-          optionValue="id"
-          inputId="acquirer"
-          [showClear]="true"
-          [showToggleAll]="false"
-          [ngModel]="acquirers()"
-          optionLabel="fantasyName"
-          [options]="acquirersOptions()"
-          (onChange)="acquirers.set($event.value ?? null)"
-        >
-          <ng-template let-option pTemplate="item">
-            <div class="cs-option-item">
-              <div class="cs-option-item__label">{{ option.fantasyName }}</div>
-              <div class="cs-option-item__subtext">
-                N° Inscrição: {{ option.cnpj | csDocument }}
-              </div>
-            </div>
-          </ng-template>
-        </p-multiSelect>
-        <label for="acquirer">{{ 'establishment.fields.acquirer' | translate }}</label>
-      </p-floatLabel>
-    </div>
+    <cs-advanced-multiselect-filter
+      optionValue="id"
+      inputId="company"
+      [value]="companies()"
+      optionLabel="fantasyName"
+      class="col-12 md:col-4 p-1"
+      [options]="companiesOptions()"
+      (valueChange)="companies.set($event)"
+      [label]="'establishment.fields.company' | translate"
+    >
+      <ng-template csAdvancedFilterItem let-option>
+        <div class="cs-option-item">
+          <div class="cs-option-item__label">{{ option.fantasyName }}</div>
+          <div class="cs-option-item__subtext">
+            {{ 'common.registrationNumber' | translate }}: {{ option.cnpj | csDocument }}
+          </div>
+        </div>
+      </ng-template>
+    </cs-advanced-multiselect-filter>
 
-    <div class="col-12 md:col-4 p-1">
-      <p-floatLabel variant="on" class="w-full">
-        <p-multiSelect
-          size="small"
-          class="w-full"
-          [filter]="true"
-          appendTo="body"
-          [showClear]="true"
-          optionLabel="label"
-          optionValue="value"
-          inputId="createdBy"
-          [showToggleAll]="false"
-          [ngModel]="createdBy()"
-          [options]="usersOptions()"
-          (onChange)="createdBy.set($event.value ?? null)"
-        ></p-multiSelect>
-        <label for="createdBy">{{ 'establishment.fields.createdBy' | translate }}</label>
-      </p-floatLabel>
-    </div>
+    <cs-advanced-multiselect-filter
+      optionValue="id"
+      inputId="acquirer"
+      [value]="acquirers()"
+      optionLabel="fantasyName"
+      class="col-12 md:col-4 p-1"
+      [options]="acquirersOptions()"
+      (valueChange)="acquirers.set($event)"
+      [label]="'establishment.fields.acquirer' | translate"
+    >
+      <ng-template csAdvancedFilterItem let-option>
+        <div class="cs-option-item">
+          <div class="cs-option-item__label">{{ option.fantasyName }}</div>
+          <div class="cs-option-item__subtext">
+            {{ 'common.registrationNumber' | translate }}: {{ option.cnpj | csDocument }}
+          </div>
+        </div>
+      </ng-template>
+    </cs-advanced-multiselect-filter>
+
+    <cs-advanced-multiselect-filter
+      inputId="createdBy"
+      optionLabel="label"
+      optionValue="value"
+      [value]="createdBy()"
+      [options]="usersOptions()"
+      class="col-12 md:col-4 p-1"
+      (valueChange)="createdBy.set($event)"
+      [label]="'establishment.fields.createdBy' | translate"
+    ></cs-advanced-multiselect-filter>
   </div>
 </cs-filters-panel>
 
@@ -232,9 +180,11 @@
     {{ selectionModeLabel() }}
   </small>
 
-  <small class="opacity-80" *ngIf="selectedRows().length">
-    {{ 'establishment.selection.count' | translate: { count: selectedRows().length } }}
-  </small>
+  @if (selectedRows().length) {
+    <small class="opacity-80">
+      {{ 'establishment.selection.count' | translate: { count: selectedRows().length } }}
+    </small>
+  }
 </div>
 
 <p-table
@@ -273,7 +223,7 @@
       <col style="width: 170px" />
       <col style="width: 150px" />
       <col style="width: 150px" />
-      <col style="width: 170px" />
+      <col style="width: 200px" />
       <col style="width: 120px" />
     </colgroup>
   </ng-template>
@@ -281,22 +231,20 @@
   <ng-template pTemplate="header">
     <tr>
       <th class="text-center">
-        <ng-container *ngIf="selectionStatus(); else selectOneHint">
+        @if (selectionStatus()) {
           <p-checkbox
             [binary]="true"
             [ngModel]="headerChecked()"
             [indeterminate]="headerIndeterminate()"
             (onChange)="toggleHeaderSelection(!!$event.checked)"
           ></p-checkbox>
-        </ng-container>
-
-        <ng-template #selectOneHint>
+        } @else {
           <i
+            tooltipPosition="top"
             class="pi pi-info-circle opacity-70"
             [pTooltip]="'establishment.selection.pickOneFirst' | translate"
-            tooltipPosition="top"
           ></i>
-        </ng-template>
+        }
       </th>
 
       <th pSortableColumn="company">
@@ -305,16 +253,66 @@
           <span class="th-icons">
             <p-sortIcon field="company"></p-sortIcon>
             <p-columnFilter
-              type="text"
               display="menu"
-              class="ml-auto"
+              matchMode="in"
               field="company"
-              matchMode="contains"
-              [useGrouping]="false"
+              #companyColumnFilter
               [showOperator]="false"
               [showAddButton]="false"
+              [showMatchModes]="false"
+              [showClearButton]="false"
+              [showApplyButton]="false"
               styleClass="cs-colfilter"
-            ></p-columnFilter>
+            >
+              <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                <cs-column-filter-shell
+                  minWidth="20rem"
+                  [clearLabel]="'common.clear' | translate"
+                  [applyLabel]="'common.apply' | translate"
+                  (clear)="clearArrayColumnFilter(companyColumnDraft, filter, companyColumnFilter)"
+                  (apply)="applyArrayColumnFilter(companyColumnDraft, filter, companyColumnFilter)"
+                >
+                  <p-multiSelect
+                    class="w-full"
+                    [filter]="true"
+                    optionValue="id"
+                    [showClear]="true"
+                    [showToggleAll]="false"
+                    optionLabel="fantasyName"
+                    [options]="companiesOptions()"
+                    [ngModel]="companyColumnDraft()"
+                    [placeholder]="'common.all' | translate"
+                    (ngModelChange)="setArrayColumnDraft(companyColumnDraft, $event)"
+                  >
+                    <ng-template let-option pTemplate="item">
+                      <div class="cs-option-item">
+                        <div class="cs-option-item__label">{{ option.fantasyName }}</div>
+                        <div class="cs-option-item__subtext">
+                          {{ 'common.registrationNumber' | translate }}:
+                          {{ option.cnpj | csDocument }}
+                        </div>
+                      </div>
+                    </ng-template>
+
+                    <ng-template let-selectedOptions pTemplate="selectedItems">
+                      @if (selectedOptions?.length === 1) {
+                        <span>
+                          {{ selectedOptions[0]?.fantasyName }}
+                        </span>
+                      }
+
+                      @if ((selectedOptions?.length ?? 0) > 1) {
+                        <span>
+                          {{
+                            'common.selectedFemale' | translate: { count: selectedOptions.length }
+                          }}
+                        </span>
+                      }
+                    </ng-template>
+                  </p-multiSelect>
+                </cs-column-filter-shell>
+              </ng-template>
+            </p-columnFilter>
           </span>
         </div>
       </th>
@@ -325,16 +323,54 @@
           <span class="th-icons">
             <p-sortIcon field="acquirer"></p-sortIcon>
             <p-columnFilter
-              type="text"
               display="menu"
-              class="ml-auto"
+              matchMode="in"
               field="acquirer"
-              matchMode="contains"
-              [useGrouping]="false"
+              #acquirerColumnFilter
               [showOperator]="false"
               [showAddButton]="false"
+              [showMatchModes]="false"
+              [showClearButton]="false"
+              [showApplyButton]="false"
               styleClass="cs-colfilter"
-            ></p-columnFilter>
+            >
+              <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                <cs-column-filter-shell
+                  minWidth="20rem"
+                  [clearLabel]="'common.clear' | translate"
+                  [applyLabel]="'common.apply' | translate"
+                  (clear)="
+                    clearArrayColumnFilter(acquirerColumnDraft, filter, acquirerColumnFilter)
+                  "
+                  (apply)="
+                    applyArrayColumnFilter(acquirerColumnDraft, filter, acquirerColumnFilter)
+                  "
+                >
+                  <p-multiSelect
+                    class="w-full"
+                    [filter]="true"
+                    optionValue="id"
+                    [showClear]="true"
+                    [showToggleAll]="false"
+                    optionLabel="fantasyName"
+                    [options]="acquirersOptions()"
+                    [ngModel]="acquirerColumnDraft()"
+                    [placeholder]="'common.all' | translate"
+                    (ngModelChange)="setArrayColumnDraft(acquirerColumnDraft, $event)"
+                  >
+                    <ng-template let-option pTemplate="item">
+                      <div class="cs-option-item">
+                        <div class="cs-option-item__label">{{ option.fantasyName }}</div>
+                        <div class="cs-option-item__subtext">
+                          {{ 'common.registrationNumber' | translate }}:
+                          {{ option.cnpj | csDocument }}
+                        </div>
+                      </div>
+                    </ng-template>
+                  </p-multiSelect>
+                </cs-column-filter-shell>
+              </ng-template>
+            </p-columnFilter>
           </span>
         </div>
       </th>
@@ -349,10 +385,32 @@
               field="pvNumber"
               matchMode="contains"
               [useGrouping]="false"
+              #pvNumberColumnFilter
               [showOperator]="false"
               [showAddButton]="false"
+              [showMatchModes]="true"
+              [showClearButton]="false"
+              [showApplyButton]="false"
               styleClass="cs-colfilter"
-            ></p-columnFilter>
+            >
+              <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                <cs-column-filter-shell
+                  [clearLabel]="'common.clear' | translate"
+                  [applyLabel]="'common.apply' | translate"
+                  (clear)="clearTextColumnFilter(pvNumberColumnDraft, filter, pvNumberColumnFilter)"
+                  (apply)="applyTextColumnFilter(pvNumberColumnDraft, filter, pvNumberColumnFilter)"
+                >
+                  <input
+                    pInputText
+                    type="text"
+                    class="w-full p-inputtext-sm"
+                    [ngModel]="pvNumberColumnDraft()"
+                    [placeholder]="'establishment.fields.pvNumber' | translate"
+                    (ngModelChange)="pvNumberColumnDraft.set($event ?? '')"
+                  />
+                </cs-column-filter-shell>
+              </ng-template>
+            </p-columnFilter>
           </span>
         </div>
       </th>
@@ -366,23 +424,48 @@
               display="menu"
               matchMode="in"
               field="statusEnum"
+              #statusColumnFilter
               [showOperator]="false"
               [showAddButton]="false"
               [showMatchModes]="false"
+              [showClearButton]="false"
+              [showApplyButton]="false"
               styleClass="cs-colfilter"
             >
               <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                <p-multiSelect
-                  class="w-full"
-                  appendTo="body"
-                  [ngModel]="value"
-                  [showClear]="true"
-                  optionLabel="label"
-                  optionValue="value"
-                  [options]="statusEnumOptions()"
-                  (onChange)="filter($event.value)"
-                  [placeholder]="'common.all' | translate"
-                ></p-multiSelect>
+                <cs-column-filter-shell
+                  [clearLabel]="'common.clear' | translate"
+                  [applyLabel]="'common.apply' | translate"
+                  (clear)="clearArrayColumnFilter(statusColumnDraft, filter, statusColumnFilter)"
+                  (apply)="applyArrayColumnFilter(statusColumnDraft, filter, statusColumnFilter)"
+                >
+                  <p-multiSelect
+                    class="w-full"
+                    [filter]="true"
+                    [showClear]="true"
+                    optionLabel="label"
+                    optionValue="value"
+                    [showToggleAll]="false"
+                    [ngModel]="statusColumnDraft()"
+                    [options]="statusEnumOptions()"
+                    [placeholder]="'common.all' | translate"
+                    (ngModelChange)="setArrayColumnDraft(statusColumnDraft, $event)"
+                  >
+                    <ng-template let-selectedOptions pTemplate="selectedItems">
+                      @if (selectedOptions?.length === 1) {
+                        <span>
+                          {{ selectedOptions[0]?.label }}
+                        </span>
+                      }
+
+                      @if ((selectedOptions?.length ?? 0) > 1) {
+                        <span>
+                          {{ 'common.selected' | translate: { count: selectedOptions.length } }}
+                        </span>
+                      }
+                    </ng-template>
+                  </p-multiSelect>
+                </cs-column-filter-shell>
               </ng-template>
             </p-columnFilter>
           </span>
@@ -395,26 +478,51 @@
           <span class="th-icons">
             <p-sortIcon field="type"></p-sortIcon>
             <p-columnFilter
+              #typeColumnFilter
               display="menu"
               matchMode="in"
               field="typeEnum"
               [showOperator]="false"
               [showAddButton]="false"
               [showMatchModes]="false"
+              [showClearButton]="false"
+              [showApplyButton]="false"
               styleClass="cs-colfilter"
             >
               <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                <p-multiSelect
-                  class="w-full"
-                  appendTo="body"
-                  [ngModel]="value"
-                  [showClear]="true"
-                  optionLabel="label"
-                  optionValue="value"
-                  [options]="typeEnumOptions()"
-                  (onChange)="filter($event.value)"
-                  [placeholder]="'common.all' | translate"
-                ></p-multiSelect>
+                <cs-column-filter-shell
+                  [clearLabel]="'common.clear' | translate"
+                  [applyLabel]="'common.apply' | translate"
+                  (clear)="clearArrayColumnFilter(typeColumnDraft, filter, typeColumnFilter)"
+                  (apply)="applyArrayColumnFilter(typeColumnDraft, filter, typeColumnFilter)"
+                >
+                  <p-multiSelect
+                    class="w-full"
+                    [filter]="true"
+                    [showClear]="true"
+                    optionLabel="label"
+                    optionValue="value"
+                    [showToggleAll]="false"
+                    [ngModel]="typeColumnDraft()"
+                    [options]="typeEnumOptions()"
+                    [placeholder]="'common.all' | translate"
+                    (ngModelChange)="setArrayColumnDraft(typeColumnDraft, $event)"
+                  >
+                    <ng-template let-selectedOptions pTemplate="selectedItems">
+                      @if (selectedOptions?.length === 1) {
+                        <span>
+                          {{ selectedOptions[0]?.label }}
+                        </span>
+                      }
+
+                      @if ((selectedOptions?.length ?? 0) > 1) {
+                        <span>
+                          {{ 'common.selected' | translate: { count: selectedOptions.length } }}
+                        </span>
+                      }
+                    </ng-template>
+                  </p-multiSelect>
+                </cs-column-filter-shell>
               </ng-template>
             </p-columnFilter>
           </span>
@@ -428,26 +536,88 @@
             <p-sortIcon field="createdAt"></p-sortIcon>
 
             <p-columnFilter
+              #createdAtColumnFilter
               display="menu"
               field="createdAt"
-              matchMode="between"
+              matchMode="equals"
               [showOperator]="false"
               [showAddButton]="false"
               [showMatchModes]="false"
+              [showClearButton]="false"
+              [showApplyButton]="false"
               styleClass="cs-colfilter"
             >
               <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                <p-datepicker
-                  class="w-full"
-                  appendTo="body"
-                  [showIcon]="true"
-                  [ngModel]="value"
-                  selectionMode="range"
-                  dateFormat="dd/mm/yy"
-                  [readonlyInput]="true"
-                  (ngModelChange)="filter($event)"
-                  [placeholder]="'common.period' | translate"
-                ></p-datepicker>
+                <cs-column-filter-shell
+                  [clearLabel]="'common.clear' | translate"
+                  [applyLabel]="'common.apply' | translate"
+                  [applyDisabled]="
+                    !canApplyPeriodColumnFilter(createdAtColumnPeriod, createdAtColumnDraft)
+                  "
+                  (clear)="
+                    clearPeriodColumnFilter(
+                      createdAtColumnPeriod,
+                      createdAtColumnDraft,
+                      filter,
+                      createdAtColumnFilter
+                    )
+                  "
+                  (apply)="
+                    applyPeriodColumnFilter(
+                      createdAtColumnPeriod,
+                      createdAtColumnDraft,
+                      filter,
+                      createdAtColumnFilter
+                    )
+                  "
+                >
+                  <p-floatLabel variant="on" class="w-full">
+                    <p-select
+                      size="small"
+                      class="w-full"
+                      [showClear]="true"
+                      optionValue="value"
+                      optionLabel="label"
+                      inputId="createdAtColumnPeriod"
+                      [ngModel]="createdAtColumnPeriod()"
+                      [options]="periodEnumOptions()"
+                      (ngModelChange)="
+                        onPeriodColumnChange(
+                          createdAtColumnPeriod,
+                          createdAtColumnDraft,
+                          $event ?? null
+                        )
+                      "
+                    ></p-select>
+
+                    <label for="createdAtColumnPeriod">
+                      {{ 'common.period' | translate }}
+                    </label>
+                  </p-floatLabel>
+
+                  <p-floatLabel variant="on" class="w-full">
+                    <p-datepicker
+                      size="small"
+                      class="w-full"
+                      dataType="string"
+                      [showIcon]="true"
+                      [readonlyInput]="true"
+                      inputId="createdAtColumnDraft"
+                      [ngModel]="createdAtColumnDraft()"
+                      [disabled]="isCreatedAtColumnDisabled()"
+                      [view]="setViewFormat(createdAtColumnPeriod())"
+                      [dateFormat]="setDateFormat(createdAtColumnPeriod())"
+                      [selectionMode]="setSelectionMode(createdAtColumnPeriod())"
+                      (ngModelChange)="
+                        onPeriodColumnDraftChange(createdAtColumnDraft, $event ?? null)
+                      "
+                    ></p-datepicker>
+
+                    <label for="createdAtColumnDraft">
+                      {{ 'establishment.columns.createdAt' | translate }}
+                    </label>
+                  </p-floatLabel>
+                </cs-column-filter-shell>
               </ng-template>
             </p-columnFilter>
           </span>
@@ -463,24 +633,52 @@
               display="menu"
               matchMode="in"
               field="createdBy"
+              #createdByColumnFilter
               [showOperator]="false"
               [showAddButton]="false"
               [showMatchModes]="false"
+              [showClearButton]="false"
+              [showApplyButton]="false"
               styleClass="cs-colfilter"
             >
               <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                <p-multiSelect
-                  class="w-full"
-                  appendTo="body"
-                  [filter]="true"
-                  [ngModel]="value"
-                  [showClear]="true"
-                  optionLabel="label"
-                  optionValue="value"
-                  [options]="usersOptions()"
-                  (onChange)="filter($event.value)"
-                  [placeholder]="'common.all' | translate"
-                ></p-multiSelect>
+                <cs-column-filter-shell
+                  [clearLabel]="'common.clear' | translate"
+                  [applyLabel]="'common.apply' | translate"
+                  (clear)="
+                    clearArrayColumnFilter(createdByColumnDraft, filter, createdByColumnFilter)
+                  "
+                  (apply)="
+                    applyArrayColumnFilter(createdByColumnDraft, filter, createdByColumnFilter)
+                  "
+                >
+                  <p-multiSelect
+                    class="w-full"
+                    [filter]="true"
+                    [showClear]="true"
+                    optionLabel="label"
+                    optionValue="value"
+                    [showToggleAll]="false"
+                    [options]="usersOptions()"
+                    [ngModel]="createdByColumnDraft()"
+                    [placeholder]="'common.all' | translate"
+                    (ngModelChange)="setArrayColumnDraft(createdByColumnDraft, $event)"
+                  >
+                    <ng-template let-selectedOptions pTemplate="selectedItems">
+                      @if (selectedOptions?.length === 1) {
+                        <span>
+                          {{ selectedOptions[0]?.label }}
+                        </span>
+                      }
+
+                      @if ((selectedOptions?.length ?? 0) > 1) {
+                        <span>
+                          {{ 'common.selected' | translate: { count: selectedOptions.length } }}
+                        </span>
+                      }
+                    </ng-template>
+                  </p-multiSelect>
+                </cs-column-filter-shell>
               </ng-template>
             </p-columnFilter>
           </span>
@@ -507,10 +705,7 @@
       </td>
 
       <td class="cell-strong">{{ row.company?.fantasyName }}</td>
-
-      <td class="cell-muted">
-        {{ row.acquirer?.fantasyName }}
-      </td>
+      <td class="cell-muted">{{ row.acquirer?.fantasyName }}</td>
 
       <td class="cell-muted text-center">
         <span [pTooltip]="row.pvNumber" tooltipPosition="top">
@@ -539,76 +734,56 @@
 
       <td class="text-center">
         <div class="table-actions">
-          <button
-            pButton
-            type="button"
+          <cs-row-action-button
             icon="pi pi-pencil"
-            (click)="edit(row)"
-            tooltipPosition="top"
-            class="p-button-text p-button-sm"
             [disabled]="!secPolicy.canEdit(row)"
-            [pTooltip]="!secPolicy.canEdit(row) ? undefined : ('common.edit' | translate)"
-          ></button>
+            [tooltip]="!secPolicy.canEdit(row) ? undefined : ('common.edit' | translate)"
+            (clicked)="edit(row)"
+          ></cs-row-action-button>
 
-          <button
-            pButton
-            type="button"
-            tooltipPosition="top"
+          <cs-row-action-button
             icon="pi pi-check-circle"
-            (click)="confirmActivate(row)"
-            class="p-button-text p-button-sm"
             [disabled]="!secPolicy.canActivate(row)"
-            [pTooltip]="
+            [tooltip]="
               secPolicy.canActivate(row)
                 ? ('establishment.action.activate.label' | translate)
                 : (secPolicy.activateDisabledReason(row) ?? '' | translate)
             "
-          ></button>
+            (clicked)="confirmActivate(row)"
+          ></cs-row-action-button>
 
-          <button
-            pButton
-            type="button"
+          <cs-row-action-button
             icon="pi pi-ban"
-            tooltipPosition="top"
-            (click)="confirmDeactivate(row)"
-            class="p-button-text p-button-sm"
             [disabled]="!secPolicy.canDeactivate(row)"
-            [pTooltip]="
+            [tooltip]="
               secPolicy.canDeactivate(row)
                 ? ('establishment.action.deactivate.label' | translate)
                 : (secPolicy.deactivateDisabledReason(row) ?? '' | translate)
             "
-          ></button>
+            (clicked)="confirmDeactivate(row)"
+          ></cs-row-action-button>
 
-          <button
-            pButton
-            type="button"
+          <cs-row-action-button
             icon="pi pi-lock"
-            tooltipPosition="top"
-            (click)="confirmBlock(row)"
-            class="p-button-text p-button-sm"
             [disabled]="!secPolicy.canBlock(row)"
-            [pTooltip]="
+            [tooltip]="
               secPolicy.canBlock(row)
                 ? ('establishment.action.block.label' | translate)
                 : (secPolicy.blockDisabledReason(row) ?? '' | translate)
             "
-          ></button>
+            (clicked)="confirmBlock(row)"
+          ></cs-row-action-button>
 
-          <button
-            pButton
-            type="button"
+          <cs-row-action-button
             icon="pi pi-trash"
-            tooltipPosition="top"
-            (click)="confirmDelete(row)"
-            class="p-button-text p-button-sm"
             [disabled]="!secPolicy.canDelete(row)"
-            [pTooltip]="
+            [tooltip]="
               secPolicy.canDelete(row)
                 ? ('establishment.action.delete.label' | translate)
                 : (secPolicy.deleteDisabledReason(row) ?? '' | translate)
             "
-          ></button>
+            (clicked)="confirmDelete(row)"
+          ></cs-row-action-button>
         </div>
       </td>
     </tr>

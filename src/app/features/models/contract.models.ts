@@ -1,15 +1,16 @@
+import { PeriodEnum } from './enums/period.enum';
 import { UserMinimalModel } from './user-minimal.models';
 import { EstablishmentModel } from './establishment.models';
 import { CompanyMinimalModel } from './company-minimal.models';
 import { AcquirerMinimalModel } from './acquirer-minimal.models';
-import { normalizeStatusEnum, StatusEnum } from './enums/status.enum';
-import { ModalityEnum, normalizeModalityEnum } from './modality.enum';
+import { ModalityEnum, normalizeModalityEnum } from './enums/modality.enum';
+import { ContractEnum, normalizeContractEnum } from './enums/contract.enum';
 
 export interface ContractFlagMinimalModel {
   id: string;
   name: string;
   erpCode?: number | null;
-  status?: StatusEnum | null;
+  status?: ContractEnum | null;
 }
 
 export interface ContractRateModel {
@@ -35,7 +36,7 @@ export interface ContractModel {
   createdAt?: string | null;
   updatedAt?: string | null;
 
-  status?: StatusEnum | null;
+  status?: ContractEnum | null;
   createdBy?: UserMinimalModel | null;
   updatedBy?: UserMinimalModel | null;
   company?: CompanyMinimalModel | null;
@@ -64,7 +65,7 @@ export interface ContractCreateInput {
   companyId?: string | null;
   acquirerId: string;
   establishmentId?: string | null;
-  status?: StatusEnum | null;
+  status?: ContractEnum | null;
   contractFlags: ContractFlagInput[];
 }
 
@@ -75,13 +76,25 @@ export interface ContractUpdateInput {
   companyId?: string | null;
   acquirerId?: string;
   establishmentId?: string | null;
-  status?: StatusEnum | null;
+  status?: ContractEnum | null;
   contractFlags?: ContractFlagInput[];
 }
 
 export type ContractFiltersState = {
   description: string;
-  statusEnum: StatusEnum[] | null;
+  contractEnum: ContractEnum[] | null;
+
+  company: string[] | null;
+  acquirer: string[] | null;
+  createdAt: string[] | null;
+  establishment: string[] | null;
+  createdBy: string[] | null;
+
+  periodStartDate: PeriodEnum | null;
+  startDate: string | string[] | null;
+
+  periodEndDate: PeriodEnum | null;
+  endDate: string | string[] | null;
 };
 
 export interface ContractBulkStatusInput {
@@ -111,7 +124,7 @@ export interface ContractApiModel {
   createdAt?: string | null;
   updatedAt?: string | null;
 
-  status?: StatusEnum | null;
+  status?: ContractEnum | null;
   createdBy?: UserMinimalModel | null;
   updatedBy?: UserMinimalModel | null;
   company?: CompanyMinimalModel | null;
@@ -127,7 +140,7 @@ function mapContractFlagMinimalModel(
 
   return {
     ...input,
-    status: normalizeStatusEnum(input.status),
+    status: normalizeContractEnum(input.status),
   };
 }
 
@@ -153,7 +166,7 @@ function mapContractFlagApiModel(input: ContractFlagApiModel): ContractFlagModel
 export function mapContractApiModel(input: ContractApiModel): ContractModel {
   return {
     ...input,
-    status: normalizeStatusEnum(input.status),
+    status: normalizeContractEnum(input.status),
     contractFlags: (input.contractFlags ?? []).map(mapContractFlagApiModel),
   };
 }

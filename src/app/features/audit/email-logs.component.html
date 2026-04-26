@@ -79,7 +79,7 @@
           [ngModel]="status()"
           [showToggleAll]="false"
           [options]="statusOptions()"
-          (onChange)="status.set($event.value ?? null)"
+          (ngModelChange)="status.set($event?.length ? $event : null)"
         ></p-multiSelect>
         <label for="status">{{ 'audit.emailLog.fields.status' | translate }}</label>
       </p-floatLabel>
@@ -99,7 +99,7 @@
           [ngModel]="eventType()"
           [showToggleAll]="false"
           [options]="eventTypeOptions()"
-          (onChange)="eventType.set($event.value ?? null)"
+          (ngModelChange)="eventType.set($event?.length ? $event : null)"
         ></p-multiSelect>
         <label for="eventType">{{ 'audit.emailLog.fields.eventType' | translate }}</label>
       </p-floatLabel>
