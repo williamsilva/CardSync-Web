@@ -141,8 +141,8 @@ export class SidebarComponent {
     this.confirm.confirm({
       header: this.i18n.tUi('confirm.logoutTitle'),
       message: this.i18n.tUi('confirm.logoutMessage'),
-      acceptLabel: this.i18n.tUi('common.logout') ?? 'Sair',
-      rejectLabel: this.i18n.tUi('common.cancel') ?? 'Cancelar',
+      acceptLabel: this.i18n.tUi('common.logout'),
+      rejectLabel: this.i18n.tUi('common.cancel'),
       acceptButtonStyleClass: 'p-button-danger cs-confirm-accept',
       rejectButtonStyleClass: 'p-button-text cs-confirm-reject',
       accept: async () => {

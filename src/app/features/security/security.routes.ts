@@ -4,6 +4,7 @@ import { permissionGuard } from '@core/auth/permission.guard';
 import { PERMISSIONS } from '@core/auth/permissions.constants';
 
 export const SECURITY_ROUTES: Routes = [
+  { path: '', pathMatch: 'full', redirectTo: 'users' },
   {
     path: 'account/password',
     title: 'routes.security.accountPassword.title',
@@ -52,5 +53,10 @@ export const SECURITY_ROUTES: Routes = [
     },
     loadComponent: () =>
       import('./groups/group-detail/group-detail.component').then((m) => m.GroupDetailComponent),
+  },
+  {
+    path: '**',
+    title: 'routes.notFound.title',
+    loadComponent: () => import('../error/not-found/not-found.page').then((m) => m.NotFoundPage),
   },
 ];

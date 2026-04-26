@@ -5,7 +5,7 @@ import { AppMenuItem } from './menu.model';
 export const APP_MENU: AppMenuItem[] = [
   {
     labelKey: 'menu.dashboard',
-    icon: 'pi pi-chart-line',
+    icon: 'pi pi-chart-line text-blue-500',
     route: '/dashboard',
     exact: true,
   },
@@ -46,106 +46,88 @@ export const APP_MENU: AppMenuItem[] = [
     ],
   },
   {
-    icon: 'pi pi-shield',
+    icon: 'pi pi-shield text-red-500',
     labelKey: 'menu.security.title',
     children: [
       {
         labelKey: 'menu.security.users',
-        icon: 'pi pi-user',
+        icon: 'pi pi-user text-red-400',
         route: '/security/users',
         exact: false,
         permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.USERS.VIEW],
       },
       {
         labelKey: 'menu.security.groups',
-        icon: 'pi pi-id-card',
+        icon: 'pi pi-id-card text-red-400',
         route: '/security/groups',
+        exact: false,
         permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.GROUPS.VIEW],
       },
     ],
   },
-
   {
-    icon: 'pi pi-folder-open',
+    icon: 'pi pi-folder-open text-orange-500',
     labelKey: 'menu.register.title',
     children: [
       {
         labelKey: 'menu.register.company',
-        icon: 'pi pi-building',
+        icon: 'pi pi-building text-orange-400',
         route: '/register/company',
         exact: false,
         permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.COMPANIES.VIEW],
       },
       {
         labelKey: 'menu.register.acquirer',
-        icon: 'pi pi-sitemap',
+        icon: 'pi pi-sitemap text-orange-400',
         route: '/register/acquirer',
         exact: false,
         permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.ACQUIRER.VIEW],
       },
       {
         labelKey: 'menu.register.establishment',
-        icon: 'pi pi-shop',
+        icon: 'pi pi-shop text-orange-400',
         route: '/register/establishment',
         exact: false,
         permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.ESTABLISHMENT.VIEW],
       },
       {
         labelKey: 'menu.register.flags',
-        icon: 'pi pi-flag',
+        icon: 'pi pi-flag text-orange-400',
         route: '/register/flags',
         exact: false,
         permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.FLAGS.VIEW],
       },
       {
         labelKey: 'menu.register.contracts',
-        icon: 'pi pi-file-edit',
+        icon: 'pi pi-file-edit text-orange-400',
         route: '/register/contract',
         exact: false,
         permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.CONTRACTS.VIEW],
       },
     ],
   },
-
   {
-    icon: 'pi pi-history',
+    icon: 'pi pi-history text-cyan-500',
     labelKey: 'menu.audit.title',
     children: [
       {
         labelKey: 'menu.audit.mail',
         route: '/audit',
         exact: false,
-        icon: 'pi pi-envelope',
+        icon: 'pi pi-envelope text-cyan-400',
         permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.AUDIT.VIEW],
       },
     ],
   },
-
   {
-    icon: 'pi pi-credit-card',
-    labelKey: 'menu.finance.title',
-    children: [
-      {
-        labelKey: 'menu.reconciliation',
-        route: '/reconciliation',
-        icon: 'pi pi-sync',
-      },
-      {
-        labelKey: 'menu.contracts',
-        route: '/contracts',
-        icon: 'pi pi-file-edit',
-      },
-    ],
-  },
-
-  {
-    icon: 'pi pi-cog',
+    icon: 'pi pi-cog text-indigo-500',
     labelKey: 'menu.settings.title',
     children: [
       {
         labelKey: 'menu.settings.email',
         route: '/settings/email',
-        icon: 'pi pi-envelope',
+        exact: false,
+        icon: 'pi pi-envelope text-indigo-400',
       },
     ],
   },

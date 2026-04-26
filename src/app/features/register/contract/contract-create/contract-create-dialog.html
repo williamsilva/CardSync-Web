@@ -96,10 +96,10 @@
                     {{ typeEstablishmentEnumLabel(option.type) }}
                   </div>
                   <div class="cs-option-item__subtext">
-                    Adquirente: {{ option.acquirer?.fantasyName }}
+                    {{ 'contract.fields.acquirer' | translate }}: {{ option.acquirer?.fantasyName }}
                   </div>
                   <div class="cs-option-item__subtext">
-                    Empresa: {{ option.company?.fantasyName }}
+                    {{ 'contract.fields.company' | translate }}: {{ option.company?.fantasyName }}
                   </div>
                 </div>
               </ng-template>
@@ -214,10 +214,10 @@
                 class="w-full"
                 appendTo="body"
                 [filter]="true"
-                inputId="newFlagId"
                 optionValue="id"
                 optionLabel="name"
                 [showClear]="true"
+                inputId="newFlagId"
                 [options]="availableFlags()"
                 [formControl]="newFlagIdControl"
               ></p-select>
@@ -273,9 +273,8 @@
                   </div>
                   <div class="contract-flag-card__subtitle">
                     {{
-                      ratesAt(flagIndex).length === 1
-                        ? '1 modalidade cadastrada'
-                        : ratesAt(flagIndex).length + ' modalidades cadastradas'
+                      'contract.flags.registeredModalitiesCount'
+                        | translate: { count: ratesAt(flagIndex).length }
                     }}
                   </div>
 
@@ -304,9 +303,7 @@
                 <p-tag
                   severity="contrast"
                   [value]="
-                    ratesAt(flagIndex).length === 1
-                      ? '1 taxa'
-                      : ratesAt(flagIndex).length + ' taxas'
+                    'contract.flags.ratesCount' | translate: { count: ratesAt(flagIndex).length }
                   "
                 ></p-tag>
 
@@ -314,8 +311,8 @@
                   pButton
                   type="button"
                   tooltipPosition="top"
-                  pTooltip="Expandir / recolher"
                   (click)="toggleFlagCard(flagIndex)"
+                  [pTooltip]="'contract.flags.toggle' | translate"
                   class="p-button-text p-button-sm contract-flag-card__toggle"
                   [icon]="
                     isFlagCardExpanded(flagIndex) ? 'pi pi-chevron-down' : 'pi pi-chevron-right'
@@ -327,9 +324,9 @@
                   type="button"
                   icon="pi pi-plus"
                   tooltipPosition="top"
-                  pTooltip="Adicionar taxa"
                   (click)="addRate(flagIndex)"
                   [disabled]="!canAddRate(flagIndex)"
+                  [pTooltip]="'contract.rates.add' | translate"
                   class="p-button-sm p-button-outlined contract-flag-card__icon-action"
                 ></button>
 
@@ -338,21 +335,21 @@
                   type="button"
                   icon="pi pi-trash"
                   tooltipPosition="top"
-                  pTooltip="Remover bandeira"
                   (click)="removeFlag(flagIndex)"
+                  [pTooltip]="'contract.flags.remove' | translate"
                   class="p-button-text p-button-sm p-button-danger contract-flag-card__icon-action"
                 ></button>
               </div>
             </header>
 
             <div
-              formArrayName="contractRates"
               class="contract-rates-list"
+              formArrayName="contractRates"
               [class.contract-rates-list--collapsed]="!isFlagCardExpanded(flagIndex)"
             >
               <div class="contract-rates-empty-state" *ngIf="ratesAt(flagIndex).length === 0">
                 <i class="pi pi-percentage"></i>
-                <span>Nenhuma taxa adicionada</span>
+                <span>{{ 'contract.rates.empty' | translate }}</span>
               </div>
 
               <div
@@ -376,8 +373,8 @@
                     pButton
                     type="button"
                     icon="pi pi-trash"
-                    (click)="removeRate(flagIndex, rateIndex)"
                     [disabled]="false"
+                    (click)="removeRate(flagIndex, rateIndex)"
                     class="p-button-text p-button-sm p-button-danger"
                   ></button>
                 </div>
@@ -475,9 +472,11 @@
 
         <div *ngIf="contractFlags.length === 0" class="contract-flags-empty-state">
           <i class="pi pi-credit-card"></i>
-          <div class="contract-flags-empty-state__title">Nenhuma bandeira adicionada</div>
+          <div class="contract-flags-empty-state__title">
+            {{ 'contract.flags.emptyTitle' | translate }}
+          </div>
           <div class="contract-flags-empty-state__subtitle">
-            Selecione uma bandeira acima para começar a configurar as taxas.
+            {{ 'contract.flags.emptySubtitle' | translate }}
           </div>
         </div>
       </div>

@@ -7,6 +7,9 @@
       "company": {
         "title": "Companies"
       },
+      "contract": {
+        "title": "Contracts"
+      },
       "acquirer": {
         "title": "Acquirers"
       },
@@ -14,7 +17,7 @@
         "title": "Establishments"
       },
       "flags": {
-        "title": "Brands"
+        "title": "Flags"
       },
       "contracts": {
         "title": "Contracts"
@@ -31,10 +34,10 @@
         "title": "My Account"
       },
       "accountPassword": {
-        "title": "Change Password"
+        "title": "Change password"
       },
       "groupDetail": {
-        "title": "Group Details"
+        "title": "Group detail"
       }
     },
     "audit": {
@@ -45,6 +48,9 @@
     },
     "forbidden": {
       "title": "Access denied"
+    },
+    "notFound": {
+      "title": "Page not found"
     }
   },
   "topbar": {
@@ -68,12 +74,22 @@
       "mail": "Email Logs"
     },
     "register": {
-      "title": "Registrations",
-      "flags": "Brands",
+      "flags": "Flags",
       "company": "Companies",
-      "contracts": "Contracts",
       "acquirer": "Acquirers",
+      "title": "Registrations",
+      "contracts": "Contracts",
       "establishment": "Establishments"
+    },
+    "erp": {
+      "title": "ERP",
+      "sales": "Sales",
+      "parcels": "Installments"
+    },
+    "conciliation": {
+      "fees": "rates",
+      "sales": "Sales",
+      "title": "Reconciliation"
     },
     "security": {
       "title": "Security",
@@ -92,7 +108,7 @@
     "users": "Users",
     "dashboard": "Dashboard",
     "register": {
-      "flag": "Brands",
+      "flag": "Flags",
       "company": "Companies",
       "acquirer": "Acquirers",
       "contract": "Contracts",
@@ -116,15 +132,15 @@
   "validation": {
     "invalid": "Invalid value",
     "required": "Required",
-    "minLength": "Minimum {requiredLength} characters",
-    "maxLength": "Maximum {requiredLength} characters",
+    "minLength": "Minimum of {requiredLength} characters",
+    "maxLength": "Maximum of {requiredLength} characters",
     "email": "Invalid email",
     "pattern": "Invalid format",
-    "min": "Minimum value is {min}",
-    "max": "Maximum value is {max}",
+    "min": "The minimum value is {min}",
+    "max": "The maximum value is {max}",
     "uuid": "Invalid identifier",
     "document": "Invalid document",
-    "passwordPolicy": "Password does not meet policy requirements",
+    "passwordPolicy": "Password does not meet the policy",
     "server": "{message}"
   },
   "users": {
@@ -141,7 +157,7 @@
       "name": "Name",
       "status": "Status",
       "groups": "Groups",
-      "userName": "Username",
+      "userName": "User",
       "document": "Document",
       "createdAt": "Created at",
       "lastLoginAt": "Last login",
@@ -162,7 +178,7 @@
     },
     "form": {
       "loadError": "Could not load user data",
-      "saveError": "Could not save user.",
+      "saveError": "Could not save the user.",
       "created": "User created successfully.",
       "updated": "User updated successfully",
       "resend": {
@@ -184,13 +200,13 @@
       "unknown": "Unknown"
     },
     "invite": {
-      "resend": "Resend invite",
-      "resent": "Invite resent successfully.",
-      "resendError": "Could not resend invite."
+      "resend": "Resend invitation",
+      "resent": "Invitation resent successfully.",
+      "resendError": "Could not resend the invitation."
     },
     "delete": {
       "header": "Confirm deletion",
-      "success": "User deactivated successfully",
+      "success": "User disabled successfully",
       "message": "Do you want to delete user {userName}?"
     },
     "activate": {
@@ -212,7 +228,7 @@
     "selection": {
       "currentMode": "Selection mode",
       "count": "{count, plural, =0 {None selected} one {# selected} other {# selected}}",
-      "pickOneFirst": "Select an eligible user first to define the selection context.",
+      "pickOneFirst": "First select an eligible user to define the selection context.",
       "mode": {
         "none": "None",
         "activate": "Bulk activation",
@@ -240,7 +256,7 @@
   },
   "enum": {
     "typeCompanyEnum": {
-      "matriz": "Head office",
+      "matriz": "Headquarters",
       "filial": "Branch"
     },
     "typeEstablishmentEnum": {
@@ -251,6 +267,28 @@
       "active": "Active",
       "inactive": "Inactive",
       "blocked": "Blocked"
+    },
+    "contractEnum": {
+      "expired": "Expired",
+      "closed": "Closed",
+      "validity": "Valid"
+    },
+    "modalityEnum": {
+      "outros": "Other",
+      "cash_debit": "Debit",
+      "cash_credit": "Credit",
+      "digital_wallet": "Digital wallet",
+      "installment_2_6": "Installments 2 to 6X",
+      "installment_7_12": "Installments 7 to 12X",
+      "installment_13_18": "Installments 13 to 18X"
+    },
+    "periodEnum": {
+      "day": "Day",
+      "year": "Year",
+      "month": "Month",
+      "end": "End",
+      "start": "Start",
+      "interval": "Interval"
     }
   },
   "company": {
@@ -264,7 +302,7 @@
       "subtitle": "Company editing"
     },
     "columns": {
-      "cnpj": "Tax ID",
+      "cnpj": "CNPJ",
       "statusEnum": "Status",
       "createdAt": "Created at",
       "createdBy": "Created by",
@@ -290,7 +328,7 @@
       }
     },
     "fields": {
-      "cnpj": "Tax ID",
+      "cnpj": "CNPJ",
       "statusEnum": "Status",
       "createdAt": "Created at",
       "createdBy": "Created by",
@@ -325,7 +363,7 @@
     "selection": {
       "currentMode": "Selection mode",
       "count": "{count, plural, =0 {None selected} one {# selected} other {# selected}}",
-      "pickOneFirst": "Select an eligible company first to define the selection context.",
+      "pickOneFirst": "First select an eligible company to define the selection context.",
       "mode": {
         "none": "None",
         "activate": "Bulk activation",
@@ -335,7 +373,7 @@
     "form": {
       "created": "Company created successfully.",
       "updated": "Company updated successfully.",
-      "saveError": "Could not save company.",
+      "saveError": "Could not save the company.",
       "loadError": "Could not load company data.",
       "permissionDenied": "You do not have permission to save companies."
     },
@@ -354,13 +392,18 @@
       "subtitle": "Acquirer editing"
     },
     "columns": {
-      "cnpj": "Tax ID",
+      "cnpj": "CNPJ",
+      "typeEnum": "Type",
+      "name": "Acquirer",
+      "company": "Companies",
       "statusEnum": "Status",
+      "pvNumber": "PV Number",
       "adqCode": "ADQ Code",
       "createdAt": "Created at",
       "createdBy": "Created by",
       "socialReason": "Legal Name",
-      "fantasyName": "Trade Name"
+      "fantasyName": "Trade Name",
+      "establishment": "Establishments"
     },
     "action": {
       "deactivate": {
@@ -380,7 +423,8 @@
       }
     },
     "fields": {
-      "cnpj": "Tax ID",
+      "cnpj": "CNPJ",
+      "company": "Company",
       "statusEnum": "Status",
       "createdAt": "Created at",
       "createdBy": "Created by",
@@ -414,18 +458,38 @@
     "selection": {
       "currentMode": "Selection mode",
       "count": "{count, plural, =0 {None selected} one {# selected} other {# selected}}",
-      "pickOneFirst": "Select an eligible acquirer first to define the selection context.",
+      "pickOneFirst": "First select an eligible acquirer to define the selection context.",
       "mode": {
         "none": "None",
         "activate": "Bulk activation",
         "deactivate": "Bulk deactivation"
       }
     },
+    "relationships": {
+      "add": "Add",
+      "companies": "Companies",
+      "acquirers": "Acquirers",
+      "saveLinks": "Save links",
+      "linkedCompanies": "Linked companies",
+      "linkedEstablishments": "Linked establishments",
+      "addCompanyToAcquirer": "Add company to acquirer",
+      "addEstablishmentToAcquirer": "Add establishment to acquirer",
+      "removeCompany": {
+        "header": "Remove link",
+        "message": "Do you want to remove company {company} from acquirer {acquirer}?",
+        "success": "Company {company} removed from acquirer {acquirer} successfully."
+      },
+      "removeEstablishment": {
+        "header": "Remove link",
+        "message": "Do you want to remove establishment {establishment} from acquirer {acquirer}?",
+        "success": "Establishment {establishment} removed from acquirer {acquirer} successfully."
+      }
+    },
     "form": {
-      "loadError": "Could not load acquirer data.",
-      "saveError": "Could not save acquirer.",
       "created": "Acquirer created successfully.",
       "updated": "Acquirer updated successfully.",
+      "saveError": "Could not save the acquirer.",
+      "loadError": "Could not load acquirer data.",
       "permissionDenied": "You do not have permission to save acquirers."
     },
     "empty": {
@@ -449,7 +513,8 @@
       "pvNumber": "PV Number",
       "acquirer": "Acquirer",
       "createdAt": "Created at",
-      "createdBy": "Created by"
+      "createdBy": "Created by",
+      "establishment": "Establishment"
     },
     "fields": {
       "typeEnum": "Type",
@@ -475,7 +540,20 @@
         "label": "Block",
         "noPermission": "You do not have permission to block establishments.",
         "invalidStatus": "Only active establishments can be blocked."
+      },
+      "delete": {
+        "label": "Delete",
+        "noPermission": "You do not have permission to delete establishments.",
+        "invalidStatus": "Only active establishments can be deleted."
       }
+    },
+    "delete": {
+      "selected": "Delete",
+      "header": "Confirm deletion",
+      "successSingle": "Establishment deleted successfully.",
+      "messageSingle": "Do you want to delete establishment {pvNumber}?",
+      "successBulk": "{count, plural, one {# establishment deleted successfully.} other {# establishments deleted successfully.}}",
+      "messageBulk": "{count, plural, one {Do you want to delete # selected establishment?} other {Do you want to delete # selected establishments?}}"
     },
     "block": {
       "selected": "Block",
@@ -504,7 +582,7 @@
     "selection": {
       "currentMode": "Selection mode",
       "count": "{count, plural, =0 {None selected} one {# selected} other {# selected}}",
-      "pickOneFirst": "Select an eligible establishment first to define the selection context.",
+      "pickOneFirst": "First select an eligible establishment to define the selection context.",
       "mode": {
         "none": "None",
         "activate": "Bulk activation",
@@ -512,10 +590,10 @@
       }
     },
     "form": {
-      "loadError": "Could not load establishment data.",
-      "saveError": "Could not save establishment.",
       "created": "Establishment created successfully.",
       "updated": "Establishment updated successfully.",
+      "saveError": "Could not save the establishment.",
+      "loadError": "Could not load establishment data.",
       "permissionDenied": "You do not have permission to save establishment."
     },
     "empty": {
@@ -534,43 +612,55 @@
     },
     "columns": {
       "name": "Description",
-      "description": "Description",
       "company": "Company",
-      "acquirer": "Acquirer",
-      "establishment": "Establishment",
       "period": "Validity",
-      "flags": "Brands",
-      "statusEnum": "Status"
+      "flags": "Flags",
+      "statusEnum": "Status",
+      "acquirer": "Acquirer",
+      "description": "Description",
+      "createdAt": "Created at",
+      "createdBy": "Created by",
+      "establishment": "Establishment"
     },
     "fields": {
       "rate": "Rate",
-      "flag": "Brand",
+      "flag": "Flag",
       "name": "Description",
       "company": "Company",
-      "flags": "Brands",
-      "statusEnum": "Status",
-      "endDate": "End date",
+      "flags": "Flags",
+      "contractEnum": "Status",
       "modality": "Modality",
       "acquirer": "Acquirer",
       "description": "Description",
-      "startDate": "Start date",
+      "endDate": "End validity",
+      "createdBy": "Created by",
       "paymentTermDays": "Settlement",
       "rateEcommerce": "E-commerce",
+      "periodEndDate": "End Period",
+      "startDate": "Start validity",
       "establishment": "Establishment",
+      "periodStartDate": "Start Period",
       "paymentTermDaysEcommerce": "E-commerce settlement"
     },
     "modality": {
       "CASH_DEBIT": "Debit",
-      "CASH_CREDIT": "Single-payment credit",
+      "CASH_CREDIT": "Credit",
       "INSTALLMENT_CREDIT_2_6": "Installment credit 2 to 6x",
       "INSTALLMENT_CREDIT_7_12": "Installment credit 7 to 12x"
     },
     "flags": {
-      "title": "Brands and rates",
-      "add": "Add brand"
+      "title": "Flags and rates",
+      "add": "Add flag",
+      "toggle": "Expand / collapse",
+      "remove": "Remove flag",
+      "emptyTitle": "No flags added",
+      "emptySubtitle": "Select a flag above to start configuring the rates.",
+      "registeredModalitiesCount": "{count, plural, =0 {No modalities registered} =1 {1 modality registered} other {# modalities registered}}",
+      "ratesCount": "{count, plural, =0 {No rates} =1 {1 rate} other {# rates}}"
     },
     "rates": {
-      "add": "Add rate"
+      "add": "Add rate",
+      "empty": "No rates added"
     },
     "validation": {
       "invalidDateRange": "The end date must be greater than or equal to the start date."
@@ -582,9 +672,9 @@
         "noPermission": "You do not have permission to expire contracts."
       },
       "validity": {
-        "label": "Activate",
+        "label": "Valid",
         "noPermission": "You do not have permission to activate contracts.",
-        "invalidStatus": "Only expired contracts can be activated."
+        "invalidStatus": "Only expired contracts can be validated."
       },
       "closed": {
         "label": "Close",
@@ -594,7 +684,7 @@
     },
     "closed": {
       "selected": "Close",
-      "header": "Confirm closure",
+      "header": "Confirm closing",
       "successSingle": "Contract closed successfully.",
       "messageSingle": "Do you want to close contract {description}?",
       "successBulk": "{count, plural, one {# contract closed successfully.} other {# contracts closed successfully.}}",
@@ -619,7 +709,7 @@
     "selection": {
       "currentMode": "Selection mode",
       "count": "{count, plural, =0 {None selected} one {# selected} other {# selected}}",
-      "pickOneFirst": "Select an eligible contract first to define the selection context.",
+      "pickOneFirst": "First select an eligible contract to define the selection context.",
       "mode": {
         "none": "None",
         "activate": "Bulk activation",
@@ -628,21 +718,21 @@
     },
     "form": {
       "loadError": "Could not load contract data.",
-      "saveError": "Could not save contract.",
+      "saveError": "Could not save the contract.",
       "created": "Contract created successfully.",
       "updated": "Contract updated successfully.",
-      "permissionDenied": "You do not have permission to save contracts."
+      "permissionDenied": "You do not have permission to save contract."
     },
     "empty": {
       "title": "No contracts found"
     },
     "view": {
       "title": "Contract Rates:",
-      "emptyRates": "No rates registered for this brand.",
+      "emptyRates": "No rates registered for this flag.",
       "days": "{count, plural, =0 {0 days} one {# day} other {# days}}",
-      "emptyFlags": "No brands/rates registered for this contract.",
+      "emptyFlags": "No flags/rates registered for this contract.",
       "flag": {
-        "defaultName": "Brand",
+        "defaultName": "Flag",
         "modalitiesCount": "{count, plural, =0 {No modalities} one {# modality} other {# modalities}}"
       },
       "validity": {
@@ -654,7 +744,7 @@
     }
   },
   "flag": {
-    "subtitle": "Manage brands",
+    "subtitle": "Manage flags",
     "relationships": {
       "add": "Add",
       "companies": "Companies",
@@ -662,20 +752,30 @@
       "saveLinks": "Save links",
       "linkedCompanies": "Linked companies",
       "linkedAcquirers": "Linked acquirers",
-      "addCompanyToFlag": "Add company to brand",
-      "addAcquirerToFlag": "Add acquirer to brand"
+      "addCompanyToFlag": "Add company to flag",
+      "addAcquirerToFlag": "Add acquirer to flag",
+      "removeCompany": {
+        "header": "Remove link",
+        "message": "Do you want to remove company {company} from flag {flag}?",
+        "success": "Company {company} removed from flag {flag} successfully."
+      },
+      "removeAcquirer": {
+        "header": "Remove link",
+        "message": "Do you want to remove acquirer {acquirer} from flag {flag}?",
+        "success": "Acquirer {acquirer} removed from flag {flag} successfully."
+      }
     },
     "new": {
-      "title": "New brand",
-      "subtitle": "Brand registration"
+      "title": "New flag",
+      "subtitle": "Flag registration"
     },
     "edit": {
-      "title": "Edit brand",
-      "subtitle": "Brand editing"
+      "title": "Edit flag",
+      "subtitle": "Flag editing"
     },
     "columns": {
-      "cnpj": "Tax ID",
-      "name": "Brand",
+      "cnpj": "CNPJ",
+      "name": "Flag",
       "statusEnum": "Status",
       "company": "Companies",
       "erpCode": "ERP Code",
@@ -683,7 +783,7 @@
       "acquirerCode": "Acquirer Code"
     },
     "fields": {
-      "name": "Brand",
+      "name": "Flag",
       "erpCode": "Code",
       "statusEnum": "Status",
       "company": "Companies",
@@ -692,48 +792,48 @@
     "action": {
       "deactivate": {
         "label": "Deactivate",
-        "invalidStatus": "Only active brands can be deactivated.",
-        "noPermission": "You do not have permission to deactivate brands."
+        "invalidStatus": "Only active flags can be deactivated.",
+        "noPermission": "You do not have permission to deactivate flags."
       },
       "activate": {
         "label": "Activate",
-        "noPermission": "You do not have permission to activate brands.",
-        "invalidStatus": "Only inactive brands can be activated."
+        "noPermission": "You do not have permission to activate flags.",
+        "invalidStatus": "Only inactive flags can be activated."
       },
       "block": {
         "label": "Block",
-        "noPermission": "You do not have permission to block brands.",
-        "invalidStatus": "Only active brands can be blocked."
+        "noPermission": "You do not have permission to block flags.",
+        "invalidStatus": "Only active flags can be blocked."
       }
     },
     "block": {
       "selected": "Block",
       "header": "Confirm block",
-      "successSingle": "Brand blocked successfully.",
-      "messageSingle": "Do you want to block brand {name}?",
-      "successBulk": "{count, plural, one {# brand blocked successfully.} other {# brands blocked successfully.}}",
-      "messageBulk": "{count, plural, one {Do you want to block # selected brand?} other {Do you want to block # selected brands?}}"
+      "successSingle": "Flag blocked successfully.",
+      "messageSingle": "Do you want to block flag {name}?",
+      "successBulk": "{count, plural, one {# flag blocked successfully.} other {# flags blocked successfully.}}",
+      "messageBulk": "{count, plural, one {Do you want to block # selected flag?} other {Do you want to block # selected flags?}}"
     },
     "activate": {
       "selected": "Activate",
       "header": "Confirm activation",
-      "successSingle": "Brand activated successfully.",
-      "messageSingle": "Do you want to activate brand {name}?",
-      "successBulk": "{count, plural, one {# brand activated successfully.} other {# brands activated successfully.}}",
-      "messageBulk": "{count, plural, one {Do you want to activate # selected brand?} other {Do you want to activate # selected brands?}}"
+      "successSingle": "Flag activated successfully.",
+      "messageSingle": "Do you want to activate flag {name}?",
+      "successBulk": "{count, plural, one {# flag activated successfully.} other {# flags activated successfully.}}",
+      "messageBulk": "{count, plural, one {Do you want to activate # selected flag?} other {Do you want to activate # selected flags?}}"
     },
     "deactivate": {
       "selected": "Deactivate",
       "header": "Confirm deactivation",
-      "successSingle": "Brand deactivated successfully.",
-      "messageSingle": "Do you want to deactivate brand {name}?",
-      "successBulk": "{count, plural, one {# brand deactivated successfully.} other {# brands deactivated successfully.}}",
-      "messageBulk": "{count, plural, one {Do you want to deactivate # selected brand?} other {Do you want to deactivate # selected brands?}}"
+      "successSingle": "Flag deactivated successfully.",
+      "messageSingle": "Do you want to deactivate flag {name}?",
+      "successBulk": "{count, plural, one {# flag deactivated successfully.} other {# flags deactivated successfully.}}",
+      "messageBulk": "{count, plural, one {Do you want to deactivate # selected flag?} other {Do you want to deactivate # selected flags?}}"
     },
     "selection": {
       "currentMode": "Selection mode",
       "count": "{count, plural, =0 {None selected} one {# selected} other {# selected}}",
-      "pickOneFirst": "Select an eligible brand first to define the selection context.",
+      "pickOneFirst": "First select an eligible flag to define the selection context.",
       "mode": {
         "none": "None",
         "activate": "Bulk activation",
@@ -741,14 +841,14 @@
       }
     },
     "form": {
-      "created": "Brand created successfully.",
-      "updated": "Brand updated successfully.",
-      "saveError": "Could not save brand.",
-      "loadError": "Could not load brand data.",
-      "permissionDenied": "You do not have permission to save brands."
+      "created": "Flag created successfully.",
+      "updated": "Flag updated successfully.",
+      "saveError": "Could not save the flag.",
+      "loadError": "Could not load flag data.",
+      "permissionDenied": "You do not have permission to save flags."
     },
     "empty": {
-      "title": "No brands found"
+      "title": "No flags found"
     }
   },
   "accountPassword": {
@@ -776,7 +876,7 @@
     },
     "strength": {
       "title": "Password strength",
-      "empty": "Not informed",
+      "empty": "Not provided",
       "weak": "Weak",
       "medium": "Medium",
       "strong": "Strong",
@@ -791,7 +891,7 @@
       "groups": "Groups",
       "permissions": "Permissions",
       "groupsSubtitle": "Organizational profiles linked to the user.",
-      "permissionsSubtitle": "Available permissions for the authenticated user."
+      "permissionsSubtitle": "Access available to the authenticated user."
     },
     "section": {
       "identification": "Identification",
@@ -801,13 +901,13 @@
     "field": {
       "id": "ID",
       "name": "Name",
-      "username": "Username",
+      "username": "User",
       "document": "Document",
       "status": "Status",
       "blocked": "Blocked",
       "blockedUntil": "Blocked until",
       "password": "Password",
-      "passwordExpires": "Password expires in",
+      "passwordExpires": "Password expires on",
       "issuer": "Issuer",
       "createdAt": "Created at",
       "lastLogin": "Last login",
@@ -818,16 +918,16 @@
       "changePassword": "Change password"
     },
     "fallback": {
-      "noName": "Unnamed user",
+      "noName": "User without name",
       "noUsername": "Username not provided"
     },
     "items": "{count, plural, =0 {0 items} one {# item} other {# items}}",
     "empty": {
-      "groups": "No groups provided.",
+      "groups": "No group provided.",
       "permissions": "No permissions found."
     },
-    "loading": "Please wait while we load your profile data.",
-    "error": "Could not load profile."
+    "loading": "Please wait while we load the profile data.",
+    "error": "Could not load the profile."
   },
   "session": {
     "expiring": {
@@ -842,37 +942,46 @@
     }
   },
   "common": {
-    "yes": "Yes",
     "no": "No",
+    "yes": "Yes",
+    "new": "New",
+    "all": "All",
+    "error": "Error",
     "save": "Save",
+    "edit": "Edit",
     "back": "Back",
-    "cancel": "Cancel",
+    "logout": "Sign out",
+    "close": "Close",
     "clear": "Clear",
     "search": "Search",
-    "new": "New",
-    "period": "Period",
-    "activate": "Activate",
-    "deactivate": "Deactivate",
-    "update": "Update",
-    "loading": "Loading...",
-    "filter": "Filter",
-    "all": "All",
-    "edit": "Edit",
-    "delete": "Delete",
+    "apply": "Apply",
     "actions": "Actions",
-    "error": "Error",
+    "filter": "Filter",
+    "remove": "Remove",
+    "period": "Period",
+    "delete": "Delete",
+    "cancel": "Cancel",
+    "activate": "Activate",
     "success": "Success",
     "info": "Information",
-    "logout": "Sign out",
-    "notNow": "Not now",
-    "renewSession": "Renew session",
-    "goToLogin": "Go to login",
     "warning": "Warning",
-    "correlationId": "Correlation ID",
     "view": "View",
-    "notInformed": "Not informed",
+    "company": "Company",
+    "notNow": "Not now",
+    "update": "Update",
+    "confirm": "Confirm",
+    "acquirer": "Acquirer",
+    "deactivate": "Deactivate",
+    "loading": "Loading...",
+    "goToLogin": "Go to login",
+    "notInformed": "Not provided",
+    "tableFilters": "Table filters",
+    "renewSession": "Renew session",
+    "correlationId": "Correlation ID",
+    "registrationNumber": "Registration No.",
     "advancedFilters": "Advanced filters",
-    "tableFilters": "Table filters"
+    "selected": "{count, plural, =0 {None selected} one {# selected} other {# selected}}",
+    "selectedFemale": "{count, plural, =0 {None selected} one {# selected} other {# selected}}"
   },
   "confirm": {
     "logoutTitle": "Sign out",
@@ -887,7 +996,7 @@
       "GENERIC_ERROR": "An unexpected error occurred. Please try again.",
       "NETWORK_ERROR": "Could not connect to the server.",
       "ACCESS_DENIED": "You do not have permission to perform this action.",
-      "SESSION_EXPIRED": "Your session has expired. Please sign in again.",
+      "SESSION_EXPIRED": "Your session has expired. Sign in again.",
       "VALIDATION_ERROR": "Some fields need to be corrected.",
       "USER_DOCUMENT_ALREADY_EXISTS": "A user with this document already exists.",
       "USER_USERNAME_ALREADY_EXISTS": "A user with this username already exists.",
@@ -898,17 +1007,17 @@
       "GROUP_NAME_ALREADY_EXISTS": "A group with this name already exists.",
       "GROUP_DELETE_SUPPORT_NOT_ALLOWED": "The SUPPORT group cannot be deleted or changed in this operation.",
       "GROUP_DELETE_IN_USE": "This group has associated users and cannot be deleted.",
-      "PERMISSION_NOT_FOUND": "One or more provided permissions were not found.",
+      "PERMISSION_NOT_FOUND": "One or more informed permissions were not found.",
       "ESTABLISHMENT_ALREADY_EXISTS": "An establishment with the same PV, company, and acquirer already exists."
     },
     "fields": {
       "*": {
         "required": "{label} is required.",
-        "minLength": "{label} must be at least {requiredLength} characters.",
-        "maxLength": "{label} must be at most {requiredLength} characters.",
+        "minLength": "{label} must have at least {requiredLength} characters.",
+        "maxLength": "{label} must have at most {requiredLength} characters.",
         "min": "{label} must be at least {min}.",
         "max": "{label} must be at most {max}.",
-        "email": "{label} please enter a valid email.",
+        "email": "{label} must be a valid email.",
         "pattern": "{label} has an invalid format.",
         "invalid": "{label} is invalid.",
         "passwordMismatch": "Passwords must match."
@@ -941,7 +1050,7 @@
     },
     "form": {
       "loadError": "Could not load group data.",
-      "saveError": "Could not save group.",
+      "saveError": "Could not save the group.",
       "created": "Group created successfully.",
       "updated": "Group updated successfully.",
       "permissionDenied": "You do not have permission to save groups."
@@ -961,7 +1070,7 @@
       }
     },
     "detail": {
-      "title": "Group details",
+      "title": "Group detail",
       "subtitle": "Summary, permissions, and group users",
       "tabs": {
         "summary": "Summary",
@@ -970,18 +1079,18 @@
       },
       "permissions": {
         "title": "Permissions",
-        "subtitle": "Associate or disassociate permissions for this group.",
+        "subtitle": "Associate or disassociate permissions from this group.",
         "placeholder": "Select permissions",
         "saved": "Permissions updated successfully.",
-        "saveError": "Could not save group permissions.",
+        "saveError": "Could not save the group permissions.",
         "empty": "No associated permissions."
       },
       "users": {
         "title": "Users",
-        "subtitle": "Associate or disassociate users for this group.",
+        "subtitle": "Associate or disassociate users from this group.",
         "placeholder": "Select users",
         "saved": "Users updated successfully.",
-        "saveError": "Could not save group users.",
+        "saveError": "Could not save the group users.",
         "empty": "No associated users."
       }
     },
@@ -1023,5 +1132,12 @@
         "title": "No logs found"
       }
     }
+  },
+  "notFound": {
+    "title": "Page not found",
+    "message": "The requested route does not exist or was removed. Check the address or return to the dashboard.",
+    "attemptedUrl": "Requested URL",
+    "goHome": "Go to dashboard",
+    "hint": "If you got here through an app link, review the route registration or the related menu item."
   }
 }

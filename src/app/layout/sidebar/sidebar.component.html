@@ -1,8 +1,8 @@
 <aside class="sidebar cs-glass">
-  <a class="sidebar-brand" [routerLink]="'/dashboard'" aria-label="CardSync">
-    <img [src]="brand.markUrl" alt="CardSync" class="sidebar-brand-logo" />
+  <a class="sidebar-brand" [routerLink]="'/dashboard'" aria-label="{{ 'app.name' | translate }}">
+    <img [src]="brand.markUrl" alt="{{ 'app.name' | translate }}" class="sidebar-brand-logo" />
     <div class="sidebar-brand-text">
-      <div class="sidebar-brand-name">CardSync</div>
+      <div class="sidebar-brand-name">{{ 'app.name' | translate }}</div>
       <div class="sidebar-brand-sub">{{ 'topbar.brandSub' | translate }}</div>
     </div>
   </a>
@@ -18,11 +18,7 @@
       >
         <i
           class="nav-icon"
-          [class]="
-            isActive(item)
-              ? 'pi pi-map-marker nav-icon nav-icon-active-bounce'
-              : item.icon + ' nav-icon'
-          "
+          [ngClass]="isActive(item) ? 'pi pi-map-marker nav-icon-active-bounce' : item.icon"
         ></i>
 
         <span class="nav-label">{{ item.labelKey | translate }}</span>
@@ -36,7 +32,7 @@
           (click)="toggleGroup(item)"
         >
           <span class="nav-group-left">
-            <i class="nav-icon" [class]="item.icon + ' nav-icon'"></i>
+            <i class="nav-icon" [ngClass]="item.icon"></i>
             <span class="nav-label">{{ item.labelKey | translate }}</span>
           </span>
 
@@ -56,11 +52,7 @@
           >
             <i
               class="nav-icon"
-              [class]="
-                isActive(child)
-                  ? 'pi pi-map-marker nav-icon nav-icon-active-bounce'
-                  : child.icon + ' nav-icon'
-              "
+              [ngClass]="isActive(child) ? 'pi pi-map-marker nav-icon-active-bounce' : child.icon"
             ></i>
 
             <span class="nav-label">{{ child.labelKey | translate }}</span>
