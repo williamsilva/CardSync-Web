@@ -3,25 +3,25 @@ import { RouterModule } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Component, computed, inject, signal, DestroyRef } from '@angular/core';
 
-import { TagModule } from 'primeng/tag';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { DividerModule } from 'primeng/divider';
 import { TranslateModule } from '@ngx-translate/core';
 
-import { BadgeModule } from 'primeng/badge';
 import { MeStore } from '@core/auth/me.store';
 import { UserModel } from '@models/users.models';
+import { BffMeResponse } from '@core/auth/models';
 import { AuthService } from '@core/auth/auth.service';
 import { I18nService } from '@core/i18n/i18n.service';
+import { CsTagComponent, CsTagTone } from '@shared/ui';
 import { UsersFacade } from '@features/facade/users.facade';
+import { CsBadgeComponent } from '@shared/ui/badge/cs-badge.component';
 import {
   UserStatus,
   userStatusLabel,
   UserStatusInput,
   normalizeUserStatus,
 } from '@models/enums/user-status.enum';
-import { BffMeResponse } from '@core/auth/models';
 
 type ProfileView = {
   authenticated: boolean;
@@ -42,25 +42,25 @@ type ProfileView = {
   templateUrl: './profile.component.html',
   imports: [
     CommonModule,
-    TagModule,
     CardModule,
-    BadgeModule,
     RouterModule,
     ButtonModule,
     DividerModule,
+    CsTagComponent,
     TranslateModule,
+    CsBadgeComponent,
   ],
 })
 export class ProfilePageComponent {
-  private readonly auth = inject(AuthService);
+  readonly i18n = inject(I18nService);
   private readonly meStore = inject(MeStore);
+  private readonly auth = inject(AuthService);
   private readonly usersFacade = inject(UsersFacade);
   private readonly destroyRef = inject(DestroyRef);
-  readonly i18n = inject(I18nService);
 
-  readonly profile = signal<ProfileView | null>(null);
   readonly loading = signal(true);
   readonly loadError = signal<string | null>(null);
+  readonly profile = signal<ProfileView | null>(null);
 
   readonly groups = computed(() => this.profile()?.groups ?? []);
   readonly authorities = computed(() => this.profile()?.authorities ?? []);
@@ -174,7 +174,7 @@ export class ProfilePageComponent {
     return userStatusLabel(status, this.i18n);
   }
 
-  statusSeverity(status?: UserStatusInput): 'success' | 'info' | 'warn' | 'danger' | 'contrast' {
+  statusSeverity(status?: UserStatusInput): CsTagTone {
     switch (normalizeUserStatus(status)) {
       case UserStatus.ACTIVE:
         return 'success';

@@ -1,0 +1,217 @@
+<div class="cs-page">
+  <div class="cs-page__header">
+    <div>
+      <p class="cs-page__eyebrow">Processamento de arquivos</p>
+      <h1>Visão geral</h1>
+      <span>Monitore importações ERP/Rede/CNAB, pendências e conciliação bancária.</span>
+    </div>
+
+    <div class="cs-page__actions">
+      <button
+        pButton
+        type="button"
+        icon="pi pi-refresh"
+        label="Atualizar"
+        severity="secondary"
+        [loading]="loading()"
+        (click)="reload()"
+      ></button>
+      <button
+        pButton
+        type="button"
+        icon="pi pi-play"
+        label="Processar ERP"
+        [loading]="processingErp()"
+        (click)="processErp()"
+      ></button>
+      <button
+        pButton
+        type="button"
+        icon="pi pi-cloud-upload"
+        label="Processar Rede"
+        severity="help"
+        [loading]="processingRede()"
+        (click)="processRede()"
+      ></button>
+      <button
+        pButton
+        type="button"
+        icon="pi pi-building-columns"
+        label="Processar CNAB"
+        severity="secondary"
+        [loading]="processingBank()"
+        (click)="processBank()"
+      ></button>
+      <button
+        pButton
+        type="button"
+        icon="pi pi-link"
+        label="Conciliar Banco"
+        severity="success"
+        [loading]="reconcilingBank()"
+        (click)="reconcileBank()"
+      ></button>
+    </div>
+  </div>
+
+  <section class="cs-metrics">
+    <p-card>
+      <div class="cs-metric">
+        <span class="cs-metric__icon pi pi-check-circle"></span>
+        <div>
+          <strong>{{ totals().processed }}</strong
+          ><small>Processados</small>
+        </div>
+      </div>
+    </p-card>
+    <p-card>
+      <div class="cs-metric">
+        <span class="cs-metric__icon pi pi-exclamation-triangle"></span>
+        <div>
+          <strong>{{ totals().warnings }}</strong
+          ><small>Com avisos</small>
+        </div>
+      </div>
+    </p-card>
+    <p-card>
+      <div class="cs-metric">
+        <span class="cs-metric__icon pi pi-times-circle"></span>
+        <div>
+          <strong>{{ totals().errors }}</strong
+          ><small>Com erro</small>
+        </div>
+      </div>
+    </p-card>
+    <p-card>
+      <div class="cs-metric">
+        <span class="cs-metric__icon pi pi-link"></span>
+        <div>
+          <strong>{{ totals().pendingContract + totals().pendingContext }}</strong
+          ><small>Pendências ERP</small>
+        </div>
+      </div>
+    </p-card>
+  </section>
+
+  <section class="cs-grid">
+    <p-card header="Scheduler">
+      <div class="cs-scheduler-card" *ngIf="schedule() as s">
+        <div class="cs-scheduler-row">
+          <div>
+            <strong>ERP</strong><span>{{ s['erp'].lastMessage || 'Sem execução' }}</span>
+          </div>
+          <cs-tag
+            [value]="
+              s['erp'].running ? 'Executando' : s['erp'].lastSuccess === true ? 'OK' : 'Atenção'
+            "
+            [tone]="s['erp'].running ? 'info' : boolSeverity(s['erp'].lastSuccess)"
+          ></cs-tag>
+        </div>
+        <div class="cs-scheduler-row">
+          <div>
+            <strong>Rede</strong><span>{{ s['rede'].lastMessage || 'Sem execução' }}</span>
+          </div>
+          <cs-tag
+            [value]="
+              s['rede'].running ? 'Executando' : s['rede'].lastSuccess === true ? 'OK' : 'Atenção'
+            "
+            [tone]="s['rede'].running ? 'info' : boolSeverity(s['rede'].lastSuccess)"
+          ></cs-tag>
+        </div>
+        <div class="cs-scheduler-row" *ngIf="s['bank'] as bank">
+          <div>
+            <strong>Banco</strong><span>{{ bank.lastMessage || 'Sem execução' }}</span>
+          </div>
+          <cs-tag
+            [value]="bank.running ? 'Executando' : bank.lastSuccess === true ? 'OK' : 'Atenção'"
+            [tone]="bank.running ? 'info' : boolSeverity(bank.lastSuccess)"
+          ></cs-tag>
+        </div>
+      </div>
+    </p-card>
+
+    <p-card header="Atalhos">
+      <div class="cs-shortcuts">
+        <a
+          pButton
+          routerLink="files"
+          label="Arquivos processados"
+          icon="pi pi-folder-open"
+          severity="secondary"
+        ></a>
+        <a
+          pButton
+          routerLink="erp/pending-sales"
+          label="Vendas ERP pendentes"
+          icon="pi pi-exclamation-circle"
+          severity="warn"
+        ></a>
+        <a
+          pButton
+          routerLink="rede/movements"
+          label="Movimentos Rede"
+          icon="pi pi-database"
+          severity="help"
+        ></a>
+        <a
+          pButton
+          routerLink="bank/releases"
+          label="Lançamentos bancários"
+          icon="pi pi-wallet"
+          severity="secondary"
+        ></a>
+        <a
+          pButton
+          routerLink="divergences"
+          label="Divergências"
+          icon="pi pi-exclamation-triangle"
+          severity="warn"
+        ></a>
+      </div>
+    </p-card>
+  </section>
+
+  <p-card header="Últimos arquivos">
+    <p-table [value]="files()" [loading]="loading()" styleClass="p-datatable-sm">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Arquivo</th>
+          <th>Origem</th>
+          <th>Status</th>
+          <th>Linhas</th>
+          <th>Importação</th>
+          <th></th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-file>
+        <tr>
+          <td>
+            <strong>{{ file.file }}</strong
+            ><small>{{ file.statusMessage }}</small>
+          </td>
+          <td>{{ file.originFile || file.group || '-' }}</td>
+          <td>
+            <cs-tag [value]="file.status" [tone]="fileStatusSeverity(file.status)"></cs-tag>
+          </td>
+          <td>{{ file.processedLines || 0 }}/{{ file.totalLines || 0 }}</td>
+          <td>{{ file.dateImport | date: 'short' }}</td>
+          <td class="text-right">
+            <a
+              pButton
+              [routerLink]="['files', file.id]"
+              icon="pi pi-eye"
+              text
+              rounded
+              pTooltip="Detalhar"
+            ></a>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage"
+        ><tr>
+          <td colspan="6">Nenhum arquivo encontrado.</td>
+        </tr></ng-template
+      >
+    </p-table>
+  </p-card>
+</div>

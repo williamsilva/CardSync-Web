@@ -144,6 +144,18 @@ export class I18nService {
     return this.genericError(fallback);
   }
 
+  tPrimeNg(key: string | null | undefined, fallback?: string): string {
+    if (!key) return fallback ?? '';
+
+    const current = this.primengCache.get(this.appliedLang())?.[key];
+    if (typeof current === 'string' && current.trim()) return current;
+
+    const defaultValue = this.primengCache.get(DEFAULT_LANG)?.[key];
+    if (typeof defaultValue === 'string' && defaultValue.trim()) return defaultValue;
+
+    return fallback ?? key;
+  }
+
   private async applyAll(lang: Lang, syncAcrossTabs: boolean): Promise<void> {
     const normalized = normalizeLang(lang);
 

@@ -1,12 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output, computed } from '@angular/core';
 
-import { TagModule } from 'primeng/tag';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { TranslateModule } from '@ngx-translate/core';
 
+import { CsTagComponent } from '@shared/ui';
 import { I18nService } from '@core/i18n/i18n.service';
 import { ContractModel } from '@models/contract.models';
 import { CsDatePipe } from '@shared/pipes/cs-date.pipe';
@@ -20,11 +20,11 @@ import { ContractEnum, contractEnumLabel } from '@models/enums/contract.enum';
   styleUrls: ['./contract-view-dialog.component.scss'],
   imports: [
     CommonModule,
-    DialogModule,
-    TagModule,
     CsDatePipe,
     TableModule,
+    DialogModule,
     ButtonModule,
+    CsTagComponent,
     TranslateModule,
   ],
 })

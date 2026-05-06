@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { Component, ViewChild, computed, inject, signal } from '@angular/core';
 
 import { Table } from 'primeng/table';
-import { TagModule } from 'primeng/tag';
 import { TableModule } from 'primeng/table';
 import { PanelModule } from 'primeng/panel';
 import { ButtonModule } from 'primeng/button';
@@ -20,6 +19,7 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService, MessageService } from 'primeng/api';
 
+import { CsTagComponent } from '@shared/ui';
 import { I18nService } from '@core/i18n/i18n.service';
 import { CsDatePipe } from '@shared/pipes/cs-date.pipe';
 import { UsersFacade } from '@features/facade/users.facade';
@@ -60,7 +60,6 @@ import {
   templateUrl: './acquirer-list-component.html',
   imports: [
     CommonModule,
-    TagModule,
     FloatLabel,
     CsDatePipe,
     FormsModule,
@@ -73,6 +72,7 @@ import {
     CheckboxModule,
     CsDocumentPipe,
     SkeletonModule,
+    CsTagComponent,
     InputTextModule,
     TranslateModule,
     DatePickerModule,

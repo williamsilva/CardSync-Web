@@ -2,16 +2,16 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Output, ViewChild, computed, input } from '@angular/core';
 
-import { TagModule } from 'primeng/tag';
 import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
 import { CheckboxModule } from 'primeng/checkbox';
 import { TranslateModule } from '@ngx-translate/core';
+import { MultiSelectModule } from 'primeng/multiselect';
 import { Table, TableLazyLoadEvent, TableModule } from 'primeng/table';
 
 import { FlagModel } from '@models/flag.models';
 import { I18nService } from '@core/i18n/i18n.service';
-import { MultiSelectModule } from 'primeng/multiselect';
+import { CsTagComponent, CsTagTone } from '@shared/ui';
 import { StatusEnum, allStatusEnum, statusEnumLabel } from '@models/enums/status.enum';
 import { FlagPermissionPolicy } from '@features/security/policy/flag-permission.policy';
 import { FlagRowActionsComponent } from '../flag-row-actions/flag-row-actions.component';
@@ -24,12 +24,12 @@ import { FlagAcquirerRelationsComponent } from '@features/register/flag/flag-rel
   templateUrl: './flag-table.component.html',
   imports: [
     CommonModule,
-    TagModule,
     TableModule,
     FormsModule,
     ButtonModule,
     TooltipModule,
     CheckboxModule,
+    CsTagComponent,
     TranslateModule,
     MultiSelectModule,
     FlagRowActionsComponent,
@@ -65,12 +65,7 @@ export class FlagTableComponent {
   secPolicy = input.required<FlagPermissionPolicy>();
   expandedRelationType = input<'companies' | 'acquirers' | null>(null);
   statusLabel = input.required<(status: StatusEnum | null) => string>();
-  statusSeverity =
-    input.required<
-      (
-        status: StatusEnum | null,
-      ) => 'success' | 'secondary' | 'info' | 'warn' | 'danger' | 'contrast' | null | undefined
-    >();
+  statusSeverity = input.required<(status: StatusEnum | null) => CsTagTone>();
 
   constructor(private readonly i18n: I18nService) {}
 

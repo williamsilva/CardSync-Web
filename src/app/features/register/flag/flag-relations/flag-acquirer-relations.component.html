@@ -49,10 +49,7 @@
         <td class="text-center">{{ item.cnpj | csDocument }}</td>
 
         <td class="text-center">
-          <p-tag
-            [value]="statusLabel(item.status)"
-            [severity]="statusSeverity(item.status)"
-          ></p-tag>
+          <cs-tag [value]="statusLabel(item.status)" [tone]="statusSeverity(item.status)" />
         </td>
 
         <td class="text-center">

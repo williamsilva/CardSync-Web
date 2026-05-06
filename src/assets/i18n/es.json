@@ -40,6 +40,43 @@
         "title": "Detalle del grupo"
       }
     },
+    "conciliation": {
+      "fees": {
+        "title": "Tasas"
+      },
+      "sales": {
+        "title": "Ventas de adquirente"
+      },
+      "dashboard": {
+        "title": "Dashboard de conciliación"
+      },
+      "erpVsAcquirer": {
+        "title": "ERP vs adquirente"
+      },
+      "debits": {
+        "title": "Débitos"
+      },
+      "chargebacks": {
+        "title": "Chargebacks"
+      },
+      "bankSettlement": {
+        "title": "Liquidación bancaria"
+      },
+      "aging": {
+        "title": "Aging de pendientes"
+      },
+      "divergences": {
+        "title": "Divergencias operativas"
+      }
+    },
+    "erp": {
+      "parcels": {
+        "title": "Installments"
+      },
+      "sales": {
+        "title": "Sales"
+      }
+    },
     "audit": {
       "title": "Registros de e-mail"
     },
@@ -87,9 +124,16 @@
       "parcels": "Cuotas"
     },
     "conciliation": {
-      "fees": "tasas",
-      "sales": "Ventas",
-      "title": "Conciliación"
+      "fees": "Tasas aplicadas",
+      "sales": "Ventas adquirente",
+      "title": "Conciliación",
+      "dashboard": "Dashboard",
+      "erpVsAcquirer": "ERP vs adquirente",
+      "bankSettlement": "Liquidación bancaria",
+      "debits": "Débitos",
+      "chargebacks": "Chargebacks",
+      "divergences": "Divergencias",
+      "aging": "Aging de pendientes"
     },
     "security": {
       "title": "Seguridad",
@@ -97,6 +141,23 @@
       "users": "Usuarios",
       "myAccount": "Mi Cuenta",
       "changePassword": "Cambiar Contraseña"
+    },
+    "file": {
+      "processing": {
+        "scheduler": "Scheduler",
+        "creditOrders": "Órdenes de crédito",
+        "adjustments": "Ajustes Rede",
+        "anticipations": "Anticipaciones",
+        "pendingDebts": "Débitos pendientes",
+        "settledDebts": "Débitos liquidados",
+        "totalizers": "Totalizadores",
+        "bankReleases": "Lanzamientos bancarios",
+        "divergences": "Divergencias"
+      }
+    },
+    "settings": {
+      "title": "Configuraciones",
+      "email": "E-mail"
     }
   },
   "sidebar": {
@@ -113,6 +174,9 @@
       "acquirer": "Adquirentes",
       "contract": "Contratos",
       "establishment": "Establecimientos"
+    },
+    "erp": {
+      "sales": "Ventas de ERP"
     },
     "audit": {
       "emailLog": "Registros de e-mail"
@@ -741,6 +805,15 @@
         "rangePrefix": "Vigente desde:",
         "openEnded": "vigencia indefinida"
       }
+    }
+  },
+  "erp": {
+    "sales": {
+      "subtitle": "Consulta de ventas importada desde el sistema ERP."
+    },
+    "columns":{
+      "saleDate": "Ventas",
+      "expectedPaymentDate": "Prev. Pago"
     }
   },
   "flag": {

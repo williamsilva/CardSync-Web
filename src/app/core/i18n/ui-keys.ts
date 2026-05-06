@@ -36,6 +36,13 @@ export const UI_KEYS = {
       fees: 'menu.conciliation.fees',
       sales: 'menu.conciliation.sales',
       title: 'menu.conciliation.title',
+      dashboard: 'menu.conciliation.dashboard',
+      erpVsAcquirer: 'menu.conciliation.erpVsAcquirer',
+      bankSettlement: 'menu.conciliation.bankSettlement',
+      debits: 'menu.conciliation.debits',
+      chargebacks: 'menu.conciliation.chargebacks',
+      divergences: 'menu.conciliation.divergences',
+      aging: 'menu.conciliation.aging',
     },
     security: {
       title: 'menu.security.title',
@@ -44,10 +51,25 @@ export const UI_KEYS = {
       myAccount: 'menu.security.myAccount',
       changePassword: 'menu.security.changePassword',
     },
+    file: {
+      processing: {
+        file: 'menu.file.processing.file',
+        title: 'menu.file.processing.title',
+        dashboard: 'menu.file.processing.dashboard',
+        erpPendent: 'menu.file.processing.erpPendent',
+        movementRede: 'menu.file.processing.movementRede',
+        scheduler: 'menu.file.processing.scheduler',
+        creditOrders: 'menu.file.processing.creditOrders',
+        adjustments: 'menu.file.processing.adjustments',
+        anticipations: 'menu.file.processing.anticipations',
+        pendingDebts: 'menu.file.processing.pendingDebts',
+        settledDebts: 'menu.file.processing.settledDebts',
+        totalizers: 'menu.file.processing.totalizers',
+        divergences: 'menu.file.processing.divergences',
+        bankReleases: 'menu.file.processing.bankReleases',
+      },
+    },
 
-    // TODO: Ajustar depois
-    finance: 'menu.finance.title',
-    contracts: 'menu.contracts',
     settings: {
       title: 'menu.settings.title',
       email: 'menu.settings.email',
@@ -234,7 +256,6 @@ export const UI_KEYS = {
       unknown: 'users.status.unknown',
       null: 'users.status.null',
     },
-
     delete: {
       error: 'users.delete.error',
       header: 'users.delete.header',
@@ -246,7 +267,6 @@ export const UI_KEYS = {
       resent: 'users.invite.resent',
       resendError: 'users.invite.resendError',
     },
-
     selection: {
       mode: {
         none: 'users.selection.mode.none',
@@ -254,7 +274,6 @@ export const UI_KEYS = {
         deactivate: 'users.selection.mode.deactivate',
       },
     },
-
     activate: {
       header: 'users.activate.header',
       successBulk: 'users.activate.successBulk',
@@ -269,7 +288,6 @@ export const UI_KEYS = {
       messageSingle: 'users.deactivate.messageSingle',
       successSingle: 'users.deactivate.successSingle',
     },
-
     fields: {
       name: 'users.fields.name',
       status: 'users.fields.status',
@@ -284,7 +302,6 @@ export const UI_KEYS = {
       passwordChangedAt: 'users.fields.passwordChangedAt',
       passwordExpiresAt: 'users.fields.passwordExpiresAt',
     },
-
     form: {
       loadError: 'users.form.loadError',
       updated: 'users.form.updated',
@@ -297,6 +314,33 @@ export const UI_KEYS = {
         error: 'users.form.resend.error',
         todoServer: 'users.form.resend.todoServer',
       },
+    },
+  },
+  erp: {
+    fields: {
+      tid: 'erp.fields.tid',
+      flag: 'erp.fields.flag',
+      cvNsu: 'erp.fields.cvNsu',
+      machine: 'erp.fields.machine',
+      company: 'erp.fields.company',
+      capture: 'erp.fields.capture',
+      acquirer: 'erp.fields.acquirer',
+      saleDate: 'erp.fields.saleDate',
+      modality: 'erp.fields.modality',
+      cardNumber: 'erp.fields.cardNumber',
+      grossValue: 'erp.fields.grossValue',
+      liquidValue: 'erp.fields.liquidValue',
+      installment: 'erp.fields.installment',
+      paymentDate: 'erp.fields.paymentDate',
+      establishment: 'erp.fields.establishment',
+      authorization: 'erp.fields.authorization',
+      discountValue: 'erp.fields.discountValue',
+      periodSaleDate: 'erp.fields.periodSaleDate',
+      adjustmentValue: 'erp.fields.adjustmentValue',
+      periodPaymentDate: 'erp.fields.periodPaymentDate',
+      conciliationStatus: 'erp.fields.conciliationStatus',
+      expectedPaymentDate: 'erp.fields.expectedPaymentDate',
+      periodExpectedPaymentDate: 'erp.fields.periodExpectedPaymentDate',
     },
   },
   enum: {
@@ -316,6 +360,25 @@ export const UI_KEYS = {
       month: 'enum.periodEnum.month',
       unknown: 'enum.periodEnum.unknown',
       interval: 'enum.periodEnum.interval',
+    },
+    conciliationStatusEnum: {
+      null: 'enum.conciliationStatusEnum.null',
+      unknown: 'enum.conciliationStatusEnum.unknown',
+      pending: 'enum.conciliationStatusEnum.pending',
+      canceled: 'enum.conciliationStatusEnum.canceled',
+      divergent: 'enum.conciliationStatusEnum.divergent',
+      liquidated: 'enum.conciliationStatusEnum.liquidated',
+      reconciled: 'enum.conciliationStatusEnum.reconciled',
+      notReconciled: 'enum.conciliationStatusEnum.notReconciled',
+      partiallyReconciled: 'enum.conciliationStatusEnum.partiallyReconciled',
+    },
+    captureEnum: {
+      pos: 'enum.captureEnum.pos',
+      pdv: 'enum.captureEnum.pdv',
+      null: 'enum.captureEnum.null',
+      manual: 'enum.captureEnum.manual',
+      unknown: 'enum.captureEnum.unknown',
+      ecommerce: 'enum.captureEnum.ecommerce',
     },
     contractEnum: {
       null: 'enum.contractEnum.null',

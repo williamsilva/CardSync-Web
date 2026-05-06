@@ -1,3 +1,4 @@
+import { CsTagTone } from '@shared/ui';
 import { I18nService } from '@core/i18n/i18n.service';
 
 export enum ContractEnum {
@@ -56,9 +57,7 @@ export function canLogin(status: ContractInput): boolean {
   return normalizeContractEnum(status) === ContractEnum.VALIDITY;
 }
 
-export function contractEnumSeverity(
-  status: ContractInput,
-): 'success' | 'danger' | 'warn' | 'contrast' | 'info' {
+export function contractEnumSeverity(status: ContractInput): CsTagTone {
   switch (normalizeContractEnum(status)) {
     case ContractEnum.VALIDITY:
       return 'success';

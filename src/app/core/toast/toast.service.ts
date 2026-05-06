@@ -2,9 +2,10 @@ import { Injectable, inject } from '@angular/core';
 
 import { MessageService } from 'primeng/api';
 
+import { CsTagTone } from '@shared/ui';
 import { I18nService } from '../i18n/i18n.service';
 
-type ToastSeverity = 'success' | 'info' | 'warn' | 'error';
+type ToastSeverity = CsTagTone;
 
 export interface ToastMeta {
   context?: string;

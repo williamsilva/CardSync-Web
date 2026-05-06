@@ -1,0 +1,7 @@
+.cs-list-page { display: flex; flex-direction: column; gap: 1.25rem; }
+.cs-list-page__header { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; }
+.cs-list-page__eyebrow { margin: 0 0 .25rem; color: var(--primary-color); text-transform: uppercase; letter-spacing: .08em; font-weight: 700; font-size: .75rem; }
+h1 { margin: 0; font-size: 1.875rem; font-weight: 800; }
+.cs-list-page__header span, td small { display: block; color: var(--text-color-secondary); margin-top: .25rem; }
+:host ::ng-deep .p-tabpanels { padding: 1rem 0 0; }
+@media (max-width: 768px) { .cs-list-page__header { flex-direction: column; } }

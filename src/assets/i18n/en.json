@@ -40,6 +40,43 @@
         "title": "Group detail"
       }
     },
+    "conciliation": {
+      "fees": {
+        "title": "Fees"
+      },
+      "sales": {
+        "title": "Acquirer Sales"
+      },
+      "dashboard": {
+        "title": "Reconciliation Dashboard"
+      },
+      "erpVsAcquirer": {
+        "title": "ERP vs Acquirer"
+      },
+      "debits": {
+        "title": "Debits"
+      },
+      "chargebacks": {
+        "title": "Chargebacks"
+      },
+      "bankSettlement": {
+        "title": "Bank Settlement"
+      },
+      "aging": {
+        "title": "Pending Aging"
+      },
+      "divergences": {
+        "title": "Operational Divergences"
+      }
+    },
+    "erp": {
+      "parcels": {
+        "title": "Pagos a plazos"
+      },
+      "sales": {
+        "title": "Ventas"
+      }
+    },
     "audit": {
       "title": "Email Logs"
     },
@@ -87,9 +124,16 @@
       "parcels": "Installments"
     },
     "conciliation": {
-      "fees": "rates",
-      "sales": "Sales",
-      "title": "Reconciliation"
+      "fees": "Applied fees",
+      "sales": "Acquirer sales",
+      "title": "Reconciliation",
+      "dashboard": "Dashboard",
+      "erpVsAcquirer": "ERP vs Acquirer",
+      "bankSettlement": "Bank settlement",
+      "debits": "Debits",
+      "chargebacks": "Chargebacks",
+      "divergences": "Divergences",
+      "aging": "Pending aging"
     },
     "security": {
       "title": "Security",
@@ -97,6 +141,23 @@
       "users": "Users",
       "myAccount": "My Account",
       "changePassword": "Change Password"
+    },
+    "file": {
+      "processing": {
+        "scheduler": "Scheduler",
+        "creditOrders": "Credit orders",
+        "adjustments": "Rede adjustments",
+        "anticipations": "Anticipations",
+        "pendingDebts": "Pending debts",
+        "settledDebts": "Settled debts",
+        "totalizers": "Totalizers",
+        "bankReleases": "Bank releases",
+        "divergences": "Divergences"
+      }
+    },
+    "settings": {
+      "title": "Settings",
+      "email": "Email"
     }
   },
   "sidebar": {
@@ -113,6 +174,9 @@
       "acquirer": "Acquirers",
       "contract": "Contracts",
       "establishment": "Establishments"
+    },
+    "erp": {
+      "sales": "ERP Sales"
     },
     "audit": {
       "emailLog": "Email Logs"
@@ -741,6 +805,15 @@
         "rangePrefix": "Valid from:",
         "openEnded": "open-ended validity"
       }
+    }
+  },
+  "erp": {
+    "sales": {
+      "subtitle": "Sales query imported from ERP"
+    },
+    "columns":{
+      "saleDate": "Sale",
+      "expectedPaymentDate": "FCST. Payment"
     }
   },
   "flag": {

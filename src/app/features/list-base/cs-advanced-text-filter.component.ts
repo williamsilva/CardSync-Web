@@ -16,10 +16,10 @@ import { InputTextModule } from 'primeng/inputtext';
       <input
         pInputText
         type="text"
-        class="w-full p-inputtext-sm"
         [id]="inputId"
-        [value]="value ?? ''"
+        [value]="value"
         [disabled]="disabled"
+        class="w-full p-inputtext-sm"
         (input)="valueChange.emit(($any($event.target).value ?? '').toString())"
       />
 
@@ -28,9 +28,9 @@ import { InputTextModule } from 'primeng/inputtext';
   `,
 })
 export class CsAdvancedTextFilterComponent {
-  @Input() inputId = '';
   @Input() label = '';
   @Input() value = '';
+  @Input() inputId = '';
   @Input() disabled = false;
 
   @Output() valueChange = new EventEmitter<string>();

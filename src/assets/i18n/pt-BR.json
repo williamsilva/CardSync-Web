@@ -40,6 +40,43 @@
         "title": "Detalhe do grupo"
       }
     },
+    "conciliation": {
+      "fees": {
+        "title": "Taxas"
+      },
+      "sales": {
+        "title": "Vendas da Adquirente"
+      },
+      "dashboard": {
+        "title": "Dashboard de Conciliação"
+      },
+      "erpVsAcquirer": {
+        "title": "ERP x Adquirente"
+      },
+      "debits": {
+        "title": "Débitos"
+      },
+      "chargebacks": {
+        "title": "Chargebacks"
+      },
+      "bankSettlement": {
+        "title": "Liquidação Bancária"
+      },
+      "aging": {
+        "title": "Aging de Pendências"
+      },
+      "divergences": {
+        "title": "Divergências operacionais"
+      }
+    },
+    "erp": {
+      "parcels": {
+        "title": "Parcelas"
+      },
+      "sales": {
+        "title": "Vendas"
+      }
+    },
     "audit": {
       "title": "E-mail Logs"
     },
@@ -55,8 +92,8 @@
   },
   "topbar": {
     "online": "Online",
-    "bandName": "CardSync",
-    "bandSub": "Conciliação Simplificada",
+    "brandName": "CardSync",
+    "brandSub": "Conciliação Simplificada",
     "sidebarToggleAria": "Mostrar/ocultar menu",
     "sidebarShowTooltip": "Mostrar menu",
     "sidebarHideTooltip": "Ocultar menu",
@@ -87,9 +124,16 @@
       "parcels": "Parcelas"
     },
     "conciliation": {
-      "fees": "taxas",
-      "sales": "Vendas",
-      "title": "Conciliação"
+      "fees": "Taxas aplicadas",
+      "sales": "Vendas adquirente",
+      "title": "Conciliação",
+      "dashboard": "Dashboard",
+      "erpVsAcquirer": "ERP x Adquirente",
+      "bankSettlement": "Liquidação bancária",
+      "debits": "Débitos",
+      "chargebacks": "Chargebacks",
+      "divergences": "Divergências",
+      "aging": "Aging de pendências"
     },
     "security": {
       "title": "Segurança",
@@ -101,6 +145,24 @@
     "settings": {
       "title": "Configurações",
       "email": "E-mail"
+    },
+    "file": {
+      "processing": {
+        "file": "Arquivos",
+        "title": "Processamento",
+        "dashboard": "Dashboard",
+        "erpPendent": "ERP Pendentes",
+        "movementRede": "Movimentos Rede",
+        "scheduler": "Scheduler",
+        "creditOrders": "Ordens de crédito",
+        "adjustments": "Ajustes Rede",
+        "anticipations": "Antecipações",
+        "pendingDebts": "Débitos pendentes",
+        "settledDebts": "Débitos liquidados",
+        "totalizers": "Totalizadores",
+        "bankReleases": "Lançamentos bancários",
+        "divergences": "Divergências"
+      }
     }
   },
   "sidebar": {
@@ -117,6 +179,9 @@
       "acquirer": "Adquirentes",
       "contract": "Contratos",
       "establishment": "Estabelecimentos"
+    },
+    "erp": {
+      "sales": "Vendas ERP"
     },
     "audit": {
       "emailLog": "E-mail Logs"
@@ -276,6 +341,23 @@
       "expired": "Vencido",
       "closed": "Encerrado",
       "validity": "Em Virgência"
+    },
+    "captureEnum": {
+      "pdv": "PDV",
+      "pos": "POS",
+      "manual": "Manual",
+      "ecommerce": "E-commerce",
+      "unknown": "Não Informado"
+    },
+    "conciliationStatusEnum": {
+      "pending": "Pendente",
+      "canceled": "Cancelado",
+      "divergent": "Divergente",
+      "liquidated": "Liquidado",
+      "reconciled": "Conciliado",
+      "notReconciled":"Não conciliado",
+      "partiallyReconciled": "Parcial",
+      "unknown": "Não Informado"
     },
     "modalityEnum": {
       "outros": "Outros",
@@ -745,6 +827,57 @@
         "rangePrefix": "Em vigência de:",
         "openEnded": "vigência indeterminada"
       }
+    }
+  },
+  "erp": {
+    "sales": {
+      "subtitle": "Consulta de vendas importadas do ERP"
+    },
+    "fields": {
+      "cvNsu": "Cv/Nsu",
+      "flag": "Bandeira",
+      "saleDate": "Venda",
+      "company": "Empresa",
+      "machine": "Maquinetas",
+      "discountValue": "Taxa",
+      "modality":"Modalidade",
+      "liquidValue": "Liquido",
+      "acquirer": "Adquirente",
+      "capture":"Tipo Captura",
+      "installment": "Parcelas",
+      "paymentDate": "Pagamento",
+      "tid": "Transação ID (TID)",
+      "grossValue": "Valor Bruto",
+      "cardNumber":"Número Cartão",
+      "adjustmentValue": "Ajustes",
+      "authorization": "Autorização",
+      "conciliationDate": "Conciliação",
+      "periodSaleDate": "Período Venda",
+      "establishment": "Estabelecimento",
+      "expectedPaymentDate":"Prev. Pagamento",
+      "periodPaymentDate": "Período Pagamento",
+      "conciliationStatus": "Status Conciliação",
+      "periodConciliationDate": "Período Conciliação",
+      "periodExpectedPaymentDate": "Período Prev. Pagamento"
+    },
+    "columns":{
+      "cvNsu": "Cv/Nsu",
+      "flag": "Bandeira",
+      "saleDate": "Venda",
+      "company": "Empresa",
+      "grossValue": "Bruto",
+      "machine": "Maquinetas",
+      "discountValue": "Taxa",
+      "liquidValue": "Liquido",
+      "acquirer": "Adquirente",
+      "modality": "Modalidade",
+      "capture": "Tipo Captura",
+      "installment": "Parcelas",
+      "tid": "Transação ID (TID)",
+      "adjustmentValue": "Ajustes",
+      "authorization": "Autorização",
+      "establishment": "Estabelecimento",
+      "expectedPaymentDate": "Prev. Pagamento"
     }
   },
   "flag": {

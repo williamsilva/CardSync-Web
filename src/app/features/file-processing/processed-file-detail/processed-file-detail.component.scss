@@ -1,0 +1,14 @@
+.cs-detail-page { display: flex; flex-direction: column; gap: 1.25rem; }
+.cs-detail-page__header { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; }
+.cs-detail-page__eyebrow { margin: 0 0 .25rem; color: var(--primary-color); text-transform: uppercase; letter-spacing: .08em; font-weight: 700; font-size: .75rem; }
+h1 { margin: 0; font-size: 1.875rem; font-weight: 800; }
+.cs-detail-page__header span, td small { display: block; color: var(--text-color-secondary); margin-top: .25rem; }
+.cs-detail-page__actions { display: flex; gap: .5rem; flex-wrap: wrap; }
+.cs-summary { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.cs-summary__top { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; }
+.cs-summary__top div, .cs-kpis div { padding: .75rem; border: 1px solid var(--surface-border); border-radius: 1rem; }
+.cs-summary__top strong, .cs-kpis span { display: block; color: var(--text-color-secondary); font-size: .825rem; margin-bottom: .25rem; }
+.cs-kpis { display: grid; grid-template-columns: repeat(3, 1fr); gap: .75rem; }
+.cs-kpis strong { display: block; font-size: 1.25rem; }
+code { font-size: .8rem; }
+@media (max-width: 960px) { .cs-summary, .cs-summary__top, .cs-kpis { grid-template-columns: 1fr; } .cs-detail-page__header { flex-direction: column; } }

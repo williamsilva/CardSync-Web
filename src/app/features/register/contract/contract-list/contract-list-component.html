@@ -1,10 +1,10 @@
 <cs-page-header
+  [compact]="false"
   [subtitle]="'contract.subtitle' | translate"
   [breadcrumb]="[
     { label: ('breadcrumb.dashboard' | translate), url: '/' },
     { label: ('breadcrumb.register.contract' | translate) },
   ]"
-  [compact]="false"
 >
   <button
     pButton
@@ -29,9 +29,9 @@
     pButton
     type="button"
     icon="pi pi-lock"
+    class="p-button-warn p-button-sm"
     (click)="confirmExpiredSelected()"
     [disabled]="!canExpiredSelected()"
-    class="p-button-warn p-button-sm"
     [label]="'contract.expired.selected' | translate"
   ></button>
 
@@ -694,7 +694,7 @@
       <td>{{ row.establishment?.pvNumber || ('common.notInformed' | translate) }}</td>
 
       <td class="text-center">
-        <p-tag [value]="statusLabel(row.status)" [severity]="statusSeverity(row.status)"></p-tag>
+        <cs-tag [value]="statusLabel(row.status)" [tone]="statusSeverity(row.status)" />
       </td>
 
       <td>

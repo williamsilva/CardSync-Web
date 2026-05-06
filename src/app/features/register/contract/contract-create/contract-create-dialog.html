@@ -300,12 +300,12 @@
               </div>
 
               <div class="contract-flag-card__header-actions" (click)="$event.stopPropagation()">
-                <p-tag
+                <cs-tag
                   severity="contrast"
                   [value]="
                     'contract.flags.ratesCount' | translate: { count: ratesAt(flagIndex).length }
                   "
-                ></p-tag>
+                ></cs-tag>
 
                 <button
                   pButton

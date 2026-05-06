@@ -7,12 +7,18 @@ export type FilterMatchMode =
   | 'equals'
   | 'notEquals'
   | 'in'
+  | 'is'
   | 'lt'
-  | 'lte'
   | 'gt'
+  | 'lte'
   | 'gte'
+  | 'isNot'
+  | 'after'
   | 'dateIs'
+  | 'before'
+  | 'dateIsNot'
   | 'dateBefore'
+  | 'notContains'
   | 'dateAfter';
 
 export interface FilterRuleDto {

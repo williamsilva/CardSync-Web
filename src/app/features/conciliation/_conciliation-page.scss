@@ -1,0 +1,133 @@
+.cs-list-page,
+.cs-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.cs-list-page__header,
+.cs-page__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.cs-list-page__eyebrow,
+.cs-page__eyebrow {
+  margin: 0 0 .25rem;
+  color: var(--primary-color);
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  font-weight: 700;
+  font-size: .75rem;
+}
+
+h1 {
+  margin: 0;
+  font-size: 1.875rem;
+  font-weight: 800;
+}
+
+.cs-list-page__header span,
+.cs-page__header span,
+td small {
+  display: block;
+  color: var(--text-color-secondary);
+  margin-top: .25rem;
+}
+
+.cs-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+}
+
+.cs-kpi-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.cs-kpi-card,
+.cs-metric-card {
+  border: 1px solid var(--surface-border);
+  border-radius: 1.25rem;
+  padding: 1rem;
+  background: var(--surface-card);
+}
+
+.cs-kpi-card small,
+.cs-metric-card small {
+  color: var(--text-color-secondary);
+}
+
+.cs-kpi-card strong,
+.cs-metric-card strong {
+  display: block;
+  font-size: 1.55rem;
+  margin-top: .35rem;
+}
+
+.cs-grid-two {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, .8fr);
+}
+
+.cs-shortcuts {
+  display: grid;
+  gap: .75rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.cs-chart-list {
+  display: flex;
+  flex-direction: column;
+  gap: .85rem;
+}
+
+.cs-chart-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: .75rem;
+  align-items: center;
+}
+
+.cs-chart-row strong {
+  display: block;
+}
+
+.cs-chart-row small {
+  color: var(--text-color-secondary);
+}
+
+.cs-inline-tags {
+  display: flex;
+  gap: .35rem;
+  flex-wrap: wrap;
+}
+
+.text-right {
+  text-align: right;
+}
+
+@media (max-width: 1024px) {
+  .cs-kpi-grid,
+  .cs-grid-two {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .cs-list-page__header,
+  .cs-page__header {
+    flex-direction: column;
+  }
+
+  .cs-kpi-grid,
+  .cs-grid-two,
+  .cs-shortcuts {
+    grid-template-columns: 1fr;
+  }
+}

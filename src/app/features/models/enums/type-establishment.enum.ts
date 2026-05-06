@@ -1,3 +1,4 @@
+import { CsTagTone } from '@shared/ui';
 import { I18nService } from '@core/i18n/i18n.service';
 
 export enum TypeEstablishmentEnum {
@@ -52,7 +53,7 @@ export function isBlocked(typeEstablishment: TypeEstablishmentInput): boolean {
 
 export function typeEstablishmentEnumSeverity(
   typeEstablishment: TypeEstablishmentInput,
-): 'success' | 'danger' | 'warn' | 'contrast' | 'info' {
+): CsTagTone {
   switch (normalizeTypeEstablishmentEnum(typeEstablishment)) {
     case TypeEstablishmentEnum.PDV_TEF:
       return 'success';

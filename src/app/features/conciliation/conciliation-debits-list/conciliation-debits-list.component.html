@@ -1,0 +1,78 @@
+<div class="cs-list-page">
+  <div class="cs-list-page__header">
+    <div>
+      <p class="cs-list-page__eyebrow">Conciliação</p>
+      <h1>Débitos</h1>
+      <span
+        >Consolide débitos pendentes, débitos liquidados, ajustes, cancelamentos e descontos da
+        adquirente.</span
+      >
+    </div>
+    <div class="cs-actions">
+      <button
+        pButton
+        type="button"
+        icon="pi pi-refresh"
+        label="Atualizar"
+        severity="secondary"
+        [loading]="loading()"
+        (click)="load()"
+      ></button>
+    </div>
+  </div>
+  <p-card
+    ><p-table
+      [value]="rows()"
+      [lazy]="true"
+      [loading]="loading()"
+      [paginator]="true"
+      [rows]="pageSize()"
+      [totalRecords]="totalRecords()"
+      [rowsPerPageOptions]="[15, 30, 50]"
+      styleClass="p-datatable-sm"
+      (onLazyLoad)="load($event)"
+      ><ng-template pTemplate="header"
+        ><tr>
+          <th>Datas</th>
+          <th>Tipo</th>
+          <th>Motivo</th>
+          <th>Valores</th>
+          <th>Contexto</th>
+          <th>Status</th>
+        </tr></ng-template
+      ><ng-template pTemplate="body" let-row
+        ><tr>
+          <td>
+            <strong>{{ row.debitDate | date: 'shortDate' }}</strong
+            ><small>Liquidação {{ row.settlementDate | date: 'shortDate' }}</small>
+          </td>
+          <td>
+            <strong>{{ row.type || '-' }}</strong
+            ><small>Arquivo {{ row.processedFile || '-' }}</small>
+          </td>
+          <td>
+            <strong>{{ compactId(row.reasonCode) }}</strong
+            ><small>{{ row.reasonDescription || '-' }}</small>
+          </td>
+          <td>
+            <strong>{{ formatCurrency(row.debitValue) }}</strong
+            ><small>Liquidado {{ formatCurrency(row.settledValue) }}</small>
+          </td>
+          <td>
+            <strong>{{ row.company || '-' }}</strong
+            ><small
+              >{{ row.establishment || '-' }} · {{ row.acquirer || '-' }} ·
+              {{ row.flag || '-' }}</small
+            >
+          </td>
+          <td>
+            <cs-tag [value]="statusLabel(row.status)" [tone]="statusSeverity(row.status)"></cs-tag>
+          </td></tr></ng-template
+      ><ng-template pTemplate="emptymessage"
+        ><tr>
+          <td colspan="6">Nenhum registro encontrado.</td>
+        </tr></ng-template
+      ></p-table
+    ></p-card
+  >
+</div>

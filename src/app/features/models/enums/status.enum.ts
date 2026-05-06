@@ -1,3 +1,4 @@
+import { CsTagTone } from '@shared/ui';
 import { I18nService } from '@core/i18n/i18n.service';
 
 export enum StatusEnum {
@@ -56,9 +57,7 @@ export function canLogin(status: StatusInput): boolean {
   return normalizeStatusEnum(status) === StatusEnum.ACTIVE;
 }
 
-export function statusEnumSeverity(
-  status: StatusInput,
-): 'success' | 'danger' | 'warn' | 'contrast' | 'info' {
+export function statusEnumSeverity(status: StatusInput): CsTagTone {
   switch (normalizeStatusEnum(status)) {
     case StatusEnum.ACTIVE:
       return 'success';

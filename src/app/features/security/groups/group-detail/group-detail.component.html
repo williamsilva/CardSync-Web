@@ -48,15 +48,15 @@
           <div class="cs-profile-username">{{ descriptionText() }}</div>
 
           <div class="cs-profile-tags">
-            <p-tag *ngIf="isSupportGroup()" severity="warn" value="SUPPORT"></p-tag>
-            <p-tag
+            <cs-tag *ngIf="isSupportGroup()" severity="warn" value="SUPPORT"></cs-tag>
+            <cs-tag
               severity="info"
               [value]="('groups.detail.permissions.title' | translate) + ': ' + permissionsCount()"
-            ></p-tag>
-            <p-tag
+            ></cs-tag>
+            <cs-tag
               severity="success"
               [value]="('groups.detail.users.title' | translate) + ': ' + usersCount()"
-            ></p-tag>
+            ></cs-tag>
           </div>
         </div>
 
@@ -68,7 +68,7 @@
                 {{ 'groups.detail.permissions.title' | translate }}
               </span>
               <span class="cs-permission-chip-raw">
-                <p-badge severity="info" [value]="permissionsCount()"></p-badge>
+                <cs-badge severity="info" [value]="permissionsCount()"></cs-badge>
               </span>
             </div>
           </div>
@@ -80,7 +80,7 @@
                 {{ 'groups.detail.users.title' | translate }}
               </span>
               <span class="cs-permission-chip-raw">
-                <p-badge severity="success" [value]="usersCount()"></p-badge>
+                <cs-badge severity="success" [value]="usersCount()"></cs-badge>
               </span>
             </div>
           </div>
@@ -132,7 +132,7 @@
         >
           <i class="pi pi-shield"></i>
           <span>{{ 'groups.detail.tabs.permissions' | translate }}</span>
-          <p-badge severity="info" [value]="permissionsCount()"></p-badge>
+          <cs-badge severity="info" [value]="permissionsCount()"></cs-badge>
         </button>
 
         <button
@@ -144,7 +144,7 @@
         >
           <i class="pi pi-user"></i>
           <span>{{ 'groups.detail.tabs.users' | translate }}</span>
-          <p-badge severity="success" [value]="usersCount()"></p-badge>
+          <cs-badge severity="success" [value]="usersCount()"></cs-badge>
         </button>
       </div>
 
@@ -157,7 +157,7 @@
               <span class="cs-summary-block-title-text">{{
                 'groups.detail.users.title' | translate
               }}</span>
-              <p-badge severity="success" [value]="usersCount()"></p-badge>
+              <cs-badge severity="success" [value]="usersCount()"></cs-badge>
             </div>
 
             <div
@@ -189,7 +189,7 @@
               <span class="cs-summary-block-title-text">{{
                 'groups.detail.permissions.title' | translate
               }}</span>
-              <p-badge severity="info" [value]="permissionsCount()"></p-badge>
+              <cs-badge severity="info" [value]="permissionsCount()"></cs-badge>
             </div>
 
             <div

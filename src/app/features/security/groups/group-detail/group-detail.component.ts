@@ -3,9 +3,7 @@ import { CommonModule, Location } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Component, DestroyRef, computed, inject, signal } from '@angular/core';
 
-import { TagModule } from 'primeng/tag';
 import { CardModule } from 'primeng/card';
-import { BadgeModule } from 'primeng/badge';
 import { FormsModule } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
@@ -14,9 +12,11 @@ import { TranslateModule } from '@ngx-translate/core';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
+import { CsTagComponent } from '@shared/ui';
 import { I18nService } from '@core/i18n/i18n.service';
 import { GroupsFacade } from '@features/facade/groups.facade';
 import { UsersApiService } from '@features/service/users.api.service';
+import { CsBadgeComponent } from '@shared/ui/badge/cs-badge.component';
 import { PermissionsApiService } from '@features/service/permissions.api.service';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
 import { GroupModel, PermissionOptionModel, UserOptionModel } from '@models/groups.models';
@@ -30,17 +30,17 @@ import { GroupsCreateDialogComponent } from '@features/security/groups/groups-cr
   templateUrl: './group-detail.component.html',
   imports: [
     CommonModule,
-    TagModule,
     CardModule,
     FormsModule,
-    BadgeModule,
     ButtonModule,
     DividerModule,
     TranslateModule,
+    CsBadgeComponent,
     MultiSelectModule,
     PageHeaderComponent,
     ProgressSpinnerModule,
     GroupsCreateDialogComponent,
+    CsTagComponent,
   ],
 })
 export class GroupDetailComponent {

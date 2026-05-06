@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Component, EventEmitter, Output, computed, inject, input, signal } from '@angular/core';
 
-import { TagModule } from 'primeng/tag';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
@@ -13,6 +12,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService, MessageService } from 'primeng/api';
 
+import { CsTagComponent } from '@shared/ui';
 import { FlagModel } from '@models/flag.models';
 import { I18nService } from '@core/i18n/i18n.service';
 import { CompanyFacade } from '@features/facade/company.facade';
@@ -29,12 +29,12 @@ import { StatusEnum, statusEnumLabel, statusEnumSeverity } from '@models/enums/s
   templateUrl: './flag-company-relations.component.html',
   imports: [
     CommonModule,
-    TagModule,
     TableModule,
     ButtonModule,
     DialogModule,
     SelectModule,
     CsDocumentPipe,
+    CsTagComponent,
     TranslateModule,
     InputTextModule,
     FloatLabelModule,

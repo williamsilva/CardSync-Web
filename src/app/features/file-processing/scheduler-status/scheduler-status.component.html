@@ -1,0 +1,123 @@
+<div class="cs-list-page">
+  <div class="cs-list-page__header">
+    <div>
+      <p class="cs-list-page__eyebrow">Agendamento</p>
+      <h1>Status do Scheduler</h1>
+      <span>Acompanhe a última execução automática/manual do processamento ERP, Rede e Banco.</span>
+    </div>
+
+    <div class="flex gap-2 flex-wrap">
+      <button
+        pButton
+        type="button"
+        icon="pi pi-refresh"
+        label="Atualizar"
+        severity="secondary"
+        [loading]="loading()"
+        (click)="reload()"
+      ></button>
+      <a pButton routerLink="../files" icon="pi pi-list" label="Arquivos" severity="secondary"></a>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="col-12 lg:col-4">
+      <p-card>
+        <ng-template pTemplate="title">ERP</ng-template>
+        <div class="flex flex-column gap-3">
+          <div class="flex align-items-center justify-content-between">
+            <span>Executando agora</span>
+            <cs-tag
+              [value]="schedule()?.erp?.running ? 'Sim' : 'Não'"
+              [tone]="boolSeverity(schedule()?.erp?.running)"
+            ></cs-tag>
+          </div>
+
+          <div>
+            <strong>Último início:</strong> {{ schedule()?.erp?.lastStartedAt | date: 'short' }}
+          </div>
+          <div>
+            <strong>Último fim:</strong> {{ schedule()?.erp?.lastFinishedAt | date: 'short' }}
+          </div>
+          <div><strong>Trigger:</strong> {{ schedule()?.erp?.lastTrigger || '-' }}</div>
+          <div><strong>Mensagem:</strong> {{ schedule()?.erp?.lastMessage || '-' }}</div>
+
+          <button
+            pButton
+            type="button"
+            icon="pi pi-play"
+            label="Processar ERP agora"
+            [loading]="processingErp()"
+            (click)="processErp()"
+          ></button>
+        </div>
+      </p-card>
+    </div>
+
+    <div class="col-12 lg:col-4">
+      <p-card>
+        <ng-template pTemplate="title">Rede</ng-template>
+        <div class="flex flex-column gap-3">
+          <div class="flex align-items-center justify-content-between">
+            <span>Executando agora</span>
+            <cs-tag
+              [value]="schedule()?.rede?.running ? 'Sim' : 'Não'"
+              [tone]="boolSeverity(schedule()?.rede?.running)"
+            ></cs-tag>
+          </div>
+
+          <div>
+            <strong>Último início:</strong> {{ schedule()?.rede?.lastStartedAt | date: 'short' }}
+          </div>
+          <div>
+            <strong>Último fim:</strong> {{ schedule()?.rede?.lastFinishedAt | date: 'short' }}
+          </div>
+          <div><strong>Trigger:</strong> {{ schedule()?.rede?.lastTrigger || '-' }}</div>
+          <div><strong>Mensagem:</strong> {{ schedule()?.rede?.lastMessage || '-' }}</div>
+
+          <button
+            pButton
+            type="button"
+            icon="pi pi-play"
+            label="Processar Rede agora"
+            [loading]="processingRede()"
+            (click)="processRede()"
+          ></button>
+        </div>
+      </p-card>
+    </div>
+
+    <div class="col-12 lg:col-4">
+      <p-card>
+        <ng-template pTemplate="title">Banco / CNAB</ng-template>
+        <div class="flex flex-column gap-3">
+          <div class="flex align-items-center justify-content-between">
+            <span>Executando agora</span>
+            <cs-tag
+              [value]="schedule()?.bank?.running ? 'Sim' : 'Não'"
+              [tone]="boolSeverity(schedule()?.bank?.running)"
+            ></cs-tag>
+          </div>
+
+          <div>
+            <strong>Último início:</strong> {{ schedule()?.bank?.lastStartedAt | date: 'short' }}
+          </div>
+          <div>
+            <strong>Último fim:</strong> {{ schedule()?.bank?.lastFinishedAt | date: 'short' }}
+          </div>
+          <div><strong>Trigger:</strong> {{ schedule()?.bank?.lastTrigger || '-' }}</div>
+          <div><strong>Mensagem:</strong> {{ schedule()?.bank?.lastMessage || '-' }}</div>
+
+          <button
+            pButton
+            type="button"
+            icon="pi pi-building-columns"
+            label="Processar CNAB agora"
+            [loading]="processingBank()"
+            (click)="processBank()"
+          ></button>
+        </div>
+      </p-card>
+    </div>
+  </div>
+</div>

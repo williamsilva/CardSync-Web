@@ -37,10 +37,10 @@
             </div>
 
             <div class="cs-profile-tags">
-              <p-tag
+              <cs-tag
                 [value]="statusLabel(p.userDetails?.status)"
-                [severity]="statusSeverity(p.userDetails?.status)"
-              ></p-tag>
+                [tone]="statusSeverity(p.userDetails?.status)"
+              />
             </div>
           </div>
 
@@ -56,11 +56,11 @@
                 </span>
 
                 <span class="cs-permission-chip-raw">
-                  <p-badge
+                  <cs-badge
                     class="ml-2"
                     severity="info"
                     [value]="'profile.items' | translate: { count: groups().length }"
-                  ></p-badge>
+                  ></cs-badge>
                 </span>
               </div>
             </div>
@@ -75,11 +75,11 @@
                 </span>
 
                 <span class="cs-permission-chip-raw">
-                  <p-badge
+                  <cs-badge
                     class="ml-2"
                     severity="warn"
                     [value]="'profile.items' | translate: { count: authorities().length }"
-                  ></p-badge>
+                  ></cs-badge>
                 </span>
               </div>
             </div>
@@ -300,10 +300,10 @@
               </span>
 
               <div class="flex items-center gap-2">
-                <p-badge
+                <cs-badge
                   severity="info"
                   [value]="'profile.items' | translate: { count: groups().length }"
-                ></p-badge>
+                ></cs-badge>
               </div>
             </div>
           </ng-template>
@@ -352,10 +352,10 @@
               <div class="flex items-center gap-2">
                 <span class="text-sm opacity-70"> </span>
 
-                <p-badge
+                <cs-badge
                   severity="warn"
                   [value]="'profile.items' | translate: { count: authorities().length }"
-                ></p-badge>
+                ></cs-badge>
               </div>
             </div>
           </ng-template>

@@ -1,10 +1,11 @@
 import { computed, signal, WritableSignal } from '@angular/core';
 
 import { Table } from 'primeng/table';
+import { DatePickerTypeView } from 'primeng/datepicker';
 
 import { I18nService } from '@core/i18n/i18n.service';
-import { PeriodEnum } from '@models/enums/period.enum';
-import { DatePickerTypeView } from 'primeng/datepicker';
+import { readFilterValues } from './table-filter-readers';
+import { PeriodEnum, periodEnumLabel } from '@models/enums/period.enum';
 import { BaseListPage } from '@shared/features/list-base/base-list-page';
 import { buildListQuery } from '@shared/features/list-query/list-query.builder';
 import { mapPrimeLazyToTableQuery } from '@shared/features/list-query/primeng-lazy.mapper';
@@ -39,10 +40,10 @@ export abstract class StatefulListPage<
 
   protected abstract loadFirstPage(): void;
 
+  protected abstract advancedActiveFilters: () => ActiveFilterItem[];
   protected abstract buildAdvancedFilters(): Partial<TAdvancedFilter>;
   protected abstract mapTableFiltersToActiveItems(filters: any): ActiveFilterItem[];
   protected abstract loadPage(query: ReturnType<typeof buildListQuery<TAdvancedFilter>>): void;
-  protected abstract advancedActiveFilters: () => ActiveFilterItem[];
 
   protected onAfterClear(): void {}
   protected clearCustomTableState(_defaultRows: number): void {}
@@ -207,6 +208,58 @@ export abstract class StatefulListPage<
     this.closeColumnFilter(columnFilter);
   }
 
+  applyDecimalColumnFilter(
+    draft: WritableSignal<string | null>,
+    filter: (value: unknown) => void,
+    columnFilter: unknown,
+  ): void {
+    const value = this.normalizeMoneyText(draft());
+
+    draft.set(value);
+    filter(value || null);
+
+    this.closeColumnFilter(columnFilter);
+  }
+
+  clearDecimalColumnFilter(
+    draft: WritableSignal<string | null>,
+    filter: (value: unknown) => void,
+    columnFilter: unknown,
+  ): void {
+    draft.set('');
+    filter(null);
+
+    this.closeColumnFilter(columnFilter);
+  }
+
+  setIntegerColumnDraft(draft: WritableSignal<string>, value: string | null | undefined): void {
+    draft.set(this.normalizeIntegerText(value));
+  }
+
+  applyIntegerColumnFilter(
+    draft: WritableSignal<string>,
+    filter: (value: unknown) => void,
+    columnFilter: unknown,
+  ): void {
+    const value = this.normalizeIntegerText(draft());
+
+    draft.set(value);
+    filter(value || null);
+
+    this.closeColumnFilter(columnFilter);
+  }
+
+  clearIntegerColumnFilter(
+    draft: WritableSignal<string>,
+    filter: (value: unknown) => void,
+    columnFilter: unknown,
+  ): void {
+    draft.set('');
+    filter(null);
+
+    this.closeColumnFilter(columnFilter);
+  }
+
   syncArrayColumnDraftFromTableState(
     filters: any,
     field: string,
@@ -320,10 +373,7 @@ export abstract class StatefulListPage<
     valueDraft.set(value?.value ?? null);
   }
 
-  setTextColumnDraft(
-    draft: WritableSignal<string>,
-    value: string | null | undefined,
-  ): void {
+  setTextColumnDraft(draft: WritableSignal<string>, value: string | null | undefined): void {
     draft.set((value ?? '').toString());
   }
 
@@ -358,6 +408,321 @@ export abstract class StatefulListPage<
     reader: (filters: any, field: string) => string | null,
   ): void {
     draft.set(reader(filters, field) ?? '');
+  }
+
+  dateFilterLabel(value: unknown): string {
+    const filterValue = value as { period?: PeriodEnum; value?: string | string[] } | null;
+
+    if (!filterValue?.period || !filterValue.value) {
+      return '';
+    }
+
+    const periodLabel = periodEnumLabel(filterValue.period, this.i18n);
+    const dateLabel = this.formatDateFilterValue(filterValue.value, filterValue.period);
+
+    return `${periodLabel}: ${dateLabel}`;
+  }
+
+  formatActiveFilterDateValue(date: string | string[] | null | undefined): string | null {
+    if (!date) {
+      return null;
+    }
+
+    return Array.isArray(date) ? date.join(' - ') : date;
+  }
+
+  formatActiveFilterPeriodDateValue(
+    period: PeriodEnum | null | undefined,
+    date: string | string[] | null | undefined,
+    i18n: I18nService,
+  ): string | null {
+    const periodLabel = period ? periodEnumLabel(period, i18n) : null;
+    const dateLabel = this.formatActiveFilterDateValue(date);
+
+    if (periodLabel && dateLabel) {
+      return `${periodLabel} - ${dateLabel}`;
+    }
+
+    return periodLabel ?? dateLabel;
+  }
+
+  protected formatDateFilterValue(value: string | string[], period: PeriodEnum): string {
+    if (Array.isArray(value)) {
+      return value
+        .filter(Boolean)
+        .map((item) => this.formatSingleDateFilterValue(item, period))
+        .join(' - ');
+    }
+
+    return this.formatSingleDateFilterValue(value, period);
+  }
+
+  protected formatSingleDateFilterValue(value: string, period: PeriodEnum): string {
+    const raw = `${value ?? ''}`.trim();
+
+    if (!raw) {
+      return '';
+    }
+
+    const parsed = this.parseDateFilterValue(raw);
+
+    if (!parsed) {
+      return raw;
+    }
+
+    const locale = this.i18n.getDateLocale();
+
+    if (period === PeriodEnum.YEAR) {
+      return new Intl.DateTimeFormat(locale, { year: 'numeric' }).format(parsed);
+    }
+
+    if (period === PeriodEnum.MONTH) {
+      return new Intl.DateTimeFormat(locale, {
+        month: '2-digit',
+        year: 'numeric',
+      }).format(parsed);
+    }
+
+    return new Intl.DateTimeFormat(locale, {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+    }).format(parsed);
+  }
+
+  protected parseDateFilterValue(value: string): Date | null {
+    const raw = value.trim();
+
+    const isoDate = raw.match(/^(\d{4})-(\d{2})-(\d{2})/);
+    if (isoDate) {
+      return this.safeDate(Number(isoDate[1]), Number(isoDate[2]), Number(isoDate[3]));
+    }
+
+    const isoMonth = raw.match(/^(\d{4})-(\d{2})$/);
+    if (isoMonth) {
+      return this.safeDate(Number(isoMonth[1]), Number(isoMonth[2]), 1);
+    }
+
+    const yearOnly = raw.match(/^(\d{4})$/);
+    if (yearOnly) {
+      return this.safeDate(Number(yearOnly[1]), 1, 1);
+    }
+
+    const separated = raw.match(/^(\d{1,2})[\/.-](\d{1,2})(?:[\/.-](\d{2}|\d{4}))?$/);
+    if (separated) {
+      const first = Number(separated[1]);
+      const second = Number(separated[2]);
+      const year = this.normalizeYear(separated[3]);
+      const locale = this.i18n.getDateLocale();
+
+      if (locale === 'en-US') {
+        return this.safeDate(year, first, second);
+      }
+
+      return this.safeDate(year, second, first);
+    }
+
+    const parsed = new Date(raw);
+    return Number.isNaN(parsed.getTime()) ? null : parsed;
+  }
+
+  protected normalizeYear(value: string | undefined): number {
+    if (!value) {
+      return new Date().getFullYear();
+    }
+
+    if (value.length === 2) {
+      return 2000 + Number(value);
+    }
+
+    return Number(value);
+  }
+
+  protected normalizeMoneyText(value: string | null | undefined): string {
+    const raw = (value ?? '').toString().trim();
+
+    if (!raw) {
+      return '';
+    }
+
+    let normalized = raw.replace(/R\$/gi, '').replace(/\s/g, '').trim();
+
+    if (normalized.includes(',')) {
+      normalized = normalized.replace(/\./g, '').replace(',', '.');
+    }
+
+    return normalized.replace(/[^0-9.+-]/g, '');
+  }
+
+  protected normalizeIntegerText(value: string | null | undefined): string {
+    const raw = (value ?? '').toString().trim();
+
+    if (!raw) {
+      return '';
+    }
+
+    return raw.replace(/\D/g, '');
+  }
+
+  protected safeDate(year: number, month: number, day: number): Date | null {
+    const parsed = new Date(year, month - 1, day, 0, 0, 0, 0);
+
+    if (Number.isNaN(parsed.getTime())) {
+      return null;
+    }
+
+    return parsed;
+  }
+
+  protected moneyFilterLabel(filters: any, field: string): string | null {
+    const constraint = this.firstFilterConstraint(filters, field);
+    const rawValue = constraint?.value;
+
+    if (rawValue == null || rawValue === '') {
+      return null;
+    }
+
+    const values = readFilterValues(filters, field)
+      .flatMap((value) => (Array.isArray(value) ? value : [value]))
+      .map((value) => this.formatMoneyFilterValue(value))
+      .filter(Boolean);
+
+    if (!values.length) {
+      return null;
+    }
+
+    const matchMode = this.filterMatchModeLabel(constraint?.matchMode);
+
+    return matchMode ? `${matchMode}: ${values.join(', ')}` : values.join(', ');
+  }
+
+  protected integerFilterLabel(filters: any, field: string): string | null {
+    const constraint = this.firstFilterConstraint(filters, field);
+    const rawValue = constraint?.value;
+
+    if (rawValue == null || rawValue === '') {
+      return null;
+    }
+
+    const values = readFilterValues(filters, field)
+      .flatMap((value) => (Array.isArray(value) ? value : [value]))
+      .map((value) => this.formatIntegerFilterValue(value))
+      .filter(Boolean);
+
+    if (!values.length) {
+      return null;
+    }
+
+    const matchMode = this.filterMatchModeLabel(constraint?.matchMode);
+
+    return matchMode ? `${matchMode}: ${values.join(', ')}` : values.join(', ');
+  }
+
+  protected formatIntegerFilterValue(value: unknown): string {
+    const raw = `${value ?? ''}`.trim();
+
+    if (!raw) {
+      return '';
+    }
+
+    const normalized = this.normalizeIntegerText(raw);
+
+    if (!normalized) {
+      return raw;
+    }
+
+    const parsed = Number(normalized);
+
+    if (!Number.isSafeInteger(parsed)) {
+      return normalized;
+    }
+
+    return new Intl.NumberFormat(this.i18n.getLocale(), {
+      maximumFractionDigits: 0,
+      useGrouping: false,
+    }).format(parsed);
+  }
+
+  protected formatMoneyFilterValue(value: unknown): string {
+    const raw = `${value ?? ''}`.trim();
+
+    if (!raw) {
+      return '';
+    }
+
+    const amount = this.parseMoneyFilterValue(raw);
+
+    if (amount == null) {
+      return raw;
+    }
+
+    return new Intl.NumberFormat(this.i18n.getLocale(), {
+      style: 'currency',
+      currency: this.i18n.getCurrency(),
+      currencyDisplay: 'symbol',
+    }).format(amount);
+  }
+
+  protected parseMoneyFilterValue(value: string): number | null {
+    let normalized = value
+      .replace(/R\$/gi, '')
+      .replace(/US\$/gi, '')
+      .replace(/€/g, '')
+      .replace(/\s/g, '')
+      .trim();
+
+    if (!normalized) {
+      return null;
+    }
+
+    const hasComma = normalized.includes(',');
+    const hasDot = normalized.includes('.');
+
+    if (hasComma && hasDot) {
+      const lastComma = normalized.lastIndexOf(',');
+      const lastDot = normalized.lastIndexOf('.');
+
+      normalized =
+        lastComma > lastDot
+          ? normalized.replace(/\./g, '').replace(',', '.')
+          : normalized.replace(/,/g, '');
+    } else if (hasComma) {
+      normalized = normalized.replace(',', '.');
+    }
+
+    normalized = normalized.replace(/[^0-9.+-]/g, '');
+
+    if (!normalized || normalized === '-' || normalized === '+') {
+      return null;
+    }
+
+    const parsed = Number(normalized);
+    return Number.isFinite(parsed) ? parsed : null;
+  }
+
+  protected firstFilterConstraint(
+    filters: any,
+    field: string,
+  ): { matchMode?: string; value?: unknown } | null {
+    const metadata = filters?.[field];
+
+    if (!metadata) {
+      return null;
+    }
+
+    if (Array.isArray(metadata)) {
+      return metadata[0] ?? null;
+    }
+
+    if (Array.isArray(metadata.constraints)) {
+      return metadata.constraints[0] ?? null;
+    }
+
+    return metadata;
+  }
+
+  protected filterMatchModeLabel(matchMode: string | null | undefined): string {
+    return this.i18n.tPrimeNg(matchMode, matchMode ?? '');
   }
 
   protected closeColumnFilter(columnFilter: unknown): void {

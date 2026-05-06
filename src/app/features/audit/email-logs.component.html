@@ -374,14 +374,11 @@
       </td>
 
       <td class="cell-muted text-center">
-        <p-tag [value]="statusLabel(row.status)" [severity]="severityStatus(row.status)"></p-tag>
+        <cs-tag [value]="statusLabel(row.status)" [tone]="severityStatus(row.status)" />
       </td>
 
       <td class="cell-muted text-center">
-        <p-tag
-          [value]="eventTypeLabel(row.eventType)"
-          [severity]="severityEventType(row.eventType)"
-        ></p-tag>
+        <cs-tag [value]="eventTypeLabel(row.eventType)" [tone]="severityEventType(row.eventType)" />
       </td>
     </tr>
   </ng-template>

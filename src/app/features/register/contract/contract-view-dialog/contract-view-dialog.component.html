@@ -64,7 +64,9 @@
 
       <div class="cs-meta-card">
         <span class="cs-meta-label">{{ 'contract.fields.statusEnum' | translate }}</span>
-        <p-tag [value]="contractEnumLabel(c.status) || ('common.notInformed' | translate)"></p-tag>
+        <cs-tag
+          [value]="contractEnumLabel(c.status) || ('common.notInformed' | translate)"
+        ></cs-tag>
       </div>
 
       <div class="cs-meta-card">
@@ -93,7 +95,7 @@
             <small class="cs-flag-card__subtitle">
               {{
                 'contract.view.flag.modalitiesCount'
-                  | translate: { count: flagItem.contractRates?.length ?? 0 }
+                  | translate: { count: flagItem.contractRates.length }
               }}
             </small>
           </div>

@@ -203,6 +203,7 @@
   [value]="establishments()"
   class="p-datatable-sm mt-1"
   styleClass="cs-admin-table"
+  [stateKey]="tableStateKey()"
   [showCurrentPageReport]="true"
   [totalRecords]="totalRecords()"
   (onPage)="onPageChange($event)"
@@ -210,9 +211,8 @@
   [paginatorDropdownAppendTo]="'body'"
   [rowsPerPageOptions]="rowsPerPageOptions"
   [loading]="establishmentFacade.loading()"
-  stateKey="cardsync.establishment.table.state.v1"
-  [tableStyle]="{ width: '100%', 'min-width': '62rem' }"
   [currentPageReportTemplate]="'pagination.report' | translate"
+  [tableStyle]="{ width: '100%', 'min-width': '90rem', 'table-layout': 'fixed' }"
 >
   <ng-template pTemplate="colgroup">
     <colgroup>
@@ -714,14 +714,14 @@
       </td>
 
       <td class="cell-muted text-center">
-        <p-tag [value]="statusEnumLabel(row.status)" [severity]="severityEnum(row.status)"></p-tag>
+        <cs-tag [value]="statusEnumLabel(row.status)" [tone]="severityEnum(row.status)" />
       </td>
 
       <td class="cell-muted text-center">
-        <p-tag
+        <cs-tag
           [value]="typeEstablishmentEnumLabel(row.type)"
-          [severity]="severityTypeEstablishmentEnum(row.type)"
-        ></p-tag>
+          [tone]="severityTypeEstablishmentEnum(row.type)"
+        />
       </td>
 
       <td class="cell-muted text-center">

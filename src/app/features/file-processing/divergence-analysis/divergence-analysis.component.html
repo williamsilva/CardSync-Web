@@ -1,0 +1,115 @@
+<div class="cs-list-page">
+  <div class="cs-list-page__header">
+    <div>
+      <p class="cs-list-page__eyebrow">Análise</p>
+      <h1>Análise de Divergências</h1>
+      <span
+        >Visão operacional para localizar pendências comerciais, falhas de arquivo e movimentos Rede
+        que exigem análise.</span
+      >
+    </div>
+
+    <button
+      pButton
+      type="button"
+      icon="pi pi-refresh"
+      label="Atualizar"
+      severity="secondary"
+      [loading]="loading()"
+      (click)="reload()"
+    ></button>
+  </div>
+
+  <div class="cs-kpi-grid">
+    <div class="cs-kpi-card">
+      <small>Arquivos com erro</small>
+      <strong>{{ metrics().filesWithError }}</strong>
+    </div>
+    <div class="cs-kpi-card">
+      <small>Arquivos com warning</small>
+      <strong>{{ metrics().filesWithWarnings }}</strong>
+    </div>
+    <div class="cs-kpi-card">
+      <small>Pendentes contrato</small>
+      <strong>{{ metrics().pendingContracts }}</strong>
+    </div>
+    <div class="cs-kpi-card">
+      <small>Pendentes empresa/PV</small>
+      <strong>{{ metrics().pendingContext }}</strong>
+    </div>
+    <div class="cs-kpi-card">
+      <small>Total ordens Rede</small>
+      <strong>{{ formatCurrency(metrics().creditOrdersTotal) }}</strong>
+    </div>
+    <div class="cs-kpi-card">
+      <small>Total ajustes Rede</small>
+      <strong>{{ formatCurrency(metrics().adjustmentsTotal) }}</strong>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="col-12 xl:col-6">
+      <p-card>
+        <ng-template pTemplate="title">Vendas ERP pendentes recentes</ng-template>
+        <p-table [value]="erpPendings()" styleClass="p-datatable-sm">
+          <ng-template pTemplate="header">
+            <tr>
+              <th>Venda</th>
+              <th>Origem</th>
+              <th>Status</th>
+              <th class="text-right">Valor</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-row>
+            <tr>
+              <td>
+                <strong>NSU {{ row.nsu || '-' }}</strong
+                ><small>{{ row.saleDate | date: 'short' }}</small>
+              </td>
+              <td>
+                <strong>{{ row.sourceCompanyName || row.company || '-' }}</strong
+                ><small>PV {{ row.sourceEstablishmentPvNumber || row.establishment || '-' }}</small>
+              </td>
+              <td>
+                <cs-tag
+                  [value]="row.commercialStatus"
+                  [tone]="commercialStatusSeverity(row.commercialStatus)"
+                ></cs-tag>
+              </td>
+              <td class="text-right">{{ formatCurrency(row.grossValue) }}</td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </p-card>
+    </div>
+
+    <div class="col-12 xl:col-6">
+      <p-card>
+        <ng-template pTemplate="title">Arquivos recentes com atenção</ng-template>
+        <p-table [value]="files()" styleClass="p-datatable-sm">
+          <ng-template pTemplate="header">
+            <tr>
+              <th>Arquivo</th>
+              <th>Status</th>
+              <th>Erros</th>
+              <th>Warnings</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-row>
+            <tr>
+              <td>
+                <a [routerLink]="['../files', row.id]">{{ row.file }}</a
+                ><small>{{ row.dateImport | date: 'short' }}</small>
+              </td>
+              <td>
+                <cs-tag [value]="row.status" [tone]="fileStatusSeverity(row.status)"></cs-tag>
+              </td>
+              <td>{{ row.errorLines || 0 }}</td>
+              <td>{{ row.warningLines || 0 }}</td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </p-card>
+    </div>
+  </div>
+</div>

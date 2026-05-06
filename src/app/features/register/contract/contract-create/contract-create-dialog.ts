@@ -23,7 +23,6 @@ import {
 } from '@angular/core';
 
 import { of, forkJoin } from 'rxjs';
-import { TagModule } from 'primeng/tag';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
@@ -36,6 +35,7 @@ import { FloatLabelModule } from 'primeng/floatlabel';
 import { TranslateModule } from '@ngx-translate/core';
 import { DatePickerModule } from 'primeng/datepicker';
 
+import { CsTagComponent } from '@shared/ui';
 import { I18nService } from '@core/i18n/i18n.service';
 import { CompanyFacade } from '@features/facade/company.facade';
 import { CsDocumentPipe } from '@shared/pipes/cs-document.pipe';
@@ -105,7 +105,6 @@ type ContractFlagFormValue = {
   templateUrl: './contract-create-dialog.html',
   imports: [
     CommonModule,
-    TagModule,
     ToastModule,
     DialogModule,
     ButtonModule,
@@ -113,6 +112,7 @@ type ContractFlagFormValue = {
     DividerModule,
     TooltipModule,
     CsDocumentPipe,
+    CsTagComponent,
     InputTextModule,
     TranslateModule,
     DatePickerModule,

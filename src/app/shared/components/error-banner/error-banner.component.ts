@@ -9,11 +9,12 @@ import {
   ChangeDetectionStrategy,
 } from '@angular/core';
 
+import { CsTagTone } from '@shared/ui';
 import { TranslateModule } from '@ngx-translate/core';
 import { ApiError } from '../../../core/errors/api-error.model';
 import { ErrorMapperService } from '../../../core/errors/error-mapper.service';
 
-export type BannerType = 'error' | 'warn' | 'info' | 'success';
+export type BannerType = CsTagTone;
 
 @Component({
   standalone: true,

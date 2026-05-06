@@ -1,3 +1,4 @@
+import { CsTagTone } from '@shared/ui';
 import { I18nService } from '@core/i18n/i18n.service';
 
 export enum PeriodEnum {
@@ -52,9 +53,7 @@ export function normalizePeriodEnum(status: PeriodInput): PeriodEnum | null {
   }
 }
 
-export function periodEnumSeverity(
-  status: PeriodInput,
-): 'success' | 'danger' | 'warn' | 'contrast' | 'info' {
+export function periodEnumSeverity(status: PeriodInput): CsTagTone {
   switch (normalizePeriodEnum(status)) {
     case PeriodEnum.DAY:
       return 'success';

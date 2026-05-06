@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Component, computed, inject, signal, ViewChild } from '@angular/core';
 
-import { TagModule } from 'primeng/tag';
 import { ButtonModule } from 'primeng/button';
 import { SelectModule } from 'primeng/select';
 import { FloatLabel } from 'primeng/floatlabel';
@@ -13,6 +12,7 @@ import { DatePickerModule } from 'primeng/datepicker';
 import { TranslateModule } from '@ngx-translate/core';
 import { MultiSelectModule } from 'primeng/multiselect';
 
+import { CsTagComponent } from '@shared/ui';
 import { I18nService } from '@core/i18n/i18n.service';
 import { CsDatePipe } from '@shared/pipes/cs-date.pipe';
 import { EmailLogsFacade } from '@features/facade/email-logs.facade';
@@ -50,7 +50,6 @@ import {
   templateUrl: './email-logs.component.html',
   imports: [
     CommonModule,
-    TagModule,
     FloatLabel,
     CsDatePipe,
     TableModule,
@@ -58,6 +57,7 @@ import {
     ButtonModule,
     SelectModule,
     TooltipModule,
+    CsTagComponent,
     TranslateModule,
     InputTextModule,
     DatePickerModule,

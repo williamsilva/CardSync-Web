@@ -1,3 +1,4 @@
+import { CsTagTone } from '@shared/ui';
 import { I18nService } from '@core/i18n/i18n.service';
 
 export enum TypeCompanyEnum {
@@ -46,9 +47,7 @@ export function isFilial(status: TypeCompanyEnumInput): boolean {
   return normalizeTypeCompanyEnum(status) === TypeCompanyEnum.FILIAL;
 }
 
-export function typeCompanySeverity(
-  status: TypeCompanyEnumInput,
-): 'success' | 'danger' | 'warn' | 'contrast' | 'info' {
+export function typeCompanySeverity(status: TypeCompanyEnumInput): CsTagTone {
   switch (normalizeTypeCompanyEnum(status)) {
     case TypeCompanyEnum.MATRIZ:
       return 'success';

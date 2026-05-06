@@ -15,7 +15,8 @@ export const appRoutes: Routes = [
 
       {
         path: 'erp',
-        loadChildren: () => import('./features/erp/erp.routes').then((m) => m.ERP_ROUTES),
+        loadChildren: () =>
+          import('./features/erp/transactions-erp.routes').then((m) => m.ERP_ROUTES),
       },
       {
         path: 'conciliation',
@@ -27,11 +28,17 @@ export const appRoutes: Routes = [
         loadChildren: () =>
           import('./features/register/register.routes').then((m) => m.REGISTER_ROUTES),
       },
-
       {
         path: 'security',
         loadChildren: () =>
           import('./features/security/security.routes').then((m) => m.SECURITY_ROUTES),
+      },
+      {
+        path: 'file-processing',
+        loadChildren: () =>
+          import('./features/file-processing/file-processing.routes').then(
+            (m) => m.FILE_PROCESSING_ROUTES,
+          ),
       },
 
       {

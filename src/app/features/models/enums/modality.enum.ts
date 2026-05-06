@@ -1,3 +1,4 @@
+import { CsTagTone } from '@shared/ui';
 import { I18nService } from '@core/i18n/i18n.service';
 
 export enum ModalityEnum {
@@ -63,21 +64,28 @@ export function normalizeModalityEnum(modality: ModalityInput): ModalityEnum | n
   }
 }
 
-export function modalityEnumSeverity(
-  modality: ModalityInput,
-): 'success' | 'danger' | 'warn' | 'contrast' | 'info' {
+export function modalityEnumSeverity(modality: ModalityInput): CsTagTone {
   switch (normalizeModalityEnum(modality)) {
-    case ModalityEnum.CASH_CREDIT:
-    case ModalityEnum.INSTALLMENT_CREDIT_2_6:
-    case ModalityEnum.INSTALLMENT_CREDIT_7_12:
-    case ModalityEnum.INSTALLMENT_CREDIT_13_18:
-      return 'success';
-
     case ModalityEnum.CASH_DEBIT:
-      return 'warn';
+      return 'teal';
+
+    case ModalityEnum.CASH_CREDIT:
+      return 'blue';
+
+    case ModalityEnum.INSTALLMENT_CREDIT_2_6:
+      return 'purple';
+
+    case ModalityEnum.INSTALLMENT_CREDIT_7_12:
+      return 'orange';
+
+    case ModalityEnum.INSTALLMENT_CREDIT_13_18:
+      return 'pink';
 
     case ModalityEnum.DIGITAL_WALLET:
-      return 'danger';
+      return 'money';
+
+    case ModalityEnum.NULL:
+      return 'secondary';
 
     case ModalityEnum.OUTROS:
     default:

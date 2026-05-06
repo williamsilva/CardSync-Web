@@ -1,0 +1,177 @@
+<div class="cs-page">
+  <div class="cs-page__header">
+    <div>
+      <p class="cs-page__eyebrow">Conciliação</p>
+      <h1>Dashboard de Conciliação</h1>
+      <span>Visão executiva de vendas ERP, adquirente, taxas, banco, débitos e chargebacks.</span>
+    </div>
+
+    <div class="cs-actions">
+      <button
+        pButton
+        type="button"
+        icon="pi pi-refresh"
+        label="Atualizar"
+        severity="secondary"
+        [loading]="loading()"
+        (click)="reload()"
+      ></button>
+      <a pButton routerLink="../erp-vs-acquirer" icon="pi pi-sync" label="ERP x Adquirente"></a>
+    </div>
+  </div>
+
+  <section class="cs-kpi-grid" *ngIf="summary() as s; else emptyDashboard">
+    <div class="cs-kpi-card">
+      <small>Vendas ERP</small>
+      <strong>{{ formatCurrency(s.erpGrossAmount) }}</strong>
+      <span>{{ s.erpSalesQuantity || 0 }} vendas</span>
+    </div>
+    <div class="cs-kpi-card">
+      <small>Vendas adquirente</small>
+      <strong>{{ formatCurrency(s.acquirerGrossAmount) }}</strong>
+      <span>{{ s.acquirerSalesQuantity || 0 }} vendas</span>
+    </div>
+    <div class="cs-kpi-card">
+      <small>Taxas cobradas</small>
+      <strong>{{ formatCurrency(s.feeAmount) }}</strong>
+      <span>Diferença {{ formatCurrency(s.feeDifferenceAmount) }}</span>
+    </div>
+    <div class="cs-kpi-card">
+      <small>Liquidado no banco</small>
+      <strong>{{ formatCurrency(s.bankSettledAmount) }}</strong>
+      <span>Pendente {{ formatCurrency(s.bankPendingAmount) }}</span>
+    </div>
+    <div class="cs-kpi-card">
+      <small>Pendências</small>
+      <strong>{{ formatCurrency(s.pendingAmount) }}</strong>
+      <span>{{ s.pendingSalesQuantity || 0 }} vendas</span>
+    </div>
+    <div class="cs-kpi-card">
+      <small>Débitos pendentes</small>
+      <strong>{{ formatCurrency(s.debitPendingAmount) }}</strong>
+      <span>Débitos e ajustes a liquidar</span>
+    </div>
+    <div class="cs-kpi-card">
+      <small>Chargebacks abertos</small>
+      <strong>{{ formatCurrency(s.chargebackOpenAmount) }}</strong>
+      <span>Valor em disputa</span>
+    </div>
+    <div class="cs-kpi-card">
+      <small>Divergências</small>
+      <strong>{{ formatCurrency(s.divergenceAmount) }}</strong>
+      <span>{{ s.divergenceQuantity || 0 }} ocorrências</span>
+    </div>
+  </section>
+
+  <section class="cs-grid-two" *ngIf="dashboard() as d">
+    <p-card header="ERP x Adquirente">
+      <div *ngIf="comparison() as c" class="cs-chart-list">
+        <div>
+          <div class="flex justify-content-between mb-2">
+            <strong>Valor conciliado</strong>
+            <span>{{ formatCurrency(c.matchedAmount) }}</span>
+          </div>
+          <p-progressBar [value]="progress(c.matchedAmount, c.erpAmount)"></p-progressBar>
+        </div>
+        <div class="cs-chart-row">
+          <div><strong>ERP</strong><small>Total importado do sistema comercial</small></div>
+          <span>{{ formatCurrency(c.erpAmount) }}</span>
+        </div>
+        <div class="cs-chart-row">
+          <div>
+            <strong>Adquirente</strong><small>Total informado nos arquivos da adquirente</small>
+          </div>
+          <span>{{ formatCurrency(c.acquirerAmount) }}</span>
+        </div>
+        <div class="cs-chart-row">
+          <div><strong>Diferença</strong><small>Valor ainda não equalizado</small></div>
+          <cs-tag [value]="formatCurrency(c.differenceAmount)" severity="warn"></cs-tag>
+        </div>
+      </div>
+    </p-card>
+
+    <p-card header="Atalhos de análise">
+      <div class="cs-shortcuts">
+        <a
+          pButton
+          routerLink="../sales"
+          label="Vendas adquirente"
+          icon="pi pi-credit-card"
+          severity="secondary"
+        ></a>
+        <a
+          pButton
+          routerLink="../../erp/sales"
+          label="Vendas ERP"
+          icon="pi pi-shopping-bag"
+          severity="secondary"
+        ></a>
+        <a
+          pButton
+          routerLink="../fees"
+          label="Taxas"
+          icon="pi pi-percentage"
+          severity="secondary"
+        ></a>
+        <a
+          pButton
+          routerLink="../debits"
+          label="Débitos"
+          icon="pi pi-minus-circle"
+          severity="secondary"
+        ></a>
+        <a
+          pButton
+          routerLink="../chargebacks"
+          label="Chargebacks"
+          icon="pi pi-shield"
+          severity="secondary"
+        ></a>
+        <a
+          pButton
+          routerLink="../bank-settlement"
+          label="Liquidação"
+          icon="pi pi-wallet"
+          severity="secondary"
+        ></a>
+      </div>
+    </p-card>
+  </section>
+
+  <section class="cs-grid-two" *ngIf="dashboard() as d">
+    <p-card header="Divergências por tipo">
+      <div class="cs-chart-list">
+        <div class="cs-chart-row" *ngFor="let item of d.divergencesByType">
+          <div>
+            <strong>{{ item.label }}</strong
+            ><small>{{ item.quantity || 0 }} ocorrências</small>
+          </div>
+          <span>{{ formatCurrency(item.value) }}</span>
+        </div>
+        <span *ngIf="!d.divergencesByType.length">Nenhuma divergência encontrada.</span>
+      </div>
+    </p-card>
+
+    <p-card header="Aging de pendências">
+      <div class="cs-chart-list">
+        <div class="cs-chart-row" *ngFor="let item of d.pendingAging">
+          <div>
+            <strong>{{ item.bucket }}</strong
+            ><small>{{ item.quantity || 0 }} pendências</small>
+          </div>
+          <span>{{ formatCurrency(item.amount) }}</span>
+        </div>
+        <span *ngIf="!d.pendingAging.length">Nenhuma pendência encontrada.</span>
+      </div>
+    </p-card>
+  </section>
+</div>
+
+<ng-template #emptyDashboard>
+  <p-card>
+    <span
+      >Não foi possível carregar os indicadores. Verifique se o endpoint de conciliação já está
+      disponível.</span
+    >
+  </p-card>
+</ng-template>

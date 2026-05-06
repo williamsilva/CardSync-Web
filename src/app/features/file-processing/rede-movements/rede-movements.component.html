@@ -1,0 +1,380 @@
+<div class="cs-list-page">
+  <div class="cs-list-page__header">
+    <div>
+      <p class="cs-list-page__eyebrow">Rede</p>
+      <h1>Movimentos financeiros</h1>
+      <span>Analise ordens de crédito, ajustes, antecipações, débitos e totalizadores EEFI.</span>
+    </div>
+    <a
+      pButton
+      routerLink="../../"
+      icon="pi pi-chart-line"
+      label="Dashboard"
+      severity="secondary"
+    ></a>
+  </div>
+
+  <p-card>
+    <p-tabs [value]="activeTab()" (valueChange)="onTabChange($event)">
+      <p-tablist>
+        <p-tab value="credit-orders">Ordens de crédito</p-tab>
+        <p-tab value="adjustments">Ajustes</p-tab>
+        <p-tab value="anticipations">Antecipações</p-tab>
+        <p-tab value="pending-debts">Débitos pendentes</p-tab>
+        <p-tab value="settled-debts">Débitos liquidados</p-tab>
+        <p-tab value="totalizers">Totalizadores</p-tab>
+      </p-tablist>
+
+      <p-tabpanels>
+        <p-tabpanel value="credit-orders">
+          <p-table
+            [value]="creditOrders()"
+            [lazy]="true"
+            [loading]="loading()"
+            [paginator]="true"
+            [rows]="pageSize()"
+            [totalRecords]="total('credit-orders')"
+            styleClass="p-datatable-sm"
+            (onLazyLoad)="loadCurrent($event)"
+          >
+            <ng-template pTemplate="header"
+              ><tr>
+                <th>Arquivo</th>
+                <th>OC/RV</th>
+                <th>PV</th>
+                <th>Parcela</th>
+                <th>Datas</th>
+                <th>Valores</th>
+                <th>Contexto</th>
+              </tr></ng-template
+            >
+            <ng-template pTemplate="body" let-row>
+              <tr>
+                <td>
+                  <strong>{{ row.processedFile }}</strong
+                  ><small>Linha {{ row.lineNumber }}</small>
+                </td>
+                <td>
+                  <strong>OC {{ row.creditOrderNumber || '-' }}</strong
+                  ><small>RV {{ row.rvNumber || '-' }}</small>
+                </td>
+                <td>{{ row.originalPvNumber || '-' }}</td>
+                <td>{{ row.installmentNumber || '-' }}/{{ row.installmentTotal || '-' }}</td>
+                <td>
+                  <strong>{{ row.releaseDate | date: 'shortDate' }}</strong
+                  ><small>RV {{ row.rvDate | date: 'shortDate' }}</small>
+                </td>
+                <td>
+                  <strong>{{ formatCurrency(row.releaseValue) }}</strong
+                  ><small
+                    >Bruto {{ formatCurrency(row.grossRvValue) }} · Desc.
+                    {{ formatCurrency(row.discountRateValue) }}</small
+                  >
+                </td>
+                <td>
+                  <strong>{{ row.company || '-' }}</strong
+                  ><small>{{ row.acquirer || '-' }} · {{ row.flag || '-' }}</small>
+                </td>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage"
+              ><tr>
+                <td colspan="7">Nenhuma ordem de crédito encontrada.</td>
+              </tr></ng-template
+            >
+          </p-table>
+        </p-tabpanel>
+
+        <p-tabpanel value="adjustments">
+          <p-table
+            [value]="adjustments()"
+            [lazy]="true"
+            [loading]="loading()"
+            [paginator]="true"
+            [rows]="pageSize()"
+            [totalRecords]="total('adjustments')"
+            styleClass="p-datatable-sm"
+            (onLazyLoad)="loadCurrent($event)"
+          >
+            <ng-template pTemplate="header"
+              ><tr>
+                <th>Arquivo</th>
+                <th>Registro</th>
+                <th>PV/NSU</th>
+                <th>Motivo</th>
+                <th>Datas</th>
+                <th>Valor</th>
+                <th>Contexto</th>
+              </tr></ng-template
+            >
+            <ng-template pTemplate="body" let-row>
+              <tr>
+                <td>
+                  <strong>{{ row.processedFile }}</strong
+                  ><small>Linha {{ row.lineNumber }}</small>
+                </td>
+                <td>
+                  <cs-tag [value]="row.recordType || '-'" severity="info"></cs-tag
+                  ><small>{{ row.ecommerce ? 'E-commerce' : 'Presencial' }}</small>
+                </td>
+                <td>
+                  <strong>PV {{ row.pvNumber || '-' }}</strong
+                  ><small>NSU {{ row.nsu || '-' }} · Aut. {{ row.authorization || '-' }}</small>
+                </td>
+                <td>
+                  <strong>{{ row.adjustmentReason || '-' }}</strong
+                  ><small>{{ row.adjustmentDescription }}</small>
+                </td>
+                <td>
+                  <strong>{{ row.adjustmentDate | date: 'shortDate' }}</strong
+                  ><small>Crédito {{ row.creditDate | date: 'shortDate' }}</small>
+                </td>
+                <td>
+                  <strong>{{ formatCurrency(row.adjustmentValue) }}</strong
+                  ><small>Líquido {{ formatCurrency(row.liquidValue) }}</small>
+                </td>
+                <td>
+                  <strong>{{ row.company || '-' }}</strong
+                  ><small>{{ row.acquirer || '-' }} · PV {{ row.establishment || '-' }}</small>
+                </td>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage"
+              ><tr>
+                <td colspan="7">Nenhum ajuste encontrado.</td>
+              </tr></ng-template
+            >
+          </p-table>
+        </p-tabpanel>
+
+        <p-tabpanel value="anticipations">
+          <p-table
+            [value]="anticipations()"
+            [lazy]="true"
+            [loading]="loading()"
+            [paginator]="true"
+            [rows]="pageSize()"
+            [totalRecords]="total('anticipations')"
+            styleClass="p-datatable-sm"
+            (onLazyLoad)="loadCurrent($event)"
+          >
+            <ng-template pTemplate="header"
+              ><tr>
+                <th>Arquivo</th>
+                <th>PV/RV</th>
+                <th>Parcela</th>
+                <th>Datas</th>
+                <th>Valores</th>
+                <th>Contexto</th>
+              </tr></ng-template
+            >
+            <ng-template pTemplate="body" let-row>
+              <tr>
+                <td>
+                  <strong>{{ row.processedFile }}</strong
+                  ><small>Linha {{ row.lineNumber }}</small>
+                </td>
+                <td>
+                  <strong>PV {{ row.pvNumber || '-' }}</strong
+                  ><small>RV {{ row.numberRvCorresponding || '-' }}</small>
+                </td>
+                <td>{{ row.installmentNumber || '-' }}/{{ row.installmentNumberMax || '-' }}</td>
+                <td>
+                  <strong>{{ row.releaseDate | date: 'shortDate' }}</strong
+                  ><small>Venc. original {{ row.originalDueDate | date: 'shortDate' }}</small>
+                </td>
+                <td>
+                  <strong>{{ formatCurrency(row.releaseValue) }}</strong
+                  ><small
+                    >Bruto {{ formatCurrency(row.grossValue) }} · Desc.
+                    {{ formatCurrency(row.discountRateValue) }}</small
+                  >
+                </td>
+                <td>
+                  <strong>{{ row.company || '-' }}</strong
+                  ><small>{{ row.acquirer || '-' }} · {{ row.flag || '-' }}</small>
+                </td>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage"
+              ><tr>
+                <td colspan="6">Nenhuma antecipação encontrada.</td>
+              </tr></ng-template
+            >
+          </p-table>
+        </p-tabpanel>
+
+        <p-tabpanel value="pending-debts">
+          <p-table
+            [value]="pendingDebts()"
+            [lazy]="true"
+            [loading]="loading()"
+            [paginator]="true"
+            [rows]="pageSize()"
+            [totalRecords]="total('pending-debts')"
+            styleClass="p-datatable-sm"
+            (onLazyLoad)="loadCurrent($event)"
+          >
+            <ng-template pTemplate="header"
+              ><tr>
+                <th>Arquivo</th>
+                <th>PV/NSU</th>
+                <th>Débito</th>
+                <th>Motivo</th>
+                <th>Valor</th>
+                <th>Contexto</th>
+              </tr></ng-template
+            >
+            <ng-template pTemplate="body" let-row>
+              <tr>
+                <td>
+                  <strong>{{ row.processedFile }}</strong
+                  ><small>Linha {{ row.lineNumber }}</small>
+                </td>
+                <td>
+                  <strong>PV {{ row.pvNumber || '-' }}</strong
+                  ><small>NSU {{ row.nsu || '-' }}</small>
+                </td>
+                <td>
+                  <strong>{{ row.numberDebitOrder || '-' }}</strong
+                  ><small>{{ row.dateDebitOrder | date: 'shortDate' }}</small>
+                </td>
+                <td>
+                  <strong>{{ row.reasonCode || '-' }}</strong
+                  ><small>{{ row.reasonDescription }}</small>
+                </td>
+                <td>
+                  <strong>{{ formatCurrency(row.valueDebitOrder) }}</strong
+                  ><small>Comp. {{ formatCurrency(row.compensatedValue) }}</small>
+                </td>
+                <td>
+                  <strong>{{ row.company || '-' }}</strong
+                  ><small>{{ row.acquirer || '-' }} · {{ row.flag || '-' }}</small>
+                </td>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage"
+              ><tr>
+                <td colspan="6">Nenhum débito pendente encontrado.</td>
+              </tr></ng-template
+            >
+          </p-table>
+        </p-tabpanel>
+
+        <p-tabpanel value="settled-debts">
+          <p-table
+            [value]="settledDebts()"
+            [lazy]="true"
+            [loading]="loading()"
+            [paginator]="true"
+            [rows]="pageSize()"
+            [totalRecords]="total('settled-debts')"
+            styleClass="p-datatable-sm"
+            (onLazyLoad)="loadCurrent($event)"
+          >
+            <ng-template pTemplate="header"
+              ><tr>
+                <th>Arquivo</th>
+                <th>PV/NSU</th>
+                <th>Débito</th>
+                <th>Liquidação</th>
+                <th>Motivo</th>
+                <th>Valor</th>
+              </tr></ng-template
+            >
+            <ng-template pTemplate="body" let-row>
+              <tr>
+                <td>
+                  <strong>{{ row.processedFile }}</strong
+                  ><small>Linha {{ row.lineNumber }}</small>
+                </td>
+                <td>
+                  <strong>PV {{ row.pvNumber || '-' }}</strong
+                  ><small>NSU {{ row.nsu || '-' }}</small>
+                </td>
+                <td>
+                  <strong>{{ row.numberDebitOrder || '-' }}</strong
+                  ><small>{{ row.dateDebitOrder | date: 'shortDate' }}</small>
+                </td>
+                <td>{{ row.liquidatedDate | date: 'shortDate' }}</td>
+                <td>
+                  <strong>{{ row.reasonCode || '-' }}</strong
+                  ><small>{{ row.reasonDescription }}</small>
+                </td>
+                <td>
+                  <strong>{{ formatCurrency(row.valueDebitOrder) }}</strong
+                  ><small>Liq. {{ formatCurrency(row.liquidatedValue) }}</small>
+                </td>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage"
+              ><tr>
+                <td colspan="6">Nenhum débito liquidado encontrado.</td>
+              </tr></ng-template
+            >
+          </p-table>
+        </p-tabpanel>
+
+        <p-tabpanel value="totalizers">
+          <p-table
+            [value]="totalizers()"
+            [lazy]="true"
+            [loading]="loading()"
+            [paginator]="true"
+            [rows]="pageSize()"
+            [totalRecords]="total('totalizers')"
+            styleClass="p-datatable-sm"
+            (onLazyLoad)="loadCurrent($event)"
+          >
+            <ng-template pTemplate="header"
+              ><tr>
+                <th>Tipo</th>
+                <th>Arquivo</th>
+                <th>PV</th>
+                <th>Data crédito</th>
+                <th>Créditos</th>
+                <th>Ajustes</th>
+                <th>Contexto</th>
+              </tr></ng-template
+            >
+            <ng-template pTemplate="body" let-row>
+              <tr>
+                <td><cs-tag [value]="row.type" severity="secondary"></cs-tag></td>
+                <td>
+                  <strong>{{ row.processedFile }}</strong
+                  ><small>Linha {{ row.lineNumber }}</small>
+                </td>
+                <td>{{ row.pvNumber || '-' }}</td>
+                <td>{{ row.creditDate | date: 'shortDate' }}</td>
+                <td>
+                  <strong>{{
+                    formatCurrency(row.totalCreditValue || row.totalValueNormalCredits)
+                  }}</strong
+                  ><small
+                    >Ant.
+                    {{
+                      formatCurrency(row.totalValueAdvanceCredits || row.totalValueAnticipated)
+                    }}</small
+                  >
+                </td>
+                <td>
+                  <strong>{{ formatCurrency(row.totalValueCreditAdjustments) }}</strong
+                  ><small>Déb. {{ formatCurrency(row.totalValueDebitAdjustments) }}</small>
+                </td>
+                <td>
+                  <strong>{{ row.company || '-' }}</strong
+                  ><small>{{ row.acquirer || '-' }} · PV {{ row.establishment || '-' }}</small>
+                </td>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage"
+              ><tr>
+                <td colspan="7">Nenhum totalizador encontrado.</td>
+              </tr></ng-template
+            >
+          </p-table>
+        </p-tabpanel>
+      </p-tabpanels>
+    </p-tabs>
+  </p-card>
+</div>

@@ -1,3 +1,4 @@
+import { CsTagTone } from '@shared/ui';
 import { I18nService } from '@core/i18n/i18n.service';
 
 export type EmailLogStatusInput = EmailLogStatus | string | number | null | undefined;
@@ -24,9 +25,7 @@ export const STATUS_CODE_MAP: Record<number, EmailLogStatus> = {
   2: EmailLogStatus.FAILED,
 };
 
-export function emailLogStatusSeverity(
-  status: EmailLogStatusInput,
-): 'success' | 'danger' | 'warn' | 'contrast' | 'info' {
+export function emailLogStatusSeverity(status: EmailLogStatusInput): CsTagTone {
   switch (normalizeEmailLogStatus(status)) {
     case EmailLogStatus.SENT:
       return 'success';

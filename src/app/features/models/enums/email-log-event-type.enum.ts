@@ -1,3 +1,4 @@
+import { CsTagTone } from '@shared/ui';
 import { I18nService } from '@core/i18n/i18n.service';
 
 export type EmailLogEventTypeInput = EmailLogEventType | string | number | null | undefined;
@@ -43,9 +44,7 @@ export function emailLogEventTypeStatusLabel(
   }
 }
 
-export function emailLogEventTypeSeverity(
-  status: EmailLogEventTypeInput,
-): 'success' | 'danger' | 'warn' | 'contrast' | 'info' {
+export function emailLogEventTypeSeverity(status: EmailLogEventTypeInput): CsTagTone {
   switch (normalizeEmailLogEventType(status)) {
     case EmailLogEventType.FIRST_PASSWORD:
       return 'success';

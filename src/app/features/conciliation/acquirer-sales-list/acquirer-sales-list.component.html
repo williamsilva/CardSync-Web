@@ -1,0 +1,92 @@
+<div class="cs-list-page">
+  <div class="cs-list-page__header">
+    <div>
+      <p class="cs-list-page__eyebrow">Conciliação</p>
+      <h1>Vendas da Adquirente</h1>
+      <span
+        >Analise todas as vendas importadas da adquirente, independente do vínculo com ERP ou
+        banco.</span
+      >
+    </div>
+    <div class="cs-actions">
+      <button
+        pButton
+        type="button"
+        icon="pi pi-refresh"
+        label="Atualizar"
+        severity="secondary"
+        [loading]="loading()"
+        (click)="load()"
+      ></button>
+    </div>
+  </div>
+
+  <p-card>
+    <p-table
+      [value]="rows()"
+      [lazy]="true"
+      [loading]="loading()"
+      [paginator]="true"
+      [rows]="pageSize()"
+      [totalRecords]="totalRecords()"
+      [rowsPerPageOptions]="[15, 30, 50]"
+      styleClass="p-datatable-sm"
+      (onLazyLoad)="load($event)"
+    >
+      <ng-template pTemplate="header"
+        ><tr>
+          <th>Venda</th>
+          <th>Identificação</th>
+          <th>Valores</th>
+          <th>Parcela</th>
+          <th>Contexto</th>
+          <th>Status</th>
+        </tr></ng-template
+      >
+      <ng-template pTemplate="body" let-row>
+        <tr>
+          <td>
+            <strong>{{ row.saleDate | date: 'shortDate' }}</strong
+            ><small>Arquivo {{ row.processedFile || '-' }}</small>
+          </td>
+          <td>
+            <strong>NSU {{ compactId(row.nsu) }}</strong
+            ><small>Aut. {{ row.authorization || '-' }} · RV {{ compactId(row.rvNumber) }}</small>
+          </td>
+          <td>
+            <strong>{{ formatCurrency(row.grossValue) }}</strong
+            ><small
+              >Taxa {{ formatCurrency(row.discountValue) }} · Líq.
+              {{ formatCurrency(row.liquidValue) }}</small
+            >
+          </td>
+          <td>{{ row.installmentNumber || '-' }}/{{ row.installmentTotal || '-' }}</td>
+          <td>
+            <strong>{{ row.company || '-' }}</strong
+            ><small
+              >{{ row.establishment || '-' }} · {{ row.acquirer || '-' }} ·
+              {{ row.flag || '-' }}</small
+            >
+          </td>
+          <td>
+            <div class="cs-inline-tags">
+              <cs-tag
+                [value]="statusLabel(row.reconciliationStatus)"
+                [tone]="statusSeverity(row.reconciliationStatus)"
+              ></cs-tag
+              ><cs-tag
+                [value]="statusLabel(row.statusPaymentBank)"
+                [tone]="statusSeverity(row.statusPaymentBank)"
+              ></cs-tag>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage"
+        ><tr>
+          <td colspan="6">Nenhum registro encontrado.</td>
+        </tr></ng-template
+      >
+    </p-table>
+  </p-card>
+</div>

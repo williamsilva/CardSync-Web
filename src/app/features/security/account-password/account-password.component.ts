@@ -1,4 +1,6 @@
+import { RouterModule } from '@angular/router';
 import { CommonModule, Location } from '@angular/common';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
   inject,
   signal,
@@ -8,7 +10,6 @@ import {
   DestroyRef,
   ChangeDetectionStrategy,
 } from '@angular/core';
-import { RouterModule } from '@angular/router';
 import {
   Validators,
   FormBuilder,
@@ -17,28 +18,26 @@ import {
   ValidationErrors,
   ReactiveFormsModule,
 } from '@angular/forms';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { merge } from 'rxjs';
-import { TranslateModule } from '@ngx-translate/core';
-import { debounceTime, distinctUntilChanged, finalize } from 'rxjs/operators';
-
 import { CardModule } from 'primeng/card';
-import { TagModule } from 'primeng/tag';
-import { BadgeModule } from 'primeng/badge';
 import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
 import { DividerModule } from 'primeng/divider';
 import { PasswordModule } from 'primeng/password';
 import { FloatLabelModule } from 'primeng/floatlabel';
+import { TranslateModule } from '@ngx-translate/core';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { debounceTime, distinctUntilChanged, finalize } from 'rxjs/operators';
 
 import { MeStore } from '@core/auth/me.store';
 import { I18nService } from '@core/i18n/i18n.service';
+import { CsTagComponent, CsTagTone } from '@shared/ui';
 import { ApiError } from '@core/errors/api-error.model';
 import { ToastService } from '@core/toast/toast.service';
 import { applyApiFieldErrors } from '@core/errors/form-errors.util';
 import { ErrorMapperService } from '@core/errors/error-mapper.service';
+import { CsBadgeComponent } from '@shared/ui/badge/cs-badge.component';
 import { ErrorMsgComponent } from '@shared/error-msg/error-msg.component';
 import { AccountPasswordService, PasswordRulesViewModel } from './account-password.service';
 
@@ -90,15 +89,15 @@ type PolicyRuleVm = {
   templateUrl: './account-password.component.html',
   imports: [
     CommonModule,
-    RouterModule,
     CardModule,
-    TagModule,
-    BadgeModule,
+    RouterModule,
     ButtonModule,
     TooltipModule,
     DividerModule,
     PasswordModule,
+    CsTagComponent,
     TranslateModule,
+    CsBadgeComponent,
     FloatLabelModule,
     ErrorMsgComponent,
     ReactiveFormsModule,
@@ -165,7 +164,7 @@ export class AccountPasswordComponent {
     return 'strong';
   });
 
-  readonly strengthBadgeSeverity = computed<'contrast' | 'warn' | 'info' | 'success'>(() => {
+  readonly strengthBadgeSeverity = computed<CsTagTone>(() => {
     switch (this.passwordStrengthLevel()) {
       case 'weak':
         return 'warn';
@@ -314,7 +313,7 @@ export class AccountPasswordComponent {
     return `${parts[0][0]}${parts[1][0]}`.toUpperCase();
   }
 
-  policySummarySeverity(): 'success' | 'warn' | 'danger' | 'contrast' {
+  policySummarySeverity(): CsTagTone {
     if (this.invalidRulesCount() > 0) return 'danger';
     if (this.validRulesCount() > 0) return 'success';
     return 'contrast';

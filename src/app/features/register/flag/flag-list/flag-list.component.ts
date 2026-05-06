@@ -2,7 +2,6 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Component, ViewChild, computed, inject, signal } from '@angular/core';
 
-import { TagModule } from 'primeng/tag';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { SelectModule } from 'primeng/select';
@@ -47,7 +46,6 @@ import {
   templateUrl: './flag-list.component.html',
   imports: [
     CommonModule,
-    TagModule,
     FloatLabel,
     FormsModule,
     TableModule,

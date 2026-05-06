@@ -1,0 +1,100 @@
+.cs-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+.cs-page__header {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-start;
+}
+.cs-page__header h1 {
+  margin: 0;
+  font-size: 1.875rem;
+  font-weight: 800;
+}
+.cs-page__header span,
+td small {
+  display: block;
+  color: var(--text-color-secondary);
+  margin-top: 0.25rem;
+}
+.cs-page__eyebrow {
+  margin: 0 0 0.25rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--primary-color);
+  font-weight: 700;
+  font-size: 0.75rem;
+}
+.cs-page__actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+.cs-metrics {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+}
+.cs-metric {
+  display: flex;
+  gap: 0.875rem;
+  align-items: center;
+}
+.cs-metric strong {
+  display: block;
+  font-size: 1.5rem;
+}
+.cs-metric small {
+  color: var(--text-color-secondary);
+}
+.cs-metric__icon {
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 1rem;
+  display: grid;
+  place-items: center;
+  background: color-mix(in srgb, var(--primary-color) 12%, transparent);
+  color: var(--primary-color);
+}
+.cs-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 1rem;
+}
+.cs-scheduler-card,
+.cs-shortcuts {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.cs-scheduler-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: center;
+  padding: 0.75rem;
+  border: 1px solid var(--surface-border);
+  border-radius: 1rem;
+}
+.cs-scheduler-row span {
+  display: block;
+  color: var(--text-color-secondary);
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+.text-right {
+  text-align: right;
+}
+@media (max-width: 960px) {
+  .cs-metrics,
+  .cs-grid {
+    grid-template-columns: 1fr;
+  }
+  .cs-page__header {
+    flex-direction: column;
+  }
+}

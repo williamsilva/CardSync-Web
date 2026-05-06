@@ -49,7 +49,29 @@ export class EstablishmentFacade {
       )
       .subscribe({
         next: (res) => {
-          this._options.set(res?._embedded?.content ?? []);
+          const options = res?._embedded?.content ?? [];
+
+          const sorted = [...options].sort((a, b) => {
+            const companyCompare = (a.company?.fantasyName ?? '').localeCompare(
+              b.company?.fantasyName ?? '',
+              'pt-BR',
+              {
+                sensitivity: 'base',
+                numeric: true,
+              },
+            );
+
+            if (companyCompare !== 0) {
+              return companyCompare;
+            }
+
+            return String(a.pvNumber ?? '').localeCompare(String(b.pvNumber ?? ''), 'pt-BR', {
+              sensitivity: 'base',
+              numeric: true,
+            });
+          });
+
+          this._options.set(sorted);
         },
         error: () => {
           this._options.set([]);

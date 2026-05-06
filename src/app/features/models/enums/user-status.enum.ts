@@ -1,3 +1,4 @@
+import { CsTagTone } from '@shared/ui';
 import { I18nService } from '@core/i18n/i18n.service';
 
 export enum UserStatus {
@@ -76,9 +77,7 @@ export function canLogin(status: UserStatusInput): boolean {
   return normalizeUserStatus(status) === UserStatus.ACTIVE;
 }
 
-export function userStatusSeverity(
-  status: UserStatusInput,
-): 'success' | 'danger' | 'warn' | 'contrast' | 'info' {
+export function userStatusSeverity(status: UserStatusInput): CsTagTone {
   switch (normalizeUserStatus(status)) {
     case UserStatus.ACTIVE:
       return 'success';
@@ -90,6 +89,8 @@ export function userStatusSeverity(
       return 'warn';
 
     case UserStatus.INACTIVE:
+      return 'bank';
+
     case UserStatus.DISABLED:
       return 'danger';
 

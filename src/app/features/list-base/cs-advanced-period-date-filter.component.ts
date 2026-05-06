@@ -30,6 +30,7 @@ import { DatePickerModule } from 'primeng/datepicker';
           optionLabel="label"
           [inputId]="periodInputId"
           [options]="periodOptions"
+          [disabled]="disabledPeriod"
           (ngModelChange)="periodChange.emit($event ?? null)"
         ></p-select>
 
@@ -73,6 +74,7 @@ export class CsAdvancedPeriodDateFilterComponent {
   @Input() periodOptions: any[] = [];
 
   @Input() disabled = false;
+  @Input() disabledPeriod = false;
   @Input() view: any = 'date';
   @Input() dateFormat = 'dd/mm/yy';
   @Input() selectionMode: any = 'single';

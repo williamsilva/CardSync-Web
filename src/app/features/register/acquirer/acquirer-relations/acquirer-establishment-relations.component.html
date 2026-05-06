@@ -53,17 +53,14 @@
         <td class="text-center">{{ item.pvNumber | csDocument }}</td>
 
         <td class="text-center">
-          <p-tag
-            [value]="typeEstablishmentEnumLabel(item.type)"
-            [severity]="severityTypeEstablishmentEnum(item.type)"
-          ></p-tag>
+          <cs-tag
+            [value]="statusLabel(item.status)"
+            [tone]="severityTypeEstablishmentEnum(item.status)"
+          />
         </td>
 
         <td class="text-center">
-          <p-tag
-            [value]="statusLabel(item.status)"
-            [severity]="statusSeverity(item.status)"
-          ></p-tag>
+          <cs-tag [value]="statusLabel(item.status)" [tone]="statusSeverity(item.status)" />
         </td>
 
         <td class="text-center">

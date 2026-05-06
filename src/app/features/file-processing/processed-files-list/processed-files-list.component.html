@@ -1,0 +1,81 @@
+<div class="cs-list-page">
+  <div class="cs-list-page__header">
+    <div>
+      <p class="cs-list-page__eyebrow">Importação</p>
+      <h1>Arquivos processados</h1>
+      <span>Acompanhe arquivos ERP/Rede, status, erros, avisos e pendências comerciais.</span>
+    </div>
+    <a pButton routerLink="../" icon="pi pi-chart-line" label="Dashboard" severity="secondary"></a>
+  </div>
+
+  <p-card>
+    <p-table
+      [value]="rows()"
+      [lazy]="true"
+      [loading]="loading()"
+      [paginator]="true"
+      [rows]="pageSize()"
+      [totalRecords]="totalRecords()"
+      [rowsPerPageOptions]="[10, 15, 25, 50]"
+      sortField="dateImport"
+      [sortOrder]="-1"
+      styleClass="p-datatable-sm"
+      (onLazyLoad)="load($event)"
+    >
+      <ng-template pTemplate="header">
+        <tr>
+          <th pSortableColumn="file">Arquivo <p-sortIcon field="file"></p-sortIcon></th>
+          <th>Origem</th>
+          <th pSortableColumn="status">Status <p-sortIcon field="status"></p-sortIcon></th>
+          <th>Linhas</th>
+          <th>Pendências</th>
+          <th pSortableColumn="dateImport">
+            Importação <p-sortIcon field="dateImport"></p-sortIcon>
+          </th>
+          <th></th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-file>
+        <tr>
+          <td class="cs-file-cell">
+            <strong>{{ file.file }}</strong
+            ><small>{{ file.statusMessage || file.errorMessage }}</small>
+          </td>
+          <td>{{ file.originFile || file.group || '-' }}</td>
+          <td><cs-tag [value]="file.status" [tone]="fileStatusSeverity(file.status)"></cs-tag></td>
+          <td>
+            <span>{{ file.processedLines || 0 }}/{{ file.totalLines || 0 }}</span>
+            <small>{{ file.warningLines || 0 }} avisos · {{ file.errorLines || 0 }} erros</small>
+          </td>
+          <td>
+            <span>{{
+              (file.pendingContractLines || 0) + (file.pendingBusinessContextLines || 0)
+            }}</span>
+            <small
+              >Contrato: {{ file.pendingContractLines || 0 }} · Contexto:
+              {{ file.pendingBusinessContextLines || 0 }}</small
+            >
+          </td>
+          <td>{{ file.dateImport | date: 'short' }}</td>
+          <td class="text-right">
+            <a
+              pButton
+              [routerLink]="[file.id]"
+              icon="pi pi-eye"
+              text
+              rounded
+              pTooltip="Detalhar"
+            ></a>
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="7">Nenhum arquivo processado encontrado.</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </p-card>
+</div>
