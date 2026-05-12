@@ -25,8 +25,8 @@ export class CsCurrencyPipe implements PipeTransform {
       queueMicrotask(() => this.cdr.markForCheck());
     }
 
-    const locale = this.i18n.getLocale();
-    const curr = currency ?? this.i18n.getCurrency();
+    const locale = this.i18n.getLocalePtBr();
+    const curr = currency ?? this.i18n.getCurrencyBrl();
     const num = typeof value === 'string' ? Number(value) : value;
 
     return new Intl.NumberFormat(locale, {

@@ -1,0 +1,17 @@
+<cs-page-header
+  [compact]="false"
+  [subtitle]="'transactions.erp.installment.subtitle' | translate"
+  [breadcrumb]="[
+    { label: ('breadcrumb.dashboard' | translate), url: '/' },
+    { label: ('breadcrumb.transactions.erp.installment' | translate) },
+  ]"
+>
+  <button
+    pButton
+    type="button"
+    (click)="refresh()"
+    icon="pi pi-refresh"
+    class="p-button-text p-button-sm"
+    [label]="'common.update' | translate"
+  ></button>
+</cs-page-header>

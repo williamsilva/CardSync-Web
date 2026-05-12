@@ -21,12 +21,6 @@ export const APP_MENU: AppMenuItem[] = [
       },
       {
         exact: false,
-        route: '/conciliation/sales',
-        labelKey: 'menu.conciliation.sales',
-        icon: 'pi pi-credit-card text-purple-500',
-      },
-      {
-        exact: false,
         route: '/conciliation/erp-vs-acquirer',
         labelKey: 'menu.conciliation.erpVsAcquirer',
         icon: 'pi pi-arrow-right-arrow-left text-purple-500',
@@ -71,18 +65,36 @@ export const APP_MENU: AppMenuItem[] = [
   },
   {
     icon: 'pi pi-briefcase text-teal-500',
-    labelKey: 'menu.erp.title',
+    labelKey: 'menu.transactions.erp.title',
     children: [
       {
         exact: false,
-        route: '/erp/sales',
-        labelKey: 'menu.erp.sales',
+        route: '/documents/erp/sales',
+        labelKey: 'menu.transactions.erp.sales',
         icon: 'pi pi-shopping-bag text-teal-400',
       },
       {
         exact: false,
-        route: '/erp/parcels',
-        labelKey: 'menu.erp.parcels',
+        route: '/documents/erp/installments',
+        labelKey: 'menu.transactions.erp.installments',
+        icon: 'pi pi-list-check text-teal-400',
+      },
+    ],
+  },
+  {
+    icon: 'pi pi-briefcase text-teal-500',
+    labelKey: 'menu.transactions.acq.title',
+    children: [
+      {
+        exact: false,
+        route: '/documents/acq/sales',
+        labelKey: 'menu.transactions.acq.sales',
+        icon: 'pi pi-shopping-bag text-teal-400',
+      },
+      {
+        exact: false,
+        route: '/documents/acq/installments',
+        labelKey: 'menu.transactions.acq.installments',
         icon: 'pi pi-list-check text-teal-400',
       },
     ],

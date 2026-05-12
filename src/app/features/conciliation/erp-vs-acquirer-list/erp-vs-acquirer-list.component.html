@@ -9,14 +9,39 @@
       <button
         pButton
         type="button"
+        icon="pi pi-sync"
+        label="Processar conciliação"
+        [loading]="reconciling()"
+        [disabled]="loading()"
+        pTooltip="Executa manualmente a conciliação ERP x adquirente"
+        tooltipPosition="bottom"
+        (click)="reconcileManually()"
+      ></button>
+
+      <button
+        pButton
+        type="button"
         icon="pi pi-refresh"
         label="Atualizar"
         severity="secondary"
         [loading]="loading()"
+        [disabled]="reconciling()"
         (click)="load()"
       ></button>
     </div>
   </div>
+
+  @if (lastResult(); as result) {
+    <p-card styleClass="cs-reconcile-summary">
+      <div class="cs-reconcile-summary__header">
+        <div>
+          <strong>Último processamento manual</strong>
+          <span>{{ resultSummary(result) }}</span>
+        </div>
+      </div>
+    </p-card>
+  }
+
   <p-card
     ><p-table
       [value]="rows()"

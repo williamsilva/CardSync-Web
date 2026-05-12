@@ -1,9 +1,9 @@
 <cs-page-header
   [compact]="false"
-  [subtitle]="'erp.sales.subtitle' | translate"
+  [subtitle]="'transactions.acq.sales.subtitle' | translate"
   [breadcrumb]="[
     { label: ('breadcrumb.dashboard' | translate), url: '/' },
-    { label: ('breadcrumb.erp.sales' | translate) },
+    { label: ('breadcrumb.transactions.acq.sales' | translate) },
   ]"
 >
   <button
@@ -37,9 +37,9 @@
       [periodOptions]="periodEnumOptions()"
       [view]="setViewFormat(periodSaleDate())"
       [dateFormat]="setDateFormat(periodSaleDate())"
-      [dateLabel]="'erp.fields.saleDate' | translate"
       [selectionMode]="setSelectionMode(periodSaleDate())"
-      [periodLabel]="'erp.fields.periodSaleDate' | translate"
+      [dateLabel]="'transactions.fields.saleDate' | translate"
+      [periodLabel]="'transactions.fields.periodSaleDate' | translate"
       (periodChange)="onPeriodColumnChange(periodSaleDate, saleDate, $event)"
     ></cs-advanced-period-date-filter>
 
@@ -53,9 +53,9 @@
       [disabled]="isExpectedPaymentDateDisabled()"
       [view]="setViewFormat(periodExpectedPaymentDate())"
       [dateFormat]="setDateFormat(periodExpectedPaymentDate())"
-      [dateLabel]="'erp.fields.expectedPaymentDate' | translate"
       [selectionMode]="setSelectionMode(periodExpectedPaymentDate())"
-      [periodLabel]="'erp.fields.periodExpectedPaymentDate' | translate"
+      [dateLabel]="'transactions.fields.expectedPaymentDate' | translate"
+      [periodLabel]="'transactions.fields.periodExpectedPaymentDate' | translate"
       (periodChange)="onPeriodColumnChange(periodExpectedPaymentDate, expectedPaymentDate, $event)"
       (valueChange)="expectedPaymentDate.set($event)"
     ></cs-advanced-period-date-filter>
@@ -72,9 +72,9 @@
       (valueChange)="paymentDate.set($event)"
       [view]="setViewFormat(periodPaymentDate())"
       [dateFormat]="setDateFormat(periodPaymentDate())"
-      [dateLabel]="'erp.fields.paymentDate' | translate"
       [selectionMode]="setSelectionMode(periodPaymentDate())"
-      [periodLabel]="'erp.fields.periodPaymentDate' | translate"
+      [dateLabel]="'transactions.fields.paymentDate' | translate"
+      [periodLabel]="'transactions.fields.periodPaymentDate' | translate"
       (periodChange)="onPeriodColumnChange(periodPaymentDate, paymentDate, $event)"
     ></cs-advanced-period-date-filter>
   </div>
@@ -92,22 +92,21 @@
       (valueChange)="conciliationDate.set($event)"
       [view]="setViewFormat(periodConciliationDate())"
       [dateFormat]="setDateFormat(periodConciliationDate())"
-      [dateLabel]="'erp.fields.conciliationDate' | translate"
       [selectionMode]="setSelectionMode(periodConciliationDate())"
-      [periodLabel]="'erp.fields.periodConciliationDate' | translate"
+      [dateLabel]="'transactions.fields.conciliationDate' | translate"
+      [periodLabel]="'transactions.fields.periodConciliationDate' | translate"
       (periodChange)="onPeriodColumnChange(periodConciliationDate, conciliationDate, $event)"
     ></cs-advanced-period-date-filter>
 
     <cs-advanced-multiselect-filter
-      [disabled]="true"
       optionLabel="label"
       optionValue="value"
-      inputId="conciliationStatus"
-      [value]="conciliationStatus()"
+      inputId="transactionStatus"
+      [value]="transactionStatus()"
       class="col-12 md:col-3 xl:col-2 p-1"
-      [options]="conciliationStatusOptions()"
-      (valueChange)="conciliationStatus.set($event)"
-      [label]="'erp.fields.conciliationStatus' | translate"
+      [options]="transactionStatusOptions()"
+      (valueChange)="transactionStatus.set($event)"
+      [label]="'transactions.fields.transactionStatus' | translate"
     ></cs-advanced-multiselect-filter>
 
     <cs-advanced-text-filter
@@ -115,7 +114,7 @@
       [value]="authorization()"
       class="col-12 md:col-3 xl:col-2 p-1"
       (valueChange)="authorization.set($event)"
-      [label]="'erp.fields.authorization' | translate"
+      [label]="'transactions.fields.authorization' | translate"
     ></cs-advanced-text-filter>
 
     <cs-advanced-text-filter
@@ -123,7 +122,7 @@
       [value]="cardNumber()"
       class="col-12 md:col-3 xl:col-2 p-1"
       (valueChange)="cardNumber.set($event)"
-      [label]="'erp.fields.cardNumber' | translate"
+      [label]="'transactions.fields.cardNumber' | translate"
     ></cs-advanced-text-filter>
 
     <cs-advanced-text-filter
@@ -131,7 +130,7 @@
       [value]="cvNsu()"
       (valueChange)="cvNsu.set($event)"
       class="col-12 md:col-3 xl:col-2 p-1"
-      [label]="'erp.fields.cvNsu' | translate"
+      [label]="'transactions.fields.cvNsu' | translate"
     ></cs-advanced-text-filter>
   </div>
 
@@ -141,7 +140,7 @@
       [value]="tid()"
       (valueChange)="tid.set($event)"
       class="col-12 md:col-3 xl:col-2 p-1"
-      [label]="'erp.fields.tid' | translate"
+      [label]="'transactions.fields.tid' | translate"
     ></cs-advanced-text-filter>
 
     <cs-advanced-multiselect-filter
@@ -152,7 +151,7 @@
       [options]="captureEnumOptions()"
       (valueChange)="capture.set($event)"
       class="col-12 md:col-3 xl:col-2 p-1"
-      [label]="'erp.fields.capture' | translate"
+      [label]="'transactions.fields.capture' | translate"
     ></cs-advanced-multiselect-filter>
 
     <cs-advanced-multiselect-filter
@@ -163,7 +162,7 @@
       [options]="modalityOptions()"
       class="col-12 md:col-3 xl:col-3 p-1"
       (valueChange)="modality.set($event)"
-      [label]="'erp.fields.modality' | translate"
+      [label]="'transactions.fields.modality' | translate"
     ></cs-advanced-multiselect-filter>
 
     <cs-advanced-text-filter
@@ -172,9 +171,11 @@
       [value]="machine()"
       (valueChange)="machine.set($event)"
       class="col-12 md:col-3 xl:col-2 p-1"
-      [label]="'erp.fields.machine' | translate"
+      [label]="'transactions.fields.machine' | translate"
     ></cs-advanced-text-filter>
+  </div>
 
+  <div class="grid formgrid gap-0 align-items-end">
     <cs-advanced-multiselect-filter
       optionValue="id"
       inputId="acquirer"
@@ -183,7 +184,7 @@
       [options]="acquirersOptions()"
       class="col-12 md:col-3 xl:col-3 p-1"
       (valueChange)="acquirers.set($event)"
-      [label]="'erp.fields.acquirer' | translate"
+      [label]="'transactions.fields.acquirer' | translate"
     >
       <ng-template csAdvancedFilterItem let-option>
         <div class="cs-option-item">
@@ -194,9 +195,7 @@
         </div>
       </ng-template>
     </cs-advanced-multiselect-filter>
-  </div>
 
-  <div class="grid formgrid gap-0 align-items-end">
     <cs-advanced-multiselect-filter
       inputId="flags"
       optionValue="id"
@@ -205,7 +204,7 @@
       [options]="flagsOptions()"
       (valueChange)="flags.set($event)"
       class="col-12 md:col-3 xl:col-3 p-1"
-      [label]="'erp.fields.flag' | translate"
+      [label]="'transactions.fields.flag' | translate"
     ></cs-advanced-multiselect-filter>
 
     <cs-advanced-multiselect-filter
@@ -216,7 +215,7 @@
       [options]="establishmentsOptions()"
       class="col-12 md:col-3 xl:col-3 p-1"
       (valueChange)="establishments.set($event)"
-      [label]="'erp.fields.establishment' | translate"
+      [label]="'transactions.fields.establishment' | translate"
     >
       <ng-template csAdvancedFilterItem let-option>
         <div class="cs-option-item">
@@ -239,7 +238,7 @@
       [options]="companiesOptions()"
       class="col-12 md:col-3 xl:col-3 p-1"
       (valueChange)="companies.set($event)"
-      [label]="'erp.fields.company' | translate"
+      [label]="'transactions.fields.company' | translate"
     >
       <ng-template csAdvancedFilterItem let-option>
         <div class="cs-option-item">
@@ -251,6 +250,48 @@
       </ng-template>
     </cs-advanced-multiselect-filter>
   </div>
+
+  <div class="grid formgrid gap-0 align-items-end">
+    <cs-currency-range-filter
+      inputId="grossValue"
+      [value]="grossValueRange()"
+      class="col-12 md:col-6 xl:col-3 p-1"
+      [endLabel]="'common.filters.final' | translate"
+      (valueChange)="onGrossValueRangeChange($event)"
+      [startLabel]="'common.filters.initial' | translate"
+      [label]="'transactions.fields.grossValue' | translate"
+    ></cs-currency-range-filter>
+
+    <cs-currency-range-filter
+      inputId="discountValue"
+      [value]="discountValueRange()"
+      class="col-12 md:col-6 xl:col-3 p-1"
+      [endLabel]="'common.filters.final' | translate"
+      (valueChange)="onDiscountValueRangeChange($event)"
+      [startLabel]="'common.filters.initial' | translate"
+      [label]="'transactions.fields.discountValue' | translate"
+    ></cs-currency-range-filter>
+
+    <cs-currency-range-filter
+      inputId="liquidValue"
+      [value]="liquidValueRange()"
+      class="col-12 md:col-6 xl:col-3 p-1"
+      [endLabel]="'common.filters.final' | translate"
+      (valueChange)="onLiquidValueRangeChange($event)"
+      [startLabel]="'common.filters.initial' | translate"
+      [label]="'transactions.fields.liquidValue' | translate"
+    ></cs-currency-range-filter>
+
+    <cs-currency-range-filter
+      inputId="adjustments"
+      [value]="adjustmentValueRange()"
+      class="col-12 md:col-6 xl:col-3 p-1"
+      [endLabel]="'common.filters.final' | translate"
+      [startLabel]="'common.filters.initial' | translate"
+      (valueChange)="onAdjustmentValueRangeChange($event)"
+      [label]="'transactions.fields.adjustmentValue' | translate"
+    ></cs-currency-range-filter>
+  </div>
 </cs-filters-panel>
 
 <div class="surface-card border-round p-3 mt-3">
@@ -261,26 +302,29 @@
       pButton
       type="button"
       icon="pi pi-calculator"
-      label="Calcular Totais"
       (click)="calculateTotals()"
       class="p-button-success p-button-sm"
-      [loading]="erpSalesFacade.totalsLoading()"
+      [loading]="acqSalesFacade.totalsLoading()"
+      [label]="'common.calculateTotals' | translate"
     ></button>
 
-    @if (erpSalesFacade.totals(); as totals) {
+    @if (acqSalesFacade.totals(); as totals) {
       <div class="flex flex-wrap gap-2 text-sm">
-        <span class="px-2 py-1 border-round surface-100">Qtd: {{ totals.quantity }}</span>
         <span class="px-2 py-1 border-round surface-100"
-          >Bruto: {{ totals.totalGrossValue | csCurrency }}</span
+          >{{ 'common.quantity' | translate }}: {{ totals.quantity }}</span
         >
         <span class="px-2 py-1 border-round surface-100"
-          >Taxa: {{ totals.totalFeeValue | csCurrency }}</span
+          >{{ 'common.grossValue' | translate }}: {{ totals.totalGrossValue | csCurrency }}</span
         >
         <span class="px-2 py-1 border-round surface-100"
-          >Líquido: {{ totals.totalNetValue | csCurrency }}</span
+          >{{ 'common.discountValue' | translate }}: {{ totals.totalFeeValue | csCurrency }}</span
         >
         <span class="px-2 py-1 border-round surface-100"
-          >Ajustes: {{ totals.totalAdjustments | csCurrency }}</span
+          >{{ 'common.liquidValue' | translate }}: {{ totals.totalNetValue | csCurrency }}</span
+        >
+        <span class="px-2 py-1 border-round surface-100"
+          >{{ 'common.adjustmentValue' | translate }}:
+          {{ totals.totalAdjustments | csCurrency }}</span
         >
       </div>
     }
@@ -299,14 +343,13 @@
     [paginator]="true"
     sortMode="multiple"
     stateStorage="local"
-    class="p-datatable-sm"
-    styleClass="cs-admin-table"
+    class="cs-admin-table"
     [stateKey]="tableStateKey()"
     [showCurrentPageReport]="true"
     (onPage)="onPageChange($event)"
     [totalRecords]="totalRecords()"
     (onLazyLoad)="onLazyLoad($event)"
-    [loading]="erpSalesFacade.loading()"
+    [loading]="acqSalesFacade.loading()"
     [paginatorDropdownAppendTo]="'body'"
     [rowsPerPageOptions]="rowsPerPageOptions"
     [currentPageReportTemplate]="'pagination.report' | translate"
@@ -316,20 +359,22 @@
       <colgroup>
         <col style="width: 120px" />
         <col style="width: 120px" />
-        <col style="width: 170px" />
-        <col style="width: 170px" />
-        <col style="width: 150px" />
-        <col style="width: 150px" />
         <col style="width: 130px" />
+        <col style="width: 100px" />
+        <col style="width: 100px" />
         <col style="width: 120px" />
         <col style="width: 120px" />
         <col style="width: 120px" />
+        <col style="width: 90px" />
+        <col style="width: 90px" />
+        <col style="width: 90px" />
+        <col style="width: 90px" />
+        <col style="width: 100px" />
         <col style="width: 120px" />
         <col style="width: 120px" />
-        <col style="width: 130px" />
-        <col style="width: 120px" />
-        <col style="width: 120px" />
-        <col style="width: 120px" />
+        <col style="width: 60px" />
+        <col style="width: 60px" />
+        <col style="width: 60px" />
       </colgroup>
     </ng-template>
 
@@ -337,7 +382,7 @@
       <tr>
         <th pSortableColumn="saleDate">
           <div class="th-flex text-center">
-            <span class="th-label">{{ 'erp.columns.saleDate' | translate }}</span>
+            <span class="th-label">{{ 'transactions.columns.saleDate' | translate }}</span>
             <span class="th-icons">
               <p-sortIcon field="saleDate"></p-sortIcon>
 
@@ -421,7 +466,7 @@
                       ></p-datepicker>
 
                       <label for="saleDateColumnDraft">
-                        {{ 'erp.columns.saleDate' | translate }}
+                        {{ 'transactions.columns.saleDate' | translate }}
                       </label>
                     </p-floatLabel>
                   </cs-column-filter-shell>
@@ -433,7 +478,9 @@
 
         <th pSortableColumn="expectedPaymentDate">
           <div class="th-flex text-center">
-            <span class="th-label">{{ 'erp.columns.expectedPaymentDate' | translate }}</span>
+            <span class="th-label">{{
+              'transactions.columns.expectedPaymentDate' | translate
+            }}</span>
             <span class="th-icons">
               <p-sortIcon field="expectedPaymentDate"></p-sortIcon>
 
@@ -519,7 +566,7 @@
                       ></p-datepicker>
 
                       <label for="expectedPaymentDateColumnDraft">
-                        {{ 'erp.columns.expectedPaymentDate' | translate }}
+                        {{ 'transactions.columns.expectedPaymentDate' | translate }}
                       </label>
                     </p-floatLabel>
                   </cs-column-filter-shell>
@@ -531,7 +578,7 @@
 
         <th pSortableColumn="company">
           <div class="th-flex text-center">
-            <span class="th-label">{{ 'erp.columns.company' | translate }}</span>
+            <span class="th-label">{{ 'transactions.columns.company' | translate }}</span>
             <span class="th-icons">
               <p-sortIcon field="company"></p-sortIcon>
               <p-columnFilter
@@ -605,7 +652,7 @@
 
         <th pSortableColumn="establishment">
           <div class="th-flex text-center">
-            <span class="th-label">{{ 'erp.columns.establishment' | translate }}</span>
+            <span class="th-label">{{ 'transactions.columns.establishment' | translate }}</span>
             <span class="th-icons">
               <p-sortIcon field="establishment"></p-sortIcon>
               <p-columnFilter
@@ -645,8 +692,8 @@
                       type="text"
                       class="w-full p-inputtext-sm"
                       [ngModel]="establishmentColumnDraft()"
-                      [placeholder]="'erp.fields.establishment' | translate"
                       (ngModelChange)="establishmentColumnDraft.set($event ?? '')"
+                      [placeholder]="'transactions.fields.establishment' | translate"
                     />
                   </cs-column-filter-shell>
                 </ng-template>
@@ -657,7 +704,7 @@
 
         <th pSortableColumn="modality">
           <div class="th-flex text-center">
-            <span class="th-label">{{ 'erp.columns.modality' | translate }}</span>
+            <span class="th-label">{{ 'transactions.columns.modality' | translate }}</span>
             <span class="th-icons">
               <p-sortIcon field="modality"></p-sortIcon>
               <p-columnFilter
@@ -718,7 +765,7 @@
 
         <th pSortableColumn="capture">
           <div class="th-flex text-center">
-            <span class="th-label">{{ 'erp.columns.capture' | translate }}</span>
+            <span class="th-label">{{ 'transactions.columns.capture' | translate }}</span>
             <span class="th-icons">
               <p-sortIcon field="capture"></p-sortIcon>
               <p-columnFilter
@@ -779,7 +826,7 @@
 
         <th pSortableColumn="acquirer">
           <div class="th-flex text-center">
-            <span class="th-label">{{ 'erp.columns.acquirer' | translate }}</span>
+            <span class="th-label">{{ 'transactions.columns.acquirer' | translate }}</span>
             <span class="th-icons">
               <p-sortIcon field="acquirer"></p-sortIcon>
               <p-columnFilter
@@ -837,7 +884,7 @@
 
         <th pSortableColumn="flag">
           <div class="th-flex text-center">
-            <span class="th-label">{{ 'erp.columns.flag' | translate }}</span>
+            <span class="th-label">{{ 'transactions.columns.flag' | translate }}</span>
             <span class="th-icons">
               <p-sortIcon field="flag"></p-sortIcon>
               <p-columnFilter
@@ -882,7 +929,7 @@
 
         <th pSortableColumn="grossValue">
           <div class="th-flex text-center">
-            <span class="th-label">{{ 'erp.columns.grossValue' | translate }}</span>
+            <span class="th-label">{{ 'transactions.columns.grossValue' | translate }}</span>
             <span class="th-icons">
               <p-sortIcon field="grossValue"></p-sortIcon>
               <p-columnFilter
@@ -924,7 +971,7 @@
                       inputmode="decimal"
                       class="w-full p-inputtext-sm"
                       [ngModel]="grossValueColumnDraft()"
-                      [placeholder]="'erp.fields.grossValue' | translate"
+                      [placeholder]="'transactions.fields.grossValue' | translate"
                       (ngModelChange)="grossValueColumnDraft.set($event ?? '')"
                     />
                   </cs-column-filter-shell>
@@ -936,7 +983,7 @@
 
         <th pSortableColumn="discountValue">
           <div class="th-flex text-center">
-            <span class="th-label">{{ 'erp.columns.discountValue' | translate }}</span>
+            <span class="th-label">{{ 'transactions.columns.discountValue' | translate }}</span>
             <span class="th-icons">
               <p-sortIcon field="discountValue"></p-sortIcon>
               <p-columnFilter
@@ -978,7 +1025,7 @@
                       inputmode="decimal"
                       class="w-full p-inputtext-sm"
                       [ngModel]="discountValueColumnDraft()"
-                      [placeholder]="'erp.fields.discountValue' | translate"
+                      [placeholder]="'transactions.fields.rate' | translate"
                       (ngModelChange)="discountValueColumnDraft.set($event ?? '')"
                     />
                   </cs-column-filter-shell>
@@ -990,7 +1037,7 @@
 
         <th pSortableColumn="liquidValue">
           <div class="th-flex text-center">
-            <span class="th-label">{{ 'erp.columns.liquidValue' | translate }}</span>
+            <span class="th-label">{{ 'transactions.columns.liquidValue' | translate }}</span>
             <span class="th-icons">
               <p-sortIcon field="liquidValue"></p-sortIcon>
               <p-columnFilter
@@ -1032,7 +1079,7 @@
                       inputmode="decimal"
                       class="w-full p-inputtext-sm"
                       [ngModel]="liquidValueColumnDraft()"
-                      [placeholder]="'erp.fields.liquidValue' | translate"
+                      [placeholder]="'transactions.fields.liquid' | translate"
                       (ngModelChange)="liquidValueColumnDraft.set($event ?? '')"
                     />
                   </cs-column-filter-shell>
@@ -1044,7 +1091,7 @@
 
         <th pSortableColumn="adjustmentValue">
           <div class="th-flex text-center">
-            <span class="th-label">{{ 'erp.columns.adjustmentValue' | translate }}</span>
+            <span class="th-label">{{ 'transactions.columns.adjustmentValue' | translate }}</span>
             <span class="th-icons">
               <p-sortIcon field="adjustmentValue"></p-sortIcon>
               <p-columnFilter
@@ -1086,7 +1133,7 @@
                       inputmode="decimal"
                       class="w-full p-inputtext-sm"
                       [ngModel]="adjustmentValueColumnDraft()"
-                      [placeholder]="'erp.fields.adjustmentValue' | translate"
+                      [placeholder]="'transactions.fields.adjustment' | translate"
                       (ngModelChange)="adjustmentValueColumnDraft.set($event ?? '')"
                     />
                   </cs-column-filter-shell>
@@ -1098,7 +1145,7 @@
 
         <th pSortableColumn="installment">
           <div class="th-flex text-center">
-            <span class="th-label">{{ 'erp.columns.installment' | translate }}</span>
+            <span class="th-label">{{ 'transactions.columns.installment' | translate }}</span>
             <span class="th-icons">
               <p-sortIcon field="installment"></p-sortIcon>
               <p-columnFilter
@@ -1109,10 +1156,10 @@
                 [showOperator]="false"
                 [showAddButton]="false"
                 [showMatchModes]="true"
+                #installmentColumnFilter
                 [showClearButton]="false"
                 [showApplyButton]="false"
                 styleClass="cs-colfilter"
-                #installmentColumnFilter
               >
                 <ng-template pTemplate="filter" let-value let-filter="filterCallback">
                   <cs-column-filter-shell
@@ -1140,7 +1187,7 @@
                       inputmode="numeric"
                       class="w-full p-inputtext-sm"
                       [ngModel]="installmentColumnDraft()"
-                      [placeholder]="'erp.fields.installment' | translate"
+                      [placeholder]="'transactions.fields.installments' | translate"
                       (ngModelChange)="setIntegerColumnDraft(installmentColumnDraft, $event)"
                     />
                   </cs-column-filter-shell>
@@ -1152,7 +1199,7 @@
 
         <th pSortableColumn="cvNsu">
           <div class="th-flex text-center">
-            <span class="th-label">{{ 'erp.columns.cvNsu' | translate }}</span>
+            <span class="th-label">{{ 'transactions.columns.cvNsu' | translate }}</span>
             <span class="th-icons">
               <p-sortIcon field="cvNsu"></p-sortIcon>
               <p-columnFilter
@@ -1182,7 +1229,7 @@
                       inputmode="numeric"
                       [ngModel]="cvNsuColumnDraft()"
                       class="w-full p-inputtext-sm"
-                      [placeholder]="'erp.fields.cvNsu' | translate"
+                      [placeholder]="'transactions.fields.cvNsu' | translate"
                       (ngModelChange)="setIntegerColumnDraft(cvNsuColumnDraft, $event)"
                     />
                   </cs-column-filter-shell>
@@ -1194,7 +1241,7 @@
 
         <th pSortableColumn="authorization">
           <div class="th-flex text-center">
-            <span class="th-label">{{ 'erp.columns.authorization' | translate }}</span>
+            <span class="th-label">{{ 'transactions.columns.authorization' | translate }}</span>
             <span class="th-icons">
               <p-sortIcon field="authorization"></p-sortIcon>
               <p-columnFilter
@@ -1234,7 +1281,7 @@
                       type="text"
                       class="w-full p-inputtext-sm"
                       [ngModel]="authorizationColumnDraft()"
-                      [placeholder]="'erp.fields.authorization' | translate"
+                      [placeholder]="'transactions.fields.authorization' | translate"
                       (ngModelChange)="setIntegerColumnDraft(authorizationColumnDraft, $event)"
                     />
                   </cs-column-filter-shell>
@@ -1244,16 +1291,18 @@
           </div>
         </th>
 
-        <th class="text-center">Parcelas</th>
+        <th class="text-center">{{ 'transactions.fields.sale' | translate }}</th>
+        <th class="text-center">{{ 'transactions.fields.installments' | translate }}</th>
+        <th class="text-center">{{ 'common.search' | translate }}</th>
       </tr>
     </ng-template>
 
-    <ng-template pTemplate="body" let-row>
+    <ng-template pTemplate="body" let-row let-expanded="expanded">
       <tr>
         <td class="cell-muted text-center">{{ row.saleDate | csDate: 'short' }}</td>
         <td class="cell-muted text-center">{{ row.expectedPaymentDate | csDate: 'date' }}</td>
-        <td>{{ row.companyName || '-' }}</td>
-        <td>{{ row.establishmentPvNumber || '-' }}</td>
+        <td>{{ row.company?.fantasyName || '-' }}</td>
+        <td>{{ row.establishment?.pvNumber || '-' }}</td>
         <td class="cell-muted text-center">
           <cs-tag [value]="modalityLabel(row.modality)" [tone]="modalitySeverity(row.modality)" />
         </td>
@@ -1263,26 +1312,116 @@
             [tone]="captureEnumSeverity(row.capture)"
           />
         </td>
-
         <td>{{ row.acquirer?.fantasyName || '-' }}</td>
         <td>{{ row.flag?.name || '-' }}</td>
         <td class="text-right">{{ row.grossValue | csCurrency }}</td>
-        <td class="text-right">{{ row.feeValue | csCurrency }}</td>
-        <td class="text-right">{{ row.netValue | csCurrency }}</td>
+        <td class="text-right">
+          <div class="cs-cell-with-info justify-content-end">
+            <span>{{ row.discountValue | csCurrency }}</span>
+            <i
+              [escape]="false"
+              tooltipPosition="top"
+              [pTooltip]="discountTooltip(row)"
+              tooltipStyleClass="cs-info-tooltip"
+              class="pi pi-info-circle cs-inline-info-icon"
+            ></i>
+          </div>
+        </td>
+        <td class="text-right">{{ row.liquidValue | csCurrency }}</td>
         <td class="text-center">{{ row.adjustmentValue | csCurrency }}</td>
         <td class="text-center">{{ row.installment }}</td>
+        <td class="text-center">
+          <div class="cs-cell-with-info justify-content-center">
+            <span>{{ row.cvNsu || '-' }}</span>
 
-        <td>{{ row.cvNsu || '-' }}</td>
+            @if (hasCvNsu(row)) {
+              <i
+                [escape]="false"
+                tooltipPosition="top"
+                [pTooltip]="cvNsuTooltip(row)"
+                tooltipStyleClass="cs-info-tooltip"
+                class="pi pi-info-circle cs-inline-info-icon"
+              ></i>
+            }
+          </div>
+        </td>
         <td>{{ row.authorization || '-' }}</td>
 
-        <td class="text-center"></td>
+        <td class="text-center">
+          <div class="table-actions justify-content-center">
+            <i
+              [escape]="false"
+              tooltipPosition="left"
+              [class]="saleStatusIcon(row)"
+              [pTooltip]="installmentStatusTooltip(row)"
+              [tooltipStyleClass]="installmentStatusTooltipClass(row)"
+            ></i>
+          </div>
+        </td>
+
+        <td class="text-center">
+          <div class="table-actions justify-content-center">
+            <button
+              text
+              pButton
+              rounded
+              size="small"
+              type="button"
+              [pRowToggler]="row"
+              tooltipPosition="left"
+              class="p-button-text p-button-sm"
+              [pTooltip]="'common.viewInstallments' | translate"
+              [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+            ></button>
+          </div>
+        </td>
+
+        <td class="text-center">
+          <div class="table-actions justify-content-center">
+            <p-menu
+              #searchMenu
+              [popup]="true"
+              appendTo="body"
+              styleClass="cs-search-menu"
+              [model]="searchActions(row)"
+            ></p-menu>
+
+            <button
+              text
+              pButton
+              rounded
+              size="small"
+              type="button"
+              icon="pi pi-search"
+              tooltipPosition="left"
+              class="p-button-text p-button-sm"
+              [pTooltip]="'common.search' | translate"
+              (click)="searchMenu.toggle($event)"
+            ></button>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template #expandedrow let-row>
+      <tr>
+        <td colspan="18" class="p-3 surface-ground flag-expanded-cell">
+          <div
+            class="flag-expanded-wrap"
+            style="--flag-rel-card-width: 70%; --flag-rel-card-max-width: 80%"
+          >
+            <app-transactions-acquires-sales-installments-table
+              [transaction]="row"
+            ></app-transactions-acquires-sales-installments-table>
+          </div>
+        </td>
       </tr>
     </ng-template>
 
     <ng-template pTemplate="emptymessage">
       <tr>
-        <td colspan="16" class="text-center py-4 text-500">
-          Nenhuma venda ERP encontrada para os filtros informados.
+        <td colspan="18" class="text-center py-4 text-500">
+          {{ 'pagination.emptymessage' | translate }}
         </td>
       </tr>
     </ng-template>

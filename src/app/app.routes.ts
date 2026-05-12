@@ -1,9 +1,9 @@
 import { Routes } from '@angular/router';
 
-import { authGuard } from './core/auth/auth.guard';
-import { permissionGuard } from './core/auth/permission.guard';
-import { PERMISSIONS } from './core/auth/permissions.constants';
-import { LayoutComponent } from './layout/layout.component';
+import { authGuard } from '@core/auth/auth.guard';
+import { LayoutComponent } from '@layout/layout.component';
+import { permissionGuard } from '@core/auth/permission.guard';
+import { PERMISSIONS } from '@core/auth/permissions.constants';
 
 export const appRoutes: Routes = [
   {
@@ -14,25 +14,29 @@ export const appRoutes: Routes = [
       { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
 
       {
-        path: 'erp',
+        path: 'documents',
         loadChildren: () =>
-          import('./features/erp/transactions-erp.routes').then((m) => m.ERP_ROUTES),
+          import('./features/documents/documents.routes').then((m) => m.DOCUMENTS_ROUTES),
       },
+
       {
         path: 'conciliation',
         loadChildren: () =>
           import('./features/conciliation/conciliation.routes').then((m) => m.CONCILIATION_ROUTES),
       },
+
       {
         path: 'register',
         loadChildren: () =>
           import('./features/register/register.routes').then((m) => m.REGISTER_ROUTES),
       },
+
       {
         path: 'security',
         loadChildren: () =>
           import('./features/security/security.routes').then((m) => m.SECURITY_ROUTES),
       },
+
       {
         path: 'file-processing',
         loadChildren: () =>

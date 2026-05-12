@@ -20,6 +20,7 @@ import {
   LOCALE_COOKIE,
   normalizeLang,
 } from './i18n.config';
+import { PeriodEnum } from '@models/enums/period.enum';
 
 type I18nSyncMessage = {
   type: 'lang-changed';
@@ -69,6 +70,14 @@ export class I18nService {
 
   getLocale(): 'pt-BR' | 'en-US' | 'es-ES' {
     return LANG_CONFIG[this.appliedLang()].locale;
+  }
+
+  getLocalePtBr(): 'pt-BR' {
+    return 'pt-BR';
+  }
+
+  getCurrencyBrl(): 'BRL' {
+    return 'BRL';
   }
 
   getCurrency(): 'BRL' | 'USD' | 'EUR' {
@@ -154,6 +163,137 @@ export class I18nService {
     if (typeof defaultValue === 'string' && defaultValue.trim()) return defaultValue;
 
     return fallback ?? key;
+  }
+
+  formatBrlCurrency(
+    value: unknown,
+    options?: {
+      fallbackKey?: UiKey;
+      minimumFractionDigits?: number;
+      maximumFractionDigits?: number;
+    },
+  ): string {
+    return this.formatCurrency(value, {
+      ...options,
+      currency: 'BRL',
+    });
+  }
+
+  getDateFormatByPeriod(period: PeriodEnum | null | undefined): string {
+    switch (period) {
+      case PeriodEnum.MONTH:
+        return this.getMonthYearFormat();
+
+      case PeriodEnum.YEAR:
+        return this.getYearFormat();
+
+      case PeriodEnum.DAY:
+      case PeriodEnum.START:
+      case PeriodEnum.END:
+      case PeriodEnum.INTERVAL:
+      default:
+        return this.getDateFormat();
+    }
+  }
+
+  getDateFormat(): string {
+    const locale = this.getDateLocale();
+
+    switch (locale) {
+      case 'en-US':
+        return 'mm/dd/yy';
+
+      case 'es-ES':
+        return 'dd/mm/yy';
+
+      case 'pt-BR':
+      default:
+        return 'dd/mm/yy';
+    }
+  }
+
+  getMonthYearFormat(): string {
+    return 'mm/yy';
+  }
+
+  getYearFormat(): string {
+    return 'yy';
+  }
+
+  formatDateValue(value: string | Date | null | undefined): string | null {
+    if (!value) {
+      return null;
+    }
+
+    const date = value instanceof Date ? value : this.parseDatePreservingDay(value);
+
+    if (!date) {
+      return null;
+    }
+
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = String(date.getFullYear());
+
+    const locale = this.getDateLocale();
+
+    switch (locale) {
+      case 'en-US':
+        return `${month}/${day}/${year}`;
+
+      case 'es-ES':
+      case 'pt-BR':
+      default:
+        return `${day}/${month}/${year}`;
+    }
+  }
+
+  private parseDatePreservingDay(value: string): Date | null {
+    /**
+     * Mantém o dia original quando vier ISO do backend:
+     * 2026-05-11
+     * 2026-05-11T00:00:00Z
+     * 2026-05-11T03:00:00-03:00
+     */
+    const isoDateMatch = value.match(/^(\d{4})-(\d{2})-(\d{2})/);
+
+    if (isoDateMatch) {
+      const [, year, month, day] = isoDateMatch;
+
+      return new Date(Number(year), Number(month) - 1, Number(day));
+    }
+
+    const parsed = new Date(value);
+
+    return Number.isNaN(parsed.getTime()) ? null : parsed;
+  }
+
+  private formatCurrency(
+    value: unknown,
+    options?: {
+      currency?: 'BRL' | 'USD' | 'EUR';
+      locale?: 'pt-BR' | 'en-US' | 'es-ES';
+      fallbackKey?: UiKey;
+      minimumFractionDigits?: number;
+      maximumFractionDigits?: number;
+    },
+  ): string {
+    if (value === null || value === undefined || value === '') {
+      return this.tUi(options?.fallbackKey ?? 'common.notInformed');
+    }
+
+    const numericValue = Number(value);
+
+    if (Number.isNaN(numericValue)) {
+      return String(value);
+    }
+
+    return new Intl.NumberFormat(options?.locale ?? this.getLocale(), {
+      style: 'currency',
+      currency: options?.currency ?? this.getCurrency(),
+      minimumFractionDigits: options?.minimumFractionDigits ?? 2,
+      maximumFractionDigits: options?.maximumFractionDigits ?? 2,
+    }).format(numericValue);
   }
 
   private async applyAll(lang: Lang, syncAcrossTabs: boolean): Promise<void> {

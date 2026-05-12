@@ -19,10 +19,9 @@
   <p-table
     size="small"
     showGridlines
-    styleClass="cs-admin-table"
-    class="p-datatable-sm mt-1"
     [tableStyle]="{ width: '100%' }"
     [value]="acquirer().establishments ?? []"
+    class="p-datatable-sm mt-1 cs-admin-table"
   >
     <ng-template pTemplate="colgroup">
       <colgroup>

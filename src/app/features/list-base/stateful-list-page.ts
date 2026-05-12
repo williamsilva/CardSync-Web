@@ -160,17 +160,8 @@ export abstract class StatefulListPage<
     }
   }
 
-  setDateFormat(period: PeriodEnum | null): string {
-    switch (period) {
-      case PeriodEnum.DAY:
-        return 'dd/mm/yy';
-      case PeriodEnum.MONTH:
-        return 'mm/yy';
-      case PeriodEnum.YEAR:
-        return 'yy';
-      default:
-        return 'dd/mm/yy';
-    }
+  setDateFormat(period: PeriodEnum | null, _lang?: unknown): string {
+    return this.i18n.getDateFormatByPeriod(period);
   }
 
   setSelectionMode(period: PeriodEnum | null): 'single' | 'range' {

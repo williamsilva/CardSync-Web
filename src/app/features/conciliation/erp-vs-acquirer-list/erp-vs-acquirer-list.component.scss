@@ -1,1 +1,24 @@
 @import '../_conciliation-page.scss';
+
+:host ::ng-deep .cs-reconcile-summary {
+  margin-bottom: 1rem;
+}
+
+.cs-reconcile-summary__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.cs-reconcile-summary__header div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.cs-reconcile-summary__header span {
+  color: var(--text-color-secondary);
+  font-size: 0.875rem;
+  line-height: 1.35;
+}

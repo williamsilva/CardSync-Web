@@ -7,12 +7,12 @@ export const ERP_ROUTES: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'sales' },
   {
     path: 'sales',
-    title: 'routes.erp.sales.title',
+    title: 'routes.transactions.erp.sales.title',
     canActivate: [permissionGuard],
     data: {
       requireAll: false,
       redirectTo: '/forbidden',
-      permissions: [PERMISSIONS.ERP_SALES.VIEW],
+      permissions: [PERMISSIONS.DOCUMENTS.ERP_SALES.VIEW],
     },
     loadComponent: () =>
       import('./transactions-erp-sales-list/transactions-erp-sales-list.component').then(
@@ -20,22 +20,22 @@ export const ERP_ROUTES: Routes = [
       ),
   },
   {
-    path: 'parcels',
-    title: 'routes.erp.parcels.title',
+    path: 'installments',
+    title: 'routes.erp.installments.title',
     canActivate: [permissionGuard],
     data: {
       requireAll: false,
       redirectTo: '/forbidden',
-      permissions: [PERMISSIONS.ERP_PARCELS.VIEW],
+      permissions: [PERMISSIONS.DOCUMENTS.ERP_INSTALLMENTS.VIEW],
     },
     loadComponent: () =>
-      import('./transactions-erp-parcels-list/transactions-erp-parcels-list.component').then(
+      import('./transactions-erp-installments-list/transactions-erp-installments-list.component').then(
         (m) => m.ErpParcelsListComponent,
       ),
   },
   {
     path: '**',
     title: 'routes.notFound.title',
-    loadComponent: () => import('../error/not-found/not-found.page').then((m) => m.NotFoundPage),
+    loadComponent: () => import('../../error/not-found/not-found.page').then((m) => m.NotFoundPage),
   },
 ];

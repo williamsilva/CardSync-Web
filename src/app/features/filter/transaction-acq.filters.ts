@@ -2,9 +2,9 @@ import { PeriodEnum } from '@models/enums/period.enum';
 import { CaptureEnum } from '@models/enums/capture.enum';
 import { ModalityEnum } from '@models/enums/modality.enum';
 
-export interface TransactionsErpAdvancedFilters {}
+export interface TransactionsAcquirersSalesAdvancedFilters {}
 
-export type TransactionsErpFiltersState = {
+export type TransactionsAcquirersSalesFiltersState = {
   tid: string;
   cvNsu: string;
   machine: string;
@@ -17,8 +17,8 @@ export type TransactionsErpFiltersState = {
 
   grossValueEnd?: number | null;
   liquidValueEnd?: number | null;
-  grossValueStart?: number | null;
   liquidValueStart?: number | null;
+  grossValueStart?: number | null;
   discountValueEnd?: number | null;
   discountValueStart?: number | null;
   adjustmentValueEnd?: number | null;

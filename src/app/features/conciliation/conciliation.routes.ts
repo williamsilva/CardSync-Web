@@ -3,7 +3,11 @@ import { Routes } from '@angular/router';
 import { permissionGuard } from '@core/auth/permission.guard';
 import { PERMISSIONS } from '@core/auth/permissions.constants';
 
-const defaultPermissions = [PERMISSIONS.SUPPORT, PERMISSIONS.COMPANIES.VIEW, PERMISSIONS.ACQUIRER.VIEW];
+const defaultPermissions = [
+  PERMISSIONS.SUPPORT,
+  PERMISSIONS.COMPANIES.VIEW,
+  PERMISSIONS.ACQUIRER.VIEW,
+];
 
 export const CONCILIATION_ROUTES: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
@@ -17,16 +21,7 @@ export const CONCILIATION_ROUTES: Routes = [
         (m) => m.ConciliationDashboardComponent,
       ),
   },
-  {
-    path: 'sales',
-    title: 'routes.conciliation.sales.title',
-    canActivate: [permissionGuard],
-    data: { requireAll: false, redirectTo: '/forbidden', permissions: defaultPermissions },
-    loadComponent: () =>
-      import('./acquirer-sales-list/acquirer-sales-list.component').then(
-        (m) => m.AcquirerSalesListComponent,
-      ),
-  },
+
   {
     path: 'erp-vs-acquirer',
     title: 'routes.conciliation.erpVsAcquirer.title',

@@ -5,9 +5,9 @@ import { AcquirerMinimalModel } from './acquirer-minimal.models';
 import { EstablishmentMinimalModel } from './establishment-minimal.models';
 import { ModalityEnum, normalizeModalityEnum } from './enums/modality.enum';
 import { ProcessedFileMinimalModel } from './processed-file-minimal.models';
-import { TransactionsErpInstallmentModel } from './transactions-erp-installment.models';
+import { TransactionsAcqInstallmentModel } from './transactions-acq-installment.models';
 
-export interface TransactionsErpModel {
+export interface TransactionsAcqModel {
   id: string;
 
   saleDate?: string | null;
@@ -25,8 +25,8 @@ export interface TransactionsErpModel {
   cvNsu: number;
   feeValue: number;
   netValue: number;
-  lineNumber: number;
   grossValue: number;
+  lineNumber: number;
   installment: number;
   adjustmentValue: number;
 
@@ -38,14 +38,14 @@ export interface TransactionsErpModel {
   acquirer: AcquirerMinimalModel;
   processedFile: ProcessedFileMinimalModel;
   establishment: EstablishmentMinimalModel;
-  installments?: TransactionsErpInstallmentModel[] | null;
+  installments?: TransactionsAcqInstallmentModel[] | null;
 }
 
-export interface TransactionsErpCreateInput {}
+export interface TransactionsAcqCreateInput {}
 
-export interface TransactionsErpUpdateInput {}
+export interface TransactionsAcqUpdateInput {}
 
-export interface TransactionsErpTotalsModel {
+export interface TransactionsAcqTotalsModel {
   totalGrossValue: number;
   totalFeeValue: number;
   totalNetValue: number;
@@ -57,7 +57,7 @@ export interface TransactionsErpTotalsModel {
  * Payload bruto vindo da API.
  * Aceita status numérico ou string para tolerar mudanças no backend.
  */
-export interface TransactionsErpApiModel {
+export interface TransactionsAcqApiModel {
   id: string;
 
   saleDate?: string | null;
@@ -71,11 +71,10 @@ export interface TransactionsErpApiModel {
   capture?: CaptureEnum | null;
   companyName?: string | null;
   establishmentPvNumber?: string | null;
-
+  lineNumber: number;
   cvNsu: number;
   feeValue: number;
   netValue: number;
-  lineNumber: number;
   grossValue: number;
   installment: number;
   adjustmentValue: number;
@@ -88,18 +87,18 @@ export interface TransactionsErpApiModel {
   acquirer: AcquirerMinimalModel;
   processedFile: ProcessedFileMinimalModel;
   establishment: EstablishmentMinimalModel;
-  installments?: TransactionsErpInstallmentModel[] | null;
+  installments?: TransactionsAcqInstallmentModel[] | null;
 }
 
-export function mapTransactionsErpApiModel(input: TransactionsErpApiModel): TransactionsErpModel {
+export function mapTransactionsAcqApiModel(input: TransactionsAcqApiModel): TransactionsAcqModel {
   return {
     ...input,
     modality: normalizeModalityEnum(input.modality),
   };
 }
 
-export function mapTransactionsErpApiModels(
-  items: TransactionsErpApiModel[] | null | undefined,
-): TransactionsErpModel[] {
-  return (items ?? []).map(mapTransactionsErpApiModel);
+export function mapTransactionsAcqApiModels(
+  items: TransactionsAcqApiModel[] | null | undefined,
+): TransactionsAcqModel[] {
+  return (items ?? []).map(mapTransactionsAcqApiModel);
 }

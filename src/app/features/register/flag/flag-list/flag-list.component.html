@@ -150,12 +150,10 @@
   (pageChange)="onPageChange($event)"
   (activate)="confirmActivate($event)"
   [loadedOnce]="flagFacade.loadedOnce()"
-  [statusLabel]="statusLabel.bind(this)"
   (deactivate)="confirmDeactivate($event)"
   [rowsPerPageOptions]="rowsPerPageOptions"
   (toggleCompanies)="toggleCompanies($event)"
   (toggleAcquirers)="toggleAcquirers($event)"
-  [statusSeverity]="statusSeverity.bind(this)"
   [expandedRelationType]="expandedRelationType()"
   (selectionChange)="onTableSelectionChange($event)"
 ></app-flag-table>

@@ -45,7 +45,7 @@
         "title": "Taxas"
       },
       "sales": {
-        "title": "Vendas da Adquirente"
+        "title": "Vendas Adquirente"
       },
       "dashboard": {
         "title": "Dashboard de Conciliação"
@@ -69,12 +69,22 @@
         "title": "Divergências operacionais"
       }
     },
-    "erp": {
-      "parcels": {
-        "title": "Parcelas"
+    "transactions": {
+      "erp": {
+        "parcels": {
+          "title": "Parcelas"
+        },
+        "sales": {
+          "title": "Vendas ERP"
+        }
       },
-      "sales": {
-        "title": "Vendas"
+      "acq": {
+        "parcels": {
+          "title": "Parcelas"
+        },
+        "sales": {
+          "title": "Vendas Adquirente"
+        }
       }
     },
     "audit": {
@@ -104,6 +114,18 @@
     "sessionExpiredTooltip": "Faça login novamente"
   },
   "menu": {
+    "transactions": {
+      "erp": {
+        "title": "ERP",
+        "sales": "Vendas",
+        "installments": "Parcelas"
+      },
+      "acq": {
+        "title": "Adquirentes",
+        "sales": "Vendas",
+        "installments": "Parcelas"
+      }
+    },
     "me": "Minha conta",
     "dashboard": "Dashboard",
     "audit": {
@@ -118,11 +140,7 @@
       "acquirer": "Adquirentes",
       "establishment": "Estabelecimentos"
     },
-    "erp": {
-      "title": "ERP",
-      "sales": "Vendas",
-      "parcels": "Parcelas"
-    },
+
     "conciliation": {
       "fees": "Taxas aplicadas",
       "sales": "Vendas adquirente",
@@ -180,8 +198,15 @@
       "contract": "Contratos",
       "establishment": "Estabelecimentos"
     },
-    "erp": {
-      "sales": "Vendas ERP"
+    "transactions": {
+      "erp": {
+        "sales": "Vendas ERP",
+        "installment": "Parcelas ERP"
+      },
+      "acq": {
+        "sales": "Vendas adquirente",
+        "installment": "Parcelas adquirente"
+      }
     },
     "audit": {
       "emailLog": "E-mail Logs"
@@ -196,6 +221,7 @@
     "noneActive": "Nenhum filtro ativo"
   },
   "pagination": {
+    "emptymessage": "Não foram encontrados dados para serem exibido!",
     "report": "Mostrando '{first}' a '{last}' de '{totalRecords}' registros"
   },
   "validation": {
@@ -343,21 +369,36 @@
       "validity": "Em Virgência"
     },
     "captureEnum": {
-      "pdv": "PDV",
-      "pos": "POS",
+      "pdv": "Caixa",
       "manual": "Manual",
+      "pos": "Maquina Movel",
       "ecommerce": "E-commerce",
       "unknown": "Não Informado"
     },
-    "conciliationStatusEnum": {
+    "transactionReasonEnum": {
+      "unknown": "Não Informado",
+      "chargeBack": "ChargeBack",
+      "canceled": "Venda Cancelada",
+      "scheduled": "Venda Agendada",
+      "differentPlans": "Planos Diferentes",
+      "valueMismatch": "Divergência de valor",
+      "flagMismatch": "Divergência de bandeira",
+      "cvNotFoundErp": "Cv não encontrado no ERP",
+      "cvNotFoundAdq": "Cv não encontrado na ADQ",
+      "ambiguousMatch": "Correspondência ambígua",
+      "acquirerMismatch": "Divergência de Adquirente"
+    },
+    "transactionStatusEnum": {
       "pending": "Pendente",
+      "deleted": "Excluido",
       "canceled": "Cancelado",
-      "divergent": "Divergente",
-      "liquidated": "Liquidado",
       "reconciled": "Conciliado",
+      "unknown": "Não Informado",
       "notReconciled":"Não conciliado",
-      "partiallyReconciled": "Parcial",
-      "unknown": "Não Informado"
+      "excludedSale": "Venda Excluída",
+      "canceledSale": "Venda Cancelada",
+      "manuallyReconciled": "Conciliado Manual",
+      "reconciledAutomatically": "Conciliado Automaticamente"
     },
     "modalityEnum": {
       "outros": "Outros",
@@ -829,34 +870,74 @@
       }
     }
   },
-  "erp": {
-    "sales": {
-      "subtitle": "Consulta de vendas importadas do ERP"
+  "transactions": {
+    "search": {
+      "line": "Linha",
+      "Installments": "Parcelas",
+      "searchErp": "Buscar no ERP",
+      "process": "Buscar no Arquivo",
+      "searchAcq": "Buscar na Adquirente"
+    },
+    "tooltip": {
+      "mdrRate": "Taxa MDR",
+      "flexRate": "Taxa FLEX"
+    },
+    "erp": {
+      "sales": {
+        "subtitle": "Consulta de vendas importadas do ERP"
+      },
+      "installment": {
+        "subtitle": "Consulta parcelas de vendas importadas do ERP"
+      }
+    },
+    "acq": {
+      "sales": {
+        "subtitle": "Consulta de vendas importadas da adquirente"
+      },
+      "installment": {
+        "subtitle": "Consulta parcelas de vendas importadas do adquirente"
+      }
     },
     "fields": {
+      "rate": "Taxa",
+      "bank": "Banco",
+      "sale": "Venda",
       "cvNsu": "Cv/Nsu",
+      "reason": "Motivo",
+      "status": "Status",
+      "account": "Conta",
       "flag": "Bandeira",
+      "agency": "Agencia",
+      "liquid": "Líquido",
       "saleDate": "Venda",
       "company": "Empresa",
+      "payment":"Pagamento",
+      "forecast": "Previsão",
       "machine": "Maquinetas",
-      "discountValue": "Taxa",
       "modality":"Modalidade",
-      "liquidValue": "Liquido",
       "acquirer": "Adquirente",
       "capture":"Tipo Captura",
-      "installment": "Parcelas",
-      "paymentDate": "Pagamento",
+      "installment": "Parcela",
+      "cardName":"Nome Cartão",
+      "issuer":"Emissor Cartão",
+      "installments": "Parcelas",
       "tid": "Transação ID (TID)",
       "grossValue": "Valor Bruto",
       "cardNumber":"Número Cartão",
       "adjustmentValue": "Ajustes",
+      "netAmount": "Valor Líquido",
+      "conciliation": "Conciliação",
+      "liquidValue": "Valor Líquido",
       "authorization": "Autorização",
-      "conciliationDate": "Conciliação",
+      "paymentDate": "Data Pagamento",
+      "discountValue": "Valor Desconto",
       "periodSaleDate": "Período Venda",
       "establishment": "Estabelecimento",
+      "bankDomicile": "Domicílio bancário",
+      "conciliationDate": "Data Conciliação",
       "expectedPaymentDate":"Prev. Pagamento",
       "periodPaymentDate": "Período Pagamento",
-      "conciliationStatus": "Status Conciliação",
+      "transactionStatus": "Status Conciliação",
       "periodConciliationDate": "Período Conciliação",
       "periodExpectedPaymentDate": "Período Prev. Pagamento"
     },
@@ -864,17 +945,18 @@
       "cvNsu": "Cv/Nsu",
       "flag": "Bandeira",
       "saleDate": "Venda",
+      "liquid": "Líquido",
       "company": "Empresa",
       "grossValue": "Bruto",
       "machine": "Maquinetas",
       "discountValue": "Taxa",
-      "liquidValue": "Liquido",
       "acquirer": "Adquirente",
       "modality": "Modalidade",
       "capture": "Tipo Captura",
       "installment": "Parcelas",
       "tid": "Transação ID (TID)",
       "adjustmentValue": "Ajustes",
+      "liquidValue": "Valor Líquido",
       "authorization": "Autorização",
       "establishment": "Estabelecimento",
       "expectedPaymentDate": "Prev. Pagamento"
@@ -887,6 +969,7 @@
       "companies": "Empresas",
       "acquirers": "Adquirentes",
       "saveLinks": "Salvar vínculos",
+      "establishment": "Estabelecimentos",
       "linkedCompanies": "Empresas vinculadas",
       "linkedAcquirers": "Adquirentes vinculadas",
       "addCompanyToFlag": "Adicionar Empresa à bandeira",
@@ -1066,101 +1149,6 @@
     "loading": "Aguarde enquanto carregamos os dados do perfil.",
     "error": "Não foi possível carregar o perfil."
   },
-  "session": {
-    "expiring": {
-      "title": "Sessão vai expirar",
-      "body": "Sua sessão vai expirar por inatividade em",
-      "hint": "Clique em “Renovar” para continuar sem recarregar a página."
-    },
-    "expired": {
-      "title": "Sessão expirada",
-      "body": "Sua sessão expirou por inatividade.",
-      "hint": "Para continuar, faça login novamente."
-    }
-  },
-  "common": {
-    "no": "Não",
-    "yes": "Sim",
-    "new": "Novo",
-    "all": "Todos",
-    "error": "Erro",
-    "save": "Salvar",
-    "edit": "Editar",
-    "back": "Voltar",
-    "logout": "Sair",
-    "close": "Fechar",
-    "clear": "Limpar",
-    "search": "Buscar",
-    "apply": "Aplicar",
-    "actions": "Ações",
-    "filter": "Filtrar",
-    "remove": "Remover",
-    "period": "Periodo",
-    "delete": "Excluir",
-    "cancel": "Cancelar",
-    "activate": "Ativar",
-    "success": "Sucesso",
-    "info": "Informação",
-    "warning": "Atenção",
-    "view": "Visualizar",
-    "company": "Empresa",
-    "notNow": "Agora não",
-    "update": "Atualizar",
-    "confirm": "Confirmar",
-    "acquirer": "Adquirente",
-    "deactivate": "Inativar",
-    "loading": "Carregando...",
-    "goToLogin": "Ir para login",
-    "notInformed": "Não informado",
-    "tableFilters": "Filtros tabela",
-    "renewSession": "Renovar sessão",
-    "correlationId": "ID de correlação",
-    "registrationNumber": "N° Inscrição",
-    "advancedFilters": "Filtros avançados",
-    "selected": "{count, plural, =0 {Nenhum selecionado} one {# selecionado} other {# selecionados}}",
-    "selectedFemale": "{count, plural, =0 {Nenhuma selecionada} one {# selecionada} other {# selecionadas}}"
-  },
-  "confirm": {
-    "logoutTitle": "Encerrar sessão",
-    "logoutMessage": "Deseja realmente sair do CardSync?"
-  },
-  "notifications": {
-    "welcome": "Olá, {name}!",
-    "itemsCount": "{count, plural, =0 {Nenhum item} one {# item} other {# itens}}"
-  },
-  "errors": {
-    "global": {
-      "GENERIC_ERROR": "Ocorreu um erro inesperado. Tente novamente.",
-      "NETWORK_ERROR": "Não foi possível conectar ao servidor.",
-      "ACCESS_DENIED": "Você não tem permissão para executar esta ação.",
-      "SESSION_EXPIRED": "Sua sessão expirou. Faça login novamente.",
-      "VALIDATION_ERROR": "Alguns campos precisam ser corrigidos.",
-      "USER_DOCUMENT_ALREADY_EXISTS": "Já existe um usuário com este documento.",
-      "USER_USERNAME_ALREADY_EXISTS": "Já existe um usuário com este nome de usuário.",
-      "USER_DELETE_SELF_NOT_ALLOWED": "Você não pode excluir seu próprio usuário.",
-      "USER_DELETE_PROTECTED_NOT_ALLOWED": "Este usuário é protegido e não pode ser excluído.",
-      "NOT_FOUND": "Recurso não encontrado.",
-      "INTERNAL_ERROR": "Ocorreu um erro interno. Tente novamente.",
-      "GROUP_NAME_ALREADY_EXISTS": "Já existe um grupo com este nome.",
-      "GROUP_DELETE_SUPPORT_NOT_ALLOWED": "O grupo SUPPORT não pode ser excluído ou alterado nesta operação.",
-      "GROUP_DELETE_IN_USE": "Este grupo possui usuários associados e não pode ser excluído.",
-      "PERMISSION_NOT_FOUND": "Uma ou mais permissões informadas não foram encontradas.",
-      "ESTABLISHMENT_ALREADY_EXISTS": "Já existe um estabelecimento com o mesmo PV, empresa e adquirente."
-    },
-    "fields": {
-      "*": {
-        "required": "{label} é obrigatório.",
-        "minLength": "{label} deve ter no mínimo {requiredLength} caracteres.",
-        "maxLength": "{label} deve ter no máximo {requiredLength} caracteres.",
-        "min": "{label} deve ser no mínimo {min}.",
-        "max": "{label} deve ser no máximo {max}.",
-        "email": "{label} informe um e-mail válido.",
-        "pattern": "{label} está em formato inválido.",
-        "invalid": "{label} está inválido.",
-        "passwordMismatch": "As senhas devem ser iguais."
-      }
-    }
-  },
   "groups": {
     "subtitle": "Gerencie grupos e permissões de acesso",
     "new": {
@@ -1270,11 +1258,122 @@
       }
     }
   },
+  "session": {
+    "expiring": {
+      "title": "Sessão vai expirar",
+      "body": "Sua sessão vai expirar por inatividade em",
+      "hint": "Clique em “Renovar” para continuar sem recarregar a página."
+    },
+    "expired": {
+      "title": "Sessão expirada",
+      "body": "Sua sessão expirou por inatividade.",
+      "hint": "Para continuar, faça login novamente."
+    }
+  },
+  "common": {
+    "filters": {
+      "final": "Valor Final",
+      "initial": "Valor Incial"
+    },
+    "no": "Não",
+    "to": "até",
+    "yes": "Sim",
+    "new": "Novo",
+    "all": "Todos",
+    "error": "Erro",
+    "until": "Até",
+    "save": "Salvar",
+    "edit": "Editar",
+    "back": "Voltar",
+    "logout": "Sair",
+    "close": "Fechar",
+    "clear": "Limpar",
+    "quantity": "Qtd.",
+    "search": "Buscar",
+    "apply": "Aplicar",
+    "actions": "Ações",
+    "filter": "Filtrar",
+    "remove": "Remover",
+    "period": "Periodo",
+    "delete": "Excluir",
+    "cancel": "Cancelar",
+    "activate": "Ativar",
+    "success": "Sucesso",
+    "info": "Informação",
+    "warning": "Atenção",
+    "view": "Visualizar",
+    "company": "Empresa",
+    "grossValue":"Bruto",
+    "notNow": "Agora não",
+    "from": "A partir de",
+    "update": "Atualizar",
+    "confirm": "Confirmar",
+    "discountValue": "Taxa",
+    "liquidValue": "Líquido",
+    "acquirer": "Adquirente",
+    "deactivate": "Inativar",
+    "loading": "Carregando...",
+    "adjustmentValue": "Ajustes",
+    "goToLogin": "Ir para login",
+    "notInformed": "Não informado",
+    "tableFilters": "Filtros tabela",
+    "renewSession": "Renovar sessão",
+    "correlationId": "ID de correlação",
+    "notInformedFemale": "Não informada",
+    "calculateTotals": "Calcular Totais",
+    "registrationNumber": "N° Inscrição",
+    "advancedFilters": "Filtros avançados",
+    "viewInstallments": "Visualizar parcelas",
+    "selected": "{count, plural, =0 {Nenhum selecionado} one {# selecionado} other {# selecionados}}",
+    "selectedFemale": "{count, plural, =0 {Nenhuma selecionada} one {# selecionada} other {# selecionadas}}"
+  },
+  "confirm": {
+    "logoutTitle": "Encerrar sessão",
+    "logoutMessage": "Deseja realmente sair do CardSync?"
+  },
+  "notifications": {
+    "welcome": "Olá, {name}!",
+    "itemsCount": "{count, plural, =0 {Nenhum item} one {# item} other {# itens}}"
+  },
+  "errors": {
+    "global": {
+      "GENERIC_ERROR": "Ocorreu um erro inesperado. Tente novamente.",
+      "NETWORK_ERROR": "Não foi possível conectar ao servidor.",
+      "ACCESS_DENIED": "Você não tem permissão para executar esta ação.",
+      "SESSION_EXPIRED": "Sua sessão expirou. Faça login novamente.",
+      "VALIDATION_ERROR": "Alguns campos precisam ser corrigidos.",
+      "USER_DOCUMENT_ALREADY_EXISTS": "Já existe um usuário com este documento.",
+      "USER_USERNAME_ALREADY_EXISTS": "Já existe um usuário com este nome de usuário.",
+      "USER_DELETE_SELF_NOT_ALLOWED": "Você não pode excluir seu próprio usuário.",
+      "USER_DELETE_PROTECTED_NOT_ALLOWED": "Este usuário é protegido e não pode ser excluído.",
+      "NOT_FOUND": "Recurso não encontrado.",
+      "INTERNAL_ERROR": "Ocorreu um erro interno. Tente novamente.",
+      "GROUP_NAME_ALREADY_EXISTS": "Já existe um grupo com este nome.",
+      "GROUP_DELETE_SUPPORT_NOT_ALLOWED": "O grupo SUPPORT não pode ser excluído ou alterado nesta operação.",
+      "GROUP_DELETE_IN_USE": "Este grupo possui usuários associados e não pode ser excluído.",
+      "PERMISSION_NOT_FOUND": "Uma ou mais permissões informadas não foram encontradas.",
+      "ESTABLISHMENT_ALREADY_EXISTS": "Já existe um estabelecimento com o mesmo PV, empresa e adquirente."
+    },
+    "fields": {
+      "*": {
+        "required": "{label} é obrigatório.",
+        "minLength": "{label} deve ter no mínimo {requiredLength} caracteres.",
+        "maxLength": "{label} deve ter no máximo {requiredLength} caracteres.",
+        "min": "{label} deve ser no mínimo {min}.",
+        "max": "{label} deve ser no máximo {max}.",
+        "email": "{label} informe um e-mail válido.",
+        "pattern": "{label} está em formato inválido.",
+        "invalid": "{label} está inválido.",
+        "passwordMismatch": "As senhas devem ser iguais."
+      }
+    }
+  },
+
   "notFound": {
-    "title": "Página não encontrada",
-    "message": "A rota informada não existe ou foi removida. Verifique o endereço acessado ou volte para o dashboard.",
     "attemptedUrl": "URL acessada",
     "goHome": "Ir para o dashboard",
-    "hint": "Se você chegou aqui por um link do sistema, revise o cadastro da rota ou o item de menu correspondente."
+    "title": "Página não encontrada",
+    "hint": "Se você chegou aqui por um link do sistema, revise o cadastro da rota ou o item de menu correspondente.",
+    "message": "A rota informada não existe ou foi removida. Verifique o endereço acessado ou volte para o dashboard."
   }
 }

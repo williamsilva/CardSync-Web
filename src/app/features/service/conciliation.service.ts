@@ -5,7 +5,6 @@ import { Observable } from 'rxjs';
 import { environment } from 'environments/environment';
 import { PageResponse } from '@models/file-processing.models';
 import {
-  AcquirerSaleAnalysisModel,
   BankSettlementAnalysisModel,
   ChargebackAnalysisModel,
   ConciliationAgingModel,
@@ -15,6 +14,7 @@ import {
   DebitAnalysisModel,
   DivergenceAnalysisModel,
   ErpVsAcquirerAnalysisModel,
+  ReconcileErpAcquirerResultModel,
 } from '@models/conciliation.models';
 
 @Injectable({ providedIn: 'root' })
@@ -24,15 +24,6 @@ export class ConciliationService {
 
   getDashboard(): Observable<ConciliationDashboardModel> {
     return this.http.get<ConciliationDashboardModel>(`${this.baseUrl}/dashboard`, {
-      withCredentials: true,
-    });
-  }
-
-  listAcquirerSales(
-    query: ConciliationPageQuery = {},
-  ): Observable<PageResponse<AcquirerSaleAnalysisModel>> {
-    return this.http.get<PageResponse<AcquirerSaleAnalysisModel>>(`${this.baseUrl}/acquirer-sales`, {
-      params: this.toParams(query),
       withCredentials: true,
     });
   }
@@ -55,6 +46,14 @@ export class ConciliationService {
         params: this.toParams(query),
         withCredentials: true,
       },
+    );
+  }
+
+  reconcileErpVsAcquirer(): Observable<ReconcileErpAcquirerResultModel> {
+    return this.http.post<ReconcileErpAcquirerResultModel>(
+      `${this.baseUrl}/erp-vs-acquirer/reconcile`,
+      {},
+      { withCredentials: true },
     );
   }
 

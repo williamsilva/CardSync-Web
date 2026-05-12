@@ -17,8 +17,8 @@
 }
 
 .cs-admin-table .flag-expanded-wrap > * {
-  width: 100%;
-  max-width: 920px;
+  width: var(--flag-rel-card-width, 100%);
+  max-width: var(--flag-rel-card-max-width, 920px);
 }
 
 /* reset nested relation tables */
@@ -35,8 +35,8 @@
 
 /* compact but readable relation card */
 .cs-admin-table .flag-expanded-cell .flag-rel-card {
-  width: 100%;
-  max-width: 920px;
+  width: var(--flag-rel-card-width, 100%);
+  max-width: var(--flag-rel-card-max-width, 920px);
   margin: 0 auto;
 }
 

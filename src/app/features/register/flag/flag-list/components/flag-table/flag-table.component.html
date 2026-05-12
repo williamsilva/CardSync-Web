@@ -40,22 +40,20 @@
   <ng-template pTemplate="header">
     <tr>
       <th class="text-center">
-        <ng-container *ngIf="selectionStatus(); else selectOneHint">
+        @if (selectionStatus()) {
           <p-checkbox
             [binary]="true"
             [ngModel]="headerChecked()"
             [indeterminate]="headerIndeterminate()"
             (onChange)="toggleHeaderSelection(!!$event.checked)"
           ></p-checkbox>
-        </ng-container>
-
-        <ng-template #selectOneHint>
+        } @else {
           <i
             tooltipPosition="top"
             class="pi pi-info-circle opacity-70"
             [pTooltip]="'flag.selection.pickOneFirst' | translate"
           ></i>
-        </ng-template>
+        }
       </th>
 
       <th pSortableColumn="erpCode">
@@ -161,12 +159,15 @@
           "
         >
           {{ row.name }}
-          <span *ngIf="expandedFlagId() === row.id">▼</span>
+
+          @if (expandedFlagId() === row.id) {
+            <span>▼</span>
+          }
         </span>
       </td>
 
       <td class="cell-muted text-center">
-        <!-- <cs-tag [value]="statusLabel(row.status)" [tone]="statusSeverity(row.status)" /> -->
+        <cs-tag [value]="statusLabel(row.status)" [tone]="statusEnumSeverity(row.status)" />
       </td>
 
       <td class="text-center">
@@ -207,25 +208,29 @@
       </td>
     </tr>
 
-    <tr *ngIf="expandedFlagId() === row.id">
-      <td colspan="7" class="p-3 surface-ground flag-expanded-cell">
-        <div class="flag-expanded-wrap">
-          <ng-container [ngSwitch]="expandedRelationType()">
-            <app-flag-company-relations
-              [flag]="row"
-              *ngSwitchCase="'companies'"
-              (changed)="refreshRelations.emit()"
-            ></app-flag-company-relations>
+    @if (expandedFlagId() === row.id) {
+      <tr>
+        <td colspan="7" class="p-3 surface-ground flag-expanded-cell">
+          <div class="flag-expanded-wrap">
+            @switch (expandedRelationType()) {
+              @case ('companies') {
+                <app-flag-company-relations
+                  [flag]="row"
+                  (changed)="refreshRelations.emit()"
+                ></app-flag-company-relations>
+              }
 
-            <app-flag-acquirer-relations
-              [flag]="row"
-              *ngSwitchCase="'acquirers'"
-              (changed)="refreshRelations.emit()"
-            ></app-flag-acquirer-relations>
-          </ng-container>
-        </div>
-      </td>
-    </tr>
+              @case ('acquirers') {
+                <app-flag-acquirer-relations
+                  [flag]="row"
+                  (changed)="refreshRelations.emit()"
+                ></app-flag-acquirer-relations>
+              }
+            }
+          </div>
+        </td>
+      </tr>
+    }
   </ng-template>
 
   <ng-template pTemplate="emptymessage">

@@ -21,10 +21,9 @@
     size="small"
     showGridlines
     [rowHover]="true"
-    class="p-datatable-sm mt-1"
-    styleClass="cs-admin-table"
     [tableStyle]="{ width: '100%' }"
     [value]="acquirer().companies ?? []"
+    class="p-datatable-sm mt-1 cs-admin-table"
   >
     <ng-template pTemplate="colgroup">
       <colgroup>

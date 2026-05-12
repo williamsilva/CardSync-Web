@@ -37,7 +37,7 @@
         "title": "Change password"
       },
       "groupDetail": {
-        "title": "Group detail"
+        "title": "Group details"
       }
     },
     "conciliation": {
@@ -51,7 +51,7 @@
         "title": "Reconciliation Dashboard"
       },
       "erpVsAcquirer": {
-        "title": "ERP vs Acquirer"
+        "title": "ERP x Acquirer"
       },
       "debits": {
         "title": "Debits"
@@ -66,19 +66,29 @@
         "title": "Pending Aging"
       },
       "divergences": {
-        "title": "Operational Divergences"
+        "title": "Operational divergences"
       }
     },
-    "erp": {
-      "parcels": {
-        "title": "Pagos a plazos"
+    "transactions": {
+      "erp": {
+        "parcels": {
+          "title": "Installments"
+        },
+        "sales": {
+          "title": "ERP Sales"
+        }
       },
-      "sales": {
-        "title": "Ventas"
+      "acq": {
+        "parcels": {
+          "title": "Installments"
+        },
+        "sales": {
+          "title": "Acquirer Sales"
+        }
       }
     },
     "audit": {
-      "title": "Email Logs"
+      "title": "E-mail Logs"
     },
     "dashboard": {
       "title": "Dashboard"
@@ -101,34 +111,41 @@
     "langAria": "Select language",
     "sessionExpired": "Session expired",
     "sessionExpireTooltip": "Session expires due to inactivity",
-    "sessionExpiredTooltip": "Sign in again"
+    "sessionExpiredTooltip": "Log in again"
   },
   "menu": {
+    "transactions": {
+      "erp": {
+        "title": "ERP",
+        "sales": "Sales",
+        "installments": "Installments"
+      },
+      "acq": {
+        "title": "Acquirers",
+        "sales": "Sales",
+        "installments": "Installments"
+      }
+    },
     "me": "My account",
     "dashboard": "Dashboard",
     "audit": {
       "title": "Audit",
-      "mail": "Email Logs"
+      "mail": "E-mail Logs"
     },
     "register": {
+      "title": "Registers",
       "flags": "Flags",
       "company": "Companies",
-      "acquirer": "Acquirers",
-      "title": "Registrations",
       "contracts": "Contracts",
+      "acquirer": "Acquirers",
       "establishment": "Establishments"
-    },
-    "erp": {
-      "title": "ERP",
-      "sales": "Sales",
-      "parcels": "Installments"
     },
     "conciliation": {
       "fees": "Applied fees",
       "sales": "Acquirer sales",
       "title": "Reconciliation",
       "dashboard": "Dashboard",
-      "erpVsAcquirer": "ERP vs Acquirer",
+      "erpVsAcquirer": "ERP x Acquirer",
       "bankSettlement": "Bank settlement",
       "debits": "Debits",
       "chargebacks": "Chargebacks",
@@ -142,27 +159,32 @@
       "myAccount": "My Account",
       "changePassword": "Change Password"
     },
+    "settings": {
+      "title": "Settings",
+      "email": "E-mail"
+    },
     "file": {
       "processing": {
+        "file": "Files",
+        "title": "Processing",
+        "dashboard": "Dashboard",
+        "erpPendent": "Pending ERP",
+        "movementRede": "Rede Movements",
         "scheduler": "Scheduler",
         "creditOrders": "Credit orders",
         "adjustments": "Rede adjustments",
-        "anticipations": "Anticipations",
-        "pendingDebts": "Pending debts",
-        "settledDebts": "Settled debts",
+        "anticipations": "Prepayments",
+        "pendingDebts": "Pending debits",
+        "settledDebts": "Settled debits",
         "totalizers": "Totalizers",
         "bankReleases": "Bank releases",
         "divergences": "Divergences"
       }
-    },
-    "settings": {
-      "title": "Settings",
-      "email": "Email"
     }
   },
   "sidebar": {
     "userFallback": "User",
-    "logout": "Sign out"
+    "logout": "Log out"
   },
   "breadcrumb": {
     "groups": "Groups",
@@ -175,11 +197,18 @@
       "contract": "Contracts",
       "establishment": "Establishments"
     },
-    "erp": {
-      "sales": "ERP Sales"
+    "transactions": {
+      "erp": {
+        "sales": "ERP Sales",
+        "installment": "ERP installments"
+      },
+      "acq": {
+        "sales": "Acquirer sales",
+        "installment": "Acquirer installments"
+      }
     },
     "audit": {
-      "emailLog": "Email Logs"
+      "emailLog": "E-mail Logs"
     }
   },
   "footer": {
@@ -191,6 +220,7 @@
     "noneActive": "No active filters"
   },
   "pagination": {
+    "emptymessage": "No data was found to display!",
     "report": "Showing '{first}' to '{last}' of '{totalRecords}' records"
   },
   "validation": {
@@ -198,7 +228,7 @@
     "required": "Required",
     "minLength": "Minimum of {requiredLength} characters",
     "maxLength": "Maximum of {requiredLength} characters",
-    "email": "Invalid email",
+    "email": "Invalid e-mail",
     "pattern": "Invalid format",
     "min": "The minimum value is {min}",
     "max": "The maximum value is {max}",
@@ -208,7 +238,7 @@
     "server": "{message}"
   },
   "users": {
-    "subtitle": "Manage users, status, and invitations",
+    "subtitle": "Manage users, statuses, and invitations",
     "new": {
       "title": "New user",
       "subtitle": "User registration"
@@ -246,11 +276,11 @@
       "created": "User created successfully.",
       "updated": "User updated successfully",
       "resend": {
-        "button": "Resend password email",
-        "header": "Resend email",
-        "message": "Do you want to resend the password setup email?",
-        "sent": "Email sent successfully.",
-        "error": "Could not resend the email.",
+        "button": "Resend password e-mail",
+        "header": "Resend e-mail",
+        "message": "Do you want to resend the password setup e-mail?",
+        "sent": "E-mail sent successfully.",
+        "error": "Could not resend the e-mail.",
         "todoServer": "Feature pending on the server."
       }
     },
@@ -270,7 +300,7 @@
     },
     "delete": {
       "header": "Confirm deletion",
-      "success": "User disabled successfully",
+      "success": "User deactivated successfully",
       "message": "Do you want to delete user {userName}?"
     },
     "activate": {
@@ -320,7 +350,7 @@
   },
   "enum": {
     "typeCompanyEnum": {
-      "matriz": "Headquarters",
+      "matriz": "Head office",
       "filial": "Branch"
     },
     "typeEstablishmentEnum": {
@@ -335,16 +365,48 @@
     "contractEnum": {
       "expired": "Expired",
       "closed": "Closed",
-      "validity": "Valid"
+      "validity": "In effect"
+    },
+    "captureEnum": {
+      "pdv": "Checkout",
+      "manual": "Manual",
+      "pos": "Mobile POS",
+      "ecommerce": "E-commerce",
+      "unknown": "Not informed"
+    },
+    "transactionReasonEnum": {
+      "unknown": "Not informed",
+      "chargeBack": "Chargeback",
+      "canceled": "Canceled sale",
+      "scheduled": "Scheduled sale",
+      "differentPlans": "Different plans",
+      "valueMismatch": "Value divergence",
+      "flagMismatch": "Flag divergence",
+      "cvNotFoundErp": "CV not found in ERP",
+      "cvNotFoundAdq": "CV not found in ADQ",
+      "ambiguousMatch": "Ambiguous match",
+      "acquirerMismatch": "Acquirer divergence"
+    },
+    "transactionStatusEnum": {
+      "pending": "Pending",
+      "deleted": "Deleted",
+      "canceled": "Canceled",
+      "reconciled": "Reconciled",
+      "unknown": "Not informed",
+      "excludedSale": "Deleted sale",
+      "canceledSale": "Canceled sale",
+      "notReconciled": "Not reconciled",
+      "manuallyReconciled": "Reconciled Manual",
+      "reconciledAutomatically": "Automatically reconciled"
     },
     "modalityEnum": {
       "outros": "Other",
       "cash_debit": "Debit",
-      "cash_credit": "Credit",
+      "cash_credit": "Credit upfront",
       "digital_wallet": "Digital wallet",
-      "installment_2_6": "Installments 2 to 6X",
-      "installment_7_12": "Installments 7 to 12X",
-      "installment_13_18": "Installments 13 to 18X"
+      "installment_2_6": "Installments 2 to 6x",
+      "installment_7_12": "Installments 7 to 12x",
+      "installment_13_18": "Installments 13 to 18x"
     },
     "periodEnum": {
       "day": "Day",
@@ -370,9 +432,9 @@
       "statusEnum": "Status",
       "createdAt": "Created at",
       "createdBy": "Created by",
-      "socialReason": "Legal Name",
-      "fantasyName": "Trade Name",
-      "typeCompanyEnum": "Company Type"
+      "socialReason": "Legal name",
+      "fantasyName": "Trade name",
+      "typeCompanyEnum": "Company type"
     },
     "action": {
       "deactivate": {
@@ -396,9 +458,9 @@
       "statusEnum": "Status",
       "createdAt": "Created at",
       "createdBy": "Created by",
-      "socialReason": "Legal Name",
-      "fantasyName": "Trade Name",
-      "typeCompanyEnum": "Company Type"
+      "socialReason": "Legal name",
+      "fantasyName": "Trade name",
+      "typeCompanyEnum": "Company type"
     },
     "block": {
       "selected": "Block",
@@ -461,12 +523,12 @@
       "name": "Acquirer",
       "company": "Companies",
       "statusEnum": "Status",
-      "pvNumber": "PV Number",
-      "adqCode": "ADQ Code",
+      "pvNumber": "PV number",
+      "adqCode": "ADQ code",
       "createdAt": "Created at",
       "createdBy": "Created by",
-      "socialReason": "Legal Name",
-      "fantasyName": "Trade Name",
+      "socialReason": "Legal name",
+      "fantasyName": "Trade name",
       "establishment": "Establishments"
     },
     "action": {
@@ -492,8 +554,8 @@
       "statusEnum": "Status",
       "createdAt": "Created at",
       "createdBy": "Created by",
-      "socialReason": "Legal Name",
-      "fantasyName": "Trade Name"
+      "socialReason": "Legal name",
+      "fantasyName": "Trade name"
     },
     "block": {
       "selected": "Block",
@@ -574,7 +636,7 @@
       "typeEnum": "Type",
       "company": "Company",
       "statusEnum": "Status",
-      "pvNumber": "PV Number",
+      "pvNumber": "PV number",
       "acquirer": "Acquirer",
       "createdAt": "Created at",
       "createdBy": "Created by",
@@ -583,7 +645,7 @@
     "fields": {
       "typeEnum": "Type",
       "company": "Company",
-      "pvNumber": "PV Number",
+      "pvNumber": "PV number",
       "statusEnum": "Status",
       "acquirer": "Acquirer",
       "createdAt": "Created at",
@@ -658,7 +720,7 @@
       "updated": "Establishment updated successfully.",
       "saveError": "Could not save the establishment.",
       "loadError": "Could not load establishment data.",
-      "permissionDenied": "You do not have permission to save establishment."
+      "permissionDenied": "You do not have permission to save establishments."
     },
     "empty": {
       "title": "No establishments found"
@@ -687,7 +749,7 @@
       "establishment": "Establishment"
     },
     "fields": {
-      "rate": "Rate",
+      "rate": "Fee",
       "flag": "Flag",
       "name": "Description",
       "company": "Company",
@@ -696,35 +758,35 @@
       "modality": "Modality",
       "acquirer": "Acquirer",
       "description": "Description",
-      "endDate": "End validity",
+      "endDate": "Final validity",
       "createdBy": "Created by",
-      "paymentTermDays": "Settlement",
+      "paymentTermDays": "Settlement term",
       "rateEcommerce": "E-commerce",
-      "periodEndDate": "End Period",
-      "startDate": "Start validity",
+      "periodEndDate": "End period",
+      "startDate": "Initial validity",
       "establishment": "Establishment",
-      "periodStartDate": "Start Period",
-      "paymentTermDaysEcommerce": "E-commerce settlement"
+      "periodStartDate": "Start period",
+      "paymentTermDaysEcommerce": "E-commerce settlement term"
     },
     "modality": {
-      "CASH_DEBIT": "Debit",
-      "CASH_CREDIT": "Credit",
-      "INSTALLMENT_CREDIT_2_6": "Installment credit 2 to 6x",
-      "INSTALLMENT_CREDIT_7_12": "Installment credit 7 to 12x"
+      "CASH_DEBIT": "Debit upfront",
+      "CASH_CREDIT": "Credit upfront",
+      "INSTALLMENT_CREDIT_2_6": "Credit installments 2 to 6x",
+      "INSTALLMENT_CREDIT_7_12": "Credit installments 7 to 12x"
     },
     "flags": {
-      "title": "Flags and rates",
+      "title": "Flags and fees",
       "add": "Add flag",
       "toggle": "Expand / collapse",
       "remove": "Remove flag",
-      "emptyTitle": "No flags added",
-      "emptySubtitle": "Select a flag above to start configuring the rates.",
-      "registeredModalitiesCount": "{count, plural, =0 {No modalities registered} =1 {1 modality registered} other {# modalities registered}}",
-      "ratesCount": "{count, plural, =0 {No rates} =1 {1 rate} other {# rates}}"
+      "emptyTitle": "No flag added",
+      "emptySubtitle": "Select a flag above to start configuring fees.",
+      "registeredModalitiesCount": "{count, plural, =0 {No modality registered} =1 {1 modality registered} other {# modalities registered}}",
+      "ratesCount": "{count, plural, =0 {No fees} =1 {1 fee} other {# fees}}"
     },
     "rates": {
-      "add": "Add rate",
-      "empty": "No rates added"
+      "add": "Add fee",
+      "empty": "No fee added"
     },
     "validation": {
       "invalidDateRange": "The end date must be greater than or equal to the start date."
@@ -785,35 +847,118 @@
       "saveError": "Could not save the contract.",
       "created": "Contract created successfully.",
       "updated": "Contract updated successfully.",
-      "permissionDenied": "You do not have permission to save contract."
+      "permissionDenied": "You do not have permission to save contracts."
     },
     "empty": {
       "title": "No contracts found"
     },
     "view": {
-      "title": "Contract Rates:",
-      "emptyRates": "No rates registered for this flag.",
+      "title": "Contract fees:",
+      "emptyRates": "No fee registered for this flag.",
       "days": "{count, plural, =0 {0 days} one {# day} other {# days}}",
-      "emptyFlags": "No flags/rates registered for this contract.",
+      "emptyFlags": "No flag/fee registered for this contract.",
       "flag": {
         "defaultName": "Flag",
         "modalitiesCount": "{count, plural, =0 {No modalities} one {# modality} other {# modalities}}"
       },
       "validity": {
-        "until": "until",
-        "since": "Valid since",
-        "rangePrefix": "Valid from:",
+        "until": "to",
+        "since": "Effective since",
+        "rangePrefix": "In effect from:",
         "openEnded": "open-ended validity"
       }
     }
   },
-  "erp": {
-    "sales": {
-      "subtitle": "Sales query imported from ERP"
+  "transactions": {
+    "search": {
+      "line": "Line",
+      "Installments": "Installments",
+      "searchErp": "Search in ERP",
+      "process": "Search in Archive",
+      "searchAcq": "Search in Acquirer"
     },
-    "columns":{
+    "tooltip": {
+      "mdrRate": "MDR fee",
+      "flexRate": "FLEX fee"
+    },
+    "erp": {
+      "sales": {
+        "subtitle": "Search imported ERP sales"
+      },
+      "installment": {
+        "subtitle": "Search installments from imported ERP sales"
+      }
+    },
+    "acq": {
+      "sales": {
+        "subtitle": "Search imported acquirer sales"
+      },
+      "installment": {
+        "subtitle": "Search installments from imported acquirer sales"
+      }
+    },
+    "fields": {
+      "rate": "Fee",
+      "bank": "Bank",
+      "sale": "Sale",
+      "cvNsu": "CV/NSU",
+      "reason": "Reason",
+      "status": "Status",
+      "account": "Account",
+      "flag": "Flag",
+      "netAmount": "Net Value",
+      "agency": "Branch",
+      "liquid": "Net",
       "saleDate": "Sale",
-      "expectedPaymentDate": "FCST. Payment"
+      "company": "Company",
+      "payment": "Payment",
+      "forecast": "Forecast",
+      "machine": "Machines",
+      "modality": "Modality",
+      "acquirer": "Acquirer",
+      "capture": "Capture Type",
+      "installment": "Installment",
+      "cardName": "Card Name",
+      "issuer": "Card Issuer",
+      "installments": "Installments",
+      "tid": "Transaction ID (TID)",
+      "grossValue": "Gross Amount",
+      "cardNumber": "Card Number",
+      "adjustmentValue": "Adjustments",
+      "conciliation": "Reconciliation",
+      "liquidValue": "Net Amount",
+      "authorization": "Authorization",
+      "paymentDate": "Payment Date",
+      "discountValue": "Discount Amount",
+      "periodSaleDate": "Sale Period",
+      "establishment": "Establishment",
+      "bankDomicile": "Bank domicile",
+      "conciliationDate": "Reconciliation Date",
+      "expectedPaymentDate": "Payment Forecast",
+      "periodPaymentDate": "Payment Period",
+      "transactionStatus": "Reconciliation Status",
+      "periodConciliationDate": "Reconciliation Period",
+      "periodExpectedPaymentDate": "Payment Forecast Period"
+    },
+    "columns": {
+      "cvNsu": "CV/NSU",
+      "flag": "Flag",
+      "saleDate": "Sale",
+      "liquid": "Net",
+      "company": "Company",
+      "grossValue": "Gross",
+      "machine": "Machines",
+      "discountValue": "Fee",
+      "acquirer": "Acquirer",
+      "modality": "Modality",
+      "capture": "Capture Type",
+      "installment": "Installments",
+      "tid": "Transaction ID (TID)",
+      "adjustmentValue": "Adjustments",
+      "liquidValue": "Net Amount",
+      "authorization": "Authorization",
+      "establishment": "Establishment",
+      "expectedPaymentDate": "Payment Forecast"
     }
   },
   "flag": {
@@ -823,6 +968,7 @@
       "companies": "Companies",
       "acquirers": "Acquirers",
       "saveLinks": "Save links",
+      "establishment": "Establishments",
       "linkedCompanies": "Linked companies",
       "linkedAcquirers": "Linked acquirers",
       "addCompanyToFlag": "Add company to flag",
@@ -851,9 +997,9 @@
       "name": "Flag",
       "statusEnum": "Status",
       "company": "Companies",
-      "erpCode": "ERP Code",
+      "erpCode": "ERP code",
       "acquirer": "Acquirers",
-      "acquirerCode": "Acquirer Code"
+      "acquirerCode": "Acquirer code"
     },
     "fields": {
       "name": "Flag",
@@ -933,13 +1079,13 @@
     "policyTitle": "Password policy",
     "submit": "Save password",
     "successTitle": "Password changed",
-    "successMessage": "Your password has been updated successfully.",
+    "successMessage": "Your password was updated successfully.",
     "footer": "© 2026 CardSync • All rights reserved",
     "formSubtitle": "Enter your current password and set a new secure password.",
     "policySubtitle": "The password must meet the security rules below.",
-    "formSectionTitle": "Change details",
+    "formSectionTitle": "Change data",
     "userFallback": "User",
-    "usernameFallback": "No username",
+    "usernameFallback": "No user",
     "summary": {
       "rules": "Rules",
       "strength": "Strength",
@@ -949,11 +1095,11 @@
     },
     "strength": {
       "title": "Password strength",
-      "empty": "Not provided",
+      "empty": "Not informed",
       "weak": "Weak",
       "medium": "Medium",
       "strong": "Strong",
-      "rulesSatisfied": "rules satisfied"
+      "rulesSatisfied": "rules met"
     }
   },
   "profile": {
@@ -992,110 +1138,15 @@
     },
     "fallback": {
       "noName": "User without name",
-      "noUsername": "Username not provided"
+      "noUsername": "User not informed"
     },
     "items": "{count, plural, =0 {0 items} one {# item} other {# items}}",
     "empty": {
-      "groups": "No group provided.",
-      "permissions": "No permissions found."
+      "groups": "No group informed.",
+      "permissions": "No permission found."
     },
     "loading": "Please wait while we load the profile data.",
     "error": "Could not load the profile."
-  },
-  "session": {
-    "expiring": {
-      "title": "Session will expire",
-      "body": "Your session will expire due to inactivity in",
-      "hint": "Click “Renew” to continue without reloading the page."
-    },
-    "expired": {
-      "title": "Session expired",
-      "body": "Your session expired due to inactivity.",
-      "hint": "To continue, sign in again."
-    }
-  },
-  "common": {
-    "no": "No",
-    "yes": "Yes",
-    "new": "New",
-    "all": "All",
-    "error": "Error",
-    "save": "Save",
-    "edit": "Edit",
-    "back": "Back",
-    "logout": "Sign out",
-    "close": "Close",
-    "clear": "Clear",
-    "search": "Search",
-    "apply": "Apply",
-    "actions": "Actions",
-    "filter": "Filter",
-    "remove": "Remove",
-    "period": "Period",
-    "delete": "Delete",
-    "cancel": "Cancel",
-    "activate": "Activate",
-    "success": "Success",
-    "info": "Information",
-    "warning": "Warning",
-    "view": "View",
-    "company": "Company",
-    "notNow": "Not now",
-    "update": "Update",
-    "confirm": "Confirm",
-    "acquirer": "Acquirer",
-    "deactivate": "Deactivate",
-    "loading": "Loading...",
-    "goToLogin": "Go to login",
-    "notInformed": "Not provided",
-    "tableFilters": "Table filters",
-    "renewSession": "Renew session",
-    "correlationId": "Correlation ID",
-    "registrationNumber": "Registration No.",
-    "advancedFilters": "Advanced filters",
-    "selected": "{count, plural, =0 {None selected} one {# selected} other {# selected}}",
-    "selectedFemale": "{count, plural, =0 {None selected} one {# selected} other {# selected}}"
-  },
-  "confirm": {
-    "logoutTitle": "Sign out",
-    "logoutMessage": "Do you really want to sign out of CardSync?"
-  },
-  "notifications": {
-    "welcome": "Hello, {name}!",
-    "itemsCount": "{count, plural, =0 {No items} one {# item} other {# items}}"
-  },
-  "errors": {
-    "global": {
-      "GENERIC_ERROR": "An unexpected error occurred. Please try again.",
-      "NETWORK_ERROR": "Could not connect to the server.",
-      "ACCESS_DENIED": "You do not have permission to perform this action.",
-      "SESSION_EXPIRED": "Your session has expired. Sign in again.",
-      "VALIDATION_ERROR": "Some fields need to be corrected.",
-      "USER_DOCUMENT_ALREADY_EXISTS": "A user with this document already exists.",
-      "USER_USERNAME_ALREADY_EXISTS": "A user with this username already exists.",
-      "USER_DELETE_SELF_NOT_ALLOWED": "You cannot delete your own user.",
-      "USER_DELETE_PROTECTED_NOT_ALLOWED": "This user is protected and cannot be deleted.",
-      "NOT_FOUND": "Resource not found.",
-      "INTERNAL_ERROR": "An internal error occurred. Please try again.",
-      "GROUP_NAME_ALREADY_EXISTS": "A group with this name already exists.",
-      "GROUP_DELETE_SUPPORT_NOT_ALLOWED": "The SUPPORT group cannot be deleted or changed in this operation.",
-      "GROUP_DELETE_IN_USE": "This group has associated users and cannot be deleted.",
-      "PERMISSION_NOT_FOUND": "One or more informed permissions were not found.",
-      "ESTABLISHMENT_ALREADY_EXISTS": "An establishment with the same PV, company, and acquirer already exists."
-    },
-    "fields": {
-      "*": {
-        "required": "{label} is required.",
-        "minLength": "{label} must have at least {requiredLength} characters.",
-        "maxLength": "{label} must have at most {requiredLength} characters.",
-        "min": "{label} must be at least {min}.",
-        "max": "{label} must be at most {max}.",
-        "email": "{label} must be a valid email.",
-        "pattern": "{label} has an invalid format.",
-        "invalid": "{label} is invalid.",
-        "passwordMismatch": "Passwords must match."
-      }
-    }
   },
   "groups": {
     "subtitle": "Manage groups and access permissions",
@@ -1143,8 +1194,8 @@
       }
     },
     "detail": {
-      "title": "Group detail",
-      "subtitle": "Summary, permissions, and group users",
+      "title": "Group details",
+      "subtitle": "Summary, permissions and group users",
       "tabs": {
         "summary": "Summary",
         "permissions": "Permissions",
@@ -1152,19 +1203,19 @@
       },
       "permissions": {
         "title": "Permissions",
-        "subtitle": "Associate or disassociate permissions from this group.",
+        "subtitle": "Associate or dissociate permissions from this group.",
         "placeholder": "Select permissions",
         "saved": "Permissions updated successfully.",
-        "saveError": "Could not save the group permissions.",
-        "empty": "No associated permissions."
+        "saveError": "Could not save group permissions.",
+        "empty": "No permission associated."
       },
       "users": {
         "title": "Users",
-        "subtitle": "Associate or disassociate users from this group.",
+        "subtitle": "Associate or dissociate users from this group.",
         "placeholder": "Select users",
         "saved": "Users updated successfully.",
-        "saveError": "Could not save the group users.",
-        "empty": "No associated users."
+        "saveError": "Could not save group users.",
+        "empty": "No user associated."
       }
     },
     "delete": {
@@ -1175,7 +1226,7 @@
   },
   "audit": {
     "emailLog": {
-      "subtitle": "Manage email logs",
+      "subtitle": "Manage e-mail logs",
       "fields": {
         "recipient": "Recipient",
         "subject": "Subject",
@@ -1195,7 +1246,7 @@
       },
       "status": {
         "sent": "Sent",
-        "failed": "Send failed"
+        "failed": "Send failure"
       },
       "eventType": {
         "firstPassword": "First password",
@@ -1206,11 +1257,121 @@
       }
     }
   },
+  "session": {
+    "expiring": {
+      "title": "Session will expire",
+      "body": "Your session will expire due to inactivity in",
+      "hint": "Click “Renew” to continue without reloading the page."
+    },
+    "expired": {
+      "title": "Session expired",
+      "body": "Your session expired due to inactivity.",
+      "hint": "To continue, log in again."
+    }
+  },
+  "common": {
+    "filters": {
+      "final": "Final Value",
+      "initial": "Initial Value"
+    },
+    "no": "No",
+    "yes": "Yes",
+    "new": "New",
+    "all": "All",
+    "error": "Error",
+    "save": "Save",
+    "edit": "Edit",
+    "back": "Back",
+    "logout": "Log out",
+    "close": "Close",
+    "clear": "Clear",
+    "quantity": "Qty.",
+    "search": "Search",
+    "from": "From",
+    "until": "Up to",
+    "to": "to",
+    "apply": "Apply",
+    "actions": "Actions",
+    "filter": "Filter",
+    "remove": "Remove",
+    "period": "Period",
+    "delete": "Delete",
+    "cancel": "Cancel",
+    "activate": "Activate",
+    "success": "Success",
+    "info": "Information",
+    "warning": "Warning",
+    "view": "View",
+    "company": "Company",
+    "notNow": "Not now",
+    "grossValue": "Gross",
+    "update": "Update",
+    "confirm": "Confirm",
+    "discountValue": "Fee",
+    "liquidValue": "Net",
+    "acquirer": "Acquirer",
+    "deactivate": "Deactivate",
+    "loading": "Loading...",
+    "adjustmentValue": "Adjustments",
+    "goToLogin": "Go to login",
+    "notInformed": "Not informed",
+    "tableFilters": "Table filters",
+    "renewSession": "Renew session",
+    "correlationId": "Correlation ID",
+    "notInformedFemale": "Not informed",
+    "calculateTotals": "Calculate Totals",
+    "registrationNumber": "Registration No.",
+    "advancedFilters": "Advanced filters",
+    "viewInstallments": "View installments",
+    "selected": "{count, plural, =0 {None selected} one {# selected} other {# selected}}",
+    "selectedFemale": "{count, plural, =0 {None selected} one {# selected} other {# selected}}"
+  },
+  "confirm": {
+    "logoutTitle": "End session",
+    "logoutMessage": "Do you really want to log out of CardSync?"
+  },
+  "notifications": {
+    "welcome": "Hello, {name}!",
+    "itemsCount": "{count, plural, =0 {No items} one {# item} other {# items}}"
+  },
+  "errors": {
+    "global": {
+      "GENERIC_ERROR": "An unexpected error occurred. Try again.",
+      "NETWORK_ERROR": "Could not connect to the server.",
+      "ACCESS_DENIED": "You do not have permission to perform this action.",
+      "SESSION_EXPIRED": "Your session has expired. Log in again.",
+      "VALIDATION_ERROR": "Some fields need to be corrected.",
+      "USER_DOCUMENT_ALREADY_EXISTS": "A user with this document already exists.",
+      "USER_USERNAME_ALREADY_EXISTS": "A user with this username already exists.",
+      "USER_DELETE_SELF_NOT_ALLOWED": "You cannot delete your own user.",
+      "USER_DELETE_PROTECTED_NOT_ALLOWED": "This user is protected and cannot be deleted.",
+      "NOT_FOUND": "Resource not found.",
+      "INTERNAL_ERROR": "An internal error occurred. Try again.",
+      "GROUP_NAME_ALREADY_EXISTS": "A group with this name already exists.",
+      "GROUP_DELETE_SUPPORT_NOT_ALLOWED": "The SUPPORT group cannot be deleted or changed in this operation.",
+      "GROUP_DELETE_IN_USE": "This group has associated users and cannot be deleted.",
+      "PERMISSION_NOT_FOUND": "One or more informed permissions were not found.",
+      "ESTABLISHMENT_ALREADY_EXISTS": "An establishment with the same PV, company, and acquirer already exists."
+    },
+    "fields": {
+      "*": {
+        "required": "{label} is required.",
+        "minLength": "{label} must have at least {requiredLength} characters.",
+        "maxLength": "{label} must have at most {requiredLength} characters.",
+        "min": "{label} must be at least {min}.",
+        "max": "{label} must be at most {max}.",
+        "email": "{label} must be a valid e-mail.",
+        "pattern": "{label} has an invalid format.",
+        "invalid": "{label} is invalid.",
+        "passwordMismatch": "Passwords must match."
+      }
+    }
+  },
   "notFound": {
-    "title": "Page not found",
-    "message": "The requested route does not exist or was removed. Check the address or return to the dashboard.",
-    "attemptedUrl": "Requested URL",
+    "attemptedUrl": "Accessed URL",
     "goHome": "Go to dashboard",
-    "hint": "If you got here through an app link, review the route registration or the related menu item."
+    "title": "Page not found",
+    "hint": "If you got here through a system link, review the route registration or the corresponding menu item.",
+    "message": "The informed route does not exist or was removed. Check the accessed address or return to the dashboard."
   }
 }

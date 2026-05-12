@@ -1,0 +1,58 @@
+<div class="flag-rel-card border-1 surface-border border-round p-3 mx-auto">
+  <p-table
+    stripedRows
+    size="small"
+    showGridlines
+    [rowHover]="true"
+    [value]="installments()"
+    [tableStyle]="{ width: '100%' }"
+    class="p-datatable-sm mt-1 cs-admin-table"
+  >
+    <ng-template pTemplate="colgroup">
+      <colgroup>
+        <col style="width: 60px" />
+        <col style="width: 100px" />
+        <col style="width: 100px" />
+        <col style="width: 70px" />
+        <col style="width: 70px" />
+        <col style="width: 70px" />
+        <col style="width: 70px" />
+        <col style="width: 70px" />
+      </colgroup>
+    </ng-template>
+
+    <ng-template pTemplate="header">
+      <tr>
+        <th class="text-center">{{ 'transactions.fields.installment' | translate }}</th>
+        <th class="text-center">{{ 'transactions.fields.forecast' | translate }}</th>
+        <th class="text-center">{{ 'transactions.fields.payment' | translate }}</th>
+        <th class="text-right">{{ 'transactions.fields.grossValue' | translate }}</th>
+        <th class="text-right">{{ 'transactions.fields.rate' | translate }}</th>
+        <th class="text-right">{{ 'transactions.fields.liquid' | translate }}</th>
+        <th class="text-right">{{ 'transactions.fields.rate' | translate }}</th>
+        <th>{{ 'transactions.fields.status' | translate }}</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-row>
+      <tr>
+        <td class="text-center font-medium">{{ installmentNumber(row) || '-' }}</td>
+        <td class="text-center">{{ row.expectedPaymentDate | csDate: 'date' }}</td>
+        <td class="text-center">{{ row.paymentDate | csDate: 'date' }}</td>
+        <td class="text-right">{{ row.grossValue | csCurrency }}</td>
+        <td class="text-right">{{ row.feeValue | csCurrency }}</td>
+        <td class="text-right">{{ row.netValue | csCurrency }}</td>
+        <td class="text-right">{{ row.adjustmentValue | csCurrency }}</td>
+        <td>{{ row.status || '-' }}</td>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="8" class="text-center py-4 text-500">
+          {{ 'pagination.emptymessage' | translate }}
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

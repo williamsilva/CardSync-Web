@@ -106,29 +106,6 @@ export interface ConciliationDashboardModel {
   pendingAging: ConciliationAgingModel[];
 }
 
-export interface AcquirerSaleAnalysisModel {
-  id: string;
-  saleDate?: string | null;
-  company?: string | null;
-  establishment?: string | null;
-  acquirer?: string | null;
-  flag?: string | null;
-  modality?: string | null;
-  nsu?: string | number | null;
-  authorization?: string | null;
-  tid?: string | null;
-  rvNumber?: string | number | null;
-  grossValue?: number | null;
-  discountValue?: number | null;
-  liquidValue?: number | null;
-  installmentNumber?: number | null;
-  installmentTotal?: number | null;
-  transactionStatus?: string | null;
-  reconciliationStatus?: ConciliationStatus | null;
-  statusPaymentBank?: ConciliationStatus | null;
-  processedFile?: string | null;
-}
-
 export interface ConciliationFeeAnalysisModel {
   id: string;
   saleDate?: string | null;
@@ -225,12 +202,7 @@ export interface BankSettlementAnalysisModel {
   status?: ConciliationStatus | null;
 }
 
-export type DivergenceSeverity =
-  | 'LOW'
-  | 'MEDIUM'
-  | 'HIGH'
-  | 'CRITICAL'
-  | string;
+export type DivergenceSeverity = 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL' | string;
 
 export interface DivergenceAnalysisModel {
   id: string;
@@ -251,4 +223,17 @@ export interface DivergenceAnalysisModel {
   message?: string | null;
   actionHint?: string | null;
   fileName?: string | null;
+}
+
+export interface ReconcileErpAcquirerResultModel {
+  analyzed: number;
+  matched: number;
+  updated: number;
+  skippedDivergent: number;
+  flagUpdated: number;
+  businessContextUpdated: number;
+  notMatched: number;
+  valueDivergences: number;
+  acquirerDivergences: number;
+  ambiguousMatches: number;
 }

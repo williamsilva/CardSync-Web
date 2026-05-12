@@ -183,8 +183,7 @@
   stateStorage="local"
   filterDisplay="menu"
   [value]="acquirers()"
-  class="p-datatable-sm mt-1"
-  styleClass="cs-admin-table"
+  class="cs-admin-table"
   [loading]="facade.loading()"
   [showCurrentPageReport]="true"
   [totalRecords]="totalRecords()"
@@ -455,7 +454,7 @@
             icon="pi pi-briefcase"
             class="p-button-text p-button-sm"
             (click)="toggleEstablishments(row)"
-            [pTooltip]="'flag.relationships.acquirers' | translate"
+            [pTooltip]="'flag.relationships.establishment' | translate"
           ></button>
         </div>
       </td>

@@ -1,6 +1,6 @@
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Output, ViewChild, computed, input } from '@angular/core';
+import { Component, EventEmitter, Output, ViewChild, computed, inject, input } from '@angular/core';
 
 import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
@@ -12,11 +12,16 @@ import { Table, TableLazyLoadEvent, TableModule } from 'primeng/table';
 import { FlagModel } from '@models/flag.models';
 import { I18nService } from '@core/i18n/i18n.service';
 import { CsTagComponent, CsTagTone } from '@shared/ui';
-import { StatusEnum, allStatusEnum, statusEnumLabel } from '@models/enums/status.enum';
 import { FlagPermissionPolicy } from '@features/security/policy/flag-permission.policy';
 import { FlagRowActionsComponent } from '../flag-row-actions/flag-row-actions.component';
 import { FlagCompanyRelationsComponent } from '@features/register/flag/flag-relations/flag-company-relations.component';
 import { FlagAcquirerRelationsComponent } from '@features/register/flag/flag-relations/flag-acquirer-relations.component';
+import {
+  StatusEnum,
+  allStatusEnum,
+  statusEnumLabel,
+  statusEnumSeverity,
+} from '@models/enums/status.enum';
 
 @Component({
   standalone: true,
@@ -54,6 +59,8 @@ export class FlagTableComponent {
   @Output() refreshRelations = new EventEmitter<void>();
   @Output() selectionChange = new EventEmitter<FlagModel[]>();
 
+  protected readonly i18n = inject(I18nService);
+
   rows = input.required<number>();
   loading = input.required<boolean>();
   loadedOnce = input<boolean>(false);
@@ -64,10 +71,6 @@ export class FlagTableComponent {
   rowsPerPageOptions = input.required<number[]>();
   secPolicy = input.required<FlagPermissionPolicy>();
   expandedRelationType = input<'companies' | 'acquirers' | null>(null);
-  statusLabel = input.required<(status: StatusEnum | null) => string>();
-  statusSeverity = input.required<(status: StatusEnum | null) => CsTagTone>();
-
-  constructor(private readonly i18n: I18nService) {}
 
   readonly statusEnumOptions = computed(() =>
     allStatusEnum().map((value) => ({
@@ -101,6 +104,14 @@ export class FlagTableComponent {
     const selectedCount = eligible.filter((row) => this.isRowSelected(row)).length;
     return selectedCount > 0 && selectedCount < eligible.length;
   });
+
+  statusLabel(value: StatusEnum | null): string {
+    return statusEnumLabel(value, this.i18n);
+  }
+
+  statusEnumSeverity(value: StatusEnum | null): CsTagTone {
+    return statusEnumSeverity(value);
+  }
 
   clearTableFilters(defaultRows = 10) {
     if (!this.dt) return;
