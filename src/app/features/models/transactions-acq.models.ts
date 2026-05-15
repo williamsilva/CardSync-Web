@@ -45,14 +45,6 @@ export interface TransactionsAcqCreateInput {}
 
 export interface TransactionsAcqUpdateInput {}
 
-export interface TransactionsAcqTotalsModel {
-  totalGrossValue: number;
-  totalFeeValue: number;
-  totalNetValue: number;
-  totalAdjustments: number;
-  quantity: number;
-}
-
 /**
  * Payload bruto vindo da API.
  * Aceita status numérico ou string para tolerar mudanças no backend.

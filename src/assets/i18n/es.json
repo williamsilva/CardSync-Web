@@ -71,16 +71,16 @@
     },
     "transactions": {
       "erp": {
-        "parcels": {
-          "title": "Cuotas"
+        "installments": {
+          "title": "Cuotas ERP"
         },
         "sales": {
           "title": "Ventas ERP"
         }
       },
       "acq": {
-        "parcels": {
-          "title": "Cuotas"
+        "installments": {
+          "title": "Cuotas ACQ"
         },
         "sales": {
           "title": "Ventas adquirente"

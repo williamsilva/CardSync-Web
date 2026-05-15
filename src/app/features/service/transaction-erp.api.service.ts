@@ -5,12 +5,12 @@ import { map } from 'rxjs/operators';
 
 import { API } from '@core/api/api.config';
 import { HalPagedResponse } from '@core/api/page.model';
+import { TransactionsTotalsModel } from '@models/transactionsTotalsModel';
 import { ListQueryDto } from '@shared/features/list-query/list-query.types';
 import { TransactionsErpAdvancedFilters } from '@features/filter/transaction-erp.filters';
 import {
   TransactionsErpModel,
   TransactionsErpApiModel,
-  TransactionsErpTotalsModel,
   mapTransactionsErpApiModels,
 } from '@models/transactions-erp.models';
 
@@ -37,6 +37,6 @@ export class TransactionsErpApiService {
   }
 
   calculateTotals(body: ListQueryDto<TransactionsErpAdvancedFilters>) {
-    return this.http.post<TransactionsErpTotalsModel>(`${this.baseUrl}/totals`, body);
+    return this.http.post<TransactionsTotalsModel>(`${this.baseUrl}/totals`, body);
   }
 }

@@ -1,0 +1,529 @@
+<cs-page-header
+  [compact]="false"
+  [subtitle]="'transactions.acq.installment.subtitle' | translate"
+  [breadcrumb]="[
+    { label: ('breadcrumb.dashboard' | translate), url: '/' },
+    { label: ('breadcrumb.transactions.acq.installment' | translate) },
+  ]"
+>
+  <button
+    pButton
+    type="button"
+    icon="pi pi-refresh"
+    (click)="refresh()"
+    class="p-button-text p-button-sm"
+    [label]="'common.update' | translate"
+  ></button>
+</cs-page-header>
+
+<cs-filters-panel
+  (clear)="clear()"
+  [collapsed]="true"
+  (search)="search()"
+  [actionsAlign]="'start'"
+  [activeCount]="activeFiltersCount()"
+  [title]="'common.filter' | translate"
+  [activeFilterGroups]="activeFilterGroups()"
+>
+  <div class="grid formgrid gap-0 align-items-end">
+    <cs-advanced-period-date-filter
+      inputId="saleDate"
+      [value]="saleDate()"
+      [period]="periodSaleDate()"
+      periodInputId="periodSaleDate"
+      [disabled]="isSaleDateDisabled()"
+      class="col-12 md:col-3 xl:col-2 p-1"
+      (valueChange)="saleDate.set($event)"
+      [periodOptions]="periodEnumOptions()"
+      [view]="setViewFormat(periodSaleDate())"
+      [dateFormat]="setDateFormat(periodSaleDate())"
+      [selectionMode]="setSelectionMode(periodSaleDate())"
+      [dateLabel]="'transactions.fields.saleDate' | translate"
+      [periodLabel]="'transactions.fields.periodSaleDate' | translate"
+      (periodChange)="onPeriodColumnChange(periodSaleDate, saleDate, $event)"
+    ></cs-advanced-period-date-filter>
+
+    <cs-advanced-period-date-filter
+      inputId="expectedPaymentDate"
+      [value]="expectedPaymentDate()"
+      [period]="periodExpectedPaymentDate()"
+      periodInputId="periodExpectedPaymentDate"
+      [disabled]="isExpectedPaymentDateDisabled()"
+      class="col-12 md:col-3 xl:col-2 p-1"
+      (valueChange)="expectedPaymentDate.set($event)"
+      [periodOptions]="periodEnumOptions()"
+      [view]="setViewFormat(periodExpectedPaymentDate())"
+      [dateFormat]="setDateFormat(periodExpectedPaymentDate())"
+      [selectionMode]="setSelectionMode(periodExpectedPaymentDate())"
+      [dateLabel]="'transactions.fields.expectedPaymentDate' | translate"
+      [periodLabel]="'transactions.fields.periodExpectedPaymentDate' | translate"
+      (periodChange)="onPeriodColumnChange(periodExpectedPaymentDate, expectedPaymentDate, $event)"
+    ></cs-advanced-period-date-filter>
+
+    <cs-advanced-period-date-filter
+      inputId="paymentDate"
+      [value]="paymentDate()"
+      [period]="periodPaymentDate()"
+      periodInputId="periodPaymentDate"
+      [disabled]="isPaymentDateDisabled()"
+      class="col-12 md:col-3 xl:col-2 p-1"
+      (valueChange)="paymentDate.set($event)"
+      [periodOptions]="periodEnumOptions()"
+      [view]="setViewFormat(periodPaymentDate())"
+      [dateFormat]="setDateFormat(periodPaymentDate())"
+      [selectionMode]="setSelectionMode(periodPaymentDate())"
+      [dateLabel]="'transactions.fields.paymentDate' | translate"
+      [periodLabel]="'transactions.fields.periodPaymentDate' | translate"
+      (periodChange)="onPeriodColumnChange(periodPaymentDate, paymentDate, $event)"
+    ></cs-advanced-period-date-filter>
+
+    <cs-advanced-period-date-filter
+      inputId="conciliationDate"
+      [value]="conciliationDate()"
+      [period]="periodConciliationDate()"
+      periodInputId="periodConciliationDate"
+      [disabled]="isConciliationDateDisabled()"
+      class="col-12 md:col-3 xl:col-2 p-1"
+      (valueChange)="conciliationDate.set($event)"
+      [periodOptions]="periodEnumOptions()"
+      [view]="setViewFormat(periodConciliationDate())"
+      [dateFormat]="setDateFormat(periodConciliationDate())"
+      [selectionMode]="setSelectionMode(periodConciliationDate())"
+      [dateLabel]="'transactions.fields.conciliationDate' | translate"
+      [periodLabel]="'transactions.fields.periodConciliationDate' | translate"
+      (periodChange)="onPeriodColumnChange(periodConciliationDate, conciliationDate, $event)"
+    ></cs-advanced-period-date-filter>
+  </div>
+
+  <div class="grid formgrid gap-0 align-items-end">
+    <cs-advanced-text-filter
+      inputId="cvNsu"
+      [value]="cvNsu()"
+      class="col-12 md:col-3 xl:col-2 p-1"
+      (valueChange)="cvNsu.set($event)"
+      [label]="'transactions.fields.cvNsu' | translate"
+    ></cs-advanced-text-filter>
+
+    <cs-advanced-text-filter
+      inputId="authorization"
+      [value]="authorization()"
+      class="col-12 md:col-3 xl:col-2 p-1"
+      (valueChange)="authorization.set($event)"
+      [label]="'transactions.fields.authorization' | translate"
+    ></cs-advanced-text-filter>
+
+    <cs-advanced-text-filter
+      inputId="installment"
+      [value]="installment()"
+      class="col-12 md:col-3 xl:col-2 p-1"
+      (valueChange)="installment.set($event)"
+      [label]="'transactions.fields.installment' | translate"
+    ></cs-advanced-text-filter>
+
+    <cs-advanced-text-filter
+      inputId="status"
+      [value]="status()"
+      class="col-12 md:col-3 xl:col-2 p-1"
+      (valueChange)="status.set($event)"
+      [label]="'transactions.fields.status' | translate"
+    ></cs-advanced-text-filter>
+
+    <cs-advanced-multiselect-filter
+      optionValue="id"
+      inputId="companies"
+      [value]="companies()"
+      optionLabel="fantasyName"
+      [options]="companiesOptions()"
+      class="col-12 md:col-3 xl:col-2 p-1"
+      (valueChange)="companies.set($event)"
+      [label]="'transactions.fields.company' | translate"
+    ></cs-advanced-multiselect-filter>
+
+    <cs-advanced-multiselect-filter
+      optionValue="id"
+      inputId="establishments"
+      [value]="establishments()"
+      optionLabel="pvNumber"
+      [options]="establishmentsOptions()"
+      class="col-12 md:col-3 xl:col-2 p-1"
+      (valueChange)="establishments.set($event)"
+      [label]="'transactions.fields.establishment' | translate"
+    ></cs-advanced-multiselect-filter>
+  </div>
+
+  <div class="grid formgrid gap-0 align-items-end">
+    <cs-advanced-multiselect-filter
+      optionValue="id"
+      inputId="acquirers"
+      [value]="acquirers()"
+      optionLabel="fantasyName"
+      [options]="acquirersOptions()"
+      class="col-12 md:col-3 xl:col-2 p-1"
+      (valueChange)="acquirers.set($event)"
+      [label]="'transactions.fields.acquirer' | translate"
+    ></cs-advanced-multiselect-filter>
+
+    <cs-advanced-multiselect-filter
+      optionValue="id"
+      inputId="flags"
+      [value]="flags()"
+      optionLabel="name"
+      [options]="flagsOptions()"
+      class="col-12 md:col-3 xl:col-2 p-1"
+      (valueChange)="flags.set($event)"
+      [label]="'transactions.fields.flag' | translate"
+    ></cs-advanced-multiselect-filter>
+
+    <cs-currency-range-filter
+      inputId="grossValue"
+      [value]="grossValueRange()"
+      class="col-12 md:col-6 xl:col-2 p-2"
+      (valueChange)="onGrossValueRangeChange($event)"
+      [label]="'transactions.fields.grossValue' | translate"
+    ></cs-currency-range-filter>
+
+    <cs-currency-range-filter
+      inputId="feeValue"
+      [value]="feeValueRange()"
+      class="col-12 md:col-6 xl:col-2 p-2"
+      (valueChange)="onFeeValueRangeChange($event)"
+      [label]="'transactions.fields.discountValue' | translate"
+    ></cs-currency-range-filter>
+
+    <cs-currency-range-filter
+      inputId="netValue"
+      [value]="netValueRange()"
+      class="col-12 md:col-6 xl:col-2 p-2"
+      (valueChange)="onNetValueRangeChange($event)"
+      [label]="'transactions.fields.liquidValue' | translate"
+    ></cs-currency-range-filter>
+
+    <cs-currency-range-filter
+      inputId="adjustmentValue"
+      [value]="adjustmentValueRange()"
+      class="col-12 md:col-6 xl:col-2 p-2"
+      (valueChange)="onAdjustmentValueRangeChange($event)"
+      [label]="'transactions.fields.adjustmentValue' | translate"
+    ></cs-currency-range-filter>
+  </div>
+</cs-filters-panel>
+
+<div class="surface-card border-round p-3 mt-3">
+  <!-- <div
+    class="flex flex-column md:flex-row justify-content-between align-items-start md:align-items-center gap-2 mb-3"
+  >
+    <button
+      pButton
+      type="button"
+      icon="pi pi-calculator"
+      (click)="calculateTotals()"
+      class="p-button-success p-button-sm"
+      [loading]="erpSalesFacade.totalsLoading()"
+      [label]="'common.calculateTotals' | translate"
+    ></button>
+
+    @if (erpSalesFacade.totals(); as totals) {
+      <div class="flex flex-wrap gap-2 text-sm">
+        <span class="px-2 py-1 border-round surface-100"
+          >{{ 'common.quantity' | translate }}: {{ totals.quantity }}</span
+        >
+        <span class="px-2 py-1 border-round surface-100"
+          >{{ 'common.grossValue' | translate }}: {{ totals.totalGrossValue | csCurrency }}</span
+        >
+        <span class="px-2 py-1 border-round surface-100"
+          >{{ 'common.discountValue' | translate }}: {{ totals.totalFeeValue | csCurrency }}</span
+        >
+        <span class="px-2 py-1 border-round surface-100"
+          >{{ 'common.liquidValue' | translate }}: {{ totals.totalNetValue | csCurrency }}</span
+        >
+        <span class="px-2 py-1 border-round surface-100"
+          >{{ 'common.adjustmentValue' | translate }}:
+          {{ totals.totalAdjustments | csCurrency }}</span
+        >
+      </div>
+    }
+  </div> -->
+  <p-table
+    #dt
+    stripedRows
+    dataKey="id"
+    size="small"
+    [rows]="rows"
+    [lazy]="true"
+    showGridlines
+    [value]="installments()"
+    [rowHover]="true"
+    [paginator]="true"
+    sortMode="multiple"
+    stateStorage="local"
+    class="cs-admin-table"
+    [stateKey]="tableStateKey()"
+    [showCurrentPageReport]="true"
+    (onPage)="onPageChange($event)"
+    [totalRecords]="totalRecords()"
+    (onLazyLoad)="onLazyLoad($event)"
+    [paginatorDropdownAppendTo]="'body'"
+    [loading]="installmentFacade.loading()"
+    [rowsPerPageOptions]="rowsPerPageOptions"
+    [currentPageReportTemplate]="'pagination.report' | translate"
+    [tableStyle]="{ width: '100%', 'min-width': '92rem', 'table-layout': 'fixed' }"
+  >
+    <ng-template pTemplate="colgroup">
+      <colgroup>
+        <col style="width: 120px" />
+        <col style="width: 120px" />
+        <col style="width: 120px" />
+        <col style="width: 130px" />
+        <col style="width: 100px" />
+        <col style="width: 120px" />
+        <col style="width: 120px" />
+        <col style="width: 120px" />
+        <col style="width: 90px" />
+        <col style="width: 90px" />
+        <col style="width: 90px" />
+        <col style="width: 90px" />
+        <col style="width: 80px" />
+        <col style="width: 110px" />
+        <col style="width: 120px" />
+        <col style="width: 130px" />
+      </colgroup>
+    </ng-template>
+
+    <ng-template pTemplate="header">
+      <tr>
+        <th pSortableColumn="saleDate">
+          <div class="th-flex text-center">
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'transactions.columns.saleDate' | translate"
+              >{{ 'transactions.columns.saleDate' | translate }}</span
+            ><span class="th-icons"
+              ><p-sortIcon field="saleDate"></p-sortIcon
+              ><p-columnFilter type="date" display="menu" field="saleDate"></p-columnFilter
+            ></span>
+          </div>
+        </th>
+
+        <th pSortableColumn="expectedPaymentDate">
+          <div class="th-flex text-center">
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'transactions.columns.expectedPaymentDate' | translate"
+              >{{ 'transactions.columns.expectedPaymentDate' | translate }}</span
+            ><span class="th-icons"
+              ><p-sortIcon field="expectedPaymentDate"></p-sortIcon
+              ><p-columnFilter
+                type="date"
+                display="menu"
+                field="expectedPaymentDate"
+              ></p-columnFilter
+            ></span>
+          </div>
+        </th>
+        <th pSortableColumn="paymentDate">
+          <div class="th-flex text-center">
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'transactions.fields.paymentDate' | translate"
+              >{{ 'transactions.fields.paymentDate' | translate }}</span
+            ><span class="th-icons"
+              ><p-sortIcon field="paymentDate"></p-sortIcon
+              ><p-columnFilter type="date" display="menu" field="paymentDate"></p-columnFilter
+            ></span>
+          </div>
+        </th>
+        <th pSortableColumn="company">
+          <div class="th-flex text-center">
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'transactions.columns.company' | translate"
+              >{{ 'transactions.columns.company' | translate }}</span
+            ><span class="th-icons"
+              ><p-sortIcon field="company"></p-sortIcon
+              ><p-columnFilter type="text" display="menu" field="company"></p-columnFilter
+            ></span>
+          </div>
+        </th>
+        <th pSortableColumn="establishment">
+          <div class="th-flex text-center">
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'transactions.columns.establishment' | translate"
+              >{{ 'transactions.columns.establishment' | translate }}</span
+            ><span class="th-icons"
+              ><p-sortIcon field="establishment"></p-sortIcon
+              ><p-columnFilter type="text" display="menu" field="establishment"></p-columnFilter
+            ></span>
+          </div>
+        </th>
+        <th pSortableColumn="acquirer">
+          <div class="th-flex text-center">
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'transactions.columns.acquirer' | translate"
+              >{{ 'transactions.columns.acquirer' | translate }}</span
+            ><span class="th-icons"
+              ><p-sortIcon field="acquirer"></p-sortIcon
+              ><p-columnFilter type="text" display="menu" field="acquirer"></p-columnFilter
+            ></span>
+          </div>
+        </th>
+        <th pSortableColumn="flag">
+          <div class="th-flex text-center">
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'transactions.columns.flag' | translate"
+              >{{ 'transactions.columns.flag' | translate }}</span
+            ><span class="th-icons"
+              ><p-sortIcon field="flag"></p-sortIcon
+              ><p-columnFilter type="text" display="menu" field="flag"></p-columnFilter
+            ></span>
+          </div>
+        </th>
+        <th pSortableColumn="grossValue">
+          <div class="th-flex text-center">
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'transactions.columns.grossValue' | translate"
+              >{{ 'transactions.columns.grossValue' | translate }}</span
+            ><span class="th-icons"
+              ><p-sortIcon field="grossValue"></p-sortIcon
+              ><p-columnFilter type="numeric" display="menu" field="grossValue"></p-columnFilter
+            ></span>
+          </div>
+        </th>
+        <th pSortableColumn="feeValue">
+          <div class="th-flex text-center">
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'transactions.columns.discountValue' | translate"
+              >{{ 'transactions.columns.discountValue' | translate }}</span
+            ><span class="th-icons"
+              ><p-sortIcon field="feeValue"></p-sortIcon
+              ><p-columnFilter type="numeric" display="menu" field="feeValue"></p-columnFilter
+            ></span>
+          </div>
+        </th>
+        <th pSortableColumn="netValue">
+          <div class="th-flex text-center">
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'transactions.columns.liquidValue' | translate"
+              >{{ 'transactions.columns.liquidValue' | translate }}</span
+            ><span class="th-icons"
+              ><p-sortIcon field="netValue"></p-sortIcon
+              ><p-columnFilter type="numeric" display="menu" field="netValue"></p-columnFilter
+            ></span>
+          </div>
+        </th>
+        <th pSortableColumn="adjustmentValue">
+          <div class="th-flex text-center">
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'transactions.columns.adjustmentValue' | translate"
+              >{{ 'transactions.columns.adjustmentValue' | translate }}</span
+            ><span class="th-icons"
+              ><p-sortIcon field="adjustmentValue"></p-sortIcon
+              ><p-columnFilter
+                type="numeric"
+                display="menu"
+                field="adjustmentValue"
+              ></p-columnFilter
+            ></span>
+          </div>
+        </th>
+        <th pSortableColumn="installment">
+          <div class="th-flex text-center">
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'transactions.columns.installment' | translate"
+              >{{ 'transactions.columns.installment' | translate }}</span
+            ><span class="th-icons"
+              ><p-sortIcon field="installment"></p-sortIcon
+              ><p-columnFilter type="text" display="menu" field="installment"></p-columnFilter
+            ></span>
+          </div>
+        </th>
+        <th pSortableColumn="cvNsu">
+          <div class="th-flex text-center">
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'transactions.columns.cvNsu' | translate"
+              >{{ 'transactions.columns.cvNsu' | translate }}</span
+            ><span class="th-icons"
+              ><p-sortIcon field="cvNsu"></p-sortIcon
+              ><p-columnFilter type="text" display="menu" field="cvNsu"></p-columnFilter
+            ></span>
+          </div>
+        </th>
+        <th pSortableColumn="authorization">
+          <div class="th-flex text-center">
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'transactions.columns.authorization' | translate"
+              >{{ 'transactions.columns.authorization' | translate }}</span
+            ><span class="th-icons"
+              ><p-sortIcon field="authorization"></p-sortIcon
+              ><p-columnFilter type="text" display="menu" field="authorization"></p-columnFilter
+            ></span>
+          </div>
+        </th>
+        <th pSortableColumn="status">
+          <div class="th-flex text-center">
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'transactions.fields.status' | translate"
+              >{{ 'transactions.fields.status' | translate }}</span
+            ><span class="th-icons"
+              ><p-sortIcon field="status"></p-sortIcon
+              ><p-columnFilter type="text" display="menu" field="status"></p-columnFilter
+            ></span>
+          </div>
+        </th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-row>
+      <tr>
+        <td class="cell-muted text-center">{{ row.saleDate | csDate: 'short' }}</td>
+        <td class="cell-muted text-center">{{ row.expectedPaymentDate | csDate: 'date' }}</td>
+        <td class="cell-muted text-center">{{ row.paymentDate | csDate: 'date' }}</td>
+        <td>{{ row.company?.fantasyName || '-' }}</td>
+        <td>{{ row.establishment?.pvNumber || '-' }}</td>
+        <td>{{ row.acquirer?.fantasyName || '-' }}</td>
+        <td>{{ row.flag?.name || '-' }}</td>
+        <td class="text-right">{{ row.grossValue | csCurrency }}</td>
+        <td class="text-right">{{ row.feeValue | csCurrency }}</td>
+        <td class="text-right">{{ row.netValue | csCurrency }}</td>
+        <td class="text-right">{{ row.adjustmentValue | csCurrency }}</td>
+        <td class="text-center font-medium">{{ installmentNumber(row) }}</td>
+        <td class="text-center">{{ row.cvNsu || '-' }}</td>
+        <td>{{ row.authorization || '-' }}</td>
+        <td><cs-tag [value]="rowStatus(row)" [tone]="statusTone(row)" /></td>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="16" class="text-center py-4 text-500">
+          {{ 'pagination.emptymessage' | translate }}
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

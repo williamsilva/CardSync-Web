@@ -37,6 +37,11 @@ import { CsColumnFilterShellComponent } from '@features/list-base/cs-column-filt
 import { CsAdvancedTextFilterComponent } from '@features/list-base/cs-advanced-text-filter.component';
 import { CsAdvancedPeriodDateFilterComponent } from '@features/list-base/cs-advanced-period-date-filter.component';
 import { CsAdvancedMultiselectFilterComponent } from '@features/list-base/cs-advanced-multiselect-filter.component';
+import {
+  allPaymentStatusEnum,
+  PaymentStatusEnum,
+  paymentStatusEnumLabel,
+} from '@models/enums/payment-status.enum';
 import { CsAdvancedFilterItemTemplateDirective } from '@features/list-base/cs-advanced-filter-item-template.directive';
 import { TransactionsErpSalesInstallmentsTableComponent } from '../transactions-erp-sales-installments-table/transactions-erp-sales-installments-table.component';
 import {
@@ -45,10 +50,7 @@ import {
   CsCurrencyRangeFilterComponent,
 } from '@features/list-base/cs-currency-range-filter.component';
 import {
-  TransactionsErpFiltersState,
-  TransactionsErpAdvancedFilters,
-} from '@features/filter/transaction-erp.filters';
-import {
+  TransactionStatusEnum,
   allTransactionStatusEnum,
   transactionStatusEnumLabel,
   installmentStatusTooltipTone,
@@ -70,11 +72,18 @@ import {
   allModalityEnum,
   modalityEnumLabel,
   modalityEnumSeverity,
+  normalizeModalityEnum,
 } from '@models/enums/modality.enum';
 import {
   ActiveFilterItem,
   FiltersPanelComponent,
 } from '@shared/features/filters-panel/filters-panel.component';
+import {
+  TransactionsErpFiltersState,
+  TransactionsErpAdvancedFilters,
+  resetTransactionsErpAdvancedFilters,
+  createEmptyTransactionsErpFiltersState,
+} from '@features/filter/transaction-erp.filters';
 
 @Component({
   standalone: true,
@@ -155,17 +164,18 @@ export class TransactionsErpSalesListComponent
   readonly acquirers = signal<string[] | null>(null);
   readonly companies = signal<string[] | null>(null);
   readonly capture = signal<CaptureEnum[] | null>(null);
-  readonly establishments = signal<string[] | null>(null);
   readonly modality = signal<ModalityEnum[] | null>(null);
+  readonly establishments = signal<string[] | null>(null);
   readonly periodSaleDate = signal<PeriodEnum | null>(null);
   readonly saleDate = signal<string | string[] | null>(null);
-  readonly transactionStatus = signal<string[] | null>(null);
   readonly periodPaymentDate = signal<PeriodEnum | null>(null);
   readonly paymentDate = signal<string | string[] | null>(null);
+  readonly paymentStatus = signal<PaymentStatusEnum[] | null>(null);
   readonly periodConciliationDate = signal<PeriodEnum | null>(null);
   readonly conciliationDate = signal<string | string[] | null>(null);
   readonly periodExpectedPaymentDate = signal<PeriodEnum | null>(null);
   readonly expectedPaymentDate = signal<string | string[] | null>(null);
+  readonly transactionStatus = signal<TransactionStatusEnum[] | null>(null);
 
   /* Campos Tabela*/
   cvNsuColumnDraft = signal('');
@@ -245,6 +255,14 @@ export class TransactionsErpSalesListComponent
     }));
   });
 
+  readonly paymentStatusOptions = computed(() => {
+    this.i18n.getAppliedLang();
+    return allPaymentStatusEnum().map((value) => ({
+      label: paymentStatusEnumLabel(value, this.i18n),
+      value,
+    }));
+  });
+
   ngOnInit(): void {
     this.flagFacade.loadCompanyOptionsFilter();
     this.companyFacade.loadCompanyOptionsFilter();
@@ -261,7 +279,6 @@ export class TransactionsErpSalesListComponent
 
   clear(): void {
     const key = this.tableStateKey();
-    console.log('Key ', key);
 
     localStorage.removeItem(key);
     sessionStorage.removeItem(key);
@@ -272,9 +289,9 @@ export class TransactionsErpSalesListComponent
 
     this.flagColumnDraft.set(null);
     this.companyColumnDraft.set(null);
+    this.captureColumnDraft.set(null);
     this.acquirerColumnDraft.set(null);
     this.modalityColumnDraft.set(null);
-    this.captureColumnDraft.set(null);
     this.establishmentColumnDraft.set(null);
 
     this.cvNsuColumnDraft.set('');
@@ -287,7 +304,6 @@ export class TransactionsErpSalesListComponent
 
     this.saleDateColumnDraft.set(null);
     this.saleDateColumnPeriod.set(null);
-
     this.expectedPaymentDateColumnDraft.set(null);
     this.expectedPaymentDateColumnPeriod.set(null);
 
@@ -354,13 +370,13 @@ export class TransactionsErpSalesListComponent
   protected searchOnFileSales(row: TransactionsErpModel): void {
     const targetFilters = this.buildTargetFilters(row);
 
-    localStorage.setItem(STATE_KEY.CARDSYNC.FILE.SALES.FILTERS.V1, JSON.stringify(targetFilters));
-    localStorage.removeItem(STATE_KEY.CARDSYNC.FILE.SALES.TABLE.STATE.V1);
+    localStorage.setItem(STATE_KEY.CARDSYNC.FILE.FILTERS.V1, JSON.stringify(targetFilters));
+    localStorage.removeItem(STATE_KEY.CARDSYNC.FILE.TABLE.STATE.V1);
 
     this.openRouteInNewTab(['/file-processing/files']);
   }
 
-  private openRouteInNewTab(
+  protected openRouteInNewTab(
     commands: unknown[],
     extras: { queryParams?: Record<string, string> } = {},
   ): void {
@@ -368,22 +384,25 @@ export class TransactionsErpSalesListComponent
     window.open(`${window.location.origin}${url}`, '_blank', 'noopener,noreferrer');
   }
 
-  private buildTargetFilters(row: TransactionsErpModel): TransactionsErpFiltersState {
+  protected buildTargetFilters(row: TransactionsErpModel): TransactionsErpFiltersState {
+    const modality = normalizeModalityEnum(row.modality);
     return {
       ...this.emptyFiltersState(),
-      cvNsu: row.cvNsu != null ? String(row.cvNsu) : '',
       authorization: row.authorization ?? '',
-      acquirers: row.acquirer?.id ? [row.acquirer.id] : null,
-      companies: row.company?.id ? [row.company.id] : null,
-      establishments: row.establishment?.id ? [row.establishment.id] : null,
+      cvNsu: row.cvNsu != null ? String(row.cvNsu) : '',
+
       flags: row.flag?.id ? [row.flag.id] : null,
-      modality: row.modality ? [row.modality] : null,
+      companies: row.company?.id ? [row.company.id] : null,
+      acquirers: row.acquirer?.id ? [row.acquirer.id] : null,
+      establishments: row.establishment?.id ? [row.establishment.id] : null,
+
+      modality: modality && modality !== ModalityEnum.NULL ? [modality] : null,
       periodSaleDate: row.saleDate ? PeriodEnum.DAY : null,
       saleDate: row.saleDate ? this.i18n.formatDateValue(row.saleDate) : null,
     };
   }
 
-  private buildRowQueryParams(row: TransactionsErpModel): Record<string, string> {
+  protected buildRowQueryParams(row: TransactionsErpModel): Record<string, string> {
     const params: Record<string, string> = { transactionId: row.id };
 
     if (row.cvNsu != null) params['cvNsu'] = String(row.cvNsu);
@@ -393,37 +412,8 @@ export class TransactionsErpSalesListComponent
     return params;
   }
 
-  private emptyFiltersState(): TransactionsErpFiltersState {
-    return {
-      tid: '',
-      cvNsu: '',
-      machine: '',
-      cardNumber: '',
-      authorization: '',
-      acquirers: null,
-      capture: null,
-      modality: null,
-      transactionStatus: null,
-      flags: null,
-      companies: null,
-      establishments: null,
-      periodSaleDate: null,
-      saleDate: null,
-      periodPaymentDate: null,
-      paymentDate: null,
-      periodExpectedPaymentDate: null,
-      expectedPaymentDate: null,
-      periodConciliationDate: null,
-      conciliationDate: null,
-      grossValueEnd: null,
-      liquidValueEnd: null,
-      grossValueStart: null,
-      liquidValueStart: null,
-      discountValueEnd: null,
-      discountValueStart: null,
-      adjustmentValueEnd: null,
-      adjustmentValueStart: null,
-    };
+  protected emptyFiltersState(): TransactionsErpFiltersState {
+    return createEmptyTransactionsErpFiltersState();
   }
 
   protected override tableStateKey(): string {
@@ -458,36 +448,7 @@ export class TransactionsErpSalesListComponent
   }
 
   protected override resetFilters(): void {
-    this.flags.set(null);
-    this.capture.set(null);
-    this.modality.set(null);
-    this.saleDate.set(null);
-    this.acquirers.set(null);
-    this.companies.set(null);
-    this.paymentDate.set(null);
-    this.establishments.set(null);
-    this.periodSaleDate.set(null);
-    this.conciliationDate.set(null);
-    this.periodPaymentDate.set(null);
-    this.transactionStatus.set(null);
-    this.expectedPaymentDate.set(null);
-    this.periodConciliationDate.set(null);
-    this.periodExpectedPaymentDate.set(null);
-
-    this.discountValueEnd.set(null);
-    this.liquidValueEnd.set(null);
-    this.grossValueEnd.set(null);
-    this.discountValueStart.set(null);
-    this.liquidValueStart.set(null);
-    this.grossValueStart.set(null);
-    this.adjustmentValueEnd.set(null);
-    this.adjustmentValueStart.set(null);
-
-    this.tid.set('');
-    this.cvNsu.set('');
-    this.machine.set('');
-    this.cardNumber.set('');
-    this.authorization.set('');
+    resetTransactionsErpAdvancedFilters(this);
   }
 
   protected syncColumnDraftsFromTableState(): void {
@@ -774,6 +735,7 @@ export class TransactionsErpSalesListComponent
     const adjustmentValueEnd = this.adjustmentValueEnd();
     const adjustmentValueStart = this.adjustmentValueStart();
 
+    const paymentStatus = this.paymentStatus();
     const establishment = this.establishments();
     const transactionStatus = this.transactionStatus();
 
@@ -913,6 +875,13 @@ export class TransactionsErpSalesListComponent
       });
     }
 
+    if (paymentStatus?.length) {
+      items.push({
+        label: this.i18n.tUi('transactions.fields.paymentStatus'),
+        value: paymentStatus.map((v) => paymentStatusEnumLabel(v, this.i18n)).join(', '),
+      });
+    }
+
     if (acquirer?.length) {
       const labels = this.acquirersOptions()
         .filter((opt) => acquirer.includes(opt.id))
@@ -972,6 +941,7 @@ export class TransactionsErpSalesListComponent
       capture: this.capture(),
       cardNumber: this.cardNumber(),
       authorization: this.authorization(),
+      paymentStatus: this.paymentStatus(),
       transactionStatus: this.transactionStatus(),
 
       grossValueEnd: this.grossValueEnd(),
@@ -1009,14 +979,15 @@ export class TransactionsErpSalesListComponent
     this.machine.set(s.machine ?? '');
     this.cardNumber.set(s.cardNumber ?? '');
     this.authorization.set(s.authorization ?? '');
+    this.paymentStatus.set(s.paymentStatus ?? null);
     this.transactionStatus.set(s.transactionStatus ?? null);
 
-    this.discountValueEnd.set(s.discountValueEnd ?? null);
-    this.liquidValueEnd.set(s.liquidValueEnd ?? null);
-    this.discountValueStart.set(s.discountValueStart ?? null);
     this.grossValueEnd.set(s.grossValueEnd ?? null);
-    this.liquidValueStart.set(s.liquidValueStart ?? null);
+    this.liquidValueEnd.set(s.liquidValueEnd ?? null);
     this.grossValueStart.set(s.grossValueStart ?? null);
+    this.liquidValueStart.set(s.liquidValueStart ?? null);
+    this.discountValueEnd.set(s.discountValueEnd ?? null);
+    this.discountValueStart.set(s.discountValueStart ?? null);
     this.adjustmentValueEnd.set(s.adjustmentValueEnd ?? null);
     this.adjustmentValueStart.set(s.adjustmentValueStart ?? null);
 
@@ -1073,6 +1044,7 @@ export class TransactionsErpSalesListComponent
       companies: this.companies()?.length ? this.companies()! : undefined,
       establishments: this.establishments()?.length ? this.establishments()! : undefined,
 
+      paymentStatus: this.paymentStatus()?.length ? this.paymentStatus()! : undefined,
       transactionStatus: this.transactionStatus()?.length ? this.transactionStatus()! : undefined,
 
       saleDate: this.saleDate() ?? undefined,
@@ -1173,7 +1145,7 @@ export class TransactionsErpSalesListComponent
     ]);
   }
 
-  private infoTooltip(rows: Array<{ label: string; value: string; nowrap?: boolean }>): string {
+  protected infoTooltip(rows: Array<{ label: string; value: string; nowrap?: boolean }>): string {
     const content = rows
       .filter((row) => row.value !== null && row.value !== undefined && row.value !== '')
       .map((row) => this.infoTooltipRow(row.label, row.value, row.nowrap))
@@ -1182,7 +1154,7 @@ export class TransactionsErpSalesListComponent
     return `<div class="cs-tooltip">${content}</div>`;
   }
 
-  private infoTooltipRow(label: string, value: string, nowrap = false): string {
+  protected infoTooltipRow(label: string, value: string, nowrap = false): string {
     const nowrapClass = nowrap ? ' cs-tooltip-row-nowrap' : '';
 
     return `
@@ -1195,7 +1167,7 @@ export class TransactionsErpSalesListComponent
 
   /* Metodos Tooltip Status */
   protected installmentStatusTooltip(row: any): string {
-    const status = installmentTooltipStatusLabel(row?.transactionStatus, this.i18n);
+    const transactionStatus = installmentTooltipStatusLabel(row?.transactionStatus, this.i18n);
     const reason = statusTransactionReasonEnumLabel(row?.transactionStatusReason, this.i18n);
 
     const conciliationDate = row?.saleReconciliationDate
@@ -1209,7 +1181,7 @@ export class TransactionsErpSalesListComponent
     return this.infoTooltip([
       {
         label: `${this.i18n.tUi('transactions.fields.status')}:`,
-        value: status,
+        value: transactionStatus,
         nowrap: true,
       },
       {

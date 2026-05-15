@@ -15,3 +15,1555 @@
     [label]="'common.update' | translate"
   ></button>
 </cs-page-header>
+
+<cs-filters-panel
+  (clear)="clear()"
+  [collapsed]="true"
+  (search)="search()"
+  [actionsAlign]="'start'"
+  [activeCount]="activeFiltersCount()"
+  [title]="'common.filter' | translate"
+  [activeFilterGroups]="activeFilterGroups()"
+>
+  <div class="grid formgrid gap-0 align-items-end">
+    <cs-advanced-period-date-filter
+      inputId="saleDate"
+      [value]="saleDate()"
+      [period]="periodSaleDate()"
+      periodInputId="periodSaleDate"
+      [disabled]="isSaleDateDisabled()"
+      class="col-12 md:col-3 xl:col-2 p-1"
+      (valueChange)="saleDate.set($event)"
+      [periodOptions]="periodEnumOptions()"
+      [view]="setViewFormat(periodSaleDate())"
+      [dateFormat]="setDateFormat(periodSaleDate())"
+      [selectionMode]="setSelectionMode(periodSaleDate())"
+      [dateLabel]="'transactions.fields.saleDate' | translate"
+      [periodLabel]="'transactions.fields.periodSaleDate' | translate"
+      (periodChange)="onPeriodColumnChange(periodSaleDate, saleDate, $event)"
+    ></cs-advanced-period-date-filter>
+
+    <cs-advanced-period-date-filter
+      inputId="expectedPaymentDate"
+      [value]="expectedPaymentDate()"
+      class="col-12 md:col-3 xl:col-2 p-1"
+      [periodOptions]="periodEnumOptions()"
+      [period]="periodExpectedPaymentDate()"
+      periodInputId="periodExpectedPaymentDate"
+      [disabled]="isExpectedPaymentDateDisabled()"
+      (valueChange)="expectedPaymentDate.set($event)"
+      [view]="setViewFormat(periodExpectedPaymentDate())"
+      [dateFormat]="setDateFormat(periodExpectedPaymentDate())"
+      [selectionMode]="setSelectionMode(periodExpectedPaymentDate())"
+      [dateLabel]="'transactions.fields.expectedPaymentDate' | translate"
+      [periodLabel]="'transactions.fields.periodExpectedPaymentDate' | translate"
+      (periodChange)="onPeriodColumnChange(periodExpectedPaymentDate, expectedPaymentDate, $event)"
+    ></cs-advanced-period-date-filter>
+
+    <cs-advanced-period-date-filter
+      inputId="paymentDate"
+      [value]="paymentDate()"
+      [disabledPeriod]="true"
+      [period]="periodPaymentDate()"
+      periodInputId="periodPaymentDate"
+      class="col-12 md:col-3 xl:col-2 p-1"
+      [disabled]="isPaymentDateDisabled()"
+      [periodOptions]="periodEnumOptions()"
+      (valueChange)="paymentDate.set($event)"
+      [view]="setViewFormat(periodPaymentDate())"
+      [dateFormat]="setDateFormat(periodPaymentDate())"
+      [selectionMode]="setSelectionMode(periodPaymentDate())"
+      [dateLabel]="'transactions.fields.paymentDate' | translate"
+      [periodLabel]="'transactions.fields.periodPaymentDate' | translate"
+      (periodChange)="onPeriodColumnChange(periodPaymentDate, paymentDate, $event)"
+    ></cs-advanced-period-date-filter>
+  </div>
+
+  <div class="grid formgrid gap-0 align-items-end">
+    <cs-advanced-multiselect-filter
+      optionLabel="label"
+      optionValue="value"
+      inputId="transactionStatus"
+      [value]="transactionStatus()"
+      class="col-12 md:col-3 xl:col-2 p-1"
+      [options]="transactionStatusOptions()"
+      (valueChange)="transactionStatus.set($event)"
+      [label]="'transactions.fields.transactionStatus' | translate"
+    ></cs-advanced-multiselect-filter>
+
+    <cs-advanced-multiselect-filter
+      optionLabel="label"
+      optionValue="value"
+      inputId="paymentStatus"
+      [value]="paymentStatus()"
+      [options]="paymentStatusOptions()"
+      class="col-12 md:col-3 xl:col-2 p-1"
+      (valueChange)="paymentStatus.set($event)"
+      [label]="'transactions.fields.paymentStatus' | translate"
+    ></cs-advanced-multiselect-filter>
+
+    <cs-advanced-text-filter
+      inputId="authorization"
+      [value]="authorization()"
+      class="col-12 md:col-3 xl:col-2 p-1"
+      (valueChange)="authorization.set($event)"
+      [label]="'transactions.fields.authorization' | translate"
+    ></cs-advanced-text-filter>
+
+    <cs-advanced-text-filter
+      inputId="cvNsu"
+      [value]="cvNsu()"
+      (valueChange)="cvNsu.set($event)"
+      class="col-12 md:col-3 xl:col-2 p-1"
+      [label]="'transactions.fields.cvNsu' | translate"
+    ></cs-advanced-text-filter>
+
+    <cs-advanced-text-filter
+      inputId="tid"
+      [value]="tid()"
+      (valueChange)="tid.set($event)"
+      class="col-12 md:col-3 xl:col-2 p-1"
+      [label]="'transactions.fields.tid' | translate"
+    ></cs-advanced-text-filter>
+
+    <cs-advanced-multiselect-filter
+      inputId="capture"
+      [value]="capture()"
+      optionValue="value"
+      optionLabel="label"
+      [options]="captureEnumOptions()"
+      (valueChange)="capture.set($event)"
+      class="col-12 md:col-3 xl:col-2 p-1"
+      [label]="'transactions.fields.capture' | translate"
+    ></cs-advanced-multiselect-filter>
+  </div>
+
+  <div class="grid formgrid gap-0 align-items-end">
+    <cs-advanced-multiselect-filter
+      inputId="modality"
+      optionValue="value"
+      optionLabel="label"
+      [value]="modality()"
+      [options]="modalityOptions()"
+      class="col-12 md:col-3 xl:col-2 p-1"
+      (valueChange)="modality.set($event)"
+      [label]="'transactions.fields.modality' | translate"
+    ></cs-advanced-multiselect-filter>
+
+    <cs-advanced-multiselect-filter
+      optionValue="id"
+      inputId="acquirer"
+      [value]="acquirers()"
+      optionLabel="fantasyName"
+      [options]="acquirersOptions()"
+      class="col-12 md:col-3 xl:col-2 p-1"
+      (valueChange)="acquirers.set($event)"
+      [label]="'transactions.fields.acquirer' | translate"
+    >
+      <ng-template csAdvancedFilterItem let-option>
+        <div class="cs-option-item">
+          <div class="cs-option-item__label">{{ option.fantasyName }}</div>
+          <div class="cs-option-item__subtext">
+            {{ 'common.registrationNumber' | translate }}: {{ option.cnpj | csDocument }}
+          </div>
+        </div>
+      </ng-template>
+    </cs-advanced-multiselect-filter>
+
+    <cs-advanced-multiselect-filter
+      inputId="flags"
+      optionValue="id"
+      [value]="flags()"
+      optionLabel="name"
+      [options]="flagsOptions()"
+      (valueChange)="flags.set($event)"
+      class="col-12 md:col-3 xl:col-3 p-1"
+      [label]="'transactions.fields.flag' | translate"
+    ></cs-advanced-multiselect-filter>
+
+    <cs-advanced-multiselect-filter
+      optionValue="id"
+      optionLabel="pvNumber"
+      inputId="establishments"
+      [value]="establishments()"
+      [options]="establishmentsOptions()"
+      class="col-12 md:col-3 xl:col-2 p-1"
+      (valueChange)="establishments.set($event)"
+      [label]="'transactions.fields.establishment' | translate"
+    >
+      <ng-template csAdvancedFilterItem let-option>
+        <div class="cs-option-item">
+          <div class="cs-option-item__label">{{ option.pvNumber }}</div>
+          <div class="cs-option-item__subtext">
+            {{ 'common.company' | translate }}: {{ option.company.fantasyName }}
+          </div>
+          <div class="cs-option-item__subtext">
+            {{ 'common.registrationNumber' | translate }}: {{ option.company.cnpj | csDocument }}
+          </div>
+        </div>
+      </ng-template>
+    </cs-advanced-multiselect-filter>
+
+    <cs-advanced-multiselect-filter
+      optionValue="id"
+      inputId="companies"
+      [value]="companies()"
+      optionLabel="fantasyName"
+      [options]="companiesOptions()"
+      class="col-12 md:col-3 xl:col-3 p-1"
+      (valueChange)="companies.set($event)"
+      [label]="'transactions.fields.company' | translate"
+    >
+      <ng-template csAdvancedFilterItem let-option>
+        <div class="cs-option-item">
+          <div class="cs-option-item__label">{{ option.fantasyName }}</div>
+          <div class="cs-option-item__subtext">
+            {{ 'common.registrationNumber' | translate }}: {{ option.cnpj | csDocument }}
+          </div>
+        </div>
+      </ng-template>
+    </cs-advanced-multiselect-filter>
+  </div>
+
+  <div class="grid formgrid gap-0 align-items-end">
+    <cs-currency-range-filter
+      inputId="grossValue"
+      [value]="grossValueRange()"
+      class="col-12 md:col-6 xl:col-3 p-2"
+      [endLabel]="'common.filters.final' | translate"
+      (valueChange)="onGrossValueRangeChange($event)"
+      [startLabel]="'common.filters.initial' | translate"
+      [label]="'transactions.fields.grossValue' | translate"
+    ></cs-currency-range-filter>
+
+    <cs-currency-range-filter
+      inputId="discountValue"
+      [value]="discountValueRange()"
+      class="col-12 md:col-6 xl:col-3 p-2"
+      [endLabel]="'common.filters.final' | translate"
+      (valueChange)="onDiscountValueRangeChange($event)"
+      [startLabel]="'common.filters.initial' | translate"
+      [label]="'transactions.fields.discountValue' | translate"
+    ></cs-currency-range-filter>
+
+    <cs-currency-range-filter
+      inputId="liquidValue"
+      [value]="liquidValueRange()"
+      class="col-12 md:col-6 xl:col-3 p-2"
+      [endLabel]="'common.filters.final' | translate"
+      (valueChange)="onLiquidValueRangeChange($event)"
+      [startLabel]="'common.filters.initial' | translate"
+      [label]="'transactions.fields.liquidValue' | translate"
+    ></cs-currency-range-filter>
+
+    <cs-currency-range-filter
+      inputId="adjustments"
+      [value]="adjustmentValueRange()"
+      class="col-12 md:col-6 xl:col-3 p-2"
+      [endLabel]="'common.filters.final' | translate"
+      [startLabel]="'common.filters.initial' | translate"
+      (valueChange)="onAdjustmentValueRangeChange($event)"
+      [label]="'transactions.fields.adjustmentValue' | translate"
+    ></cs-currency-range-filter>
+  </div>
+</cs-filters-panel>
+
+<div class="surface-card border-round p-3 mt-3">
+  <div
+    class="flex flex-column md:flex-row justify-content-between align-items-start md:align-items-center gap-2 mb-3"
+  >
+    <button
+      pButton
+      type="button"
+      icon="pi pi-calculator"
+      (click)="calculateTotals()"
+      class="p-button-success p-button-sm"
+      [loading]="installmentFacade.totalsLoading()"
+      [label]="'common.calculateTotals' | translate"
+    ></button>
+
+    @if (installmentFacade.totals(); as totals) {
+      <div class="flex flex-wrap gap-2 text-sm">
+        <span class="px-2 py-1 border-round surface-100"
+          >{{ 'common.quantity' | translate }}: {{ totals.quantity }}</span
+        >
+        <span class="px-2 py-1 border-round surface-100"
+          >{{ 'common.grossValue' | translate }}: {{ totals.totalGrossValue | csCurrency }}</span
+        >
+        <span class="px-2 py-1 border-round surface-100"
+          >{{ 'common.discountValue' | translate }}: {{ totals.totalFeeValue | csCurrency }}</span
+        >
+        <span class="px-2 py-1 border-round surface-100"
+          >{{ 'common.liquidValue' | translate }}: {{ totals.totalNetValue | csCurrency }}</span
+        >
+        <span class="px-2 py-1 border-round surface-100"
+          >{{ 'common.adjustmentValue' | translate }}:
+          {{ totals.totalAdjustments | csCurrency }}</span
+        >
+      </div>
+    }
+  </div>
+
+  <p-table
+    #dt
+    stripedRows
+    dataKey="id"
+    size="small"
+    [rows]="rows"
+    [lazy]="true"
+    showGridlines
+    [rowHover]="true"
+    [paginator]="true"
+    sortMode="multiple"
+    stateStorage="local"
+    class="cs-admin-table"
+    [value]="installments()"
+    [stateKey]="tableStateKey()"
+    [showCurrentPageReport]="true"
+    (onPage)="onPageChange($event)"
+    [totalRecords]="totalRecords()"
+    (onLazyLoad)="onLazyLoad($event)"
+    [paginatorDropdownAppendTo]="'body'"
+    [loading]="installmentFacade.loading()"
+    [rowsPerPageOptions]="rowsPerPageOptions"
+    [currentPageReportTemplate]="'pagination.report' | translate"
+    [tableStyle]="{ width: '100%', 'min-width': '90rem', 'table-layout': 'fixed' }"
+  >
+    <ng-template pTemplate="colgroup">
+      <colgroup>
+        <col style="width: 120px" />
+        <col style="width: 90px" />
+        <col style="width: auto" />
+        <col style="width: 90px" />
+        <col style="width: 130px" />
+        <col style="width: 120px" />
+        <col style="width: 110px" />
+        <col style="width: 120px" />
+        <col style="width: 90px" />
+        <col style="width: 90px" />
+        <col style="width: 90px" />
+        <col style="width: 90px" />
+        <col style="width: 90px" />
+        <col style="width: 120px" />
+        <col style="width: 100px" />
+        <col style="width: 90px" />
+        <col style="width: 90px" />
+        <col style="width: 50px" />
+      </colgroup>
+    </ng-template>
+
+    <ng-template pTemplate="header">
+      <tr>
+        <th pSortableColumn="saleDate">
+          <div class="th-flex text-center">
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'transactions.columns.saleDate' | translate"
+            >
+              {{ 'transactions.columns.saleDate' | translate }}
+            </span>
+            <span class="th-icons">
+              <p-sortIcon field="saleDate"></p-sortIcon>
+
+              <p-columnFilter
+                type="date"
+                display="menu"
+                field="saleDate"
+                matchMode="dateIs"
+                #saleDateColumnFilter
+                [showOperator]="false"
+                [showAddButton]="false"
+                [showMatchModes]="true"
+                [showClearButton]="false"
+                [showApplyButton]="false"
+                styleClass="cs-colfilter"
+              >
+                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                  <cs-column-filter-shell
+                    [clearLabel]="'common.clear' | translate"
+                    [applyLabel]="'common.apply' | translate"
+                    [applyDisabled]="
+                      !canApplyPeriodColumnFilter(saleDateColumnPeriod, saleDateColumnDraft)
+                    "
+                    (clear)="
+                      clearPeriodColumnFilter(
+                        saleDateColumnPeriod,
+                        saleDateColumnDraft,
+                        filter,
+                        saleDateColumnFilter
+                      )
+                    "
+                    (apply)="
+                      applyPeriodColumnFilter(
+                        saleDateColumnPeriod,
+                        saleDateColumnDraft,
+                        filter,
+                        saleDateColumnFilter
+                      )
+                    "
+                  >
+                    <p-floatLabel variant="on" class="w-full">
+                      <p-select
+                        size="small"
+                        class="w-full"
+                        [showClear]="true"
+                        optionValue="value"
+                        optionLabel="label"
+                        inputId="saleDateColumnPeriod"
+                        [options]="periodEnumOptions()"
+                        [ngModel]="saleDateColumnPeriod()"
+                        (ngModelChange)="
+                          onPeriodColumnChange(
+                            saleDateColumnPeriod,
+                            saleDateColumnDraft,
+                            $event ?? null
+                          )
+                        "
+                      ></p-select>
+
+                      <label for="saleDateColumnPeriod">
+                        {{ 'common.period' | translate }}
+                      </label>
+                    </p-floatLabel>
+
+                    <p-floatLabel variant="on" class="w-full">
+                      <p-datepicker
+                        size="small"
+                        class="w-full"
+                        dataType="string"
+                        [showIcon]="true"
+                        [readonlyInput]="true"
+                        inputId="saleDateColumnDraft"
+                        [ngModel]="saleDateColumnDraft()"
+                        [disabled]="isSaleDateColumnDisabled()"
+                        [view]="setViewFormat(saleDateColumnPeriod())"
+                        [dateFormat]="setDateFormat(saleDateColumnPeriod())"
+                        [selectionMode]="setSelectionMode(saleDateColumnPeriod())"
+                        (ngModelChange)="
+                          onPeriodColumnDraftChange(saleDateColumnDraft, $event ?? null)
+                        "
+                      ></p-datepicker>
+
+                      <label for="saleDateColumnDraft">
+                        {{ 'transactions.columns.saleDate' | translate }}
+                      </label>
+                    </p-floatLabel>
+                  </cs-column-filter-shell>
+                </ng-template>
+              </p-columnFilter>
+            </span>
+          </div>
+        </th>
+
+        <th pSortableColumn="expectedPaymentDate">
+          <div class="th-flex text-center">
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'transactions.columns.expectedPaymentDate' | translate"
+            >
+              {{ 'transactions.columns.expectedPaymentDate' | translate }}
+            </span>
+            <span class="th-icons">
+              <p-sortIcon field="expectedPaymentDate"></p-sortIcon>
+
+              <p-columnFilter
+                display="menu"
+                matchMode="equals"
+                [showOperator]="false"
+                [showAddButton]="false"
+                [showMatchModes]="false"
+                [showClearButton]="false"
+                [showApplyButton]="false"
+                styleClass="cs-colfilter"
+                field="expectedPaymentDate"
+                #expectedPaymentDateColumnFilter
+              >
+                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                  <cs-column-filter-shell
+                    [clearLabel]="'common.clear' | translate"
+                    [applyLabel]="'common.apply' | translate"
+                    [applyDisabled]="
+                      !canApplyPeriodColumnFilter(
+                        expectedPaymentDateColumnPeriod,
+                        expectedPaymentDateColumnDraft
+                      )
+                    "
+                    (clear)="
+                      clearPeriodColumnFilter(
+                        expectedPaymentDateColumnPeriod,
+                        expectedPaymentDateColumnDraft,
+                        filter,
+                        expectedPaymentDateColumnFilter
+                      )
+                    "
+                    (apply)="
+                      applyPeriodColumnFilter(
+                        expectedPaymentDateColumnPeriod,
+                        expectedPaymentDateColumnDraft,
+                        filter,
+                        expectedPaymentDateColumnFilter
+                      )
+                    "
+                  >
+                    <p-floatLabel variant="on" class="w-full">
+                      <p-select
+                        size="small"
+                        class="w-full"
+                        [showClear]="true"
+                        optionValue="value"
+                        optionLabel="label"
+                        [options]="periodEnumOptions()"
+                        inputId="expectedPaymentDateColumnPeriod"
+                        [ngModel]="expectedPaymentDateColumnPeriod()"
+                        (ngModelChange)="
+                          onPeriodColumnChange(
+                            expectedPaymentDateColumnPeriod,
+                            expectedPaymentDateColumnDraft,
+                            $event ?? null
+                          )
+                        "
+                      ></p-select>
+
+                      <label for="expectedPaymentDateColumnPeriod">
+                        {{ 'common.period' | translate }}
+                      </label>
+                    </p-floatLabel>
+
+                    <p-floatLabel variant="on" class="w-full">
+                      <p-datepicker
+                        size="small"
+                        class="w-full"
+                        dataType="string"
+                        [showIcon]="true"
+                        [readonlyInput]="true"
+                        inputId="expectedPaymentDateColumnDraft"
+                        [ngModel]="expectedPaymentDateColumnDraft()"
+                        [disabled]="isExpectedPaymentDateColumnDisabled()"
+                        [view]="setViewFormat(expectedPaymentDateColumnPeriod())"
+                        [dateFormat]="setDateFormat(expectedPaymentDateColumnPeriod())"
+                        [selectionMode]="setSelectionMode(expectedPaymentDateColumnPeriod())"
+                        (ngModelChange)="
+                          onPeriodColumnDraftChange(expectedPaymentDateColumnDraft, $event ?? null)
+                        "
+                      ></p-datepicker>
+
+                      <label for="expectedPaymentDateColumnDraft">
+                        {{ 'transactions.columns.expectedPaymentDate' | translate }}
+                      </label>
+                    </p-floatLabel>
+                  </cs-column-filter-shell>
+                </ng-template>
+              </p-columnFilter>
+            </span>
+          </div>
+        </th>
+
+        <th pSortableColumn="company">
+          <div class="th-flex text-center">
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'transactions.columns.company' | translate"
+            >
+              {{ 'transactions.columns.company' | translate }}
+            </span>
+            <span class="th-icons">
+              <p-sortIcon field="company"></p-sortIcon>
+              <p-columnFilter
+                display="menu"
+                matchMode="in"
+                field="company"
+                #companyColumnFilter
+                [showOperator]="false"
+                [showAddButton]="false"
+                [showMatchModes]="false"
+                [showClearButton]="false"
+                [showApplyButton]="false"
+                styleClass="cs-colfilter"
+              >
+                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                  <cs-column-filter-shell
+                    minWidth="20rem"
+                    [clearLabel]="'common.clear' | translate"
+                    [applyLabel]="'common.apply' | translate"
+                    (clear)="
+                      clearArrayColumnFilter(companyColumnDraft, filter, companyColumnFilter)
+                    "
+                    (apply)="
+                      applyArrayColumnFilter(companyColumnDraft, filter, companyColumnFilter)
+                    "
+                  >
+                    <p-multiSelect
+                      class="w-full"
+                      [filter]="true"
+                      optionValue="id"
+                      [showClear]="true"
+                      [showToggleAll]="false"
+                      optionLabel="fantasyName"
+                      [options]="companiesOptions()"
+                      [ngModel]="companyColumnDraft()"
+                      [placeholder]="'common.all' | translate"
+                      (ngModelChange)="setArrayColumnDraft(companyColumnDraft, $event)"
+                    >
+                      <ng-template let-option pTemplate="item">
+                        <div class="cs-option-item">
+                          <div class="cs-option-item__label">{{ option.fantasyName }}</div>
+                          <div class="cs-option-item__subtext">
+                            {{ 'common.registrationNumber' | translate }}:
+                            {{ option.cnpj | csDocument }}
+                          </div>
+                        </div>
+                      </ng-template>
+
+                      <ng-template let-selectedOptions pTemplate="selectedItems">
+                        @if (selectedOptions?.length === 1) {
+                          <span>
+                            {{ selectedOptions[0]?.fantasyName }}
+                          </span>
+                        }
+
+                        @if ((selectedOptions?.length ?? 0) > 1) {
+                          <span>
+                            {{
+                              'common.selectedFemale' | translate: { count: selectedOptions.length }
+                            }}
+                          </span>
+                        }
+                      </ng-template>
+                    </p-multiSelect>
+                  </cs-column-filter-shell>
+                </ng-template>
+              </p-columnFilter>
+            </span>
+          </div>
+        </th>
+
+        <th pSortableColumn="establishment">
+          <div class="th-flex text-center">
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'transactions.columns.establishment' | translate"
+            >
+              {{ 'transactions.columns.establishment' | translate }}
+            </span>
+            <span class="th-icons">
+              <p-sortIcon field="establishment"></p-sortIcon>
+              <p-columnFilter
+                display="menu"
+                type="numeric"
+                matchMode="equals"
+                field="establishment"
+                [useGrouping]="false"
+                [showOperator]="false"
+                [showAddButton]="false"
+                [showMatchModes]="true"
+                [showClearButton]="false"
+                [showApplyButton]="false"
+                styleClass="cs-colfilter"
+                #establishmentColumnFilter
+              >
+                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                  <cs-column-filter-shell
+                    [clearLabel]="'common.clear' | translate"
+                    [applyLabel]="'common.apply' | translate"
+                    (clear)="
+                      clearIntegerColumnFilter(
+                        establishmentColumnDraft,
+                        filter,
+                        establishmentColumnFilter
+                      )
+                    "
+                    (apply)="
+                      applyIntegerColumnFilter(
+                        establishmentColumnDraft,
+                        filter,
+                        establishmentColumnFilter
+                      )
+                    "
+                  >
+                    <input
+                      pInputText
+                      type="text"
+                      pattern="[0-9]*"
+                      inputmode="numeric"
+                      class="w-full p-inputtext-sm"
+                      [ngModel]="establishmentColumnDraft()"
+                      [placeholder]="'transactions.fields.establishment' | translate"
+                      (ngModelChange)="setIntegerColumnDraft(establishmentColumnDraft, $event)"
+                    />
+                  </cs-column-filter-shell>
+                </ng-template>
+              </p-columnFilter>
+            </span>
+          </div>
+        </th>
+
+        <th pSortableColumn="modality">
+          <div class="th-flex text-center">
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'transactions.columns.modality' | translate"
+            >
+              {{ 'transactions.columns.modality' | translate }}
+            </span>
+            <span class="th-icons">
+              <p-sortIcon field="modality"></p-sortIcon>
+              <p-columnFilter
+                display="menu"
+                matchMode="in"
+                field="modality"
+                #modalityColumnFilter
+                [showOperator]="false"
+                [showAddButton]="false"
+                [showMatchModes]="false"
+                [showClearButton]="false"
+                [showApplyButton]="false"
+                styleClass="cs-colfilter"
+              >
+                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                  <cs-column-filter-shell
+                    [clearLabel]="'common.clear' | translate"
+                    [applyLabel]="'common.apply' | translate"
+                    (clear)="
+                      clearArrayColumnFilter(modalityColumnDraft, filter, modalityColumnFilter)
+                    "
+                    (apply)="
+                      applyArrayColumnFilter(modalityColumnDraft, filter, modalityColumnFilter)
+                    "
+                  >
+                    <p-multiSelect
+                      class="w-full"
+                      [filter]="true"
+                      [showClear]="true"
+                      optionLabel="label"
+                      optionValue="value"
+                      [showToggleAll]="false"
+                      [options]="modalityOptions()"
+                      [ngModel]="modalityColumnDraft()"
+                      [placeholder]="'common.all' | translate"
+                      (ngModelChange)="setArrayColumnDraft(modalityColumnDraft, $event)"
+                    >
+                      <ng-template let-selectedOptions pTemplate="selectedItems">
+                        @if (selectedOptions?.length === 1) {
+                          <span>
+                            {{ selectedOptions[0]?.label }}
+                          </span>
+                        }
+
+                        @if ((selectedOptions?.length ?? 0) > 1) {
+                          <span>
+                            {{ 'common.selected' | translate: { count: selectedOptions.length } }}
+                          </span>
+                        }
+                      </ng-template>
+                    </p-multiSelect>
+                  </cs-column-filter-shell>
+                </ng-template>
+              </p-columnFilter>
+            </span>
+          </div>
+        </th>
+
+        <th pSortableColumn="capture">
+          <div class="th-flex text-center">
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'transactions.columns.capture' | translate"
+            >
+              {{ 'transactions.columns.capture' | translate }}
+            </span>
+            <span class="th-icons">
+              <p-sortIcon field="capture"></p-sortIcon>
+              <p-columnFilter
+                display="menu"
+                matchMode="in"
+                field="capture"
+                #captureColumnFilter
+                [showOperator]="false"
+                [showAddButton]="false"
+                [showMatchModes]="false"
+                [showClearButton]="false"
+                [showApplyButton]="false"
+                styleClass="cs-colfilter"
+              >
+                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                  <cs-column-filter-shell
+                    [clearLabel]="'common.clear' | translate"
+                    [applyLabel]="'common.apply' | translate"
+                    (clear)="
+                      clearArrayColumnFilter(captureColumnDraft, filter, captureColumnFilter)
+                    "
+                    (apply)="
+                      applyArrayColumnFilter(captureColumnDraft, filter, captureColumnFilter)
+                    "
+                  >
+                    <p-multiSelect
+                      class="w-full"
+                      [filter]="true"
+                      [showClear]="true"
+                      optionLabel="label"
+                      optionValue="value"
+                      [showToggleAll]="false"
+                      [ngModel]="captureColumnDraft()"
+                      [options]="captureEnumOptions()"
+                      [placeholder]="'common.all' | translate"
+                      (ngModelChange)="setArrayColumnDraft(captureColumnDraft, $event)"
+                    >
+                      <ng-template let-selectedOptions pTemplate="selectedItems">
+                        @if (selectedOptions?.length === 1) {
+                          <span>
+                            {{ selectedOptions[0]?.label }}
+                          </span>
+                        }
+
+                        @if ((selectedOptions?.length ?? 0) > 1) {
+                          <span>
+                            {{ 'common.selected' | translate: { count: selectedOptions.length } }}
+                          </span>
+                        }
+                      </ng-template>
+                    </p-multiSelect>
+                  </cs-column-filter-shell>
+                </ng-template>
+              </p-columnFilter>
+            </span>
+          </div>
+        </th>
+
+        <th pSortableColumn="acquirer">
+          <div class="th-flex text-center">
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'transactions.columns.acquirer' | translate"
+            >
+              {{ 'transactions.columns.acquirer' | translate }}
+            </span>
+            <span class="th-icons">
+              <p-sortIcon field="acquirer"></p-sortIcon>
+              <p-columnFilter
+                display="menu"
+                matchMode="in"
+                field="acquirer"
+                #acquirerColumnFilter
+                [showOperator]="false"
+                [showAddButton]="false"
+                [showMatchModes]="false"
+                [showClearButton]="false"
+                [showApplyButton]="false"
+                styleClass="cs-colfilter"
+              >
+                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                  <cs-column-filter-shell
+                    minWidth="20rem"
+                    [clearLabel]="'common.clear' | translate"
+                    [applyLabel]="'common.apply' | translate"
+                    (clear)="
+                      clearArrayColumnFilter(acquirerColumnDraft, filter, acquirerColumnFilter)
+                    "
+                    (apply)="
+                      applyArrayColumnFilter(acquirerColumnDraft, filter, acquirerColumnFilter)
+                    "
+                  >
+                    <p-multiSelect
+                      class="w-full"
+                      [filter]="true"
+                      optionValue="id"
+                      [showClear]="true"
+                      [showToggleAll]="false"
+                      optionLabel="fantasyName"
+                      [options]="acquirersOptions()"
+                      [ngModel]="acquirerColumnDraft()"
+                      [placeholder]="'common.all' | translate"
+                      (ngModelChange)="setArrayColumnDraft(acquirerColumnDraft, $event)"
+                    >
+                      <ng-template let-option pTemplate="item">
+                        <div class="cs-option-item">
+                          <div class="cs-option-item__label">{{ option.fantasyName }}</div>
+                          <div class="cs-option-item__subtext">
+                            {{ 'common.registrationNumber' | translate }}:
+                            {{ option.cnpj | csDocument }}
+                          </div>
+                        </div>
+                      </ng-template>
+                    </p-multiSelect>
+                  </cs-column-filter-shell>
+                </ng-template>
+              </p-columnFilter>
+            </span>
+          </div>
+        </th>
+
+        <th pSortableColumn="flag">
+          <div class="th-flex text-center">
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'transactions.columns.flag' | translate"
+            >
+              {{ 'transactions.columns.flag' | translate }}
+            </span>
+            <span class="th-icons">
+              <p-sortIcon field="flag"></p-sortIcon>
+              <p-columnFilter
+                field="flag"
+                display="menu"
+                matchMode="in"
+                #flagColumnFilter
+                [showOperator]="false"
+                [showAddButton]="false"
+                [showMatchModes]="false"
+                [showClearButton]="false"
+                [showApplyButton]="false"
+                styleClass="cs-colfilter"
+              >
+                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                  <cs-column-filter-shell
+                    minWidth="20rem"
+                    [clearLabel]="'common.clear' | translate"
+                    [applyLabel]="'common.apply' | translate"
+                    (clear)="clearArrayColumnFilter(flagColumnDraft, filter, flagColumnFilter)"
+                    (apply)="applyArrayColumnFilter(flagColumnDraft, filter, flagColumnFilter)"
+                  >
+                    <p-multiSelect
+                      class="w-full"
+                      [filter]="true"
+                      optionValue="id"
+                      [showClear]="true"
+                      optionLabel="name"
+                      [showToggleAll]="false"
+                      [options]="flagsOptions()"
+                      [ngModel]="flagColumnDraft()"
+                      [placeholder]="'common.all' | translate"
+                      (ngModelChange)="setArrayColumnDraft(flagColumnDraft, $event)"
+                    >
+                    </p-multiSelect>
+                  </cs-column-filter-shell>
+                </ng-template>
+              </p-columnFilter>
+            </span>
+          </div>
+        </th>
+
+        <th pSortableColumn="grossValue">
+          <div class="th-flex text-center">
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'transactions.columns.grossValue' | translate"
+            >
+              {{ 'transactions.columns.grossValue' | translate }}
+            </span>
+            <span class="th-icons">
+              <p-sortIcon field="grossValue"></p-sortIcon>
+              <p-columnFilter
+                display="menu"
+                type="numeric"
+                field="grossValue"
+                matchMode="equals"
+                [useGrouping]="false"
+                [showOperator]="false"
+                [showAddButton]="false"
+                [showMatchModes]="true"
+                #grossValueColumnFilter
+                [showClearButton]="false"
+                [showApplyButton]="false"
+                styleClass="cs-colfilter"
+              >
+                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                  <cs-column-filter-shell
+                    [clearLabel]="'common.clear' | translate"
+                    [applyLabel]="'common.apply' | translate"
+                    (clear)="
+                      clearDecimalColumnFilter(
+                        grossValueColumnDraft,
+                        filter,
+                        grossValueColumnFilter
+                      )
+                    "
+                    (apply)="
+                      applyDecimalColumnFilter(
+                        grossValueColumnDraft,
+                        filter,
+                        grossValueColumnFilter
+                      )
+                    "
+                  >
+                    <input
+                      pInputText
+                      type="text"
+                      inputmode="decimal"
+                      class="w-full p-inputtext-sm"
+                      [ngModel]="grossValueColumnDraft()"
+                      (ngModelChange)="grossValueColumnDraft.set($event ?? '')"
+                      [placeholder]="'transactions.fields.grossValue' | translate"
+                    />
+                  </cs-column-filter-shell>
+                </ng-template>
+              </p-columnFilter>
+            </span>
+          </div>
+        </th>
+
+        <th pSortableColumn="discountValue">
+          <div class="th-flex text-center">
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'transactions.columns.discountValue' | translate"
+            >
+              {{ 'transactions.columns.discountValue' | translate }}
+            </span>
+            <span class="th-icons">
+              <p-sortIcon field="discountValue"></p-sortIcon>
+              <p-columnFilter
+                display="menu"
+                type="numeric"
+                matchMode="equals"
+                field="discountValue"
+                [useGrouping]="false"
+                [showOperator]="false"
+                [showAddButton]="false"
+                [showMatchModes]="true"
+                [showClearButton]="false"
+                [showApplyButton]="false"
+                styleClass="cs-colfilter"
+                #discountValueColumnFilter
+              >
+                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                  <cs-column-filter-shell
+                    [clearLabel]="'common.clear' | translate"
+                    [applyLabel]="'common.apply' | translate"
+                    (clear)="
+                      clearDecimalColumnFilter(
+                        discountValueColumnDraft,
+                        filter,
+                        discountValueColumnFilter
+                      )
+                    "
+                    (apply)="
+                      applyDecimalColumnFilter(
+                        discountValueColumnDraft,
+                        filter,
+                        discountValueColumnFilter
+                      )
+                    "
+                  >
+                    <input
+                      pInputText
+                      type="text"
+                      inputmode="decimal"
+                      class="w-full p-inputtext-sm"
+                      [ngModel]="discountValueColumnDraft()"
+                      [placeholder]="'transactions.fields.rate' | translate"
+                      (ngModelChange)="discountValueColumnDraft.set($event ?? '')"
+                    />
+                  </cs-column-filter-shell>
+                </ng-template>
+              </p-columnFilter>
+            </span>
+          </div>
+        </th>
+
+        <th pSortableColumn="liquidValue">
+          <div class="th-flex text-center">
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'transactions.columns.liquidValue' | translate"
+            >
+              {{ 'transactions.columns.liquidValue' | translate }}
+            </span>
+            <span class="th-icons">
+              <p-sortIcon field="liquidValue"></p-sortIcon>
+              <p-columnFilter
+                display="menu"
+                type="numeric"
+                matchMode="equals"
+                field="liquidValue"
+                [useGrouping]="false"
+                [showOperator]="false"
+                [showAddButton]="false"
+                [showMatchModes]="true"
+                #liquidValueColumnFilter
+                [showClearButton]="false"
+                [showApplyButton]="false"
+                styleClass="cs-colfilter"
+              >
+                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                  <cs-column-filter-shell
+                    [clearLabel]="'common.clear' | translate"
+                    [applyLabel]="'common.apply' | translate"
+                    (clear)="
+                      clearDecimalColumnFilter(
+                        liquidValueColumnDraft,
+                        filter,
+                        liquidValueColumnFilter
+                      )
+                    "
+                    (apply)="
+                      applyDecimalColumnFilter(
+                        liquidValueColumnDraft,
+                        filter,
+                        liquidValueColumnFilter
+                      )
+                    "
+                  >
+                    <input
+                      pInputText
+                      type="text"
+                      inputmode="decimal"
+                      class="w-full p-inputtext-sm"
+                      [ngModel]="liquidValueColumnDraft()"
+                      [placeholder]="'transactions.fields.liquid' | translate"
+                      (ngModelChange)="liquidValueColumnDraft.set($event ?? '')"
+                    />
+                  </cs-column-filter-shell>
+                </ng-template>
+              </p-columnFilter>
+            </span>
+          </div>
+        </th>
+
+        <th pSortableColumn="adjustmentValue">
+          <div class="th-flex text-center">
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'transactions.columns.adjustmentValue' | translate"
+            >
+              {{ 'transactions.columns.adjustmentValue' | translate }}
+            </span>
+            <span class="th-icons">
+              <p-sortIcon field="adjustmentValue"></p-sortIcon>
+              <p-columnFilter
+                display="menu"
+                type="numeric"
+                matchMode="equals"
+                [useGrouping]="false"
+                [showOperator]="false"
+                field="adjustmentValue"
+                [showAddButton]="false"
+                [showMatchModes]="true"
+                [showClearButton]="false"
+                [showApplyButton]="false"
+                styleClass="cs-colfilter"
+                #adjustmentValueColumnFilter
+              >
+                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                  <cs-column-filter-shell
+                    [clearLabel]="'common.clear' | translate"
+                    [applyLabel]="'common.apply' | translate"
+                    (clear)="
+                      clearDecimalColumnFilter(
+                        adjustmentValueColumnDraft,
+                        filter,
+                        adjustmentValueColumnFilter
+                      )
+                    "
+                    (apply)="
+                      applyDecimalColumnFilter(
+                        adjustmentValueColumnDraft,
+                        filter,
+                        adjustmentValueColumnFilter
+                      )
+                    "
+                  >
+                    <input
+                      pInputText
+                      type="text"
+                      inputmode="decimal"
+                      class="w-full p-inputtext-sm"
+                      [ngModel]="adjustmentValueColumnDraft()"
+                      [placeholder]="'transactions.fields.adjustment' | translate"
+                      (ngModelChange)="adjustmentValueColumnDraft.set($event ?? '')"
+                    />
+                  </cs-column-filter-shell>
+                </ng-template>
+              </p-columnFilter>
+            </span>
+          </div>
+        </th>
+
+        <th pSortableColumn="installment">
+          <div class="th-flex text-center">
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'transactions.columns.installment' | translate"
+            >
+              {{ 'transactions.columns.installment' | translate }}
+            </span>
+            <span class="th-icons">
+              <p-sortIcon field="installment"></p-sortIcon>
+              <p-columnFilter
+                display="menu"
+                type="numeric"
+                matchMode="equals"
+                field="installment"
+                [useGrouping]="false"
+                [showOperator]="false"
+                [showAddButton]="false"
+                [showMatchModes]="true"
+                #installmentColumnFilter
+                [showClearButton]="false"
+                [showApplyButton]="false"
+                styleClass="cs-colfilter"
+              >
+                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                  <cs-column-filter-shell
+                    [clearLabel]="'common.clear' | translate"
+                    [applyLabel]="'common.apply' | translate"
+                    (clear)="
+                      clearIntegerColumnFilter(
+                        installmentColumnDraft,
+                        filter,
+                        installmentColumnFilter
+                      )
+                    "
+                    (apply)="
+                      applyIntegerColumnFilter(
+                        installmentColumnDraft,
+                        filter,
+                        installmentColumnFilter
+                      )
+                    "
+                  >
+                    <input
+                      pInputText
+                      type="text"
+                      pattern="[0-9]*"
+                      inputmode="numeric"
+                      class="w-full p-inputtext-sm"
+                      [ngModel]="installmentColumnDraft()"
+                      [placeholder]="'transactions.fields.installments' | translate"
+                      (ngModelChange)="setIntegerColumnDraft(installmentColumnDraft, $event)"
+                    />
+                  </cs-column-filter-shell>
+                </ng-template>
+              </p-columnFilter>
+            </span>
+          </div>
+        </th>
+
+        <th pSortableColumn="cvNsu">
+          <div class="th-flex text-center">
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'transactions.columns.cvNsu' | translate"
+            >
+              {{ 'transactions.columns.cvNsu' | translate }}
+            </span>
+            <span class="th-icons">
+              <p-sortIcon field="cvNsu"></p-sortIcon>
+              <p-columnFilter
+                field="cvNsu"
+                display="menu"
+                #cvNsuColumnFilter
+                matchMode="contains"
+                [useGrouping]="false"
+                [showOperator]="false"
+                [showAddButton]="false"
+                [showMatchModes]="true"
+                [showClearButton]="false"
+                [showApplyButton]="false"
+                styleClass="cs-colfilter"
+              >
+                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                  <cs-column-filter-shell
+                    [clearLabel]="'common.clear' | translate"
+                    [applyLabel]="'common.apply' | translate"
+                    (clear)="clearIntegerColumnFilter(cvNsuColumnDraft, filter, cvNsuColumnFilter)"
+                    (apply)="applyIntegerColumnFilter(cvNsuColumnDraft, filter, cvNsuColumnFilter)"
+                  >
+                    <input
+                      pInputText
+                      type="text"
+                      pattern="[0-9]*"
+                      inputmode="numeric"
+                      [ngModel]="cvNsuColumnDraft()"
+                      class="w-full p-inputtext-sm"
+                      [placeholder]="'transactions.fields.cvNsu' | translate"
+                      (ngModelChange)="setIntegerColumnDraft(cvNsuColumnDraft, $event)"
+                    />
+                  </cs-column-filter-shell>
+                </ng-template>
+              </p-columnFilter>
+            </span>
+          </div>
+        </th>
+
+        <th pSortableColumn="authorization">
+          <div class="th-flex text-center">
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'transactions.columns.authorization' | translate"
+            >
+              {{ 'transactions.columns.authorization' | translate }}
+            </span>
+            <span class="th-icons">
+              <p-sortIcon field="authorization"></p-sortIcon>
+              <p-columnFilter
+                display="menu"
+                matchMode="contains"
+                field="authorization"
+                [useGrouping]="false"
+                [showOperator]="false"
+                [showAddButton]="false"
+                [showMatchModes]="true"
+                [showClearButton]="false"
+                [showApplyButton]="false"
+                styleClass="cs-colfilter"
+                #authorizationColumnFilter
+              >
+                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                  <cs-column-filter-shell
+                    [clearLabel]="'common.clear' | translate"
+                    [applyLabel]="'common.apply' | translate"
+                    (clear)="
+                      clearIntegerColumnFilter(
+                        authorizationColumnDraft,
+                        filter,
+                        authorizationColumnFilter
+                      )
+                    "
+                    (apply)="
+                      applyIntegerColumnFilter(
+                        authorizationColumnDraft,
+                        filter,
+                        authorizationColumnFilter
+                      )
+                    "
+                  >
+                    <input
+                      pInputText
+                      type="text"
+                      class="w-full p-inputtext-sm"
+                      [ngModel]="authorizationColumnDraft()"
+                      [placeholder]="'transactions.fields.authorization' | translate"
+                      (ngModelChange)="setIntegerColumnDraft(authorizationColumnDraft, $event)"
+                    />
+                  </cs-column-filter-shell>
+                </ng-template>
+              </p-columnFilter>
+            </span>
+          </div>
+        </th>
+
+        <th pSortableColumn="transactionStatus" class="text-center">
+          <div class="th-flex th-flex--compact th-flex--center">
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'transactions.fields.sale' | translate"
+            >
+              {{ 'transactions.fields.sale' | translate }}
+            </span>
+            <span class="th-icons">
+              <p-sortIcon field="transactionStatus"></p-sortIcon>
+            </span>
+          </div>
+        </th>
+
+        <th pSortableColumn="installmentStatus" class="text-center">
+          <div class="th-flex th-flex--compact th-flex--center">
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'transactions.fields.installment' | translate"
+            >
+              {{ 'transactions.fields.installment' | translate }}
+            </span>
+            <span class="th-icons">
+              <p-sortIcon field="installmentStatus"></p-sortIcon>
+            </span>
+          </div>
+        </th>
+
+        <th class="text-center">
+          <div class="th-flex th-flex--compact th-flex--center">
+            <span class="th-label" tooltipPosition="top" [pTooltip]="'common.search' | translate">
+              {{ 'common.search' | translate }}
+            </span>
+          </div>
+        </th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-row let-expanded="expanded">
+      <tr>
+        <td class="cell-muted text-center">{{ row.transaction?.saleDate | csDate: 'short' }}</td>
+        <td class="cell-muted text-center">{{ row.expectedPaymentDate | csDate: 'date' }}</td>
+
+        <td>
+          <span
+            class="cs-table-cell-ellipsis"
+            tooltipPosition="top"
+            [pTooltip]="row.transaction?.company?.fantasyName || ''"
+          >
+            {{ row.transaction?.company?.fantasyName }}
+          </span>
+        </td>
+
+        <td>
+          <span
+            class="cs-table-cell-ellipsis"
+            tooltipPosition="top"
+            [pTooltip]="row.transaction?.establishment?.pvNumber || ''"
+          >
+            {{ row.transaction?.establishment?.pvNumber }}
+          </span>
+        </td>
+
+        <td class="cell-muted text-center">
+          <cs-tag
+            [value]="modalityLabel(row.transaction?.modality)"
+            [tone]="modalitySeverity(row.transaction?.modality)"
+          />
+        </td>
+
+        <td class="cell-muted text-center">
+          <cs-tag
+            [value]="captureEnumLabel(row.transaction?.capture)"
+            [tone]="captureEnumSeverity(row.transaction?.capture)"
+          />
+        </td>
+
+        <td>
+          <span
+            class="cs-table-cell-ellipsis"
+            tooltipPosition="top"
+            [pTooltip]="row.transaction?.acquirer?.fantasyName || ''"
+          >
+            {{ row.transaction?.acquirer?.fantasyName }}
+          </span>
+        </td>
+
+        <td>
+          <span
+            class="cs-table-cell-ellipsis"
+            tooltipPosition="top"
+            [pTooltip]="row.transaction?.flag?.name || ''"
+          >
+            {{ row.transaction?.flag?.name }}
+          </span>
+        </td>
+
+        <td class="text-right">{{ row.grossValue | csCurrency }}</td>
+
+        <td class="text-right">
+          <div class="cs-cell-with-info justify-content-end">
+            <span>{{ row.discountValue | csCurrency }}</span>
+            <i
+              [escape]="false"
+              tooltipPosition="top"
+              [pTooltip]="discountTooltip(row)"
+              tooltipStyleClass="cs-info-tooltip"
+              class="pi pi-info-circle cs-inline-info-icon"
+            ></i>
+          </div>
+        </td>
+
+        <td class="text-right">{{ row.liquidValue | csCurrency }}</td>
+        <td class="text-center">{{ row.adjustmentValue | csCurrency }}</td>
+        <td class="text-center">{{ row.installment }} / {{ row.transaction?.installment }}</td>
+
+        <td class="text-center">
+          <div class="cs-cell-with-info justify-content-center">
+            <span
+              class="cs-table-cell-ellipsis"
+              tooltipPosition="top"
+              [pTooltip]="row.transaction?.cvNsu ? row.transaction?.cvNsu : ''"
+            >
+              {{ row.transaction?.cvNsu }}
+            </span>
+
+            @if (hasCvNsu(row.transaction)) {
+              <i
+                [escape]="false"
+                tooltipPosition="top"
+                [pTooltip]="cvNsuTooltip(row.transaction)"
+                tooltipStyleClass="cs-info-tooltip"
+                class="pi pi-info-circle cs-inline-info-icon"
+              ></i>
+            }
+          </div>
+        </td>
+
+        <td>
+          <span
+            class="cs-table-cell-ellipsis"
+            tooltipPosition="top"
+            [pTooltip]="row.transaction?.authorization || ''"
+          >
+            {{ row.transaction?.authorization }}
+          </span>
+        </td>
+
+        <td class="text-center">
+          <div class="table-actions justify-content-center">
+            <i
+              [escape]="false"
+              tooltipPosition="left"
+              [pTooltip]="saleStatusTooltip(row.transaction)"
+              [class]="statusIconTooltip(row.transaction?.transactionStatus)"
+              [tooltipStyleClass]="statusTooltipClass(row.transaction?.transactionStatus)"
+            ></i>
+          </div>
+        </td>
+
+        <td class="text-center">
+          <div class="table-actions justify-content-center">
+            <i
+              [escape]="false"
+              tooltipPosition="left"
+              [pTooltip]="installmentStatusTooltip(row.transaction)"
+              [class]="statusIconTooltip(row.transaction?.installmentStatus)"
+              [tooltipStyleClass]="statusTooltipClass(row.transaction?.installmentStatus)"
+            ></i>
+          </div>
+        </td>
+
+        <td class="text-center">
+          <div class="table-actions justify-content-center">
+            <p-menu
+              #searchMenu
+              [popup]="true"
+              appendTo="body"
+              styleClass="cs-search-menu"
+              [model]="searchActions(row)"
+            ></p-menu>
+
+            <button
+              text
+              pButton
+              rounded
+              size="small"
+              type="button"
+              icon="pi pi-search"
+              tooltipPosition="left"
+              class="p-button-text p-button-sm"
+              (click)="searchMenu.toggle($event)"
+              [pTooltip]="'common.search' | translate"
+            ></button>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="18" class="text-center py-4 text-500">
+          {{ 'pagination.emptymessage' | translate }}
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

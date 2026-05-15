@@ -71,16 +71,16 @@
     },
     "transactions": {
       "erp": {
-        "parcels": {
-          "title": "Parcelas"
+        "installments": {
+          "title": "Parcelas ERP"
         },
         "sales": {
           "title": "Vendas ERP"
         }
       },
       "acq": {
-        "parcels": {
-          "title": "Parcelas"
+        "installments": {
+          "title": "Parcelas ADQ"
         },
         "sales": {
           "title": "Vendas Adquirente"
@@ -399,6 +399,17 @@
       "canceledSale": "Venda Cancelada",
       "manuallyReconciled": "Conciliado Manual",
       "reconciledAutomatically": "Conciliado Automaticamente"
+    },
+    "paymentStatusEnum": {
+      "paid": "Pago",
+      "notPaid":"Não Pago",
+      "pending": "Pendente",
+      "deleted": "Excluido",
+      "canceled": "Cancelado",
+      "unknown": "Não Informado",
+      "divergent": "Divergente",
+      "excludedSale": "Venda Excluída",
+      "canceledSale": "Venda Cancelada"
     },
     "modalityEnum": {
       "outros": "Outros",
@@ -923,6 +934,7 @@
       "installments": "Parcelas",
       "tid": "Transação ID (TID)",
       "grossValue": "Valor Bruto",
+      "creditDate": "Data Crédito",
       "cardNumber":"Número Cartão",
       "adjustmentValue": "Ajustes",
       "netAmount": "Valor Líquido",
@@ -933,6 +945,7 @@
       "discountValue": "Valor Desconto",
       "periodSaleDate": "Período Venda",
       "establishment": "Estabelecimento",
+      "paymentStatus": "Status Pagamento",
       "bankDomicile": "Domicílio bancário",
       "conciliationDate": "Data Conciliação",
       "expectedPaymentDate":"Prev. Pagamento",

@@ -71,16 +71,16 @@
     },
     "transactions": {
       "erp": {
-        "parcels": {
-          "title": "Installments"
+        "installments": {
+          "title": "Installments ERP"
         },
         "sales": {
           "title": "ERP Sales"
         }
       },
       "acq": {
-        "parcels": {
-          "title": "Installments"
+        "installments": {
+          "title": "Installments ACQ"
         },
         "sales": {
           "title": "Acquirer Sales"

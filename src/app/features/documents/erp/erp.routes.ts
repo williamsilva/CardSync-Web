@@ -21,7 +21,7 @@ export const ERP_ROUTES: Routes = [
   },
   {
     path: 'installments',
-    title: 'routes.erp.installments.title',
+    title: 'routes.transactions.erp.installments.title',
     canActivate: [permissionGuard],
     data: {
       requireAll: false,
@@ -30,7 +30,7 @@ export const ERP_ROUTES: Routes = [
     },
     loadComponent: () =>
       import('./transactions-erp-installments-list/transactions-erp-installments-list.component').then(
-        (m) => m.ErpParcelsListComponent,
+        (m) => m.ErpInstallmentsListComponent,
       ),
   },
   {

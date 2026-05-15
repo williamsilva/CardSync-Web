@@ -348,8 +348,8 @@ export class TransactionsAcquirersSalesListComponent
   protected searchOnFileSales(row: TransactionsAcqModel): void {
     const targetFilters = this.buildTargetFilters(row);
 
-    localStorage.setItem(STATE_KEY.CARDSYNC.FILE.SALES.FILTERS.V1, JSON.stringify(targetFilters));
-    localStorage.removeItem(STATE_KEY.CARDSYNC.FILE.SALES.TABLE.STATE.V1);
+    localStorage.setItem(STATE_KEY.CARDSYNC.FILE.FILTERS.V1, JSON.stringify(targetFilters));
+    localStorage.removeItem(STATE_KEY.CARDSYNC.FILE.TABLE.STATE.V1);
 
     this.openRouteInNewTab(['/file-processing/files']);
   }
@@ -363,7 +363,7 @@ export class TransactionsAcquirersSalesListComponent
     this.openRouteInNewTab(['/documents/erp/sales']);
   }
 
-  private openRouteInNewTab(
+  protected openRouteInNewTab(
     commands: unknown[],
     extras: { queryParams?: Record<string, string> } = {},
   ): void {
@@ -371,7 +371,7 @@ export class TransactionsAcquirersSalesListComponent
     window.open(`${window.location.origin}${url}`, '_blank', 'noopener,noreferrer');
   }
 
-  private buildTargetFilters(row: TransactionsAcqModel): TransactionsAcquirersSalesFiltersState {
+  protected buildTargetFilters(row: TransactionsAcqModel): TransactionsAcquirersSalesFiltersState {
     return {
       ...this.emptyFiltersState(),
       cvNsu: row.cvNsu != null ? String(row.cvNsu) : '',
@@ -386,7 +386,7 @@ export class TransactionsAcquirersSalesListComponent
     };
   }
 
-  private buildRowQueryParams(row: TransactionsAcqModel): Record<string, string> {
+  protected buildRowQueryParams(row: TransactionsAcqModel): Record<string, string> {
     const params: Record<string, string> = { transactionId: row.id };
 
     if (row.cvNsu != null) params['cvNsu'] = String(row.cvNsu);
@@ -396,7 +396,7 @@ export class TransactionsAcquirersSalesListComponent
     return params;
   }
 
-  private emptyFiltersState(): TransactionsAcquirersSalesFiltersState {
+  protected emptyFiltersState(): TransactionsAcquirersSalesFiltersState {
     return {
       tid: '',
       cvNsu: '',
@@ -1176,7 +1176,7 @@ export class TransactionsAcquirersSalesListComponent
     ]);
   }
 
-  private infoTooltip(rows: Array<{ label: string; value: string; nowrap?: boolean }>): string {
+  protected infoTooltip(rows: Array<{ label: string; value: string; nowrap?: boolean }>): string {
     const content = rows
       .filter((row) => row.value !== null && row.value !== undefined && row.value !== '')
       .map((row) => this.infoTooltipRow(row.label, row.value, row.nowrap))
@@ -1185,7 +1185,7 @@ export class TransactionsAcquirersSalesListComponent
     return `<div class="cs-tooltip">${content}</div>`;
   }
 
-  private infoTooltipRow(label: string, value: string, nowrap = false): string {
+  protected infoTooltipRow(label: string, value: string, nowrap = false): string {
     const nowrapClass = nowrap ? ' cs-tooltip-row-nowrap' : '';
 
     return `

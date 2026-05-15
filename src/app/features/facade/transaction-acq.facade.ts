@@ -2,9 +2,10 @@ import { Injectable, inject, signal } from '@angular/core';
 
 import { finalize } from 'rxjs';
 
+import { TransactionsAcqModel } from '@models/transactions-acq.models';
+import { TransactionsTotalsModel } from '@models/transactionsTotalsModel';
 import { ListQueryDto } from '@shared/features/list-query/list-query.types';
 import { TransactionsAcqApiService } from '@features/service/transaction-acq.api.service';
-import { TransactionsAcqModel, TransactionsAcqTotalsModel } from '@models/transactions-acq.models';
 import { TransactionsAcquirersSalesAdvancedFilters } from '@features/filter/transaction-acq.filters';
 
 type LastQuery = ListQueryDto<TransactionsAcquirersSalesAdvancedFilters>;
@@ -18,7 +19,7 @@ export class TransactionsAcqFacade {
   private readonly _totalsLoading = signal(false);
   private readonly _data = signal<TransactionsAcqModel[]>([]);
   private readonly _lastQuery = signal<LastQuery | null>(null);
-  private readonly _totals = signal<TransactionsAcqTotalsModel | null>(null);
+  private readonly _totals = signal<TransactionsTotalsModel | null>(null);
 
   readonly sales = this._data.asReadonly();
   readonly totals = this._totals.asReadonly();

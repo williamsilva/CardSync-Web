@@ -57,17 +57,27 @@
    ========================================================= */
 
 .cs-admin-table .th-flex {
+  --cs-th-label-min-width: 6.0ch; /* ~5 caracteres + ellipsis */
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 0.2rem;
   height: 16px;
   width: 100%;
+  min-width: calc(var(--cs-th-label-min-width) + 1.75rem);
+  overflow: visible;
 }
 
 .cs-admin-table .th-label {
-  flex: 1 1 auto;
+  flex: 1 1 var(--cs-th-label-min-width);
+  min-width: var(--cs-th-label-min-width);
+  display: block;
+  overflow: hidden;
   font-weight: 500;
+  line-height: 1.1;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  cursor: help;
 }
 
 .cs-admin-table .th-icons {
@@ -75,6 +85,7 @@
   align-items: center;
   gap: 0.05rem;
   flex: 0 0 auto;
+  min-width: max-content;
 }
 
 /* =========================================================
@@ -533,4 +544,37 @@
 
 .p-menu.cs-search-menu .p-menuitem-icon {
   flex-shrink: 0;
+}
+
+/* Compact headers for narrow action/status columns (sale, installments, search) */
+.cs-admin-table .th-flex--compact {
+  --cs-th-label-min-width: 6.5ch; /* garante ~5 caracteres antes do ellipsis */
+  min-width: 0;
+  gap: 0.12rem;
+  overflow: hidden;
+}
+
+.cs-admin-table .th-flex--center {
+  justify-content: center;
+}
+
+.cs-admin-table .th-flex--compact .th-label {
+  flex: 0 0 var(--cs-th-label-min-width);
+  width: var(--cs-th-label-min-width);
+  min-width: var(--cs-th-label-min-width);
+  max-width: var(--cs-th-label-min-width);
+}
+
+.cs-admin-table .th-flex--compact .th-icons {
+  flex: 0 0 auto;
+  min-width: 1rem;
+}
+
+.cs-table-cell-ellipsis {
+  display: block;
+  max-width: 100%;
+  overflow: hidden;
+  cursor: help;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }

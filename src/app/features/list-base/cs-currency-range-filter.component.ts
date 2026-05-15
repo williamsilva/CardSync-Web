@@ -16,21 +16,26 @@ export interface CsCurrencyRangeValue {
   selector: 'cs-currency-range-filter',
   standalone: true,
   imports: [CommonModule, FormsModule, InputNumberModule, FloatLabel],
+  host: {
+    class: 'block',
+  },
   template: `
-    <div class="cs-currency-range-filter">
-      <div class="cs-currency-range-filter__label">
+    <div class="flex flex-column w-full gap-2">
+      <div class="w-full text-center text-sm font-semibold text-color-secondary line-height-2">
         {{ label }}
       </div>
 
-      <div class="cs-currency-range-filter__content">
-        <div class="cs-currency-range-filter__field">
+      <div class="grid formgrid align-items-end">
+        <div class="col-12 sm:col-6 p-1">
           <p-floatlabel variant="on" class="w-full">
             <p-inputNumber
               size="small"
+              class="w-full"
               mode="currency"
               [locale]="locale()"
               [currency]="currency()"
               [ngModel]="startValue()"
+              inputStyleClass="w-full"
               [inputId]="inputId + '-start'"
               [minFractionDigits]="minFractionDigits"
               [maxFractionDigits]="maxFractionDigits"
@@ -43,7 +48,7 @@ export interface CsCurrencyRangeValue {
           </p-floatlabel>
         </div>
 
-        <div class="cs-currency-range-filter__field">
+        <div class="col-12 sm:col-6 p-1">
           <p-floatlabel variant="on" class="w-full">
             <p-inputNumber
               size="small"
@@ -52,6 +57,7 @@ export interface CsCurrencyRangeValue {
               [locale]="locale()"
               [ngModel]="endValue()"
               [currency]="currency()"
+              inputStyleClass="w-full"
               [inputId]="inputId + '-end'"
               (ngModelChange)="onEndChange($event)"
               [minFractionDigits]="minFractionDigits"
@@ -66,54 +72,6 @@ export interface CsCurrencyRangeValue {
       </div>
     </div>
   `,
-  styles: [
-    `
-      .cs-currency-range-filter {
-        display: flex;
-        flex-direction: column;
-        gap: 0.45rem;
-        width: 100%;
-      }
-
-      .cs-currency-range-filter__label {
-        width: 100%;
-        text-align: center;
-        font-size: 0.8125rem;
-        font-weight: 600;
-        color: var(--text-color-secondary);
-        line-height: 1.2;
-      }
-
-      .cs-currency-range-filter__content {
-        display: grid;
-        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-        align-items: end;
-        gap: 0.5rem;
-        width: 100%;
-      }
-
-      .cs-currency-range-filter__field {
-        min-width: 0;
-        width: 100%;
-      }
-
-      .cs-currency-range-filter p-floatlabel {
-        width: 100%;
-        display: block;
-      }
-
-      .cs-currency-range-filter .p-inputnumber,
-      .cs-currency-range-filter .p-inputnumber-input {
-        width: 100%;
-      }
-
-      @media (max-width: 640px) {
-        .cs-currency-range-filter__content {
-          grid-template-columns: 1fr;
-        }
-      }
-    `,
-  ],
 })
 export class CsCurrencyRangeFilterComponent {
   private readonly i18n = inject(I18nService);

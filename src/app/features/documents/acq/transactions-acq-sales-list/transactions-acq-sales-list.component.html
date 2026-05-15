@@ -255,7 +255,7 @@
     <cs-currency-range-filter
       inputId="grossValue"
       [value]="grossValueRange()"
-      class="col-12 md:col-6 xl:col-3 p-1"
+      class="col-12 md:col-6 xl:col-3 p-2"
       [endLabel]="'common.filters.final' | translate"
       (valueChange)="onGrossValueRangeChange($event)"
       [startLabel]="'common.filters.initial' | translate"
@@ -265,7 +265,7 @@
     <cs-currency-range-filter
       inputId="discountValue"
       [value]="discountValueRange()"
-      class="col-12 md:col-6 xl:col-3 p-1"
+      class="col-12 md:col-6 xl:col-3 p-2"
       [endLabel]="'common.filters.final' | translate"
       (valueChange)="onDiscountValueRangeChange($event)"
       [startLabel]="'common.filters.initial' | translate"
@@ -275,7 +275,7 @@
     <cs-currency-range-filter
       inputId="liquidValue"
       [value]="liquidValueRange()"
-      class="col-12 md:col-6 xl:col-3 p-1"
+      class="col-12 md:col-6 xl:col-3 p-2"
       [endLabel]="'common.filters.final' | translate"
       (valueChange)="onLiquidValueRangeChange($event)"
       [startLabel]="'common.filters.initial' | translate"
@@ -285,7 +285,7 @@
     <cs-currency-range-filter
       inputId="adjustments"
       [value]="adjustmentValueRange()"
-      class="col-12 md:col-6 xl:col-3 p-1"
+      class="col-12 md:col-6 xl:col-3 p-2"
       [endLabel]="'common.filters.final' | translate"
       [startLabel]="'common.filters.initial' | translate"
       (valueChange)="onAdjustmentValueRangeChange($event)"
@@ -358,23 +358,23 @@
     <ng-template pTemplate="colgroup">
       <colgroup>
         <col style="width: 120px" />
-        <col style="width: 120px" />
+        <col style="width: 90px" />
+        <col style="width: auto" />
+        <col style="width: 90px" />
         <col style="width: 130px" />
+        <col style="width: 120px" />
+        <col style="width: 110px" />
+        <col style="width: 120px" />
+        <col style="width: 90px" />
+        <col style="width: 90px" />
+        <col style="width: 90px" />
+        <col style="width: 90px" />
+        <col style="width: 90px" />
+        <col style="width: 120px" />
         <col style="width: 100px" />
-        <col style="width: 100px" />
-        <col style="width: 120px" />
-        <col style="width: 120px" />
-        <col style="width: 120px" />
         <col style="width: 90px" />
-        <col style="width: 90px" />
-        <col style="width: 90px" />
-        <col style="width: 90px" />
-        <col style="width: 100px" />
-        <col style="width: 120px" />
-        <col style="width: 120px" />
         <col style="width: 60px" />
-        <col style="width: 60px" />
-        <col style="width: 60px" />
+        <col style="width: 50px" />
       </colgroup>
     </ng-template>
 
@@ -382,7 +382,13 @@
       <tr>
         <th pSortableColumn="saleDate">
           <div class="th-flex text-center">
-            <span class="th-label">{{ 'transactions.columns.saleDate' | translate }}</span>
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'transactions.columns.saleDate' | translate"
+            >
+              {{ 'transactions.columns.saleDate' | translate }}
+            </span>
             <span class="th-icons">
               <p-sortIcon field="saleDate"></p-sortIcon>
 
@@ -478,9 +484,13 @@
 
         <th pSortableColumn="expectedPaymentDate">
           <div class="th-flex text-center">
-            <span class="th-label">{{
-              'transactions.columns.expectedPaymentDate' | translate
-            }}</span>
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'transactions.columns.expectedPaymentDate' | translate"
+            >
+              {{ 'transactions.columns.expectedPaymentDate' | translate }}
+            </span>
             <span class="th-icons">
               <p-sortIcon field="expectedPaymentDate"></p-sortIcon>
 
@@ -578,7 +588,13 @@
 
         <th pSortableColumn="company">
           <div class="th-flex text-center">
-            <span class="th-label">{{ 'transactions.columns.company' | translate }}</span>
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'transactions.columns.company' | translate"
+            >
+              {{ 'transactions.columns.company' | translate }}
+            </span>
             <span class="th-icons">
               <p-sortIcon field="company"></p-sortIcon>
               <p-columnFilter
@@ -652,7 +668,13 @@
 
         <th pSortableColumn="establishment">
           <div class="th-flex text-center">
-            <span class="th-label">{{ 'transactions.columns.establishment' | translate }}</span>
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'transactions.columns.establishment' | translate"
+            >
+              {{ 'transactions.columns.establishment' | translate }}
+            </span>
             <span class="th-icons">
               <p-sortIcon field="establishment"></p-sortIcon>
               <p-columnFilter
@@ -704,7 +726,13 @@
 
         <th pSortableColumn="modality">
           <div class="th-flex text-center">
-            <span class="th-label">{{ 'transactions.columns.modality' | translate }}</span>
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'transactions.columns.modality' | translate"
+            >
+              {{ 'transactions.columns.modality' | translate }}
+            </span>
             <span class="th-icons">
               <p-sortIcon field="modality"></p-sortIcon>
               <p-columnFilter
@@ -765,7 +793,13 @@
 
         <th pSortableColumn="capture">
           <div class="th-flex text-center">
-            <span class="th-label">{{ 'transactions.columns.capture' | translate }}</span>
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'transactions.columns.capture' | translate"
+            >
+              {{ 'transactions.columns.capture' | translate }}
+            </span>
             <span class="th-icons">
               <p-sortIcon field="capture"></p-sortIcon>
               <p-columnFilter
@@ -826,7 +860,13 @@
 
         <th pSortableColumn="acquirer">
           <div class="th-flex text-center">
-            <span class="th-label">{{ 'transactions.columns.acquirer' | translate }}</span>
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'transactions.columns.acquirer' | translate"
+            >
+              {{ 'transactions.columns.acquirer' | translate }}
+            </span>
             <span class="th-icons">
               <p-sortIcon field="acquirer"></p-sortIcon>
               <p-columnFilter
@@ -884,7 +924,13 @@
 
         <th pSortableColumn="flag">
           <div class="th-flex text-center">
-            <span class="th-label">{{ 'transactions.columns.flag' | translate }}</span>
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'transactions.columns.flag' | translate"
+            >
+              {{ 'transactions.columns.flag' | translate }}
+            </span>
             <span class="th-icons">
               <p-sortIcon field="flag"></p-sortIcon>
               <p-columnFilter
@@ -929,7 +975,13 @@
 
         <th pSortableColumn="grossValue">
           <div class="th-flex text-center">
-            <span class="th-label">{{ 'transactions.columns.grossValue' | translate }}</span>
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'transactions.columns.grossValue' | translate"
+            >
+              {{ 'transactions.columns.grossValue' | translate }}
+            </span>
             <span class="th-icons">
               <p-sortIcon field="grossValue"></p-sortIcon>
               <p-columnFilter
@@ -983,7 +1035,13 @@
 
         <th pSortableColumn="discountValue">
           <div class="th-flex text-center">
-            <span class="th-label">{{ 'transactions.columns.discountValue' | translate }}</span>
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'transactions.columns.discountValue' | translate"
+            >
+              {{ 'transactions.columns.discountValue' | translate }}
+            </span>
             <span class="th-icons">
               <p-sortIcon field="discountValue"></p-sortIcon>
               <p-columnFilter
@@ -1037,7 +1095,13 @@
 
         <th pSortableColumn="liquidValue">
           <div class="th-flex text-center">
-            <span class="th-label">{{ 'transactions.columns.liquidValue' | translate }}</span>
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'transactions.columns.liquidValue' | translate"
+            >
+              {{ 'transactions.columns.liquidValue' | translate }}
+            </span>
             <span class="th-icons">
               <p-sortIcon field="liquidValue"></p-sortIcon>
               <p-columnFilter
@@ -1091,7 +1155,13 @@
 
         <th pSortableColumn="adjustmentValue">
           <div class="th-flex text-center">
-            <span class="th-label">{{ 'transactions.columns.adjustmentValue' | translate }}</span>
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'transactions.columns.adjustmentValue' | translate"
+            >
+              {{ 'transactions.columns.adjustmentValue' | translate }}
+            </span>
             <span class="th-icons">
               <p-sortIcon field="adjustmentValue"></p-sortIcon>
               <p-columnFilter
@@ -1145,7 +1215,13 @@
 
         <th pSortableColumn="installment">
           <div class="th-flex text-center">
-            <span class="th-label">{{ 'transactions.columns.installment' | translate }}</span>
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'transactions.columns.installment' | translate"
+            >
+              {{ 'transactions.columns.installment' | translate }}
+            </span>
             <span class="th-icons">
               <p-sortIcon field="installment"></p-sortIcon>
               <p-columnFilter
@@ -1199,7 +1275,13 @@
 
         <th pSortableColumn="cvNsu">
           <div class="th-flex text-center">
-            <span class="th-label">{{ 'transactions.columns.cvNsu' | translate }}</span>
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'transactions.columns.cvNsu' | translate"
+            >
+              {{ 'transactions.columns.cvNsu' | translate }}
+            </span>
             <span class="th-icons">
               <p-sortIcon field="cvNsu"></p-sortIcon>
               <p-columnFilter
@@ -1241,7 +1323,13 @@
 
         <th pSortableColumn="authorization">
           <div class="th-flex text-center">
-            <span class="th-label">{{ 'transactions.columns.authorization' | translate }}</span>
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'transactions.columns.authorization' | translate"
+            >
+              {{ 'transactions.columns.authorization' | translate }}
+            </span>
             <span class="th-icons">
               <p-sortIcon field="authorization"></p-sortIcon>
               <p-columnFilter
@@ -1291,9 +1379,38 @@
           </div>
         </th>
 
-        <th class="text-center">{{ 'transactions.fields.sale' | translate }}</th>
-        <th class="text-center">{{ 'transactions.fields.installments' | translate }}</th>
-        <th class="text-center">{{ 'common.search' | translate }}</th>
+        <th pSortableColumn="transactionStatus" class="text-center">
+          <div class="th-flex th-flex--compact th-flex--center">
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'transactions.fields.sale' | translate"
+            >
+              {{ 'transactions.fields.sale' | translate }}
+            </span>
+            <span class="th-icons">
+              <p-sortIcon field="transactionStatus"></p-sortIcon>
+            </span>
+          </div>
+        </th>
+        <th class="text-center">
+          <div class="th-flex th-flex--compact th-flex--center">
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'transactions.fields.installments' | translate"
+            >
+              {{ 'transactions.fields.installments' | translate }}
+            </span>
+          </div>
+        </th>
+        <th class="text-center">
+          <div class="th-flex th-flex--compact th-flex--center">
+            <span class="th-label" tooltipPosition="top" [pTooltip]="'common.search' | translate">
+              {{ 'common.search' | translate }}
+            </span>
+          </div>
+        </th>
       </tr>
     </ng-template>
 
@@ -1301,20 +1418,60 @@
       <tr>
         <td class="cell-muted text-center">{{ row.saleDate | csDate: 'short' }}</td>
         <td class="cell-muted text-center">{{ row.expectedPaymentDate | csDate: 'date' }}</td>
-        <td>{{ row.company?.fantasyName || '-' }}</td>
-        <td>{{ row.establishment?.pvNumber || '-' }}</td>
+
+        <td>
+          <span
+            class="cs-table-cell-ellipsis"
+            tooltipPosition="top"
+            [pTooltip]="row.company?.fantasyName || ''"
+          >
+            {{ row.company?.fantasyName || '-' }}
+          </span>
+        </td>
+
+        <td>
+          <span
+            class="cs-table-cell-ellipsis"
+            tooltipPosition="top"
+            [pTooltip]="row.establishment?.pvNumber ? row.establishment?.pvNumber : ''"
+          >
+            {{ row.establishment?.pvNumber || '-' }}
+          </span>
+        </td>
+
         <td class="cell-muted text-center">
           <cs-tag [value]="modalityLabel(row.modality)" [tone]="modalitySeverity(row.modality)" />
         </td>
+
         <td class="cell-muted text-center">
           <cs-tag
             [value]="captureEnumLabel(row.capture)"
             [tone]="captureEnumSeverity(row.capture)"
           />
         </td>
-        <td>{{ row.acquirer?.fantasyName || '-' }}</td>
-        <td>{{ row.flag?.name || '-' }}</td>
+
+        <td>
+          <span
+            class="cs-table-cell-ellipsis"
+            tooltipPosition="top"
+            [pTooltip]="row.acquirer?.fantasyName || ''"
+          >
+            {{ row.acquirer?.fantasyName || '-' }}
+          </span>
+        </td>
+
+        <td>
+          <span
+            class="cs-table-cell-ellipsis"
+            tooltipPosition="top"
+            [pTooltip]="row.flag?.name || ''"
+          >
+            {{ row.flag?.name || '-' }}
+          </span>
+        </td>
+
         <td class="text-right">{{ row.grossValue | csCurrency }}</td>
+
         <td class="text-right">
           <div class="cs-cell-with-info justify-content-end">
             <span>{{ row.discountValue | csCurrency }}</span>
@@ -1327,12 +1484,20 @@
             ></i>
           </div>
         </td>
+
         <td class="text-right">{{ row.liquidValue | csCurrency }}</td>
         <td class="text-center">{{ row.adjustmentValue | csCurrency }}</td>
         <td class="text-center">{{ row.installment }}</td>
+
         <td class="text-center">
           <div class="cs-cell-with-info justify-content-center">
-            <span>{{ row.cvNsu || '-' }}</span>
+            <span
+              class="cs-table-cell-ellipsis"
+              tooltipPosition="top"
+              [pTooltip]="row.cvNsu ? row.cvNsu : ''"
+            >
+              {{ row.cvNsu || '-' }}
+            </span>
 
             @if (hasCvNsu(row)) {
               <i
@@ -1345,7 +1510,16 @@
             }
           </div>
         </td>
-        <td>{{ row.authorization || '-' }}</td>
+
+        <td>
+          <span
+            class="cs-table-cell-ellipsis"
+            tooltipPosition="top"
+            [pTooltip]="row.authorization || ''"
+          >
+            {{ row.authorization || '-' }}
+          </span>
+        </td>
 
         <td class="text-center">
           <div class="table-actions justify-content-center">

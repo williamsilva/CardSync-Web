@@ -2,28 +2,28 @@ import { Injectable, inject, signal } from '@angular/core';
 
 import { finalize } from 'rxjs';
 
-import { TransactionsErpModel } from '@models/transactions-erp.models';
 import { TransactionsTotalsModel } from '@models/transactionsTotalsModel';
 import { ListQueryDto } from '@shared/features/list-query/list-query.types';
-import { TransactionsErpApiService } from '@features/service/transaction-erp.api.service';
-import { TransactionsErpAdvancedFilters } from '@features/filter/transaction-erp.filters';
+import { TransactionsErpInstallmentModel } from '@models/transactions-erp-installment.models';
+import { TransactionsErpInstallmentAdvancedFilters } from '../filter/transaction-erp-installment.filters';
+import { TransactionsErpInstallmentApiService } from '@features/service/transaction-erp-installment.api.service';
 
-type LastQuery = ListQueryDto<TransactionsErpAdvancedFilters>;
+type LastQuery = ListQueryDto<TransactionsErpInstallmentAdvancedFilters>;
 
 @Injectable({ providedIn: 'root' })
-export class TransactionsErpFacade {
-  private readonly api = inject(TransactionsErpApiService);
+export class TransactionsErpInstallmentFacade {
+  private readonly api = inject(TransactionsErpInstallmentApiService);
 
   private readonly _total = signal(0);
   private readonly _loading = signal(false);
   private readonly _totalsLoading = signal(false);
-  private readonly _data = signal<TransactionsErpModel[]>([]);
   private readonly _lastQuery = signal<LastQuery | null>(null);
+  private readonly _data = signal<TransactionsErpInstallmentModel[]>([]);
   private readonly _totals = signal<TransactionsTotalsModel | null>(null);
 
-  readonly sales = this._data.asReadonly();
   readonly totals = this._totals.asReadonly();
   readonly loading = this._loading.asReadonly();
+  readonly installments = this._data.asReadonly();
   readonly totalRecords = this._total.asReadonly();
   readonly totalsLoading = this._totalsLoading.asReadonly();
 
