@@ -7,8 +7,8 @@ import { ModalityEnum, normalizeModalityEnum } from './enums/modality.enum';
 import { ProcessedFileMinimalModel } from './processed-file-minimal.models';
 import { TransactionsErpInstallmentModel } from './transactions-erp-installment.models';
 import {
-  TransactionStatusEnum,
-  normalizeTransactionStatusEnum,
+  StatusTransactionEnum,
+  normalizeStatusTransactionEnum,
 } from './enums/transaction-status.enum';
 
 export interface TransactionsErpMinimalModel {
@@ -26,14 +26,13 @@ export interface TransactionsErpMinimalModel {
 
   capture: CaptureEnum | null;
   modality: ModalityEnum | null;
-  transactionStatus: TransactionStatusEnum | null;
+  statusTransaction: StatusTransactionEnum | null;
 
   flag: FlagMinimalModel;
   company: CompanyMinimalModel;
   acquirer: AcquirerMinimalModel;
   processedFile: ProcessedFileMinimalModel;
   establishment: EstablishmentMinimalModel;
-  //bankingDomicile: BankingDomicileMinimalModel;
 }
 
 export interface TransactionsErpMinimalCreateInput {}
@@ -71,7 +70,7 @@ export interface TransactionsErpMinimalApiModel {
   flag: FlagMinimalModel;
   company: CompanyMinimalModel;
   acquirer: AcquirerMinimalModel;
-  transactionStatus: TransactionStatusEnum;
+  statusTransaction: StatusTransactionEnum;
   processedFile: ProcessedFileMinimalModel;
   establishment: EstablishmentMinimalModel;
   installments?: TransactionsErpInstallmentModel[] | null;
@@ -83,7 +82,7 @@ export function mapTransactionsErpMinimalApiModel(
   return {
     ...input,
     modality: normalizeModalityEnum(input.modality),
-    transactionStatus: normalizeTransactionStatusEnum(input.modality),
+    statusTransaction: normalizeStatusTransactionEnum(input.modality),
   };
 }
 

@@ -11,10 +11,10 @@ import { CsCurrencyPipe } from '@shared/pipes/cs-currency.pipe';
 import { TransactionsAcqModel } from '@models/transactions-acq.models';
 import { TransactionsAcqInstallmentModel } from '@models/transactions-acq-installment.models';
 import {
-  PaymentStatusEnum,
-  paymentStatusEnumLabel,
-  paymentStatusEnumSeverity,
-} from '@models/enums/payment-status.enum';
+  StatusPaymentBankEnum,
+  statusPaymentBankEnumLabel,
+  statusPaymentBankEnumSeverity,
+} from '@models/enums/status-payment-bank.enum';
 
 @Component({
   standalone: true,
@@ -37,11 +37,11 @@ export class TransactionsAcquirersSalesInstallmentsTableComponent {
     return row.installmentNumber ?? row.installment ?? 0;
   }
 
-  paymentBankStatusLabel(value: PaymentStatusEnum | null): string {
-    return paymentStatusEnumLabel(value, this.i18n);
+  statusPaymentBankLabel(value: StatusPaymentBankEnum | null): string {
+    return statusPaymentBankEnumLabel(value, this.i18n);
   }
 
-  paymentBankStatusSeverity(value: PaymentStatusEnum | null): CsTagTone {
-    return paymentStatusEnumSeverity(value);
+  statusPaymentBankSeverity(value: StatusPaymentBankEnum | null): CsTagTone {
+    return statusPaymentBankEnumSeverity(value);
   }
 }

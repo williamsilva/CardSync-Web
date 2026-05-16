@@ -2,11 +2,11 @@ import { ModalityEnum } from './enums/modality.enum';
 import { FlagMinimalModel } from './flag-minimal.models';
 import { CompanyMinimalModel } from './company-minimal.models';
 import { AcquirerMinimalModel } from './acquirer-minimal.models';
-import { TransactionStatusEnum } from './enums/transaction-status.enum';
+import { StatusTransactionEnum } from './enums/transaction-status.enum';
+import { StatusPaymentBankEnum } from './enums/status-payment-bank.enum';
 import { EstablishmentMinimalModel } from './establishment-minimal.models';
 import { ProcessedFileMinimalModel } from './processed-file-minimal.models';
 import { TransactionsAcqMinimalModel } from './transactions-acq-minimal.models';
-import { PaymentStatusEnum } from './enums/payment-status.enum';
 
 export interface TransactionsAcqInstallmentModel {
   id: string;
@@ -29,8 +29,8 @@ export interface TransactionsAcqInstallmentModel {
   installmentTotal?: number | null;
   installmentNumber?: number | null;
 
-  paymentStatus?: PaymentStatusEnum | null;
-  transactionStatus: TransactionStatusEnum | null;
+  statusPaymentBank?: StatusPaymentBankEnum | null;
+  statusTransaction: StatusTransactionEnum | null;
   transaction?: TransactionsAcqMinimalModel | null;
   processedFile?: ProcessedFileMinimalModel | null;
   establishment?: EstablishmentMinimalModel | null;

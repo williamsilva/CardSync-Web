@@ -3,8 +3,8 @@ import { WritableSignal } from '@angular/core';
 import { PeriodEnum } from '@models/enums/period.enum';
 import { CaptureEnum } from '@models/enums/capture.enum';
 import { ModalityEnum } from '@models/enums/modality.enum';
-import { PaymentStatusEnum } from '@models/enums/payment-status.enum';
-import { TransactionStatusEnum } from '@models/enums/transaction-status.enum';
+import { StatusTransactionEnum } from '@models/enums/transaction-status.enum';
+import { StatusPaymentBankEnum } from '@models/enums/status-payment-bank.enum';
 
 export type TransactionsErpInstallmentFiltersState = {
   tid: string;
@@ -26,8 +26,8 @@ export type TransactionsErpInstallmentFiltersState = {
   capture: CaptureEnum[] | null;
   establishments: string[] | null;
   modality: ModalityEnum[] | null;
-  paymentStatus: PaymentStatusEnum[] | null;
-  transactionStatus: TransactionStatusEnum[] | null;
+  statusPaymentBank: StatusPaymentBankEnum[] | null;
+  statusTransaction: StatusTransactionEnum[] | null;
 
   periodSaleDate: PeriodEnum | null;
   saleDate: string | string[] | null;
@@ -68,9 +68,9 @@ export function createEmptyTransactionsErpInstallmentFiltersState(): Transaction
     modality: null,
     acquirers: null,
     companies: null,
-    paymentStatus: null,
     establishments: null,
-    transactionStatus: null,
+    statusPaymentBank: null,
+    statusTransaction: null,
 
     saleDate: null,
     periodSaleDate: null,
@@ -90,13 +90,13 @@ export function resetTransactionsErpInstallmentAdvancedFilters(
 
   filters.tid.set(empty.tid);
   filters.cvNsu.set(empty.cvNsu);
-  filters.paymentStatus.set(empty.paymentStatus);
   filters.authorization.set(empty.authorization);
   filters.grossValueEnd.set(empty.grossValueEnd);
   filters.liquidValueEnd.set(empty.liquidValueEnd);
   filters.grossValueStart.set(empty.grossValueStart);
   filters.discountValueEnd.set(empty.discountValueEnd);
   filters.liquidValueStart.set(empty.liquidValueStart);
+  filters.statusPaymentBank.set(empty.statusPaymentBank);
   filters.adjustmentValueEnd.set(empty.adjustmentValueEnd);
   filters.discountValueStart.set(empty.discountValueStart);
   filters.adjustmentValueStart.set(empty.adjustmentValueStart);
@@ -107,7 +107,7 @@ export function resetTransactionsErpInstallmentAdvancedFilters(
   filters.acquirers.set(empty.acquirers);
   filters.companies.set(empty.companies);
   filters.establishments.set(empty.establishments);
-  filters.transactionStatus.set(empty.transactionStatus);
+  filters.statusTransaction.set(empty.statusTransaction);
 
   filters.saleDate.set(empty.saleDate);
   filters.periodSaleDate.set(empty.periodSaleDate);

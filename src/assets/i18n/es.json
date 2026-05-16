@@ -387,7 +387,7 @@
       "ambiguousMatch": "Coincidencia ambigua",
       "acquirerMismatch": "Divergencia de adquirente"
     },
-    "transactionStatusEnum": {
+    "statusTransactionEnum": {
       "pending": "Pendiente",
       "deleted": "Eliminado",
       "canceled": "Cancelado",
@@ -936,7 +936,7 @@
       "conciliationDate": "Fecha conciliación",
       "expectedPaymentDate": "Prev. pago",
       "periodPaymentDate": "Período pago",
-      "transactionStatus": "Estado conciliación",
+      "statusTransaction": "Estado conciliación",
       "periodConciliationDate": "Período conciliación",
       "periodExpectedPaymentDate": "Período prev. pago"
     },

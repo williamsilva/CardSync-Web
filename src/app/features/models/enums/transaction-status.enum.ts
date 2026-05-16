@@ -1,7 +1,7 @@
 import { CsTagTone } from '@shared/ui';
 import { I18nService } from '@core/i18n/i18n.service';
 
-export enum TransactionStatusEnum {
+export enum StatusTransactionEnum {
   NULL = 'NULL',
   PENDING = 'PENDING',
   DELETED = 'DELETED',
@@ -11,76 +11,76 @@ export enum TransactionStatusEnum {
   AUTOMATICALLY_RECONCILED = 'AUTOMATICALLY_RECONCILED',
 }
 
-export type TransactionStatusInput = TransactionStatusEnum | string | number | null | undefined;
+export type StatusTransactionInput = StatusTransactionEnum | string | number | null | undefined;
 
-export const STATUS_CODE_MAP: Record<number, TransactionStatusEnum> = {
-  0: TransactionStatusEnum.NULL,
-  1: TransactionStatusEnum.PENDING,
-  2: TransactionStatusEnum.AUTOMATICALLY_RECONCILED,
-  3: TransactionStatusEnum.MANUALLY_RECONCILED,
-  4: TransactionStatusEnum.NOT_RECONCILED,
-  5: TransactionStatusEnum.CANCELED,
-  6: TransactionStatusEnum.DELETED,
+export const STATUS_CODE_MAP: Record<number, StatusTransactionEnum> = {
+  0: StatusTransactionEnum.NULL,
+  1: StatusTransactionEnum.PENDING,
+  2: StatusTransactionEnum.AUTOMATICALLY_RECONCILED,
+  3: StatusTransactionEnum.MANUALLY_RECONCILED,
+  4: StatusTransactionEnum.NOT_RECONCILED,
+  5: StatusTransactionEnum.CANCELED,
+  6: StatusTransactionEnum.DELETED,
 };
 
-export function normalizeTransactionStatusEnum(
-  transactionStatus: TransactionStatusInput,
-): TransactionStatusEnum | null {
-  if (transactionStatus == null) return null;
+export function normalizeStatusTransactionEnum(
+  statusTransaction: StatusTransactionInput,
+): StatusTransactionEnum | null {
+  if (statusTransaction == null) return null;
 
-  if (typeof transactionStatus === 'number') {
-    return STATUS_CODE_MAP[transactionStatus] ?? null;
+  if (typeof statusTransaction === 'number') {
+    return STATUS_CODE_MAP[statusTransaction] ?? null;
   }
 
-  const normalized = String(transactionStatus).trim().toUpperCase();
+  const normalized = String(statusTransaction).trim().toUpperCase();
 
   switch (normalized) {
-    case TransactionStatusEnum.NULL:
-      return TransactionStatusEnum.NULL;
+    case StatusTransactionEnum.NULL:
+      return StatusTransactionEnum.NULL;
 
-    case TransactionStatusEnum.PENDING:
-      return TransactionStatusEnum.PENDING;
+    case StatusTransactionEnum.PENDING:
+      return StatusTransactionEnum.PENDING;
 
-    case TransactionStatusEnum.MANUALLY_RECONCILED:
-      return TransactionStatusEnum.MANUALLY_RECONCILED;
+    case StatusTransactionEnum.MANUALLY_RECONCILED:
+      return StatusTransactionEnum.MANUALLY_RECONCILED;
 
-    case TransactionStatusEnum.AUTOMATICALLY_RECONCILED:
-      return TransactionStatusEnum.AUTOMATICALLY_RECONCILED;
+    case StatusTransactionEnum.AUTOMATICALLY_RECONCILED:
+      return StatusTransactionEnum.AUTOMATICALLY_RECONCILED;
 
-    case TransactionStatusEnum.NOT_RECONCILED:
-      return TransactionStatusEnum.NOT_RECONCILED;
+    case StatusTransactionEnum.NOT_RECONCILED:
+      return StatusTransactionEnum.NOT_RECONCILED;
 
-    case TransactionStatusEnum.DELETED:
-      return TransactionStatusEnum.DELETED;
+    case StatusTransactionEnum.DELETED:
+      return StatusTransactionEnum.DELETED;
 
-    case TransactionStatusEnum.CANCELED:
-      return TransactionStatusEnum.CANCELED;
+    case StatusTransactionEnum.CANCELED:
+      return StatusTransactionEnum.CANCELED;
 
     default:
       return null;
   }
 }
 
-export function transactionStatusEnumSeverity(
-  transactionStatus: TransactionStatusInput,
+export function statusTransactionEnumSeverity(
+  statusTransaction: StatusTransactionInput,
 ): CsTagTone {
-  switch (normalizeTransactionStatusEnum(transactionStatus)) {
-    case TransactionStatusEnum.PENDING:
+  switch (normalizeStatusTransactionEnum(statusTransaction)) {
+    case StatusTransactionEnum.PENDING:
       return 'success';
 
-    case TransactionStatusEnum.AUTOMATICALLY_RECONCILED:
+    case StatusTransactionEnum.AUTOMATICALLY_RECONCILED:
       return 'warn';
 
-    case TransactionStatusEnum.CANCELED:
+    case StatusTransactionEnum.CANCELED:
       return 'orange';
 
-    case TransactionStatusEnum.MANUALLY_RECONCILED:
+    case StatusTransactionEnum.MANUALLY_RECONCILED:
       return 'info';
 
-    case TransactionStatusEnum.DELETED:
+    case StatusTransactionEnum.DELETED:
       return 'danger';
 
-    case TransactionStatusEnum.NOT_RECONCILED:
+    case StatusTransactionEnum.NOT_RECONCILED:
       return 'contrast';
 
     default:
@@ -88,87 +88,87 @@ export function transactionStatusEnumSeverity(
   }
 }
 
-export function transactionStatusEnumLabel(
-  transactionStatus: TransactionStatusInput,
+export function statusTransactionEnumLabel(
+  statusTransaction: StatusTransactionInput,
   i18n: I18nService,
 ): string {
-  switch (normalizeTransactionStatusEnum(transactionStatus)) {
-    case TransactionStatusEnum.PENDING:
-      return i18n.tUi('enum.transactionStatusEnum.pending');
+  switch (normalizeStatusTransactionEnum(statusTransaction)) {
+    case StatusTransactionEnum.PENDING:
+      return i18n.tUi('enum.statusTransactionEnum.pending');
 
-    case TransactionStatusEnum.AUTOMATICALLY_RECONCILED:
-      return i18n.tUi('enum.transactionStatusEnum.reconciledAutomatically');
+    case StatusTransactionEnum.AUTOMATICALLY_RECONCILED:
+      return i18n.tUi('enum.statusTransactionEnum.reconciledAutomatically');
 
-    case TransactionStatusEnum.CANCELED:
-      return i18n.tUi('enum.transactionStatusEnum.canceled');
+    case StatusTransactionEnum.CANCELED:
+      return i18n.tUi('enum.statusTransactionEnum.canceled');
 
-    case TransactionStatusEnum.MANUALLY_RECONCILED:
-      return i18n.tUi('enum.transactionStatusEnum.manuallyReconciled');
+    case StatusTransactionEnum.MANUALLY_RECONCILED:
+      return i18n.tUi('enum.statusTransactionEnum.manuallyReconciled');
 
-    case TransactionStatusEnum.DELETED:
-      return i18n.tUi('enum.transactionStatusEnum.deleted');
+    case StatusTransactionEnum.DELETED:
+      return i18n.tUi('enum.statusTransactionEnum.deleted');
 
-    case TransactionStatusEnum.NOT_RECONCILED:
-      return i18n.tUi('enum.transactionStatusEnum.notReconciled');
+    case StatusTransactionEnum.NOT_RECONCILED:
+      return i18n.tUi('enum.statusTransactionEnum.notReconciled');
 
-    case TransactionStatusEnum.NULL:
-      return i18n.tUi('enum.transactionStatusEnum.null', 'N/A');
+    case StatusTransactionEnum.NULL:
+      return i18n.tUi('enum.statusTransactionEnum.null', 'N/A');
 
     default:
-      return i18n.tUi('enum.transactionStatusEnum.unknown');
+      return i18n.tUi('enum.statusTransactionEnum.unknown');
   }
 }
 
 export function installmentTooltipStatusLabel(
-  transactionStatus: TransactionStatusInput,
+  statusTransaction: StatusTransactionInput,
   i18n: I18nService,
 ): string {
-  switch (normalizeTransactionStatusEnum(transactionStatus)) {
-    case TransactionStatusEnum.AUTOMATICALLY_RECONCILED:
-      return i18n.tUi('enum.transactionStatusEnum.reconciledAutomatically');
+  switch (normalizeStatusTransactionEnum(statusTransaction)) {
+    case StatusTransactionEnum.AUTOMATICALLY_RECONCILED:
+      return i18n.tUi('enum.statusTransactionEnum.reconciledAutomatically');
 
-    case TransactionStatusEnum.MANUALLY_RECONCILED:
-      return i18n.tUi('enum.transactionStatusEnum.manuallyReconciled');
+    case StatusTransactionEnum.MANUALLY_RECONCILED:
+      return i18n.tUi('enum.statusTransactionEnum.manuallyReconciled');
 
-    case TransactionStatusEnum.CANCELED:
-      return i18n.tUi('enum.transactionStatusEnum.canceledSale');
+    case StatusTransactionEnum.CANCELED:
+      return i18n.tUi('enum.statusTransactionEnum.canceledSale');
 
-    case TransactionStatusEnum.DELETED:
-      return i18n.tUi('enum.transactionStatusEnum.excludedSale');
+    case StatusTransactionEnum.DELETED:
+      return i18n.tUi('enum.statusTransactionEnum.excludedSale');
 
-    case TransactionStatusEnum.PENDING:
-    case TransactionStatusEnum.NOT_RECONCILED:
-    case TransactionStatusEnum.NULL:
+    case StatusTransactionEnum.PENDING:
+    case StatusTransactionEnum.NOT_RECONCILED:
+    case StatusTransactionEnum.NULL:
     default:
-      return i18n.tUi('enum.transactionStatusEnum.notReconciled');
+      return i18n.tUi('enum.statusTransactionEnum.notReconciled');
   }
 }
 
-export function installmentStatusTooltipTone(transactionStatus: TransactionStatusInput): CsTagTone {
-  switch (normalizeTransactionStatusEnum(transactionStatus)) {
-    case TransactionStatusEnum.AUTOMATICALLY_RECONCILED:
-    case TransactionStatusEnum.MANUALLY_RECONCILED:
+export function installmentStatusTooltipTone(statusTransaction: StatusTransactionInput): CsTagTone {
+  switch (normalizeStatusTransactionEnum(statusTransaction)) {
+    case StatusTransactionEnum.AUTOMATICALLY_RECONCILED:
+    case StatusTransactionEnum.MANUALLY_RECONCILED:
       return 'success';
 
-    case TransactionStatusEnum.DELETED:
-    case TransactionStatusEnum.CANCELED:
+    case StatusTransactionEnum.DELETED:
+    case StatusTransactionEnum.CANCELED:
       return 'warn';
 
-    case TransactionStatusEnum.PENDING:
-    case TransactionStatusEnum.NOT_RECONCILED:
-    case TransactionStatusEnum.NULL:
+    case StatusTransactionEnum.PENDING:
+    case StatusTransactionEnum.NOT_RECONCILED:
+    case StatusTransactionEnum.NULL:
     default:
       return 'danger';
   }
 }
 
-export function allTransactionStatusEnum(): TransactionStatusEnum[] {
+export function allStatusTransactionEnum(): StatusTransactionEnum[] {
   return [
-    TransactionStatusEnum.DELETED,
-    TransactionStatusEnum.PENDING,
-    TransactionStatusEnum.AUTOMATICALLY_RECONCILED,
-    TransactionStatusEnum.MANUALLY_RECONCILED,
-    TransactionStatusEnum.NOT_RECONCILED,
-    TransactionStatusEnum.CANCELED,
+    StatusTransactionEnum.DELETED,
+    StatusTransactionEnum.PENDING,
+    StatusTransactionEnum.AUTOMATICALLY_RECONCILED,
+    StatusTransactionEnum.MANUALLY_RECONCILED,
+    StatusTransactionEnum.NOT_RECONCILED,
+    StatusTransactionEnum.CANCELED,
   ];
 }

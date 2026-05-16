@@ -45,8 +45,8 @@
         <td class="text-center">{{ row.mdrRate / 100 | percent: '1.2-2' }}</td>
         <td class="cell-muted text-center">
           <cs-tag
-            [value]="paymentBankStatusLabel(row.statusPaymentBank)"
-            [tone]="paymentBankStatusSeverity(row.statusPaymentBank)"
+            [value]="statusPaymentBankLabel(row.statusPaymentBank)"
+            [tone]="statusPaymentBankSeverity(row.statusPaymentBank)"
           />
         </td>
       </tr>

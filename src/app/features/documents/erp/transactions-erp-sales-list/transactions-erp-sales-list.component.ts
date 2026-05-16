@@ -40,19 +40,19 @@ import { CsAdvancedMultiselectFilterComponent } from '@features/list-base/cs-adv
 import { CsAdvancedFilterItemTemplateDirective } from '@features/list-base/cs-advanced-filter-item-template.directive';
 import { TransactionsErpSalesInstallmentsTableComponent } from '../transactions-erp-sales-installments-table/transactions-erp-sales-installments-table.component';
 import {
-  PaymentStatusEnum,
-  allPaymentStatusEnum,
-  paymentStatusEnumLabel,
-} from '@models/enums/payment-status.enum';
+  StatusPaymentBankEnum,
+  allStatusPaymentBankEnum,
+  statusPaymentBankEnumLabel,
+} from '@models/enums/status-payment-bank.enum';
 import {
   currencyRangeLabel,
   CsCurrencyRangeValue,
   CsCurrencyRangeFilterComponent,
 } from '@features/list-base/cs-currency-range-filter.component';
 import {
-  TransactionStatusEnum,
-  allTransactionStatusEnum,
-  transactionStatusEnumLabel,
+  StatusTransactionEnum,
+  allStatusTransactionEnum,
+  statusTransactionEnumLabel,
   installmentStatusTooltipTone,
   installmentTooltipStatusLabel,
 } from '@models/enums/transaction-status.enum';
@@ -85,15 +85,13 @@ import {
   createEmptyTransactionsErpFiltersState,
 } from '@features/filter/transaction-erp.filters';
 import {
-  createEmptyTransactionsAcqFiltersState,
   TransactionsAcqFiltersState,
+  createEmptyTransactionsAcqFiltersState,
 } from '@features/filter/transaction-acq.filters';
-import { TransactionsErpInstallmentModel } from '@models/transactions-erp-installment.models';
 import {
-  createEmptyTransactionsErpInstallmentFiltersState,
   TransactionsErpInstallmentFiltersState,
+  createEmptyTransactionsErpInstallmentFiltersState,
 } from '@features/filter/transaction-erp-installment.filters';
-import { TransactionsAcqModel } from '@models/transactions-acq.models';
 
 @Component({
   standalone: true,
@@ -180,12 +178,12 @@ export class TransactionsErpSalesListComponent
   readonly saleDate = signal<string | string[] | null>(null);
   readonly periodPaymentDate = signal<PeriodEnum | null>(null);
   readonly paymentDate = signal<string | string[] | null>(null);
-  readonly paymentStatus = signal<PaymentStatusEnum[] | null>(null);
   readonly periodConciliationDate = signal<PeriodEnum | null>(null);
   readonly conciliationDate = signal<string | string[] | null>(null);
   readonly periodExpectedPaymentDate = signal<PeriodEnum | null>(null);
   readonly expectedPaymentDate = signal<string | string[] | null>(null);
-  readonly transactionStatus = signal<TransactionStatusEnum[] | null>(null);
+  readonly statusPaymentBank = signal<StatusPaymentBankEnum[] | null>(null);
+  readonly statusTransaction = signal<StatusTransactionEnum[] | null>(null);
 
   /* Campos Tabela*/
   cvNsuColumnDraft = signal('');
@@ -195,6 +193,7 @@ export class TransactionsErpSalesListComponent
   authorizationColumnDraft = signal('');
   discountValueColumnDraft = signal('');
   adjustmentValueColumnDraft = signal('');
+
   flagColumnDraft = signal<string[] | null>(null);
   companyColumnDraft = signal<string[] | null>(null);
   captureColumnDraft = signal<string[] | null>(null);
@@ -257,18 +256,18 @@ export class TransactionsErpSalesListComponent
     }));
   });
 
-  readonly transactionStatusOptions = computed(() => {
+  readonly statusTransactionOptions = computed(() => {
     this.i18n.getAppliedLang();
-    return allTransactionStatusEnum().map((value) => ({
-      label: transactionStatusEnumLabel(value, this.i18n),
+    return allStatusTransactionEnum().map((value) => ({
+      label: statusTransactionEnumLabel(value, this.i18n),
       value,
     }));
   });
 
-  readonly paymentStatusOptions = computed(() => {
+  readonly statusPaymentBankOptions = computed(() => {
     this.i18n.getAppliedLang();
-    return allPaymentStatusEnum().map((value) => ({
-      label: paymentStatusEnumLabel(value, this.i18n),
+    return allStatusPaymentBankEnum().map((value) => ({
+      label: statusPaymentBankEnumLabel(value, this.i18n),
       value,
     }));
   });
@@ -664,9 +663,9 @@ export class TransactionsErpSalesListComponent
     const adjustmentValueEnd = this.adjustmentValueEnd();
     const adjustmentValueStart = this.adjustmentValueStart();
 
-    const paymentStatus = this.paymentStatus();
     const establishment = this.establishments();
-    const transactionStatus = this.transactionStatus();
+    const statusPaymentBank = this.statusPaymentBank();
+    const statusTransaction = this.statusTransaction();
 
     const saleDate = this.saleDate();
     const periodSaleDate = this.periodSaleDate();
@@ -797,17 +796,17 @@ export class TransactionsErpSalesListComponent
       });
     }
 
-    if (transactionStatus?.length) {
+    if (statusTransaction?.length) {
       items.push({
-        label: this.i18n.tUi('transactions.fields.transactionStatus'),
-        value: transactionStatus.map((v) => transactionStatusEnumLabel(v, this.i18n)).join(', '),
+        label: this.i18n.tUi('transactions.fields.statusTransaction'),
+        value: statusTransaction.map((v) => statusTransactionEnumLabel(v, this.i18n)).join(', '),
       });
     }
 
-    if (paymentStatus?.length) {
+    if (statusPaymentBank?.length) {
       items.push({
-        label: this.i18n.tUi('transactions.fields.paymentStatus'),
-        value: paymentStatus.map((v) => paymentStatusEnumLabel(v, this.i18n)).join(', '),
+        label: this.i18n.tUi('transactions.fields.statusPaymentBank'),
+        value: statusPaymentBank.map((v) => statusPaymentBankEnumLabel(v, this.i18n)).join(', '),
       });
     }
 
@@ -870,8 +869,8 @@ export class TransactionsErpSalesListComponent
       capture: this.capture(),
       cardNumber: this.cardNumber(),
       authorization: this.authorization(),
-      paymentStatus: this.paymentStatus(),
-      transactionStatus: this.transactionStatus(),
+      statusPaymentBank: this.statusPaymentBank(),
+      statusTransaction: this.statusTransaction(),
 
       grossValueEnd: this.grossValueEnd(),
       liquidValueEnd: this.liquidValueEnd(),
@@ -908,8 +907,8 @@ export class TransactionsErpSalesListComponent
     this.machine.set(s.machine ?? '');
     this.cardNumber.set(s.cardNumber ?? '');
     this.authorization.set(s.authorization ?? '');
-    this.paymentStatus.set(s.paymentStatus ?? null);
-    this.transactionStatus.set(s.transactionStatus ?? null);
+    this.statusPaymentBank.set(s.statusPaymentBank ?? null);
+    this.statusTransaction.set(s.statusTransaction ?? null);
 
     this.grossValueEnd.set(s.grossValueEnd ?? null);
     this.liquidValueEnd.set(s.liquidValueEnd ?? null);
@@ -973,8 +972,8 @@ export class TransactionsErpSalesListComponent
       companies: this.companies()?.length ? this.companies()! : undefined,
       establishments: this.establishments()?.length ? this.establishments()! : undefined,
 
-      paymentStatus: this.paymentStatus()?.length ? this.paymentStatus()! : undefined,
-      transactionStatus: this.transactionStatus()?.length ? this.transactionStatus()! : undefined,
+      statusPaymentBank: this.statusPaymentBank()?.length ? this.statusPaymentBank()! : undefined,
+      statusTransaction: this.statusTransaction()?.length ? this.statusTransaction()! : undefined,
 
       saleDate: this.saleDate() ?? undefined,
       periodSaleDate: this.periodSaleDate() ?? undefined,
@@ -1096,8 +1095,8 @@ export class TransactionsErpSalesListComponent
 
   /* Metodos Tooltip Status */
   protected installmentStatusTooltip(row: any): string {
-    const transactionStatus = installmentTooltipStatusLabel(row?.transactionStatus, this.i18n);
-    const reason = statusTransactionReasonEnumLabel(row?.transactionStatusReason, this.i18n);
+    const statusTransaction = installmentTooltipStatusLabel(row?.statusTransaction, this.i18n);
+    const reason = statusTransactionReasonEnumLabel(row?.statusTransactionReason, this.i18n);
 
     const conciliationDate = row?.saleReconciliationDate
       ? this.csDatePipe.transform(row.saleReconciliationDate, 'short')
@@ -1110,7 +1109,7 @@ export class TransactionsErpSalesListComponent
     return this.infoTooltip([
       {
         label: `${this.i18n.tUi('transactions.fields.status')}:`,
-        value: transactionStatus,
+        value: statusTransaction,
         nowrap: true,
       },
       {
@@ -1146,13 +1145,13 @@ export class TransactionsErpSalesListComponent
   }
 
   protected installmentStatusTooltipClass(row: any): string {
-    const tone = installmentStatusTooltipTone(row?.transactionStatus);
+    const tone = installmentStatusTooltipTone(row?.statusTransaction);
 
     return `cs-info-tooltip cs-installment-tooltip cs-installment-tooltip-${tone}`;
   }
 
   protected saleStatusIcon(row: any): string {
-    const tone = installmentStatusTooltipTone(row?.transactionStatus);
+    const tone = installmentStatusTooltipTone(row?.statusTransaction);
 
     if (tone === 'success') {
       return 'pi pi-thumbs-up cs-sale-status-icon cs-sale-status-icon-success';

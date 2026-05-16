@@ -387,7 +387,7 @@
       "ambiguousMatch": "Ambiguous match",
       "acquirerMismatch": "Acquirer divergence"
     },
-    "transactionStatusEnum": {
+    "statusTransactionEnum": {
       "pending": "Pending",
       "deleted": "Deleted",
       "canceled": "Canceled",
@@ -936,7 +936,7 @@
       "conciliationDate": "Reconciliation Date",
       "expectedPaymentDate": "Payment Forecast",
       "periodPaymentDate": "Payment Period",
-      "transactionStatus": "Reconciliation Status",
+      "statusTransaction": "Reconciliation Status",
       "periodConciliationDate": "Reconciliation Period",
       "periodExpectedPaymentDate": "Payment Forecast Period"
     },

@@ -3,8 +3,8 @@ import { WritableSignal } from '@angular/core';
 import { PeriodEnum } from '@models/enums/period.enum';
 import { CaptureEnum } from '@models/enums/capture.enum';
 import { ModalityEnum } from '@models/enums/modality.enum';
-import { PaymentStatusEnum } from '../models/enums/payment-status.enum';
-import { TransactionStatusEnum } from '@models/enums/transaction-status.enum';
+import { StatusTransactionEnum } from '@models/enums/transaction-status.enum';
+import { StatusPaymentBankEnum } from '../models/enums/status-payment-bank.enum';
 
 export type TransactionsAcqFiltersState = {
   tid: string;
@@ -15,8 +15,8 @@ export type TransactionsAcqFiltersState = {
 
   capture: CaptureEnum[] | null;
   modality: ModalityEnum[] | null;
-  paymentStatus: PaymentStatusEnum[] | null;
-  transactionStatus: TransactionStatusEnum[] | null;
+  statusPaymentBank: StatusPaymentBankEnum[] | null;
+  statusTransaction: StatusTransactionEnum[] | null;
 
   grossValueEnd: number | null;
   liquidValueEnd: number | null;
@@ -62,8 +62,8 @@ export function createEmptyTransactionsAcqFiltersState(): TransactionsAcqFilters
     capture: null,
     modality: null,
     acquirers: null,
-    paymentStatus: null,
-    transactionStatus: null,
+    statusPaymentBank: null,
+    statusTransaction: null,
 
     grossValueEnd: null,
     liquidValueEnd: null,
@@ -106,8 +106,8 @@ export function resetTransactionsAcqAdvancedFilters(
   filters.capture.set(empty.capture);
   filters.modality.set(empty.modality);
   filters.acquirers.set(empty.acquirers);
-  filters.paymentStatus.set(empty.paymentStatus);
-  filters.transactionStatus.set(empty.transactionStatus);
+  filters.statusPaymentBank.set(empty.statusPaymentBank);
+  filters.statusTransaction.set(empty.statusTransaction);
 
   filters.grossValueEnd.set(empty.grossValueEnd);
   filters.liquidValueEnd.set(empty.liquidValueEnd);

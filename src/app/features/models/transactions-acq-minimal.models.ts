@@ -8,8 +8,8 @@ import { ModalityEnum, normalizeModalityEnum } from './enums/modality.enum';
 import { ProcessedFileMinimalModel } from './processed-file-minimal.models';
 import { TransactionsAcqInstallmentModel } from './transactions-acq-installment.models';
 import {
-  TransactionStatusEnum,
-  normalizeTransactionStatusEnum,
+  StatusTransactionEnum,
+  normalizeStatusTransactionEnum,
 } from './enums/transaction-status.enum';
 
 export interface TransactionsAcqMinimalModel {
@@ -26,7 +26,7 @@ export interface TransactionsAcqMinimalModel {
 
   capture: CaptureEnum | null;
   modality: ModalityEnum | null;
-  transactionStatus: TransactionStatusEnum | null;
+  statusTransaction: StatusTransactionEnum | null;
 
   flag: FlagMinimalModel;
   company: CompanyMinimalModel;
@@ -68,7 +68,7 @@ export interface TransactionsAcqMinimalApiModel {
 
   capture: CaptureEnum;
   modality: ModalityEnum;
-  transactionStatus: TransactionStatusEnum;
+  statusTransaction: StatusTransactionEnum;
 
   flag: FlagMinimalModel;
   company: CompanyMinimalModel;
@@ -86,7 +86,7 @@ export function mapTransactionsAcqMinimalApiModel(
     ...input,
     capture: normalizeCaptureEnum(input.capture),
     modality: normalizeModalityEnum(input.modality),
-    transactionStatus: normalizeTransactionStatusEnum(input.modality),
+    statusTransaction: normalizeStatusTransactionEnum(input.modality),
   };
 }
 

@@ -2,7 +2,8 @@ import { ModalityEnum } from './enums/modality.enum';
 import { FlagMinimalModel } from './flag-minimal.models';
 import { CompanyMinimalModel } from './company-minimal.models';
 import { AcquirerMinimalModel } from './acquirer-minimal.models';
-import { TransactionStatusEnum } from './enums/transaction-status.enum';
+import { StatusTransactionEnum } from './enums/transaction-status.enum';
+import { StatusPaymentBankEnum } from './enums/status-payment-bank.enum';
 import { EstablishmentMinimalModel } from './establishment-minimal.models';
 import { ProcessedFileMinimalModel } from './processed-file-minimal.models';
 import { TransactionsErpMinimalModel } from './transactions-erp-minimal.models';
@@ -13,6 +14,7 @@ export interface TransactionsErpInstallmentModel {
   saleDate?: string | null;
   paymentDate?: string | null;
 
+  lineNumber?: number | null;
   installment?: number | null;
   transactionId?: string | null;
   authorization?: string | null;
@@ -28,14 +30,13 @@ export interface TransactionsErpInstallmentModel {
   liquidValue?: number | null;
   adjustmentValue?: number | null;
 
-  paymentStatus?: string | null;
-
-  lineNumber?: number | null;
   modality: ModalityEnum | null;
+  statusTransaction: StatusTransactionEnum | null;
+  statusPaymentBank?: StatusPaymentBankEnum | null;
+
   flag?: FlagMinimalModel | null;
   company?: CompanyMinimalModel | null;
   acquirer?: AcquirerMinimalModel | null;
-  transactionStatus: TransactionStatusEnum | null;
   transaction?: TransactionsErpMinimalModel | null;
   processedFile?: ProcessedFileMinimalModel | null;
   establishment?: EstablishmentMinimalModel | null;

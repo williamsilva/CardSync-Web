@@ -54,13 +54,13 @@ import {
   readSingleFilterValue,
 } from '@features/list-base/table-filter-readers';
 import {
-  TransactionStatusEnum,
-  allTransactionStatusEnum,
-  transactionStatusEnumLabel,
+  StatusTransactionEnum,
+  allStatusTransactionEnum,
+  statusTransactionEnumLabel,
   installmentStatusTooltipTone,
   installmentTooltipStatusLabel,
-  transactionStatusEnumSeverity,
-  normalizeTransactionStatusEnum,
+  statusTransactionEnumSeverity,
+  normalizeStatusTransactionEnum,
 } from '@models/enums/transaction-status.enum';
 import {
   ActiveFilterItem,
@@ -82,10 +82,10 @@ import {
   createEmptyProcessedFileFiltersState,
 } from '@features/filter/processed-file.filters';
 import {
-  PaymentStatusEnum,
-  allPaymentStatusEnum,
-  paymentStatusEnumLabel,
-} from '@models/enums/payment-status.enum';
+  StatusPaymentBankEnum,
+  allStatusPaymentBankEnum,
+  statusPaymentBankEnumLabel,
+} from '@models/enums/status-payment-bank.enum';
 
 @Component({
   standalone: true,
@@ -173,10 +173,10 @@ export class AcqInstallmentsListComponent
   readonly saleDate = signal<string | string[] | null>(null);
   readonly periodPaymentDate = signal<PeriodEnum | null>(null);
   readonly paymentDate = signal<string | string[] | null>(null);
-  readonly paymentStatus = signal<PaymentStatusEnum[] | null>(null);
+  readonly statusPaymentBank = signal<StatusPaymentBankEnum[] | null>(null);
   readonly periodExpectedPaymentDate = signal<PeriodEnum | null>(null);
   readonly expectedPaymentDate = signal<string | string[] | null>(null);
-  readonly transactionStatus = signal<TransactionStatusEnum[] | null>(null);
+  readonly statusTransaction = signal<StatusTransactionEnum[] | null>(null);
 
   /* Campos Tabela*/
   cvNsuColumnDraft = signal('');
@@ -248,18 +248,18 @@ export class AcqInstallmentsListComponent
     }));
   });
 
-  readonly transactionStatusOptions = computed(() => {
+  readonly statusTransactionOptions = computed(() => {
     this.i18n.getAppliedLang();
-    return allTransactionStatusEnum().map((value) => ({
-      label: transactionStatusEnumLabel(value, this.i18n),
+    return allStatusTransactionEnum().map((value) => ({
+      label: statusTransactionEnumLabel(value, this.i18n),
       value,
     }));
   });
 
-  readonly paymentStatusOptions = computed(() => {
+  readonly statusPaymentBankOptions = computed(() => {
     this.i18n.getAppliedLang();
-    return allPaymentStatusEnum().map((value) => ({
-      label: paymentStatusEnumLabel(value, this.i18n),
+    return allStatusPaymentBankEnum().map((value) => ({
+      label: statusPaymentBankEnumLabel(value, this.i18n),
       value,
     }));
   });
@@ -333,12 +333,12 @@ export class AcqInstallmentsListComponent
     return modalityEnumSeverity(value);
   }
 
-  transactionStatusLabel(value: TransactionStatusEnum | null): string {
-    return transactionStatusEnumLabel(value, this.i18n);
+  statusTransactionLabel(value: StatusTransactionEnum | null): string {
+    return statusTransactionEnumLabel(value, this.i18n);
   }
 
-  transactionStatusSeverity(value: TransactionStatusEnum | null): CsTagTone {
-    return transactionStatusEnumSeverity(value);
+  statusTransactionSeverity(value: StatusTransactionEnum | null): CsTagTone {
+    return statusTransactionEnumSeverity(value);
   }
 
   protected searchActions(row: TransactionsAcqInstallmentModel): MenuItem[] {
@@ -395,7 +395,7 @@ export class AcqInstallmentsListComponent
     row: TransactionsAcqInstallmentModel,
   ): TransactionsAcqInstallmentFiltersState {
     const modality = normalizeModalityEnum(row.transaction?.modality);
-    const transactionStatus = normalizeTransactionStatusEnum(row.transaction?.transactionStatus);
+    const statusTransaction = normalizeStatusTransactionEnum(row.transaction?.statusTransaction);
     return {
       ...createEmptyTransactionsAcqInstallmentFiltersState(),
       authorization: row.transaction?.authorization ?? '',
@@ -405,9 +405,9 @@ export class AcqInstallmentsListComponent
       modality: modality && modality !== ModalityEnum.NULL ? [modality] : null,
       companies: row.transaction?.company?.id ? [row.transaction?.company.id] : null,
       acquirers: row.transaction?.acquirer?.id ? [row.transaction?.acquirer.id] : null,
-      transactionStatus:
-        transactionStatus && transactionStatus !== TransactionStatusEnum.NULL
-          ? [transactionStatus]
+      statusTransaction:
+        statusTransaction && statusTransaction !== StatusTransactionEnum.NULL
+          ? [statusTransaction]
           : null,
       establishments: row.transaction?.establishment?.id
         ? [row.transaction?.establishment.id]
@@ -726,10 +726,10 @@ export class AcqInstallmentsListComponent
     const company = this.companies();
     const modality = this.modality();
     const acquirer = this.acquirers();
-    const paymentStatus = this.paymentStatus();
+    const statusPaymentBank = this.statusPaymentBank();
     const authorization = this.authorization();
     const discountValueEnd = this.discountValueEnd();
-    const transactionStatus = this.transactionStatus();
+    const statusTransaction = this.statusTransaction();
 
     const grossValueEnd = this.grossValueEnd();
     const liquidValueEnd = this.liquidValueEnd();
@@ -856,17 +856,17 @@ export class AcqInstallmentsListComponent
       });
     }
 
-    if (transactionStatus?.length) {
+    if (statusTransaction?.length) {
       items.push({
-        label: this.i18n.tUi('transactions.fields.transactionStatus'),
-        value: transactionStatus.map((v) => transactionStatusEnumLabel(v, this.i18n)).join(', '),
+        label: this.i18n.tUi('transactions.fields.statusTransaction'),
+        value: statusTransaction.map((v) => statusTransactionEnumLabel(v, this.i18n)).join(', '),
       });
     }
 
-    if (paymentStatus?.length) {
+    if (statusPaymentBank?.length) {
       items.push({
-        label: this.i18n.tUi('transactions.fields.paymentStatus'),
-        value: paymentStatus.map((v) => paymentStatusEnumLabel(v, this.i18n)).join(', '),
+        label: this.i18n.tUi('transactions.fields.statusPaymentBank'),
+        value: statusPaymentBank.map((v) => statusPaymentBankEnumLabel(v, this.i18n)).join(', '),
       });
     }
 
@@ -941,9 +941,9 @@ export class AcqInstallmentsListComponent
       modality: this.modality(),
       acquirers: this.acquirers(),
       companies: this.companies(),
-      paymentStatus: this.paymentStatus(),
       establishments: this.establishments(),
-      transactionStatus: this.transactionStatus(),
+      statusPaymentBank: this.statusPaymentBank(),
+      statusTransaction: this.statusTransaction(),
 
       saleDate: this.saleDate(),
       periodSaleDate: this.periodSaleDate(),
@@ -974,9 +974,9 @@ export class AcqInstallmentsListComponent
     this.modality.set(s.modality ?? null);
     this.acquirers.set(s.acquirers ?? null);
     this.companies.set(s.companies ?? null);
-    this.paymentStatus.set(s.paymentStatus ?? null);
     this.establishments.set(s.establishments ?? null);
-    this.transactionStatus.set(s.transactionStatus ?? null);
+    this.statusPaymentBank.set(s.statusPaymentBank ?? null);
+    this.statusTransaction.set(s.statusTransaction ?? null);
 
     this.saleDate.set(s.saleDate ?? null);
     this.periodSaleDate.set(s.periodSaleDate ?? null);
@@ -1003,12 +1003,12 @@ export class AcqInstallmentsListComponent
       cvNsu: this.cvNsu().trim() || undefined,
       authorization: this.authorization().trim() || undefined,
 
-      discountValueEnd: discountValueEnd ?? undefined,
-      liquidValueEnd: liquidValueEnd ?? undefined,
       grossValueEnd: grossValueEnd ?? undefined,
-      discountValueStart: discountValueStart ?? undefined,
-      liquidValueStart: liquidValueStart ?? undefined,
+      liquidValueEnd: liquidValueEnd ?? undefined,
       grossValueStart: grossValueStart ?? undefined,
+      discountValueEnd: discountValueEnd ?? undefined,
+      liquidValueStart: liquidValueStart ?? undefined,
+      discountValueStart: discountValueStart ?? undefined,
       adjustmentValueEnd: adjustmentValueEnd ?? undefined,
       adjustmentValueStart: adjustmentValueStart ?? undefined,
 
@@ -1017,9 +1017,9 @@ export class AcqInstallmentsListComponent
       modality: this.modality()?.length ? this.modality()! : undefined,
       acquirers: this.acquirers()?.length ? this.acquirers()! : undefined,
       companies: this.companies()?.length ? this.companies()! : undefined,
-      paymentStatus: this.paymentStatus()?.length ? this.paymentStatus()! : undefined,
       establishments: this.establishments()?.length ? this.establishments()! : undefined,
-      transactionStatus: this.transactionStatus()?.length ? this.transactionStatus()! : undefined,
+      statusPaymentBank: this.statusPaymentBank()?.length ? this.statusPaymentBank()! : undefined,
+      statusTransaction: this.statusTransaction()?.length ? this.statusTransaction()! : undefined,
 
       saleDate: this.saleDate() ?? undefined,
       periodSaleDate: this.periodSaleDate() ?? undefined,
@@ -1138,8 +1138,8 @@ export class AcqInstallmentsListComponent
 
   /* Metodos Tooltip Status */
   protected saleStatusTooltip(row: any): string {
-    const status = installmentTooltipStatusLabel(row?.transactionStatus, this.i18n);
-    const reason = statusTransactionReasonEnumLabel(row?.transactionStatusReason, this.i18n);
+    const status = installmentTooltipStatusLabel(row?.statusTransaction, this.i18n);
+    const reason = statusTransactionReasonEnumLabel(row?.statusTransactionReason, this.i18n);
 
     const agency = row?.salesSummary?.bankingDomicile?.agency ?? '-';
     const bank = row?.salesSummary?.bankingDomicile?.bank?.name ?? '-';
@@ -1194,14 +1194,14 @@ export class AcqInstallmentsListComponent
     ]);
   }
 
-  protected statusTooltipClass(transactionStatus: string): string {
-    const tone = installmentStatusTooltipTone(transactionStatus);
+  protected statusTooltipClass(statusTransaction: string): string {
+    const tone = installmentStatusTooltipTone(statusTransaction);
 
     return `cs-info-tooltip cs-installment-tooltip cs-installment-tooltip-${tone}`;
   }
 
-  protected statusIconTooltip(transactionStatus: string): string {
-    const tone = installmentStatusTooltipTone(transactionStatus);
+  protected statusIconTooltip(statusTransaction: string): string {
+    const tone = installmentStatusTooltipTone(statusTransaction);
 
     if (tone === 'success') {
       return 'pi pi-thumbs-up cs-sale-status-icon cs-sale-status-icon-success';

@@ -2,7 +2,7 @@ import { I18nService } from '@core/i18n/i18n.service';
 
 import { CsTagTone } from '@shared/ui';
 
-export enum TransactionStatusReasonEnum {
+export enum StatusTransactionReasonEnum {
   NULL = 'NULL',
   CV_NOT_FOUND_ERP = 'CV_NOT_FOUND_ERP',
   CANCELED = 'CANCELED',
@@ -16,30 +16,30 @@ export enum TransactionStatusReasonEnum {
   AMBIGUOUS_MATCH = 'AMBIGUOUS_MATCH',
 }
 
-export type TransactionStatusReasonInput =
-  | TransactionStatusReasonEnum
+export type StatusTransactionReasonInput =
+  | StatusTransactionReasonEnum
   | string
   | number
   | null
   | undefined;
 
-export const STATUS_CODE_MAP: Record<number, TransactionStatusReasonEnum> = {
-  0: TransactionStatusReasonEnum.NULL,
-  1: TransactionStatusReasonEnum.CV_NOT_FOUND_ERP,
-  2: TransactionStatusReasonEnum.CV_NOT_FOUND_ADQ,
-  3: TransactionStatusReasonEnum.FLAG_MISMATCH,
-  4: TransactionStatusReasonEnum.DIFFERENT_PLANS,
-  5: TransactionStatusReasonEnum.SCHEDULED,
-  6: TransactionStatusReasonEnum.CHARGEBACK,
-  7: TransactionStatusReasonEnum.CANCELED,
-  8: TransactionStatusReasonEnum.VALUE_MISMATCH,
-  9: TransactionStatusReasonEnum.ACQUIRER_MISMATCH,
-  10: TransactionStatusReasonEnum.AMBIGUOUS_MATCH,
+export const STATUS_CODE_MAP: Record<number, StatusTransactionReasonEnum> = {
+  0: StatusTransactionReasonEnum.NULL,
+  1: StatusTransactionReasonEnum.CV_NOT_FOUND_ERP,
+  2: StatusTransactionReasonEnum.CV_NOT_FOUND_ADQ,
+  3: StatusTransactionReasonEnum.FLAG_MISMATCH,
+  4: StatusTransactionReasonEnum.DIFFERENT_PLANS,
+  5: StatusTransactionReasonEnum.SCHEDULED,
+  6: StatusTransactionReasonEnum.CHARGEBACK,
+  7: StatusTransactionReasonEnum.CANCELED,
+  8: StatusTransactionReasonEnum.VALUE_MISMATCH,
+  9: StatusTransactionReasonEnum.ACQUIRER_MISMATCH,
+  10: StatusTransactionReasonEnum.AMBIGUOUS_MATCH,
 };
 
-export function normalizeTransactionStatusReasonEnum(
-  statusTransactionReason: TransactionStatusReasonInput,
-): TransactionStatusReasonEnum | null {
+export function normalizeStatusTransactionReasonEnum(
+  statusTransactionReason: StatusTransactionReasonInput,
+): StatusTransactionReasonEnum | null {
   if (statusTransactionReason == null) return null;
 
   if (typeof statusTransactionReason === 'number') {
@@ -49,38 +49,38 @@ export function normalizeTransactionStatusReasonEnum(
   const normalized = String(statusTransactionReason).trim().toUpperCase();
 
   switch (normalized) {
-    case TransactionStatusReasonEnum.NULL:
-      return TransactionStatusReasonEnum.NULL;
+    case StatusTransactionReasonEnum.NULL:
+      return StatusTransactionReasonEnum.NULL;
 
-    case TransactionStatusReasonEnum.CV_NOT_FOUND_ERP:
-      return TransactionStatusReasonEnum.CV_NOT_FOUND_ERP;
+    case StatusTransactionReasonEnum.CV_NOT_FOUND_ERP:
+      return StatusTransactionReasonEnum.CV_NOT_FOUND_ERP;
 
-    case TransactionStatusReasonEnum.CV_NOT_FOUND_ADQ:
-      return TransactionStatusReasonEnum.CV_NOT_FOUND_ADQ;
+    case StatusTransactionReasonEnum.CV_NOT_FOUND_ADQ:
+      return StatusTransactionReasonEnum.CV_NOT_FOUND_ADQ;
 
-    case TransactionStatusReasonEnum.FLAG_MISMATCH:
-      return TransactionStatusReasonEnum.FLAG_MISMATCH;
+    case StatusTransactionReasonEnum.FLAG_MISMATCH:
+      return StatusTransactionReasonEnum.FLAG_MISMATCH;
 
-    case TransactionStatusReasonEnum.DIFFERENT_PLANS:
-      return TransactionStatusReasonEnum.DIFFERENT_PLANS;
+    case StatusTransactionReasonEnum.DIFFERENT_PLANS:
+      return StatusTransactionReasonEnum.DIFFERENT_PLANS;
 
-    case TransactionStatusReasonEnum.SCHEDULED:
-      return TransactionStatusReasonEnum.SCHEDULED;
+    case StatusTransactionReasonEnum.SCHEDULED:
+      return StatusTransactionReasonEnum.SCHEDULED;
 
-    case TransactionStatusReasonEnum.CHARGEBACK:
-      return TransactionStatusReasonEnum.CHARGEBACK;
+    case StatusTransactionReasonEnum.CHARGEBACK:
+      return StatusTransactionReasonEnum.CHARGEBACK;
 
-    case TransactionStatusReasonEnum.CANCELED:
-      return TransactionStatusReasonEnum.CANCELED;
+    case StatusTransactionReasonEnum.CANCELED:
+      return StatusTransactionReasonEnum.CANCELED;
 
-    case TransactionStatusReasonEnum.VALUE_MISMATCH:
-      return TransactionStatusReasonEnum.VALUE_MISMATCH;
+    case StatusTransactionReasonEnum.VALUE_MISMATCH:
+      return StatusTransactionReasonEnum.VALUE_MISMATCH;
 
-    case TransactionStatusReasonEnum.ACQUIRER_MISMATCH:
-      return TransactionStatusReasonEnum.ACQUIRER_MISMATCH;
+    case StatusTransactionReasonEnum.ACQUIRER_MISMATCH:
+      return StatusTransactionReasonEnum.ACQUIRER_MISMATCH;
 
-    case TransactionStatusReasonEnum.AMBIGUOUS_MATCH:
-      return TransactionStatusReasonEnum.AMBIGUOUS_MATCH;
+    case StatusTransactionReasonEnum.AMBIGUOUS_MATCH:
+      return StatusTransactionReasonEnum.AMBIGUOUS_MATCH;
 
     default:
       return null;
@@ -88,37 +88,37 @@ export function normalizeTransactionStatusReasonEnum(
 }
 
 export function statusTransactionReasonEnumSeverity(
-  statusTransactionReason: TransactionStatusReasonInput,
+  statusTransactionReason: StatusTransactionReasonInput,
 ): CsTagTone {
-  switch (normalizeTransactionStatusReasonEnum(statusTransactionReason)) {
-    case TransactionStatusReasonEnum.CV_NOT_FOUND_ERP:
+  switch (normalizeStatusTransactionReasonEnum(statusTransactionReason)) {
+    case StatusTransactionReasonEnum.CV_NOT_FOUND_ERP:
       return 'success';
 
-    case TransactionStatusReasonEnum.CV_NOT_FOUND_ADQ:
+    case StatusTransactionReasonEnum.CV_NOT_FOUND_ADQ:
       return 'warn';
 
-    case TransactionStatusReasonEnum.CANCELED:
+    case StatusTransactionReasonEnum.CANCELED:
       return 'orange';
 
-    case TransactionStatusReasonEnum.FLAG_MISMATCH:
+    case StatusTransactionReasonEnum.FLAG_MISMATCH:
       return 'info';
 
-    case TransactionStatusReasonEnum.CHARGEBACK:
+    case StatusTransactionReasonEnum.CHARGEBACK:
       return 'blue';
 
-    case TransactionStatusReasonEnum.SCHEDULED:
+    case StatusTransactionReasonEnum.SCHEDULED:
       return 'contrast';
 
-    case TransactionStatusReasonEnum.DIFFERENT_PLANS:
+    case StatusTransactionReasonEnum.DIFFERENT_PLANS:
       return 'danger';
 
-    case TransactionStatusReasonEnum.VALUE_MISMATCH:
+    case StatusTransactionReasonEnum.VALUE_MISMATCH:
       return 'pink';
 
-    case TransactionStatusReasonEnum.ACQUIRER_MISMATCH:
+    case StatusTransactionReasonEnum.ACQUIRER_MISMATCH:
       return 'teal';
 
-    case TransactionStatusReasonEnum.AMBIGUOUS_MATCH:
+    case StatusTransactionReasonEnum.AMBIGUOUS_MATCH:
       return 'slate';
 
     default:
@@ -127,41 +127,41 @@ export function statusTransactionReasonEnumSeverity(
 }
 
 export function statusTransactionReasonEnumLabel(
-  statusTransactionReason: TransactionStatusReasonInput,
+  statusTransactionReason: StatusTransactionReasonInput,
   i18n: I18nService,
 ): string {
-  switch (normalizeTransactionStatusReasonEnum(statusTransactionReason)) {
-    case TransactionStatusReasonEnum.CV_NOT_FOUND_ERP:
+  switch (normalizeStatusTransactionReasonEnum(statusTransactionReason)) {
+    case StatusTransactionReasonEnum.CV_NOT_FOUND_ERP:
       return i18n.tUi('enum.transactionReasonEnum.cvNotFoundErp');
 
-    case TransactionStatusReasonEnum.CV_NOT_FOUND_ADQ:
+    case StatusTransactionReasonEnum.CV_NOT_FOUND_ADQ:
       return i18n.tUi('enum.transactionReasonEnum.cvNotFoundAdq');
 
-    case TransactionStatusReasonEnum.CANCELED:
+    case StatusTransactionReasonEnum.CANCELED:
       return i18n.tUi('enum.transactionReasonEnum.canceled');
 
-    case TransactionStatusReasonEnum.FLAG_MISMATCH:
+    case StatusTransactionReasonEnum.FLAG_MISMATCH:
       return i18n.tUi('enum.transactionReasonEnum.flagMismatch');
 
-    case TransactionStatusReasonEnum.CHARGEBACK:
+    case StatusTransactionReasonEnum.CHARGEBACK:
       return i18n.tUi('enum.transactionReasonEnum.chargeBack');
 
-    case TransactionStatusReasonEnum.DIFFERENT_PLANS:
+    case StatusTransactionReasonEnum.DIFFERENT_PLANS:
       return i18n.tUi('enum.transactionReasonEnum.differentPlans');
 
-    case TransactionStatusReasonEnum.SCHEDULED:
+    case StatusTransactionReasonEnum.SCHEDULED:
       return i18n.tUi('enum.transactionReasonEnum.scheduled');
 
-    case TransactionStatusReasonEnum.VALUE_MISMATCH:
+    case StatusTransactionReasonEnum.VALUE_MISMATCH:
       return i18n.tUi('enum.transactionReasonEnum.valueMismatch');
 
-    case TransactionStatusReasonEnum.ACQUIRER_MISMATCH:
+    case StatusTransactionReasonEnum.ACQUIRER_MISMATCH:
       return i18n.tUi('enum.transactionReasonEnum.acquirerMismatch');
 
-    case TransactionStatusReasonEnum.AMBIGUOUS_MATCH:
+    case StatusTransactionReasonEnum.AMBIGUOUS_MATCH:
       return i18n.tUi('enum.transactionReasonEnum.ambiguousMatch');
 
-    case TransactionStatusReasonEnum.NULL:
+    case StatusTransactionReasonEnum.NULL:
       return i18n.tUi('enum.transactionReasonEnum.null', 'N/A');
 
     default:
@@ -169,17 +169,17 @@ export function statusTransactionReasonEnumLabel(
   }
 }
 
-export function allTransactionStatusReasonEnum(): TransactionStatusReasonEnum[] {
+export function allStatusTransactionReasonEnum(): StatusTransactionReasonEnum[] {
   return [
-    TransactionStatusReasonEnum.CHARGEBACK,
-    TransactionStatusReasonEnum.CV_NOT_FOUND_ERP,
-    TransactionStatusReasonEnum.CV_NOT_FOUND_ADQ,
-    TransactionStatusReasonEnum.FLAG_MISMATCH,
-    TransactionStatusReasonEnum.DIFFERENT_PLANS,
-    TransactionStatusReasonEnum.SCHEDULED,
-    TransactionStatusReasonEnum.CANCELED,
-    TransactionStatusReasonEnum.VALUE_MISMATCH,
-    TransactionStatusReasonEnum.ACQUIRER_MISMATCH,
-    TransactionStatusReasonEnum.AMBIGUOUS_MATCH,
+    StatusTransactionReasonEnum.CHARGEBACK,
+    StatusTransactionReasonEnum.CV_NOT_FOUND_ERP,
+    StatusTransactionReasonEnum.CV_NOT_FOUND_ADQ,
+    StatusTransactionReasonEnum.FLAG_MISMATCH,
+    StatusTransactionReasonEnum.DIFFERENT_PLANS,
+    StatusTransactionReasonEnum.SCHEDULED,
+    StatusTransactionReasonEnum.CANCELED,
+    StatusTransactionReasonEnum.VALUE_MISMATCH,
+    StatusTransactionReasonEnum.ACQUIRER_MISMATCH,
+    StatusTransactionReasonEnum.AMBIGUOUS_MATCH,
   ];
 }

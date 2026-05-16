@@ -41,10 +41,10 @@ import { CsAdvancedMultiselectFilterComponent } from '@features/list-base/cs-adv
 import { CsAdvancedFilterItemTemplateDirective } from '@features/list-base/cs-advanced-filter-item-template.directive';
 import { TransactionsAcquirersSalesInstallmentsTableComponent } from '../transactions-acq-sales-installments-table/transactions-acq-sales-installments-table.component';
 import {
-  PaymentStatusEnum,
-  allPaymentStatusEnum,
-  paymentStatusEnumLabel,
-} from '@models/enums/payment-status.enum';
+  StatusPaymentBankEnum,
+  allStatusPaymentBankEnum,
+  statusPaymentBankEnumLabel,
+} from '@models/enums/status-payment-bank.enum';
 import {
   currencyRangeLabel,
   CsCurrencyRangeValue,
@@ -57,9 +57,9 @@ import {
   createEmptyTransactionsAcqFiltersState,
 } from '@features/filter/transaction-acq.filters';
 import {
-  TransactionStatusEnum,
-  allTransactionStatusEnum,
-  transactionStatusEnumLabel,
+  StatusTransactionEnum,
+  allStatusTransactionEnum,
+  statusTransactionEnumLabel,
   installmentStatusTooltipTone,
   installmentTooltipStatusLabel,
 } from '@models/enums/transaction-status.enum';
@@ -176,11 +176,11 @@ export class TransactionsAcquirersSalesListComponent
   readonly periodPaymentDate = signal<PeriodEnum | null>(null);
   readonly paymentDate = signal<string | string[] | null>(null);
   readonly periodConciliationDate = signal<PeriodEnum | null>(null);
-  readonly paymentStatus = signal<PaymentStatusEnum[] | null>(null);
+  readonly statusPaymentBank = signal<StatusPaymentBankEnum[] | null>(null);
   readonly conciliationDate = signal<string | string[] | null>(null);
   readonly periodExpectedPaymentDate = signal<PeriodEnum | null>(null);
   readonly expectedPaymentDate = signal<string | string[] | null>(null);
-  readonly transactionStatus = signal<TransactionStatusEnum[] | null>(null);
+  readonly statusTransaction = signal<StatusTransactionEnum[] | null>(null);
 
   /* Campos Tabela*/
   cvNsuColumnDraft = signal('');
@@ -253,18 +253,18 @@ export class TransactionsAcquirersSalesListComponent
     }));
   });
 
-  readonly transactionStatusOptions = computed(() => {
+  readonly statusTransactionOptions = computed(() => {
     this.i18n.getAppliedLang();
-    return allTransactionStatusEnum().map((value) => ({
-      label: transactionStatusEnumLabel(value, this.i18n),
+    return allStatusTransactionEnum().map((value) => ({
+      label: statusTransactionEnumLabel(value, this.i18n),
       value,
     }));
   });
 
-  readonly paymentStatusOptions = computed(() => {
+  readonly statusPaymentBankOptions = computed(() => {
     this.i18n.getAppliedLang();
-    return allPaymentStatusEnum().map((value) => ({
-      label: paymentStatusEnumLabel(value, this.i18n),
+    return allStatusPaymentBankEnum().map((value) => ({
+      label: statusPaymentBankEnumLabel(value, this.i18n),
       value,
     }));
   });
@@ -652,9 +652,9 @@ export class TransactionsAcquirersSalesListComponent
     const acquirer = this.acquirers();
     const cardNumber = this.cardNumber();
     const authorization = this.authorization();
-    const paymentStatus = this.paymentStatus();
     const establishment = this.establishments();
-    const transactionStatus = this.transactionStatus();
+    const statusPaymentBank = this.statusPaymentBank();
+    const statusTransaction = this.statusTransaction();
 
     const discountValueEnd = this.discountValueEnd();
     const liquidValueEnd = this.liquidValueEnd();
@@ -795,17 +795,17 @@ export class TransactionsAcquirersSalesListComponent
       });
     }
 
-    if (transactionStatus?.length) {
+    if (statusTransaction?.length) {
       items.push({
-        label: this.i18n.tUi('transactions.fields.transactionStatus'),
-        value: transactionStatus.map((v) => transactionStatusEnumLabel(v, this.i18n)).join(', '),
+        label: this.i18n.tUi('transactions.fields.statusTransaction'),
+        value: statusTransaction.map((v) => statusTransactionEnumLabel(v, this.i18n)).join(', '),
       });
     }
 
-    if (paymentStatus?.length) {
+    if (statusPaymentBank?.length) {
       items.push({
-        label: this.i18n.tUi('transactions.fields.paymentStatus'),
-        value: paymentStatus.map((v) => paymentStatusEnumLabel(v, this.i18n)).join(', '),
+        label: this.i18n.tUi('transactions.fields.statusPaymentBank'),
+        value: statusPaymentBank.map((v) => statusPaymentBankEnumLabel(v, this.i18n)).join(', '),
       });
     }
 
@@ -868,8 +868,8 @@ export class TransactionsAcquirersSalesListComponent
       capture: this.capture(),
       cardNumber: this.cardNumber(),
       authorization: this.authorization(),
-      paymentStatus: this.paymentStatus(),
-      transactionStatus: this.transactionStatus(),
+      statusPaymentBank: this.statusPaymentBank(),
+      statusTransaction: this.statusTransaction(),
 
       liquidValueEnd: this.liquidValueEnd(),
       grossValueEnd: this.grossValueEnd(),
@@ -906,8 +906,8 @@ export class TransactionsAcquirersSalesListComponent
     this.machine.set(s.machine ?? '');
     this.cardNumber.set(s.cardNumber ?? '');
     this.authorization.set(s.authorization ?? '');
-    this.paymentStatus.set(s.paymentStatus ?? null);
-    this.transactionStatus.set(s.transactionStatus ?? null);
+    this.statusPaymentBank.set(s.statusPaymentBank ?? null);
+    this.statusTransaction.set(s.statusTransaction ?? null);
 
     this.grossValueEnd.set(s.grossValueEnd ?? null);
     this.liquidValueEnd.set(s.liquidValueEnd ?? null);
@@ -969,9 +969,9 @@ export class TransactionsAcquirersSalesListComponent
       modality: this.modality()?.length ? this.modality()! : undefined,
       acquirers: this.acquirers()?.length ? this.acquirers()! : undefined,
       companies: this.companies()?.length ? this.companies()! : undefined,
-      paymentStatus: this.paymentStatus()?.length ? this.paymentStatus()! : undefined,
       establishments: this.establishments()?.length ? this.establishments()! : undefined,
-      transactionStatus: this.transactionStatus()?.length ? this.transactionStatus()! : undefined,
+      statusPaymentBank: this.statusPaymentBank()?.length ? this.statusPaymentBank()! : undefined,
+      statusTransaction: this.statusTransaction()?.length ? this.statusTransaction()! : undefined,
 
       saleDate: this.saleDate() ?? undefined,
       periodSaleDate: this.periodSaleDate() ?? undefined,
@@ -1093,8 +1093,8 @@ export class TransactionsAcquirersSalesListComponent
 
   /* Metodos Tooltip Status */
   protected installmentStatusTooltip(row: any): string {
-    const status = installmentTooltipStatusLabel(row?.transactionStatus, this.i18n);
-    const reason = statusTransactionReasonEnumLabel(row?.transactionStatusReason, this.i18n);
+    const status = installmentTooltipStatusLabel(row?.statusTransaction, this.i18n);
+    const reason = statusTransactionReasonEnumLabel(row?.statusTransactionReason, this.i18n);
 
     const conciliationDate = row?.saleReconciliationDate
       ? this.csDatePipe.transform(row.saleReconciliationDate, 'short')
@@ -1147,13 +1147,13 @@ export class TransactionsAcquirersSalesListComponent
   }
 
   protected installmentStatusTooltipClass(row: any): string {
-    const tone = installmentStatusTooltipTone(row?.transactionStatus);
+    const tone = installmentStatusTooltipTone(row?.statusTransaction);
 
     return `cs-info-tooltip cs-installment-tooltip cs-installment-tooltip-${tone}`;
   }
 
   protected saleStatusIcon(row: any): string {
-    const tone = installmentStatusTooltipTone(row?.transactionStatus);
+    const tone = installmentStatusTooltipTone(row?.statusTransaction);
 
     if (tone === 'success') {
       return 'pi pi-thumbs-up cs-sale-status-icon cs-sale-status-icon-success';

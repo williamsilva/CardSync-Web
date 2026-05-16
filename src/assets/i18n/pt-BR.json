@@ -388,7 +388,7 @@
       "ambiguousMatch": "Correspondência ambígua",
       "acquirerMismatch": "Divergência de Adquirente"
     },
-    "transactionStatusEnum": {
+    "statusTransactionEnum": {
       "pending": "Pendente",
       "deleted": "Excluido",
       "canceled": "Cancelado",
@@ -400,7 +400,7 @@
       "manuallyReconciled": "Conciliado Manual",
       "reconciledAutomatically": "Conciliado Automaticamente"
     },
-    "paymentStatusEnum": {
+    "statusPaymentBankEnum": {
       "paid": "Pago",
       "notPaid":"Não Pago",
       "pending": "Pendente",
@@ -946,12 +946,12 @@
       "periodSaleDate": "Período Venda",
       "contractedFee": "Taxa Contratada",
       "establishment": "Estabelecimento",
-      "paymentStatus": "Status Pagamento",
       "bankDomicile": "Domicílio bancário",
       "conciliationDate": "Data Conciliação",
+      "statusPaymentBank": "Status Pagamento",
       "expectedPaymentDate":"Prev. Pagamento",
       "periodPaymentDate": "Período Pagamento",
-      "transactionStatus": "Status Conciliação",
+      "statusTransaction": "Status Conciliação",
       "periodConciliationDate": "Período Conciliação",
       "periodExpectedPaymentDate": "Período Prev. Pagamento"
     },

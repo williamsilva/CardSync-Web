@@ -101,23 +101,23 @@
     <cs-advanced-multiselect-filter
       optionLabel="label"
       optionValue="value"
-      inputId="transactionStatus"
-      [value]="transactionStatus()"
+      inputId="statusTransaction"
+      [value]="statusTransaction()"
       class="col-12 md:col-3 xl:col-2 p-1"
-      [options]="transactionStatusOptions()"
-      (valueChange)="transactionStatus.set($event)"
-      [label]="'transactions.fields.transactionStatus' | translate"
+      [options]="statusTransactionOptions()"
+      (valueChange)="statusTransaction.set($event)"
+      [label]="'transactions.fields.statusTransaction' | translate"
     ></cs-advanced-multiselect-filter>
 
     <cs-advanced-multiselect-filter
       optionLabel="label"
       optionValue="value"
-      inputId="paymentStatus"
-      [value]="paymentStatus()"
-      [options]="paymentStatusOptions()"
+      inputId="statusPaymentBank"
+      [value]="statusPaymentBank()"
       class="col-12 md:col-3 xl:col-2 p-1"
-      (valueChange)="paymentStatus.set($event)"
-      [label]="'transactions.fields.paymentStatus' | translate"
+      [options]="statusPaymentBankOptions()"
+      (valueChange)="statusPaymentBank.set($event)"
+      [label]="'transactions.fields.statusPaymentBank' | translate"
     ></cs-advanced-multiselect-filter>
 
     <cs-advanced-text-filter
@@ -1390,7 +1390,7 @@
           </div>
         </th>
 
-        <th pSortableColumn="transactionStatus" class="text-center">
+        <th pSortableColumn="statusTransaction" class="text-center">
           <div class="th-flex th-flex--compact th-flex--center">
             <span
               class="th-label"
@@ -1400,7 +1400,7 @@
               {{ 'transactions.fields.sale' | translate }}
             </span>
             <span class="th-icons">
-              <p-sortIcon field="transactionStatus"></p-sortIcon>
+              <p-sortIcon field="statusTransaction"></p-sortIcon>
             </span>
           </div>
         </th>

@@ -1,6 +1,6 @@
 {
   "ok": false,
-  "generatedAt": "2026-04-27T11:34:17.184Z",
+  "generatedAt": "2026-05-16T01:45:05.792Z",
   "targets": [
     {
       "target": "primeng",
@@ -71,8 +71,18 @@
           "file": "C:\\WorkSpace\\NimbusSystems\\CardSync_web\\src\\assets\\i18n\\en.json",
           "ok": false,
           "missingKeys": [
-            "menu.settings.email",
-            "menu.settings.title"
+            "enum.statusPaymentBankEnum.canceled",
+            "enum.statusPaymentBankEnum.canceledSale",
+            "enum.statusPaymentBankEnum.deleted",
+            "enum.statusPaymentBankEnum.divergent",
+            "enum.statusPaymentBankEnum.excludedSale",
+            "enum.statusPaymentBankEnum.notPaid",
+            "enum.statusPaymentBankEnum.paid",
+            "enum.statusPaymentBankEnum.pending",
+            "enum.statusPaymentBankEnum.unknown",
+            "transactions.fields.contractedFee",
+            "transactions.fields.creditDate",
+            "transactions.fields.statusPaymentBank"
           ],
           "extraKeys": [],
           "emptyValues": [],
@@ -83,8 +93,18 @@
           "file": "C:\\WorkSpace\\NimbusSystems\\CardSync_web\\src\\assets\\i18n\\es.json",
           "ok": false,
           "missingKeys": [
-            "menu.settings.email",
-            "menu.settings.title"
+            "enum.statusPaymentBankEnum.canceled",
+            "enum.statusPaymentBankEnum.canceledSale",
+            "enum.statusPaymentBankEnum.deleted",
+            "enum.statusPaymentBankEnum.divergent",
+            "enum.statusPaymentBankEnum.excludedSale",
+            "enum.statusPaymentBankEnum.notPaid",
+            "enum.statusPaymentBankEnum.paid",
+            "enum.statusPaymentBankEnum.pending",
+            "enum.statusPaymentBankEnum.unknown",
+            "transactions.fields.contractedFee",
+            "transactions.fields.creditDate",
+            "transactions.fields.statusPaymentBank"
           ],
           "extraKeys": [],
           "emptyValues": [],
@@ -95,7 +115,7 @@
       "summary": {
         "ok": false,
         "missingFiles": 0,
-        "missingKeys": 4,
+        "missingKeys": 24,
         "extraKeys": 0,
         "emptyValues": 0,
         "arrayLengthMismatch": 0,
