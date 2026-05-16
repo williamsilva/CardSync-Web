@@ -37,13 +37,13 @@ import { CsColumnFilterShellComponent } from '@features/list-base/cs-column-filt
 import { CsAdvancedTextFilterComponent } from '@features/list-base/cs-advanced-text-filter.component';
 import { CsAdvancedPeriodDateFilterComponent } from '@features/list-base/cs-advanced-period-date-filter.component';
 import { CsAdvancedMultiselectFilterComponent } from '@features/list-base/cs-advanced-multiselect-filter.component';
-import {
-  allPaymentStatusEnum,
-  PaymentStatusEnum,
-  paymentStatusEnumLabel,
-} from '@models/enums/payment-status.enum';
 import { CsAdvancedFilterItemTemplateDirective } from '@features/list-base/cs-advanced-filter-item-template.directive';
 import { TransactionsErpSalesInstallmentsTableComponent } from '../transactions-erp-sales-installments-table/transactions-erp-sales-installments-table.component';
+import {
+  PaymentStatusEnum,
+  allPaymentStatusEnum,
+  paymentStatusEnumLabel,
+} from '@models/enums/payment-status.enum';
 import {
   currencyRangeLabel,
   CsCurrencyRangeValue,
@@ -84,6 +84,16 @@ import {
   resetTransactionsErpAdvancedFilters,
   createEmptyTransactionsErpFiltersState,
 } from '@features/filter/transaction-erp.filters';
+import {
+  createEmptyTransactionsAcqFiltersState,
+  TransactionsAcqFiltersState,
+} from '@features/filter/transaction-acq.filters';
+import { TransactionsErpInstallmentModel } from '@models/transactions-erp-installment.models';
+import {
+  createEmptyTransactionsErpInstallmentFiltersState,
+  TransactionsErpInstallmentFiltersState,
+} from '@features/filter/transaction-erp-installment.filters';
+import { TransactionsAcqModel } from '@models/transactions-acq.models';
 
 @Component({
   standalone: true,
@@ -329,87 +339,6 @@ export class TransactionsErpSalesListComponent
 
   modalitySeverity(value: ModalityEnum | null): CsTagTone {
     return modalityEnumSeverity(value);
-  }
-
-  protected searchActions(row: TransactionsErpModel): MenuItem[] {
-    return [
-      {
-        label: `${this.i18n.tUi('transactions.search.process')}: ${row.processedFile?.file}
-          (${this.i18n.tUi('transactions.search.line')}: ${row.lineNumber})`,
-        icon: 'pi pi-eye',
-        command: () => this.searchOnFileSales(row),
-      },
-      {
-        label: this.i18n.tUi('transactions.search.Installments'),
-        icon: 'pi pi-list',
-        command: () => this.openErpInstallments(row),
-      },
-      {
-        label: this.i18n.tUi('transactions.search.searchAcq'),
-        icon: 'pi pi-search',
-        command: () => this.searchOnAcquirerSales(row),
-      },
-    ];
-  }
-
-  protected openErpInstallments(row: TransactionsErpModel): void {
-    this.openRouteInNewTab(['/documents/erp/installments'], {
-      queryParams: this.buildRowQueryParams(row),
-    });
-  }
-
-  protected searchOnAcquirerSales(row: TransactionsErpModel): void {
-    const targetFilters = this.buildTargetFilters(row);
-
-    localStorage.setItem(STATE_KEY.CARDSYNC.ACQ.SALES.FILTERS.V1, JSON.stringify(targetFilters));
-    localStorage.removeItem(STATE_KEY.CARDSYNC.ACQ.SALES.TABLE.STATE.V1);
-
-    this.openRouteInNewTab(['/documents/acq/sales']);
-  }
-
-  protected searchOnFileSales(row: TransactionsErpModel): void {
-    const targetFilters = this.buildTargetFilters(row);
-
-    localStorage.setItem(STATE_KEY.CARDSYNC.FILE.FILTERS.V1, JSON.stringify(targetFilters));
-    localStorage.removeItem(STATE_KEY.CARDSYNC.FILE.TABLE.STATE.V1);
-
-    this.openRouteInNewTab(['/file-processing/files']);
-  }
-
-  protected openRouteInNewTab(
-    commands: unknown[],
-    extras: { queryParams?: Record<string, string> } = {},
-  ): void {
-    const url = this.router.serializeUrl(this.router.createUrlTree(commands, extras));
-    window.open(`${window.location.origin}${url}`, '_blank', 'noopener,noreferrer');
-  }
-
-  protected buildTargetFilters(row: TransactionsErpModel): TransactionsErpFiltersState {
-    const modality = normalizeModalityEnum(row.modality);
-    return {
-      ...this.emptyFiltersState(),
-      authorization: row.authorization ?? '',
-      cvNsu: row.cvNsu != null ? String(row.cvNsu) : '',
-
-      flags: row.flag?.id ? [row.flag.id] : null,
-      companies: row.company?.id ? [row.company.id] : null,
-      acquirers: row.acquirer?.id ? [row.acquirer.id] : null,
-      establishments: row.establishment?.id ? [row.establishment.id] : null,
-
-      modality: modality && modality !== ModalityEnum.NULL ? [modality] : null,
-      periodSaleDate: row.saleDate ? PeriodEnum.DAY : null,
-      saleDate: row.saleDate ? this.i18n.formatDateValue(row.saleDate) : null,
-    };
-  }
-
-  protected buildRowQueryParams(row: TransactionsErpModel): Record<string, string> {
-    const params: Record<string, string> = { transactionId: row.id };
-
-    if (row.cvNsu != null) params['cvNsu'] = String(row.cvNsu);
-    if (row.authorization) params['authorization'] = row.authorization;
-    if (row.saleDate) params['saleDate'] = row.saleDate;
-
-    return params;
   }
 
   protected emptyFiltersState(): TransactionsErpFiltersState {
@@ -1234,5 +1163,109 @@ export class TransactionsErpSalesListComponent
     }
 
     return 'pi pi-thumbs-down cs-sale-status-icon cs-sale-status-icon-danger';
+  }
+
+  /* Metodos busca */
+  protected searchActions(row: TransactionsErpModel): MenuItem[] {
+    return [
+      {
+        label: `${this.i18n.tUi('transactions.search.process')}: ${row.processedFile?.file}
+          (${this.i18n.tUi('transactions.search.line')}: ${row.lineNumber})`,
+        icon: 'pi pi-eye',
+        command: () => this.searchOnFileSales(row),
+      },
+      {
+        label: this.i18n.tUi('transactions.search.Installments'),
+        icon: 'pi pi-list',
+        command: () => this.openErpInstallments(row),
+      },
+      {
+        label: this.i18n.tUi('transactions.search.searchAcq'),
+        icon: 'pi pi-search',
+        command: () => this.searchOnAcqSales(row),
+      },
+    ];
+  }
+
+  protected searchOnFileSales(row: TransactionsErpModel): void {
+    const targetFilters = this.buildTargetFileFilters(row);
+
+    localStorage.setItem(STATE_KEY.CARDSYNC.FILE.FILTERS.V1, JSON.stringify(targetFilters));
+    localStorage.removeItem(STATE_KEY.CARDSYNC.FILE.TABLE.STATE.V1);
+
+    this.openRouteInNewTab(['/file-processing/files']);
+  }
+
+  protected openErpInstallments(row: TransactionsErpModel): void {
+    const targetFilters = this.buildInstallmentsTargetFilters(row);
+
+    localStorage.setItem(
+      STATE_KEY.CARDSYNC.ERP.INSTALLMENT.FILTERS.V1,
+      JSON.stringify(targetFilters),
+    );
+    localStorage.removeItem(STATE_KEY.CARDSYNC.ERP.INSTALLMENT.TABLE.STATE.V1);
+
+    this.openRouteInNewTab(['/documents/erp/installments']);
+  }
+
+  protected searchOnAcqSales(row: TransactionsErpModel): void {
+    const targetFilters = this.buildTargetAcqFilters(row);
+
+    localStorage.setItem(STATE_KEY.CARDSYNC.ACQ.SALES.FILTERS.V1, JSON.stringify(targetFilters));
+    localStorage.removeItem(STATE_KEY.CARDSYNC.ACQ.SALES.TABLE.STATE.V1);
+
+    this.openRouteInNewTab(['/documents/acq/sales']);
+  }
+
+  protected buildTargetFileFilters(row: TransactionsErpModel): TransactionsErpFiltersState {
+    return {
+      ...this.emptyFiltersState(),
+    };
+  }
+
+  protected buildTargetAcqFilters(row: TransactionsErpModel): TransactionsAcqFiltersState {
+    const modality = normalizeModalityEnum(row.modality);
+    return {
+      ...createEmptyTransactionsAcqFiltersState(),
+      authorization: row.authorization ?? '',
+      cvNsu: row.cvNsu != null ? String(row.cvNsu) : '',
+
+      flags: row.flag?.id ? [row.flag.id] : null,
+      companies: row.company?.id ? [row.company.id] : null,
+      acquirers: row.acquirer?.id ? [row.acquirer.id] : null,
+      establishments: row.establishment?.id ? [row.establishment.id] : null,
+
+      modality: modality && modality !== ModalityEnum.NULL ? [modality] : null,
+      periodSaleDate: row.saleDate ? PeriodEnum.DAY : null,
+      saleDate: row.saleDate ? this.i18n.formatDateValue(row.saleDate) : null,
+    };
+  }
+
+  protected buildInstallmentsTargetFilters(
+    row: TransactionsErpModel,
+  ): TransactionsErpInstallmentFiltersState {
+    const modality = normalizeModalityEnum(row.modality);
+    return {
+      ...createEmptyTransactionsErpInstallmentFiltersState(),
+      authorization: row.authorization ?? '',
+      cvNsu: row.cvNsu != null ? String(row.cvNsu) : '',
+
+      flags: row.flag?.id ? [row.flag.id] : null,
+      companies: row.company?.id ? [row.company.id] : null,
+      acquirers: row.acquirer?.id ? [row.acquirer.id] : null,
+      establishments: row.establishment?.id ? [row.establishment.id] : null,
+
+      modality: modality && modality !== ModalityEnum.NULL ? [modality] : null,
+      periodSaleDate: row.saleDate ? PeriodEnum.DAY : null,
+      saleDate: row.saleDate ? this.i18n.formatDateValue(row.saleDate) : null,
+    };
+  }
+
+  protected openRouteInNewTab(
+    commands: unknown[],
+    extras: { queryParams?: Record<string, string> } = {},
+  ): void {
+    const url = this.router.serializeUrl(this.router.createUrlTree(commands, extras));
+    window.open(`${window.location.origin}${url}`, '_blank', 'noopener,noreferrer');
   }
 }

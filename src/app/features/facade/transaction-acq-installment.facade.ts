@@ -2,10 +2,11 @@ import { Injectable, inject, signal } from '@angular/core';
 
 import { finalize } from 'rxjs';
 
+import { TransactionsTotalsModel } from '@models/transactionsTotalsModel';
 import { ListQueryDto } from '@shared/features/list-query/list-query.types';
 import { TransactionsAcqInstallmentModel } from '@models/transactions-acq-installment.models';
+import { TransactionsAcqInstallmentAdvancedFilters } from '../filter/transaction-acq-installment.filters';
 import { TransactionsAcqInstallmentApiService } from '@features/service/transaction-acq-installment.api.service';
-import { TransactionsAcqInstallmentAdvancedFilters } from '@features/filter/transaction-acq-installment.filters';
 
 type LastQuery = ListQueryDto<TransactionsAcqInstallmentAdvancedFilters>;
 
@@ -15,12 +16,16 @@ export class TransactionsAcqInstallmentFacade {
 
   private readonly _total = signal(0);
   private readonly _loading = signal(false);
+  private readonly _totalsLoading = signal(false);
   private readonly _lastQuery = signal<LastQuery | null>(null);
   private readonly _data = signal<TransactionsAcqInstallmentModel[]>([]);
+  private readonly _totals = signal<TransactionsTotalsModel | null>(null);
 
+  readonly totals = this._totals.asReadonly();
   readonly loading = this._loading.asReadonly();
   readonly installments = this._data.asReadonly();
   readonly totalRecords = this._total.asReadonly();
+  readonly totalsLoading = this._totalsLoading.asReadonly();
 
   loadPage(q: LastQuery): void {
     if (this._loading()) return;
@@ -46,5 +51,23 @@ export class TransactionsAcqInstallmentFacade {
   reloadLast(): void {
     const q = this._lastQuery();
     if (q) this.loadPage(q);
+  }
+
+  calculateTotals(q = this._lastQuery()): void {
+    if (!q || this._totalsLoading()) return;
+
+    this._totalsLoading.set(true);
+
+    this.api
+      .calculateTotals(q)
+      .pipe(finalize(() => this._totalsLoading.set(false)))
+      .subscribe({
+        next: (totals) => this._totals.set(totals),
+        error: () => this._totals.set(null),
+      });
+  }
+
+  clearTotals(): void {
+    this._totals.set(null);
   }
 }

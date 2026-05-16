@@ -1,41 +1,44 @@
+import { ModalityEnum } from './enums/modality.enum';
 import { FlagMinimalModel } from './flag-minimal.models';
 import { CompanyMinimalModel } from './company-minimal.models';
 import { AcquirerMinimalModel } from './acquirer-minimal.models';
+import { TransactionStatusEnum } from './enums/transaction-status.enum';
 import { EstablishmentMinimalModel } from './establishment-minimal.models';
 import { ProcessedFileMinimalModel } from './processed-file-minimal.models';
+import { TransactionsAcqMinimalModel } from './transactions-acq-minimal.models';
+import { PaymentStatusEnum } from './enums/payment-status.enum';
 
 export interface TransactionsAcqInstallmentModel {
   id: string;
 
-  transactionId?: string | null;
   saleDate?: string | null;
-  expectedPaymentDate?: string | null;
   paymentDate?: string | null;
-  conciliationDate?: string | null;
-
-  cvNsu?: number | string | null;
+  transactionId?: string | null;
   authorization?: string | null;
-  installmentNumber?: number | null;
-  installment?: number | null;
-  installmentTotal?: number | null;
+  cvNsu?: number | string | null;
+  conciliationDate?: string | null;
+  expectedPaymentDate?: string | null;
 
-  grossValue?: number | null;
   feeValue?: number | null;
   netValue?: number | null;
+  lineNumber?: number | null;
+  grossValue?: number | null;
+  installment?: number | null;
   liquidValue?: number | null;
   adjustmentValue?: number | null;
+  installmentTotal?: number | null;
+  installmentNumber?: number | null;
 
-  status?: string | null;
-  paymentStatus?: string | null;
-  statusPaymentBank?: string | null;
-  transactionStatus?: string | null;
+  paymentStatus?: PaymentStatusEnum | null;
+  transactionStatus: TransactionStatusEnum | null;
+  transaction?: TransactionsAcqMinimalModel | null;
+  processedFile?: ProcessedFileMinimalModel | null;
+  establishment?: EstablishmentMinimalModel | null;
 
-  lineNumber?: number | null;
+  modality: ModalityEnum | null;
   flag?: FlagMinimalModel | null;
   company?: CompanyMinimalModel | null;
   acquirer?: AcquirerMinimalModel | null;
-  processedFile?: ProcessedFileMinimalModel | null;
-  establishment?: EstablishmentMinimalModel | null;
 }
 
 export interface TransactionsAcqInstallmentCreateInput {}
@@ -49,7 +52,6 @@ export function mapTransactionsAcqInstallmentApiModel(
 ): TransactionsAcqInstallmentModel {
   return {
     ...input,
-    netValue: input.netValue ?? input.liquidValue ?? null,
   };
 }
 

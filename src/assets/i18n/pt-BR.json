@@ -83,7 +83,7 @@
           "title": "Parcelas ADQ"
         },
         "sales": {
-          "title": "Vendas Adquirente"
+          "title": "Vendas ADQ"
         }
       }
     },
@@ -944,6 +944,7 @@
       "paymentDate": "Data Pagamento",
       "discountValue": "Valor Desconto",
       "periodSaleDate": "Período Venda",
+      "contractedFee": "Taxa Contratada",
       "establishment": "Estabelecimento",
       "paymentStatus": "Status Pagamento",
       "bankDomicile": "Domicílio bancário",

@@ -12,7 +12,7 @@ export const DOCUMENTS_ROUTES: Routes = [
   },
   {
     path: 'acq',
-    loadChildren: () => import('./acq/acquirers.routes').then((m) => m.ACQUIRERS_ROUTES),
+    loadChildren: () => import('./acq/acq.routes').then((m) => m.ACQUIRERS_ROUTES),
   },
   {
     path: 'forbidden',

@@ -109,20 +109,23 @@
       [label]="'transactions.fields.transactionStatus' | translate"
     ></cs-advanced-multiselect-filter>
 
+    <cs-advanced-multiselect-filter
+      optionLabel="label"
+      optionValue="value"
+      inputId="paymentStatus"
+      [value]="paymentStatus()"
+      [options]="paymentStatusOptions()"
+      class="col-12 md:col-3 xl:col-2 p-1"
+      (valueChange)="paymentStatus.set($event)"
+      [label]="'transactions.fields.paymentStatus' | translate"
+    ></cs-advanced-multiselect-filter>
+
     <cs-advanced-text-filter
       inputId="authorization"
       [value]="authorization()"
       class="col-12 md:col-3 xl:col-2 p-1"
       (valueChange)="authorization.set($event)"
       [label]="'transactions.fields.authorization' | translate"
-    ></cs-advanced-text-filter>
-
-    <cs-advanced-text-filter
-      inputId="cardNumber"
-      [value]="cardNumber()"
-      class="col-12 md:col-3 xl:col-2 p-1"
-      (valueChange)="cardNumber.set($event)"
-      [label]="'transactions.fields.cardNumber' | translate"
     ></cs-advanced-text-filter>
 
     <cs-advanced-text-filter
@@ -135,6 +138,14 @@
   </div>
 
   <div class="grid formgrid gap-0 align-items-end">
+    <cs-advanced-text-filter
+      inputId="cardNumber"
+      [value]="cardNumber()"
+      class="col-12 md:col-3 xl:col-2 p-1"
+      (valueChange)="cardNumber.set($event)"
+      [label]="'transactions.fields.cardNumber' | translate"
+    ></cs-advanced-text-filter>
+
     <cs-advanced-text-filter
       inputId="tid"
       [value]="tid()"

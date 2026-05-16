@@ -33,6 +33,7 @@ import { buildListQuery } from '@shared/features/list-query/list-query.builder';
 import { allPeriodEnum, PeriodEnum, periodEnumLabel } from '@models/enums/period.enum';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
 import { statusTransactionReasonEnumLabel } from '@models/enums/transaction-status-reason.enum';
+import { createEmptyTransactionsErpFiltersState } from '@features/filter/transaction-erp.filters';
 import { CsColumnFilterShellComponent } from '@features/list-base/cs-column-filter-shell.component';
 import { CsAdvancedTextFilterComponent } from '@features/list-base/cs-advanced-text-filter.component';
 import { CsAdvancedPeriodDateFilterComponent } from '@features/list-base/cs-advanced-period-date-filter.component';
@@ -40,15 +41,23 @@ import { CsAdvancedMultiselectFilterComponent } from '@features/list-base/cs-adv
 import { CsAdvancedFilterItemTemplateDirective } from '@features/list-base/cs-advanced-filter-item-template.directive';
 import { TransactionsAcquirersSalesInstallmentsTableComponent } from '../transactions-acq-sales-installments-table/transactions-acq-sales-installments-table.component';
 import {
+  PaymentStatusEnum,
+  allPaymentStatusEnum,
+  paymentStatusEnumLabel,
+} from '@models/enums/payment-status.enum';
+import {
   currencyRangeLabel,
   CsCurrencyRangeValue,
   CsCurrencyRangeFilterComponent,
 } from '@features/list-base/cs-currency-range-filter.component';
 import {
-  TransactionsAcquirersSalesFiltersState,
-  TransactionsAcquirersSalesAdvancedFilters,
+  TransactionsAcqFiltersState,
+  TransactionsAcqAdvancedFilters,
+  resetTransactionsAcqAdvancedFilters,
+  createEmptyTransactionsAcqFiltersState,
 } from '@features/filter/transaction-acq.filters';
 import {
+  TransactionStatusEnum,
   allTransactionStatusEnum,
   transactionStatusEnumLabel,
   installmentStatusTooltipTone,
@@ -70,11 +79,16 @@ import {
   allModalityEnum,
   modalityEnumLabel,
   modalityEnumSeverity,
+  normalizeModalityEnum,
 } from '@models/enums/modality.enum';
 import {
   ActiveFilterItem,
   FiltersPanelComponent,
 } from '@shared/features/filters-panel/filters-panel.component';
+import {
+  TransactionsAcqInstallmentFiltersState,
+  createEmptyTransactionsAcqInstallmentFiltersState,
+} from '@features/filter/transaction-acq-installment.filters';
 
 @Component({
   standalone: true,
@@ -110,10 +124,7 @@ import {
   ],
 })
 export class TransactionsAcquirersSalesListComponent
-  extends StatefulListPage<
-    TransactionsAcquirersSalesFiltersState,
-    TransactionsAcquirersSalesAdvancedFilters
-  >
+  extends StatefulListPage<TransactionsAcqFiltersState, TransactionsAcqAdvancedFilters>
   implements AfterViewInit
 {
   @ViewChild('dt') private dt?: Table;
@@ -162,13 +173,14 @@ export class TransactionsAcquirersSalesListComponent
   readonly modality = signal<ModalityEnum[] | null>(null);
   readonly periodSaleDate = signal<PeriodEnum | null>(null);
   readonly saleDate = signal<string | string[] | null>(null);
-  readonly transactionStatus = signal<string[] | null>(null);
   readonly periodPaymentDate = signal<PeriodEnum | null>(null);
   readonly paymentDate = signal<string | string[] | null>(null);
   readonly periodConciliationDate = signal<PeriodEnum | null>(null);
+  readonly paymentStatus = signal<PaymentStatusEnum[] | null>(null);
   readonly conciliationDate = signal<string | string[] | null>(null);
   readonly periodExpectedPaymentDate = signal<PeriodEnum | null>(null);
   readonly expectedPaymentDate = signal<string | string[] | null>(null);
+  readonly transactionStatus = signal<TransactionStatusEnum[] | null>(null);
 
   /* Campos Tabela*/
   cvNsuColumnDraft = signal('');
@@ -178,6 +190,7 @@ export class TransactionsAcquirersSalesListComponent
   authorizationColumnDraft = signal('');
   discountValueColumnDraft = signal('');
   adjustmentValueColumnDraft = signal('');
+
   flagColumnDraft = signal<string[] | null>(null);
   companyColumnDraft = signal<string[] | null>(null);
   captureColumnDraft = signal<string[] | null>(null);
@@ -244,6 +257,14 @@ export class TransactionsAcquirersSalesListComponent
     this.i18n.getAppliedLang();
     return allTransactionStatusEnum().map((value) => ({
       label: transactionStatusEnumLabel(value, this.i18n),
+      value,
+    }));
+  });
+
+  readonly paymentStatusOptions = computed(() => {
+    this.i18n.getAppliedLang();
+    return allPaymentStatusEnum().map((value) => ({
+      label: paymentStatusEnumLabel(value, this.i18n),
       value,
     }));
   });
@@ -318,115 +339,8 @@ export class TransactionsAcquirersSalesListComponent
     return modalityEnumSeverity(value);
   }
 
-  protected searchActions(row: TransactionsAcqModel): MenuItem[] {
-    return [
-      {
-        label: `${this.i18n.tUi('transactions.search.process')}: ${row.processedFile?.file}
-          (${this.i18n.tUi('transactions.search.line')}: ${row.lineNumber})`,
-        icon: 'pi pi-eye',
-        command: () => this.searchOnFileSales(row),
-      },
-      {
-        label: this.i18n.tUi('transactions.search.Installments'),
-        icon: 'pi pi-list',
-        command: () => this.openAcqInstallments(row),
-      },
-      {
-        label: this.i18n.tUi('transactions.search.searchErp'),
-        icon: 'pi pi-search',
-        command: () => this.searchOnErpSales(row),
-      },
-    ];
-  }
-
-  protected openAcqInstallments(row: TransactionsAcqModel): void {
-    this.openRouteInNewTab(['/documents/acq/installments'], {
-      queryParams: this.buildRowQueryParams(row),
-    });
-  }
-
-  protected searchOnFileSales(row: TransactionsAcqModel): void {
-    const targetFilters = this.buildTargetFilters(row);
-
-    localStorage.setItem(STATE_KEY.CARDSYNC.FILE.FILTERS.V1, JSON.stringify(targetFilters));
-    localStorage.removeItem(STATE_KEY.CARDSYNC.FILE.TABLE.STATE.V1);
-
-    this.openRouteInNewTab(['/file-processing/files']);
-  }
-
-  protected searchOnErpSales(row: TransactionsAcqModel): void {
-    const targetFilters = this.buildTargetFilters(row);
-
-    localStorage.setItem(STATE_KEY.CARDSYNC.ERP.SALES.FILTERS.V1, JSON.stringify(targetFilters));
-    localStorage.removeItem(STATE_KEY.CARDSYNC.ERP.SALES.TABLE.STATE.V1);
-
-    this.openRouteInNewTab(['/documents/erp/sales']);
-  }
-
-  protected openRouteInNewTab(
-    commands: unknown[],
-    extras: { queryParams?: Record<string, string> } = {},
-  ): void {
-    const url = this.router.serializeUrl(this.router.createUrlTree(commands, extras));
-    window.open(`${window.location.origin}${url}`, '_blank', 'noopener,noreferrer');
-  }
-
-  protected buildTargetFilters(row: TransactionsAcqModel): TransactionsAcquirersSalesFiltersState {
-    return {
-      ...this.emptyFiltersState(),
-      cvNsu: row.cvNsu != null ? String(row.cvNsu) : '',
-      authorization: row.authorization ?? '',
-      acquirers: row.acquirer?.id ? [row.acquirer.id] : null,
-      companies: row.company?.id ? [row.company.id] : null,
-      establishments: row.establishment?.id ? [row.establishment.id] : null,
-      flags: row.flag?.id ? [row.flag.id] : null,
-      modality: row.modality ? [row.modality] : null,
-      periodSaleDate: row.saleDate ? PeriodEnum.DAY : null,
-      saleDate: row.saleDate ? this.i18n.formatDateValue(row.saleDate) : null,
-    };
-  }
-
-  protected buildRowQueryParams(row: TransactionsAcqModel): Record<string, string> {
-    const params: Record<string, string> = { transactionId: row.id };
-
-    if (row.cvNsu != null) params['cvNsu'] = String(row.cvNsu);
-    if (row.authorization) params['authorization'] = row.authorization;
-    if (row.saleDate) params['saleDate'] = row.saleDate;
-
-    return params;
-  }
-
-  protected emptyFiltersState(): TransactionsAcquirersSalesFiltersState {
-    return {
-      tid: '',
-      cvNsu: '',
-      machine: '',
-      cardNumber: '',
-      authorization: '',
-      acquirers: null,
-      capture: null,
-      modality: null,
-      transactionStatus: null,
-      flags: null,
-      companies: null,
-      establishments: null,
-      periodSaleDate: null,
-      saleDate: null,
-      periodPaymentDate: null,
-      paymentDate: null,
-      periodExpectedPaymentDate: null,
-      expectedPaymentDate: null,
-      periodConciliationDate: null,
-      conciliationDate: null,
-      grossValueEnd: null,
-      liquidValueEnd: null,
-      grossValueStart: null,
-      liquidValueStart: null,
-      discountValueEnd: null,
-      discountValueStart: null,
-      adjustmentValueEnd: null,
-      adjustmentValueStart: null,
-    };
+  protected emptyFiltersState(): TransactionsAcqFiltersState {
+    return createEmptyTransactionsAcqFiltersState();
   }
 
   protected override tableStateKey(): string {
@@ -446,7 +360,7 @@ export class TransactionsAcquirersSalesListComponent
   }
 
   protected override loadFirstPage(): void {
-    const query = buildListQuery<TransactionsAcquirersSalesAdvancedFilters>(
+    const query = buildListQuery<TransactionsAcqAdvancedFilters>(
       { page: 0, size: this.rows },
       this.buildAdvancedFilters(),
     );
@@ -454,43 +368,14 @@ export class TransactionsAcquirersSalesListComponent
   }
 
   protected override loadPage(
-    query: ReturnType<typeof buildListQuery<TransactionsAcquirersSalesAdvancedFilters>>,
+    query: ReturnType<typeof buildListQuery<TransactionsAcqAdvancedFilters>>,
   ): void {
     this.acqSalesFacade.clearTotals();
     this.acqSalesFacade.loadPage(query);
   }
 
   protected override resetFilters(): void {
-    this.flags.set(null);
-    this.capture.set(null);
-    this.modality.set(null);
-    this.saleDate.set(null);
-    this.acquirers.set(null);
-    this.companies.set(null);
-    this.paymentDate.set(null);
-    this.establishments.set(null);
-    this.periodSaleDate.set(null);
-    this.conciliationDate.set(null);
-    this.periodPaymentDate.set(null);
-    this.transactionStatus.set(null);
-    this.expectedPaymentDate.set(null);
-    this.periodConciliationDate.set(null);
-    this.periodExpectedPaymentDate.set(null);
-
-    this.discountValueEnd.set(null);
-    this.liquidValueEnd.set(null);
-    this.grossValueEnd.set(null);
-    this.discountValueStart.set(null);
-    this.liquidValueStart.set(null);
-    this.grossValueStart.set(null);
-    this.adjustmentValueEnd.set(null);
-    this.adjustmentValueStart.set(null);
-
-    this.tid.set('');
-    this.cvNsu.set('');
-    this.machine.set('');
-    this.cardNumber.set('');
-    this.authorization.set('');
+    resetTransactionsAcqAdvancedFilters(this);
   }
 
   protected syncColumnDraftsFromTableState(): void {
@@ -767,6 +652,7 @@ export class TransactionsAcquirersSalesListComponent
     const acquirer = this.acquirers();
     const cardNumber = this.cardNumber();
     const authorization = this.authorization();
+    const paymentStatus = this.paymentStatus();
     const establishment = this.establishments();
     const transactionStatus = this.transactionStatus();
 
@@ -916,6 +802,13 @@ export class TransactionsAcquirersSalesListComponent
       });
     }
 
+    if (paymentStatus?.length) {
+      items.push({
+        label: this.i18n.tUi('transactions.fields.paymentStatus'),
+        value: paymentStatus.map((v) => paymentStatusEnumLabel(v, this.i18n)).join(', '),
+      });
+    }
+
     if (acquirer?.length) {
       const labels = this.acquirersOptions()
         .filter((opt) => acquirer.includes(opt.id))
@@ -967,7 +860,7 @@ export class TransactionsAcquirersSalesListComponent
     return items;
   });
 
-  protected override toFiltersState(): TransactionsAcquirersSalesFiltersState {
+  protected override toFiltersState(): TransactionsAcqFiltersState {
     return {
       tid: this.tid(),
       cvNsu: this.cvNsu(),
@@ -975,6 +868,7 @@ export class TransactionsAcquirersSalesListComponent
       capture: this.capture(),
       cardNumber: this.cardNumber(),
       authorization: this.authorization(),
+      paymentStatus: this.paymentStatus(),
       transactionStatus: this.transactionStatus(),
 
       liquidValueEnd: this.liquidValueEnd(),
@@ -1006,20 +900,21 @@ export class TransactionsAcquirersSalesListComponent
     };
   }
 
-  protected override applyFiltersState(s: TransactionsAcquirersSalesFiltersState): void {
+  protected override applyFiltersState(s: TransactionsAcqFiltersState): void {
     this.tid.set(s.tid ?? '');
     this.cvNsu.set(s.cvNsu ?? '');
     this.machine.set(s.machine ?? '');
     this.cardNumber.set(s.cardNumber ?? '');
     this.authorization.set(s.authorization ?? '');
+    this.paymentStatus.set(s.paymentStatus ?? null);
     this.transactionStatus.set(s.transactionStatus ?? null);
 
-    this.discountValueEnd.set(s.discountValueEnd ?? null);
-    this.liquidValueEnd.set(s.liquidValueEnd ?? null);
-    this.discountValueStart.set(s.discountValueStart ?? null);
     this.grossValueEnd.set(s.grossValueEnd ?? null);
-    this.liquidValueStart.set(s.liquidValueStart ?? null);
+    this.liquidValueEnd.set(s.liquidValueEnd ?? null);
     this.grossValueStart.set(s.grossValueStart ?? null);
+    this.discountValueEnd.set(s.discountValueEnd ?? null);
+    this.liquidValueStart.set(s.liquidValueStart ?? null);
+    this.discountValueStart.set(s.discountValueStart ?? null);
     this.adjustmentValueEnd.set(s.adjustmentValueEnd ?? null);
     this.adjustmentValueStart.set(s.adjustmentValueStart ?? null);
 
@@ -1043,7 +938,7 @@ export class TransactionsAcquirersSalesListComponent
     this.periodConciliationDate.set(s.periodConciliationDate ?? null);
   }
 
-  protected override buildAdvancedFilters(): Partial<TransactionsAcquirersSalesAdvancedFilters> {
+  protected override buildAdvancedFilters(): Partial<TransactionsAcqAdvancedFilters> {
     const discountValueEnd = this.discountValueEnd();
     const liquidValueEnd = this.liquidValueEnd();
     const grossValueEnd = this.grossValueEnd();
@@ -1074,8 +969,8 @@ export class TransactionsAcquirersSalesListComponent
       modality: this.modality()?.length ? this.modality()! : undefined,
       acquirers: this.acquirers()?.length ? this.acquirers()! : undefined,
       companies: this.companies()?.length ? this.companies()! : undefined,
+      paymentStatus: this.paymentStatus()?.length ? this.paymentStatus()! : undefined,
       establishments: this.establishments()?.length ? this.establishments()! : undefined,
-
       transactionStatus: this.transactionStatus()?.length ? this.transactionStatus()! : undefined,
 
       saleDate: this.saleDate() ?? undefined,
@@ -1269,5 +1164,109 @@ export class TransactionsAcquirersSalesListComponent
     }
 
     return 'pi pi-thumbs-down cs-sale-status-icon cs-sale-status-icon-danger';
+  }
+
+  /* Metodos busca */
+  protected searchActions(row: TransactionsAcqModel): MenuItem[] {
+    return [
+      {
+        label: `${this.i18n.tUi('transactions.search.process')}: ${row.processedFile?.file}
+            (${this.i18n.tUi('transactions.search.line')}: ${row.lineNumber})`,
+        icon: 'pi pi-eye',
+        command: () => this.searchOnFileSales(row),
+      },
+      {
+        label: this.i18n.tUi('transactions.search.Installments'),
+        icon: 'pi pi-list',
+        command: () => this.openAcqInstallments(row),
+      },
+      {
+        label: this.i18n.tUi('transactions.search.searchErp'),
+        icon: 'pi pi-search',
+        command: () => this.searchOnErpSales(row),
+      },
+    ];
+  }
+
+  protected searchOnFileSales(row: TransactionsAcqModel): void {
+    const targetFilters = this.buildTargetFileFilters(row);
+
+    localStorage.setItem(STATE_KEY.CARDSYNC.FILE.FILTERS.V1, JSON.stringify(targetFilters));
+    localStorage.removeItem(STATE_KEY.CARDSYNC.FILE.TABLE.STATE.V1);
+
+    this.openRouteInNewTab(['/file-processing/files']);
+  }
+
+  protected openAcqInstallments(row: TransactionsAcqModel): void {
+    const targetFilters = this.buildInstallmentsTargetFilters(row);
+
+    localStorage.setItem(
+      STATE_KEY.CARDSYNC.ACQ.INSTALLMENT.FILTERS.V1,
+      JSON.stringify(targetFilters),
+    );
+    localStorage.removeItem(STATE_KEY.CARDSYNC.ACQ.INSTALLMENT.TABLE.STATE.V1);
+
+    this.openRouteInNewTab(['/documents/acq/installments']);
+  }
+
+  protected searchOnErpSales(row: TransactionsAcqModel): void {
+    const targetFilters = this.buildTargetErpFilters(row);
+
+    localStorage.setItem(STATE_KEY.CARDSYNC.ERP.SALES.FILTERS.V1, JSON.stringify(targetFilters));
+    localStorage.removeItem(STATE_KEY.CARDSYNC.ERP.SALES.TABLE.STATE.V1);
+
+    this.openRouteInNewTab(['/documents/erp/sales']);
+  }
+
+  protected buildTargetFileFilters(row: TransactionsAcqModel): TransactionsAcqFiltersState {
+    return {
+      ...this.emptyFiltersState(),
+    };
+  }
+
+  protected buildTargetErpFilters(row: TransactionsAcqModel): TransactionsAcqFiltersState {
+    const modality = normalizeModalityEnum(row.modality);
+    return {
+      ...createEmptyTransactionsErpFiltersState(),
+      authorization: row.authorization ?? '',
+      cvNsu: row.cvNsu != null ? String(row.cvNsu) : '',
+
+      flags: row.flag?.id ? [row.flag.id] : null,
+      companies: row.company?.id ? [row.company.id] : null,
+      acquirers: row.acquirer?.id ? [row.acquirer.id] : null,
+      establishments: row.establishment?.id ? [row.establishment.id] : null,
+
+      modality: modality && modality !== ModalityEnum.NULL ? [modality] : null,
+      periodSaleDate: row.saleDate ? PeriodEnum.DAY : null,
+      saleDate: row.saleDate ? this.i18n.formatDateValue(row.saleDate) : null,
+    };
+  }
+
+  protected buildInstallmentsTargetFilters(
+    row: TransactionsAcqModel,
+  ): TransactionsAcqInstallmentFiltersState {
+    const modality = normalizeModalityEnum(row.modality);
+    return {
+      ...createEmptyTransactionsAcqInstallmentFiltersState(),
+      authorization: row.authorization ?? '',
+      cvNsu: row.cvNsu != null ? String(row.cvNsu) : '',
+
+      flags: row.flag?.id ? [row.flag.id] : null,
+      companies: row.company?.id ? [row.company.id] : null,
+      acquirers: row.acquirer?.id ? [row.acquirer.id] : null,
+      establishments: row.establishment?.id ? [row.establishment.id] : null,
+
+      modality: modality && modality !== ModalityEnum.NULL ? [modality] : null,
+      periodSaleDate: row.saleDate ? PeriodEnum.DAY : null,
+      saleDate: row.saleDate ? this.i18n.formatDateValue(row.saleDate) : null,
+    };
+  }
+
+  protected openRouteInNewTab(
+    commands: unknown[],
+    extras: { queryParams?: Record<string, string> } = {},
+  ): void {
+    const url = this.router.serializeUrl(this.router.createUrlTree(commands, extras));
+    window.open(`${window.location.origin}${url}`, '_blank', 'noopener,noreferrer');
   }
 }

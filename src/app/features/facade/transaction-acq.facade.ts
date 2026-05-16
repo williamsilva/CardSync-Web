@@ -6,9 +6,9 @@ import { TransactionsAcqModel } from '@models/transactions-acq.models';
 import { TransactionsTotalsModel } from '@models/transactionsTotalsModel';
 import { ListQueryDto } from '@shared/features/list-query/list-query.types';
 import { TransactionsAcqApiService } from '@features/service/transaction-acq.api.service';
-import { TransactionsAcquirersSalesAdvancedFilters } from '@features/filter/transaction-acq.filters';
+import { TransactionsAcqAdvancedFilters } from '@features/filter/transaction-acq.filters';
 
-type LastQuery = ListQueryDto<TransactionsAcquirersSalesAdvancedFilters>;
+type LastQuery = ListQueryDto<TransactionsAcqAdvancedFilters>;
 
 @Injectable({ providedIn: 'root' })
 export class TransactionsAcqFacade {

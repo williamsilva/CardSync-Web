@@ -7,7 +7,7 @@ import { API } from '@core/api/api.config';
 import { HalPagedResponse } from '@core/api/page.model';
 import { TransactionsTotalsModel } from '@models/transactionsTotalsModel';
 import { ListQueryDto } from '@shared/features/list-query/list-query.types';
-import { TransactionsAcquirersSalesAdvancedFilters } from '@features/filter/transaction-acq.filters';
+import { TransactionsAcqAdvancedFilters } from '@features/filter/transaction-acq.filters';
 import {
   TransactionsAcqModel,
   TransactionsAcqApiModel,
@@ -19,7 +19,7 @@ export class TransactionsAcqApiService {
   private readonly http = inject(HttpClient);
   private readonly baseUrl = `${API.bff}/v1/transaction/acq/sales`;
 
-  searchPaged(body: ListQueryDto<TransactionsAcquirersSalesAdvancedFilters>) {
+  searchPaged(body: ListQueryDto<TransactionsAcqAdvancedFilters>) {
     return this.http
       .post<HalPagedResponse<TransactionsAcqApiModel>>(`${this.baseUrl}/search`, body)
       .pipe(
@@ -36,7 +36,7 @@ export class TransactionsAcqApiService {
       );
   }
 
-  calculateTotals(body: ListQueryDto<TransactionsAcquirersSalesAdvancedFilters>) {
+  calculateTotals(body: ListQueryDto<TransactionsAcqAdvancedFilters>) {
     return this.http.post<TransactionsTotalsModel>(`${this.baseUrl}/totals`, body);
   }
 }

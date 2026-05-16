@@ -1,96 +1,97 @@
-import { CaptureEnum } from './enums/capture.enum';
 import { FlagMinimalModel } from './flag-minimal.models';
 import { CompanyMinimalModel } from './company-minimal.models';
 import { AcquirerMinimalModel } from './acquirer-minimal.models';
+import { CaptureEnum, normalizeCaptureEnum } from './enums/capture.enum';
+import { SalesSummaryMinimalModel } from './sales-summary-minimal.models';
 import { EstablishmentMinimalModel } from './establishment-minimal.models';
 import { ModalityEnum, normalizeModalityEnum } from './enums/modality.enum';
 import { ProcessedFileMinimalModel } from './processed-file-minimal.models';
 import { TransactionsAcqInstallmentModel } from './transactions-acq-installment.models';
+import {
+  TransactionStatusEnum,
+  normalizeTransactionStatusEnum,
+} from './enums/transaction-status.enum';
 
-export interface TransactionsAcqModel {
+export interface TransactionsAcqMinimalModel {
   id: string;
-
-  saleDate?: string | null;
-  paymentDate?: string | null;
-  conciliationDate?: string | null;
-  expectedPaymentDate?: string | null;
-
   tid?: string | null;
-  machine?: string | null;
+  cardName?: string | null;
+  saleDate?: string | null;
   cardNumber?: string | null;
-  companyName?: string | null;
-  authorization: string | null;
-  establishmentPvNumber?: string | null;
+  authorization?: string | null;
 
   cvNsu: number;
-  feeValue: number;
-  netValue: number;
-  grossValue: number;
   lineNumber: number;
   installment: number;
-  adjustmentValue: number;
 
-  capture?: CaptureEnum | null;
+  capture: CaptureEnum | null;
   modality: ModalityEnum | null;
+  transactionStatus: TransactionStatusEnum | null;
 
   flag: FlagMinimalModel;
   company: CompanyMinimalModel;
   acquirer: AcquirerMinimalModel;
+  salesSummary: SalesSummaryMinimalModel;
   processedFile: ProcessedFileMinimalModel;
   establishment: EstablishmentMinimalModel;
-  installments?: TransactionsAcqInstallmentModel[] | null;
 }
 
-export interface TransactionsAcqCreateInput {}
+export interface TransactionsAcqMinimalCreateInput {}
 
-export interface TransactionsAcqUpdateInput {}
+export interface TransactionsAcqMinimalUpdateInput {}
 
 /**
  * Payload bruto vindo da API.
  * Aceita status numérico ou string para tolerar mudanças no backend.
  */
-export interface TransactionsAcqApiModel {
+export interface TransactionsAcqMinimalApiModel {
   id: string;
 
   saleDate?: string | null;
-  expectedPaymentDate?: string | null;
   paymentDate?: string | null;
   conciliationDate?: string | null;
+  expectedPaymentDate?: string | null;
 
   tid?: string | null;
-  cardNumber?: string | null;
   machine?: string | null;
-  capture?: CaptureEnum | null;
+  cardNumber?: string | null;
   companyName?: string | null;
-  establishmentPvNumber?: string | null;
-  lineNumber: number;
+
   cvNsu: number;
   feeValue: number;
   netValue: number;
+  lineNumber: number;
   grossValue: number;
   installment: number;
+  authorization: string;
   adjustmentValue: number;
 
-  authorization: string;
-
+  capture: CaptureEnum;
   modality: ModalityEnum;
+  transactionStatus: TransactionStatusEnum;
+
   flag: FlagMinimalModel;
   company: CompanyMinimalModel;
   acquirer: AcquirerMinimalModel;
+  salesSummary: SalesSummaryMinimalModel;
   processedFile: ProcessedFileMinimalModel;
   establishment: EstablishmentMinimalModel;
   installments?: TransactionsAcqInstallmentModel[] | null;
 }
 
-export function mapTransactionsAcqApiModel(input: TransactionsAcqApiModel): TransactionsAcqModel {
+export function mapTransactionsAcqMinimalApiModel(
+  input: TransactionsAcqMinimalApiModel,
+): TransactionsAcqMinimalModel {
   return {
     ...input,
+    capture: normalizeCaptureEnum(input.capture),
     modality: normalizeModalityEnum(input.modality),
+    transactionStatus: normalizeTransactionStatusEnum(input.modality),
   };
 }
 
-export function mapTransactionsAcqApiModels(
-  items: TransactionsAcqApiModel[] | null | undefined,
-): TransactionsAcqModel[] {
-  return (items ?? []).map(mapTransactionsAcqApiModel);
+export function mapTransactionsAcqMinimalApiModels(
+  items: TransactionsAcqMinimalApiModel[] | null | undefined,
+): TransactionsAcqMinimalModel[] {
+  return (items ?? []).map(mapTransactionsAcqMinimalApiModel);
 }

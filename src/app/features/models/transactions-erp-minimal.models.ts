@@ -2,14 +2,14 @@ import { CaptureEnum } from './enums/capture.enum';
 import { FlagMinimalModel } from './flag-minimal.models';
 import { CompanyMinimalModel } from './company-minimal.models';
 import { AcquirerMinimalModel } from './acquirer-minimal.models';
-import {
-  normalizeTransactionStatusEnum,
-  TransactionStatusEnum,
-} from './enums/transaction-status.enum';
 import { EstablishmentMinimalModel } from './establishment-minimal.models';
 import { ModalityEnum, normalizeModalityEnum } from './enums/modality.enum';
 import { ProcessedFileMinimalModel } from './processed-file-minimal.models';
 import { TransactionsErpInstallmentModel } from './transactions-erp-installment.models';
+import {
+  TransactionStatusEnum,
+  normalizeTransactionStatusEnum,
+} from './enums/transaction-status.enum';
 
 export interface TransactionsErpMinimalModel {
   id: string;

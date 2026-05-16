@@ -21,7 +21,7 @@ export const ACQUIRERS_ROUTES: Routes = [
   },
   {
     path: 'installments',
-    title: 'routes.acq.installments.title',
+    title: 'routes.transactions.acq.installments.title',
     canActivate: [permissionGuard],
     data: {
       requireAll: false,
@@ -30,7 +30,7 @@ export const ACQUIRERS_ROUTES: Routes = [
     },
     loadComponent: () =>
       import('./transactions-acq-installments-list/transactions-acq-installments-list.component').then(
-        (m) => m.TransactionsAcquirersInstallmentsListComponent,
+        (m) => m.AcqInstallmentsListComponent,
       ),
   },
   {
