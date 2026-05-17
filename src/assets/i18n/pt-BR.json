@@ -946,12 +946,12 @@
       "periodSaleDate": "Período Venda",
       "contractedFee": "Taxa Contratada",
       "establishment": "Estabelecimento",
+      "statusTransaction": "Status Venda",
       "bankDomicile": "Domicílio bancário",
       "conciliationDate": "Data Conciliação",
       "statusPaymentBank": "Status Pagamento",
       "expectedPaymentDate":"Prev. Pagamento",
       "periodPaymentDate": "Período Pagamento",
-      "statusTransaction": "Status Conciliação",
       "periodConciliationDate": "Período Conciliação",
       "periodExpectedPaymentDate": "Período Prev. Pagamento"
     },

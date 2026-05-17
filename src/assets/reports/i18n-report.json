@@ -1,6 +1,6 @@
 {
-  "ok": false,
-  "generatedAt": "2026-05-16T01:45:05.792Z",
+  "ok": true,
+  "generatedAt": "2026-05-17T14:00:45.780Z",
   "targets": [
     {
       "target": "primeng",
@@ -69,21 +69,8 @@
         },
         "en": {
           "file": "C:\\WorkSpace\\NimbusSystems\\CardSync_web\\src\\assets\\i18n\\en.json",
-          "ok": false,
-          "missingKeys": [
-            "enum.statusPaymentBankEnum.canceled",
-            "enum.statusPaymentBankEnum.canceledSale",
-            "enum.statusPaymentBankEnum.deleted",
-            "enum.statusPaymentBankEnum.divergent",
-            "enum.statusPaymentBankEnum.excludedSale",
-            "enum.statusPaymentBankEnum.notPaid",
-            "enum.statusPaymentBankEnum.paid",
-            "enum.statusPaymentBankEnum.pending",
-            "enum.statusPaymentBankEnum.unknown",
-            "transactions.fields.contractedFee",
-            "transactions.fields.creditDate",
-            "transactions.fields.statusPaymentBank"
-          ],
+          "ok": true,
+          "missingKeys": [],
           "extraKeys": [],
           "emptyValues": [],
           "arrayLengthMismatch": [],
@@ -91,21 +78,8 @@
         },
         "es": {
           "file": "C:\\WorkSpace\\NimbusSystems\\CardSync_web\\src\\assets\\i18n\\es.json",
-          "ok": false,
-          "missingKeys": [
-            "enum.statusPaymentBankEnum.canceled",
-            "enum.statusPaymentBankEnum.canceledSale",
-            "enum.statusPaymentBankEnum.deleted",
-            "enum.statusPaymentBankEnum.divergent",
-            "enum.statusPaymentBankEnum.excludedSale",
-            "enum.statusPaymentBankEnum.notPaid",
-            "enum.statusPaymentBankEnum.paid",
-            "enum.statusPaymentBankEnum.pending",
-            "enum.statusPaymentBankEnum.unknown",
-            "transactions.fields.contractedFee",
-            "transactions.fields.creditDate",
-            "transactions.fields.statusPaymentBank"
-          ],
+          "ok": true,
+          "missingKeys": [],
           "extraKeys": [],
           "emptyValues": [],
           "arrayLengthMismatch": [],
@@ -113,9 +87,9 @@
         }
       },
       "summary": {
-        "ok": false,
+        "ok": true,
         "missingFiles": 0,
-        "missingKeys": 24,
+        "missingKeys": 0,
         "extraKeys": 0,
         "emptyValues": 0,
         "arrayLengthMismatch": 0,

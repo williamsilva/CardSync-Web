@@ -1,12 +1,22 @@
-<div class="flag-rel-card border-1 surface-border border-round p-3 mx-auto">
+<div class="flag-rel-card border-1 surface-border border-round p-2 mx-auto">
+  <div class="flex justify-content-center align-items-center mb-2">
+    <span
+      class="cs-table-cell-ellipsis font-semibold text-700 text-xs uppercase"
+      tooltipPosition="top"
+      [pTooltip]="'transactions.fields.installments' | translate"
+    >
+      {{ 'transactions.fields.installments' | translate }}
+    </span>
+  </div>
+
   <p-table
     stripedRows
     size="small"
     showGridlines
     [rowHover]="true"
     [value]="installments()"
-    [tableStyle]="{ width: '100%' }"
-    class="p-datatable-sm mt-1 cs-admin-table"
+    [tableStyle]="{ width: '100%', 'table-layout': 'fixed' }"
+    class="p-datatable-sm cs-admin-table cs-compact-installments-table"
   >
     <ng-template pTemplate="colgroup">
       <colgroup>
@@ -23,31 +33,171 @@
 
     <ng-template pTemplate="header">
       <tr>
-        <th class="text-center">{{ 'transactions.fields.installment' | translate }}</th>
-        <th class="text-center">{{ 'transactions.fields.forecast' | translate }}</th>
-        <th class="text-center">{{ 'transactions.fields.paymentDate' | translate }}</th>
-        <th class="text-center">{{ 'transactions.fields.grossValue' | translate }}</th>
-        <th class="text-center">{{ 'transactions.fields.discountValue' | translate }}</th>
-        <th class="text-center">{{ 'transactions.fields.liquidValue' | translate }}</th>
-        <th class="text-center">{{ 'transactions.fields.contractedFee' | translate }}</th>
-        <th class="text-center">{{ 'transactions.fields.status' | translate }}</th>
+        <th class="text-center">
+          <span
+            class="cs-table-cell-ellipsis"
+            tooltipPosition="top"
+            [pTooltip]="'transactions.fields.installment' | translate"
+          >
+            {{ 'transactions.fields.installment' | translate }}
+          </span>
+        </th>
+
+        <th class="text-center">
+          <span
+            class="cs-table-cell-ellipsis"
+            tooltipPosition="top"
+            [pTooltip]="'transactions.fields.forecast' | translate"
+          >
+            {{ 'transactions.fields.forecast' | translate }}
+          </span>
+        </th>
+
+        <th class="text-center">
+          <span
+            class="cs-table-cell-ellipsis"
+            tooltipPosition="top"
+            [pTooltip]="'transactions.fields.paymentDate' | translate"
+          >
+            {{ 'transactions.fields.paymentDate' | translate }}
+          </span>
+        </th>
+
+        <th class="text-center">
+          <span
+            class="cs-table-cell-ellipsis"
+            tooltipPosition="top"
+            [pTooltip]="'transactions.fields.grossValue' | translate"
+          >
+            {{ 'transactions.fields.grossValue' | translate }}
+          </span>
+        </th>
+
+        <th class="text-center">
+          <span
+            class="cs-table-cell-ellipsis"
+            tooltipPosition="top"
+            [pTooltip]="'transactions.fields.discountValue' | translate"
+          >
+            {{ 'transactions.fields.discountValue' | translate }}
+          </span>
+        </th>
+
+        <th class="text-center">
+          <span
+            class="cs-table-cell-ellipsis"
+            tooltipPosition="top"
+            [pTooltip]="'transactions.fields.liquidValue' | translate"
+          >
+            {{ 'transactions.fields.liquidValue' | translate }}
+          </span>
+        </th>
+
+        <th class="text-center">
+          <span
+            class="cs-table-cell-ellipsis"
+            tooltipPosition="top"
+            [pTooltip]="'transactions.fields.contractedFee' | translate"
+          >
+            {{ 'transactions.fields.contractedFee' | translate }}
+          </span>
+        </th>
+
+        <th class="text-center">
+          <span
+            class="cs-table-cell-ellipsis"
+            tooltipPosition="top"
+            [pTooltip]="'transactions.fields.status' | translate"
+          >
+            {{ 'transactions.fields.status' | translate }}
+          </span>
+        </th>
       </tr>
     </ng-template>
 
     <ng-template pTemplate="body" let-row>
       <tr>
-        <td class="text-center font-medium">{{ row.installment || '-' }}</td>
-        <td class="text-center">{{ row.expectedPaymentDate | csDate: 'date' }}</td>
-        <td class="text-center">{{ row.paymentDate | csDate: 'date' }}</td>
-        <td class="text-center">{{ row.grossValue | csCurrency }}</td>
-        <td class="text-center">{{ row.discountValue | csCurrency }}</td>
-        <td class="text-center">{{ row.liquidValue | csCurrency }}</td>
-        <td class="text-center">{{ row.contractedFee / 100 | percent: '1.2-2' }}</td>
+        <td class="text-center font-medium">
+          <span
+            class="cs-table-cell-ellipsis"
+            tooltipPosition="top"
+            [pTooltip]="row.installment != null ? row.installment : ''"
+          >
+            {{ row.installment || '-' }}
+          </span>
+        </td>
+
+        <td class="text-center">
+          <span
+            class="cs-table-cell-ellipsis"
+            tooltipPosition="top"
+            [pTooltip]="(row.expectedPaymentDate | csDate: 'date') || ''"
+          >
+            {{ row.expectedPaymentDate | csDate: 'date' }}
+          </span>
+        </td>
+
+        <td class="text-center">
+          <span
+            class="cs-table-cell-ellipsis"
+            tooltipPosition="top"
+            [pTooltip]="(row.paymentDate | csDate: 'date') || ''"
+          >
+            {{ row.paymentDate | csDate: 'date' }}
+          </span>
+        </td>
+
+        <td class="text-center">
+          <span
+            class="cs-table-cell-ellipsis"
+            tooltipPosition="top"
+            [pTooltip]="(row.grossValue | csCurrency) || ''"
+          >
+            {{ row.grossValue | csCurrency }}
+          </span>
+        </td>
+
+        <td class="text-center">
+          <span
+            class="cs-table-cell-ellipsis"
+            tooltipPosition="top"
+            [pTooltip]="(row.discountValue | csCurrency) || ''"
+          >
+            {{ row.discountValue | csCurrency }}
+          </span>
+        </td>
+
+        <td class="text-center">
+          <span
+            class="cs-table-cell-ellipsis"
+            tooltipPosition="top"
+            [pTooltip]="(row.liquidValue | csCurrency) || ''"
+          >
+            {{ row.liquidValue | csCurrency }}
+          </span>
+        </td>
+
+        <td class="text-center">
+          <span
+            class="cs-table-cell-ellipsis"
+            tooltipPosition="top"
+            [pTooltip]="(row.contractedFee / 100 | percent: '1.2-2') || ''"
+          >
+            {{ row.contractedFee / 100 | percent: '1.2-2' }}
+          </span>
+        </td>
+
         <td class="cell-muted text-center">
-          <cs-tag
-            [value]="statusPaymentBankLabel(row.statusPaymentBank)"
-            [tone]="statusPaymentBankSeverity(row.statusPaymentBank)"
-          />
+          <span
+            class="cs-table-cell-ellipsis"
+            tooltipPosition="top"
+            [pTooltip]="statusPaymentBankLabel(row.statusPaymentBank)"
+          >
+            <cs-tag
+              [value]="statusPaymentBankLabel(row.statusPaymentBank)"
+              [tone]="statusPaymentBankSeverity(row.statusPaymentBank)"
+            />
+          </span>
         </td>
       </tr>
     </ng-template>

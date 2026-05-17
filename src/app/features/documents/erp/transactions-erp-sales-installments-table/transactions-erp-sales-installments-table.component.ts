@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, computed, inject, input } from '@angular/core';
 
 import { TableModule } from 'primeng/table';
+import { TooltipModule } from 'primeng/tooltip';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { I18nService } from '@core/i18n/i18n.service';
@@ -20,7 +21,15 @@ import {
   standalone: true,
   selector: 'app-transactions-erp-sales-installments-table',
   templateUrl: './transactions-erp-sales-installments-table.component.html',
-  imports: [CommonModule, TableModule, TranslateModule, CsDatePipe, CsCurrencyPipe, CsTagComponent],
+  imports: [
+    CommonModule,
+    CsDatePipe,
+    TableModule,
+    TooltipModule,
+    CsCurrencyPipe,
+    CsTagComponent,
+    TranslateModule,
+  ],
 })
 export class TransactionsErpSalesInstallmentsTableComponent {
   protected readonly i18n = inject(I18nService);
