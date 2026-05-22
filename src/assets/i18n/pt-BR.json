@@ -51,7 +51,16 @@
         "title": "Dashboard de Conciliação"
       },
       "erpVsAcquirer": {
-        "title": "ERP x Adquirente"
+        "title": "ERP x Adquirente",
+        "missingAcquirer": {
+          "title": "Vendas não localizadas na adquirente"
+        },
+        "missingErp": {
+          "title": "Vendas não localizadas no ERP"
+        },
+        "otherDivergences": {
+          "title": "Outras vendas não conciliadas"
+        }
       },
       "debits": {
         "title": "Débitos"
@@ -140,7 +149,6 @@
       "acquirer": "Adquirentes",
       "establishment": "Estabelecimentos"
     },
-
     "conciliation": {
       "fees": "Taxas aplicadas",
       "sales": "Vendas adquirente",
@@ -151,7 +159,10 @@
       "debits": "Débitos",
       "chargebacks": "Chargebacks",
       "divergences": "Divergências",
-      "aging": "Aging de pendências"
+      "aging": "Aging de pendências",
+      "erpMissingAcquirer": "Não localizada na adquirente",
+      "acquirerMissingErp": "Não localizada no ERP",
+      "erpVsAcquirerDivergences": "Outras não conciliadas"
     },
     "security": {
       "title": "Segurança",
@@ -210,6 +221,9 @@
     },
     "audit": {
       "emailLog": "E-mail Logs"
+    },
+    "conciliation": {
+      "title": "Conciliação"
     }
   },
   "footer": {
@@ -394,7 +408,7 @@
       "canceled": "Cancelado",
       "reconciled": "Conciliado",
       "unknown": "Não Informado",
-      "notReconciled":"Não conciliado",
+      "notReconciled": "Não conciliado",
       "excludedSale": "Venda Excluída",
       "canceledSale": "Venda Cancelada",
       "manuallyReconciled": "Conciliado Manual",
@@ -402,7 +416,7 @@
     },
     "statusPaymentBankEnum": {
       "paid": "Pago",
-      "notPaid":"Não Pago",
+      "notPaid": "Não Pago",
       "pending": "Pendente",
       "deleted": "Excluido",
       "canceled": "Cancelado",
@@ -910,9 +924,11 @@
       }
     },
     "fields": {
+      "erp": "ERP",
       "rate": "Taxa",
       "bank": "Banco",
       "sale": "Venda",
+      "title": "Campo",
       "cvNsu": "Cv/Nsu",
       "reason": "Motivo",
       "status": "Status",
@@ -920,24 +936,24 @@
       "flag": "Bandeira",
       "agency": "Agencia",
       "liquid": "Líquido",
-      "saleDate": "Venda",
       "company": "Empresa",
-      "payment":"Pagamento",
+      "payment": "Pagamento",
       "forecast": "Previsão",
       "machine": "Maquinetas",
-      "modality":"Modalidade",
+      "saleDate": "Data Venda",
+      "modality": "Modalidade",
       "acquirer": "Adquirente",
-      "capture":"Tipo Captura",
       "installment": "Parcela",
-      "cardName":"Nome Cartão",
-      "issuer":"Emissor Cartão",
+      "capture": "Tipo Captura",
+      "cardName": "Nome Cartão",
+      "issuer": "Emissor Cartão",
       "installments": "Parcelas",
       "tid": "Transação ID (TID)",
       "grossValue": "Valor Bruto",
       "creditDate": "Data Crédito",
-      "cardNumber":"Número Cartão",
       "adjustmentValue": "Ajustes",
       "netAmount": "Valor Líquido",
+      "cardNumber": "Número Cartão",
       "conciliation": "Conciliação",
       "liquidValue": "Valor Líquido",
       "authorization": "Autorização",
@@ -950,29 +966,32 @@
       "bankDomicile": "Domicílio bancário",
       "conciliationDate": "Data Conciliação",
       "statusPaymentBank": "Status Pagamento",
-      "expectedPaymentDate":"Prev. Pagamento",
+      "expectedPaymentDate": "Prev. Pagamento",
       "periodPaymentDate": "Período Pagamento",
       "periodConciliationDate": "Período Conciliação",
       "periodExpectedPaymentDate": "Período Prev. Pagamento"
     },
-    "columns":{
+    "columns": {
+      "sale": "Venda",
+      "gross": "Bruto",
       "cvNsu": "Cv/Nsu",
       "flag": "Bandeira",
-      "saleDate": "Venda",
       "liquid": "Líquido",
       "company": "Empresa",
-      "grossValue": "Bruto",
       "machine": "Maquinetas",
       "discountValue": "Taxa",
+      "saleDate": "Data Venda",
       "acquirer": "Adquirente",
       "modality": "Modalidade",
       "capture": "Tipo Captura",
       "installment": "Parcelas",
+      "grossValue": "Valor Bruto",
       "tid": "Transação ID (TID)",
       "adjustmentValue": "Ajustes",
       "liquidValue": "Valor Líquido",
       "authorization": "Autorização",
       "establishment": "Estabelecimento",
+      "statusTransactionReason": "Motivo",
       "expectedPaymentDate": "Prev. Pagamento"
     }
   },
@@ -1272,6 +1291,170 @@
       }
     }
   },
+  "conciliation": {
+    "reconcileUsingERP": "Conciliar usando ERP",
+    "errorReconciliation": "Erro na conciliação",
+    "processReconciliation": "Processar conciliação",
+    "reconcileUsingAcquirer": "Conciliar usando adquirente",
+    "reconciliationFinalizedTitle": "Conciliação finalizada",
+    "textTooltip": "Executa manualmente a conciliação ERP x adquirente",
+    "reconciliationFinalized": "A conciliação ERP x adquirente foi processada.",
+    "noDiscrepancyFound": "Nenhum campo divergente foi encontrado nessa comparação.",
+    "processReconciliationError": "Não foi possível processar a conciliação ERP x adquirente.",
+    "dialog": {
+      "compareSales": "Comparar vendas",
+      "displayingFieldsDiscrepancies": "Exibindo somente campos com divergência.",
+      "divergence": "{count, plural, =0 {Nenhum campo divergente} one {# divergente} other {# divergentes}}"
+    },
+    "pageTitle": {
+      "missingErp": "Vendas não localizadas no ERP",
+      "missingOther": "Outras vendas não conciliadas",
+      "missingAcquirer": "Vendas não localizadas na adquirente"
+    },
+    "pageDescription": {
+      "missingErp": "Vendas da adquirente que não foram encontradas no ERP. Use esta tela para criar as vendas ERP em lote.",
+      "missingAcquirer": "Vendas do ERP que não possuem venda correspondente na adquirente. Use esta tela para marcar em lote como excluídas.",
+      "missingOther": "Vendas com divergência de valor, adquirente, bandeira, modalidade ou correspondência ambígua para análise e conciliação manual."
+    },
+    "action": {
+      "missingErp": "Não encontrado no ERP",
+      "missingOther": "Outras não conciliadas",
+      "missingAcquirer": "Não localizada na adquirente"
+    },
+    "result": {
+      "analyzed": "Analisadas",
+      "matched": "Conciliadas",
+      "updated": "Atualizadas",
+      "notMatched": "Não conciliadas",
+      "flagUpdated": "Bandeiras atualizadas",
+      "valueDivergences": "Divergências de valor",
+      "skippedDivergent": "Ignoradas por divergência",
+      "ambiguousMatches": "Correspondências ambíguas",
+      "businessContextUpdated": "Contextos atualizados",
+      "acquirerDivergences": "Divergências de adquirente"
+    },
+    "finishedTitle": "Lote finalizado",
+    "errorTitle": "Erro ao processar lote",
+    "finishedWithWarningsTitle": "Lote finalizado com alertas",
+    "noEligibleSelectedTitle": "Nenhuma venda elegível selecionada",
+    "finishedMessage": "Sucesso: {{ success }} · Falhas: {{ failed }} · Solicitadas: {{ requested }}",
+    "missingErp": {
+      "batch": {
+        "noEligibleSelectedDetail": "Selecione vendas da adquirente para criar vendas ERP em lote.",
+        "createErrorDetail": "Não foi possível criar as vendas ERP selecionadas.",
+        "description": "O CardSync criará vendas correspondentes no ERP usando os dados das vendas da adquirente selecionadas. As vendas criadas já ficarão vinculadas às vendas da adquirente.",
+        "actionSuffix": "criando vendas no ERP",
+        "confirmLabel": "Criar vendas ERP"
+      },
+      "single": {
+        "acquirerNotFoundTitle": "Venda da adquirente não localizada",
+        "acquirerNotFoundDetail": "A linha precisa retornar o identificador da venda da adquirente para criar a venda ERP.",
+        "description": "O CardSync criará uma venda correspondente no ERP usando os dados da venda da adquirente selecionada. A venda criada já ficará vinculada à venda da adquirente.",
+        "actionSuffix": "criando a venda no ERP",
+        "confirmLabel": "Criar venda ERP",
+        "createErrorTitle": "Erro ao criar ERP",
+        "createErrorDetail": "Não foi possível criar a venda ERP.",
+        "createdTitle": "Venda ERP criada",
+        "createdDetail": "Venda ERP criada a partir da adquirente."
+      }
+    },
+    "missingAcq": {
+      "batch": {
+        "noEligibleSelectedDetail": "Selecione vendas ERP para marcar como excluídas em lote.",
+        "deleteErrorDetail": "Não foi possível marcar as vendas ERP selecionadas como excluídas.",
+        "description": "As vendas ERP selecionadas serão marcadas como excluídas porque não foram localizadas na adquirente. Essa ação remove essas vendas do fluxo de conciliação ERP x adquirente.",
+        "actionSuffix": "como excluídas no ERP",
+        "confirmLabel": "Marcar como excluídas"
+      },
+      "single": {
+        "erpNotFoundTitle": "Venda ERP não localizada",
+        "erpNotFoundDetail": "A linha precisa retornar o identificador da venda ERP para marcar como excluída.",
+        "description": "A venda ERP será marcada como excluída porque não foi localizada na adquirente. Essa ação remove a venda do fluxo de conciliação ERP x adquirente.",
+        "actionSuffix": "como excluída no ERP",
+        "confirmLabel": "Marcar como excluída",
+        "deleteErrorTitle": "Erro ao excluir ERP",
+        "deleteErrorDetail": "Não foi possível marcar a venda ERP como excluída.",
+        "deleteTitle": "Venda ERP marcada como excluída",
+        "deleteDetail": "Venda ERP marcada como excluída."
+      }
+    },
+    "batchDialog": {
+      "title": {
+        "createErp": "Criar vendas no ERP",
+        "deleteErp": "Remover vendas",
+        "warning": "ATENÇÃO"
+      },
+      "mainText": {
+        "createErp": {
+          "one": "Você selecionou { count } transação de venda para criar venda correspondente no ERP.",
+          "many": "Você selecionou { count } transações de venda para criar vendas correspondentes no ERP."
+        },
+        "deleteErp": {
+          "one": "Você selecionou { count } transação de venda para marcar como excluída no ERP.",
+          "many": "Você selecionou { count } transações de venda para marcar como excluídas no ERP."
+        },
+        "generic": {
+          "one": "Você selecionou { count } transação de venda para confirmar a ação.",
+          "many": "Você selecionou { count } transações de venda para confirmar a ação."
+        }
+      },
+      "description": {
+        "createErp": "O CardSync criará as vendas no ERP com base nos dados da adquirente e manterá o vínculo entre as duas origens.",
+        "deleteErp": "As vendas ERP selecionadas serão removidas do fluxo de conciliação porque não foram localizadas na adquirente.",
+        "generic": "Confirme para continuar com a ação selecionada."
+      },
+      "confirm": {
+        "createErp": "Criar vendas ERP",
+        "deleteErp": "Marcar como excluídas"
+      },
+      "securityAuditNotice": "Por segurança, os dados do responsável por esta ação serão armazenados para futuras consultas."
+    },
+    "selection": {
+      "createErp": "Criar venda ERP",
+      "currentMode": "Modo da seleção",
+      "deleteErp": "Para excluir do ERP",
+      "deleteErpSelected": "Marcar ERP Excluídos",
+      "createErpSelected": "Criar ERP Selecionados",
+      "count": "{count, plural, =0 {Nenhuma selecionada} one {# selecionada} other {# selecionadas}}",
+      "pickOneFirst": "Selecione primeiro uma transação elegível para definir o contexto da seleção.",
+      "deleteErpSelectedTooltip": "Marca em lote vendas ERP não localizadas na adquirente como excluídas",
+      "createErpSelectedTooltip": "Cria vendas ERP em lote para vendas da adquirente não localizadas no ERP"
+    },
+    "otherDivergences": {
+      "compareTooltip": "Comparar vendas",
+      "compareErrorTitle": "Erro ao comparar vendas",
+      "manualResolvedTitle": "Divergência resolvida",
+      "manualErrorTitle": "Erro ao conciliar vendas",
+      "compareUnavailableTitle": "Comparação indisponível",
+      "manualResolvedDetail": "Venda conciliada manualmente.",
+      "manualErrorDetail": "Não foi possível concluir a conciliação manual.",
+      "compareUnavailableDetail": "A linha precisa retornar os identificadores da venda ERP e da venda adquirente.",
+      "compareUnavailableTooltip": "Comparação indisponível: o backend não retornou a venda da adquirente vinculada a esta venda ERP.",
+      "compareErrorDetail": "Não foi possível carregar a comparação detalhada. Confira se o endpoint de comparação está disponível no backend."
+    },
+    "actionDialog": {
+      "titles": {
+        "createErp": "Criar venda no ERP",
+        "deleteErp": "Remover venda",
+        "warning": "ATENÇÃO"
+      },
+      "mainText": {
+        "createErp": "Você selecionou 1 transação de venda para criar a venda correspondente no ERP.",
+        "deleteErp": "Você selecionou 1 transação de venda para marcar como excluída no ERP.",
+        "generic": "Você selecionou 1 transação de venda para confirmar a ação."
+      },
+      "description": {
+        "createErp": "O CardSync criará uma venda no ERP com base nos dados da adquirente e manterá o vínculo entre as duas origens.",
+        "deleteErp": "A venda ERP será removida do fluxo de conciliação porque não foi localizada na adquirente.",
+        "generic": "Confirme para continuar com a ação selecionada."
+      },
+      "confirm": {
+        "createErp": "Criar venda ERP",
+        "deleteErp": "Marcar como excluída"
+      },
+      "securityAuditNotice": "Por segurança, os dados do responsável por esta ação serão armazenados para futuras consultas."
+    }
+  },
   "session": {
     "expiring": {
       "title": "Sessão vai expirar",
@@ -1294,8 +1477,9 @@
     "yes": "Sim",
     "new": "Novo",
     "all": "Todos",
-    "error": "Erro",
     "until": "Até",
+    "error": "Erro",
+    "action": "Ação",
     "save": "Salvar",
     "edit": "Editar",
     "back": "Voltar",
@@ -1317,7 +1501,7 @@
     "warning": "Atenção",
     "view": "Visualizar",
     "company": "Empresa",
-    "grossValue":"Bruto",
+    "grossValue": "Bruto",
     "notNow": "Agora não",
     "from": "A partir de",
     "update": "Atualizar",
@@ -1382,7 +1566,6 @@
       }
     }
   },
-
   "notFound": {
     "attemptedUrl": "URL acessada",
     "goHome": "Ir para o dashboard",

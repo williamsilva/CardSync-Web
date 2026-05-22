@@ -1,0 +1,152 @@
+<p-dialog
+  [modal]="true"
+  position="top"
+  appendTo="body"
+  [closable]="false"
+  [draggable]="false"
+  [resizable]="false"
+  [baseZIndex]="1100"
+  [visible]="visible"
+  [showHeader]="false"
+  (onHide)="closeDialog.emit()"
+  [dismissableMask]="!resolving"
+  (visibleChange)="onVisibleChange($event)"
+  [contentStyle]="{ padding: '1.5rem 1.75rem 1.75rem' }"
+  [header]="'conciliation.dialog.compareSales' | translate"
+  [style]="{ width: 'min(900px, 94vw)', marginTop: '5rem' }"
+>
+  @if (row; as currentRow) {
+    <div
+      class="flex align-items-center justify-content-between gap-3 p-3 border-1 surface-border border-round surface-ground mb-3"
+    >
+      <div class="flex flex-column gap-1">
+        <span class="text-sm text-color-secondary">
+          {{ 'transactions.fields.erp' | translate }}</span
+        >
+        <strong>{{ 'transactions.columns.cvNsu' | translate }}: {{ currentRow.erp?.cvNsu }}</strong>
+        <small
+          >{{ 'transactions.columns.authorization' | translate }}:
+          {{ currentRow.erp?.authorization }}</small
+        >
+        <small
+          >{{ 'transactions.columns.saleDate' | translate }}:
+          {{ currentRow.erp?.saleDate | csDate: 'short' }}</small
+        >
+        <small
+          >{{ 'transactions.columns.grossValue' | translate }}:
+          {{ currentRow.erp?.grossValue | csCurrency }}</small
+        >
+        <small
+          >{{ 'transactions.columns.liquidValue' | translate }}:
+          {{ currentRow.erp?.liquidValue | csCurrency }}</small
+        >
+      </div>
+
+      <i class="pi pi-arrow-right-arrow-left text-color-secondary"></i>
+
+      <div class="flex flex-column gap-1 text-right">
+        <span class="text-sm text-color-secondary">{{
+          'transactions.fields.acquirer' | translate
+        }}</span>
+        <strong
+          >{{ 'transactions.columns.cvNsu' | translate }}:
+          {{ currentRow.acquirerTransaction?.cvNsu }}</strong
+        >
+        <small
+          >{{ 'transactions.columns.authorization' | translate }}:
+          {{ currentRow.acquirerTransaction?.authorization }}</small
+        >
+        <small
+          >{{ 'transactions.columns.saleDate' | translate }}:
+          {{ currentRow.acquirerTransaction?.saleDate | csDate: 'short' }}</small
+        >
+        <small
+          >{{ 'transactions.columns.grossValue' | translate }}:
+          {{ currentRow.acquirerTransaction?.grossValue | csCurrency }}</small
+        >
+        <small
+          >{{ 'transactions.columns.liquidValue' | translate }}:
+          {{ currentRow.acquirerTransaction?.liquidValue | csCurrency }}</small
+        >
+      </div>
+    </div>
+  }
+
+  @if (comparing) {
+    <div class="flex align-items-center justify-content-center gap-2 py-6 text-color-secondary">
+      <i class="pi pi-spin pi-spinner"></i>
+      <span>{{ 'common.loading' | translate }}</span>
+    </div>
+  } @else if (comparison; as result) {
+    @let fields = divergentFields();
+
+    <div class="flex align-items-center justify-content-between gap-3 mb-3">
+      <span class="text-sm text-color-secondary">{{
+        'conciliation.dialog.displayingFieldsDiscrepancies' | translate
+      }}</span>
+
+      <cs-tag
+        [value]="'conciliation.dialog.divergence' | translate: { count: fields.length }"
+        [tone]="fields.length ? 'danger' : 'success'"
+      ></cs-tag>
+    </div>
+
+    @if (fields.length) {
+      <p-table [value]="fields" size="small" showGridlines styleClass="cs-admin-table">
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="width: 180px">{{ 'transactions.fields.title' | translate }}</th>
+            <th>{{ 'transactions.fields.erp' | translate }}</th>
+            <th>{{ 'transactions.fields.acquirer' | translate }}</th>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-field>
+          <tr>
+            <td>{{ fieldLabel(field.field) }}</td>
+            <td>{{ formatDiffValue(field, 'erp') }}</td>
+            <td>{{ formatDiffValue(field, 'acquirer') }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    } @else {
+      <div
+        class="p-4 border-1 surface-border border-round surface-ground text-center text-color-secondary"
+      >
+        {{ 'conciliation.noDiscrepancyFound' | translate }}
+      </div>
+    }
+  }
+
+  <ng-template pTemplate="footer">
+    <button
+      pButton
+      type="button"
+      (click)="close()"
+      icon="pi pi-times"
+      [disabled]="resolving"
+      class="p-button-secondary"
+      [label]="'common.cancel' | translate"
+    ></button>
+
+    <button
+      pButton
+      type="button"
+      class="p-button-info"
+      [loading]="resolving"
+      icon="pi pi-check-circle"
+      (click)="reconcileUsing('ERP')"
+      [label]="'conciliation.reconcileUsingERP' | translate"
+    ></button>
+
+    <button
+      pButton
+      type="button"
+      icon="pi pi-check"
+      [loading]="resolving"
+      class="p-button-success"
+      (click)="reconcileUsing('ACQUIRER')"
+      [label]="'conciliation.reconcileUsingAcquirer' | translate"
+    ></button>
+  </ng-template>
+</p-dialog>

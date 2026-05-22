@@ -44,6 +44,8 @@ export type ChargebackStatus =
   | 'EXPIRED'
   | string;
 
+export type ErpVsAcquirerView = 'MISSING_ACQUIRER' | 'MISSING_ERP' | 'OTHER_DIVERGENCES';
+
 export interface ConciliationPageQuery extends PageQuery {
   startDate?: string;
   endDate?: string;
@@ -52,6 +54,7 @@ export interface ConciliationPageQuery extends PageQuery {
   acquirerId?: string;
   flagId?: string;
   status?: string;
+  view?: ErpVsAcquirerView | string;
   nsu?: string;
   authorization?: string;
 }
@@ -126,7 +129,13 @@ export interface ConciliationFeeAnalysisModel {
 }
 
 export interface ErpVsAcquirerAnalysisModel {
+  /**
+   * Compatibilidade com o backend atual: hoje o id da linha vem como id da transação ERP.
+   * Quando o backend passar a retornar ambos os lados, use erpTransactionId/acquirerTransactionId.
+   */
   id: string;
+  erpTransactionId?: string | null;
+  acquirerTransactionId?: string | null;
   saleDateErp?: string | null;
   saleDateAcquirer?: string | null;
   company?: string | null;
@@ -146,6 +155,18 @@ export interface ErpVsAcquirerAnalysisModel {
   installmentErp?: number | null;
   installmentAcquirer?: number | null;
   status: ErpAcquirerComparisonStatus;
+}
+
+export interface ErpAcquirerResolutionResultModel {
+  erpId?: string | null;
+  acquirerId?: string | null;
+  action: string;
+  status: string;
+  message: string;
+}
+
+export interface ErpAcquirerBatchRequestModel {
+  transactionIds: string[];
 }
 
 export interface DebitAnalysisModel {
@@ -223,17 +244,4 @@ export interface DivergenceAnalysisModel {
   message?: string | null;
   actionHint?: string | null;
   fileName?: string | null;
-}
-
-export interface ReconcileErpAcquirerResultModel {
-  analyzed: number;
-  matched: number;
-  updated: number;
-  skippedDivergent: number;
-  flagUpdated: number;
-  businessContextUpdated: number;
-  notMatched: number;
-  valueDivergences: number;
-  acquirerDivergences: number;
-  ambiguousMatches: number;
 }

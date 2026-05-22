@@ -78,17 +78,17 @@ export function createEmptyTransactionsErpFiltersState(): TransactionsErpFilters
     companies: null,
     establishments: null,
 
-    periodSaleDate: null,
     saleDate: null,
+    periodSaleDate: null,
 
-    periodPaymentDate: null,
     paymentDate: null,
+    periodPaymentDate: null,
 
-    periodExpectedPaymentDate: null,
     expectedPaymentDate: null,
+    periodExpectedPaymentDate: null,
 
-    periodConciliationDate: null,
     conciliationDate: null,
+    periodConciliationDate: null,
   };
 }
 

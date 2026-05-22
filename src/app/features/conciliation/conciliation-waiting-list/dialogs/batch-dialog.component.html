@@ -1,0 +1,77 @@
+<p-dialog
+  [modal]="true"
+  position="top"
+  appendTo="body"
+  [closable]="false"
+  [draggable]="false"
+  [resizable]="false"
+  [baseZIndex]="1100"
+  [visible]="visible"
+  [showHeader]="false"
+  (onHide)="closeDialog.emit()"
+  [dismissableMask]="!resolving"
+  (visibleChange)="onVisibleChange($event)"
+  [contentStyle]="{ padding: '1.5rem 1.75rem 1.75rem' }"
+  [style]="{ width: 'min(600px, 94vw)', marginTop: '5rem' }"
+>
+  <div class="flex flex-column gap-4">
+    <div class="flex align-items-center gap-2 text-lg" [ngClass]="titleClass()">
+      <i [class]="icon()"></i>
+      <span>{{ titleKey() | translate }}</span>
+    </div>
+
+    <div class="flex flex-column gap-3 text-sm line-height-3 text-color">
+      <p class="m-0">
+        {{ mainTextKey() | translate: { count: rowsCount } }}
+      </p>
+
+      <div class="flex flex-wrap gap-2">
+        <span
+          class="inline-flex align-items-center px-2 py-1 border-round surface-100 border-1 surface-border text-xs white-space-nowrap"
+        >
+          {{ 'transactions.fields.grossValue' | translate }}: {{ grossTotal | csCurrency }}
+        </span>
+
+        <span
+          class="inline-flex align-items-center px-2 py-1 border-round surface-100 border-1 surface-border text-xs white-space-nowrap"
+        >
+          {{ 'transactions.fields.liquidValue' | translate }}: {{ liquidTotal | csCurrency }}
+        </span>
+      </div>
+
+      @if (description) {
+        <p class="m-0">{{ description }}</p>
+      } @else {
+        <p class="m-0">{{ defaultDescriptionKey() | translate }}</p>
+      }
+
+      <div
+        class="p-3 border-1 border-red-300 border-round bg-red-50 text-red-600 text-xs line-height-3"
+      >
+        {{ 'conciliation.batchDialog.securityAuditNotice' | translate }}
+      </div>
+    </div>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <button
+      pButton
+      type="button"
+      icon="pi pi-times"
+      [disabled]="resolving"
+      (click)="closeDialog.emit()"
+      class="p-button-text p-button-sm"
+      [label]="'common.cancel' | translate"
+    ></button>
+
+    <button
+      pButton
+      type="button"
+      icon="pi pi-save"
+      [loading]="resolving"
+      [class]="confirmButtonClass()"
+      (click)="confirmDialog.emit()"
+      [label]="confirmButtonLabel()"
+    ></button>
+  </ng-template>
+</p-dialog>

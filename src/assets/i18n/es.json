@@ -17,7 +17,7 @@
         "title": "Establecimientos"
       },
       "flags": {
-        "title": "Marcas"
+        "title": "Banderas"
       },
       "contracts": {
         "title": "Contratos"
@@ -51,7 +51,16 @@
         "title": "Dashboard de conciliación"
       },
       "erpVsAcquirer": {
-        "title": "ERP x Adquirente"
+        "title": "ERP x adquirente",
+        "missingAcquirer": {
+          "title": "Ventas no localizadas en la adquirente"
+        },
+        "missingErp": {
+          "title": "Ventas no localizadas en el ERP"
+        },
+        "otherDivergences": {
+          "title": "Otras ventas no conciliadas"
+        }
       },
       "debits": {
         "title": "Débitos"
@@ -80,15 +89,15 @@
       },
       "acq": {
         "installments": {
-          "title": "Cuotas ACQ"
+          "title": "Cuotas ADQ"
         },
         "sales": {
-          "title": "Ventas adquirente"
+          "title": "Ventas ADQ"
         }
       }
     },
     "audit": {
-      "title": "Logs de e-mail"
+      "title": "Registros de e-mail"
     },
     "dashboard": {
       "title": "Dashboard"
@@ -130,11 +139,11 @@
     "dashboard": "Dashboard",
     "audit": {
       "title": "Auditoría",
-      "mail": "Logs de e-mail"
+      "mail": "Registros de e-mail"
     },
     "register": {
       "title": "Registros",
-      "flags": "Marcas",
+      "flags": "Banderas",
       "company": "Empresas",
       "contracts": "Contratos",
       "acquirer": "Adquirentes",
@@ -145,12 +154,15 @@
       "sales": "Ventas adquirente",
       "title": "Conciliación",
       "dashboard": "Dashboard",
-      "erpVsAcquirer": "ERP x Adquirente",
+      "erpVsAcquirer": "ERP x adquirente",
       "bankSettlement": "Liquidación bancaria",
       "debits": "Débitos",
       "chargebacks": "Chargebacks",
       "divergences": "Divergencias",
-      "aging": "Aging de pendientes"
+      "aging": "Aging de pendientes",
+      "erpMissingAcquirer": "No localizada en la adquirente",
+      "acquirerMissingErp": "No localizada en el ERP",
+      "erpVsAcquirerDivergences": "Otras no conciliadas"
     },
     "security": {
       "title": "Seguridad",
@@ -160,7 +172,7 @@
       "changePassword": "Cambiar contraseña"
     },
     "settings": {
-      "title": "Configuración",
+      "title": "Configuraciones",
       "email": "E-mail"
     },
     "file": {
@@ -173,11 +185,11 @@
         "scheduler": "Scheduler",
         "creditOrders": "Órdenes de crédito",
         "adjustments": "Ajustes Rede",
-        "anticipations": "Anticipos",
+        "anticipations": "Anticipaciones",
         "pendingDebts": "Débitos pendientes",
         "settledDebts": "Débitos liquidados",
         "totalizers": "Totalizadores",
-        "bankReleases": "Movimientos bancarios",
+        "bankReleases": "Lanzamientos bancarios",
         "divergences": "Divergencias"
       }
     }
@@ -191,7 +203,7 @@
     "users": "Usuarios",
     "dashboard": "Dashboard",
     "register": {
-      "flag": "Marcas",
+      "flag": "Banderas",
       "company": "Empresas",
       "acquirer": "Adquirentes",
       "contract": "Contratos",
@@ -204,11 +216,14 @@
       },
       "acq": {
         "sales": "Ventas adquirente",
-        "installment": "Cuotas adquirente"
+        "installment": "Parcelas adquirente"
       }
     },
     "audit": {
-      "emailLog": "Logs de e-mail"
+      "emailLog": "Registros de e-mail"
+    },
+    "conciliation": {
+      "title": "Conciliación"
     }
   },
   "footer": {
@@ -216,11 +231,11 @@
     "madeWith": "Todos los derechos reservados."
   },
   "filters": {
-    "activeCount": "{count, plural, =0 {Ningún filtro activo} one {# filtro activo} other {# filtros activos}}",
+    "activeCount": "{count, plural, =0 {Ningún filtro ativo} one {# filtro ativo} other {# filtros ativos}}",
     "noneActive": "Ningún filtro activo"
   },
   "pagination": {
-    "emptymessage": "¡No se encontraron datos para mostrar!",
+    "emptymessage": "No se encontraron datos para mostrar!",
     "report": "Mostrando '{first}' a '{last}' de '{totalRecords}' registros"
   },
   "validation": {
@@ -253,22 +268,22 @@
       "groups": "Grupos",
       "userName": "Usuario",
       "document": "Documento",
-      "createdAt": "Creado el",
-      "lastLoginAt": "Último login",
+      "createdAt": "Registrado el",
+      "lastLoginAt": "Último inicio de sesión",
       "blockedUntil": "Bloqueado hasta",
       "passwordExpiresAt": "Contraseña expira",
-      "createdBy": "Creado por"
+      "createdBy": "Registrado por"
     },
     "columns": {
       "name": "Nombre",
       "status": "Estado",
-      "userName": "Username",
+      "userName": "Nombre de usuario",
       "document": "Documento",
-      "createdAt": "Creado el",
-      "lastLoginAt": "Último login",
+      "createdAt": "Registrado el",
+      "lastLoginAt": "Último inicio de sesión",
       "blockedUntil": "Bloqueado hasta",
       "passwordExpiresAt": "Contraseña expira",
-      "createdBy": "Creado por"
+      "createdBy": "Registrado por"
     },
     "form": {
       "loadError": "No fue posible cargar los datos del usuario",
@@ -285,12 +300,12 @@
       }
     },
     "status": {
-      "null": "N/A",
+      "null": "N/D",
       "active": "Activo",
       "inactive": "Inactivo",
       "blocked": "Bloqueado",
       "disabled": "Deshabilitado",
-      "pending_password": "Contraseña pendiente",
+      "pending_password": "Pendiente de contraseña",
       "unknown": "Desconocido"
     },
     "invite": {
@@ -312,21 +327,21 @@
       "messageBulk": "{count, plural, one {¿Deseas activar # usuario seleccionado?} other {¿Deseas activar # usuarios seleccionados?}}"
     },
     "deactivate": {
-      "selected": "Desactivar",
-      "header": "Confirmar desactivación",
-      "successSingle": "Usuario desactivado correctamente.",
-      "successBulk": "{count, plural, one {# usuario desactivado correctamente.} other {# usuarios desactivados correctamente.}}",
-      "messageSingle": "¿Deseas desactivar el usuario {userName}?",
-      "messageBulk": "{count, plural, one {¿Deseas desactivar # usuario seleccionado?} other {¿Deseas desactivar # usuarios seleccionados?}}"
+      "selected": "Inactivar",
+      "header": "Confirmar inactivación",
+      "successSingle": "Usuario inactivado correctamente.",
+      "successBulk": "{count, plural, one {# usuario inactivado correctamente.} other {# usuarios inactivados correctamente.}}",
+      "messageSingle": "¿Deseas inactivar el usuario {userName}?",
+      "messageBulk": "{count, plural, one {¿Deseas inactivar # usuario seleccionado?} other {¿Deseas inactivar # usuarios seleccionados?}}"
     },
     "selection": {
       "currentMode": "Modo de selección",
-      "count": "{count, plural, =0 {Ninguno seleccionado} one {# seleccionado} other {# seleccionados}}",
-      "pickOneFirst": "Selecciona primero un usuario elegible para definir el contexto de selección.",
+      "count": "{count, plural, =0 {Ningún seleccionado} one {# seleccionado} other {# seleccionados}}",
+      "pickOneFirst": "Selecciona primero un usuario elegible para definir el contexto de la selección.",
       "mode": {
         "none": "Ninguno",
-        "activate": "Activación masiva",
-        "deactivate": "Desactivación masiva"
+        "activate": "Activación por lote",
+        "deactivate": "Inactivación por lote"
       }
     },
     "action": {
@@ -334,14 +349,14 @@
         "label": "Activar",
         "noPermission": "No tienes permiso para activar usuarios.",
         "protected": "El usuario protegido no puede ser activado por esta acción.",
-        "invalidStatus": "Solo usuarios inactivos pueden ser activados."
+        "invalidStatus": "Solo los usuarios inactivos pueden ser activados."
       },
       "deactivate": {
-        "label": "Desactivar",
-        "noPermission": "No tienes permiso para desactivar usuarios.",
-        "self": "No puedes desactivar tu propio usuario.",
-        "protected": "El usuario protegido no puede ser desactivado.",
-        "invalidStatus": "Solo usuarios activos pueden ser desactivados."
+        "label": "Inactivar",
+        "noPermission": "No tienes permiso para inactivar usuarios.",
+        "self": "No puedes inactivar tu propio usuario.",
+        "protected": "El usuario protegido no puede ser inactivado.",
+        "invalidStatus": "Solo los usuarios activos pueden ser inactivados."
       }
     },
     "empty": {
@@ -365,12 +380,12 @@
     "contractEnum": {
       "expired": "Vencido",
       "closed": "Cerrado",
-      "validity": "Vigente"
+      "validity": "En vigencia"
     },
     "captureEnum": {
       "pdv": "Caja",
       "manual": "Manual",
-      "pos": "POS móvil",
+      "pos": "Máquina móvil",
       "ecommerce": "E-commerce",
       "unknown": "No informado"
     },
@@ -381,8 +396,8 @@
       "scheduled": "Venta programada",
       "differentPlans": "Planes diferentes",
       "valueMismatch": "Divergencia de valor",
-      "flagMismatch": "Divergencia de marca",
-      "cvNotFoundErp": "CV no encontrado en ERP",
+      "flagMismatch": "Divergencia de bandera",
+      "cvNotFoundErp": "CV no encontrado en el ERP",
       "cvNotFoundAdq": "CV no encontrado en ADQ",
       "ambiguousMatch": "Coincidencia ambigua",
       "acquirerMismatch": "Divergencia de adquirente"
@@ -396,21 +411,12 @@
       "notReconciled": "No conciliado",
       "excludedSale": "Venta eliminada",
       "canceledSale": "Venta cancelada",
-      "manuallyReconciled": "Manual conciliado",
+      "manuallyReconciled": "Conciliado manualmente",
       "reconciledAutomatically": "Conciliado automáticamente"
-    },
-    "modalityEnum": {
-      "outros": "Otros",
-      "cash_debit": "Débito",
-      "cash_credit": "Crédito al contado",
-      "digital_wallet": "Billetera digital",
-      "installment_2_6": "Cuotas 2 a 6x",
-      "installment_7_12": "Cuotas 7 a 12x",
-      "installment_13_18": "Cuotas 13 a 18x"
     },
     "statusPaymentBankEnum": {
       "paid": "Pagado",
-      "notPaid":"Pendiente",
+      "notPaid": "No pagado",
       "pending": "Pendiente",
       "deleted": "Eliminado",
       "canceled": "Cancelado",
@@ -418,6 +424,15 @@
       "divergent": "Divergente",
       "excludedSale": "Venta eliminada",
       "canceledSale": "Venta cancelada"
+    },
+    "modalityEnum": {
+      "outros": "Otros",
+      "cash_debit": "Débito",
+      "cash_credit": "Crédito al contado",
+      "digital_wallet": "Billetera digital",
+      "installment_2_6": "En cuotas 2 a 6x",
+      "installment_7_12": "En cuotas 7 a 12x",
+      "installment_13_18": "En cuotas 13 a 18x"
     },
     "periodEnum": {
       "day": "Día",
@@ -441,34 +456,34 @@
     "columns": {
       "cnpj": "CNPJ",
       "statusEnum": "Estado",
-      "createdAt": "Creado el",
-      "createdBy": "Creado por",
+      "createdAt": "Registrado el",
+      "createdBy": "Registrado por",
       "socialReason": "Razón social",
       "fantasyName": "Nombre comercial",
       "typeCompanyEnum": "Tipo de empresa"
     },
     "action": {
       "deactivate": {
-        "label": "Desactivar",
-        "invalidStatus": "Solo empresas activas pueden ser desactivadas.",
+        "label": "Inactivar",
+        "invalidStatus": "Solo las empresas activas pueden ser inactivadas.",
         "noPermission": "No tienes permiso para desactivar empresas."
       },
       "activate": {
         "label": "Activar",
         "noPermission": "No tienes permiso para activar empresas.",
-        "invalidStatus": "Solo empresas inactivas pueden ser activadas."
+        "invalidStatus": "Solo las empresas inactivas pueden ser activadas."
       },
       "block": {
         "label": "Bloquear",
         "noPermission": "No tienes permiso para bloquear empresas.",
-        "invalidStatus": "Solo empresas activas pueden ser bloqueadas."
+        "invalidStatus": "Solo las empresas activas pueden ser bloqueadas."
       }
     },
     "fields": {
       "cnpj": "CNPJ",
       "statusEnum": "Estado",
-      "createdAt": "Creado el",
-      "createdBy": "Creado por",
+      "createdAt": "Registrado el",
+      "createdBy": "Registrado por",
       "socialReason": "Razón social",
       "fantasyName": "Nombre comercial",
       "typeCompanyEnum": "Tipo de empresa"
@@ -479,7 +494,7 @@
       "successSingle": "Empresa bloqueada correctamente.",
       "messageSingle": "¿Deseas bloquear la empresa {socialReason}?",
       "successBulk": "{count, plural, one {# empresa bloqueada correctamente.} other {# empresas bloqueadas correctamente.}}",
-      "messageBulk": "{count, plural, one {¿Deseas bloquear # empresa seleccionado?} other {¿Deseas bloquear # empresas seleccionados?}}"
+      "messageBulk": "{count, plural, one {¿Deseas bloquear # empresa seleccionada?} other {¿Deseas bloquear # empresas seleccionadas?}}"
     },
     "activate": {
       "selected": "Activar",
@@ -487,24 +502,24 @@
       "successSingle": "Empresa activada correctamente.",
       "messageSingle": "¿Deseas activar la empresa {socialReason}?",
       "successBulk": "{count, plural, one {# empresa activada correctamente.} other {# empresas activadas correctamente.}}",
-      "messageBulk": "{count, plural, one {¿Deseas activar # empresa seleccionado?} other {¿Deseas activar # empresas seleccionados?}}"
+      "messageBulk": "{count, plural, one {¿Deseas activar # empresa seleccionada?} other {¿Deseas activar # empresas seleccionadas?}}"
     },
     "deactivate": {
-      "selected": "Desactivar",
-      "header": "Confirmar desactivación",
-      "successSingle": "Empresa desactivada correctamente.",
-      "messageSingle": "¿Deseas desactivar la empresa {socialReason}?",
-      "successBulk": "{count, plural, one {# empresa desactivada correctamente.} other {# empresas desactivadas correctamente.}}",
-      "messageBulk": "{count, plural, one {¿Deseas desactivar # empresa seleccionado?} other {¿Deseas desactivar # empresas seleccionados?}}"
+      "selected": "Inactivar",
+      "header": "Confirmar inactivación",
+      "successSingle": "Empresa inactivada correctamente.",
+      "messageSingle": "¿Deseas inactivar la empresa {socialReason}?",
+      "successBulk": "{count, plural, one {# empresa inactivada correctamente.} other {# empresas inactivadas correctamente.}}",
+      "messageBulk": "{count, plural, one {¿Deseas inactivar # empresa seleccionada?} other {¿Deseas inactivar # empresas seleccionadas?}}"
     },
     "selection": {
       "currentMode": "Modo de selección",
-      "count": "{count, plural, =0 {Ninguno seleccionado} one {# seleccionado} other {# seleccionados}}",
-      "pickOneFirst": "Selecciona primero una empresa elegible para definir el contexto de selección.",
+      "count": "{count, plural, =0 {Ningún seleccionado} one {# seleccionado} other {# seleccionados}}",
+      "pickOneFirst": "Selecciona primero una empresa elegible para definir el contexto de la selección.",
       "mode": {
         "none": "Ninguno",
-        "activate": "Activación masiva",
-        "deactivate": "Desactivación masiva"
+        "activate": "Activación por lote",
+        "deactivate": "Inactivación por lote"
       }
     },
     "form": {
@@ -519,7 +534,7 @@
     }
   },
   "acquirer": {
-    "subtitle": "Gestiona adquirentes",
+    "subtitle": "Gestioen la adquirentes",
     "new": {
       "title": "Nueva adquirente",
       "subtitle": "Registro de adquirente"
@@ -536,35 +551,35 @@
       "statusEnum": "Estado",
       "pvNumber": "Número PV",
       "adqCode": "Código ADQ",
-      "createdAt": "Creado el",
-      "createdBy": "Creado por",
+      "createdAt": "Registrado el",
+      "createdBy": "Registrado por",
       "socialReason": "Razón social",
       "fantasyName": "Nombre comercial",
       "establishment": "Establecimientos"
     },
     "action": {
       "deactivate": {
-        "label": "Desactivar",
-        "invalidStatus": "Solo adquirentes activas pueden ser desactivadas.",
+        "label": "Inactivar",
+        "invalidStatus": "Solo las adquirentes activas pueden ser inactivadas.",
         "noPermission": "No tienes permiso para desactivar adquirentes."
       },
       "activate": {
         "label": "Activar",
         "noPermission": "No tienes permiso para activar adquirentes.",
-        "invalidStatus": "Solo adquirentes inactivas pueden ser activadas."
+        "invalidStatus": "Solo las adquirentes inactivas pueden ser activadas."
       },
       "block": {
         "label": "Bloquear",
         "noPermission": "No tienes permiso para bloquear adquirentes.",
-        "invalidStatus": "Solo adquirentes activas pueden ser bloqueadas."
+        "invalidStatus": "Solo las adquirentes activas pueden ser bloqueadas."
       }
     },
     "fields": {
       "cnpj": "CNPJ",
       "company": "Empresa",
       "statusEnum": "Estado",
-      "createdAt": "Creado el",
-      "createdBy": "Creado por",
+      "createdAt": "Registrado el",
+      "createdBy": "Registrado por",
       "socialReason": "Razón social",
       "fantasyName": "Nombre comercial"
     },
@@ -574,7 +589,7 @@
       "successSingle": "Adquirente bloqueada correctamente.",
       "messageSingle": "¿Deseas bloquear la adquirente {socialReason}?",
       "successBulk": "{count, plural, one {# adquirente bloqueada correctamente.} other {# adquirentes bloqueadas correctamente.}}",
-      "messageBulk": "{count, plural, one {¿Deseas bloquear # adquirente seleccionado?} other {¿Deseas bloquear # adquirentes seleccionados?}}"
+      "messageBulk": "{count, plural, one {¿Deseas bloquear # adquirente seleccionada?} other {¿Deseas bloquear # adquirentes seleccionadas?}}"
     },
     "activate": {
       "selected": "Activar",
@@ -582,24 +597,24 @@
       "successSingle": "Adquirente activada correctamente.",
       "messageSingle": "¿Deseas activar la adquirente {socialReason}?",
       "successBulk": "{count, plural, one {# adquirente activada correctamente.} other {# adquirentes activadas correctamente.}}",
-      "messageBulk": "{count, plural, one {¿Deseas activar # adquirente seleccionado?} other {¿Deseas activar # adquirentes seleccionados?}}"
+      "messageBulk": "{count, plural, one {¿Deseas activar # adquirente seleccionada?} other {¿Deseas activar # adquirentes seleccionadas?}}"
     },
     "deactivate": {
-      "selected": "Desactivar",
-      "header": "Confirmar desactivación",
-      "successSingle": "Adquirente desactivada correctamente.",
-      "messageSingle": "¿Deseas desactivar el adquirente {socialReason}?",
-      "successBulk": "{count, plural, one {# adquirente desactivada correctamente.} other {# adquirentes desactivadas correctamente.}}",
-      "messageBulk": "{count, plural, one {¿Deseas desactivar # adquirente seleccionado?} other {¿Deseas desactivar # adquirentes seleccionados?}}"
+      "selected": "Inactivar",
+      "header": "Confirmar inactivación",
+      "successSingle": "Adquirente inactivada correctamente.",
+      "messageSingle": "¿Deseas inactivar la adquirente {socialReason}?",
+      "successBulk": "{count, plural, one {# adquirente inactivada correctamente.} other {# adquirentes inactivadas correctamente.}}",
+      "messageBulk": "{count, plural, one {¿Deseas inactivar # adquirente seleccionada?} other {¿Deseas inactivar # adquirentes seleccionadas?}}"
     },
     "selection": {
       "currentMode": "Modo de selección",
-      "count": "{count, plural, =0 {Ninguno seleccionado} one {# seleccionado} other {# seleccionados}}",
-      "pickOneFirst": "Selecciona primero una adquirente elegible para definir el contexto de selección.",
+      "count": "{count, plural, =0 {Ningún seleccionado} one {# seleccionado} other {# seleccionados}}",
+      "pickOneFirst": "Selecciona primero uen la adquirente elegible para definir el contexto de la selección.",
       "mode": {
         "none": "Ninguno",
-        "activate": "Activación masiva",
-        "deactivate": "Desactivación masiva"
+        "activate": "Activación por lote",
+        "deactivate": "Inactivación por lote"
       }
     },
     "relationships": {
@@ -630,7 +645,7 @@
       "permissionDenied": "No tienes permiso para guardar adquirentes."
     },
     "empty": {
-      "title": "Ninguna adquirente encontrada"
+      "title": "Ninguen la adquirente encontrada"
     }
   },
   "establishment": {
@@ -649,8 +664,8 @@
       "statusEnum": "Estado",
       "pvNumber": "Número PV",
       "acquirer": "Adquirente",
-      "createdAt": "Creado el",
-      "createdBy": "Creado por",
+      "createdAt": "Registrado el",
+      "createdBy": "Registrado por",
       "establishment": "Establecimiento"
     },
     "fields": {
@@ -659,29 +674,29 @@
       "pvNumber": "Número PV",
       "statusEnum": "Estado",
       "acquirer": "Adquirente",
-      "createdAt": "Creado el",
-      "createdBy": "Creado por"
+      "createdAt": "Registrado el",
+      "createdBy": "Registrado por"
     },
     "action": {
       "deactivate": {
-        "label": "Desactivar",
-        "invalidStatus": "Solo establecimientos activos pueden ser desactivados.",
+        "label": "Inactivar",
+        "invalidStatus": "Solo los establecimientos activos pueden ser inactivados.",
         "noPermission": "No tienes permiso para desactivar establecimientos."
       },
       "activate": {
         "label": "Activar",
         "noPermission": "No tienes permiso para activar establecimientos.",
-        "invalidStatus": "Solo establecimientos inactivos pueden ser activados."
+        "invalidStatus": "Solo los establecimientos inactivos pueden ser activados."
       },
       "block": {
         "label": "Bloquear",
         "noPermission": "No tienes permiso para bloquear establecimientos.",
-        "invalidStatus": "Solo establecimientos activos pueden ser bloqueados."
+        "invalidStatus": "Solo los establecimientos activos pueden ser bloqueados."
       },
       "delete": {
         "label": "Eliminar",
         "noPermission": "No tienes permiso para eliminar establecimientos.",
-        "invalidStatus": "Solo establecimientos activos pueden ser eliminados."
+        "invalidStatus": "Solo los establecimientos activos pueden ser eliminados."
       }
     },
     "delete": {
@@ -709,21 +724,21 @@
       "messageBulk": "{count, plural, one {¿Deseas activar # establecimiento seleccionado?} other {¿Deseas activar # establecimientos seleccionados?}}"
     },
     "deactivate": {
-      "selected": "Desactivar",
-      "header": "Confirmar desactivación",
-      "successSingle": "Establecimiento desactivado correctamente.",
-      "messageSingle": "¿Deseas desactivar el establecimiento {pvNumber}?",
-      "successBulk": "{count, plural, one {# establecimiento desactivado correctamente.} other {# establecimientos desactivados correctamente.}}",
-      "messageBulk": "{count, plural, one {¿Deseas desactivar # establecimiento seleccionado?} other {¿Deseas desactivar # establecimientos seleccionados?}}"
+      "selected": "Inactivar",
+      "header": "Confirmar inactivación",
+      "successSingle": "Establecimiento inactivado correctamente.",
+      "messageSingle": "¿Deseas inactivar el establecimiento {pvNumber}?",
+      "successBulk": "{count, plural, one {# establecimiento inactivado correctamente.} other {# establecimientos inactivados correctamente.}}",
+      "messageBulk": "{count, plural, one {¿Deseas inactivar # establecimiento seleccionado?} other {¿Deseas inactivar # establecimientos seleccionados?}}"
     },
     "selection": {
       "currentMode": "Modo de selección",
-      "count": "{count, plural, =0 {Ninguno seleccionado} one {# seleccionado} other {# seleccionados}}",
-      "pickOneFirst": "Selecciona primero un establecimiento elegible para definir el contexto de selección.",
+      "count": "{count, plural, =0 {Ningún seleccionado} one {# seleccionado} other {# seleccionados}}",
+      "pickOneFirst": "Selecciona primero un establecimiento elegible para definir el contexto de la selección.",
       "mode": {
         "none": "Ninguno",
-        "activate": "Activación masiva",
-        "deactivate": "Desactivación masiva"
+        "activate": "Activación por lote",
+        "deactivate": "Inactivación por lote"
       }
     },
     "form": {
@@ -751,33 +766,33 @@
       "name": "Descripción",
       "company": "Empresa",
       "period": "Vigencia",
-      "flags": "Marcas",
+      "flags": "Banderas",
       "statusEnum": "Estado",
       "acquirer": "Adquirente",
       "description": "Descripción",
-      "createdAt": "Creado el",
-      "createdBy": "Creado por",
+      "createdAt": "Registrado el",
+      "createdBy": "Registrado por",
       "establishment": "Establecimiento"
     },
     "fields": {
       "rate": "Tarifa",
-      "flag": "Marca",
+      "flag": "Bandera",
       "name": "Descripción",
       "company": "Empresa",
-      "flags": "Marcas",
+      "flags": "Banderas",
       "contractEnum": "Estado",
       "modality": "Modalidad",
       "acquirer": "Adquirente",
       "description": "Descripción",
       "endDate": "Vigencia final",
-      "createdBy": "Creado por",
-      "paymentTermDays": "Liquidación",
+      "createdBy": "Registrado por",
+      "paymentTermDays": "Transferencia",
       "rateEcommerce": "E-commerce",
-      "periodEndDate": "Período final",
+      "periodEndDate": "Periodo final",
       "startDate": "Vigencia inicial",
       "establishment": "Establecimiento",
-      "periodStartDate": "Período inicial",
-      "paymentTermDaysEcommerce": "Liquidación e-commerce"
+      "periodStartDate": "Periodo inicial",
+      "paymentTermDaysEcommerce": "Transferencia e-commerce"
     },
     "modality": {
       "CASH_DEBIT": "Débito al contado",
@@ -786,12 +801,12 @@
       "INSTALLMENT_CREDIT_7_12": "Crédito en cuotas 7 a 12x"
     },
     "flags": {
-      "title": "Marcas y tarifas",
-      "add": "Agregar marca",
+      "title": "Banderas y tarifas",
+      "add": "Agregar bandera",
       "toggle": "Expandir / contraer",
-      "remove": "Eliminar marca",
-      "emptyTitle": "Ninguna marca agregada",
-      "emptySubtitle": "Selecciona una marca arriba para empezar a configurar las tarifas.",
+      "remove": "Eliminar bandera",
+      "emptyTitle": "Ninguna bandera agregada",
+      "emptySubtitle": "Selecciona una bandera arriba para comenzar a configurar las tarifas.",
       "registeredModalitiesCount": "{count, plural, =0 {Ninguna modalidad registrada} =1 {1 modalidad registrada} other {# modalidades registradas}}",
       "ratesCount": "{count, plural, =0 {Ninguna tarifa} =1 {1 tarifa} other {# tarifas}}"
     },
@@ -800,23 +815,23 @@
       "empty": "Ninguna tarifa agregada"
     },
     "validation": {
-      "invalidDateRange": "La fecha final debe ser mayor o igual a la fecha inicial."
+      "invalidDateRange": "La fecha final debe ser mayor o igual que la fecha inicial."
     },
     "action": {
       "expired": {
         "label": "Expirar",
-        "invalidStatus": "Solo contratos válidos pueden expirar.",
+        "invalidStatus": "Solo los contratos válidos pueden expirar.",
         "noPermission": "No tienes permiso para expirar contratos."
       },
       "validity": {
         "label": "Válido",
         "noPermission": "No tienes permiso para activar contratos.",
-        "invalidStatus": "Solo contratos vencidos pueden ser validados."
+        "invalidStatus": "Solo los contratos vencidos pueden ser validados."
       },
       "closed": {
         "label": "Cerrar",
         "noPermission": "No tienes permiso para cerrar contratos.",
-        "invalidStatus": "Solo contratos válidos pueden ser cerrados."
+        "invalidStatus": "Solo los contratos válidos pueden ser cerrados."
       }
     },
     "closed": {
@@ -845,12 +860,12 @@
     },
     "selection": {
       "currentMode": "Modo de selección",
-      "count": "{count, plural, =0 {Ninguno seleccionado} one {# seleccionado} other {# seleccionados}}",
-      "pickOneFirst": "Selecciona primero un contrato elegible para definir el contexto de selección.",
+      "count": "{count, plural, =0 {Ningún seleccionado} one {# seleccionado} other {# seleccionados}}",
+      "pickOneFirst": "Selecciona primero un contrato elegible para definir el contexto de la selección.",
       "mode": {
         "none": "Ninguno",
-        "activate": "Activación masiva",
-        "deactivate": "Desactivación masiva"
+        "activate": "Activación por lote",
+        "deactivate": "Inactivación por lote"
       }
     },
     "form": {
@@ -865,18 +880,18 @@
     },
     "view": {
       "title": "Tarifas del contrato:",
-      "emptyRates": "Ninguna tarifa registrada para esta marca.",
-      "days": "{count, plural, =0 {0 días} one {# día} other {# días}}",
-      "emptyFlags": "Ninguna marca/tarifa registrada para este contrato.",
+      "emptyRates": "Ninguna tarifa registrada para esta bandera.",
+      "days": "{count, plural, =0 {0 dias} one {# dia} other {# dias}}",
+      "emptyFlags": "Ninguna bandera/tarifa registrada para este contrato.",
       "flag": {
-        "defaultName": "Marca",
-        "modalitiesCount": "{count, plural, =0 {Ninguna modalidad} one {# modalidad} other {# modalidades}}"
+        "defaultName": "Bandera",
+        "modalitiesCount": "{count, plural, =0 {Ninguna modalidade} one {# modalidade} other {# modalidades}}"
       },
       "validity": {
         "until": "hasta",
         "since": "Vigente desde",
         "rangePrefix": "En vigencia desde:",
-        "openEnded": "vigencia indefinida"
+        "openEnded": "vigencia indeterminada"
       }
     }
   },
@@ -885,8 +900,8 @@
       "line": "Línea",
       "Installments": "Cuotas",
       "searchErp": "Buscar en ERP",
-      "process": "Buscar en Archivo",
-      "searchAcq": "Buscar en Adquirente"
+      "process": "Buscar en el archivo",
+      "searchAcq": "Buscar en la adquirente"
     },
     "tooltip": {
       "mdrRate": "Tarifa MDR",
@@ -909,74 +924,79 @@
       }
     },
     "fields": {
+      "erp": "ERP",
+      "rate": "Tarifa",
       "bank": "Banco",
       "sale": "Venta",
-      "flag": "Marca",
-      "rate": "Tarifa",
-      "liquid": "Neto",
-      "payment": "Pago",
+      "title": "Campo",
       "cvNsu": "CV/NSU",
       "reason": "Motivo",
       "status": "Estado",
       "account": "Cuenta",
+      "flag": "Bandera",
       "agency": "Agencia",
-      "saleDate": "Venta",
+      "liquid": "Líquido",
       "company": "Empresa",
-      "machine": "Máquinas",
-      "installment": "Cuota",
+      "payment": "Pago",
       "forecast": "Previsión",
+      "machine": "Terminales",
+      "saleDate": "Fecha venta",
       "modality": "Modalidad",
-      "installments": "Cuotas",
       "acquirer": "Adquirente",
+      "installment": "Parcela",
       "capture": "Tipo captura",
-      "netAmount": "Valor neto",
-      "issuer": "Emisor tarjeta",
-      "grossValue": "Valor bruto",
-      "liquidValue": "Valor neto",
-      "creditDate": "Credit Date",
       "cardName": "Nombre tarjeta",
+      "issuer": "Emisor tarjeta",
+      "installments": "Cuotas",
+      "tid": "ID de transacción (TID)",
+      "grossValue": "Valor bruto",
+      "creditDate": "Fecha crédito",
       "adjustmentValue": "Ajustes",
+      "netAmount": "Valor líquido",
       "cardNumber": "Número tarjeta",
       "conciliation": "Conciliación",
-      "paymentDate": "Fecha de pago",
+      "liquidValue": "Valor líquido",
       "authorization": "Autorización",
-      "tid": "ID de transacción (TID)",
-      "periodSaleDate": "Período venta",
+      "paymentDate": "Fecha pago",
       "discountValue": "Valor descuento",
-      "contractedFee": "Contracted Rate",
+      "periodSaleDate": "Periodo venta",
+      "contractedFee": "Tarifa contratada",
       "establishment": "Establecimiento",
-      "expectedPaymentDate": "Prev. pago",
-      "periodPaymentDate": "Período pago",
+      "statusTransaction": "Estado venta",
       "bankDomicile": "Domicilio bancario",
-      "statusPaymentBank": "Payment Status",
       "conciliationDate": "Fecha conciliación",
-      "statusTransaction": "Estado conciliación",
-      "periodConciliationDate": "Período conciliación",
-      "periodExpectedPaymentDate": "Período prev. pago"
+      "statusPaymentBank": "Estado de pago",
+      "expectedPaymentDate": "Prev. pago",
+      "periodPaymentDate": "Periodo pago",
+      "periodConciliationDate": "Periodo conciliación",
+      "periodExpectedPaymentDate": "Periodo prev. pago"
     },
     "columns": {
+      "sale": "Venta",
+      "gross": "Bruto",
       "cvNsu": "CV/NSU",
-      "flag": "Marca",
-      "saleDate": "Venta",
-      "liquid": "Neto",
+      "flag": "Bandera",
+      "liquid": "Líquido",
       "company": "Empresa",
-      "grossValue": "Bruto",
-      "machine": "Máquinas",
+      "machine": "Terminales",
       "discountValue": "Tarifa",
+      "saleDate": "Fecha venta",
       "acquirer": "Adquirente",
       "modality": "Modalidad",
       "capture": "Tipo captura",
       "installment": "Cuotas",
+      "grossValue": "Valor bruto",
       "tid": "ID de transacción (TID)",
       "adjustmentValue": "Ajustes",
-      "liquidValue": "Valor neto",
+      "liquidValue": "Valor líquido",
       "authorization": "Autorización",
       "establishment": "Establecimiento",
+      "statusTransactionReason": "Motivo",
       "expectedPaymentDate": "Prev. pago"
     }
   },
   "flag": {
-    "subtitle": "Gestiona marcas",
+    "subtitle": "Gestiona banderas",
     "relationships": {
       "add": "Agregar",
       "companies": "Empresas",
@@ -985,30 +1005,30 @@
       "establishment": "Establecimientos",
       "linkedCompanies": "Empresas vinculadas",
       "linkedAcquirers": "Adquirentes vinculadas",
-      "addCompanyToFlag": "Agregar empresa a la marca",
-      "addAcquirerToFlag": "Agregar adquirente a la marca",
+      "addCompanyToFlag": "Agregar empresa a la bandera",
+      "addAcquirerToFlag": "Agregar adquirente a la bandera",
       "removeCompany": {
         "header": "Eliminar vínculo",
-        "message": "¿Deseas eliminar la empresa {company} de la marca {flag}?",
-        "success": "Empresa {company} eliminada de la marca {flag} correctamente."
+        "message": "¿Deseas eliminar la empresa {company} de la bandera {flag}?",
+        "success": "Empresa {company} eliminada de la bandera {flag} correctamente."
       },
       "removeAcquirer": {
         "header": "Eliminar vínculo",
-        "message": "¿Deseas eliminar la adquirente {acquirer} de la marca {flag}?",
-        "success": "Adquirente {acquirer} eliminada de la marca {flag} correctamente."
+        "message": "¿Deseas eliminar la adquirente {acquirer} de la bandera {flag}?",
+        "success": "Adquirente {acquirer} eliminada de la bandera {flag} correctamente."
       }
     },
     "new": {
-      "title": "Nueva marca",
-      "subtitle": "Registro de marca"
+      "title": "Nueva bandera",
+      "subtitle": "Registro de bandera"
     },
     "edit": {
-      "title": "Editar marca",
-      "subtitle": "Edición de marca"
+      "title": "Editar bandera",
+      "subtitle": "Edición de bandera"
     },
     "columns": {
       "cnpj": "CNPJ",
-      "name": "Marca",
+      "name": "Bandera",
       "statusEnum": "Estado",
       "company": "Empresas",
       "erpCode": "Código ERP",
@@ -1016,7 +1036,7 @@
       "acquirerCode": "Código adquirente"
     },
     "fields": {
-      "name": "Marca",
+      "name": "Bandera",
       "erpCode": "Código",
       "statusEnum": "Estado",
       "company": "Empresas",
@@ -1024,64 +1044,64 @@
     },
     "action": {
       "deactivate": {
-        "label": "Desactivar",
-        "invalidStatus": "Solo marcas activas pueden ser desactivadas.",
-        "noPermission": "No tienes permiso para desactivar marcas."
+        "label": "Inactivar",
+        "invalidStatus": "Solo las banderas activas pueden ser inactivadas.",
+        "noPermission": "No tienes permiso para desactivar banderas."
       },
       "activate": {
         "label": "Activar",
-        "noPermission": "No tienes permiso para activar marcas.",
-        "invalidStatus": "Solo marcas inactivas pueden ser activadas."
+        "noPermission": "No tienes permiso para activar banderas.",
+        "invalidStatus": "Solo las banderas inactivas pueden ser activadas."
       },
       "block": {
         "label": "Bloquear",
-        "noPermission": "No tienes permiso para bloquear marcas.",
-        "invalidStatus": "Solo marcas activas pueden ser bloqueadas."
+        "noPermission": "No tienes permiso para bloquear banderas.",
+        "invalidStatus": "Solo las banderas activas pueden ser bloqueadas."
       }
     },
     "block": {
       "selected": "Bloquear",
       "header": "Confirmar bloqueo",
-      "successSingle": "Marca bloqueada correctamente.",
-      "messageSingle": "¿Deseas bloquear la marca {name}?",
-      "successBulk": "{count, plural, one {# marca bloqueada correctamente.} other {# marcas bloqueadas correctamente.}}",
-      "messageBulk": "{count, plural, one {¿Deseas bloquear # marca seleccionado?} other {¿Deseas bloquear # marcas seleccionados?}}"
+      "successSingle": "Bandera bloqueada correctamente.",
+      "messageSingle": "¿Deseas bloquear la bandera {name}?",
+      "successBulk": "{count, plural, one {# bandera bloqueada correctamente.} other {# banderas bloqueadas correctamente.}}",
+      "messageBulk": "{count, plural, one {¿Deseas bloquear # bandera seleccionada?} other {¿Deseas bloquear # banderas seleccionadas?}}"
     },
     "activate": {
       "selected": "Activar",
       "header": "Confirmar activación",
-      "successSingle": "Marca activada correctamente.",
-      "messageSingle": "¿Deseas activar la marca {name}?",
-      "successBulk": "{count, plural, one {# marca activada correctamente.} other {# marcas activadas correctamente.}}",
-      "messageBulk": "{count, plural, one {¿Deseas activar # marca seleccionado?} other {¿Deseas activar # marcas seleccionados?}}"
+      "successSingle": "Bandera activada correctamente.",
+      "messageSingle": "¿Deseas activar la bandera {name}?",
+      "successBulk": "{count, plural, one {# bandera activada correctamente.} other {# banderas activadas correctamente.}}",
+      "messageBulk": "{count, plural, one {¿Deseas activar # bandera seleccionada?} other {¿Deseas activar # banderas seleccionadas?}}"
     },
     "deactivate": {
-      "selected": "Desactivar",
-      "header": "Confirmar desactivación",
-      "successSingle": "Marca desactivada correctamente.",
-      "messageSingle": "¿Deseas desactivar la marca {name}?",
-      "successBulk": "{count, plural, one {# marca desactivada correctamente.} other {# marcas desactivadas correctamente.}}",
-      "messageBulk": "{count, plural, one {¿Deseas desactivar # marca seleccionado?} other {¿Deseas desactivar # marcas seleccionados?}}"
+      "selected": "Inactivar",
+      "header": "Confirmar inactivación",
+      "successSingle": "Bandera inactivada correctamente.",
+      "messageSingle": "¿Deseas inactivar la bandera {name}?",
+      "successBulk": "{count, plural, one {# bandera inactivada correctamente.} other {# banderas inactivadas correctamente.}}",
+      "messageBulk": "{count, plural, one {¿Deseas inactivar # bandera seleccionada?} other {¿Deseas inactivar # banderas seleccionadas?}}"
     },
     "selection": {
       "currentMode": "Modo de selección",
-      "count": "{count, plural, =0 {Ninguno seleccionado} one {# seleccionado} other {# seleccionados}}",
-      "pickOneFirst": "Selecciona primero una marca elegible para definir el contexto de selección.",
+      "count": "{count, plural, =0 {Ningún seleccionado} one {# seleccionado} other {# seleccionados}}",
+      "pickOneFirst": "Selecciona primero una bandera elegible para definir el contexto de la selección.",
       "mode": {
         "none": "Ninguno",
-        "activate": "Activación masiva",
-        "deactivate": "Desactivación masiva"
+        "activate": "Activación por lote",
+        "deactivate": "Inactivación por lote"
       }
     },
     "form": {
-      "created": "Marca creada correctamente.",
-      "updated": "Marca actualizada correctamente.",
-      "saveError": "No fue posible guardar la marca.",
-      "loadError": "No fue posible cargar los datos de la marca.",
-      "permissionDenied": "No tienes permiso para guardar marcas."
+      "created": "Bandera creada correctamente.",
+      "updated": "Bandera actualizada correctamente.",
+      "saveError": "No fue posible guardar la bandera.",
+      "loadError": "No fue posible cargar los datos de la bandera.",
+      "permissionDenied": "No tienes permiso para guardar banderas."
     },
     "empty": {
-      "title": "Ninguna marca encontrada"
+      "title": "Ninguna bandera encontrada"
     }
   },
   "accountPassword": {
@@ -1095,8 +1115,8 @@
     "successTitle": "Contraseña cambiada",
     "successMessage": "Tu contraseña se actualizó correctamente.",
     "footer": "© 2026 CardSync • Todos los derechos reservados",
-    "formSubtitle": "Informa tu contraseña actual y define una nueva contraseña segura.",
-    "policySubtitle": "La contraseña debe cumplir las reglas de seguridad abajo.",
+    "formSubtitle": "Ingresa tu contraseña actual y define una nueva contraseña segura.",
+    "policySubtitle": "La contraseña debe cumplir las reglas de seguridad a continuación.",
     "formSectionTitle": "Datos del cambio",
     "userFallback": "Usuario",
     "usernameFallback": "Sin usuario",
@@ -1108,7 +1128,7 @@
       "minLength": "Tamaño mínimo"
     },
     "strength": {
-      "title": "Fuerza de la contraseña",
+      "title": "Fortaleza de la contraseña",
       "empty": "No informada",
       "weak": "Débil",
       "medium": "Media",
@@ -1141,9 +1161,9 @@
       "blockedUntil": "Bloqueado hasta",
       "password": "Contraseña",
       "passwordExpires": "Contraseña expira el",
-      "issuer": "Issuer",
+      "issuer": "Emisor",
       "createdAt": "Creado el",
-      "lastLogin": "Último login",
+      "lastLogin": "Último inicio de sesión",
       "groups": "Grupos",
       "permissions": "Permisos"
     },
@@ -1154,7 +1174,7 @@
       "noName": "Usuario sin nombre",
       "noUsername": "Usuario no informado"
     },
-    "items": "{count, plural, =0 {0 ítems} one {# ítem} other {# ítems}}",
+    "items": "{count, plural, =0 {0 itens} one {# item} other {# itens}}",
     "empty": {
       "groups": "Ningún grupo informado.",
       "permissions": "Ningún permiso encontrado."
@@ -1175,15 +1195,15 @@
     "fields": {
       "name": "Nombre",
       "description": "Descripción",
-      "createdAt": "Creado el",
-      "createdBy": "Creado por"
+      "createdAt": "Registrado el",
+      "createdBy": "Registrado por"
     },
     "columns": {
       "name": "Nombre",
       "usersCount": "Usuarios",
       "description": "Descripción",
-      "createdAt": "Creado el",
-      "createdBy": "Creado por",
+      "createdAt": "Registrado el",
+      "createdBy": "Registrado por",
       "permissionsCount": "Permisos"
     },
     "form": {
@@ -1240,22 +1260,22 @@
   },
   "audit": {
     "emailLog": {
-      "subtitle": "Gestiona logs de e-mail",
+      "subtitle": "Gestiona registros de e-mail",
       "fields": {
         "recipient": "Destinatario",
         "subject": "Asunto",
-        "template": "Template",
+        "template": "Plantilla",
         "status": "Estado",
         "sentAt": "Enviado el",
-        "eventType": "Tipo evento"
+        "eventType": "Tipo de evento"
       },
       "columns": {
         "recipient": "Destinatario",
         "subject": "Asunto",
-        "template": "Template",
+        "template": "Plantilla",
         "status": "Estado",
         "sentAt": "Enviado el",
-        "eventType": "Tipo evento",
+        "eventType": "Tipo de evento",
         "errorMessage": "Error"
       },
       "status": {
@@ -1267,8 +1287,172 @@
         "passwordReset": "Restablecimiento de contraseña"
       },
       "empty": {
-        "title": "Ningún log encontrado"
+        "title": "Ningún registro encontrado"
       }
+    }
+  },
+  "conciliation": {
+    "reconcileUsingERP": "Conciliar usando ERP",
+    "errorReconciliation": "Error en la conciliación",
+    "processReconciliation": "Procesar conciliación",
+    "reconcileUsingAcquirer": "Conciliar usando adquirente",
+    "reconciliationFinalizedTitle": "Conciliación finalizada",
+    "textTooltip": "Ejecuta manualmente la conciliación ERP x adquirente",
+    "reconciliationFinalized": "La conciliación ERP x adquirente fue procesada.",
+    "noDiscrepancyFound": "No se encontró ningún campo divergente en esta comparación.",
+    "processReconciliationError": "No fue posible procesar la conciliación ERP x adquirente.",
+    "dialog": {
+      "compareSales": "Comparar ventas",
+      "displayingFieldsDiscrepancies": "Mostrando solo campos con divergencia.",
+      "divergence": "{count, plural, =0 {Ningún campo divergente} one {# divergente} other {# divergentes}}"
+    },
+    "pageTitle": {
+      "missingErp": "Ventas no localizadas en el ERP",
+      "missingOther": "Otras ventas no conciliadas",
+      "missingAcquirer": "Ventas no localizadas en la adquirente"
+    },
+    "pageDescription": {
+      "missingErp": "Ventas de la adquirente que no se encontraron en el ERP. Usa esta pantalla para crear ventas ERP por lote.",
+      "missingAcquirer": "Ventas del ERP que no tienen una venta correspondiente en la adquirente. Usa esta pantalla para marcarlas por lote como eliminadas.",
+      "missingOther": "Ventas con divergencia de valor, adquirente, bandera, modalidad o coincidencia ambigua para análisis y conciliación manual."
+    },
+    "action": {
+      "missingErp": "No encontrado en el ERP",
+      "missingOther": "Otras no conciliadas",
+      "missingAcquirer": "No localizada en la adquirente"
+    },
+    "result": {
+      "analyzed": "Analizadas",
+      "matched": "Conciliadas",
+      "updated": "Actualizadas",
+      "notMatched": "No conciliadas",
+      "flagUpdated": "Banderas actualizadas",
+      "valueDivergences": "Divergencias de valor",
+      "skippedDivergent": "Omitidas por divergencia",
+      "ambiguousMatches": "Coincidencias ambiguas",
+      "businessContextUpdated": "Contextos actualizados",
+      "acquirerDivergences": "Divergencias de adquirente"
+    },
+    "finishedTitle": "Lote finalizado",
+    "errorTitle": "Error al procesar lote",
+    "finishedWithWarningsTitle": "Lote finalizado con alertas",
+    "noEligibleSelectedTitle": "Ninguna venta elegible seleccionada",
+    "finishedMessage": "Éxito: {{ success }} · Fallas: {{ failed }} · Solicitadas: {{ requested }}",
+    "missingErp": {
+      "batch": {
+        "noEligibleSelectedDetail": "Selecciona ventas de la adquirente para crear ventas ERP por lote.",
+        "createErrorDetail": "No fue posible crear las ventas ERP seleccionadas.",
+        "description": "CardSync creará ventas correspondientes en el ERP usando los datos de las ventas de la adquirente seleccionadas. Las ventas creadas ya quedarán vinculadas a las ventas de la adquirente.",
+        "actionSuffix": "creando ventas en el ERP",
+        "confirmLabel": "Crear ventas ERP"
+      },
+      "single": {
+        "acquirerNotFoundTitle": "Venta de la adquirente no localizada",
+        "acquirerNotFoundDetail": "La línea debe devolver el identificador de la venta de la adquirente para crear la venta ERP.",
+        "description": "CardSync creará una venta correspondiente en el ERP usando los datos de la venta de la adquirente seleccionada. La venta creada ya quedará vinculada a la venta de la adquirente.",
+        "actionSuffix": "creando la venta en el ERP",
+        "confirmLabel": "Crear venta ERP",
+        "createErrorTitle": "Error al crear ERP",
+        "createErrorDetail": "No fue posible crear la venta ERP.",
+        "createdTitle": "Venta ERP creada",
+        "createdDetail": "Venta ERP creada a partir de la adquirente."
+      }
+    },
+    "missingAcq": {
+      "batch": {
+        "noEligibleSelectedDetail": "Selecciona ventas ERP para marcarlas como eliminadas por lote.",
+        "deleteErrorDetail": "No fue posible marcar las ventas ERP seleccionadas como eliminadas.",
+        "description": "Las ventas ERP seleccionadas se marcarán como eliminadas porque no fueron localizadas en la adquirente. Esta acción elimina esas ventas del flujo de conciliación ERP x adquirente.",
+        "actionSuffix": "como eliminadas en el ERP",
+        "confirmLabel": "Marcar como eliminadas"
+      },
+      "single": {
+        "erpNotFoundTitle": "Venta ERP no localizada",
+        "erpNotFoundDetail": "La línea debe devolver el identificador de la venta ERP para marcarla como eliminada.",
+        "description": "La venta ERP se marcará como eliminada porque no fue localizada en la adquirente. Esta acción elimina la venta del flujo de conciliación ERP x adquirente.",
+        "actionSuffix": "como eliminada en el ERP",
+        "confirmLabel": "Marcar como eliminada",
+        "deleteErrorTitle": "Error al eliminar ERP",
+        "deleteErrorDetail": "No fue posible marcar la venta ERP como eliminada.",
+        "deleteTitle": "Venta ERP marcada como eliminada",
+        "deleteDetail": "Venta ERP marcada como eliminada."
+      }
+    },
+    "batchDialog": {
+      "title": {
+        "createErp": "Crear ventas en el ERP",
+        "deleteErp": "Eliminar ventas",
+        "warning": "ATENCIÓN"
+      },
+      "mainText": {
+        "createErp": {
+          "one": "Seleccionaste { count } transacción de venta para criar venta correspondente en el ERP.",
+          "many": "Seleccionaste { count } transacciones de venta para criar ventas correspondentes en el ERP."
+        },
+        "deleteErp": {
+          "one": "Seleccionaste { count } transacción de venta para marcar como eliminada en el ERP.",
+          "many": "Seleccionaste { count } transacciones de venta para marcar como eliminadas en el ERP."
+        },
+        "generic": {
+          "one": "Seleccionaste { count } transacción de venta para confirmar a acción.",
+          "many": "Seleccionaste { count } transacciones de venta para confirmar a acción."
+        }
+      },
+      "description": {
+        "createErp": "CardSync creará las ventas en el ERP con base en los datos de la adquirente y mantendrá el vínculo entre los dos orígenes.",
+        "deleteErp": "Las ventas ERP seleccionadas se eliminarán del flujo de conciliación porque no fueron localizadas en la adquirente.",
+        "generic": "Confirma para continuar con la acción seleccionada."
+      },
+      "confirm": {
+        "createErp": "Crear ventas ERP",
+        "deleteErp": "Marcar como eliminadas"
+      },
+      "securityAuditNotice": "Por seguridad, los datos del responsable de esta acción se almacenarán para futuras consultas."
+    },
+    "selection": {
+      "createErp": "Crear venta ERP",
+      "currentMode": "Modo de selección",
+      "deleteErp": "Para eliminar del ERP",
+      "deleteErpSelected": "Marcar ERP eliminados",
+      "createErpSelected": "Crear ERP seleccionados",
+      "count": "{count, plural, =0 {Ninguna seleccionada} one {# seleccionada} other {# seleccionadas}}",
+      "pickOneFirst": "Selecciona primero una transacción elegible para definir el contexto de la selección.",
+      "deleteErpSelectedTooltip": "Marca por lote ventas ERP no localizadas en la adquirente como eliminadas",
+      "createErpSelectedTooltip": "Crea ventas ERP por lote para ventas de la adquirente no localizadas en el ERP"
+    },
+    "otherDivergences": {
+      "compareTooltip": "Comparar ventas",
+      "compareErrorTitle": "Error al comparar ventas",
+      "manualResolvedTitle": "Divergencia resuelta",
+      "manualErrorTitle": "Error al conciliar ventas",
+      "compareUnavailableTitle": "Comparación no disponible",
+      "manualResolvedDetail": "Venta conciliada manualmente.",
+      "manualErrorDetail": "No fue posible concluir la conciliación manual.",
+      "compareUnavailableDetail": "La línea debe devolver los identificadores de la venta ERP y de la venta adquirente.",
+      "compareUnavailableTooltip": "Comparación no disponible: el backend no devolvió la venta de la adquirente vinculada a esta venta ERP.",
+      "compareErrorDetail": "No fue posible cargar la comparación detallada. Verifica que el endpoint de comparación esté disponible en el backend."
+    },
+    "actionDialog": {
+      "titles": {
+        "createErp": "Crear venta en el ERP",
+        "deleteErp": "Eliminar venta",
+        "warning": "ATENCIÓN"
+      },
+      "mainText": {
+        "createErp": "Has seleccionado 1 transacción de venta para crear la venta correspondiente en el ERP.",
+        "deleteErp": "Has seleccionado 1 transacción de venta para marcarla como eliminada en el ERP.",
+        "generic": "Has seleccionado 1 transacción de venta para confirmar la acción."
+      },
+      "description": {
+        "createErp": "CardSync creará una venta en el ERP con base en los datos de la adquirente y mantendrá el vínculo entre ambos orígenes.",
+        "deleteErp": "La venta ERP se eliminará del flujo de conciliación porque no fue localizada en la adquirente.",
+        "generic": "Confirma para continuar con la acción seleccionada."
+      },
+      "confirm": {
+        "createErp": "Crear venta ERP",
+        "deleteErp": "Marcar como eliminada"
+      },
+      "securityAuditNotice": "Por seguridad, los datos del responsable de esta acción se almacenarán para futuras consultas."
     }
   },
   "session": {
@@ -1288,14 +1472,14 @@
       "final": "Valor final",
       "initial": "Valor inicial"
     },
-    "from": "A partir de",
-    "until": "Hasta",
-    "to": "Hasta",
     "no": "No",
+    "to": "hasta",
     "yes": "Sí",
     "new": "Nuevo",
     "all": "Todos",
+    "until": "Hasta",
     "error": "Error",
+    "action": "Acción",
     "save": "Guardar",
     "edit": "Editar",
     "back": "Volver",
@@ -1308,36 +1492,37 @@
     "actions": "Acciones",
     "filter": "Filtrar",
     "remove": "Eliminar",
-    "period": "Período",
+    "period": "Periodo",
     "delete": "Eliminar",
     "cancel": "Cancelar",
     "activate": "Activar",
     "success": "Éxito",
     "info": "Información",
     "warning": "Atención",
-    "view": "Ver",
+    "view": "Visualizar",
     "company": "Empresa",
-    "notNow": "Ahora no",
     "grossValue": "Bruto",
+    "notNow": "Ahora no",
+    "from": "A partir de",
     "update": "Actualizar",
     "confirm": "Confirmar",
     "discountValue": "Tarifa",
-    "liquidValue": "Neto",
+    "liquidValue": "Líquido",
     "acquirer": "Adquirente",
-    "deactivate": "Desactivar",
+    "deactivate": "Inactivar",
     "loading": "Cargando...",
     "adjustmentValue": "Ajustes",
     "goToLogin": "Ir al login",
     "notInformed": "No informado",
-    "tableFilters": "Filtros tabla",
+    "tableFilters": "Filtros de tabla",
     "renewSession": "Renovar sesión",
     "correlationId": "ID de correlación",
     "notInformedFemale": "No informada",
     "calculateTotals": "Calcular totales",
-    "registrationNumber": "N.° inscripción",
+    "registrationNumber": "N.º inscripción",
     "advancedFilters": "Filtros avanzados",
-    "viewInstallments": "Ver cuotas",
-    "selected": "{count, plural, =0 {Ninguno seleccionado} one {# seleccionado} other {# seleccionados}}",
+    "viewInstallments": "Visualizar cuotas",
+    "selected": "{count, plural, =0 {Ningún seleccionado} one {# seleccionado} other {# seleccionados}}",
     "selectedFemale": "{count, plural, =0 {Ninguna seleccionada} one {# seleccionada} other {# seleccionadas}}"
   },
   "confirm": {
@@ -1346,12 +1531,12 @@
   },
   "notifications": {
     "welcome": "¡Hola, {name}!",
-    "itemsCount": "{count, plural, =0 {Ningún ítem} one {# ítem} other {# ítems}}"
+    "itemsCount": "{count, plural, =0 {Ningún item} one {# item} other {# itens}}"
   },
   "errors": {
     "global": {
-      "GENERIC_ERROR": "Ocurrió un error inesperado. Intenta nuevamente.",
-      "NETWORK_ERROR": "No fue posible conectar al servidor.",
+      "GENERIC_ERROR": "Ocurrió un error inesperado. Inténtalo nuevamente.",
+      "NETWORK_ERROR": "No fue posible conectarse al servidor.",
       "ACCESS_DENIED": "No tienes permiso para ejecutar esta acción.",
       "SESSION_EXPIRED": "Tu sesión expiró. Inicia sesión nuevamente.",
       "VALIDATION_ERROR": "Algunos campos deben corregirse.",
@@ -1360,9 +1545,9 @@
       "USER_DELETE_SELF_NOT_ALLOWED": "No puedes eliminar tu propio usuario.",
       "USER_DELETE_PROTECTED_NOT_ALLOWED": "Este usuario está protegido y no puede ser eliminado.",
       "NOT_FOUND": "Recurso no encontrado.",
-      "INTERNAL_ERROR": "Ocurrió un error interno. Intenta nuevamente.",
+      "INTERNAL_ERROR": "Ocurrió un error interno. Inténtalo nuevamente.",
       "GROUP_NAME_ALREADY_EXISTS": "Ya existe un grupo con este nombre.",
-      "GROUP_DELETE_SUPPORT_NOT_ALLOWED": "El grupo SUPPORT no puede ser eliminado o alterado en esta operación.",
+      "GROUP_DELETE_SUPPORT_NOT_ALLOWED": "El grupo SUPPORT no puede ser eliminado ni modificado en esta operación.",
       "GROUP_DELETE_IN_USE": "Este grupo tiene usuarios asociados y no puede ser eliminado.",
       "PERMISSION_NOT_FOUND": "Uno o más permisos informados no fueron encontrados.",
       "ESTABLISHMENT_ALREADY_EXISTS": "Ya existe un establecimiento con el mismo PV, empresa y adquirente."
@@ -1370,11 +1555,11 @@
     "fields": {
       "*": {
         "required": "{label} es obligatorio.",
-        "minLength": "{label} debe tener como mínimo {requiredLength} caracteres.",
+        "minLength": "{label} debe tener al menos {requiredLength} caracteres.",
         "maxLength": "{label} debe tener como máximo {requiredLength} caracteres.",
         "min": "{label} debe ser como mínimo {min}.",
         "max": "{label} debe ser como máximo {max}.",
-        "email": "{label} debe ser un e-mail válido.",
+        "email": "{label} informa un e-mail válido.",
         "pattern": "{label} tiene un formato inválido.",
         "invalid": "{label} es inválido.",
         "passwordMismatch": "Las contraseñas deben ser iguales."
@@ -1385,7 +1570,7 @@
     "attemptedUrl": "URL accedida",
     "goHome": "Ir al dashboard",
     "title": "Página no encontrada",
-    "hint": "Si llegaste aquí por un enlace del sistema, revisa el registro de la ruta o el ítem de menú correspondiente.",
+    "hint": "Si llegaste aquí por un enlace del sistema, revisa el registro de la ruta o el elemento de menú correspondiente.",
     "message": "La ruta informada no existe o fue eliminada. Verifica la dirección accedida o vuelve al dashboard."
   }
 }

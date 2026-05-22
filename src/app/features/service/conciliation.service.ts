@@ -13,8 +13,6 @@ import {
   ConciliationPageQuery,
   DebitAnalysisModel,
   DivergenceAnalysisModel,
-  ErpVsAcquirerAnalysisModel,
-  ReconcileErpAcquirerResultModel,
 } from '@models/conciliation.models';
 
 @Injectable({ providedIn: 'root' })
@@ -35,26 +33,6 @@ export class ConciliationService {
       params: this.toParams(query),
       withCredentials: true,
     });
-  }
-
-  listErpVsAcquirer(
-    query: ConciliationPageQuery = {},
-  ): Observable<PageResponse<ErpVsAcquirerAnalysisModel>> {
-    return this.http.get<PageResponse<ErpVsAcquirerAnalysisModel>>(
-      `${this.baseUrl}/erp-vs-acquirer`,
-      {
-        params: this.toParams(query),
-        withCredentials: true,
-      },
-    );
-  }
-
-  reconcileErpVsAcquirer(): Observable<ReconcileErpAcquirerResultModel> {
-    return this.http.post<ReconcileErpAcquirerResultModel>(
-      `${this.baseUrl}/erp-vs-acquirer/reconcile`,
-      {},
-      { withCredentials: true },
-    );
   }
 
   listDebits(query: ConciliationPageQuery = {}): Observable<PageResponse<DebitAnalysisModel>> {

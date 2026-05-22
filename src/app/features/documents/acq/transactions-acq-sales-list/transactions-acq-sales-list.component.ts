@@ -285,7 +285,6 @@ export class TransactionsAcquirersSalesListComponent
 
   clear(): void {
     const key = this.tableStateKey();
-    console.log('Key ', key);
 
     localStorage.removeItem(key);
     sessionStorage.removeItem(key);

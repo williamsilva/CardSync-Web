@@ -956,12 +956,12 @@ export class TransactionsErpSalesListComponent
       cardNumber: this.cardNumber().trim() || undefined,
       authorization: this.authorization().trim() || undefined,
 
-      discountValueEnd: discountValueEnd ?? undefined,
-      liquidValueEnd: liquidValueEnd ?? undefined,
       grossValueEnd: grossValueEnd ?? undefined,
-      discountValueStart: discountValueStart ?? undefined,
-      liquidValueStart: liquidValueStart ?? undefined,
+      liquidValueEnd: liquidValueEnd ?? undefined,
       grossValueStart: grossValueStart ?? undefined,
+      discountValueEnd: discountValueEnd ?? undefined,
+      liquidValueStart: liquidValueStart ?? undefined,
+      discountValueStart: discountValueStart ?? undefined,
       adjustmentValueEnd: adjustmentValueEnd ?? undefined,
       adjustmentValueStart: adjustmentValueStart ?? undefined,
 

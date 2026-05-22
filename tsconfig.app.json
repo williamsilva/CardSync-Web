@@ -8,7 +8,7 @@
   },
   "include": [
     "src/**/*.ts"
-  ],
+, "src/app/features/conciliation/conciliation-waiting-list/missing-acquirer-list"  ],
   "exclude": [
     "src/**/*.spec.ts"
   ]

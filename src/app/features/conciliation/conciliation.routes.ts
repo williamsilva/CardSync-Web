@@ -24,12 +24,52 @@ export const CONCILIATION_ROUTES: Routes = [
 
   {
     path: 'erp-vs-acquirer',
-    title: 'routes.conciliation.erpVsAcquirer.title',
+    pathMatch: 'full',
+    redirectTo: 'erp-vs-acquirer/missing-acquirer',
+  },
+  {
+    path: 'erp-vs-acquirer/missing-acquirer',
+    title: 'routes.conciliation.erpVsAcquirer.missingAcquirer.title',
     canActivate: [permissionGuard],
-    data: { requireAll: false, redirectTo: '/forbidden', permissions: defaultPermissions },
+    data: {
+      requireAll: false,
+      redirectTo: '/forbidden',
+      permissions: defaultPermissions,
+      view: 'MISSING_ACQUIRER',
+    },
     loadComponent: () =>
-      import('./erp-vs-acquirer-list/erp-vs-acquirer-list.component').then(
-        (m) => m.ErpVsAcquirerListComponent,
+      import('./conciliation-waiting-list/missing-acquirer-list/missing-acquirer-list.component').then(
+        (m) => m.MissingAcquirerListComponent,
+      ),
+  },
+  {
+    path: 'erp-vs-acquirer/missing-erp',
+    title: 'routes.conciliation.erpVsAcquirer.missingErp.title',
+    canActivate: [permissionGuard],
+    data: {
+      requireAll: false,
+      redirectTo: '/forbidden',
+      permissions: defaultPermissions,
+      view: 'MISSING_ERP',
+    },
+    loadComponent: () =>
+      import('./conciliation-waiting-list/missing-erp-list/missing-erp-list.component').then(
+        (m) => m.MissingErpListComponent,
+      ),
+  },
+  {
+    path: 'erp-vs-acquirer/other-divergences',
+    title: 'routes.conciliation.erpVsAcquirer.otherDivergences.title',
+    canActivate: [permissionGuard],
+    data: {
+      requireAll: false,
+      redirectTo: '/forbidden',
+      permissions: defaultPermissions,
+      view: 'OTHER_DIVERGENCES',
+    },
+    loadComponent: () =>
+      import('./conciliation-waiting-list/other-divergences-list/other-divergences-list.component').then(
+        (m) => m.ErpVsAcquirerOtherDivergencesListComponent,
       ),
   },
   {

@@ -3,12 +3,14 @@ import { PERMISSIONS } from '@core/auth/permissions.constants';
 import { AppMenuItem } from './menu.model';
 
 export const APP_MENU: AppMenuItem[] = [
+  /* Dashboard */
   {
     labelKey: 'menu.dashboard',
     icon: 'pi pi-chart-line text-blue-500',
     route: '/dashboard',
     exact: true,
   },
+  /* Conciliation */
   {
     icon: 'pi pi-sync text-purple-400',
     labelKey: 'menu.conciliation.title',
@@ -21,9 +23,21 @@ export const APP_MENU: AppMenuItem[] = [
       },
       {
         exact: false,
-        route: '/conciliation/erp-vs-acquirer',
-        labelKey: 'menu.conciliation.erpVsAcquirer',
-        icon: 'pi pi-arrow-right-arrow-left text-purple-500',
+        route: '/conciliation/erp-vs-acquirer/missing-acquirer',
+        labelKey: 'menu.conciliation.erpMissingAcquirer',
+        icon: 'pi pi-exclamation-circle text-purple-500',
+      },
+      {
+        exact: false,
+        route: '/conciliation/erp-vs-acquirer/missing-erp',
+        labelKey: 'menu.conciliation.acquirerMissingErp',
+        icon: 'pi pi-plus-circle text-purple-500',
+      },
+      {
+        exact: false,
+        route: '/conciliation/erp-vs-acquirer/other-divergences',
+        labelKey: 'menu.conciliation.erpVsAcquirerDivergences',
+        icon: 'pi pi-search text-purple-500',
       },
       {
         exact: false,
@@ -63,6 +77,7 @@ export const APP_MENU: AppMenuItem[] = [
       },
     ],
   },
+  /* ERP */
   {
     icon: 'pi pi-briefcase text-teal-500',
     labelKey: 'menu.transactions.erp.title',
@@ -81,6 +96,7 @@ export const APP_MENU: AppMenuItem[] = [
       },
     ],
   },
+  /* ACQ */
   {
     icon: 'pi pi-briefcase text-teal-500',
     labelKey: 'menu.transactions.acq.title',
@@ -99,6 +115,7 @@ export const APP_MENU: AppMenuItem[] = [
       },
     ],
   },
+  /* Security */
   {
     icon: 'pi pi-shield text-red-500',
     labelKey: 'menu.security.title',
@@ -119,6 +136,7 @@ export const APP_MENU: AppMenuItem[] = [
       },
     ],
   },
+  /* Register */
   {
     icon: 'pi pi-folder-open text-orange-500',
     labelKey: 'menu.register.title',
@@ -160,6 +178,7 @@ export const APP_MENU: AppMenuItem[] = [
       },
     ],
   },
+  /* File Processing */
   {
     labelKey: 'menu.file.processing.title',
     icon: 'pi pi-folder-open',
@@ -250,6 +269,7 @@ export const APP_MENU: AppMenuItem[] = [
       },
     ],
   },
+  /* Audit */
   {
     icon: 'pi pi-history text-cyan-500',
     labelKey: 'menu.audit.title',
@@ -263,6 +283,7 @@ export const APP_MENU: AppMenuItem[] = [
       },
     ],
   },
+  /* Settings */
   {
     icon: 'pi pi-cog text-indigo-500',
     labelKey: 'menu.settings.title',

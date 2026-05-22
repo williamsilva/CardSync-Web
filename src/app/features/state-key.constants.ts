@@ -74,5 +74,49 @@ export const STATE_KEY = {
         },
       },
     },
+    MISSING: {
+      ACQ: {
+        TABLE: {
+          ROWS: {
+            V1: 'cardsync.missing.acq.table.rows',
+          },
+          STATE: {
+            V1: 'cardsync.missing.acq.table.state.v1',
+          },
+        },
+
+        FILTERS: {
+          V1: 'cardsync.missing.acq.filters.v1',
+        },
+      },
+      ERP: {
+        TABLE: {
+          ROWS: {
+            V1: 'cardsync.missing.erp.table.rows',
+          },
+          STATE: {
+            V1: 'cardsync.missing.erp.table.state.v1',
+          },
+        },
+
+        FILTERS: {
+          V1: 'cardsync.missing.erp.filters.v1',
+        },
+      },
+      OTHER_DIVERGENCES: {
+        TABLE: {
+          ROWS: {
+            V1: 'cardsync.missing.other-divergences.table.rows',
+          },
+          STATE: {
+            V1: 'cardsync.missing.other-divergences.table.state.v1',
+          },
+        },
+
+        FILTERS: {
+          V1: 'cardsync.missing.other-divergences.filters.v1',
+        },
+      },
+    },
   },
 };

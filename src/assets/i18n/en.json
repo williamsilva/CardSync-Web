@@ -37,7 +37,7 @@
         "title": "Change password"
       },
       "groupDetail": {
-        "title": "Group details"
+        "title": "Group detail"
       }
     },
     "conciliation": {
@@ -51,7 +51,16 @@
         "title": "Reconciliation Dashboard"
       },
       "erpVsAcquirer": {
-        "title": "ERP x Acquirer"
+        "title": "ERP x Acquirer",
+        "missingAcquirer": {
+          "title": "Sales not found in acquirer"
+        },
+        "missingErp": {
+          "title": "Sales not found in ERP"
+        },
+        "otherDivergences": {
+          "title": "Other unreconciled sales"
+        }
       },
       "debits": {
         "title": "Debits"
@@ -72,7 +81,7 @@
     "transactions": {
       "erp": {
         "installments": {
-          "title": "Installments ERP"
+          "title": "ERP Installments"
         },
         "sales": {
           "title": "ERP Sales"
@@ -80,10 +89,10 @@
       },
       "acq": {
         "installments": {
-          "title": "Installments ACQ"
+          "title": "ADQ Installments"
         },
         "sales": {
-          "title": "Acquirer Sales"
+          "title": "ADQ Sales"
         }
       }
     },
@@ -150,7 +159,10 @@
       "debits": "Debits",
       "chargebacks": "Chargebacks",
       "divergences": "Divergences",
-      "aging": "Pending aging"
+      "aging": "Pending aging",
+      "erpMissingAcquirer": "Not found in acquirer",
+      "acquirerMissingErp": "Not found in ERP",
+      "erpVsAcquirerDivergences": "Other unreconciled"
     },
     "security": {
       "title": "Security",
@@ -169,11 +181,11 @@
         "title": "Processing",
         "dashboard": "Dashboard",
         "erpPendent": "Pending ERP",
-        "movementRede": "Rede Movements",
+        "movementRede": "Rede movements",
         "scheduler": "Scheduler",
         "creditOrders": "Credit orders",
         "adjustments": "Rede adjustments",
-        "anticipations": "Prepayments",
+        "anticipations": "Anticipations",
         "pendingDebts": "Pending debits",
         "settledDebts": "Settled debits",
         "totalizers": "Totalizers",
@@ -200,7 +212,7 @@
     "transactions": {
       "erp": {
         "sales": "ERP Sales",
-        "installment": "ERP installments"
+        "installment": "ERP Installments"
       },
       "acq": {
         "sales": "Acquirer sales",
@@ -209,6 +221,9 @@
     },
     "audit": {
       "emailLog": "E-mail Logs"
+    },
+    "conciliation": {
+      "title": "Reconciliation"
     }
   },
   "footer": {
@@ -220,7 +235,7 @@
     "noneActive": "No active filters"
   },
   "pagination": {
-    "emptymessage": "No data was found to display!",
+    "emptymessage": "No data found to display!",
     "report": "Showing '{first}' to '{last}' of '{totalRecords}' records"
   },
   "validation": {
@@ -230,8 +245,8 @@
     "maxLength": "Maximum of {requiredLength} characters",
     "email": "Invalid e-mail",
     "pattern": "Invalid format",
-    "min": "The minimum value is {min}",
-    "max": "The maximum value is {max}",
+    "min": "Minimum value is {min}",
+    "max": "Maximum value is {max}",
     "uuid": "Invalid identifier",
     "document": "Invalid document",
     "passwordPolicy": "Password does not meet the policy",
@@ -253,22 +268,22 @@
       "groups": "Groups",
       "userName": "User",
       "document": "Document",
-      "createdAt": "Created at",
+      "createdAt": "Registered on",
       "lastLoginAt": "Last login",
       "blockedUntil": "Blocked until",
       "passwordExpiresAt": "Password expires",
-      "createdBy": "Created by"
+      "createdBy": "Registered by"
     },
     "columns": {
       "name": "Name",
       "status": "Status",
       "userName": "Username",
       "document": "Document",
-      "createdAt": "Created at",
+      "createdAt": "Registered on",
       "lastLoginAt": "Last login",
       "blockedUntil": "Blocked until",
       "passwordExpiresAt": "Password expires",
-      "createdBy": "Created by"
+      "createdBy": "Registered by"
     },
     "form": {
       "loadError": "Could not load user data",
@@ -278,7 +293,7 @@
       "resend": {
         "button": "Resend password e-mail",
         "header": "Resend e-mail",
-        "message": "Do you want to resend the password setup e-mail?",
+        "message": "Do you want to resend the password registration e-mail?",
         "sent": "E-mail sent successfully.",
         "error": "Could not resend the e-mail.",
         "todoServer": "Feature pending on the server."
@@ -294,9 +309,9 @@
       "unknown": "Unknown"
     },
     "invite": {
-      "resend": "Resend invitation",
-      "resent": "Invitation resent successfully.",
-      "resendError": "Could not resend the invitation."
+      "resend": "Resend invite",
+      "resent": "Invite resent successfully.",
+      "resendError": "Could not resend the invite."
     },
     "delete": {
       "header": "Confirm deletion",
@@ -345,12 +360,12 @@
       }
     },
     "empty": {
-      "title": "No users found"
+      "title": "No user found"
     }
   },
   "enum": {
     "typeCompanyEnum": {
-      "matriz": "Head office",
+      "matriz": "Headquarters",
       "filial": "Branch"
     },
     "typeEstablishmentEnum": {
@@ -368,9 +383,9 @@
       "validity": "In effect"
     },
     "captureEnum": {
-      "pdv": "Checkout",
+      "pdv": "Cashier",
       "manual": "Manual",
-      "pos": "Mobile POS",
+      "pos": "Mobile machine",
       "ecommerce": "E-commerce",
       "unknown": "Not informed"
     },
@@ -393,22 +408,22 @@
       "canceled": "Canceled",
       "reconciled": "Reconciled",
       "unknown": "Not informed",
+      "notReconciled": "Unreconciled",
       "excludedSale": "Deleted sale",
       "canceledSale": "Canceled sale",
-      "notReconciled": "Not reconciled",
-      "manuallyReconciled": "Reconciled Manual",
+      "manuallyReconciled": "Manually reconciled",
       "reconciledAutomatically": "Automatically reconciled"
     },
     "statusPaymentBankEnum": {
       "paid": "Paid",
-      "notPaid":"Unpaid",
+      "notPaid": "Not paid",
       "pending": "Pending",
       "deleted": "Deleted",
-      "canceled": "Cancelled",
-      "unknown": "Not Informed",
+      "canceled": "Canceled",
+      "unknown": "Not informed",
       "divergent": "Divergent",
-      "excludedSale": "Sale Deleted",
-      "canceledSale": "Sale Cancelled"
+      "excludedSale": "Deleted sale",
+      "canceledSale": "Canceled sale"
     },
     "modalityEnum": {
       "outros": "Other",
@@ -441,9 +456,9 @@
     "columns": {
       "cnpj": "CNPJ",
       "statusEnum": "Status",
-      "createdAt": "Created at",
-      "createdBy": "Created by",
-      "socialReason": "Legal name",
+      "createdAt": "Registered on",
+      "createdBy": "Registered by",
+      "socialReason": "Corporate name",
       "fantasyName": "Trade name",
       "typeCompanyEnum": "Company type"
     },
@@ -467,9 +482,9 @@
     "fields": {
       "cnpj": "CNPJ",
       "statusEnum": "Status",
-      "createdAt": "Created at",
-      "createdBy": "Created by",
-      "socialReason": "Legal name",
+      "createdAt": "Registered on",
+      "createdBy": "Registered by",
+      "socialReason": "Corporate name",
       "fantasyName": "Trade name",
       "typeCompanyEnum": "Company type"
     },
@@ -515,7 +530,7 @@
       "permissionDenied": "You do not have permission to save companies."
     },
     "empty": {
-      "title": "No companies found"
+      "title": "No company found"
     }
   },
   "acquirer": {
@@ -534,11 +549,11 @@
       "name": "Acquirer",
       "company": "Companies",
       "statusEnum": "Status",
-      "pvNumber": "PV number",
-      "adqCode": "ADQ code",
-      "createdAt": "Created at",
-      "createdBy": "Created by",
-      "socialReason": "Legal name",
+      "pvNumber": "PV Number",
+      "adqCode": "ADQ Code",
+      "createdAt": "Registered on",
+      "createdBy": "Registered by",
+      "socialReason": "Corporate name",
       "fantasyName": "Trade name",
       "establishment": "Establishments"
     },
@@ -563,9 +578,9 @@
       "cnpj": "CNPJ",
       "company": "Company",
       "statusEnum": "Status",
-      "createdAt": "Created at",
-      "createdBy": "Created by",
-      "socialReason": "Legal name",
+      "createdAt": "Registered on",
+      "createdBy": "Registered by",
+      "socialReason": "Corporate name",
       "fantasyName": "Trade name"
     },
     "block": {
@@ -609,7 +624,7 @@
       "saveLinks": "Save links",
       "linkedCompanies": "Linked companies",
       "linkedEstablishments": "Linked establishments",
-      "addCompanyToAcquirer": "Add company to acquirer",
+      "addCompanyToAcquirer": "Add Company to acquirer",
       "addEstablishmentToAcquirer": "Add establishment to acquirer",
       "removeCompany": {
         "header": "Remove link",
@@ -630,7 +645,7 @@
       "permissionDenied": "You do not have permission to save acquirers."
     },
     "empty": {
-      "title": "No acquirers found"
+      "title": "No acquirer found"
     }
   },
   "establishment": {
@@ -647,20 +662,20 @@
       "typeEnum": "Type",
       "company": "Company",
       "statusEnum": "Status",
-      "pvNumber": "PV number",
+      "pvNumber": "PV Number",
       "acquirer": "Acquirer",
-      "createdAt": "Created at",
-      "createdBy": "Created by",
+      "createdAt": "Registered on",
+      "createdBy": "Registered by",
       "establishment": "Establishment"
     },
     "fields": {
       "typeEnum": "Type",
       "company": "Company",
-      "pvNumber": "PV number",
+      "pvNumber": "PV Number",
       "statusEnum": "Status",
       "acquirer": "Acquirer",
-      "createdAt": "Created at",
-      "createdBy": "Created by"
+      "createdAt": "Registered on",
+      "createdBy": "Registered by"
     },
     "action": {
       "deactivate": {
@@ -734,7 +749,7 @@
       "permissionDenied": "You do not have permission to save establishments."
     },
     "empty": {
-      "title": "No establishments found"
+      "title": "No establishment found"
     }
   },
   "contract": {
@@ -755,8 +770,8 @@
       "statusEnum": "Status",
       "acquirer": "Acquirer",
       "description": "Description",
-      "createdAt": "Created at",
-      "createdBy": "Created by",
+      "createdAt": "Registered on",
+      "createdBy": "Registered by",
       "establishment": "Establishment"
     },
     "fields": {
@@ -770,20 +785,20 @@
       "acquirer": "Acquirer",
       "description": "Description",
       "endDate": "Final validity",
-      "createdBy": "Created by",
+      "createdBy": "Registered by",
       "paymentTermDays": "Settlement term",
       "rateEcommerce": "E-commerce",
-      "periodEndDate": "End period",
+      "periodEndDate": "End Period",
       "startDate": "Initial validity",
       "establishment": "Establishment",
-      "periodStartDate": "Start period",
+      "periodStartDate": "Start Period",
       "paymentTermDaysEcommerce": "E-commerce settlement term"
     },
     "modality": {
       "CASH_DEBIT": "Debit upfront",
       "CASH_CREDIT": "Credit upfront",
-      "INSTALLMENT_CREDIT_2_6": "Credit installments 2 to 6x",
-      "INSTALLMENT_CREDIT_7_12": "Credit installments 7 to 12x"
+      "INSTALLMENT_CREDIT_2_6": "Installment credit 2 to 6x",
+      "INSTALLMENT_CREDIT_7_12": "Installment credit 7 to 12x"
     },
     "flags": {
       "title": "Flags and fees",
@@ -793,7 +808,7 @@
       "emptyTitle": "No flag added",
       "emptySubtitle": "Select a flag above to start configuring fees.",
       "registeredModalitiesCount": "{count, plural, =0 {No modality registered} =1 {1 modality registered} other {# modalities registered}}",
-      "ratesCount": "{count, plural, =0 {No fees} =1 {1 fee} other {# fees}}"
+      "ratesCount": "{count, plural, =0 {No fee} =1 {1 fee} other {# fees}}"
     },
     "rates": {
       "add": "Add fee",
@@ -861,16 +876,16 @@
       "permissionDenied": "You do not have permission to save contracts."
     },
     "empty": {
-      "title": "No contracts found"
+      "title": "No contract found"
     },
     "view": {
-      "title": "Contract fees:",
+      "title": "Contract Fees:",
       "emptyRates": "No fee registered for this flag.",
       "days": "{count, plural, =0 {0 days} one {# day} other {# days}}",
       "emptyFlags": "No flag/fee registered for this contract.",
       "flag": {
         "defaultName": "Flag",
-        "modalitiesCount": "{count, plural, =0 {No modalities} one {# modality} other {# modalities}}"
+        "modalitiesCount": "{count, plural, =0 {No modality} one {# modality} other {# modalities}}"
       },
       "validity": {
         "until": "to",
@@ -885,7 +900,7 @@
       "line": "Line",
       "Installments": "Installments",
       "searchErp": "Search in ERP",
-      "process": "Search in Archive",
+      "process": "Search in File",
       "searchAcq": "Search in Acquirer"
     },
     "tooltip": {
@@ -894,85 +909,90 @@
     },
     "erp": {
       "sales": {
-        "subtitle": "Search imported ERP sales"
+        "subtitle": "Query sales imported from ERP"
       },
       "installment": {
-        "subtitle": "Search installments from imported ERP sales"
+        "subtitle": "Query installments from sales imported from ERP"
       }
     },
     "acq": {
       "sales": {
-        "subtitle": "Search imported acquirer sales"
+        "subtitle": "Query sales imported from the acquirer"
       },
       "installment": {
-        "subtitle": "Search installments from imported acquirer sales"
+        "subtitle": "Query installments from sales imported from the acquirer"
       }
     },
     "fields": {
+      "erp": "ERP",
       "rate": "Fee",
       "bank": "Bank",
       "sale": "Sale",
-      "flag": "Flag",
-      "liquid": "Net",
+      "title": "Field",
       "cvNsu": "CV/NSU",
       "reason": "Reason",
       "status": "Status",
-      "agency": "Branch",
-      "saleDate": "Sale",
       "account": "Account",
-      "company": "Company",
-      "payment": "Payment",
-      "machine": "Machines",
-      "forecast": "Forecast",
-      "modality": "Modality",
-      "acquirer": "Acquirer",
-      "cardName": "Card Name",
-      "issuer": "Card Issuer",
-      "netAmount": "Net Value",
-      "capture": "Capture Type",
-      "cardNumber": "Card Number",
-      "liquidValue": "Net Amount",
-      "installment": "Installment",
-      "grossValue": "Gross Amount",
-      "tid": "Transaction ID (TID)",
-      "paymentDate": "Payment Date",
-      "installments": "Installments",
-      "periodSaleDate": "Sale Period",
-      "bankDomicile": "Bank domicile",
-      "adjustmentValue": "Adjustments",
-      "conciliation": "Reconciliation",
-      "authorization": "Authorization",
-      "creditDate": "Fecha de crédito",
-      "establishment": "Establishment",
-      "discountValue": "Discount Amount",
-      "contractedFee": "Tasa contratada",
-      "periodPaymentDate": "Payment Period",
-      "statusPaymentBank": "Estado del pago",
-      "conciliationDate": "Reconciliation Date",
-      "expectedPaymentDate": "Payment Forecast",
-      "statusTransaction": "Reconciliation Status",
-      "periodConciliationDate": "Reconciliation Period",
-      "periodExpectedPaymentDate": "Payment Forecast Period"
-    },
-    "columns": {
-      "cvNsu": "CV/NSU",
       "flag": "Flag",
-      "saleDate": "Sale",
+      "agency": "Branch",
       "liquid": "Net",
       "company": "Company",
-      "grossValue": "Gross",
+      "payment": "Payment",
+      "forecast": "Forecast",
+      "machine": "Machines",
+      "saleDate": "Sale Date",
+      "modality": "Modality",
+      "acquirer": "Acquirer",
+      "installment": "Installment",
+      "capture": "Capture Type",
+      "cardName": "Card Name",
+      "issuer": "Card Issuer",
+      "installments": "Installments",
+      "tid": "Transaction ID (TID)",
+      "grossValue": "Gross Amount",
+      "creditDate": "Credit Date",
+      "adjustmentValue": "Adjustments",
+      "netAmount": "Net Amount",
+      "cardNumber": "Card Number",
+      "conciliation": "Reconciliation",
+      "liquidValue": "Net Amount",
+      "authorization": "Authorization",
+      "paymentDate": "Payment Date",
+      "discountValue": "Discount Amount",
+      "periodSaleDate": "Sale Period",
+      "contractedFee": "Contracted Fee",
+      "establishment": "Establishment",
+      "statusTransaction": "Sale Status",
+      "bankDomicile": "Bank domicile",
+      "conciliationDate": "Reconciliation Date",
+      "statusPaymentBank": "Payment Status",
+      "expectedPaymentDate": "Expected Payment",
+      "periodPaymentDate": "Payment Period",
+      "periodConciliationDate": "Reconciliation Period",
+      "periodExpectedPaymentDate": "Expected Payment Period"
+    },
+    "columns": {
+      "sale": "Sale",
+      "gross": "Gross",
+      "cvNsu": "CV/NSU",
+      "flag": "Flag",
+      "liquid": "Net",
+      "company": "Company",
       "machine": "Machines",
       "discountValue": "Fee",
+      "saleDate": "Sale Date",
       "acquirer": "Acquirer",
       "modality": "Modality",
       "capture": "Capture Type",
       "installment": "Installments",
+      "grossValue": "Gross Amount",
       "tid": "Transaction ID (TID)",
       "adjustmentValue": "Adjustments",
       "liquidValue": "Net Amount",
       "authorization": "Authorization",
       "establishment": "Establishment",
-      "expectedPaymentDate": "Payment Forecast"
+      "statusTransactionReason": "Reason",
+      "expectedPaymentDate": "Expected Payment"
     }
   },
   "flag": {
@@ -985,8 +1005,8 @@
       "establishment": "Establishments",
       "linkedCompanies": "Linked companies",
       "linkedAcquirers": "Linked acquirers",
-      "addCompanyToFlag": "Add company to flag",
-      "addAcquirerToFlag": "Add acquirer to flag",
+      "addCompanyToFlag": "Add Company to flag",
+      "addAcquirerToFlag": "Add Acquirer to flag",
       "removeCompany": {
         "header": "Remove link",
         "message": "Do you want to remove company {company} from flag {flag}?",
@@ -1011,9 +1031,9 @@
       "name": "Flag",
       "statusEnum": "Status",
       "company": "Companies",
-      "erpCode": "ERP code",
+      "erpCode": "ERP Code",
       "acquirer": "Acquirers",
-      "acquirerCode": "Acquirer code"
+      "acquirerCode": "Acquirer Code"
     },
     "fields": {
       "name": "Flag",
@@ -1081,7 +1101,7 @@
       "permissionDenied": "You do not have permission to save flags."
     },
     "empty": {
-      "title": "No flags found"
+      "title": "No flag found"
     }
   },
   "accountPassword": {
@@ -1093,11 +1113,11 @@
     "policyTitle": "Password policy",
     "submit": "Save password",
     "successTitle": "Password changed",
-    "successMessage": "Your password was updated successfully.",
+    "successMessage": "Your password has been updated successfully.",
     "footer": "© 2026 CardSync • All rights reserved",
     "formSubtitle": "Enter your current password and set a new secure password.",
-    "policySubtitle": "The password must meet the security rules below.",
-    "formSectionTitle": "Change data",
+    "policySubtitle": "The password must comply with the security rules below.",
+    "formSectionTitle": "Change details",
     "userFallback": "User",
     "usernameFallback": "No user",
     "summary": {
@@ -1113,7 +1133,7 @@
       "weak": "Weak",
       "medium": "Medium",
       "strong": "Strong",
-      "rulesSatisfied": "rules met"
+      "rulesSatisfied": "rules satisfied"
     }
   },
   "profile": {
@@ -1124,7 +1144,7 @@
       "groups": "Groups",
       "permissions": "Permissions",
       "groupsSubtitle": "Organizational profiles linked to the user.",
-      "permissionsSubtitle": "Access available to the authenticated user."
+      "permissionsSubtitle": "Accesses available to the authenticated user."
     },
     "section": {
       "identification": "Identification",
@@ -1142,7 +1162,7 @@
       "password": "Password",
       "passwordExpires": "Password expires on",
       "issuer": "Issuer",
-      "createdAt": "Created at",
+      "createdAt": "Created on",
       "lastLogin": "Last login",
       "groups": "Groups",
       "permissions": "Permissions"
@@ -1175,15 +1195,15 @@
     "fields": {
       "name": "Name",
       "description": "Description",
-      "createdAt": "Created at",
-      "createdBy": "Created by"
+      "createdAt": "Registered on",
+      "createdBy": "Registered by"
     },
     "columns": {
       "name": "Name",
       "usersCount": "Users",
       "description": "Description",
-      "createdAt": "Created at",
-      "createdBy": "Created by",
+      "createdAt": "Registered on",
+      "createdBy": "Registered by",
       "permissionsCount": "Permissions"
     },
     "form": {
@@ -1194,7 +1214,7 @@
       "permissionDenied": "You do not have permission to save groups."
     },
     "empty": {
-      "title": "No groups found"
+      "title": "No group found"
     },
     "action": {
       "create": {
@@ -1208,8 +1228,8 @@
       }
     },
     "detail": {
-      "title": "Group details",
-      "subtitle": "Summary, permissions and group users",
+      "title": "Group detail",
+      "subtitle": "Summary, permissions, and users of the group",
       "tabs": {
         "summary": "Summary",
         "permissions": "Permissions",
@@ -1217,19 +1237,19 @@
       },
       "permissions": {
         "title": "Permissions",
-        "subtitle": "Associate or dissociate permissions from this group.",
+        "subtitle": "Associate or disassociate permissions from this group.",
         "placeholder": "Select permissions",
         "saved": "Permissions updated successfully.",
         "saveError": "Could not save group permissions.",
-        "empty": "No permission associated."
+        "empty": "No permission assigned."
       },
       "users": {
         "title": "Users",
-        "subtitle": "Associate or dissociate users from this group.",
+        "subtitle": "Associate or disassociate users from this group.",
         "placeholder": "Select users",
         "saved": "Users updated successfully.",
         "saveError": "Could not save group users.",
-        "empty": "No user associated."
+        "empty": "No user assigned."
       }
     },
     "delete": {
@@ -1246,7 +1266,7 @@
         "subject": "Subject",
         "template": "Template",
         "status": "Status",
-        "sentAt": "Sent at",
+        "sentAt": "Sent on",
         "eventType": "Event Type"
       },
       "columns": {
@@ -1254,21 +1274,185 @@
         "subject": "Subject",
         "template": "Template",
         "status": "Status",
-        "sentAt": "Sent at",
+        "sentAt": "Sent on",
         "eventType": "Event Type",
         "errorMessage": "Error"
       },
       "status": {
         "sent": "Sent",
-        "failed": "Send failure"
+        "failed": "Send failed"
       },
       "eventType": {
         "firstPassword": "First password",
         "passwordReset": "Password reset"
       },
       "empty": {
-        "title": "No logs found"
+        "title": "No log found"
       }
+    }
+  },
+  "conciliation": {
+    "reconcileUsingERP": "Reconcile using ERP",
+    "errorReconciliation": "Reconciliation error",
+    "processReconciliation": "Process reconciliation",
+    "reconcileUsingAcquirer": "Reconcile using acquirer",
+    "reconciliationFinalizedTitle": "Reconciliation finalized",
+    "textTooltip": "Manually runs ERP x acquirer reconciliation",
+    "reconciliationFinalized": "ERP x acquirer reconciliation was processed.",
+    "noDiscrepancyFound": "No divergent field was found in this comparison.",
+    "processReconciliationError": "Could not process ERP x acquirer reconciliation.",
+    "dialog": {
+      "compareSales": "Compare sales",
+      "displayingFieldsDiscrepancies": "Displaying only fields with divergence.",
+      "divergence": "{count, plural, =0 {No divergent field} one {# divergent} other {# divergent}}"
+    },
+    "pageTitle": {
+      "missingErp": "Sales not found in ERP",
+      "missingOther": "Other unreconciled sales",
+      "missingAcquirer": "Sales not found in acquirer"
+    },
+    "pageDescription": {
+      "missingErp": "Acquirer sales that were not found in ERP. Use this screen to create ERP sales in bulk.",
+      "missingAcquirer": "ERP sales that do not have a corresponding acquirer sale. Use this screen to mark them as deleted in bulk.",
+      "missingOther": "Sales with value, acquirer, flag, modality, or ambiguous match divergence for analysis and manual reconciliation."
+    },
+    "action": {
+      "missingErp": "Not found in ERP",
+      "missingOther": "Other unreconciled",
+      "missingAcquirer": "Not found in acquirer"
+    },
+    "result": {
+      "analyzed": "Analyzed",
+      "matched": "Reconciled",
+      "updated": "Updated",
+      "notMatched": "Unreconciled",
+      "flagUpdated": "Flags updated",
+      "valueDivergences": "Value divergences",
+      "skippedDivergent": "Skipped due to divergence",
+      "ambiguousMatches": "Ambiguous matches",
+      "businessContextUpdated": "Contexts updated",
+      "acquirerDivergences": "Acquirer divergences"
+    },
+    "finishedTitle": "Batch finalized",
+    "errorTitle": "Error processing batch",
+    "finishedWithWarningsTitle": "Batch finalized with warnings",
+    "noEligibleSelectedTitle": "No eligible sale selected",
+    "finishedMessage": "Success: {{ success }} · Failed: {{ failed }} · Requested: {{ requested }}",
+    "missingErp": {
+      "batch": {
+        "noEligibleSelectedDetail": "Select acquirer sales to create ERP sales in bulk.",
+        "createErrorDetail": "Could not create the selected ERP sales.",
+        "description": "CardSync will create corresponding ERP sales using the data from the selected acquirer sales. The created sales will already be linked to the acquirer sales.",
+        "actionSuffix": "creating sales in ERP",
+        "confirmLabel": "Create ERP sales"
+      },
+      "single": {
+        "acquirerNotFoundTitle": "Acquirer sale not found",
+        "acquirerNotFoundDetail": "The row must return the acquirer sale identifier to create the ERP sale.",
+        "description": "CardSync will create a corresponding ERP sale using the data from the selected acquirer sale. The created sale will already be linked to the acquirer sale.",
+        "actionSuffix": "creating the sale in ERP",
+        "confirmLabel": "Create ERP sale",
+        "createErrorTitle": "Error creating ERP",
+        "createErrorDetail": "Could not create the ERP sale.",
+        "createdTitle": "ERP sale created",
+        "createdDetail": "ERP sale created from the acquirer."
+      }
+    },
+    "missingAcq": {
+      "batch": {
+        "noEligibleSelectedDetail": "Select ERP sales to mark as deleted in bulk.",
+        "deleteErrorDetail": "Could not mark the selected ERP sales as deleted.",
+        "description": "The selected ERP sales will be marked as deleted because they were not found in the acquirer. This action removes these sales from the ERP x acquirer reconciliation flow.",
+        "actionSuffix": "as deleted in ERP",
+        "confirmLabel": "Mark as deleted"
+      },
+      "single": {
+        "erpNotFoundTitle": "ERP sale not found",
+        "erpNotFoundDetail": "The row must return the ERP sale identifier to mark it as deleted.",
+        "description": "The ERP sale will be marked as deleted because it was not found in the acquirer. This action removes the sale from the ERP x acquirer reconciliation flow.",
+        "actionSuffix": "as deleted in ERP",
+        "confirmLabel": "Mark as deleted",
+        "deleteErrorTitle": "Error deleting ERP",
+        "deleteErrorDetail": "Could not mark the ERP sale as deleted.",
+        "deleteTitle": "ERP sale marked as deleted",
+        "deleteDetail": "ERP sale marked as deleted."
+      }
+    },
+    "batchDialog": {
+      "title": {
+        "createErp": "Create sales in ERP",
+        "deleteErp": "Remove sales",
+        "warning": "WARNING"
+      },
+      "mainText": {
+        "createErp": {
+          "one": "You selected { count } sale transaction to create a corresponding sale in ERP.",
+          "many": "You selected { count } sale transactions to create corresponding sales in ERP."
+        },
+        "deleteErp": {
+          "one": "You selected { count } sale transaction to mark as deleted in ERP.",
+          "many": "You selected { count } sale transactions to mark as deleted in ERP."
+        },
+        "generic": {
+          "one": "You selected { count } sale transaction to confirm the action.",
+          "many": "You selected { count } sale transactions to confirm the action."
+        }
+      },
+      "description": {
+        "createErp": "CardSync will create the sales in ERP based on acquirer data and keep the link between the two sources.",
+        "deleteErp": "The selected ERP sales will be removed from the reconciliation flow because they were not found in the acquirer.",
+        "generic": "Confirm to continue with the selected action."
+      },
+      "confirm": {
+        "createErp": "Create ERP sales",
+        "deleteErp": "Mark as deleted"
+      },
+      "securityAuditNotice": "For security reasons, the data of the person responsible for this action will be stored for future queries."
+    },
+    "selection": {
+      "createErp": "Create ERP sale",
+      "currentMode": "Selection mode",
+      "deleteErp": "To delete from ERP",
+      "deleteErpSelected": "Mark ERP Deleted",
+      "createErpSelected": "Create Selected ERP",
+      "count": "{count, plural, =0 {None selected} one {# selected} other {# selected}}",
+      "pickOneFirst": "First select an eligible transaction to define the selection context.",
+      "deleteErpSelectedTooltip": "Marks ERP sales not found in the acquirer as deleted in bulk",
+      "createErpSelectedTooltip": "Creates ERP sales in bulk for acquirer sales not found in ERP"
+    },
+    "otherDivergences": {
+      "compareTooltip": "Compare sales",
+      "compareErrorTitle": "Error comparing sales",
+      "manualResolvedTitle": "Divergence resolved",
+      "manualErrorTitle": "Error reconciling sales",
+      "compareUnavailableTitle": "Comparison unavailable",
+      "manualResolvedDetail": "Sale reconciled manually.",
+      "manualErrorDetail": "Could not complete manual reconciliation.",
+      "compareUnavailableDetail": "The row must return the ERP sale and acquirer sale identifiers.",
+      "compareUnavailableTooltip": "Comparison unavailable: the backend did not return the acquirer sale linked to this ERP sale.",
+      "compareErrorDetail": "Could not load the detailed comparison. Check whether the comparison endpoint is available on the backend."
+    },
+    "actionDialog": {
+      "titles": {
+        "createErp": "Create sale in ERP",
+        "deleteErp": "Remove sale",
+        "warning": "WARNING"
+      },
+      "mainText": {
+        "createErp": "You selected 1 sales transaction to create the corresponding sale in ERP.",
+        "deleteErp": "You selected 1 sales transaction to mark as deleted in ERP.",
+        "generic": "You selected 1 sales transaction to confirm the action."
+      },
+      "description": {
+        "createErp": "CardSync will create a sale in ERP based on the acquirer data and keep the link between both sources.",
+        "deleteErp": "The ERP sale will be removed from the reconciliation flow because it was not found in the acquirer.",
+        "generic": "Confirm to continue with the selected action."
+      },
+      "confirm": {
+        "createErp": "Create ERP sale",
+        "deleteErp": "Mark as deleted"
+      },
+      "securityAuditNotice": "For security reasons, the details of the user responsible for this action will be stored for future reference."
     }
   },
   "session": {
@@ -1289,10 +1473,13 @@
       "initial": "Initial Value"
     },
     "no": "No",
+    "to": "to",
     "yes": "Yes",
     "new": "New",
     "all": "All",
+    "until": "Until",
     "error": "Error",
+    "action": "Action",
     "save": "Save",
     "edit": "Edit",
     "back": "Back",
@@ -1301,9 +1488,6 @@
     "clear": "Clear",
     "quantity": "Qty.",
     "search": "Search",
-    "from": "From",
-    "until": "Up to",
-    "to": "to",
     "apply": "Apply",
     "actions": "Actions",
     "filter": "Filter",
@@ -1317,8 +1501,9 @@
     "warning": "Warning",
     "view": "View",
     "company": "Company",
-    "notNow": "Not now",
     "grossValue": "Gross",
+    "notNow": "Not now",
+    "from": "From",
     "update": "Update",
     "confirm": "Confirm",
     "discountValue": "Fee",
@@ -1346,7 +1531,7 @@
   },
   "notifications": {
     "welcome": "Hello, {name}!",
-    "itemsCount": "{count, plural, =0 {No items} one {# item} other {# items}}"
+    "itemsCount": "{count, plural, =0 {No item} one {# item} other {# items}}"
   },
   "errors": {
     "global": {
@@ -1385,7 +1570,7 @@
     "attemptedUrl": "Accessed URL",
     "goHome": "Go to dashboard",
     "title": "Page not found",
-    "hint": "If you got here through a system link, review the route registration or the corresponding menu item.",
-    "message": "The informed route does not exist or was removed. Check the accessed address or return to the dashboard."
+    "hint": "If you arrived here through a system link, review the route registration or the corresponding menu item.",
+    "message": "The informed route does not exist or has been removed. Check the accessed address or go back to the dashboard."
   }
 }
