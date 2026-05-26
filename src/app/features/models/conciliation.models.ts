@@ -111,6 +111,12 @@ export interface ConciliationDashboardModel {
 
 export interface ConciliationFeeAnalysisModel {
   id: string;
+  acquirerTransactionId?: string | null;
+  erpTransactionId?: string | null;
+  companyId?: string | null;
+  establishmentId?: string | null;
+  acquirerId?: string | null;
+  flagId?: string | null;
   saleDate?: string | null;
   company?: string | null;
   establishment?: string | null;
@@ -119,11 +125,20 @@ export interface ConciliationFeeAnalysisModel {
   modality?: string | null;
   nsu?: string | number | null;
   authorization?: string | null;
+  machine?: string | null;
+  capture?: string | null;
+  plan?: number | null;
+
   grossValue?: number | null;
-  expectedRate?: number | null;
   appliedRate?: number | null;
-  expectedFeeValue?: number | null;
   appliedFeeValue?: number | null;
+  acquirerLiquidValue?: number | null;
+
+  auditGrossValue?: number | null;
+  expectedRate?: number | null;
+  expectedFeeValue?: number | null;
+  auditLiquidValue?: number | null;
+
   feeDifference?: number | null;
   status: FeeAnalysisStatus;
 }

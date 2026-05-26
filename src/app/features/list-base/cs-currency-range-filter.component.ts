@@ -12,9 +12,11 @@ export interface CsCurrencyRangeValue {
   end: number | null;
 }
 
+export type CsCurrencyRangeMask = 'currency' | 'decimal' | 'percent';
+
 @Component({
-  selector: 'cs-currency-range-filter',
   standalone: true,
+  selector: 'cs-currency-range-filter',
   imports: [CommonModule, FormsModule, InputNumberModule, FloatLabel],
   host: {
     class: 'block',
@@ -31,11 +33,15 @@ export interface CsCurrencyRangeValue {
             <p-inputNumber
               size="small"
               class="w-full"
-              mode="currency"
               [locale]="locale()"
-              [currency]="currency()"
+              [suffix]="suffix()"
+              [prefix]="prefix()"
               [ngModel]="startValue()"
               inputStyleClass="w-full"
+              [mode]="inputNumberMode()"
+              [currency]="currencyCode()"
+              [useGrouping]="useGrouping"
+              [placeholder]="placeholder()"
               [inputId]="inputId + '-start'"
               [minFractionDigits]="minFractionDigits"
               [maxFractionDigits]="maxFractionDigits"
@@ -53,12 +59,16 @@ export interface CsCurrencyRangeValue {
             <p-inputNumber
               size="small"
               class="w-full"
-              mode="currency"
               [locale]="locale()"
+              [suffix]="suffix()"
+              [prefix]="prefix()"
               [ngModel]="endValue()"
-              [currency]="currency()"
               inputStyleClass="w-full"
+              [mode]="inputNumberMode()"
+              [currency]="currencyCode()"
+              [useGrouping]="useGrouping"
               [inputId]="inputId + '-end'"
+              [placeholder]="placeholder()"
               (ngModelChange)="onEndChange($event)"
               [minFractionDigits]="minFractionDigits"
               [maxFractionDigits]="maxFractionDigits"
@@ -76,12 +86,20 @@ export interface CsCurrencyRangeValue {
 export class CsCurrencyRangeFilterComponent {
   private readonly i18n = inject(I18nService);
 
-  @Input() inputId = 'currencyRange';
   @Input() label = 'Valor';
+  @Input() inputId = 'currencyRange';
 
-  @Input() startLabel = 'Inicial';
   @Input() endLabel = 'Final';
+  @Input() startLabel = 'Inicial';
 
+  /**
+   * currency: R$ 1.234,56
+   * percent: 2,50 %
+   * decimal: 1234,56
+   */
+  @Input() mask: CsCurrencyRangeMask = 'currency';
+
+  @Input() useGrouping = true;
   @Input() minFractionDigits = 2;
   @Input() maxFractionDigits = 2;
 
@@ -92,8 +110,8 @@ export class CsCurrencyRangeFilterComponent {
 
   @Output() valueChange = new EventEmitter<CsCurrencyRangeValue>();
 
-  protected readonly startValue = signal<number | null>(null);
   protected readonly endValue = signal<number | null>(null);
+  protected readonly startValue = signal<number | null>(null);
 
   protected readonly locale = computed(() => {
     this.i18n.appliedLang();
@@ -102,12 +120,32 @@ export class CsCurrencyRangeFilterComponent {
 
   protected readonly currency = computed(() => {
     this.i18n.appliedLang();
-    return this.i18n.getCurrency();
+    return this.i18n.getCurrencyBrl();
   });
 
   protected readonly hasValue = computed(
     () => this.startValue() !== null || this.endValue() !== null,
   );
+
+  protected readonly inputNumberMode = computed<'currency' | 'decimal'>(() => {
+    return this.mask === 'currency' ? 'currency' : 'decimal';
+  });
+
+  protected readonly currencyCode = computed<string | undefined>(() => {
+    return this.mask === 'currency' ? this.currency() : undefined;
+  });
+
+  protected readonly suffix = computed<string | undefined>(() => {
+    return this.mask === 'percent' ? ' %' : undefined;
+  });
+
+  protected readonly prefix = computed<string | undefined>(() => undefined);
+
+  protected readonly placeholder = computed(() => {
+    if (this.mask === 'percent') return '0,00 %';
+    if (this.mask === 'decimal') return '0,00';
+    return undefined;
+  });
 
   protected onStartChange(value: number | null): void {
     this.startValue.set(value ?? null);
@@ -132,20 +170,63 @@ export function currencyRangeLabel(
   start: number | null | undefined,
   end: number | null | undefined,
 ): string | null {
-  const hasStart = start !== null && start !== undefined;
-  const hasEnd = end !== null && end !== undefined;
+  return rangeLabel(i18n, start, end, 'currency');
+}
 
-  if (!hasStart && !hasEnd) {
-    return null;
+export function percentRangeLabel(
+  i18n: I18nService,
+  start: number | null | undefined,
+  end: number | null | undefined,
+): string | null {
+  return rangeLabel(i18n, start, end, 'percent');
+}
+
+export function decimalRangeLabel(
+  i18n: I18nService,
+  start: number | null | undefined,
+  end: number | null | undefined,
+): string | null {
+  return rangeLabel(i18n, start, end, 'decimal');
+}
+
+function rangeLabel(
+  i18n: I18nService,
+  start: number | null | undefined,
+  end: number | null | undefined,
+  mask: CsCurrencyRangeMask,
+): string | null {
+  const formatter = (value: number) => formatRangeValue(i18n, value, mask);
+
+  if (start !== null && start !== undefined && end !== null && end !== undefined) {
+    return `${formatter(start)} ${i18n.tUi('common.to')} ${formatter(end)}`;
   }
 
-  if (hasStart && hasEnd) {
-    return `${i18n.formatBrlCurrency(start)} ${i18n.tUi('common.to')} ${i18n.formatBrlCurrency(end)}`;
+  if (start !== null && start !== undefined) {
+    return `${i18n.tUi('common.from')} ${formatter(start)}`;
   }
 
-  if (hasStart) {
-    return `${i18n.tUi('common.from')} ${i18n.formatBrlCurrency(start)}`;
+  if (end !== null && end !== undefined) {
+    return `${i18n.tUi('common.until')} ${formatter(end)}`;
   }
 
-  return `${i18n.tUi('common.until')} ${i18n.formatBrlCurrency(end)}`;
+  return null;
+}
+
+function formatRangeValue(i18n: I18nService, value: number, mask: CsCurrencyRangeMask): string {
+  if (mask === 'currency') {
+    return i18n.formatBrlCurrency(value);
+  }
+
+  if (mask === 'percent') {
+    return new Intl.NumberFormat(i18n.getLocale(), {
+      style: 'percent',
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 4,
+    }).format(value / 100);
+  }
+
+  return new Intl.NumberFormat(i18n.getLocale(), {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 4,
+  }).format(value);
 }

@@ -11,6 +11,8 @@ import { ConciliationWaitingAdvancedFilters } from '@features/filter/conciliatio
 import {
   ErpAcquirerTruthSource,
   ConciliationWaitingModel,
+  ReconcileFeesResultModel,
+  ReconcileBankResultModel,
   ErpAcquirerComparisonModel,
   ReconcileErpAcquirerResultModel,
   ErpAcquirerResolutionResultModel,
@@ -29,9 +31,9 @@ type ConciliationQuery = MissingAcquirerQuery | MissingErpQuery | OtherDivergenc
 
 @Injectable({ providedIn: 'root' })
 export class ConciliationWaitingFacade {
-  private readonly api = inject(ConciliationWaitingApiService);
   private readonly i18n = inject(I18nService);
   private readonly toast = inject(ToastService);
+  private readonly api = inject(ConciliationWaitingApiService);
 
   private readonly _total = signal(0);
   private readonly _loading = signal(false);
@@ -148,8 +150,23 @@ export class ConciliationWaitingFacade {
   reconcileErpVsAcquirer(): Observable<ReconcileErpAcquirerResultModel> {
     return this.api.reconcileErpVsAcquirer().pipe(
       tap((result) => {
-        this.clearTotals();
-        this.showReconciliationResultToast(result);
+        this.showReconciliationResultErpAcquirerToast(result);
+      }),
+    );
+  }
+
+  reconcileFees(): Observable<ReconcileFeesResultModel> {
+    return this.api.reconcileFees().pipe(
+      tap((result) => {
+        this.showReconciliationResultFeesToast(result);
+      }),
+    );
+  }
+
+  reconcilingBank(): Observable<ReconcileBankResultModel> {
+    return this.api.reconcilingBank().pipe(
+      tap((result) => {
+        // this.showReconciliationResultFeesToast(result);
       }),
     );
   }
@@ -180,17 +197,17 @@ export class ConciliationWaitingFacade {
     }
   }
 
-  private showReconciliationResultToast(result: ReconcileErpAcquirerResultModel): void {
+  private showReconciliationResultFeesToast(result: ReconcileFeesResultModel): void {
     const summary = this.i18n.tUi('conciliation.reconciliationFinalizedTitle');
-    const detail = this.buildReconciliationToastDetail(result);
+    const detail = this.buildReconciliationFeesToastDetail(result);
     const life = 9000;
 
-    if (this.hasReconciliationUpdates(result)) {
+    if (this.hasReconciliationFeesUpdates(result)) {
       this.toast.success(summary, detail, life);
       return;
     }
 
-    if (this.hasReconciliationWarnings(result)) {
+    if (this.hasReconciliationFeesWarnings(result)) {
       this.toast.warn(summary, detail, life);
       return;
     }
@@ -198,7 +215,27 @@ export class ConciliationWaitingFacade {
     this.toast.info(summary, detail, life);
   }
 
-  private buildReconciliationToastDetail(result: ReconcileErpAcquirerResultModel): string {
+  private showReconciliationResultErpAcquirerToast(result: ReconcileErpAcquirerResultModel): void {
+    const summary = this.i18n.tUi('conciliation.reconciliationFinalizedTitle');
+    const detail = this.buildReconciliationErpAcquirerToastDetail(result);
+    const life = 9000;
+
+    if (this.hasReconciliationErpAcquirerUpdates(result)) {
+      this.toast.success(summary, detail, life);
+      return;
+    }
+
+    if (this.hasReconciliationErpAcquirerWarnings(result)) {
+      this.toast.warn(summary, detail, life);
+      return;
+    }
+
+    this.toast.info(summary, detail, life);
+  }
+
+  private buildReconciliationErpAcquirerToastDetail(
+    result: ReconcileErpAcquirerResultModel,
+  ): string {
     return [
       `${this.i18n.tUi('conciliation.result.analyzed')}: ${this.formatInteger(result.analyzed)}`,
       `${this.i18n.tUi('conciliation.result.matched')}: ${this.formatInteger(result.matched)}`,
@@ -213,7 +250,18 @@ export class ConciliationWaitingFacade {
     ].join(' • ');
   }
 
-  private hasReconciliationUpdates(result: ReconcileErpAcquirerResultModel): boolean {
+  private buildReconciliationFeesToastDetail(result: ReconcileFeesResultModel): string {
+    return [
+      `${this.i18n.tUi('conciliation.result.okRates')}: ${this.formatInteger(result.okRates)}`,
+      `${this.i18n.tUi('conciliation.result.analyzed')}: ${this.formatInteger(result.analyzed)}`,
+      `${this.i18n.tUi('conciliation.result.divergentRates')}: ${this.formatInteger(result.divergentRates)}`,
+      `${this.i18n.tUi('conciliation.result.updatedErpSales')}: ${this.formatInteger(result.updatedErpSales)}`,
+      `${this.i18n.tUi('conciliation.result.missingValidContracts')}: ${this.formatInteger(result.missingValidContracts)}`,
+      `${this.i18n.tUi('conciliation.result.skippedWithoutAcquire')}: ${this.formatInteger(result.skippedWithoutAcquire)}`,
+    ].join(' • ');
+  }
+
+  private hasReconciliationErpAcquirerUpdates(result: ReconcileErpAcquirerResultModel): boolean {
     return (
       result.updated > 0 ||
       result.matched > 0 ||
@@ -222,12 +270,24 @@ export class ConciliationWaitingFacade {
     );
   }
 
-  private hasReconciliationWarnings(result: ReconcileErpAcquirerResultModel): boolean {
+  private hasReconciliationErpAcquirerWarnings(result: ReconcileErpAcquirerResultModel): boolean {
     return (
       result.skippedDivergent > 0 ||
       result.ambiguousMatches > 0 ||
       result.valueDivergences > 0 ||
       result.acquirerDivergences > 0
+    );
+  }
+
+  private hasReconciliationFeesUpdates(result: ReconcileFeesResultModel): boolean {
+    return result.analyzed > 0 || result.okRates > 0 || result.updatedErpSales > 0;
+  }
+
+  private hasReconciliationFeesWarnings(result: ReconcileFeesResultModel): boolean {
+    return (
+      result.skippedWithoutAcquire > 0 ||
+      result.divergentRates > 0 ||
+      result.missingValidContracts > 0
     );
   }
 

@@ -23,9 +23,9 @@ export interface TransactionsErpModel {
 
   cvNsu: number;
   feeValue: number;
-  netValue: number;
   lineNumber: number;
   grossValue: number;
+  liquidValue: number;
   installment: number;
   adjustmentValue: number;
 
@@ -65,9 +65,9 @@ export interface TransactionsErpApiModel {
 
   cvNsu: number;
   feeValue: number;
-  netValue: number;
   lineNumber: number;
   grossValue: number;
+  liquidValue: number;
   installment: number;
   adjustmentValue: number;
 

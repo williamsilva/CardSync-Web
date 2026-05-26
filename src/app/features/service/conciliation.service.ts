@@ -3,6 +3,7 @@ import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { environment } from 'environments/environment';
+import { HalPagedResponse } from '@core/api/page.model';
 import { PageResponse } from '@models/file-processing.models';
 import {
   BankSettlementAnalysisModel,
@@ -14,6 +15,7 @@ import {
   DebitAnalysisModel,
   DivergenceAnalysisModel,
 } from '@models/conciliation.models';
+import { ListQueryDto } from '@shared/features/list-query/list-query.types';
 
 @Injectable({ providedIn: 'root' })
 export class ConciliationService {
@@ -27,12 +29,13 @@ export class ConciliationService {
   }
 
   listFees(
-    query: ConciliationPageQuery = {},
-  ): Observable<PageResponse<ConciliationFeeAnalysisModel>> {
-    return this.http.get<PageResponse<ConciliationFeeAnalysisModel>>(`${this.baseUrl}/fees`, {
-      params: this.toParams(query),
-      withCredentials: true,
-    });
+    body: ListQueryDto<Record<string, unknown>>,
+  ): Observable<HalPagedResponse<ConciliationFeeAnalysisModel>> {
+    return this.http.post<HalPagedResponse<ConciliationFeeAnalysisModel>>(
+      `${this.baseUrl}/fees`,
+      body,
+      { withCredentials: true },
+    );
   }
 
   listDebits(query: ConciliationPageQuery = {}): Observable<PageResponse<DebitAnalysisModel>> {

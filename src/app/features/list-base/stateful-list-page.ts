@@ -33,7 +33,7 @@ export abstract class StatefulListPage<
   );
 
   abstract rows: number;
-  public rowsPerPageOptions: number[] = [10, 15, 20, 30, 50, 100];
+  public rowsPerPageOptions: number[] = [13, 15, 20, 30, 50, 100];
 
   protected abstract tableRowsKey(): string;
   protected abstract tableStateKey(): string;

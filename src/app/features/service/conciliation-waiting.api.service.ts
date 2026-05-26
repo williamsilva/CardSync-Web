@@ -12,8 +12,10 @@ import { ConciliationWaitingAdvancedFilters } from '@features/filter/conciliatio
 import {
   ErpAcquirerTruthSource,
   ConciliationWaitingModel,
-  ConciliationWaitingApiModel,
+  ReconcileFeesResultModel,
+  ReconcileBankResultModel,
   ErpAcquirerComparisonModel,
+  ConciliationWaitingApiModel,
   ReconcileErpAcquirerResultModel,
   mapConciliationWaitingApiModels,
   ErpAcquirerResolutionResultModel,
@@ -164,6 +166,22 @@ export class ConciliationWaitingApiService {
   reconcileErpVsAcquirer(): Observable<ReconcileErpAcquirerResultModel> {
     return this.http.post<ReconcileErpAcquirerResultModel>(
       `${this.baseUrl}/reconcile`,
+      {},
+      { withCredentials: true },
+    );
+  }
+
+  reconcileFees(): Observable<ReconcileFeesResultModel> {
+    return this.http.post<ReconcileFeesResultModel>(
+      `${this.baseUrl}/reconcile-fees`,
+      {},
+      { withCredentials: true },
+    );
+  }
+
+  reconcilingBank(): Observable<ReconcileBankResultModel> {
+    return this.http.post<ReconcileFeesResultModel>(
+      `${this.baseUrl}/reconcile-bank`,
       {},
       { withCredentials: true },
     );

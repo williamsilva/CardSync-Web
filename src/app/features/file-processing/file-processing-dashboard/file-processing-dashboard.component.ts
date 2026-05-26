@@ -38,7 +38,6 @@ export class FileProcessingDashboardComponent {
   protected readonly processingErp = signal(false);
   protected readonly processingRede = signal(false);
   protected readonly processingBank = signal(false);
-  protected readonly reconcilingBank = signal(false);
   protected readonly files = signal<ProcessedFileModel[]>([]);
   protected readonly schedule = signal<ScheduleStatusResponse | null>(null);
 
@@ -93,15 +92,6 @@ export class FileProcessingDashboardComponent {
       next: () => this.reload(),
       error: () => this.processingBank.set(false),
       complete: () => this.processingBank.set(false),
-    });
-  }
-
-  protected reconcileBank(): void {
-    this.reconcilingBank.set(true);
-    this.service.reconcileBank().subscribe({
-      next: () => this.reload(),
-      error: () => this.reconcilingBank.set(false),
-      complete: () => this.reconcilingBank.set(false),
     });
   }
 

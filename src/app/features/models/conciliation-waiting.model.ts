@@ -22,6 +22,17 @@ export interface ErpAcquirerFieldDiffModel {
   different: boolean;
 }
 
+export interface ReconcileBankResultModel {}
+
+export interface ReconcileFeesResultModel {
+  okRates: number;
+  analyzed: number;
+  divergentRates: number;
+  updatedErpSales: number;
+  missingValidContracts: number;
+  skippedWithoutAcquire: number;
+}
+
 export interface ReconcileErpAcquirerResultModel {
   analyzed: number;
   matched: number;

@@ -41,8 +41,8 @@ export const APP_MENU: AppMenuItem[] = [
       },
       {
         exact: false,
-        route: '/conciliation/fees',
-        labelKey: 'menu.conciliation.fees',
+        route: '/conciliation/contract-audit',
+        labelKey: 'menu.conciliation.contractAudit',
         icon: 'pi pi-percentage text-purple-500',
       },
       {

@@ -7,7 +7,7 @@ export enum ModalityEnum {
   CASH_CREDIT = 'CASH_CREDIT',
   INSTALLMENT_CREDIT_2_6 = 'INSTALLMENT_CREDIT_2_6',
   INSTALLMENT_CREDIT_7_12 = 'INSTALLMENT_CREDIT_7_12',
-  INSTALLMENT_CREDIT_13_18 = 'INSTALLMENT_CREDIT_13_18',
+  INSTALLMENT_CREDIT_13_21 = 'INSTALLMENT_CREDIT_13_21',
   DIGITAL_WALLET = 'DIGITAL_WALLET',
   OUTROS = 'OUTROS',
 }
@@ -20,7 +20,7 @@ export const STATUS_CODE_MAP: Record<number, ModalityEnum> = {
   2: ModalityEnum.CASH_CREDIT,
   3: ModalityEnum.INSTALLMENT_CREDIT_2_6,
   4: ModalityEnum.INSTALLMENT_CREDIT_7_12,
-  5: ModalityEnum.INSTALLMENT_CREDIT_13_18,
+  5: ModalityEnum.INSTALLMENT_CREDIT_13_21,
   8: ModalityEnum.DIGITAL_WALLET,
   9: ModalityEnum.OUTROS,
 };
@@ -50,8 +50,8 @@ export function normalizeModalityEnum(modality: ModalityInput): ModalityEnum | n
     case ModalityEnum.INSTALLMENT_CREDIT_7_12:
       return ModalityEnum.INSTALLMENT_CREDIT_7_12;
 
-    case ModalityEnum.INSTALLMENT_CREDIT_13_18:
-      return ModalityEnum.INSTALLMENT_CREDIT_13_18;
+    case ModalityEnum.INSTALLMENT_CREDIT_13_21:
+      return ModalityEnum.INSTALLMENT_CREDIT_13_21;
 
     case ModalityEnum.DIGITAL_WALLET:
       return ModalityEnum.DIGITAL_WALLET;
@@ -78,7 +78,7 @@ export function modalityEnumSeverity(modality: ModalityInput): CsTagTone {
     case ModalityEnum.INSTALLMENT_CREDIT_7_12:
       return 'orange';
 
-    case ModalityEnum.INSTALLMENT_CREDIT_13_18:
+    case ModalityEnum.INSTALLMENT_CREDIT_13_21:
       return 'pink';
 
     case ModalityEnum.DIGITAL_WALLET:
@@ -107,8 +107,8 @@ export function modalityEnumLabel(modality: ModalityInput, i18n: I18nService): s
     case ModalityEnum.INSTALLMENT_CREDIT_7_12:
       return i18n.tUi('enum.modalityEnum.installment_7_12');
 
-    case ModalityEnum.INSTALLMENT_CREDIT_13_18:
-      return i18n.tUi('enum.modalityEnum.installment_13_18');
+    case ModalityEnum.INSTALLMENT_CREDIT_13_21:
+      return i18n.tUi('enum.modalityEnum.installment_13_21');
 
     case ModalityEnum.DIGITAL_WALLET:
       return i18n.tUi('enum.modalityEnum.digital_wallet');
@@ -130,6 +130,6 @@ export function allModalityEnum(): ModalityEnum[] {
     ModalityEnum.CASH_CREDIT,
     ModalityEnum.INSTALLMENT_CREDIT_2_6,
     ModalityEnum.INSTALLMENT_CREDIT_7_12,
-    ModalityEnum.INSTALLMENT_CREDIT_13_18,
+    ModalityEnum.INSTALLMENT_CREDIT_13_21,
   ];
 }

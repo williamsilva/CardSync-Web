@@ -134,7 +134,6 @@ export class MissingAcquirerListComponent
   protected override readonly i18n = inject(I18nService);
 
   protected readonly resolving = signal(false);
-  protected readonly reconciling = signal(false);
   protected readonly batchDialogVisible = signal(false);
   protected readonly actionDialogVisible = signal(false);
   protected readonly pendingBatchAction = signal<any | null>(null);
@@ -332,15 +331,15 @@ export class MissingAcquirerListComponent
   }
 
   protected override tableRowsKey(): string {
-    return STATE_KEY.CARDSYNC.MISSING.ACQ.TABLE.ROWS.V1;
+    return STATE_KEY.CARDSYNC.CONCILIATION.MISSING.ACQ.TABLE.ROWS.V1;
   }
 
   protected override tableStateKey(): string {
-    return STATE_KEY.CARDSYNC.MISSING.ACQ.TABLE.STATE.V1;
+    return STATE_KEY.CARDSYNC.CONCILIATION.MISSING.ACQ.TABLE.STATE.V1;
   }
 
   protected override filtersKey(): string {
-    return STATE_KEY.CARDSYNC.MISSING.ACQ.FILTERS.V1;
+    return STATE_KEY.CARDSYNC.CONCILIATION.MISSING.ACQ.FILTERS.V1;
   }
 
   protected override refresh(): void {
@@ -929,21 +928,6 @@ export class MissingAcquirerListComponent
 
     this.actionDialogVisible.set(false);
     this.markErpAsDeleted(erpId);
-  }
-
-  protected processReconciliation(): void {
-    if (this.reconciling()) return;
-
-    this.reconciling.set(true);
-
-    this.facade
-      .reconcileErpVsAcquirer()
-      .pipe(finalize(() => this.reconciling.set(false)))
-      .subscribe({
-        next: () => {
-          this.reloadWithCurrentState();
-        },
-      });
   }
 
   protected batchDescription(): string {

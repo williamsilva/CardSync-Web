@@ -74,47 +74,63 @@ export const STATE_KEY = {
         },
       },
     },
-    MISSING: {
-      ACQ: {
+    CONCILIATION: {
+      FEES: {
         TABLE: {
           ROWS: {
-            V1: 'cardsync.missing.acq.table.rows',
+            V1: 'cardsync.conciliation.contractAudit.table.rows',
           },
           STATE: {
-            V1: 'cardsync.missing.acq.table.state.v1',
+            V1: 'cardsync.conciliation.contractAudit.table.state.v1',
           },
         },
 
         FILTERS: {
-          V1: 'cardsync.missing.acq.filters.v1',
+          V1: 'cardsync.conciliation.contractAudit.filters.v1',
         },
       },
-      ERP: {
-        TABLE: {
-          ROWS: {
-            V1: 'cardsync.missing.erp.table.rows',
+      MISSING: {
+        ACQ: {
+          TABLE: {
+            ROWS: {
+              V1: 'cardsync.conciliation.missing.acq.table.rows',
+            },
+            STATE: {
+              V1: 'cardsync.conciliation.missing.acq.table.state.v1',
+            },
           },
-          STATE: {
-            V1: 'cardsync.missing.erp.table.state.v1',
-          },
-        },
 
-        FILTERS: {
-          V1: 'cardsync.missing.erp.filters.v1',
-        },
-      },
-      OTHER_DIVERGENCES: {
-        TABLE: {
-          ROWS: {
-            V1: 'cardsync.missing.other-divergences.table.rows',
-          },
-          STATE: {
-            V1: 'cardsync.missing.other-divergences.table.state.v1',
+          FILTERS: {
+            V1: 'cardsync.conciliation.missing.acq.filters.v1',
           },
         },
+        ERP: {
+          TABLE: {
+            ROWS: {
+              V1: 'cardsync.conciliation.missing.erp.table.rows',
+            },
+            STATE: {
+              V1: 'cardsync.conciliation.missing.erp.table.state.v1',
+            },
+          },
 
-        FILTERS: {
-          V1: 'cardsync.missing.other-divergences.filters.v1',
+          FILTERS: {
+            V1: 'cardsync.conciliation.missing.erp.filters.v1',
+          },
+        },
+        OTHER_DIVERGENCES: {
+          TABLE: {
+            ROWS: {
+              V1: 'cardsync.conciliation.missing.other-divergences.table.rows',
+            },
+            STATE: {
+              V1: 'cardsync.conciliation.missing.other-divergences.table.state.v1',
+            },
+          },
+
+          FILTERS: {
+            V1: 'cardsync.conciliation.missing.other-divergences.filters.v1',
+          },
         },
       },
     },

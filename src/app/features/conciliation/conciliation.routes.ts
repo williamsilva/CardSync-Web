@@ -73,13 +73,13 @@ export const CONCILIATION_ROUTES: Routes = [
       ),
   },
   {
-    path: 'fees',
-    title: 'routes.conciliation.fees.title',
+    path: 'contract-audit',
+    title: 'routes.conciliation.contractAudit.title',
     canActivate: [permissionGuard],
     data: { requireAll: false, redirectTo: '/forbidden', permissions: defaultPermissions },
     loadComponent: () =>
-      import('./conciliation-fees-list/conciliation-fees-list.component').then(
-        (m) => m.ConciliationFeesListComponent,
+      import('./contract-audit-list/contract-audit-list.component').then(
+        (m) => m.ContractAuditListComponent,
       ),
   },
   {

@@ -129,7 +129,6 @@ export class ErpVsAcquirerOtherDivergencesListComponent
 
   protected readonly resolving = signal(false);
   protected readonly comparing = signal(false);
-  protected readonly reconciling = signal(false);
   protected readonly comparisonDialogVisible = signal(false);
 
   protected readonly pendingBatchAction = signal<any | null>(null);
@@ -303,15 +302,15 @@ export class ErpVsAcquirerOtherDivergencesListComponent
   }
 
   protected override tableRowsKey(): string {
-    return STATE_KEY.CARDSYNC.MISSING.OTHER_DIVERGENCES.TABLE.ROWS.V1;
+    return STATE_KEY.CARDSYNC.CONCILIATION.MISSING.OTHER_DIVERGENCES.TABLE.ROWS.V1;
   }
 
   protected override tableStateKey(): string {
-    return STATE_KEY.CARDSYNC.MISSING.OTHER_DIVERGENCES.TABLE.STATE.V1;
+    return STATE_KEY.CARDSYNC.CONCILIATION.MISSING.OTHER_DIVERGENCES.TABLE.STATE.V1;
   }
 
   protected override filtersKey(): string {
-    return STATE_KEY.CARDSYNC.MISSING.OTHER_DIVERGENCES.FILTERS.V1;
+    return STATE_KEY.CARDSYNC.CONCILIATION.MISSING.OTHER_DIVERGENCES.FILTERS.V1;
   }
 
   protected override refresh(): void {
@@ -778,21 +777,6 @@ export class ErpVsAcquirerOtherDivergencesListComponent
     // Na visão de outras divergências não existe ação de criação ERP.
     // A linha pode vir somente com ERP quando o backend ainda não encontrou/vinculou a adquirente.
     return false;
-  }
-
-  protected processReconciliation(): void {
-    if (this.reconciling()) return;
-
-    this.reconciling.set(true);
-
-    this.facade
-      .reconcileErpVsAcquirer()
-      .pipe(finalize(() => this.reconciling.set(false)))
-      .subscribe({
-        next: () => {
-          this.reloadWithCurrentState();
-        },
-      });
   }
 
   protected canCompare(row: ConciliationWaitingModel | null | undefined): boolean {

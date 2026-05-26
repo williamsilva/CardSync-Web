@@ -432,7 +432,7 @@
       "digital_wallet": "Digital wallet",
       "installment_2_6": "Installments 2 to 6x",
       "installment_7_12": "Installments 7 to 12x",
-      "installment_13_18": "Installments 13 to 18x"
+      "installment_13_21": "Installments 13 to 21x"
     },
     "periodEnum": {
       "day": "Day",
@@ -1453,6 +1453,49 @@
         "deleteErp": "Mark as deleted"
       },
       "securityAuditNotice": "For security reasons, the details of the user responsible for this action will be stored for future reference."
+    },
+    "fees": {
+      "title": "Applied fees",
+      "subtitle": "Compare contracted fee, applied fee, and difference charged by the acquirer.",
+      "fields": {
+        "saleDate": "Sale date",
+        "periodSaleDate": "Sale date period",
+        "period": "Period",
+        "company": "Company",
+        "establishment": "Establishment",
+        "acquirer": "Acquirer",
+        "flag": "Card brand",
+        "status": "Status",
+        "nsu": "NSU",
+        "fees": "Fees",
+        "authorization": "Authorization",
+        "grossValue": "Gross value",
+        "expectedFeeValue": "Expected fee",
+        "appliedFeeValue": "Applied fee",
+        "feeDifference": "Difference",
+        "analysis":"Analysis"
+      },
+      "columns": {
+        "date": "Date",
+        "establishmentShort": "PV",
+        "authorizationShort": "Auth.",
+        "value": "Value",
+        "fees": "Fees",
+        "analysis":"Analysis"
+      },
+      "table": {
+        "appliedRate": "Applied",
+        "contractRate": "Contract",
+        "expectedFee": "Expected",
+        "differenceShort": "Diff."
+      },
+      "status": {
+        "ok": "OK",
+        "missingContract": "Missing contract",
+        "rateDivergence": "Fee divergence",
+        "valueDivergence": "Value divergence",
+        "missingAcquirerSale": "Missing acquirer sale"
+      }
     }
   },
   "session": {
@@ -1523,7 +1566,8 @@
     "advancedFilters": "Advanced filters",
     "viewInstallments": "View installments",
     "selected": "{count, plural, =0 {None selected} one {# selected} other {# selected}}",
-    "selectedFemale": "{count, plural, =0 {None selected} one {# selected} other {# selected}}"
+    "selectedFemale": "{count, plural, =0 {None selected} one {# selected} other {# selected}}",
+    "noRecordsFound": "No records found."
   },
   "confirm": {
     "logoutTitle": "End session",

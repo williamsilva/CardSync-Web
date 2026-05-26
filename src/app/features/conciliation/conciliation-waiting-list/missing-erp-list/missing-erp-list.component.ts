@@ -135,7 +135,6 @@ export class MissingErpListComponent
   readonly facade = inject(ConciliationWaitingFacade);
 
   protected readonly resolving = signal(false);
-  protected readonly reconciling = signal(false);
   protected readonly batchDialogVisible = signal(false);
   protected readonly actionDialogVisible = signal(false);
   protected readonly pendingBatchAction = signal<any | null>(null);
@@ -334,15 +333,15 @@ export class MissingErpListComponent
   }
 
   protected override tableRowsKey(): string {
-    return STATE_KEY.CARDSYNC.MISSING.ERP.TABLE.ROWS.V1;
+    return STATE_KEY.CARDSYNC.CONCILIATION.MISSING.ERP.TABLE.ROWS.V1;
   }
 
   protected override tableStateKey(): string {
-    return STATE_KEY.CARDSYNC.MISSING.ERP.TABLE.STATE.V1;
+    return STATE_KEY.CARDSYNC.CONCILIATION.MISSING.ERP.TABLE.STATE.V1;
   }
 
   protected override filtersKey(): string {
-    return STATE_KEY.CARDSYNC.MISSING.ERP.FILTERS.V1;
+    return STATE_KEY.CARDSYNC.CONCILIATION.MISSING.ERP.FILTERS.V1;
   }
 
   protected override refresh(): void {
@@ -931,21 +930,6 @@ export class MissingErpListComponent
 
     this.actionDialogVisible.set(false);
     this.createErpFromAcquirer(acquirerId);
-  }
-
-  protected processReconciliation(): void {
-    if (this.reconciling()) return;
-
-    this.reconciling.set(true);
-
-    this.facade
-      .reconcileErpVsAcquirer()
-      .pipe(finalize(() => this.reconciling.set(false)))
-      .subscribe({
-        next: () => {
-          this.reloadWithCurrentState();
-        },
-      });
   }
 
   protected batchDescription(): string {

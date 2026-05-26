@@ -3,19 +3,10 @@
   [subtitle]="'conciliation.pageDescription.missingOther' | translate"
   [breadcrumb]="[
     { label: ('breadcrumb.dashboard' | translate), url: '/' },
-    { label: ('breadcrumb.conciliation.title' | translate) },
+    { label: ('breadcrumb.conciliation.title' | translate), url: '/conciliation' },
     { label: 'conciliation.pageTitle.missingOther' | translate },
   ]"
 >
-  <button
-    pButton
-    type="button"
-    icon="pi pi-plus-circle"
-    class="p-button-sm p-button-outlined"
-    routerLink="/conciliation/erp-vs-acquirer/missing-erp"
-    [label]="'conciliation.action.missingErp' | translate"
-  ></button>
-
   <button
     pButton
     type="button"
@@ -23,6 +14,15 @@
     class="p-button-sm p-button-outlined"
     routerLink="/conciliation/erp-vs-acquirer/missing-acquirer"
     [label]="'conciliation.action.missingAcquirer' | translate"
+  ></button>
+
+  <button
+    pButton
+    type="button"
+    icon="pi pi-plus-circle"
+    class="p-button-sm p-button-outlined"
+    routerLink="/conciliation/erp-vs-acquirer/missing-erp"
+    [label]="'conciliation.action.missingErp' | translate"
   ></button>
 
   <button
@@ -38,21 +38,9 @@
     type="button"
     (click)="refresh()"
     icon="pi pi-refresh"
+    [disabled]="resolving()"
     class="p-button-text p-button-sm"
     [label]="'common.update' | translate"
-    [disabled]="reconciling() || resolving()"
-  ></button>
-
-  <button
-    pButton
-    type="button"
-    icon="pi pi-sync"
-    [loading]="reconciling()"
-    (click)="processReconciliation()"
-    class="p-button-success p-button-sm"
-    [disabled]="loading() || resolving()"
-    [pTooltip]="'conciliation.textTooltip' | translate"
-    [label]="'conciliation.processReconciliation' | translate"
   ></button>
 </cs-page-header>
 

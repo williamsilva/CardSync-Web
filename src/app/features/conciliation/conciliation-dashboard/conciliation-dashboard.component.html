@@ -10,13 +10,45 @@
       <button
         pButton
         type="button"
-        icon="pi pi-refresh"
-        label="Atualizar"
-        severity="secondary"
-        [loading]="loading()"
-        (click)="reload()"
+        class="p-button-success p-button-sm"
+        [icon]="loading() ? '' : 'pi pi-sync'"
+        [loading]="reconcilingErpVsAcquirer()"
+        (click)="processReconciliationErpVsAcquirer()"
+        [pTooltip]="'conciliation.textTooltipErpVsAcquirer' | translate"
+        [label]="'conciliation.processReconciliationErpVsAcquirer' | translate"
       ></button>
-      <a pButton routerLink="../erp-vs-acquirer" icon="pi pi-sync" label="ERP x Adquirente"></a>
+
+      <button
+        pButton
+        type="button"
+        [loading]="reconcilingFees()"
+        class="p-button-success p-button-sm"
+        (click)="processReconciliationFees()"
+        [icon]="loading() ? '' : 'pi pi-sync'"
+        [pTooltip]="'conciliation.contractAudit.textTooltip' | translate"
+        [label]="'conciliation.contractAudit.processReconciliation' | translate"
+      ></button>
+
+      <button
+        pButton
+        type="button"
+        severity="success"
+        (click)="reconcileBank()"
+        [loading]="reconcilingBank()"
+        class="p-button-success p-button-sm"
+        [icon]="loading() ? '' : 'pi pi-sync'"
+        [pTooltip]="'conciliation.bank.textTooltip' | translate"
+        [label]="'conciliation.bank.processReconciliation' | translate"
+      ></button>
+
+      <button
+        pButton
+        type="button"
+        (click)="reload()"
+        icon="pi pi-refresh"
+        class="p-button-text p-button-sm"
+        [label]="'common.update' | translate"
+      ></button>
     </div>
   </div>
 

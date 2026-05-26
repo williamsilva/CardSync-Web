@@ -16,6 +16,7 @@
         [loading]="loading()"
         (click)="reload()"
       ></button>
+
       <button
         pButton
         type="button"
@@ -24,6 +25,7 @@
         [loading]="processingErp()"
         (click)="processErp()"
       ></button>
+
       <button
         pButton
         type="button"
@@ -33,23 +35,15 @@
         [loading]="processingRede()"
         (click)="processRede()"
       ></button>
+
       <button
         pButton
         type="button"
         icon="pi pi-building-columns"
         label="Processar CNAB"
-        severity="secondary"
+        severity="success"
         [loading]="processingBank()"
         (click)="processBank()"
-      ></button>
-      <button
-        pButton
-        type="button"
-        icon="pi pi-link"
-        label="Conciliar Banco"
-        severity="success"
-        [loading]="reconcilingBank()"
-        (click)="reconcileBank()"
       ></button>
     </div>
   </div>

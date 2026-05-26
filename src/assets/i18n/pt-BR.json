@@ -41,8 +41,8 @@
       }
     },
     "conciliation": {
-      "fees": {
-        "title": "Taxas"
+      "contractAudit": {
+        "title": "Taxas Aplicadas"
       },
       "sales": {
         "title": "Vendas Adquirente"
@@ -150,7 +150,7 @@
       "establishment": "Estabelecimentos"
     },
     "conciliation": {
-      "fees": "Taxas aplicadas",
+      "contractAudit": "Taxas Aplicadas",
       "sales": "Vendas adquirente",
       "title": "Conciliação",
       "dashboard": "Dashboard",
@@ -432,7 +432,7 @@
       "digital_wallet": "Carteira digital",
       "installment_2_6": "Parcelado 2 a 6X",
       "installment_7_12": "Parcelado 7 a 12X",
-      "installment_13_18": "Parcelado 13 a 18X"
+      "installment_13_21": "Parcelado 13 a 21X"
     },
     "periodEnum": {
       "day": "Dia",
@@ -948,6 +948,7 @@
       "cardName": "Nome Cartão",
       "issuer": "Emissor Cartão",
       "installments": "Parcelas",
+      "totalValue": "Valor Total",
       "tid": "Transação ID (TID)",
       "grossValue": "Valor Bruto",
       "creditDate": "Data Crédito",
@@ -958,6 +959,7 @@
       "liquidValue": "Valor Líquido",
       "authorization": "Autorização",
       "paymentDate": "Data Pagamento",
+      "rateContract": "Taxa esperada",
       "discountValue": "Valor Desconto",
       "periodSaleDate": "Período Venda",
       "contractedFee": "Taxa Contratada",
@@ -1292,15 +1294,20 @@
     }
   },
   "conciliation": {
+    "finishedTitle": "Lote finalizado",
+    "errorTitle": "Erro ao processar lote",
     "reconcileUsingERP": "Conciliar usando ERP",
     "errorReconciliation": "Erro na conciliação",
-    "processReconciliation": "Processar conciliação",
     "reconcileUsingAcquirer": "Conciliar usando adquirente",
     "reconciliationFinalizedTitle": "Conciliação finalizada",
-    "textTooltip": "Executa manualmente a conciliação ERP x adquirente",
+    "finishedWithWarningsTitle": "Lote finalizado com alertas",
+    "processReconciliationErpVsAcquirer": "Conciliar ERP vs ADQ",
+    "noEligibleSelectedTitle": "Nenhuma venda elegível selecionada",
     "reconciliationFinalized": "A conciliação ERP x adquirente foi processada.",
     "noDiscrepancyFound": "Nenhum campo divergente foi encontrado nessa comparação.",
-    "processReconciliationError": "Não foi possível processar a conciliação ERP x adquirente.",
+    "textTooltipErpVsAcquirer": "Executa manualmente a conciliação ERP x adquirente",
+    "finishedMessage": "Sucesso: {{ success }} · Falhas: {{ failed }} · Solicitadas: {{ requested }}",
+    "processReconciliationErrorErpVsAcquirer": "Não foi possível processar a conciliação ERP x adquirente.",
     "dialog": {
       "compareSales": "Comparar vendas",
       "displayingFieldsDiscrepancies": "Exibindo somente campos com divergência.",
@@ -1322,22 +1329,22 @@
       "missingAcquirer": "Não localizada na adquirente"
     },
     "result": {
+      "okRates": "Taxas Ok",
       "analyzed": "Analisadas",
       "matched": "Conciliadas",
       "updated": "Atualizadas",
       "notMatched": "Não conciliadas",
+      "divergentRates": "Taxas divergentes",
       "flagUpdated": "Bandeiras atualizadas",
+      "updatedErpSales": "Vendas ERP Atualizadas",
       "valueDivergences": "Divergências de valor",
       "skippedDivergent": "Ignoradas por divergência",
       "ambiguousMatches": "Correspondências ambíguas",
-      "businessContextUpdated": "Contextos atualizados",
-      "acquirerDivergences": "Divergências de adquirente"
+      "missingValidContracts": "Contextos atualizados",
+      "skippedWithoutAcquire": "Ignorado sem adquirir",
+      "acquirerDivergences": "Divergências de adquirente",
+      "businessContextUpdated": "Faltano Contratos válidos"
     },
-    "finishedTitle": "Lote finalizado",
-    "errorTitle": "Erro ao processar lote",
-    "finishedWithWarningsTitle": "Lote finalizado com alertas",
-    "noEligibleSelectedTitle": "Nenhuma venda elegível selecionada",
-    "finishedMessage": "Sucesso: {{ success }} · Falhas: {{ failed }} · Solicitadas: {{ requested }}",
     "missingErp": {
       "batch": {
         "noEligibleSelectedDetail": "Selecione vendas da adquirente para criar vendas ERP em lote.",
@@ -1453,6 +1460,57 @@
         "deleteErp": "Marcar como excluída"
       },
       "securityAuditNotice": "Por segurança, os dados do responsável por esta ação serão armazenados para futuras consultas."
+    },
+    "bank": {
+      "processReconciliation": "Conciliar Banco",
+      "textTooltip": "Executa manualmente a conciliação bancaria"
+    },
+    "contractAudit": {
+      "title": "Taxas Aplicadas",
+      "processReconciliation": "Conciliar Taxas",
+      "textTooltip": "Executa manualmente a conciliação das taxas",
+      "processReconciliationError": "Não foi possível processar a conciliação das Taxas.",
+      "subtitle": "Compare taxa contratada, taxa aplicada e diferença cobrada pela adquirente.",
+      "fields": {
+        "fees": "Taxas",
+        "cvNsu": "Cv/Nsu",
+        "flag": "Bandeira",
+        "status": "Status",
+        "period": "Período",
+        "company": "Empresa",
+        "analysis":"Análise",
+        "acquirer": "Adquirente",
+        "grossValue": "Valor bruto",
+        "saleDate": "Data da venda",
+        "differenceValue": "Diferença",
+        "liquidValue": "Valor Líquido",
+        "authorization": "Autorização",
+        "rateContract": "Taxa esperada",
+        "establishment": "Estabelecimento",
+        "appliedFeeValue": "Taxa aplicada",
+        "periodSaleDate": "Período da venda"
+      },
+      "columns": {
+        "date": "Data",
+        "fees": "Taxas",
+        "value": "Valor",
+        "establishmentShort": "PV",
+        "authorizationShort": "Aut.",
+        "analysis":"Análise"
+      },
+      "table": {
+        "appliedRate": "Aplicada",
+        "expectedFee": "Esperada",
+        "differenceShort": "Dif.",
+        "contractRate": "Contrato"
+      },
+      "status": {
+        "ok": "OK",
+        "missingContract": "Contrato ausente",
+        "rateDivergence": "Divergência de taxa",
+        "valueDivergence": "Divergência de valor",
+        "missingAcquirerSale": "Venda adquirente ausente"
+      }
     }
   },
   "session": {
@@ -1479,6 +1537,7 @@
     "all": "Todos",
     "until": "Até",
     "error": "Erro",
+    "sales":"Vendas",
     "action": "Ação",
     "save": "Salvar",
     "edit": "Editar",
@@ -1491,6 +1550,7 @@
     "apply": "Aplicar",
     "actions": "Ações",
     "filter": "Filtrar",
+    "audit":"Auditoria",
     "remove": "Remover",
     "period": "Periodo",
     "delete": "Excluir",
@@ -1522,6 +1582,7 @@
     "registrationNumber": "N° Inscrição",
     "advancedFilters": "Filtros avançados",
     "viewInstallments": "Visualizar parcelas",
+    "noRecordsFound": "Nenhum registro encontrado.",
     "selected": "{count, plural, =0 {Nenhum selecionado} one {# selecionado} other {# selecionados}}",
     "selectedFemale": "{count, plural, =0 {Nenhuma selecionada} one {# selecionada} other {# selecionadas}}"
   },

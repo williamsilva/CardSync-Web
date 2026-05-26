@@ -3,7 +3,7 @@
   [subtitle]="'conciliation.pageDescription.missingErp' | translate"
   [breadcrumb]="[
     { label: ('breadcrumb.dashboard' | translate), url: '/' },
-    { label: ('breadcrumb.conciliation.title' | translate) },
+    { label: ('breadcrumb.conciliation.title' | translate), url: '/conciliation' },
     { label: 'conciliation.pageTitle.missingErp' | translate },
   ]"
 >
@@ -38,21 +38,9 @@
     type="button"
     (click)="refresh()"
     icon="pi pi-refresh"
+    [disabled]="resolving()"
     class="p-button-text p-button-sm"
     [label]="'common.update' | translate"
-    [disabled]="reconciling() || resolving()"
-  ></button>
-
-  <button
-    pButton
-    type="button"
-    icon="pi pi-sync"
-    [loading]="reconciling()"
-    (click)="processReconciliation()"
-    class="p-button-success p-button-sm"
-    [disabled]="loading() || resolving()"
-    [pTooltip]="'conciliation.textTooltip' | translate"
-    [label]="'conciliation.processReconciliation' | translate"
   ></button>
 </cs-page-header>
 

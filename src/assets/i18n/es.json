@@ -432,7 +432,7 @@
       "digital_wallet": "Billetera digital",
       "installment_2_6": "En cuotas 2 a 6x",
       "installment_7_12": "En cuotas 7 a 12x",
-      "installment_13_18": "En cuotas 13 a 18x"
+      "installment_13_21": "En cuotas 13 a 21x"
     },
     "periodEnum": {
       "day": "Día",
@@ -1453,6 +1453,49 @@
         "deleteErp": "Marcar como eliminada"
       },
       "securityAuditNotice": "Por seguridad, los datos del responsable de esta acción se almacenarán para futuras consultas."
+    },
+    "fees": {
+      "title": "Tasas aplicadas",
+      "subtitle": "Compara la tasa contratada, la tasa aplicada y la diferencia cobrada por la adquirente.",
+      "fields": {
+        "saleDate": "Fecha de venta",
+        "periodSaleDate": "Período de venta",
+        "period": "Período",
+        "company": "Empresa",
+        "establishment": "Establecimiento",
+        "acquirer": "Adquirente",
+        "flag": "Bandera",
+        "status": "Estado",
+        "nsu": "NSU",
+        "fees": "Tasas",
+        "authorization": "Autorización",
+        "grossValue": "Valor bruto",
+        "expectedFeeValue": "Tasa esperada",
+        "appliedFeeValue": "Tasa aplicada",
+        "feeDifference": "Diferencia",
+        "analysis":"Análisis"
+      },
+      "columns": {
+        "date": "Fecha",
+        "establishmentShort": "PV",
+        "authorizationShort": "Aut.",
+        "value": "Valor",
+        "fees": "Tasas",
+        "analysis":"Análisis"
+      },
+      "table": {
+        "appliedRate": "Aplicada",
+        "contractRate": "Contrato",
+        "expectedFee": "Esperada",
+        "differenceShort": "Dif."
+      },
+      "status": {
+        "ok": "OK",
+        "missingContract": "Contrato ausente",
+        "rateDivergence": "Divergencia de tasa",
+        "valueDivergence": "Divergencia de valor",
+        "missingAcquirerSale": "Venta de adquirente ausente"
+      }
     }
   },
   "session": {
@@ -1523,7 +1566,8 @@
     "advancedFilters": "Filtros avanzados",
     "viewInstallments": "Visualizar cuotas",
     "selected": "{count, plural, =0 {Ningún seleccionado} one {# seleccionado} other {# seleccionados}}",
-    "selectedFemale": "{count, plural, =0 {Ninguna seleccionada} one {# seleccionada} other {# seleccionadas}}"
+    "selectedFemale": "{count, plural, =0 {Ninguna seleccionada} one {# seleccionada} other {# seleccionadas}}",
+    "noRecordsFound": "No se encontraron registros."
   },
   "confirm": {
     "logoutTitle": "Cerrar sesión",
