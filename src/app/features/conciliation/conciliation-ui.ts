@@ -34,6 +34,12 @@ export function statusSeverity(status?: string | null): TagSeverity {
       return 'success';
     case 'PENDING':
     case 'OPEN':
+    case 'REQUEST_RECEIVED':
+    case 'DOCUMENTATION_DUE':
+    case 'PENDING_DEBIT':
+    case 'BANK_DEBIT_SCHEDULED':
+    case 'NET_COMPENSATION_SCHEDULED':
+    case 'DESCHEDULED':
     case 'UNDER_REVIEW':
     case 'REPRESENTED':
     case 'PARTIALLY_RECONCILED':
@@ -57,6 +63,7 @@ export function statusSeverity(status?: string | null): TagSeverity {
     case 'BANK_RELEASE_NOT_RECONCILED':
     case 'DEBIT_APPLIED':
     case 'CREDIT_APPLIED':
+    case 'DOCUMENTATION_OVERDUE':
     case 'LOST':
     case 'EXPIRED':
     case 'HIGH':
@@ -79,6 +86,13 @@ export function statusLabel(status?: string | null): string {
     PARTIALLY_LIQUIDATED: 'Parcialmente liquidado',
     PENDING: 'Pendente',
     OPEN: 'Aberto',
+    REQUEST_RECEIVED: 'Request recebido',
+    DOCUMENTATION_DUE: 'Documentação no prazo',
+    DOCUMENTATION_OVERDUE: 'Documentação vencida',
+    PENDING_DEBIT: 'Débito pendente',
+    BANK_DEBIT_SCHEDULED: 'Débito via banco',
+    NET_COMPENSATION_SCHEDULED: 'Compensação via Net',
+    DESCHEDULED: 'Desagendado',
     UNDER_REVIEW: 'Em análise',
     REPRESENTED: 'Representado',
     WON: 'Ganho',

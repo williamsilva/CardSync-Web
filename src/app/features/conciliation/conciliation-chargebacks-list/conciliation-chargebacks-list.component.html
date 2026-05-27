@@ -1,14 +1,24 @@
-<div class="cs-list-page">
+<div class="cs-list-page cs-chargebacks-page">
   <div class="cs-list-page__header">
     <div>
       <p class="cs-list-page__eyebrow">Conciliação</p>
-      <h1>Contestações / Chargebacks</h1>
-      <span
-        >Acompanhe vendas contestadas, valores em disputa, prazos e resultado da
-        representação.</span
-      >
+      <h1>Análise de Chargebacks</h1>
+      <span>
+        Rastreie o ciclo completo da contestação: solicitação, prazo documental, débito,
+        compensação, liquidação ou reversão.
+      </span>
     </div>
+
     <div class="cs-actions">
+      <button
+        pButton
+        type="button"
+        icon="pi pi-filter"
+        [label]="activeFilterCount() ? 'Filtros (' + activeFilterCount() + ')' : 'Filtros'"
+        severity="secondary"
+        (click)="toggleAdvancedFilters()"
+      ></button>
+
       <button
         pButton
         type="button"
@@ -20,62 +30,545 @@
       ></button>
     </div>
   </div>
-  <p-card
-    ><p-table
+
+  <div class="chargeback-summary-grid">
+    <p-card styleClass="chargeback-summary-card">
+      <span>Processos</span>
+      <strong>{{ totals()?.total ?? totalRecords() }}</strong>
+      <small>Chargebacks rastreados</small>
+    </p-card>
+
+    <p-card styleClass="chargeback-summary-card is-warning">
+      <span>Documentação</span>
+      <strong>{{
+        (totals()?.documentationDue ?? 0) + (totals()?.documentationOverdue ?? 0)
+      }}</strong>
+      <small>{{ totals()?.documentationOverdue ?? 0 }} vencido(s)</small>
+    </p-card>
+
+    <p-card styleClass="chargeback-summary-card is-danger">
+      <span>Débitos pendentes</span>
+      <strong>{{ totals()?.pendingDebit ?? 0 }}</strong>
+      <small>{{ formatCurrency(totalPendingValue()) }}</small>
+    </p-card>
+
+    <p-card styleClass="chargeback-summary-card is-info">
+      <span>Compensação</span>
+      <strong>
+        {{ (totals()?.bankDebitScheduled ?? 0) + (totals()?.netCompensationScheduled ?? 0) }}
+      </strong>
+      <small>Banco ou Net</small>
+    </p-card>
+
+    <p-card styleClass="chargeback-summary-card is-success">
+      <span>Finalizados</span>
+      <strong>{{ (totals()?.liquidatedOrLost ?? 0) + (totals()?.reversedOrWon ?? 0) }}</strong>
+      <small>{{ formatCurrency(totalSettledValue() + totalCompensatedValue()) }}</small>
+    </p-card>
+
+    <p-card styleClass="chargeback-summary-card">
+      <span>Valor contestado</span>
+      <strong>{{ formatCurrency(totalDisputedValue()) }}</strong>
+      <small>Total em disputa</small>
+    </p-card>
+  </div>
+
+  <p-card *ngIf="filtersVisible()" styleClass="chargeback-filter-card">
+    <div class="chargeback-filter-card__header">
+      <div>
+        <strong>Filtros avançados</strong>
+        <small>Pesquise por venda, processo, datas, valores e motivo do chargeback.</small>
+      </div>
+
+      <button
+        pButton
+        type="button"
+        icon="pi pi-times"
+        label="Limpar"
+        severity="secondary"
+        [outlined]="true"
+        (click)="clearAdvancedFilters()"
+      ></button>
+    </div>
+
+    <div class="chargeback-filter-grid">
+      <div class="filter-field">
+        <p-floatLabel variant="on" class="w-full">
+          <input
+            pInputText
+            id="chargeback-nsu"
+            class="w-full"
+            [ngModel]="filterNsu()"
+            (ngModelChange)="filterNsu.set($event)"
+            (keyup.enter)="applyAdvancedFilters()"
+          />
+          <label for="chargeback-nsu">NSU</label>
+        </p-floatLabel>
+      </div>
+
+      <div class="filter-field">
+        <p-floatLabel variant="on" class="w-full">
+          <input
+            pInputText
+            id="chargeback-pv"
+            class="w-full"
+            [ngModel]="filterPvNumber()"
+            (ngModelChange)="filterPvNumber.set($event)"
+            (keyup.enter)="applyAdvancedFilters()"
+          />
+          <label for="chargeback-pv">PV</label>
+        </p-floatLabel>
+      </div>
+
+      <div class="filter-field">
+        <p-floatLabel variant="on" class="w-full">
+          <input
+            pInputText
+            id="chargeback-rv"
+            class="w-full"
+            [ngModel]="filterRvNumber()"
+            (ngModelChange)="filterRvNumber.set($event)"
+            (keyup.enter)="applyAdvancedFilters()"
+          />
+          <label for="chargeback-rv">RV</label>
+        </p-floatLabel>
+      </div>
+
+      <div class="filter-field">
+        <p-floatLabel variant="on" class="w-full">
+          <input
+            pInputText
+            id="chargeback-authorization"
+            class="w-full"
+            [ngModel]="filterAuthorization()"
+            (ngModelChange)="filterAuthorization.set($event)"
+            (keyup.enter)="applyAdvancedFilters()"
+          />
+          <label for="chargeback-authorization">Autorização</label>
+        </p-floatLabel>
+      </div>
+
+      <div class="filter-field">
+        <p-floatLabel variant="on" class="w-full">
+          <input
+            pInputText
+            id="chargeback-process"
+            class="w-full"
+            [ngModel]="filterProcessNumber()"
+            (ngModelChange)="filterProcessNumber.set($event)"
+            (keyup.enter)="applyAdvancedFilters()"
+          />
+          <label for="chargeback-process">Processo</label>
+        </p-floatLabel>
+      </div>
+
+      <div class="filter-field filter-field--wide">
+        <p-floatLabel variant="on" class="w-full">
+          <input
+            pInputText
+            id="chargeback-reason"
+            class="w-full"
+            [ngModel]="filterReason()"
+            (ngModelChange)="filterReason.set($event)"
+            (keyup.enter)="applyAdvancedFilters()"
+          />
+          <label for="chargeback-reason">Motivo / código</label>
+        </p-floatLabel>
+      </div>
+
+      <div class="filter-field">
+        <p-floatLabel variant="on" class="w-full">
+          <p-datepicker
+            inputId="chargeback-date-start"
+            class="w-full"
+            size="small"
+            appendTo="body"
+            dateFormat="dd/mm/yy"
+            [showIcon]="true"
+            [readonlyInput]="true"
+            [ngModel]="filterEventDateStart()"
+            (ngModelChange)="filterEventDateStart.set($event)"
+          ></p-datepicker>
+          <label for="chargeback-date-start">Data inicial</label>
+        </p-floatLabel>
+      </div>
+
+      <div class="filter-field">
+        <p-floatLabel variant="on" class="w-full">
+          <p-datepicker
+            inputId="chargeback-date-end"
+            class="w-full"
+            size="small"
+            appendTo="body"
+            dateFormat="dd/mm/yy"
+            [showIcon]="true"
+            [readonlyInput]="true"
+            [ngModel]="filterEventDateEnd()"
+            (ngModelChange)="filterEventDateEnd.set($event)"
+          ></p-datepicker>
+          <label for="chargeback-date-end">Data final</label>
+        </p-floatLabel>
+      </div>
+
+      <div class="filter-field">
+        <p-floatLabel variant="on" class="w-full">
+          <p-inputNumber
+            inputId="chargeback-value-start"
+            class="w-full"
+            size="small"
+            locale="pt-BR"
+            mode="currency"
+            currency="BRL"
+            inputStyleClass="w-full"
+            [ngModel]="filterValueStart()"
+            (ngModelChange)="filterValueStart.set($event)"
+          ></p-inputNumber>
+          <label for="chargeback-value-start">Valor inicial</label>
+        </p-floatLabel>
+      </div>
+
+      <div class="filter-field">
+        <p-floatLabel variant="on" class="w-full">
+          <p-inputNumber
+            inputId="chargeback-value-end"
+            class="w-full"
+            size="small"
+            locale="pt-BR"
+            mode="currency"
+            currency="BRL"
+            inputStyleClass="w-full"
+            [ngModel]="filterValueEnd()"
+            (ngModelChange)="filterValueEnd.set($event)"
+          ></p-inputNumber>
+          <label for="chargeback-value-end">Valor final</label>
+        </p-floatLabel>
+      </div>
+    </div>
+
+    <div class="chargeback-filter-actions">
+      <span *ngIf="activeFilterCount()">{{ activeFilterCount() }} filtro(s) ativo(s)</span>
+      <span *ngIf="!activeFilterCount()">Nenhum filtro aplicado</span>
+
+      <button
+        pButton
+        type="button"
+        icon="pi pi-search"
+        label="Aplicar filtros"
+        [loading]="loading()"
+        (click)="applyAdvancedFilters()"
+      ></button>
+    </div>
+  </p-card>
+
+  <p-card styleClass="chargeback-table-card">
+    <p-table
       [value]="rows()"
+      dataKey="trackingKey"
       [lazy]="true"
       [loading]="loading()"
       [paginator]="true"
       [rows]="pageSize()"
       [totalRecords]="totalRecords()"
       [rowsPerPageOptions]="[15, 30, 50]"
-      styleClass="p-datatable-sm"
+      styleClass="p-datatable-sm cs-admin-table chargeback-table"
       (onLazyLoad)="load($event)"
-      ><ng-template pTemplate="header"
-        ><tr>
-          <th>Datas</th>
+    >
+      <ng-template pTemplate="header">
+        <tr>
+          <th style="width: 5rem">Detalhes</th>
+          <th>Status atual</th>
+          <th pSortableColumn="lastEventDate">
+            Último evento
+            <p-sortIcon field="lastEventDate"></p-sortIcon>
+          </th>
+          <th>Processo</th>
           <th>Venda</th>
-          <th>Valor</th>
+          <th>Valores</th>
           <th>Motivo</th>
           <th>Contexto</th>
-          <th>Status</th>
-        </tr></ng-template
-      ><ng-template pTemplate="body" let-row
-        ><tr>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-row>
+        <tr>
           <td>
-            <strong>Contest. {{ row.disputeDate | date: 'shortDate' }}</strong
-            ><small
-              >Venda {{ row.saleDate | date: 'shortDate' }} · Prazo
-              {{ row.dueDate | date: 'shortDate' }}</small
-            >
+            <button
+              pButton
+              type="button"
+              class="p-button-text p-button-rounded p-button-sm"
+              icon="pi pi-eye"
+              pTooltip="Ver rastreamento"
+              tooltipPosition="top"
+              (click)="openChargeback(row)"
+            ></button>
           </td>
+
           <td>
-            <strong>NSU {{ compactId(row.nsu) }}</strong
-            ><small>Aut. {{ row.authorization || '-' }} · TID {{ row.tid || '-' }}</small>
+            <div class="status-stack">
+              <cs-tag
+                [value]="statusLabel(row.currentStatus)"
+                [tone]="statusSeverity(row.currentStatus)"
+              ></cs-tag>
+              <small>{{ deadlineHint(row) }}</small>
+            </div>
           </td>
+
           <td>
-            <strong>{{ formatCurrency(row.disputedValue) }}</strong
-            ><small>Venda {{ formatCurrency(row.saleValue) }}</small>
+            <strong>{{ row.lastEventDate | date: 'dd/MM/yyyy' }}</strong>
+            <small>Início {{ row.firstEventDate | date: 'dd/MM/yyyy' }}</small>
           </td>
+
           <td>
-            <strong>{{ compactId(row.reasonCode) }}</strong
-            ><small>{{ row.reasonDescription || '-' }}</small>
+            <strong>{{ row.processNumber || '-' }}</strong>
+            <small *ngIf="row.debitOrderNumber">OD {{ row.debitOrderNumber }}</small>
+            <small *ngIf="!row.debitOrderNumber">{{ row.trackingKey }}</small>
           </td>
+
           <td>
-            <strong>{{ row.company || '-' }}</strong
-            ><small
+            <strong>NSU {{ compactId(row.nsu) }}</strong>
+            <small>PV {{ compactId(row.pvNumber) }} · RV {{ compactId(row.rvNumber) }}</small>
+            <small>Aut. {{ row.authorization || '-' }} · TID {{ row.tid || '-' }}</small>
+          </td>
+
+          <td>
+            <strong>{{ formatCurrency(row.disputedValue) }}</strong>
+            <small>Venda {{ formatCurrency(row.saleValue) }}</small>
+            <small *ngIf="row.pendingValue">Pendente {{ formatCurrency(row.pendingValue) }}</small>
+          </td>
+
+          <td>
+            <strong>{{ compactId(row.reasonCode) }}</strong>
+            <small>{{ row.reasonDescription || '-' }}</small>
+          </td>
+
+          <td>
+            <strong>{{ row.company || '-' }}</strong>
+            <small
               >{{ row.establishment || '-' }} · {{ row.acquirer || '-' }} ·
               {{ row.flag || '-' }}</small
             >
           </td>
-          <td>
-            <cs-tag [value]="statusLabel(row.status)" [tone]="statusSeverity(row.status)"></cs-tag>
-          </td></tr></ng-template
-      ><ng-template pTemplate="emptymessage"
-        ><tr>
-          <td colspan="6">Nenhum registro encontrado.</td>
-        </tr></ng-template
-      ></p-table
-    ></p-card
-  >
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="8">Nenhum chargeback encontrado.</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </p-card>
 </div>
+
+<p-dialog
+  [visible]="detailDialogVisible()"
+  (visibleChange)="onDetailVisibleChange($event)"
+  [modal]="true"
+  [draggable]="false"
+  [resizable]="false"
+  [dismissableMask]="true"
+  [closeOnEscape]="true"
+  appendTo="body"
+  styleClass="chargeback-detail-dialog"
+  [style]="{ width: 'min(1180px, 96vw)' }"
+  [breakpoints]="{ '1100px': '96vw', '700px': '98vw' }"
+>
+  <ng-template pTemplate="header">
+    <div class="chargeback-dialog-header" *ngIf="selectedChargeback() as selected">
+      <div>
+        <span>Rastreamento do chargeback</span>
+        <strong>Processo {{ selected.processNumber || '-' }}</strong>
+      </div>
+
+      <cs-tag
+        [value]="statusLabel(selected.currentStatus)"
+        [tone]="statusSeverity(selected.currentStatus)"
+      ></cs-tag>
+    </div>
+  </ng-template>
+
+  <div class="chargeback-detail" *ngIf="selectedChargeback() as selected">
+    <div class="chargeback-detail__top">
+      <div class="chargeback-detail__title">
+        <div class="chargeback-detail__heading">
+          <h3>Processo de chargeback</h3>
+          <cs-tag
+            [value]="statusLabel(selected.currentStatus)"
+            [tone]="statusSeverity(selected.currentStatus)"
+          ></cs-tag>
+        </div>
+
+        <p>
+          Processo <strong>{{ selected.processNumber || '-' }}</strong> · NSU
+          <strong>{{ compactId(selected.nsu) }}</strong> ·
+          {{ selected.timeline?.length ?? 0 }} evento(s)
+        </p>
+      </div>
+
+      <div class="chargeback-detail__amount">
+        <span>Valor contestado</span>
+        <strong>{{ formatCurrency(selected.disputedValue) }}</strong>
+        <small *ngIf="selected.pendingValue">
+          Pendente: {{ formatCurrency(selected.pendingValue) }}
+        </small>
+      </div>
+    </div>
+
+    <div class="chargeback-detail__progress" aria-label="Progresso do chargeback">
+      <div class="chargeback-progress__info">
+        <strong>Etapa {{ currentStep(selected) }}/{{ totalSteps() }}</strong>
+        <span>{{ statusHelpText(selected.currentStatus) }}</span>
+      </div>
+      <div class="chargeback-progress__bar">
+        <div [style.width.%]="progressPercent(selected)"></div>
+      </div>
+    </div>
+
+    <div class="chargeback-detail__summary">
+      <div class="summary-box">
+        <span class="summary-box__label">Situação atual</span>
+        <strong>{{ statusLabel(selected.currentStatus) }}</strong>
+        <small>{{ statusHelpText(selected.currentStatus) }}</small>
+      </div>
+
+      <div class="summary-box">
+        <span class="summary-box__label">Próxima ação</span>
+        <strong>{{ nextActionLabel(selected) }}</strong>
+        <small>{{ deadlineHint(selected) }}</small>
+      </div>
+
+      <div class="summary-box">
+        <span class="summary-box__label">Motivo</span>
+        <strong>{{ compactId(selected.reasonCode) }}</strong>
+        <small>{{ selected.reasonDescription || 'Não informado' }}</small>
+      </div>
+
+      <div class="summary-box">
+        <span class="summary-box__label">Contexto</span>
+        <strong>{{ selected.company || '-' }}</strong>
+        <small
+          >{{ selected.establishment || '-' }} · {{ selected.acquirer || '-' }} ·
+          {{ selected.flag || '-' }}</small
+        >
+      </div>
+    </div>
+
+    <section class="chargeback-detail__stages" aria-label="Etapas do chargeback">
+      <div class="section-heading">
+        <div>
+          <h4>Etapas do processo</h4>
+          <p>Sequência operacional do chargeback, da solicitação ao resultado final.</p>
+        </div>
+        <span>Etapa {{ currentStep(selected) }}/{{ totalSteps() }}</span>
+      </div>
+
+      <div class="chargeback-stages">
+        <div
+          class="chargeback-stage"
+          *ngFor="let stage of stages(selected)"
+          [ngClass]="'is-' + stage.state"
+        >
+          <div class="chargeback-stage__rail" aria-hidden="true">
+            <span class="chargeback-stage__index">
+              <i [class]="stage.state === 'pending' ? stage.icon : stageStateIcon(stage.state)"></i>
+            </span>
+          </div>
+
+          <div class="chargeback-stage__content">
+            <div class="chargeback-stage__header">
+              <div>
+                <strong>Etapa {{ stage.order }}/{{ totalSteps() }} · {{ stage.title }}</strong>
+                <small>{{ stage.helper }}</small>
+              </div>
+
+              <span class="chargeback-stage__state">
+                {{ stageStateLabel(stage.state) }}
+              </span>
+            </div>
+
+            <div class="chargeback-stage__event" *ngIf="stage.eventDate || stage.eventDescription">
+              <span *ngIf="stage.eventDate">
+                Data: <strong>{{ stage.eventDate | date: 'dd/MM/yyyy' }}</strong>
+              </span>
+              <span *ngIf="stage.eventLabel">
+                Evento: <strong>{{ stage.eventLabel }}</strong>
+              </span>
+              <span *ngIf="stage.sourceType">
+                Origem: <strong>{{ sourceTypeLabel(stage.sourceType) }}</strong>
+              </span>
+              <small *ngIf="stage.eventDescription">{{ stage.eventDescription }}</small>
+              <small *ngIf="stage.processedFile">Arquivo: {{ stage.processedFile }}</small>
+            </div>
+
+            <div
+              class="chargeback-stage__event is-empty"
+              *ngIf="!stage.eventDate && !stage.eventDescription"
+            >
+              <small>Etapa ainda não atingida neste processo.</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="chargeback-detail__events" aria-label="Eventos registrados">
+      <div class="section-heading">
+        <div>
+          <h4>Eventos registrados</h4>
+          <p>Histórico recebido nos arquivos da Rede para este processo.</p>
+        </div>
+        <span>{{ timeline(selected).length }} evento(s)</span>
+      </div>
+
+      <div class="chargeback-detail__timeline">
+        <div class="timeline-item" *ngFor="let event of timeline(selected); let i = index">
+          <div class="timeline-item__line" *ngIf="i < timeline(selected).length - 1"></div>
+
+          <div class="timeline-item__marker" [ngClass]="markerTone(event.status)">
+            <i [class]="statusIcon(event.status)"></i>
+          </div>
+
+          <div class="timeline-item__content">
+            <div class="timeline-item__header">
+              <div>
+                <h4>{{ eventTitle(event) }}</h4>
+                <small>
+                  {{ event.eventDate | date: 'dd/MM/yyyy' }}
+                  <span *ngIf="event.sourceType"> · {{ sourceTypeLabel(event.sourceType) }}</span>
+                </small>
+              </div>
+
+              <cs-tag
+                [value]="statusLabel(event.status)"
+                [tone]="statusSeverity(event.status)"
+              ></cs-tag>
+            </div>
+
+            <p class="timeline-item__description">
+              {{ eventFriendlyDescription(event) }}
+            </p>
+
+            <div class="timeline-item__meta" *ngIf="hasEventValues(event)">
+              <span *ngIf="event.amount">
+                Valor: <strong>{{ formatCurrency(event.amount) }}</strong>
+              </span>
+              <span *ngIf="event.pendingValue">
+                Pendente: <strong>{{ formatCurrency(event.pendingValue) }}</strong>
+              </span>
+              <span *ngIf="event.settledValue">
+                Liquidado: <strong>{{ formatCurrency(event.settledValue) }}</strong>
+              </span>
+              <span *ngIf="event.compensatedValue">
+                Compensado: <strong>{{ formatCurrency(event.compensatedValue) }}</strong>
+              </span>
+            </div>
+
+            <div class="timeline-item__footer" *ngIf="event.processedFile">
+              Arquivo de origem: {{ event.processedFile }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</p-dialog>

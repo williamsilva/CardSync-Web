@@ -35,13 +35,18 @@ export type ErpAcquirerComparisonStatus =
   | string;
 
 export type ChargebackStatus =
-  | 'OPEN'
-  | 'UNDER_REVIEW'
-  | 'REPRESENTED'
+  | 'REQUEST_RECEIVED'
+  | 'DOCUMENTATION_DUE'
+  | 'DOCUMENTATION_OVERDUE'
+  | 'PENDING_DEBIT'
+  | 'BANK_DEBIT_SCHEDULED'
+  | 'NET_COMPENSATION_SCHEDULED'
+  | 'DESCHEDULED'
+  | 'LIQUIDATED'
   | 'WON'
   | 'LOST'
   | 'REVERSED'
-  | 'EXPIRED'
+  | 'UNDER_REVIEW'
   | string;
 
 export type ErpVsAcquirerView = 'MISSING_ACQUIRER' | 'MISSING_ERP' | 'OTHER_DIVERGENCES';
@@ -203,21 +208,154 @@ export interface DebitAnalysisModel {
 
 export interface ChargebackAnalysisModel {
   id: string;
+
   saleDate?: string | null;
   disputeDate?: string | null;
+  requestDate?: string | null;
+  documentationDueDate?: string | null;
   dueDate?: string | null;
+  debitDate?: string | null;
+  settlementDate?: string | null;
+  lastEventDate?: string | null;
+
   company?: string | null;
   establishment?: string | null;
   acquirer?: string | null;
   flag?: string | null;
+
+  pvNumber?: number | null;
+  originalPvNumber?: number | null;
+  rvNumber?: number | null;
+  originalRvNumber?: number | null;
+
   nsu?: string | number | null;
   authorization?: string | null;
   tid?: string | null;
+  orderNumber?: string | null;
+
+  processNumber?: string | null;
+  debitOrderNumber?: string | null;
+  retentionProcessNumber?: string | null;
+
   saleValue?: number | null;
   disputedValue?: number | null;
+  pendingValue?: number | null;
+  settledValue?: number | null;
+  compensatedValue?: number | null;
+
   reasonCode?: string | number | null;
   reasonDescription?: string | null;
+  requestedDocuments?: string | null;
+
+  compensationCode?: string | number | null;
+  compensationDescription?: string | null;
+
+  sourceType?: string | null;
+  processedFile?: string | null;
+
   status: ChargebackStatus;
+}
+
+export interface ChargebackTimelineEventModel {
+  id?: string | null;
+  status: ChargebackStatus;
+  sourceType?: string | null;
+  eventDate?: string | null;
+  title?: string | null;
+  description?: string | null;
+  amount?: number | null;
+  pendingValue?: number | null;
+  settledValue?: number | null;
+  compensatedValue?: number | null;
+  processNumber?: string | null;
+  debitOrderNumber?: string | null;
+  processedFile?: string | null;
+}
+
+export interface ChargebackLifecycleModel {
+  trackingKey: string;
+  currentStatus: ChargebackStatus;
+  firstEventDate?: string | null;
+  lastEventDate?: string | null;
+
+  company?: string | null;
+  establishment?: string | null;
+  acquirer?: string | null;
+  flag?: string | null;
+
+  pvNumber?: number | null;
+  originalPvNumber?: number | null;
+  rvNumber?: number | null;
+  originalRvNumber?: number | null;
+
+  nsu?: string | number | null;
+  authorization?: string | null;
+  tid?: string | null;
+  orderNumber?: string | null;
+
+  processNumber?: string | null;
+  debitOrderNumber?: string | null;
+  retentionProcessNumber?: string | null;
+
+  saleValue?: number | null;
+  disputedValue?: number | null;
+  pendingValue?: number | null;
+  settledValue?: number | null;
+  compensatedValue?: number | null;
+
+  reasonCode?: string | number | null;
+  reasonDescription?: string | null;
+  requestedDocuments?: string | null;
+  compensationCode?: string | number | null;
+  compensationDescription?: string | null;
+
+  timeline: ChargebackTimelineEventModel[];
+}
+
+export interface ChargebackAnalysisTotalsModel {
+  total: number;
+  requestReceived: number;
+  documentationDue: number;
+  documentationOverdue: number;
+  pendingDebit: number;
+  bankDebitScheduled: number;
+  netCompensationScheduled: number;
+  descheduled: number;
+  liquidatedOrLost: number;
+  reversedOrWon: number;
+  saleValue?: number | null;
+  disputedValue?: number | null;
+  pendingValue?: number | null;
+  settledValue?: number | null;
+  compensatedValue?: number | null;
+}
+
+export interface ChargebackAnalysisFilter {
+  global?: string | null;
+  statuses?: ChargebackStatus[] | null;
+  saleDateStart?: string | null;
+  saleDateEnd?: string | null;
+  requestDateStart?: string | null;
+  requestDateEnd?: string | null;
+  deadlineStart?: string | null;
+  deadlineEnd?: string | null;
+  debitDateStart?: string | null;
+  debitDateEnd?: string | null;
+  settlementDateStart?: string | null;
+  settlementDateEnd?: string | null;
+  eventDateStart?: string | null;
+  eventDateEnd?: string | null;
+  valueStart?: number | null;
+  valueEnd?: number | null;
+  nsu?: string | null;
+  authorization?: string | null;
+  tid?: string | null;
+  processNumber?: string | null;
+  debitOrderNumber?: string | null;
+  reasonCode?: string | null;
+  reason?: string | null;
+  pvNumber?: string | null;
+  rvNumber?: string | null;
 }
 
 export interface BankSettlementAnalysisModel {

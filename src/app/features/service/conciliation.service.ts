@@ -1,13 +1,16 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 
 import { environment } from 'environments/environment';
 import { HalPagedResponse } from '@core/api/page.model';
 import { PageResponse } from '@models/file-processing.models';
 import {
   BankSettlementAnalysisModel,
+  ChargebackAnalysisFilter,
   ChargebackAnalysisModel,
+  ChargebackAnalysisTotalsModel,
+  ChargebackLifecycleModel,
   ConciliationAgingModel,
   ConciliationDashboardModel,
   ConciliationFeeAnalysisModel,
@@ -46,12 +49,35 @@ export class ConciliationService {
   }
 
   listChargebacks(
-    query: ConciliationPageQuery = {},
+    body: ListQueryDto<ChargebackAnalysisFilter>,
   ): Observable<PageResponse<ChargebackAnalysisModel>> {
-    return this.http.get<PageResponse<ChargebackAnalysisModel>>(`${this.baseUrl}/chargebacks`, {
-      params: this.toParams(query),
-      withCredentials: true,
-    });
+    return this.http
+      .post<
+        HalPagedResponse<ChargebackAnalysisModel> | PageResponse<ChargebackAnalysisModel>
+      >(`${this.baseUrl}/chargebacks`, body, { withCredentials: true })
+      .pipe(map((response) => this.normalizePage(response)));
+  }
+
+  listChargebackLifecycles(
+    body: ListQueryDto<ChargebackAnalysisFilter>,
+  ): Observable<PageResponse<ChargebackLifecycleModel>> {
+    return this.http
+      .post<
+        HalPagedResponse<ChargebackLifecycleModel> | PageResponse<ChargebackLifecycleModel>
+      >(`${this.baseUrl}/chargebacks-lifecycle`, body, { withCredentials: true })
+      .pipe(map((response) => this.normalizePage(response)));
+  }
+
+  chargebacksTotals(
+    body: ListQueryDto<ChargebackAnalysisFilter>,
+  ): Observable<ChargebackAnalysisTotalsModel> {
+    return this.http.post<ChargebackAnalysisTotalsModel>(
+      `${this.baseUrl}/chargebacks-totals`,
+      body,
+      {
+        withCredentials: true,
+      },
+    );
   }
 
   listBankSettlement(
@@ -80,6 +106,30 @@ export class ConciliationService {
       params: this.toParams(query),
       withCredentials: true,
     });
+  }
+
+  private normalizePage<T>(response: HalPagedResponse<T> | PageResponse<T>): PageResponse<T> {
+    if ('content' in response) {
+      return response;
+    }
+
+    const content = response._embedded?.content ?? [];
+    const page = response.page;
+    const pageNumber = page
+      ? (page.page ?? (page as unknown as { number?: number }).number ?? 0)
+      : 0;
+
+    return {
+      content,
+      totalElements: page?.totalElements ?? content.length,
+      totalPages: page?.totalPages ?? 1,
+      size: page?.size ?? content.length,
+      number: pageNumber,
+      first: pageNumber === 0,
+      last: page ? pageNumber + 1 >= page.totalPages : true,
+      numberOfElements: content.length,
+      empty: content.length === 0,
+    };
   }
 
   private toParams(query: ConciliationPageQuery): HttpParams {
