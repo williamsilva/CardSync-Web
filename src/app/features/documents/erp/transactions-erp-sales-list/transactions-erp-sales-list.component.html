@@ -1419,8 +1419,12 @@
 
         <th class="text-center">
           <div class="th-flex th-flex--compact th-flex--center">
-            <span class="th-label" tooltipPosition="top" [pTooltip]="'common.search' | translate">
-              {{ 'common.search' | translate }}
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'common.search.title' | translate"
+            >
+              {{ 'common.search.title' | translate }}
             </span>
           </div>
         </th>
@@ -1583,7 +1587,7 @@
               tooltipPosition="left"
               class="p-button-text p-button-sm"
               (click)="searchMenu.toggle($event)"
-              [pTooltip]="'common.search' | translate"
+              [pTooltip]="'common.search.title' | translate"
             ></button>
           </div>
         </td>

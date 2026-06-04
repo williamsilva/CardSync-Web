@@ -219,7 +219,7 @@ export class ContractAuditListComponent
   });
 
   ngOnInit(): void {
-    this.flagFacade.loadCompanyOptionsFilter();
+    this.flagFacade.loadFlagOptionsFilter();
     this.companyFacade.loadCompanyOptionsFilter();
     this.acquirerFacade.loadAcquirerOptionsFilter();
     this.establishmentFacade.loadEstablishmentOptionsFilter();

@@ -32,7 +32,7 @@ import { TransactionsErpFacade } from '@features/facade/transaction-erp.facade';
 import { buildListQuery } from '@shared/features/list-query/list-query.builder';
 import { allPeriodEnum, PeriodEnum, periodEnumLabel } from '@models/enums/period.enum';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
-import { statusTransactionReasonEnumLabel } from '@models/enums/transaction-status-reason.enum';
+import { statusTransactionReasonEnumLabel } from '@models/enums/status-transaction-reason.enum';
 import { CsColumnFilterShellComponent } from '@features/list-base/cs-column-filter-shell.component';
 import { CsAdvancedTextFilterComponent } from '@features/list-base/cs-advanced-text-filter.component';
 import { CsAdvancedPeriodDateFilterComponent } from '@features/list-base/cs-advanced-period-date-filter.component';
@@ -55,7 +55,7 @@ import {
   statusTransactionEnumLabel,
   installmentStatusTooltipTone,
   installmentTooltipStatusLabel,
-} from '@models/enums/transaction-status.enum';
+} from '@models/enums/status-transaction.enum';
 import {
   CaptureEnum,
   allCaptureEnum,
@@ -273,7 +273,7 @@ export class TransactionsErpSalesListComponent
   });
 
   ngOnInit(): void {
-    this.flagFacade.loadCompanyOptionsFilter();
+    this.flagFacade.loadFlagOptionsFilter();
     this.companyFacade.loadCompanyOptionsFilter();
     this.acquirerFacade.loadAcquirerOptionsFilter();
     this.establishmentFacade.loadEstablishmentOptionsFilter();

@@ -9,6 +9,7 @@ export enum StatusPaymentBankEnum {
   CANCELED = 'CANCELED',
   NOT_PAID = 'NOT_PAID',
   DIVERGENT = 'DIVERGENT',
+  PARTIALLY_PAID = 'PARTIALLY_PAID',
 }
 
 export type StatusPaymentBankInput = StatusPaymentBankEnum | string | number | null | undefined;
@@ -21,6 +22,7 @@ export const STATUS_CODE_MAP: Record<number, StatusPaymentBankEnum> = {
   4: StatusPaymentBankEnum.DIVERGENT,
   5: StatusPaymentBankEnum.CANCELED,
   6: StatusPaymentBankEnum.DELETED,
+  7: StatusPaymentBankEnum.PARTIALLY_PAID,
 };
 
 export function normalizeStatusPaymentBankEnum(
@@ -56,6 +58,9 @@ export function normalizeStatusPaymentBankEnum(
     case StatusPaymentBankEnum.CANCELED:
       return StatusPaymentBankEnum.CANCELED;
 
+    case StatusPaymentBankEnum.PARTIALLY_PAID:
+      return StatusPaymentBankEnum.PARTIALLY_PAID;
+
     default:
       return null;
   }
@@ -66,10 +71,10 @@ export function statusPaymentBankEnumSeverity(
 ): CsTagTone {
   switch (normalizeStatusPaymentBankEnum(statusPaymentBank)) {
     case StatusPaymentBankEnum.PENDING:
-      return 'success';
+      return 'warn';
 
     case StatusPaymentBankEnum.PAID:
-      return 'warn';
+      return 'success';
 
     case StatusPaymentBankEnum.CANCELED:
       return 'orange';
@@ -81,7 +86,10 @@ export function statusPaymentBankEnumSeverity(
       return 'danger';
 
     case StatusPaymentBankEnum.DIVERGENT:
-      return 'contrast';
+      return 'blue';
+
+    case StatusPaymentBankEnum.PARTIALLY_PAID:
+      return 'bank';
 
     default:
       return 'contrast';
@@ -110,6 +118,9 @@ export function statusPaymentBankEnumLabel(
 
     case StatusPaymentBankEnum.DIVERGENT:
       return i18n.tUi('enum.statusPaymentBankEnum.divergent');
+
+    case StatusPaymentBankEnum.PARTIALLY_PAID:
+      return i18n.tUi('enum.statusPaymentBankEnum.partiallyPaid');
 
     case StatusPaymentBankEnum.NULL:
       return i18n.tUi('enum.statusPaymentBankEnum.null', 'N/A');
@@ -166,9 +177,10 @@ export function allStatusPaymentBankEnum(): StatusPaymentBankEnum[] {
   return [
     StatusPaymentBankEnum.PAID,
     StatusPaymentBankEnum.NOT_PAID,
+    StatusPaymentBankEnum.PARTIALLY_PAID,
     StatusPaymentBankEnum.PENDING,
-    StatusPaymentBankEnum.DELETED,
     StatusPaymentBankEnum.DIVERGENT,
+    StatusPaymentBankEnum.DELETED,
     StatusPaymentBankEnum.CANCELED,
   ];
 }

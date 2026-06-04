@@ -1,0 +1,58 @@
+import { WritableSignal } from '@angular/core';
+
+import { FlagMinimalModel } from './flag-minimal.models';
+import { CompanyMinimalModel } from './company-minimal.models';
+import { AcquirerMinimalModel } from './acquirer-minimal.models';
+import { EstablishmentMinimalModel } from './establishment-minimal.models';
+import { SalesSummaryMinimalModel } from './sales-summary-minimal.models';
+import { ProcessedFileMinimalModel } from './processed-file-minimal.models';
+import {
+  CreditOrderAdvancedFilters,
+  createEmptyCreditOrderFiltersState,
+} from '@features/filter/credit-order.filters';
+
+export interface CreditOrderModel {
+  id: string;
+
+  flag: FlagMinimalModel;
+  company: CompanyMinimalModel;
+  acquirer: AcquirerMinimalModel;
+  establishment: EstablishmentMinimalModel;
+  salesSummary: SalesSummaryMinimalModel;
+  processedFile: ProcessedFileMinimalModel;
+}
+
+export interface CreditOrderCreateInput {}
+
+export interface CreditOrderUpdateInput {}
+
+export interface CreditOrderApiModel {
+  id: string;
+
+  flag: FlagMinimalModel;
+  company: CompanyMinimalModel;
+  acquirer: AcquirerMinimalModel;
+  establishment: EstablishmentMinimalModel;
+  salesSummary: SalesSummaryMinimalModel;
+  processedFile: ProcessedFileMinimalModel;
+}
+
+export function mapCreditOrderApiModel(input: CreditOrderApiModel): CreditOrderModel {
+  return {
+    ...input,
+  };
+}
+
+export function mapCreditOrderApiModels(
+  items: CreditOrderApiModel[] | null | undefined,
+): CreditOrderModel[] {
+  return (items ?? []).map(mapCreditOrderApiModel);
+}
+
+export type CreditOrderAdvancedFilterSignals = {
+  [K in keyof CreditOrderAdvancedFilters]: WritableSignal<CreditOrderAdvancedFilters[K]>;
+};
+
+export function createEmptyCreditOrderAdvancedFilters(): CreditOrderAdvancedFilters {
+  return createEmptyCreditOrderFiltersState();
+}

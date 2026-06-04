@@ -34,6 +34,42 @@ export const ACQUIRERS_ROUTES: Routes = [
       ),
   },
   {
+    path: 'anticipation',
+    title: 'routes.transactions.anticipation.title',
+    canActivate: [permissionGuard],
+    data: {
+      requireAll: false,
+      redirectTo: '/forbidden',
+      permissions: [PERMISSIONS.DOCUMENTS.ANTICIPATION.VIEW],
+    },
+    loadComponent: () =>
+      import('./anticipation/anticipation-list.component').then((m) => m.AnticipationListComponent),
+  },
+  {
+    path: 'sales-summary',
+    title: 'routes.transactions.saleSummary.title',
+    canActivate: [permissionGuard],
+    data: {
+      requireAll: false,
+      redirectTo: '/forbidden',
+      permissions: [PERMISSIONS.DOCUMENTS.SALES_SUMMARY.VIEW],
+    },
+    loadComponent: () =>
+      import('./sales-summary/sale-summary.component').then((m) => m.SaleSummaryListComponent),
+  },
+  {
+    path: 'credit-order',
+    title: 'routes.transactions.creditOrder.title',
+    canActivate: [permissionGuard],
+    data: {
+      requireAll: false,
+      redirectTo: '/forbidden',
+      permissions: [PERMISSIONS.DOCUMENTS.CREDIT_ORDER.VIEW],
+    },
+    loadComponent: () =>
+      import('./credit-order/credit-order.component').then((m) => m.CreditOrderListComponent),
+  },
+  {
     path: '**',
     title: 'routes.notFound.title',
     loadComponent: () => import('../../error/not-found/not-found.page').then((m) => m.NotFoundPage),

@@ -30,7 +30,7 @@ export class FlagFacade {
   readonly totalRecords = this._total.asReadonly();
   readonly loadedOnce = this._loadedOnce.asReadonly();
 
-  loadCompanyOptionsFilter(force = false): void {
+  loadFlagOptionsFilter(force = false): void {
     if (this._optionsLoading()) return;
     if (!force && this._optionsLoadedOnce()) return;
 

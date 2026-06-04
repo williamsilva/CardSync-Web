@@ -94,6 +94,15 @@
         "sales": {
           "title": "Vendas ADQ"
         }
+      },
+      "anticipation": {
+        "title": "Antecipações"
+      },
+      "saleSummary": {
+        "title": "Resumo de Vendas"
+      },
+      "creditOrder": {
+        "title": "Ordens de Pagamento"
       }
     },
     "audit": {
@@ -133,6 +142,15 @@
         "title": "Adquirentes",
         "sales": "Vendas",
         "installments": "Parcelas"
+      },
+      "anticipation": {
+        "title": "Antecipações"
+      },
+      "saleSummary": {
+        "title": "Resumo de Vendas"
+      },
+      "creditOrder": {
+        "title": "Ordens de Pagamento"
       }
     },
     "me": "Minha conta",
@@ -185,7 +203,6 @@
         "scheduler": "Scheduler",
         "creditOrders": "Ordens de crédito",
         "adjustments": "Ajustes Rede",
-        "anticipations": "Antecipações",
         "pendingDebts": "Débitos pendentes",
         "settledDebts": "Débitos liquidados",
         "totalizers": "Totalizadores",
@@ -224,6 +241,15 @@
     },
     "conciliation": {
       "title": "Conciliação"
+    },
+    "anticipation": {
+      "title": "Antecipações"
+    },
+    "saleSummary": {
+      "title": "Resumo de Vendas"
+    },
+    "creditOrders": {
+      "title": "Ordens de Pagamento"
     }
   },
   "footer": {
@@ -396,11 +422,17 @@
       "scheduled": "Venda Agendada",
       "differentPlans": "Planos Diferentes",
       "valueMismatch": "Divergência de valor",
+      "cancellationFraud": "Cancelamento Fraud",
       "flagMismatch": "Divergência de bandeira",
       "cvNotFoundErp": "Cv não encontrado no ERP",
       "cvNotFoundAdq": "Cv não encontrado na ADQ",
       "ambiguousMatch": "Correspondência ambígua",
-      "acquirerMismatch": "Divergência de Adquirente"
+      "cancellationReturn": "Cancelamento Retorno",
+      "cancellationRefound": "Cancelamento estorno",
+      "acquirerMismatch": "Divergência de Adquirente",
+      "cancellationAcquirer": "Cancelamento Adquirente",
+      "cancellationDuplicate": "Cancelamento duplicidade",
+      "cancellationOperationalError":"Cancelamento erro operacional"
     },
     "statusTransactionEnum": {
       "pending": "Pendente",
@@ -408,11 +440,33 @@
       "canceled": "Cancelado",
       "reconciled": "Conciliado",
       "unknown": "Não Informado",
-      "notReconciled": "Não conciliado",
       "excludedSale": "Venda Excluída",
+      "notReconciled": "Não conciliado",
       "canceledSale": "Venda Cancelada",
+      "naoTokenizadas": "Não Tokenizada",
       "manuallyReconciled": "Conciliado Manual",
+      "partiallyReconciled": "Conciliado Parcial",
       "reconciledAutomatically": "Conciliado Automaticamente"
+    },
+    "adjustmentReasonEnum": {
+      "unknown": "Não Informado",
+      "chargeback": "ChargeBack",
+      "tarifaCbk": "Tarifa ChargBack",
+      "saleDispute": "Disputa de Venda",
+      "txManTef": "Tarifa Manutenção Tef",
+      "cancelVendas": "Cancelamento de Vendas",
+      "salesAnticipation": "Antecipação de Vendas"
+    },
+    "saleSummaryEnum": {
+      "unknown": "Não Informado"
+    },
+    "statusReconciliationEnum": {
+      "pending": "Pendente",
+      "canceled": "Cancelado",
+      "divergent": "Divergente",
+      "reconciled": "Conciliado",
+      "unknown": "Não Informado",
+      "partiallyReconciled": "Conciliado Parcial"
     },
     "statusPaymentBankEnum": {
       "paid": "Pago",
@@ -420,10 +474,11 @@
       "pending": "Pendente",
       "deleted": "Excluido",
       "canceled": "Cancelado",
-      "unknown": "Não Informado",
       "divergent": "Divergente",
+      "unknown": "Não Informado",
       "excludedSale": "Venda Excluída",
-      "canceledSale": "Venda Cancelada"
+      "canceledSale": "Venda Cancelada",
+      "partiallyPaid": "Pagamento Parcial"
     },
     "modalityEnum": {
       "outros": "Outros",
@@ -954,6 +1009,7 @@
       "creditDate": "Data Crédito",
       "adjustmentValue": "Ajustes",
       "netAmount": "Valor Líquido",
+      "rvNumber":"Resumo de vendas",
       "cardNumber": "Número Cartão",
       "conciliation": "Conciliação",
       "liquidValue": "Valor Líquido",
@@ -995,6 +1051,130 @@
       "establishment": "Estabelecimento",
       "statusTransactionReason": "Motivo",
       "expectedPaymentDate": "Prev. Pagamento"
+    }
+  },
+  "anticipation":{
+    "subtitle": "Analise antecipações e respectivos descontos financeiros.",
+    "fields": {
+      "bank": "Banco",
+      "gross":"Bruto",
+      "flag": "Bandeira",
+      "company": "Empresa",
+      "release": "Lançamento",
+      "acquirer": "Adquirente",
+      "modality": "Modalidade",
+      "discountRate":"Desconto",
+      "grossValue":"Valor bruto",
+      "statusPayment": "Pagamento",
+      "transactionsStatus":"Venda",
+      "releaseDate": "Data lançamento",
+      "releaseValue": "Valor Lançamento",
+      "establishment": "Estabelecimento",
+      "originalCredit":"Original Crédito",
+      "originalDue": "Original Lançamento",
+      "bankingDomicile": "Domicílio bancário",
+      "advanceDiscount": "Desconto Antcipação",
+      "transactionsStatusEnum":"Status da Venda",
+      "discountRateValue":"Valor desconto venda",
+      "statusPaymentBank":"Status Pagamento Banco",
+      "originalDueDate": "Data Original Lançamento",
+      "originalCreditValue":"Valor Original Crédito",
+      "periodReleaseDate": "Período Data Lançamento",
+      "statusPaymentBankEnum":"Status Pagamento Banco",
+      "advanceDiscountValue": "Valor Desconto Antcipação"
+    },
+    "columns": {
+      "installmentNumber": "Parcela",
+      "releaseDate":"Data lançamento",
+      "numberCvNsu":"Número de vendas",
+      "numberRvCorresponding":"Resumo venda",
+      "originalDueDate": "Data original lançamento"
+     }
+  },
+  "saleSummary": {
+    "subtitle": "Analise resumo de vendas.",
+    "fields": {
+      "gross":" Bruto",
+      "orders": "Ordens",
+      "flag":" Bandeira",
+      "liquid": "Líquido",
+      "company": "Empresa",
+      "rv": "Resumo vendas",
+      "discount": "Desconto",
+      "pvNumber": "Número Pv",
+      "adjustments": "Ajustes",
+      "acquirer": "Adquirente",
+      "modality": "Modalidade",
+      "grossValue": "Valor Bruto",
+      "transactionsStatus": "Venda",
+      "liquidValue": "Valor Líquido",
+      "discountValue": "Valor Desconto",
+      "numberCvNsu": "Número de vendas",
+      "rvDate": "Data Resumo de vendas",
+      "creditOrderStatus": "Ordem Crédito",
+      "rvNumber": "Número resumo de vendas",
+      "statusPaymentBank": "Pagamento Banco",
+      "periodRvDate": "Período Resumo de Vendas",
+      "bank": "Banco",
+      "establishment": "Estabelecimento",
+      "bankingDomicile": "Domicílio Bancário",
+      "transactionsStatusEnum": "Status da Venda",
+      "creditOrderStatusEnum": "Status Ordem Crédito",
+      "statusPaymentBankEnum": "Status Pagamento Banco"
+    }
+  },
+  "creditOrders": {
+    "title": "Ordens de Pagamento",
+    "subtitle": "Ordens de Pagamento.",
+    "fields": {
+      "gross": " Bruto",
+      "flag": "Bandeira",
+      "orders": "Ordens",
+      "liquid": "Líquido",
+      "rv":"Resumo vendas",
+      "company": "Empresa",
+      "discount":"Desconto",
+      "pvNumber": "Número Pv",
+      "statusRv": "Status RV",
+      "release": "Lançamento",
+      "modality": "Modalidade",
+      "acquirer": "Adquirente",
+      "installment": "Parcela",
+      "grossValue": "Valor Bruto",
+      "liquidValue": "Valor Líquido",
+      "installmentNumber" :"Parcela",
+      "creditOrder": "Ordem Crédito",
+      "salesSummary": "Resumo Vendas",
+      "discountValue":"Valor Desconto",
+      "releaseDate": "Data lançamento",
+      "paymentBank": "Pagamento Banco",
+      "rvDate": "Data resumo de vendas",
+      "releaseValue": "Valor Lançamento",
+      "rvNumber":"Número resumo de vendas",
+      "creditOrderDate": "Data Ordem Crédito",
+      "salesSummaryStatus": "Status Resumo Vendas",
+      "statusPaymentBank": "Status Pagamento Banco",
+      "bank": "Banco",
+      "establishment": "Estabelecimento",
+      "bankingDomicile": "Domicílio Bancário",
+      "pvOriginal": "Pv Original",
+      "periodRvDate": "Período Resumo de Vendas",
+      "periodReleaseDate": "Período Lançamento",
+      "periodCreditOrderDate": "Período Ordem Crédito"
+    }
+  },
+  "adjustments": {
+    "title": "Ajustes",
+    "fields": {
+      "nsu": "Cv/Nsu",
+      "reason" : "Motivo",
+      "credit" : "Crédito",
+      "adjustment": "Ajustes",
+      "installment": "Parcela",
+      "creditDate" : "Data Crédito",
+      "adjustmentValue": "Valor Ajustes",
+      "adjustmentReason" : "Motivo do Ajuste",
+      "rvNumberOriginal": "Número Resumo original"
     }
   },
   "flag": {
@@ -1530,6 +1710,14 @@
       "final": "Valor Final",
       "initial": "Valor Incial"
     },
+    "search": {
+      "line": "Linha",
+      "title": "Buscar",
+      "process": "Processo",
+      "transactions": "Transações",
+      "salesSummary": "Resumo Venda"
+
+    },
     "no": "Não",
     "to": "até",
     "yes": "Sim",
@@ -1537,6 +1725,7 @@
     "all": "Todos",
     "until": "Até",
     "error": "Erro",
+    "code": "Código",
     "sales":"Vendas",
     "action": "Ação",
     "save": "Salvar",
@@ -1546,7 +1735,6 @@
     "close": "Fechar",
     "clear": "Limpar",
     "quantity": "Qtd.",
-    "search": "Buscar",
     "apply": "Aplicar",
     "actions": "Ações",
     "filter": "Filtrar",
@@ -1583,6 +1771,8 @@
     "advancedFilters": "Filtros avançados",
     "viewInstallments": "Visualizar parcelas",
     "noRecordsFound": "Nenhum registro encontrado.",
+    "viewAdjustments": "Visualizar ajustes na transação",
+    "viewCreditOrders": "Visualizar ordens de pagamento",
     "selected": "{count, plural, =0 {Nenhum selecionado} one {# selecionado} other {# selecionados}}",
     "selectedFemale": "{count, plural, =0 {Nenhuma selecionada} one {# selecionada} other {# selecionadas}}"
   },

@@ -133,6 +133,10 @@ export class SidebarComponent {
     });
   }
 
+  activeIcon(item: AppMenuItem): string {
+    return item.activeIcon ?? 'pi pi-map-marker nav-icon-active-bounce text-blue-500';
+  }
+
   private itemKey(item: AppMenuItem): string {
     return item.route ?? item.labelKey;
   }

@@ -31,7 +31,7 @@ import { allPeriodEnum, PeriodEnum, periodEnumLabel } from '@models/enums/period
 import { allModalityEnum, modalityEnumLabel } from '../../../models/enums/modality.enum';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
 import { TransactionsAcqInstallmentModel } from '@models/transactions-acq-installment.models';
-import { statusTransactionReasonEnumLabel } from '@models/enums/transaction-status-reason.enum';
+import { statusTransactionReasonEnumLabel } from '@models/enums/status-transaction-reason.enum';
 import { CsColumnFilterShellComponent } from '@features/list-base/cs-column-filter-shell.component';
 import { CsAdvancedTextFilterComponent } from '@features/list-base/cs-advanced-text-filter.component';
 import { TransactionsAcqInstallmentFacade } from '@features/facade/transaction-acq-installment.facade';
@@ -61,7 +61,7 @@ import {
   installmentTooltipStatusLabel,
   statusTransactionEnumSeverity,
   normalizeStatusTransactionEnum,
-} from '@models/enums/transaction-status.enum';
+} from '@models/enums/status-transaction.enum';
 import {
   ActiveFilterItem,
   FiltersPanelComponent,
@@ -265,7 +265,7 @@ export class AcqInstallmentsListComponent
   });
 
   ngOnInit(): void {
-    this.flagFacade.loadCompanyOptionsFilter();
+    this.flagFacade.loadFlagOptionsFilter();
     this.companyFacade.loadCompanyOptionsFilter();
     this.acquirerFacade.loadAcquirerOptionsFilter();
     this.establishmentFacade.loadEstablishmentOptionsFilter();

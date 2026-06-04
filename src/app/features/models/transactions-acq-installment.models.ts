@@ -2,7 +2,7 @@ import { ModalityEnum } from './enums/modality.enum';
 import { FlagMinimalModel } from './flag-minimal.models';
 import { CompanyMinimalModel } from './company-minimal.models';
 import { AcquirerMinimalModel } from './acquirer-minimal.models';
-import { StatusTransactionEnum } from './enums/transaction-status.enum';
+import { StatusTransactionEnum } from './enums/status-transaction.enum';
 import { StatusPaymentBankEnum } from './enums/status-payment-bank.enum';
 import { EstablishmentMinimalModel } from './establishment-minimal.models';
 import { ProcessedFileMinimalModel } from './processed-file-minimal.models';

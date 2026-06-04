@@ -9,7 +9,7 @@ import { TransactionsErpInstallmentModel } from './transactions-erp-installment.
 import {
   StatusTransactionEnum,
   normalizeStatusTransactionEnum,
-} from './enums/transaction-status.enum';
+} from './enums/status-transaction.enum';
 
 export interface TransactionsErpMinimalModel {
   id: string;

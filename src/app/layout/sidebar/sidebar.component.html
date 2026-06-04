@@ -18,7 +18,7 @@
       >
         <i
           class="nav-icon"
-          [ngClass]="isActive(item) ? 'pi pi-map-marker nav-icon-active-bounce' : item.icon"
+          [ngClass]="isActive(item) ? activeIcon(item) : item.icon"
         ></i>
 
         <span class="nav-label">{{ item.labelKey | translate }}</span>
@@ -52,7 +52,7 @@
           >
             <i
               class="nav-icon"
-              [ngClass]="isActive(child) ? 'pi pi-map-marker nav-icon-active-bounce' : child.icon"
+              [ngClass]="isActive(child) ? activeIcon(child) : child.icon"
             ></i>
 
             <span class="nav-label">{{ child.labelKey | translate }}</span>

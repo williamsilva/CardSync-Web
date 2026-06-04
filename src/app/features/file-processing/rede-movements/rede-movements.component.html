@@ -147,63 +147,6 @@
           </p-table>
         </p-tabpanel>
 
-        <p-tabpanel value="anticipations">
-          <p-table
-            [value]="anticipations()"
-            [lazy]="true"
-            [loading]="loading()"
-            [paginator]="true"
-            [rows]="pageSize()"
-            [totalRecords]="total('anticipations')"
-            styleClass="p-datatable-sm"
-            (onLazyLoad)="loadCurrent($event)"
-          >
-            <ng-template pTemplate="header"
-              ><tr>
-                <th>Arquivo</th>
-                <th>PV/RV</th>
-                <th>Parcela</th>
-                <th>Datas</th>
-                <th>Valores</th>
-                <th>Contexto</th>
-              </tr></ng-template
-            >
-            <ng-template pTemplate="body" let-row>
-              <tr>
-                <td>
-                  <strong>{{ row.processedFile }}</strong
-                  ><small>Linha {{ row.lineNumber }}</small>
-                </td>
-                <td>
-                  <strong>PV {{ row.pvNumber || '-' }}</strong
-                  ><small>RV {{ row.numberRvCorresponding || '-' }}</small>
-                </td>
-                <td>{{ row.installmentNumber || '-' }}/{{ row.installmentNumberMax || '-' }}</td>
-                <td>
-                  <strong>{{ row.releaseDate | date: 'shortDate' }}</strong
-                  ><small>Venc. original {{ row.originalDueDate | date: 'shortDate' }}</small>
-                </td>
-                <td>
-                  <strong>{{ formatCurrency(row.releaseValue) }}</strong
-                  ><small
-                    >Bruto {{ formatCurrency(row.grossValue) }} · Desc.
-                    {{ formatCurrency(row.discountRateValue) }}</small
-                  >
-                </td>
-                <td>
-                  <strong>{{ row.company || '-' }}</strong
-                  ><small>{{ row.acquirer || '-' }} · {{ row.flag || '-' }}</small>
-                </td>
-              </tr>
-            </ng-template>
-            <ng-template pTemplate="emptymessage"
-              ><tr>
-                <td colspan="6">Nenhuma antecipação encontrada.</td>
-              </tr></ng-template
-            >
-          </p-table>
-        </p-tabpanel>
-
         <p-tabpanel value="pending-debts">
           <p-table
             [value]="pendingDebts()"

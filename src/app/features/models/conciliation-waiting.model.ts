@@ -2,7 +2,7 @@ import {
   StatusTransactionReasonEnum,
   StatusTransactionReasonInput,
   normalizeStatusTransactionReasonEnum,
-} from './enums/transaction-status-reason.enum';
+} from './enums/status-transaction-reason.enum';
 import { ModalityEnum, ModalityInput, normalizeModalityEnum } from './enums/modality.enum';
 import { CaptureEnum, CaptureInput, normalizeCaptureEnum } from './enums/capture.enum';
 

@@ -8,6 +8,7 @@ export enum StatusTransactionEnum {
   CANCELED = 'CANCELED',
   NOT_RECONCILED = 'NOT_RECONCILED',
   MANUALLY_RECONCILED = 'MANUALLY_RECONCILED',
+  PARTIALLY_RECONCILED = 'PARTIALLY_RECONCILED',
   AUTOMATICALLY_RECONCILED = 'AUTOMATICALLY_RECONCILED',
 }
 
@@ -21,6 +22,7 @@ export const STATUS_CODE_MAP: Record<number, StatusTransactionEnum> = {
   4: StatusTransactionEnum.NOT_RECONCILED,
   5: StatusTransactionEnum.CANCELED,
   6: StatusTransactionEnum.DELETED,
+  7: StatusTransactionEnum.PARTIALLY_RECONCILED,
 };
 
 export function normalizeStatusTransactionEnum(
@@ -56,6 +58,9 @@ export function normalizeStatusTransactionEnum(
     case StatusTransactionEnum.CANCELED:
       return StatusTransactionEnum.CANCELED;
 
+    case StatusTransactionEnum.PARTIALLY_RECONCILED:
+      return StatusTransactionEnum.PARTIALLY_RECONCILED;
+
     default:
       return null;
   }
@@ -66,10 +71,10 @@ export function statusTransactionEnumSeverity(
 ): CsTagTone {
   switch (normalizeStatusTransactionEnum(statusTransaction)) {
     case StatusTransactionEnum.PENDING:
-      return 'success';
+      return 'warn';
 
     case StatusTransactionEnum.AUTOMATICALLY_RECONCILED:
-      return 'warn';
+      return 'success';
 
     case StatusTransactionEnum.CANCELED:
       return 'orange';
@@ -81,7 +86,10 @@ export function statusTransactionEnumSeverity(
       return 'danger';
 
     case StatusTransactionEnum.NOT_RECONCILED:
-      return 'contrast';
+      return 'blue';
+
+    case StatusTransactionEnum.PARTIALLY_RECONCILED:
+      return 'money';
 
     default:
       return 'contrast';
@@ -110,6 +118,9 @@ export function statusTransactionEnumLabel(
 
     case StatusTransactionEnum.NOT_RECONCILED:
       return i18n.tUi('enum.statusTransactionEnum.notReconciled');
+
+    case StatusTransactionEnum.PARTIALLY_RECONCILED:
+      return i18n.tUi('enum.statusTransactionEnum.partiallyReconciled');
 
     case StatusTransactionEnum.NULL:
       return i18n.tUi('enum.statusTransactionEnum.null', 'N/A');
@@ -164,11 +175,12 @@ export function installmentStatusTooltipTone(statusTransaction: StatusTransactio
 
 export function allStatusTransactionEnum(): StatusTransactionEnum[] {
   return [
-    StatusTransactionEnum.DELETED,
-    StatusTransactionEnum.PENDING,
     StatusTransactionEnum.AUTOMATICALLY_RECONCILED,
     StatusTransactionEnum.MANUALLY_RECONCILED,
+    StatusTransactionEnum.PARTIALLY_RECONCILED,
+    StatusTransactionEnum.PENDING,
     StatusTransactionEnum.NOT_RECONCILED,
+    StatusTransactionEnum.DELETED,
     StatusTransactionEnum.CANCELED,
   ];
 }

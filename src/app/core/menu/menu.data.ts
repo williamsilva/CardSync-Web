@@ -3,83 +3,18 @@ import { PERMISSIONS } from '@core/auth/permissions.constants';
 import { AppMenuItem } from './menu.model';
 
 export const APP_MENU: AppMenuItem[] = [
+  // https://tailscan.com/tailwind/typography/text-color-class
+
   /* Dashboard */
   {
     labelKey: 'menu.dashboard',
-    icon: 'pi pi-chart-line text-blue-500',
+    icon: 'pi pi-chart-line text-blue-600',
     route: '/dashboard',
     exact: true,
   },
-  /* Conciliation */
-  {
-    icon: 'pi pi-sync text-purple-400',
-    labelKey: 'menu.conciliation.title',
-    children: [
-      {
-        exact: false,
-        route: '/conciliation/dashboard',
-        labelKey: 'menu.conciliation.dashboard',
-        icon: 'pi pi-chart-line text-purple-500',
-      },
-      {
-        exact: false,
-        route: '/conciliation/erp-vs-acquirer/missing-acquirer',
-        labelKey: 'menu.conciliation.erpMissingAcquirer',
-        icon: 'pi pi-exclamation-circle text-purple-500',
-      },
-      {
-        exact: false,
-        route: '/conciliation/erp-vs-acquirer/missing-erp',
-        labelKey: 'menu.conciliation.acquirerMissingErp',
-        icon: 'pi pi-plus-circle text-purple-500',
-      },
-      {
-        exact: false,
-        route: '/conciliation/erp-vs-acquirer/other-divergences',
-        labelKey: 'menu.conciliation.erpVsAcquirerDivergences',
-        icon: 'pi pi-search text-purple-500',
-      },
-      {
-        exact: false,
-        route: '/conciliation/contract-audit',
-        labelKey: 'menu.conciliation.contractAudit',
-        icon: 'pi pi-percentage text-purple-500',
-      },
-      {
-        exact: false,
-        route: '/conciliation/bank-settlement',
-        labelKey: 'menu.conciliation.bankSettlement',
-        icon: 'pi pi-wallet text-purple-500',
-      },
-      {
-        exact: false,
-        route: '/conciliation/debits',
-        labelKey: 'menu.conciliation.debits',
-        icon: 'pi pi-minus-circle text-purple-500',
-      },
-      {
-        exact: false,
-        route: '/conciliation/chargebacks',
-        labelKey: 'menu.conciliation.chargebacks',
-        icon: 'pi pi-shield text-purple-500',
-      },
-      {
-        exact: false,
-        route: '/conciliation/divergences',
-        labelKey: 'menu.conciliation.divergences',
-        icon: 'pi pi-exclamation-triangle text-purple-500',
-      },
-      {
-        exact: false,
-        route: '/conciliation/aging',
-        labelKey: 'menu.conciliation.aging',
-        icon: 'pi pi-hourglass text-purple-500',
-      },
-    ],
-  },
   /* ERP */
   {
-    icon: 'pi pi-briefcase text-teal-500',
+    icon: 'pi pi-briefcase text-teal-600',
     labelKey: 'menu.transactions.erp.title',
     children: [
       {
@@ -98,26 +33,111 @@ export const APP_MENU: AppMenuItem[] = [
   },
   /* ACQ */
   {
-    icon: 'pi pi-briefcase text-teal-500',
+    icon: 'pi pi-credit-card text-cyan-600',
     labelKey: 'menu.transactions.acq.title',
     children: [
       {
         exact: false,
+        route: '/documents/acq/credit-order',
+        labelKey: 'menu.transactions.creditOrder.title',
+        icon: 'pi pi-wallet text-cyan-400',
+      },
+      {
+        exact: false,
+        route: '/documents/acq/sales-summary',
+        labelKey: 'menu.transactions.saleSummary.title',
+        icon: 'pi pi-receipt text-cyan-400',
+      },
+      {
+        exact: false,
+        route: '/documents/acq/anticipation',
+        labelKey: 'menu.transactions.anticipation.title',
+        icon: 'pi pi-calendar-clock text-cyan-400',
+      },
+      {
+        exact: false,
         route: '/documents/acq/sales',
         labelKey: 'menu.transactions.acq.sales',
-        icon: 'pi pi-shopping-bag text-teal-400',
+        icon: 'pi pi-credit-card text-cyan-400',
       },
       {
         exact: false,
         route: '/documents/acq/installments',
         labelKey: 'menu.transactions.acq.installments',
-        icon: 'pi pi-list-check text-teal-400',
+        icon: 'pi pi-list-check text-cyan-400',
+      },
+    ],
+  },
+  /* Conciliation */
+  {
+    icon: 'pi pi-sync text-purple-400',
+    labelKey: 'menu.conciliation.title',
+    children: [
+      {
+        exact: false,
+        route: '/conciliation/dashboard',
+        labelKey: 'menu.conciliation.dashboard',
+        icon: 'pi pi-chart-line text-purple-600',
+      },
+      {
+        exact: false,
+        route: '/conciliation/erp-vs-acquirer/missing-acquirer',
+        labelKey: 'menu.conciliation.erpMissingAcquirer',
+        icon: 'pi pi-exclamation-circle text-purple-600',
+      },
+      {
+        exact: false,
+        route: '/conciliation/erp-vs-acquirer/missing-erp',
+        labelKey: 'menu.conciliation.acquirerMissingErp',
+        icon: 'pi pi-plus-circle text-purple-600',
+      },
+      {
+        exact: false,
+        route: '/conciliation/erp-vs-acquirer/other-divergences',
+        labelKey: 'menu.conciliation.erpVsAcquirerDivergences',
+        icon: 'pi pi-search text-purple-600',
+      },
+      {
+        exact: false,
+        route: '/conciliation/contract-audit',
+        labelKey: 'menu.conciliation.contractAudit',
+        icon: 'pi pi-percentage text-purple-600',
+      },
+      {
+        exact: false,
+        route: '/conciliation/bank-settlement',
+        labelKey: 'menu.conciliation.bankSettlement',
+        icon: 'pi pi-wallet text-purple-600',
+      },
+      {
+        exact: false,
+        route: '/conciliation/debits',
+        labelKey: 'menu.conciliation.debits',
+        icon: 'pi pi-minus-circle text-purple-600',
+      },
+      {
+        exact: false,
+        route: '/conciliation/chargebacks',
+        labelKey: 'menu.conciliation.chargebacks',
+        icon: 'pi pi-shield text-purple-600',
+      },
+      {
+        exact: false,
+        route: '/conciliation/divergences',
+        labelKey: 'menu.conciliation.divergences',
+        icon: 'pi pi-exclamation-triangle text-purple-600',
+      },
+      {
+        exact: false,
+        route: '/conciliation/aging',
+        labelKey: 'menu.conciliation.aging',
+        icon: 'pi pi-hourglass text-purple-600',
       },
     ],
   },
   /* Security */
   {
-    icon: 'pi pi-shield text-red-500',
+    icon: 'pi pi-shield text-red-600',
     labelKey: 'menu.security.title',
     children: [
       {
@@ -138,7 +158,7 @@ export const APP_MENU: AppMenuItem[] = [
   },
   /* Register */
   {
-    icon: 'pi pi-folder-open text-orange-500',
+    icon: 'pi pi-folder-open text-orange-600',
     labelKey: 'menu.register.title',
     children: [
       {
@@ -226,9 +246,9 @@ export const APP_MENU: AppMenuItem[] = [
         permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.COMPANIES.VIEW],
       },
       {
-        labelKey: 'menu.file.processing.anticipations',
+        labelKey: 'menu.file.processing.movements',
         icon: 'pi pi-forward',
-        route: '/file-processing/rede/anticipations',
+        route: '/file-processing/rede/movements',
         exact: false,
         permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.COMPANIES.VIEW],
       },
@@ -271,7 +291,7 @@ export const APP_MENU: AppMenuItem[] = [
   },
   /* Audit */
   {
-    icon: 'pi pi-history text-cyan-500',
+    icon: 'pi pi-history text-cyan-600',
     labelKey: 'menu.audit.title',
     children: [
       {
@@ -285,7 +305,7 @@ export const APP_MENU: AppMenuItem[] = [
   },
   /* Settings */
   {
-    icon: 'pi pi-cog text-indigo-500',
+    icon: 'pi pi-cog text-indigo-600',
     labelKey: 'menu.settings.title',
     children: [
       {

@@ -10,7 +10,7 @@ import { TransactionsAcqInstallmentModel } from './transactions-acq-installment.
 import {
   StatusTransactionEnum,
   normalizeStatusTransactionEnum,
-} from './enums/transaction-status.enum';
+} from './enums/status-transaction.enum';
 
 export interface TransactionsAcqMinimalModel {
   id: string;

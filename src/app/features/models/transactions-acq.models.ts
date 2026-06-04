@@ -17,6 +17,7 @@ export interface TransactionsAcqModel {
 
   tid?: string | null;
   machine?: string | null;
+  rvNumber: string | null;
   cardNumber?: string | null;
   companyName?: string | null;
   authorization: string | null;
@@ -63,14 +64,16 @@ export interface TransactionsAcqApiModel {
   capture?: CaptureEnum | null;
   companyName?: string | null;
   establishmentPvNumber?: string | null;
-  lineNumber: number;
+
   cvNsu: number;
   feeValue: number;
   netValue: number;
   grossValue: number;
+  lineNumber: number;
   installment: number;
   adjustmentValue: number;
 
+  rvNumber: string;
   authorization: string;
 
   modality: ModalityEnum;

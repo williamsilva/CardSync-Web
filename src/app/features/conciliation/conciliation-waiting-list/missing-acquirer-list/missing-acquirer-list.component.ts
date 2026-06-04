@@ -72,7 +72,7 @@ import {
   allStatusTransactionReasonEnum,
   statusTransactionReasonEnumLabel,
   statusTransactionReasonEnumSeverity,
-} from '@models/enums/transaction-status-reason.enum';
+} from '@models/enums/status-transaction-reason.enum';
 import {
   CaptureEnum,
   allCaptureEnum,
@@ -261,7 +261,7 @@ export class MissingAcquirerListComponent
   });
 
   ngOnInit(): void {
-    this.flagFacade.loadCompanyOptionsFilter();
+    this.flagFacade.loadFlagOptionsFilter();
     this.companyFacade.loadCompanyOptionsFilter();
     this.acquirerFacade.loadAcquirerOptionsFilter();
     this.establishmentFacade.loadEstablishmentOptionsFilter();

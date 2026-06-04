@@ -1,0 +1,201 @@
+<div class="flag-rel-card border-1 surface-border border-round p-2 mx-auto">
+  <div class="flex justify-content-center align-items-center mb-2">
+    <span
+      class="cs-table-cell-ellipsis font-semibold text-700 text-xs"
+      tooltipPosition="top"
+      [pTooltip]="'creditOrders.title' | translate"
+    >
+      {{ 'creditOrders.title' | translate }}
+    </span>
+  </div>
+
+  <p-table
+    stripedRows
+    size="small"
+    showGridlines
+    [rowHover]="true"
+    [value]="creditOrders()"
+    [tableStyle]="{ width: '100%', 'table-layout': 'fixed' }"
+    class="p-datatable-sm cs-admin-table cs-compact-installments-table"
+  >
+    <ng-template pTemplate="colgroup">
+      <colgroup>
+        <col style="width: 80px" />
+        <col style="width: 100px" />
+        <col style="width: 100px" />
+        <col style="width: 90px" />
+        <col style="width: 90px" />
+        <col style="width: 90px" />
+        <col style="width: 90px" />
+        <col style="width: 90px" />
+      </colgroup>
+    </ng-template>
+
+    <ng-template pTemplate="header">
+      <tr>
+        <th class="text-center">
+          <span
+            tooltipPosition="top"
+            class="cs-table-cell-ellipsis"
+            [pTooltip]="'creditOrders.fields.orders' | translate"
+          >
+            {{ 'creditOrders.fields.orders' | translate }}
+          </span>
+        </th>
+
+        <th class="text-center">
+          <span
+            tooltipPosition="top"
+            class="cs-table-cell-ellipsis"
+            [pTooltip]="'creditOrders.fields.creditOrderDate' | translate"
+          >
+            {{ 'creditOrders.fields.creditOrder' | translate }}
+          </span>
+        </th>
+
+        <th class="text-center">
+          <span
+            tooltipPosition="top"
+            class="cs-table-cell-ellipsis"
+            [pTooltip]="'creditOrders.fields.grossValue' | translate"
+          >
+            {{ 'creditOrders.fields.grossValue' | translate }}
+          </span>
+        </th>
+
+        <th class="text-center">
+          <span
+            tooltipPosition="top"
+            class="cs-table-cell-ellipsis"
+            [pTooltip]="'creditOrders.fields.releaseValue' | translate"
+          >
+            {{ 'creditOrders.fields.releaseValue' | translate }}
+          </span>
+        </th>
+
+        <th class="text-center">
+          <span
+            tooltipPosition="top"
+            class="cs-table-cell-ellipsis"
+            [pTooltip]="'creditOrders.fields.releaseDate' | translate"
+          >
+            {{ 'creditOrders.fields.releaseDate' | translate }}
+          </span>
+        </th>
+
+        <th class="text-center">
+          <span
+            class="cs-table-cell-ellipsis"
+            tooltipPosition="top"
+            [pTooltip]="'creditOrders.fields.installment' | translate"
+          >
+            {{ 'creditOrders.fields.installment' | translate }}
+          </span>
+        </th>
+
+        <th class="text-center">
+          <span
+            class="cs-table-cell-ellipsis"
+            tooltipPosition="top"
+            [pTooltip]="'creditOrders.fields.statusRv' | translate"
+          >
+            {{ 'creditOrders.fields.statusRv' | translate }}
+          </span>
+        </th>
+
+        <th class="text-center">
+          <span
+            class="cs-table-cell-ellipsis"
+            tooltipPosition="top"
+            [pTooltip]="'creditOrders.fields.statusPaymentBank' | translate"
+          >
+            {{ 'creditOrders.fields.statusPaymentBank' | translate }}
+          </span>
+        </th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-row>
+      <tr>
+        <td class="text-center font-medium">
+          <span
+            tooltipPosition="top"
+            class="cs-table-cell-ellipsis"
+            [pTooltip]="row.creditOrderNumber"
+          >
+            {{ row.creditOrderNumber }}
+          </span>
+        </td>
+        <td class="text-center">
+          <span
+            tooltipPosition="top"
+            class="cs-table-cell-ellipsis"
+            [pTooltip]="row.creditOrderDate | csDate: 'date'"
+          >
+            {{ row.creditOrderDate | csDate: 'date' }}
+          </span>
+        </td>
+        <td class="text-center">
+          <span
+            tooltipPosition="top"
+            class="cs-table-cell-ellipsis"
+            [pTooltip]="(row.grossRvValue | csCurrency) || ''"
+          >
+            {{ row.grossRvValue | csCurrency }}
+          </span>
+        </td>
+        <td class="text-center">
+          <span
+            tooltipPosition="top"
+            class="cs-table-cell-ellipsis"
+            [pTooltip]="(row.releaseValue | csCurrency) || ''"
+          >
+            {{ row.releaseValue | csCurrency }}
+          </span>
+        </td>
+        <td class="text-center">
+          <span
+            tooltipPosition="top"
+            class="cs-table-cell-ellipsis"
+            [pTooltip]="row.releasesBank?.releaseDate | csDate: 'date'"
+          >
+            {{ row.releasesBank?.releaseDate | csDate: 'date' }}
+          </span>
+        </td>
+        <td class="text-center">{{ row.installmentNumber }} / {{ row.installmentTotal }}</td>
+        <td class="cell-muted text-center">
+          <span
+            tooltipPosition="top"
+            class="cs-table-cell-ellipsis"
+            [pTooltip]="statusReconciliationLabel(row.salesSummaryStatus)"
+          >
+            <cs-tag
+              [value]="statusReconciliationLabel(row.salesSummaryStatus)"
+              [tone]="statusReconciliationSeverity(row.salesSummaryStatus)"
+            />
+          </span>
+        </td>
+        <td class="cell-muted text-center">
+          <span
+            tooltipPosition="top"
+            class="cs-table-cell-ellipsis"
+            [pTooltip]="statusPaymentBankLabel(row.statusPaymentBank)"
+          >
+            <cs-tag
+              [value]="statusPaymentBankLabel(row.statusPaymentBank)"
+              [tone]="statusPaymentBankSeverity(row.statusPaymentBank)"
+            />
+          </span>
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="8" class="text-center py-4 text-500">
+          {{ 'pagination.emptymessage' | translate }}
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

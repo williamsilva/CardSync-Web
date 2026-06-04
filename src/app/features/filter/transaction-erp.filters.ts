@@ -3,7 +3,7 @@ import { WritableSignal } from '@angular/core';
 import { PeriodEnum } from '@models/enums/period.enum';
 import { CaptureEnum } from '@models/enums/capture.enum';
 import { ModalityEnum } from '@models/enums/modality.enum';
-import { StatusTransactionEnum } from '@models/enums/transaction-status.enum';
+import { StatusTransactionEnum } from '@models/enums/status-transaction.enum';
 import { StatusPaymentBankEnum } from '../models/enums/status-payment-bank.enum';
 
 export type TransactionsErpFiltersState = {

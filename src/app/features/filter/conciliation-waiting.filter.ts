@@ -40,7 +40,6 @@ export function createEmptyConciliationWaitingFiltersState(): ConciliationWaitin
 
     capture: null,
     modality: null,
-    acquirers: null,
 
     grossValueEnd: null,
     liquidValueEnd: null,
@@ -49,6 +48,7 @@ export function createEmptyConciliationWaitingFiltersState(): ConciliationWaitin
 
     flags: null,
     companies: null,
+    acquirers: null,
     establishments: null,
 
     saleDate: null,
@@ -67,7 +67,6 @@ export function resetConciliationWaitingAdvancedFilters(
 
   filters.capture.set(empty.capture);
   filters.modality.set(empty.modality);
-  filters.acquirers.set(empty.acquirers);
 
   filters.grossValueEnd.set(empty.grossValueEnd);
   filters.liquidValueEnd.set(empty.liquidValueEnd);
@@ -75,6 +74,7 @@ export function resetConciliationWaitingAdvancedFilters(
   filters.liquidValueStart.set(empty.liquidValueStart);
 
   filters.flags.set(empty.flags);
+  filters.acquirers.set(empty.acquirers);
   filters.companies.set(empty.companies);
   filters.establishments.set(empty.establishments);
 

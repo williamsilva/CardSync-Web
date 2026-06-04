@@ -4,7 +4,9 @@ export interface SalesSummaryMinimalModel {
   id: string;
 
   agency: number | null;
+  rvNumber: number | null;
   pvNumber: number | null;
+  lineNumber: number | null;
   currentAccount: number | null;
 
   bankingDomicile: BankingDomicileMinimalModel;
@@ -22,7 +24,9 @@ export interface SalesSummaryMinimalApiModel {
   id: string;
 
   agency: number | null;
+  rvNumber: number | null;
   pvNumber: number | null;
+  lineNumber: number | null;
   currentAccount: number | null;
 
   bankingDomicile: BankingDomicileMinimalModel;

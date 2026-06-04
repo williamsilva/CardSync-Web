@@ -3,13 +3,14 @@ import { WritableSignal } from '@angular/core';
 import { PeriodEnum } from '@models/enums/period.enum';
 import { CaptureEnum } from '@models/enums/capture.enum';
 import { ModalityEnum } from '@models/enums/modality.enum';
-import { StatusTransactionEnum } from '@models/enums/transaction-status.enum';
+import { StatusTransactionEnum } from '@models/enums/status-transaction.enum';
 import { StatusPaymentBankEnum } from '../models/enums/status-payment-bank.enum';
 
 export type TransactionsAcqFiltersState = {
   tid: string;
   cvNsu: string;
   machine: string;
+  rvNumber: string;
   cardNumber: string;
   authorization: string;
 
@@ -56,6 +57,7 @@ export function createEmptyTransactionsAcqFiltersState(): TransactionsAcqFilters
     tid: '',
     cvNsu: '',
     machine: '',
+    rvNumber: '',
     cardNumber: '',
     authorization: '',
 
@@ -100,6 +102,7 @@ export function resetTransactionsAcqAdvancedFilters(
   filters.tid.set(empty.tid);
   filters.cvNsu.set(empty.cvNsu);
   filters.machine.set(empty.machine);
+  filters.rvNumber.set(empty.rvNumber);
   filters.cardNumber.set(empty.cardNumber);
   filters.authorization.set(empty.authorization);
 

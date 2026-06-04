@@ -5,7 +5,7 @@ import { CsTagTone } from '@shared/ui';
 export enum StatusTransactionReasonEnum {
   NULL = 'NULL',
   CV_NOT_FOUND_ERP = 'CV_NOT_FOUND_ERP',
-  CANCELED = 'CANCELED',
+  CANCEL_VENDAS = 'CANCEL_VENDAS',
   DIFFERENT_PLANS = 'DIFFERENT_PLANS',
   CV_NOT_FOUND_ADQ = 'CV_NOT_FOUND_ADQ',
   CHARGEBACK = 'CHARGEBACK',
@@ -14,6 +14,12 @@ export enum StatusTransactionReasonEnum {
   VALUE_MISMATCH = 'VALUE_MISMATCH',
   ACQUIRER_MISMATCH = 'ACQUIRER_MISMATCH',
   AMBIGUOUS_MATCH = 'AMBIGUOUS_MATCH',
+  CANCELLATION_ACQUIRER = 'CANCELLATION_ACQUIRER',
+  CANCELLATION_RETURN = 'CANCELLATION_RETURN',
+  CANCELLATION_REFUND = 'CANCELLATION_REFUND',
+  CANCELLATION_DUPLICATE = 'CANCELLATION_DUPLICATE',
+  CANCELLATION_FRAUD = 'CANCELLATION_FRAUD',
+  CANCELLATION_OPERATIONAL_ERROR = 'CANCELLATION_OPERATIONAL_ERROR',
 }
 
 export type StatusTransactionReasonInput =
@@ -30,11 +36,17 @@ export const STATUS_CODE_MAP: Record<number, StatusTransactionReasonEnum> = {
   3: StatusTransactionReasonEnum.FLAG_MISMATCH,
   4: StatusTransactionReasonEnum.DIFFERENT_PLANS,
   5: StatusTransactionReasonEnum.SCHEDULED,
-  6: StatusTransactionReasonEnum.CHARGEBACK,
-  7: StatusTransactionReasonEnum.CANCELED,
+  6: StatusTransactionReasonEnum.CANCEL_VENDAS,
+  7: StatusTransactionReasonEnum.CHARGEBACK,
   8: StatusTransactionReasonEnum.VALUE_MISMATCH,
   9: StatusTransactionReasonEnum.ACQUIRER_MISMATCH,
   10: StatusTransactionReasonEnum.AMBIGUOUS_MATCH,
+  11: StatusTransactionReasonEnum.CANCELLATION_ACQUIRER,
+  12: StatusTransactionReasonEnum.CANCELLATION_REFUND,
+  13: StatusTransactionReasonEnum.CANCELLATION_RETURN,
+  14: StatusTransactionReasonEnum.CANCELLATION_DUPLICATE,
+  15: StatusTransactionReasonEnum.CANCELLATION_FRAUD,
+  16: StatusTransactionReasonEnum.CANCELLATION_OPERATIONAL_ERROR,
 };
 
 export function normalizeStatusTransactionReasonEnum(
@@ -70,8 +82,8 @@ export function normalizeStatusTransactionReasonEnum(
     case StatusTransactionReasonEnum.CHARGEBACK:
       return StatusTransactionReasonEnum.CHARGEBACK;
 
-    case StatusTransactionReasonEnum.CANCELED:
-      return StatusTransactionReasonEnum.CANCELED;
+    case StatusTransactionReasonEnum.CANCEL_VENDAS:
+      return StatusTransactionReasonEnum.CANCEL_VENDAS;
 
     case StatusTransactionReasonEnum.VALUE_MISMATCH:
       return StatusTransactionReasonEnum.VALUE_MISMATCH;
@@ -81,6 +93,24 @@ export function normalizeStatusTransactionReasonEnum(
 
     case StatusTransactionReasonEnum.AMBIGUOUS_MATCH:
       return StatusTransactionReasonEnum.AMBIGUOUS_MATCH;
+
+    case StatusTransactionReasonEnum.CANCELLATION_ACQUIRER:
+      return StatusTransactionReasonEnum.CANCELLATION_ACQUIRER;
+
+    case StatusTransactionReasonEnum.CANCELLATION_REFUND:
+      return StatusTransactionReasonEnum.CANCELLATION_REFUND;
+
+    case StatusTransactionReasonEnum.CANCELLATION_RETURN:
+      return StatusTransactionReasonEnum.CANCELLATION_RETURN;
+
+    case StatusTransactionReasonEnum.CANCELLATION_DUPLICATE:
+      return StatusTransactionReasonEnum.CANCELLATION_DUPLICATE;
+
+    case StatusTransactionReasonEnum.CANCELLATION_FRAUD:
+      return StatusTransactionReasonEnum.CANCELLATION_FRAUD;
+
+    case StatusTransactionReasonEnum.CANCELLATION_OPERATIONAL_ERROR:
+      return StatusTransactionReasonEnum.CANCELLATION_OPERATIONAL_ERROR;
 
     default:
       return null;
@@ -97,7 +127,7 @@ export function statusTransactionReasonEnumSeverity(
     case StatusTransactionReasonEnum.CV_NOT_FOUND_ADQ:
       return 'warn';
 
-    case StatusTransactionReasonEnum.CANCELED:
+    case StatusTransactionReasonEnum.CANCEL_VENDAS:
       return 'orange';
 
     case StatusTransactionReasonEnum.FLAG_MISMATCH:
@@ -137,7 +167,7 @@ export function statusTransactionReasonEnumLabel(
     case StatusTransactionReasonEnum.CV_NOT_FOUND_ADQ:
       return i18n.tUi('enum.transactionReasonEnum.cvNotFoundAdq');
 
-    case StatusTransactionReasonEnum.CANCELED:
+    case StatusTransactionReasonEnum.CANCEL_VENDAS:
       return i18n.tUi('enum.transactionReasonEnum.canceled');
 
     case StatusTransactionReasonEnum.FLAG_MISMATCH:
@@ -161,6 +191,24 @@ export function statusTransactionReasonEnumLabel(
     case StatusTransactionReasonEnum.AMBIGUOUS_MATCH:
       return i18n.tUi('enum.transactionReasonEnum.ambiguousMatch');
 
+    case StatusTransactionReasonEnum.CANCELLATION_ACQUIRER:
+      return i18n.tUi('enum.transactionReasonEnum.cancellationAcquirer');
+
+    case StatusTransactionReasonEnum.CANCELLATION_REFUND:
+      return i18n.tUi('enum.transactionReasonEnum.cancellationRefound');
+
+    case StatusTransactionReasonEnum.CANCELLATION_RETURN:
+      return i18n.tUi('enum.transactionReasonEnum.cancellationReturn');
+
+    case StatusTransactionReasonEnum.CANCELLATION_DUPLICATE:
+      return i18n.tUi('enum.transactionReasonEnum.cancellationDuplicate');
+
+    case StatusTransactionReasonEnum.CANCELLATION_FRAUD:
+      return i18n.tUi('enum.transactionReasonEnum.cancellationFraud');
+
+    case StatusTransactionReasonEnum.CANCELLATION_OPERATIONAL_ERROR:
+      return i18n.tUi('enum.transactionReasonEnum.cancellationOperationalError');
+
     case StatusTransactionReasonEnum.NULL:
       return i18n.tUi('enum.transactionReasonEnum.null', 'N/A');
 
@@ -177,9 +225,15 @@ export function allStatusTransactionReasonEnum(): StatusTransactionReasonEnum[] 
     StatusTransactionReasonEnum.FLAG_MISMATCH,
     StatusTransactionReasonEnum.DIFFERENT_PLANS,
     StatusTransactionReasonEnum.SCHEDULED,
-    StatusTransactionReasonEnum.CANCELED,
+    StatusTransactionReasonEnum.CANCEL_VENDAS,
     StatusTransactionReasonEnum.VALUE_MISMATCH,
     StatusTransactionReasonEnum.ACQUIRER_MISMATCH,
     StatusTransactionReasonEnum.AMBIGUOUS_MATCH,
+    StatusTransactionReasonEnum.CANCELLATION_ACQUIRER,
+    StatusTransactionReasonEnum.CANCELLATION_REFUND,
+    StatusTransactionReasonEnum.CANCELLATION_RETURN,
+    StatusTransactionReasonEnum.CANCELLATION_DUPLICATE,
+    StatusTransactionReasonEnum.CANCELLATION_FRAUD,
+    StatusTransactionReasonEnum.CANCELLATION_OPERATIONAL_ERROR,
   ];
 }

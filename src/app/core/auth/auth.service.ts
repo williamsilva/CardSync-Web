@@ -67,6 +67,8 @@ export class AuthService {
     return !!me?.authenticated;
   }
 
+  static readonly RETURN_URL_KEY = 'cs_return_url';
+
   async startLogin(targetUrl?: string): Promise<void> {
     if (this.loginRedirectInFlight) {
       return;
@@ -76,9 +78,16 @@ export class AuthService {
 
     const target = targetUrl ?? this.router.url ?? '/';
     const pathOnly = this.toRelativeSpaPath(target);
-    const encodedReturnTo = encodeURIComponent(pathOnly);
 
-    window.location.href = `${environment.bffBaseUrl}/bff/login?returnTo=${encodedReturnTo}`;
+    sessionStorage.setItem(AuthService.RETURN_URL_KEY, pathOnly);
+
+    window.location.href = `${environment.bffBaseUrl}/bff/login`;
+  }
+
+  consumeReturnUrl(): string | null {
+    const url = sessionStorage.getItem(AuthService.RETURN_URL_KEY);
+    if (url) sessionStorage.removeItem(AuthService.RETURN_URL_KEY);
+    return url;
   }
 
   async logout(): Promise<void> {
@@ -92,6 +101,7 @@ export class AuthService {
       this.meLoadPromise = null;
       this.loginRedirectInFlight = false;
       sessionStorage.removeItem('cs_login_redirect_lock');
+      sessionStorage.removeItem(AuthService.RETURN_URL_KEY);
     }
 
     window.location.href = `${API.bffBaseUrl}/login`;

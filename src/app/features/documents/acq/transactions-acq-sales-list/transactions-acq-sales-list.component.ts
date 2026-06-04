@@ -32,7 +32,7 @@ import { TransactionsAcqFacade } from '@features/facade/transaction-acq.facade';
 import { buildListQuery } from '@shared/features/list-query/list-query.builder';
 import { allPeriodEnum, PeriodEnum, periodEnumLabel } from '@models/enums/period.enum';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
-import { statusTransactionReasonEnumLabel } from '@models/enums/transaction-status-reason.enum';
+import { statusTransactionReasonEnumLabel } from '@models/enums/status-transaction-reason.enum';
 import { createEmptyTransactionsErpFiltersState } from '@features/filter/transaction-erp.filters';
 import { CsColumnFilterShellComponent } from '@features/list-base/cs-column-filter-shell.component';
 import { CsAdvancedTextFilterComponent } from '@features/list-base/cs-advanced-text-filter.component';
@@ -62,7 +62,7 @@ import {
   statusTransactionEnumLabel,
   installmentStatusTooltipTone,
   installmentTooltipStatusLabel,
-} from '@models/enums/transaction-status.enum';
+} from '@models/enums/status-transaction.enum';
 import {
   CaptureEnum,
   allCaptureEnum,
@@ -153,6 +153,7 @@ export class TransactionsAcquirersSalesListComponent
   readonly tid = signal('');
   readonly cvNsu = signal('');
   readonly machine = signal('');
+  readonly rvNumber = signal('');
   readonly cardNumber = signal('');
   readonly authorization = signal('');
 
@@ -176,10 +177,10 @@ export class TransactionsAcquirersSalesListComponent
   readonly periodPaymentDate = signal<PeriodEnum | null>(null);
   readonly paymentDate = signal<string | string[] | null>(null);
   readonly periodConciliationDate = signal<PeriodEnum | null>(null);
-  readonly statusPaymentBank = signal<StatusPaymentBankEnum[] | null>(null);
   readonly conciliationDate = signal<string | string[] | null>(null);
   readonly periodExpectedPaymentDate = signal<PeriodEnum | null>(null);
   readonly expectedPaymentDate = signal<string | string[] | null>(null);
+  readonly statusPaymentBank = signal<StatusPaymentBankEnum[] | null>(null);
   readonly statusTransaction = signal<StatusTransactionEnum[] | null>(null);
 
   /* Campos Tabela*/
@@ -270,7 +271,7 @@ export class TransactionsAcquirersSalesListComponent
   });
 
   ngOnInit(): void {
-    this.flagFacade.loadCompanyOptionsFilter();
+    this.flagFacade.loadFlagOptionsFilter();
     this.companyFacade.loadCompanyOptionsFilter();
     this.acquirerFacade.loadAcquirerOptionsFilter();
     this.establishmentFacade.loadEstablishmentOptionsFilter();
@@ -648,6 +649,7 @@ export class TransactionsAcquirersSalesListComponent
     const capture = this.capture();
     const company = this.companies();
     const modality = this.modality();
+    const rvNumber = this.rvNumber();
     const acquirer = this.acquirers();
     const cardNumber = this.cardNumber();
     const authorization = this.authorization();
@@ -759,6 +761,13 @@ export class TransactionsAcquirersSalesListComponent
       });
     }
 
+    if (rvNumber) {
+      items.push({
+        label: this.i18n.tUi('transactions.fields.rvNumber'),
+        value: rvNumber,
+      });
+    }
+
     if (authorization) {
       items.push({
         label: this.i18n.tUi('transactions.fields.authorization'),
@@ -865,6 +874,7 @@ export class TransactionsAcquirersSalesListComponent
       cvNsu: this.cvNsu(),
       machine: this.machine(),
       capture: this.capture(),
+      rvNumber: this.rvNumber(),
       cardNumber: this.cardNumber(),
       authorization: this.authorization(),
       statusPaymentBank: this.statusPaymentBank(),
@@ -903,6 +913,7 @@ export class TransactionsAcquirersSalesListComponent
     this.tid.set(s.tid ?? '');
     this.cvNsu.set(s.cvNsu ?? '');
     this.machine.set(s.machine ?? '');
+    this.rvNumber.set(s.rvNumber ?? '');
     this.cardNumber.set(s.cardNumber ?? '');
     this.authorization.set(s.authorization ?? '');
     this.statusPaymentBank.set(s.statusPaymentBank ?? null);
@@ -951,6 +962,7 @@ export class TransactionsAcquirersSalesListComponent
       tid: this.tid().trim() || undefined,
       cvNsu: this.cvNsu().trim() || undefined,
       machine: this.machine().trim() || undefined,
+      rvNumber: this.rvNumber().trim() || undefined,
       cardNumber: this.cardNumber().trim() || undefined,
       authorization: this.authorization().trim() || undefined,
 
@@ -1227,6 +1239,7 @@ export class TransactionsAcquirersSalesListComponent
     const modality = normalizeModalityEnum(row.modality);
     return {
       ...createEmptyTransactionsErpFiltersState(),
+      rvNumber: row.rvNumber ?? '',
       authorization: row.authorization ?? '',
       cvNsu: row.cvNsu != null ? String(row.cvNsu) : '',
 

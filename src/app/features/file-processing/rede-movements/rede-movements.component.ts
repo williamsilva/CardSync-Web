@@ -4,7 +4,6 @@ import { RouterLink } from '@angular/router';
 import { FileProcessingService } from '@features/service/file-processing.service';
 import {
   RedeAdjustmentModel,
-  RedeAnticipationModel,
   RedeCreditOrderModel,
   RedePendingDebtModel,
   RedeSettledDebtModel,
@@ -41,7 +40,6 @@ export class RedeMovementsComponent {
 
   protected readonly creditOrders = signal<RedeCreditOrderModel[]>([]);
   protected readonly adjustments = signal<RedeAdjustmentModel[]>([]);
-  protected readonly anticipations = signal<RedeAnticipationModel[]>([]);
   protected readonly pendingDebts = signal<RedePendingDebtModel[]>([]);
   protected readonly settledDebts = signal<RedeSettledDebtModel[]>([]);
   protected readonly totalizers = signal<RedeTotalizerModel[]>([]);
@@ -79,12 +77,7 @@ export class RedeMovementsComponent {
           .subscribe((r) =>
             this.apply('adjustments', r.content, r.totalElements, this.adjustments),
           ),
-      anticipations: () =>
-        this.service
-          .listRedeAnticipations(query)
-          .subscribe((r) =>
-            this.apply('anticipations', r.content, r.totalElements, this.anticipations),
-          ),
+
       'pending-debts': () =>
         this.service
           .listRedePendingDebts(query)

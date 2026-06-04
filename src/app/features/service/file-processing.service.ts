@@ -14,7 +14,6 @@ import {
   ProcessedFileModel,
   ProcessedFileSummaryModel,
   RedeAdjustmentModel,
-  RedeAnticipationModel,
   RedeCreditOrderModel,
   RedePendingDebtModel,
   RedeSettledDebtModel,
@@ -126,16 +125,6 @@ export class FileProcessingService {
       params: this.toParams(query),
       withCredentials: true,
     });
-  }
-
-  listRedeAnticipations(query: PageQuery = {}): Observable<PageResponse<RedeAnticipationModel>> {
-    return this.http.get<PageResponse<RedeAnticipationModel>>(
-      `${this.baseUrl}/rede/anticipations`,
-      {
-        params: this.toParams(query),
-        withCredentials: true,
-      },
-    );
   }
 
   listRedeSettledDebts(query: PageQuery = {}): Observable<PageResponse<RedeSettledDebtModel>> {

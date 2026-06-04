@@ -74,6 +74,48 @@ export const STATE_KEY = {
         },
       },
     },
+    ANTICIPATION: {
+      TABLE: {
+        ROWS: {
+          V1: 'cardsync.anticipation.table.rows',
+        },
+        STATE: {
+          V1: 'cardsync.anticipation.table.state.v1',
+        },
+      },
+
+      FILTERS: {
+        V1: 'cardsync.anticipation.filters.v1',
+      },
+    },
+    CREDIT_ORDER: {
+      TABLE: {
+        ROWS: {
+          V1: 'cardsync.credit_order.table.rows',
+        },
+        STATE: {
+          V1: 'cardsync.credit_order.table.state.v1',
+        },
+      },
+
+      FILTERS: {
+        V1: 'cardsync.credit_order.filters.v1',
+      },
+    },
+    SALES_SUMMARY: {
+      TABLE: {
+        ROWS: {
+          V1: 'cardsync.sales_summary.table.rows',
+        },
+        STATE: {
+          V1: 'cardsync.sales_summary.table.state.v1',
+        },
+      },
+
+      FILTERS: {
+        V1: 'cardsync.sales_summary.filters.v1',
+      },
+    },
     CONCILIATION: {
       FEES: {
         TABLE: {

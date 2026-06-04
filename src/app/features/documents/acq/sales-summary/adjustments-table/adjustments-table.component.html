@@ -1,0 +1,154 @@
+<div class="flag-rel-card border-1 surface-border border-round p-2 mx-auto">
+  <div class="flex justify-content-center align-items-center mb-2">
+    <span
+      class="cs-table-cell-ellipsis font-semibold text-700 text-xs"
+      tooltipPosition="top"
+      [pTooltip]="'adjustments.title' | translate"
+    >
+      {{ 'adjustments.title' | translate }}
+    </span>
+  </div>
+
+  <p-table
+    stripedRows
+    size="small"
+    showGridlines
+    [rowHover]="true"
+    [value]="adjustments()"
+    [tableStyle]="{ width: '100%', 'table-layout': 'fixed' }"
+    class="p-datatable-sm cs-admin-table cs-compact-installments-table"
+  >
+    <ng-template pTemplate="colgroup">
+      <colgroup>
+        <col style="width: 80px" />
+        <col style="width: 100px" />
+        <col style="width: 100px" />
+        <col style="width: 90px" />
+        <col style="width: 90px" />
+        <col style="width: 90px" />
+      </colgroup>
+    </ng-template>
+
+    <ng-template pTemplate="header">
+      <tr>
+        <th class="text-center">
+          <span
+            tooltipPosition="top"
+            class="cs-table-cell-ellipsis"
+            [pTooltip]="'adjustments.fields.creditDate' | translate"
+          >
+            {{ 'adjustments.fields.credit' | translate }}
+          </span>
+        </th>
+
+        <th class="text-center">
+          <span
+            tooltipPosition="top"
+            class="cs-table-cell-ellipsis"
+            [pTooltip]="'adjustments.fields.adjustmentValue' | translate"
+          >
+            {{ 'adjustments.fields.adjustment' | translate }}
+          </span>
+        </th>
+
+        <th class="text-center">
+          <span
+            tooltipPosition="top"
+            class="cs-table-cell-ellipsis"
+            [pTooltip]="'adjustments.fields.nsu' | translate"
+          >
+            {{ 'adjustments.fields.nsu' | translate }}
+          </span>
+        </th>
+
+        <th class="text-center">
+          <span
+            tooltipPosition="top"
+            class="cs-table-cell-ellipsis"
+            [pTooltip]="'adjustments.fields.rvNumberOriginal' | translate"
+          >
+            {{ 'adjustments.fields.rvNumberOriginal' | translate }}
+          </span>
+        </th>
+
+        <th class="text-center">
+          <span
+            class="cs-table-cell-ellipsis"
+            tooltipPosition="top"
+            [pTooltip]="'adjustments.fields.installment' | translate"
+          >
+            {{ 'adjustments.fields.installment' | translate }}
+          </span>
+        </th>
+
+        <th class="text-center">
+          <span
+            class="cs-table-cell-ellipsis"
+            tooltipPosition="top"
+            [pTooltip]="'adjustments.fields.adjustmentReason' | translate"
+          >
+            {{ 'adjustments.fields.reason' | translate }}
+          </span>
+        </th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-row>
+      <tr>
+        <td class="text-center">
+          <span
+            tooltipPosition="top"
+            class="cs-table-cell-ellipsis"
+            [pTooltip]="row.creditDate | csDate: 'date'"
+          >
+            {{ row.creditDate | csDate: 'date' }}
+          </span>
+        </td>
+        <td class="text-center">
+          <span
+            tooltipPosition="top"
+            class="cs-table-cell-ellipsis"
+            [pTooltip]="(row.adjustmentValue | csCurrency) || ''"
+          >
+            {{ row.adjustmentValue | csCurrency }}
+          </span>
+        </td>
+        <td class="text-center">
+          <span tooltipPosition="top" class="cs-table-cell-ellipsis" [pTooltip]="row.nsu || ''">
+            {{ row.nsu }}
+          </span>
+        </td>
+        <td class="text-center">
+          <span
+            tooltipPosition="top"
+            class="cs-table-cell-ellipsis"
+            [pTooltip]="row.rvNumberOriginal"
+          >
+            {{ row.rvNumberOriginal }}
+          </span>
+        </td>
+        <td class="text-center">{{ row.installmentNumber }} / {{ row.installmentTotal }}</td>
+        <td class="cell-muted text-center">
+          <span
+            tooltipPosition="top"
+            class="cs-table-cell-ellipsis"
+            [pTooltip]="adjustmentReasonLabel(row.adjustmentReason)"
+          >
+            <cs-tag
+              [value]="adjustmentReasonLabel(row.adjustmentReason)"
+              [tone]="adjustmentReasonSeverity(row.adjustmentReason)"
+            />
+          </span>
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="8" class="text-center py-4 text-500">
+          {{ 'pagination.emptymessage' | translate }}
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

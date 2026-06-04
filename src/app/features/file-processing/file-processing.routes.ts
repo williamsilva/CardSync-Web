@@ -73,14 +73,7 @@ export const FILE_PROCESSING_ROUTES: Routes = [
         (m) => m.RedeAdjustmentsComponent,
       ),
   },
-  {
-    path: 'rede/anticipations',
-    title: 'Antecipações Rede',
-    loadComponent: () =>
-      import('./rede-anticipations/rede-anticipations.component').then(
-        (m) => m.RedeAnticipationsComponent,
-      ),
-  },
+
   {
     path: 'rede/pending-debts',
     title: 'Débitos Pendentes Rede',

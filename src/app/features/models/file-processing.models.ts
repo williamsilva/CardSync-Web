@@ -174,27 +174,6 @@ export interface RedeAdjustmentModel {
   establishment?: string | null;
 }
 
-export interface RedeAnticipationModel {
-  id: string;
-  processedFile?: string | null;
-  lineNumber?: number | null;
-  pvNumber?: number | null;
-  numberRvCorresponding?: number | null;
-  installmentNumber?: number | null;
-  installmentNumberMax?: number | null;
-  releaseDate?: string | null;
-  originalDueDate?: string | null;
-  dateRvCorresponding?: string | null;
-  grossValue?: number | null;
-  releaseValue?: number | null;
-  discountRateValue?: number | null;
-  originalCreditValue?: number | null;
-  acquirer?: string | null;
-  flag?: string | null;
-  company?: string | null;
-  establishment?: string | null;
-}
-
 export interface RedeSettledDebtModel {
   id: string;
   processedFile?: string | null;
