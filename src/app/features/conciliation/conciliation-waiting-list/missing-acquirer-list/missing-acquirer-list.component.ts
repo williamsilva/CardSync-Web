@@ -45,6 +45,7 @@ import { CsAdvancedTextFilterComponent } from '@features/list-base/cs-advanced-t
 import { CsAdvancedPeriodDateFilterComponent } from '@features/list-base/cs-advanced-period-date-filter.component';
 import { CsAdvancedMultiselectFilterComponent } from '@features/list-base/cs-advanced-multiselect-filter.component';
 import {
+  DeleteErpConfirmPayload,
   ErpVsAcquirerConfirmAction,
   ErpVsAcquirerActionDialogComponent,
 } from '../dialogs/action-dialog.component';
@@ -867,31 +868,8 @@ export class MissingAcquirerListComponent
   }
 
   protected confirmBatchAction(_payload?: any): void {
-    if (this.resolving()) return;
-
-    const ids = this.selectedDeleteRows()
-      .map((row) => this.transactionId(row))
-      .filter((id): id is string => !!id);
-
-    if (!ids.length) {
-      this.closeBatchDialog();
-      return;
-    }
-
-    this.resolving.set(true);
-
-    this.facade
-      .markErpAsDeletedBatch(ids)
-      .pipe(finalize(() => this.resolving.set(false)))
-      .subscribe({
-        next: (result) => this.handleBatchSuccess(result),
-        error: () => {
-          this.toast.error(
-            this.i18n.tUi('conciliation.errorTitle'),
-            this.i18n.tUi('conciliation.missingAcq.batch.deleteErrorDetail'),
-          );
-        },
-      });
+    // handled by confirmBatchDeleteAction for delete; this path covers other batch actions
+    this.batchDialogVisible.set(false);
   }
 
   protected confirmDeleteErp(row: ConciliationWaitingModel): void {
@@ -919,6 +897,11 @@ export class MissingAcquirerListComponent
   }
 
   protected confirmAction(_payload?: any): void {
+    // handled by confirmSingleDeleteAction for delete; this path covers other actions (create, reconcile)
+    this.actionDialogVisible.set(false);
+  }
+
+  protected confirmSingleDeleteAction(payload: DeleteErpConfirmPayload): void {
     const row = this.pendingConfirmRow();
     const erpId = this.transactionId(row);
 
@@ -927,7 +910,35 @@ export class MissingAcquirerListComponent
     }
 
     this.actionDialogVisible.set(false);
-    this.markErpAsDeleted(erpId);
+    this.markErpAsDeleted(erpId, payload.reason, payload.observations);
+  }
+
+  protected confirmBatchDeleteAction(payload: DeleteErpConfirmPayload): void {
+    if (this.resolving()) return;
+
+    const ids = this.selectedDeleteRows()
+      .map((row) => this.transactionId(row))
+      .filter((id): id is string => !!id);
+
+    if (!ids.length) {
+      this.closeBatchDialog();
+      return;
+    }
+
+    this.resolving.set(true);
+
+    this.facade
+      .markErpAsDeletedBatch(ids, payload.reason, payload.observations)
+      .pipe(finalize(() => this.resolving.set(false)))
+      .subscribe({
+        next: (result) => this.handleBatchSuccess(result),
+        error: () => {
+          this.toast.error(
+            this.i18n.tUi('conciliation.errorTitle'),
+            this.i18n.tUi('conciliation.missingAcq.batch.deleteErrorDetail'),
+          );
+        },
+      });
   }
 
   protected batchDescription(): string {
@@ -966,13 +977,13 @@ export class MissingAcquirerListComponent
     return 'p-button-danger';
   }
 
-  private markErpAsDeleted(erpTransactionId: string): void {
+  private markErpAsDeleted(erpTransactionId: string, reason: string, observations: string): void {
     if (this.resolving()) return;
 
     this.resolving.set(true);
 
     this.facade
-      .markErpAsDeleted(erpTransactionId)
+      .markErpAsDeleted(erpTransactionId, reason, observations)
       .pipe(finalize(() => this.resolving.set(false)))
       .subscribe({
         next: (result) => this.handleResolutionSuccess(result),

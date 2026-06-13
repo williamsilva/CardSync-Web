@@ -1,11 +1,28 @@
+import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
+import {
+  Input,
+  inject,
+  Output,
+  computed,
+  Component,
+  OnChanges,
+  EventEmitter,
+  SimpleChanges,
+} from '@angular/core';
 
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
+import { TextareaModule } from 'primeng/textarea';
 import { TranslateModule } from '@ngx-translate/core';
+import { RadioButtonModule } from 'primeng/radiobutton';
 
 import { I18nService } from '@core/i18n/i18n.service';
+import {
+  DeleteErpReasonEnum,
+  deleteErpReasonEnumLabel,
+  allDeleteErpReasonStatusEnum,
+} from '@models/enums/delete-erp-reason.enum';
 
 export type ErpVsAcquirerConfirmAction =
   | 'CREATE_ERP_SINGLE'
@@ -13,13 +30,27 @@ export type ErpVsAcquirerConfirmAction =
   | 'MANUAL_RECONCILE'
   | null;
 
+export interface DeleteErpConfirmPayload {
+  reason: DeleteErpReasonEnum;
+  observations: string;
+}
+
 @Component({
   standalone: true,
   selector: 'cs-action-dialog',
+  styleUrl: './action-dialog.component.scss',
   templateUrl: './action-dialog.component.html',
-  imports: [CommonModule, DialogModule, ButtonModule, TranslateModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    DialogModule,
+    ButtonModule,
+    TextareaModule,
+    TranslateModule,
+    RadioButtonModule,
+  ],
 })
-export class ErpVsAcquirerActionDialogComponent {
+export class ErpVsAcquirerActionDialogComponent implements OnChanges {
   private readonly i18n = inject(I18nService);
 
   @Input() visible = false;
@@ -36,7 +67,28 @@ export class ErpVsAcquirerActionDialogComponent {
 
   @Output() closeDialog = new EventEmitter<void>();
   @Output() confirmDialog = new EventEmitter<void>();
+  @Output() confirmDelete = new EventEmitter<DeleteErpConfirmPayload>();
   @Output() visibleChange = new EventEmitter<boolean>();
+
+  protected observations = '';
+  protected reasonTouched = false;
+  protected reason: DeleteErpReasonEnum | null = null;
+
+  readonly deleteErpReasonEnumOptions = computed(() => {
+    this.i18n.getAppliedLang();
+    return allDeleteErpReasonStatusEnum().map((value) => ({
+      label: deleteErpReasonEnumLabel(value, this.i18n),
+      value,
+    }));
+  });
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['action'] || (changes['visible'] && !this.visible)) {
+      this.reason = null;
+      this.observations = '';
+      this.reasonTouched = false;
+    }
+  }
 
   protected isCreateErp(): boolean {
     return this.action === 'CREATE_ERP_SINGLE';
@@ -116,6 +168,32 @@ export class ErpVsAcquirerActionDialogComponent {
 
   protected formatCurrency(value: number | null | undefined): string {
     return this.i18n.formatBrlCurrency(Number(value) || 0);
+  }
+
+  /* protected reasonI18nKey(reason: DeleteErpReasonEnum): string {
+    const map: Record<DeleteErpReasonEnum, string> = {
+      [DeleteErpReasonEnum.DUPLICITY]: 'enum.deleteErpReasonEnum.duplicity',
+      [DeleteErpReasonEnum.UNDONE]: 'enum.deleteErpReasonEnum.undone',
+      [DeleteErpReasonEnum.CV_NOT_FOUND_ADQ]: 'enum.deleteErpReasonEnum.cvNotFoundAdq',
+      [DeleteErpReasonEnum.CV_NOT_FOUND_ERP]: 'enum.deleteErpReasonEnum.cvNotFoundErp',
+      [DeleteErpReasonEnum.TRANSACTION_ALREADY_CONCILIATED]:
+        'enum.deleteErpReasonEnum.transaction_already_conciliated',
+      [DeleteErpReasonEnum.INVALID_DATA]: 'enum.deleteErpReasonEnum.invalid_data',
+      [DeleteErpReasonEnum.CANCELED]: 'enum.deleteErpReasonEnum.canceled',
+      [DeleteErpReasonEnum.DELETED]: 'enum.deleteErpReasonEnum.deleted',
+      [DeleteErpReasonEnum.OTHER]: 'enum.deleteErpReasonEnum.other',
+    };
+    return map[reason];
+  } */
+
+  protected onConfirmClick(): void {
+    if (this.isDeleteErp()) {
+      this.reasonTouched = true;
+      if (!this.reason) return;
+      this.confirmDelete.emit({ reason: this.reason, observations: this.observations });
+    } else {
+      this.confirmDialog.emit();
+    }
   }
 
   protected onVisibleChange(value: boolean): void {

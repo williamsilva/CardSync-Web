@@ -1,0 +1,384 @@
+.cs-audit {
+  padding: 0.25rem;
+
+  &__grid {
+    display: grid;
+    grid-template-columns: 3fr 2fr 2fr 2fr;
+    gap: 1rem;
+    align-items: start;
+
+    @media (max-width: 1280px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  // ─── Panel ───────────────────────────────────────────────────────────────────
+
+  &__panel {
+    border: 1px solid var(--surface-border);
+    border-radius: 6px;
+    overflow: hidden;
+    background: var(--surface-card);
+  }
+
+  &__panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.6rem 0.875rem;
+    background: #1e293b;
+    color: #fff;
+    font-size: 0.8125rem;
+    font-weight: 600;
+  }
+
+  &__panel-body {
+    padding: 0.5rem 0;
+  }
+
+  // ─── Icon button (reload / close) ────────────────────────────────────────────
+
+  &__icon-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    border: none;
+    background: transparent;
+    color: rgba(255, 255, 255, 0.7);
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    transition: color 0.15s;
+
+    &:hover {
+      color: #fff;
+    }
+
+    &--dark {
+      color: var(--text-color-secondary);
+
+      &:hover {
+        color: var(--text-color);
+      }
+    }
+  }
+
+  // ─── Table (col 1) ───────────────────────────────────────────────────────────
+
+  &__table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.8rem;
+
+    thead tr {
+      th {
+        padding: 0.35rem 0.75rem;
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: var(--text-color-secondary);
+        text-align: left;
+
+        &.cs-audit__col-right {
+          text-align: right;
+        }
+      }
+    }
+
+    tbody tr {
+      border-bottom: 1px solid var(--surface-border);
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      td {
+        padding: 0.35rem 0.75rem;
+        color: var(--text-color);
+        white-space: nowrap;
+      }
+
+      &.cs-audit__table-row--odd td {
+        background: color-mix(in srgb, var(--surface-100) 30%, transparent);
+      }
+    }
+
+    &--detail {
+      background: var(--surface-ground);
+
+      tbody tr td {
+        font-size: 0.775rem;
+        color: var(--text-color-secondary);
+      }
+    }
+  }
+
+  &__table-row {
+    transition: background 0.12s;
+
+    &:hover {
+      background: var(--surface-hover);
+    }
+
+  }
+
+  &__loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2.5rem;
+    color: var(--text-color-secondary);
+    font-size: 1.25rem;
+  }
+
+  &__col-right {
+    text-align: right;
+  }
+
+  &__col-cv {
+    color: var(--text-color-secondary);
+    font-size: 0.75rem;
+  }
+
+  // ─── Toggle link (Expandir / Recolher) ───────────────────────────────────────
+
+  &__toggle-link {
+    display: block;
+    padding: 0.4rem 0.75rem;
+    font-size: 0.8rem;
+    color: var(--primary-color);
+    cursor: pointer;
+    border: 1px solid var(--primary-color);
+    border-radius: 3px;
+    margin: 0.4rem 0.75rem 0.25rem;
+    text-align: center;
+    width: fit-content;
+
+    &:hover {
+      background: color-mix(in srgb, var(--primary-color) 8%, transparent);
+    }
+  }
+
+  // ─── Detail grid (2 cards side by side) ──────────────────────────────────────
+
+  &__detail-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+    padding: 0.25rem 0.75rem 0.5rem;
+  }
+
+  &__detail-card {
+    border: 1px solid var(--surface-border);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  &__detail-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.35rem 0.6rem;
+    background: var(--surface-section);
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-color);
+    text-align: center;
+  }
+
+  // ─── Consult more link ────────────────────────────────────────────────────────
+
+  &__consult-wrap {
+    display: flex;
+    justify-content: center;
+    padding: 0.4rem 0;
+  }
+
+  &__consult-link {
+    font-size: 0.8rem;
+    color: var(--primary-color);
+    cursor: pointer;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  // ─── Section title ────────────────────────────────────────────────────────────
+
+  &__section-title {
+    padding: 0.4rem 0.75rem 0.25rem;
+    font-size: 0.75rem;
+    color: var(--text-color-secondary);
+    margin: 0;
+
+    &--mt {
+      margin-top: 0.5rem;
+      border-top: 1px solid var(--surface-border);
+      padding-top: 0.6rem;
+    }
+  }
+
+  // ─── List ────────────────────────────────────────────────────────────────────
+
+  &__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  &__list-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.4rem 0.75rem;
+    border-bottom: 1px solid var(--surface-border);
+    font-size: 0.8rem;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+  }
+
+  &__list-item--odd {
+    background: color-mix(in srgb, var(--surface-100) 30%, transparent);
+  }
+
+  &__list-name {
+    color: var(--text-color);
+    font-size: 0.8rem;
+  }
+
+  &__list-date {
+    color: var(--text-color-secondary);
+    font-size: 0.775rem;
+  }
+
+  &__list-empty {
+    color: var(--text-color-secondary);
+    font-size: 0.775rem;
+    font-style: italic;
+  }
+
+  &__list-count {
+    color: var(--text-color);
+    font-size: 0.8rem;
+    font-weight: 500;
+  }
+
+  &__list-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  // ─── Nonzero / max value highlights ─────────────────────────────────────────
+
+  &__val--nonzero {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 2px;
+    color: var(--text-color);
+    cursor: default;
+  }
+
+  &__val--max {
+    text-decoration-thickness: 3px;
+    font-weight: 600;
+  }
+
+  a#{&}__val--nonzero {
+    cursor: pointer;
+
+    &:hover {
+      color: var(--primary-color);
+    }
+  }
+
+  // ─── Unreconciled expandable detail ─────────────────────────────────────────
+
+  &__unreconciled-detail {
+    list-style: none;
+    padding: 0;
+    border-bottom: 1px solid var(--surface-border);
+  }
+
+  &__unreconciled-scroll {
+    max-height: 200px;
+    overflow-y: auto;
+    background: var(--surface-ground);
+  }
+
+  // ─── Add button (+) ──────────────────────────────────────────────────────────
+
+  &__add-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.375rem;
+    height: 1.375rem;
+    border: none;
+    border-radius: 3px;
+    background: #3b82f6;
+    color: #fff;
+    font-size: 0.65rem;
+    cursor: pointer;
+    transition: background 0.15s;
+
+    &:hover {
+      background: #2563eb;
+    }
+  }
+
+  // ─── Files (col 4) ───────────────────────────────────────────────────────────
+
+  &__file-category {
+    padding: 0.3rem 0.75rem 0.15rem;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-color-secondary);
+    margin: 0;
+
+    &--mt {
+      margin-top: 0.5rem;
+      border-top: 1px solid var(--surface-border);
+      padding-top: 0.5rem;
+    }
+  }
+
+  // ─── Status dot ──────────────────────────────────────────────────────────────
+
+  &__dot {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    flex-shrink: 0;
+
+    &--red {
+      background: #ef4444;
+    }
+
+    &--green {
+      background: #22c55e;
+    }
+  }
+}
+
+:root.dark {
+  .cs-audit__table tbody tr.cs-audit__table-row--odd td {
+    background: color-mix(in srgb, var(--surface-900) 25%, transparent);
+  }
+
+  .cs-audit__list-item--odd {
+    background: color-mix(in srgb, var(--surface-900) 25%, transparent);
+  }
+}

@@ -44,6 +44,53 @@
       >
         {{ 'conciliation.actionDialog.securityAuditNotice' | translate }}
       </div>
+
+      @if (isDeleteErp()) {
+        <div class="cs-delete-reason" [class.cs-delete-reason--error]="reasonTouched && !reason">
+          <div class="cs-delete-reason__header">
+            <span class="cs-delete-reason__label">
+              {{ 'conciliation.actionDialog.deleteReason.label' | translate }}:
+            </span>
+            @if (reasonTouched && !reason) {
+              <small class="cs-delete-reason__required">
+                {{ 'conciliation.actionDialog.deleteReason.required' | translate }}
+              </small>
+            }
+          </div>
+
+          <div class="cs-delete-reason__options">
+            @for (opt of deleteErpReasonEnumOptions(); track opt) {
+              <div class="cs-delete-reason__option">
+                <p-radiobutton
+                  [value]="opt.value"
+                  [(ngModel)]="reason"
+                  name="actionDeleteReason"
+                  [inputId]="'action-reason-' + opt"
+                ></p-radiobutton>
+                <label [for]="'action-reason-' + opt" class="cursor-pointer">
+                  {{ opt.label | translate }}
+                </label>
+              </div>
+            }
+          </div>
+        </div>
+
+        <div class="flex flex-column gap-1">
+          <label class="text-xs font-medium text-color-secondary">
+            {{ 'conciliation.actionDialog.deleteReason.observations' | translate }}
+          </label>
+          <textarea
+            [rows]="3"
+            pInputTextarea
+            [autoResize]="false"
+            class="w-full text-sm"
+            [(ngModel)]="observations"
+            [placeholder]="
+              'conciliation.actionDialog.deleteReason.observationsPlaceholder' | translate
+            "
+          ></textarea>
+        </div>
+      }
     </div>
   </div>
 
@@ -63,7 +110,7 @@
       type="button"
       icon="pi pi-save"
       [loading]="resolving"
-      (click)="confirmDialog.emit()"
+      (click)="onConfirmClick()"
       [label]="defaultConfirmLabel()"
       [class]="resolvedButtonClass()"
     ></button>

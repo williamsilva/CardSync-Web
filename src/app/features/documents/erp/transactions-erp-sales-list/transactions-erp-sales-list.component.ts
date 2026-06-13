@@ -186,13 +186,13 @@ export class TransactionsErpSalesListComponent
   readonly statusTransaction = signal<StatusTransactionEnum[] | null>(null);
 
   /* Campos Tabela*/
-  cvNsuColumnDraft = signal('');
-  grossValueColumnDraft = signal('');
-  liquidValueColumnDraft = signal('');
-  installmentColumnDraft = signal('');
-  authorizationColumnDraft = signal('');
-  discountValueColumnDraft = signal('');
-  adjustmentValueColumnDraft = signal('');
+  cvNsuColumnDraft = signal<string>('');
+  grossValueColumnDraft = signal<string>('');
+  liquidValueColumnDraft = signal<string>('');
+  installmentColumnDraft = signal<string>('');
+  authorizationColumnDraft = signal<string>('');
+  discountValueColumnDraft = signal<string>('');
+  adjustmentValueColumnDraft = signal<string>('');
 
   flagColumnDraft = signal<string[] | null>(null);
   companyColumnDraft = signal<string[] | null>(null);
@@ -1189,8 +1189,11 @@ export class TransactionsErpSalesListComponent
   protected searchOnFileSales(row: TransactionsErpModel): void {
     const targetFilters = this.buildTargetFileFilters(row);
 
-    localStorage.setItem(STATE_KEY.CARDSYNC.FILE.FILTERS.V1, JSON.stringify(targetFilters));
-    localStorage.removeItem(STATE_KEY.CARDSYNC.FILE.TABLE.STATE.V1);
+    localStorage.setItem(
+      STATE_KEY.CARDSYNC.PROCESSED_FILES.FILES.FILTERS.V1,
+      JSON.stringify(targetFilters),
+    );
+    localStorage.removeItem(STATE_KEY.CARDSYNC.PROCESSED_FILES.FILES.TABLE.STATE.V1);
 
     this.openRouteInNewTab(['/file-processing/files']);
   }

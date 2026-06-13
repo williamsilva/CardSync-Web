@@ -7,7 +7,6 @@ import { CardModule } from 'primeng/card';
 import { TableLazyLoadEvent, TableModule } from 'primeng/table';
 
 import { FileProcessingService } from '@features/service/file-processing.service';
-import { RedeTotalizerModel } from '@models/file-processing.models';
 import { formatCurrency } from '../file-processing-ui';
 import { CsTagComponent } from '@shared/ui';
 
@@ -21,7 +20,7 @@ import { CsTagComponent } from '@shared/ui';
 export class RedeTotalizersComponent {
   private readonly service = inject(FileProcessingService);
 
-  protected readonly rows = signal<RedeTotalizerModel[]>([]);
+  protected readonly rows = signal<any[]>([]);
   protected readonly loading = signal(false);
   protected readonly totalRecords = signal(0);
   protected readonly pageSize = signal(15);

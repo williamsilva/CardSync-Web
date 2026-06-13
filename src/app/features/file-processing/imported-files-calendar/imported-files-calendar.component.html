@@ -1,0 +1,301 @@
+<div class="cs-list-page import-calendar-page">
+  <div class="cs-list-page__header">
+    <div>
+      <p class="cs-list-page__eyebrow">{{ 'importedFilesCalendar.eyebrow' | translate }}</p>
+      <h1>{{ 'importedFilesCalendar.title' | translate }}</h1>
+      <span>{{ 'importedFilesCalendar.description' | translate }}</span>
+    </div>
+
+    <div class="header-actions">
+      <button
+        pButton
+        type="button"
+        icon="pi pi-list"
+        severity="secondary"
+        (click)="navigateToFiles()"
+        [label]="'importedFilesCalendar.viewFiles' | translate"
+      ></button>
+      <button
+        pButton
+        type="button"
+        (click)="load()"
+        icon="pi pi-refresh"
+        severity="secondary"
+        [loading]="loading()"
+        [label]="'importedFilesCalendar.refresh' | translate"
+      ></button>
+    </div>
+  </div>
+
+  <div class="summary-grid">
+    <article class="summary-card">
+      <span>{{ 'importedFilesCalendar.summary.total' | translate }}</span>
+      <strong>{{ calendar()?.totalFiles ?? 0 }}</strong>
+      <small>{{ 'importedFilesCalendar.summary.totalSub' | translate }}</small>
+    </article>
+    <article class="summary-card is-positive">
+      <span>{{ 'importedFilesCalendar.summary.withImport' | translate }}</span>
+      <strong>{{ calendar()?.daysWithFiles ?? 0 }}</strong>
+      <small>{{ 'importedFilesCalendar.summary.withImportSub' | translate }}</small>
+    </article>
+    <article class="summary-card is-negative">
+      <span>{{ 'importedFilesCalendar.summary.withoutImport' | translate }}</span>
+      <strong>{{ calendar()?.daysWithoutFiles ?? 0 }}</strong>
+      <small>{{ 'importedFilesCalendar.summary.withoutImportSub' | translate }}</small>
+    </article>
+  </div>
+
+  <p-card class="calendar-card">
+    <div class="calendar-toolbar">
+      <button
+        text
+        pButton
+        rounded
+        type="button"
+        icon="pi pi-chevron-left"
+        (click)="previousMonth()"
+      ></button>
+      <div class="month-title">
+        <strong>{{ monthLabel() }}</strong>
+        <p-datepicker
+          view="month"
+          appendTo="body"
+          dateFormat="mm/yy"
+          [showIcon]="true"
+          [readonlyInput]="true"
+          [ngModel]="selectedMonthDate()"
+          (ngModelChange)="onMonthPickerChange($event)"
+        ></p-datepicker>
+      </div>
+      <button
+        text
+        pButton
+        rounded
+        type="button"
+        (click)="nextMonth()"
+        icon="pi pi-chevron-right"
+      ></button>
+    </div>
+
+    @if (loading()) {
+      <div class="loading-state"><p-progress-spinner strokeWidth="4"></p-progress-spinner></div>
+    } @else {
+      <div class="calendar-grid weekday-grid">
+        @for (key of weekdayKeys; track key) {
+          <div class="weekday">{{ key | translate }}</div>
+        }
+      </div>
+
+      <div class="calendar-grid days-grid">
+        @for (cell of calendarCells(); track cell.key) {
+          @if (cell.day; as day) {
+            <button
+              type="button"
+              class="calendar-day"
+              (click)="selectDay(day)"
+              [class.is-future]="day.future"
+              [ngClass]="overallDayClass(day)"
+              [class.is-selected]="selectedDay()?.date === day.date"
+            >
+              <span class="day-number">{{ dayNumber(day.date) }}</span>
+              @if (day.hasFiles) {
+                <span class="total-badge">{{
+                  'importedFilesCalendar.files' | translate: { count: day.totalFiles }
+                }}</span>
+              }
+              @if (!day.future) {
+                <div class="day-groups">
+                  <span
+                    [escape]="false"
+                    class="group-pill"
+                    tooltipPosition="top"
+                    [ngStyle]="pillStyle(day, 'erp')"
+                    [pTooltip]="pillTooltip(day, 'erp')"
+                    >{{ 'importedFilesCalendar.groups.erp' | translate }}</span
+                  >
+                  <span
+                    [escape]="false"
+                    class="group-pill"
+                    tooltipPosition="top"
+                    [ngStyle]="pillStyle(day, 'adq')"
+                    [pTooltip]="pillTooltip(day, 'adq')"
+                    >{{ 'importedFilesCalendar.groups.adq' | translate }}</span
+                  >
+                  <span
+                    [escape]="false"
+                    class="group-pill"
+                    tooltipPosition="top"
+                    [ngStyle]="pillStyle(day, 'bank')"
+                    [pTooltip]="pillTooltip(day, 'bank')"
+                    >{{ 'importedFilesCalendar.groups.bank' | translate }}</span
+                  >
+                </div>
+              } @else {
+                <span class="empty-label future"
+                  ><i class="pi pi-clock"></i>
+                  {{ 'importedFilesCalendar.waiting' | translate }}</span
+                >
+              }
+            </button>
+          } @else {
+            <div class="calendar-day is-empty"></div>
+          }
+        }
+      </div>
+    }
+  </p-card>
+
+  @if (selectedDay(); as day) {
+    <section class="day-detail">
+      <div class="day-detail__header">
+        <div>
+          <span>{{ 'importedFilesCalendar.detail.title' | translate }}</span>
+          <h2>{{ day.date | csDate: 'full' }}</h2>
+        </div>
+        @if (day.hasFiles) {
+          <strong>
+            {{ 'importedFilesCalendar.files' | translate: { count: day.totalFiles } }}</strong
+          >
+        } @else if (day.future) {
+          <strong class="no-import">{{
+            'importedFilesCalendar.detail.futureDate' | translate
+          }}</strong>
+        } @else {
+          <strong class="no-import">{{
+            'importedFilesCalendar.detail.noImportation' | translate
+          }}</strong>
+        }
+      </div>
+
+      @if (!day.hasFiles) {
+        <div class="empty-detail">
+          <i [class]="day.future ? 'pi pi-clock' : 'pi pi-calendar-times'"></i>
+          <div>
+            <strong>{{
+              (day.future
+                ? 'importedFilesCalendar.detail.futureDateMessage'
+                : 'importedFilesCalendar.detail.noFileMessage'
+              ) | translate
+            }}</strong>
+            <span>{{
+              (day.future
+                ? 'importedFilesCalendar.detail.futureDateSubMessage'
+                : 'importedFilesCalendar.detail.noFileSubMessage'
+              ) | translate
+            }}</span>
+          </div>
+        </div>
+      } @else {
+        <div class="category-grid">
+          @for (group of selectedGroups(); track group.key) {
+            <article class="category-card" [ngClass]="groupClass(group.key)">
+              <header>
+                <div>
+                  <span>{{ 'importedFilesCalendar.detail.typeOrigin' | translate }}</span>
+                  <strong>{{ group.label }}</strong>
+                </div>
+                <span class="category-count">{{ group.files.length }}</span>
+              </header>
+
+              <div class="file-list">
+                @for (file of group.files; track file.id) {
+                  <a [routerLink]="['../files', file.id]" class="file-row">
+                    <div class="file-main">
+                      <i class="pi pi-file"></i>
+                      <div>
+                        <strong>{{ file.file }}</strong>
+                        <span>{{ file.typeFile || file.origin || file.categoryLabel }}</span>
+                      </div>
+                    </div>
+                    <div class="file-meta">
+                      <span class="status-pill" [ngClass]="statusClass(file.status)">
+                        {{ 'importedFilesCalendar.status.' + file.status | translate }}
+                      </span>
+                      <small>{{ file.dateImport | date: 'HH:mm' }}</small>
+                    </div>
+                  </a>
+                }
+              </div>
+            </article>
+          }
+        </div>
+      }
+    </section>
+  }
+
+  @if (calendar()) {
+    <section class="missing-section">
+      <h3>{{ 'importedFilesCalendar.missingByType.title' | translate }}</h3>
+      <div class="missing-grid">
+        <div class="missing-type-card missing-type-card--erp">
+          <header class="missing-type-card__header">
+            <span class="metric erp">{{ 'importedFilesCalendar.groups.erp' | translate }}</span>
+            <span>{{ 'importedFilesCalendar.missingByType.erp' | translate }}</span>
+            <span class="missing-badge">{{ missingByType().erp.length }}</span>
+          </header>
+          @if (missingByType().erp.length === 0) {
+            <p class="missing-empty">
+              <i class="pi pi-check-circle"></i>
+              {{ 'importedFilesCalendar.missingByType.noDays' | translate }}
+            </p>
+          } @else {
+            <ul class="missing-list">
+              @for (d of missingByType().erp; track d.date) {
+                <li (click)="selectDay(d)">
+                  <span class="status-dot" [style.background-color]="dotColor(d, 'erp')"></span>
+                  {{ d.date | csDate: 'dayMonth' }}
+                </li>
+              }
+            </ul>
+          }
+        </div>
+
+        <div class="missing-type-card missing-type-card--adq">
+          <header class="missing-type-card__header">
+            <span class="metric rede">{{ 'importedFilesCalendar.groups.adq' | translate }}</span>
+            <span>{{ 'importedFilesCalendar.missingByType.adq' | translate }}</span>
+            <span class="missing-badge">{{ missingByType().adq.length }}</span>
+          </header>
+          @if (missingByType().adq.length === 0) {
+            <p class="missing-empty">
+              <i class="pi pi-check-circle"></i>
+              {{ 'importedFilesCalendar.missingByType.noDays' | translate }}
+            </p>
+          } @else {
+            <ul class="missing-list">
+              @for (d of missingByType().adq; track d.date) {
+                <li (click)="selectDay(d)">
+                  <span class="status-dot" [style.background-color]="dotColor(d, 'adq')"></span>
+                  {{ d.date | csDate: 'dayMonth' }}
+                </li>
+              }
+            </ul>
+          }
+        </div>
+
+        <div class="missing-type-card missing-type-card--bank">
+          <header class="missing-type-card__header">
+            <span class="metric bank">{{ 'importedFilesCalendar.groups.bank' | translate }}</span>
+            <span>{{ 'importedFilesCalendar.missingByType.bank' | translate }}</span>
+            <span class="missing-badge">{{ missingByType().bank.length }}</span>
+          </header>
+          @if (missingByType().bank.length === 0) {
+            <p class="missing-empty">
+              <i class="pi pi-check-circle"></i>
+              {{ 'importedFilesCalendar.missingByType.noDays' | translate }}
+            </p>
+          } @else {
+            <ul class="missing-list">
+              @for (d of missingByType().bank; track d.date) {
+                <li (click)="selectDay(d)">
+                  <span class="status-dot" [style.background-color]="dotColor(d, 'bank')"></span>
+                  {{ d.date | csDate: 'dayMonth' }}
+                </li>
+              }
+            </ul>
+          }
+        </div>
+      </div>
+    </section>
+  }
+</div>

@@ -6,7 +6,6 @@ import { environment } from 'environments/environment';
 import { HalPagedResponse } from '@core/api/page.model';
 import { PageResponse } from '@models/file-processing.models';
 import {
-  BankSettlementAnalysisModel,
   ChargebackAnalysisFilter,
   ChargebackAnalysisModel,
   ChargebackAnalysisTotalsModel,
@@ -15,8 +14,6 @@ import {
   ConciliationDashboardModel,
   ConciliationFeeAnalysisModel,
   ConciliationPageQuery,
-  DebitAnalysisModel,
-  DivergenceAnalysisModel,
 } from '@models/conciliation.models';
 import { ListQueryDto } from '@shared/features/list-query/list-query.types';
 
@@ -39,13 +36,6 @@ export class ConciliationService {
       body,
       { withCredentials: true },
     );
-  }
-
-  listDebits(query: ConciliationPageQuery = {}): Observable<PageResponse<DebitAnalysisModel>> {
-    return this.http.get<PageResponse<DebitAnalysisModel>>(`${this.baseUrl}/debits`, {
-      params: this.toParams(query),
-      withCredentials: true,
-    });
   }
 
   listChargebacks(
@@ -78,27 +68,6 @@ export class ConciliationService {
         withCredentials: true,
       },
     );
-  }
-
-  listBankSettlement(
-    query: ConciliationPageQuery = {},
-  ): Observable<PageResponse<BankSettlementAnalysisModel>> {
-    return this.http.get<PageResponse<BankSettlementAnalysisModel>>(
-      `${this.baseUrl}/bank-settlement`,
-      {
-        params: this.toParams(query),
-        withCredentials: true,
-      },
-    );
-  }
-
-  listDivergences(
-    query: ConciliationPageQuery = {},
-  ): Observable<PageResponse<DivergenceAnalysisModel>> {
-    return this.http.get<PageResponse<DivergenceAnalysisModel>>(`${this.baseUrl}/divergences`, {
-      params: this.toParams(query),
-      withCredentials: true,
-    });
   }
 
   listAging(query: ConciliationPageQuery = {}): Observable<ConciliationAgingModel[]> {

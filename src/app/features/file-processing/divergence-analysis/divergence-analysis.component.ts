@@ -8,12 +8,7 @@ import { ButtonModule } from 'primeng/button';
 
 import { CsTagComponent } from '@shared/ui';
 import { FileProcessingService } from '@features/service/file-processing.service';
-import {
-  ProcessedFileModel,
-  ErpPendingSaleModel,
-  RedeAdjustmentModel,
-  RedeCreditOrderModel,
-} from '@models/file-processing.models';
+import { ProcessedFileModel, ErpPendingSaleModel } from '@models/file-processing.models';
 import {
   formatCurrency,
   fileStatusSeverity as getFileStatusSeverity,
@@ -33,8 +28,8 @@ export class DivergenceAnalysisComponent {
   protected readonly loading = signal(false);
   protected readonly files = signal<ProcessedFileModel[]>([]);
   protected readonly erpPendings = signal<ErpPendingSaleModel[]>([]);
-  protected readonly creditOrders = signal<RedeCreditOrderModel[]>([]);
-  protected readonly adjustments = signal<RedeAdjustmentModel[]>([]);
+  protected readonly creditOrders = signal<any[]>([]);
+  protected readonly adjustments = signal<any[]>([]);
 
   protected readonly metrics = computed(() => {
     const files = this.files();
@@ -65,16 +60,6 @@ export class DivergenceAnalysisComponent {
 
     this.service.listPendingErpSales({ page: 0, size: 20, sort: 'saleDate,desc' }).subscribe({
       next: (page) => this.erpPendings.set(page.content ?? []),
-    });
-
-    this.service.listRedeCreditOrders({ page: 0, size: 20, sort: 'releaseDate,desc' }).subscribe({
-      next: (page) => this.creditOrders.set(page.content ?? []),
-    });
-
-    this.service.listRedeAdjustments({ page: 0, size: 20, sort: 'lineNumber,asc' }).subscribe({
-      next: (page) => this.adjustments.set(page.content ?? []),
-      error: () => this.loading.set(false),
-      complete: () => this.loading.set(false),
     });
   }
 

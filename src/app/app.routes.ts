@@ -20,6 +20,12 @@ export const appRoutes: Routes = [
       },
 
       {
+        path: 'adjustment',
+        loadChildren: () =>
+          import('./features/adjustment/adjustment.router').then((m) => m.ADJUSTMENT_ROUTES),
+      },
+
+      {
         path: 'conciliation',
         loadChildren: () =>
           import('./features/conciliation/conciliation.routes').then((m) => m.CONCILIATION_ROUTES),
@@ -49,7 +55,18 @@ export const appRoutes: Routes = [
         path: 'dashboard',
         title: 'routes.dashboard.title',
         loadComponent: () =>
-          import('./features/dashboard/dashboard.component').then((m) => m.DashboardComponent),
+          import('./features/dashboard/audit/audit-dashboard.component').then(
+            (m) => m.AuditDashboardComponent,
+          ),
+      },
+
+      {
+        path: 'dashboard/management',
+        title: 'routes.managementDashboard.title',
+        loadComponent: () =>
+          import('./features/dashboard/management/management-dashboard.component').then(
+            (m) => m.ManagementDashboardComponent,
+          ),
       },
 
       {

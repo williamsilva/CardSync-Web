@@ -2,7 +2,7 @@
   [compact]="false"
   [subtitle]="'creditOrders.subtitle' | translate"
   [breadcrumb]="[
-    { label: ('breadcrumb.dashboard' | translate), url: '/' },
+    { label: ('breadcrumb.dashboard.title' | translate), url: '/' },
     { label: ('breadcrumb.creditOrders.title' | translate) },
   ]"
 >
@@ -165,9 +165,9 @@
   <div class="grid formgrid gap-0 align-items-end">
     <cs-advanced-text-filter
       inputId="rvNumber"
-      [value]="rvNumber() ?? ''"
+      [value]="rvNumber()"
       class="col-12 md:col-3 xl:col-2 p-1"
-      (valueChange)="rvNumber.set($event || null)"
+      (valueChange)="rvNumber.set($event || '')"
       [label]="'creditOrders.fields.rvNumber' | translate"
     ></cs-advanced-text-filter>
 

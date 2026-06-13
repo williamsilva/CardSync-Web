@@ -137,18 +137,36 @@ export class ConciliationWaitingFacade {
       .pipe(tap(() => this.clearTotals()));
   }
 
-  markErpAsDeleted(erpTransactionId: string): Observable<ErpAcquirerResolutionResultModel> {
-    return this.api.markErpAsDeleted(erpTransactionId).pipe(tap(() => this.clearTotals()));
+  markErpAsDeleted(
+    erpTransactionId: string,
+    reason: string,
+    observations: string,
+  ): Observable<ErpAcquirerResolutionResultModel> {
+    return this.api
+      .markErpAsDeleted(erpTransactionId, reason, observations)
+      .pipe(tap(() => this.clearTotals()));
   }
 
   markErpAsDeletedBatch(
     erpTransactionIds: string[],
+    reason: string,
+    observations: string,
   ): Observable<ErpAcquirerBatchResolutionResultModel> {
-    return this.api.markErpAsDeletedBatch(erpTransactionIds).pipe(tap(() => this.clearTotals()));
+    return this.api
+      .markErpAsDeletedBatch(erpTransactionIds, reason, observations)
+      .pipe(tap(() => this.clearTotals()));
   }
 
   reconcileErpVsAcquirer(): Observable<ReconcileErpAcquirerResultModel> {
     return this.api.reconcileErpVsAcquirer().pipe(
+      tap((result) => {
+        this.showReconciliationResultErpAcquirerToast(result);
+      }),
+    );
+  }
+
+  reconcileManualSwapped(): Observable<ReconcileErpAcquirerResultModel> {
+    return this.api.reconcileManualSwapped().pipe(
       tap((result) => {
         this.showReconciliationResultErpAcquirerToast(result);
       }),

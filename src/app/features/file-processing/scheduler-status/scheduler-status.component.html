@@ -120,4 +120,93 @@
       </p-card>
     </div>
   </div>
+
+  <p-divider></p-divider>
+
+  <div class="grid">
+    <!-- Conciliar Banco -->
+    <div class="col-12 lg:col-6">
+      <p-card>
+        <ng-template pTemplate="title">
+          <span class="flex align-items-center gap-2">
+            <i class="pi pi-building-columns"></i>
+            Conciliar Banco
+          </span>
+        </ng-template>
+        <div class="flex flex-column gap-3">
+          <span class="text-color-secondary">
+            Executa a conciliação das transações bancárias com os lançamentos do sistema.
+          </span>
+
+          @if (reconcileBankResult() !== null) {
+            <cs-tag value="Conciliação concluída com sucesso" tone="success"></cs-tag>
+          }
+
+          <button
+            pButton
+            type="button"
+            icon="pi pi-sync"
+            label="Conciliar Banco agora"
+            severity="info"
+            [loading]="reconcilingBank()"
+            (click)="reconcileBank()"
+          ></button>
+        </div>
+      </p-card>
+    </div>
+
+    <!-- Conciliar ERP x ACQ -->
+    <div class="col-12 lg:col-6">
+      <p-card>
+        <ng-template pTemplate="title">
+          <span class="flex align-items-center gap-2">
+            <i class="pi pi-arrows-h"></i>
+            Conciliar ERP x ACQ
+          </span>
+        </ng-template>
+        <div class="flex flex-column gap-3">
+          <span class="text-color-secondary">
+            Reconcilia as transações do ERP com as transações das adquirentes.
+          </span>
+
+          @if (reconcileErpAcqResult(); as result) {
+            <div class="flex flex-column gap-1 text-sm">
+              <div class="flex justify-content-between">
+                <span>Analisados</span><strong>{{ result.analyzed }}</strong>
+              </div>
+              <div class="flex justify-content-between">
+                <span>Conciliados</span><strong>{{ result.matched }}</strong>
+              </div>
+              <div class="flex justify-content-between">
+                <span>Atualizados</span><strong>{{ result.updated }}</strong>
+              </div>
+              <div class="flex justify-content-between">
+                <span>Não encontrados</span><strong>{{ result.notMatched }}</strong>
+              </div>
+              @if (result.valueDivergences) {
+                <div class="flex justify-content-between">
+                  <span>Divergências de valor</span><strong>{{ result.valueDivergences }}</strong>
+                </div>
+              }
+              @if (result.ambiguousMatches) {
+                <div class="flex justify-content-between">
+                  <span>Ambíguos</span><strong>{{ result.ambiguousMatches }}</strong>
+                </div>
+              }
+            </div>
+          }
+
+          <button
+            pButton
+            type="button"
+            icon="pi pi-sync"
+            label="Conciliar ERP x ACQ agora"
+            severity="info"
+            [loading]="reconcilingErpAcq()"
+            (click)="reconcileErpAcq()"
+          ></button>
+        </div>
+      </p-card>
+    </div>
+  </div>
 </div>

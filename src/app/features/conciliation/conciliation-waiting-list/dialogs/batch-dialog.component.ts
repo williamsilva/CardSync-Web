@@ -1,23 +1,51 @@
+import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
+import {
+  Input,
+  inject,
+  Output,
+  computed,
+  Component,
+  OnChanges,
+  EventEmitter,
+  SimpleChanges,
+} from '@angular/core';
 
 import { ButtonModule } from 'primeng/button';
+import { TextareaModule } from 'primeng/textarea';
 import { DialogModule } from 'primeng/dialog';
 import { TranslateModule } from '@ngx-translate/core';
+import { RadioButtonModule } from 'primeng/radiobutton';
 
 import { I18nService } from '@core/i18n/i18n.service';
 import { CsCurrencyPipe } from '@shared/pipes/cs-currency.pipe';
+import { DeleteErpConfirmPayload } from './action-dialog.component';
 import { ConciliationWaitingModel } from '@models/conciliation-waiting.model';
+import {
+  DeleteErpReasonEnum,
+  deleteErpReasonEnumLabel,
+  allDeleteErpReasonStatusEnum,
+} from '@models/enums/delete-erp-reason.enum';
 
 export type BatchAction = 'CREATE_ERP' | 'MARK_ERP_DELETED' | null;
 
 @Component({
   standalone: true,
   selector: 'cs-batch-dialog',
+  styleUrl: './batch-dialog.component.scss',
   templateUrl: './batch-dialog.component.html',
-  imports: [CommonModule, DialogModule, ButtonModule, CsCurrencyPipe, TranslateModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    DialogModule,
+    ButtonModule,
+    TextareaModule,
+    CsCurrencyPipe,
+    TranslateModule,
+    RadioButtonModule,
+  ],
 })
-export class BatchDialogComponent {
+export class BatchDialogComponent implements OnChanges {
   private readonly i18n = inject(I18nService);
 
   @Input() visible = false;
@@ -32,7 +60,28 @@ export class BatchDialogComponent {
 
   @Output() closeDialog = new EventEmitter<void>();
   @Output() confirmDialog = new EventEmitter<void>();
+  @Output() confirmDelete = new EventEmitter<DeleteErpConfirmPayload>();
   @Output() visibleChange = new EventEmitter<boolean>();
+
+  protected reason: DeleteErpReasonEnum | null = null;
+  protected observations = '';
+  protected reasonTouched = false;
+
+  readonly deleteErpReasonEnumOptions = computed(() => {
+    this.i18n.getAppliedLang();
+    return allDeleteErpReasonStatusEnum().map((value) => ({
+      label: deleteErpReasonEnumLabel(value, this.i18n),
+      value,
+    }));
+  });
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['action'] || (changes['visible'] && !this.visible)) {
+      this.reason = null;
+      this.observations = '';
+      this.reasonTouched = false;
+    }
+  }
 
   protected get rowsCount(): number {
     return this.rows?.length ?? 0;
@@ -118,6 +167,16 @@ export class BatchDialogComponent {
 
   protected confirmButtonLabel(): string {
     return this.confirmLabel?.trim() || this.i18n.tUi(this.defaultConfirmLabelKey() as never);
+  }
+
+  protected onConfirmClick(): void {
+    if (this.isDeleteErp()) {
+      this.reasonTouched = true;
+      if (!this.reason) return;
+      this.confirmDelete.emit({ reason: this.reason, observations: this.observations });
+    } else {
+      this.confirmDialog.emit();
+    }
   }
 
   protected onVisibleChange(value: boolean): void {

@@ -21,6 +21,17 @@
       <button
         pButton
         type="button"
+        [loading]="reconcileManualSwapped()"
+        class="p-button-success p-button-sm"
+        [icon]="loading() ? '' : 'pi pi-sync'"
+        (click)="processReconcileManualSwapped()"
+        [pTooltip]="'conciliation.textTooltipErpVsAcquirer' | translate"
+        [label]="'conciliation.processReconcileManualSwapped' | translate"
+      ></button>
+
+      <button
+        pButton
+        type="button"
         [loading]="reconcilingFees()"
         class="p-button-success p-button-sm"
         (click)="processReconciliationFees()"
@@ -55,42 +66,42 @@
   <section class="cs-kpi-grid" *ngIf="summary() as s; else emptyDashboard">
     <div class="cs-kpi-card">
       <small>Vendas ERP</small>
-      <strong>{{ formatCurrency(s.erpGrossAmount) }}</strong>
+      <strong>{{ s.erpGrossAmount | csCurrency }}</strong>
       <span>{{ s.erpSalesQuantity || 0 }} vendas</span>
     </div>
     <div class="cs-kpi-card">
       <small>Vendas adquirente</small>
-      <strong>{{ formatCurrency(s.acquirerGrossAmount) }}</strong>
+      <strong>{{ s.acquirerGrossAmount | csCurrency }}</strong>
       <span>{{ s.acquirerSalesQuantity || 0 }} vendas</span>
     </div>
     <div class="cs-kpi-card">
       <small>Taxas cobradas</small>
-      <strong>{{ formatCurrency(s.feeAmount) }}</strong>
-      <span>Diferença {{ formatCurrency(s.feeDifferenceAmount) }}</span>
+      <strong>{{ s.feeAmount | csCurrency }}</strong>
+      <span>Diferença {{ s.feeDifferenceAmount | csCurrency }}</span>
     </div>
     <div class="cs-kpi-card">
       <small>Liquidado no banco</small>
-      <strong>{{ formatCurrency(s.bankSettledAmount) }}</strong>
-      <span>Pendente {{ formatCurrency(s.bankPendingAmount) }}</span>
+      <strong>{{ s.bankSettledAmount | csCurrency }}</strong>
+      <span>Pendente {{ s.bankPendingAmount | csCurrency }}</span>
     </div>
     <div class="cs-kpi-card">
       <small>Pendências</small>
-      <strong>{{ formatCurrency(s.pendingAmount) }}</strong>
+      <strong>{{ s.pendingAmount | csCurrency }}</strong>
       <span>{{ s.pendingSalesQuantity || 0 }} vendas</span>
     </div>
     <div class="cs-kpi-card">
       <small>Débitos pendentes</small>
-      <strong>{{ formatCurrency(s.debitPendingAmount) }}</strong>
+      <strong>{{ s.debitPendingAmount | csCurrency }}</strong>
       <span>Débitos e ajustes a liquidar</span>
     </div>
     <div class="cs-kpi-card">
       <small>Chargebacks abertos</small>
-      <strong>{{ formatCurrency(s.chargebackOpenAmount) }}</strong>
+      <strong>{{ s.chargebackOpenAmount | csCurrency }}</strong>
       <span>Valor em disputa</span>
     </div>
     <div class="cs-kpi-card">
       <small>Divergências</small>
-      <strong>{{ formatCurrency(s.divergenceAmount) }}</strong>
+      <strong>{{ s.divergenceAmount | csCurrency }}</strong>
       <span>{{ s.divergenceQuantity || 0 }} ocorrências</span>
     </div>
   </section>
@@ -101,19 +112,19 @@
         <div>
           <div class="flex justify-content-between mb-2">
             <strong>Valor conciliado</strong>
-            <span>{{ formatCurrency(c.matchedAmount) }}</span>
+            <span>{{ c.matchedAmount | csCurrency }}</span>
           </div>
           <p-progressBar [value]="progress(c.matchedAmount, c.erpAmount)"></p-progressBar>
         </div>
         <div class="cs-chart-row">
           <div><strong>ERP</strong><small>Total importado do sistema comercial</small></div>
-          <span>{{ formatCurrency(c.erpAmount) }}</span>
+          <span>{{ c.erpAmount | csCurrency }}</span>
         </div>
         <div class="cs-chart-row">
           <div>
             <strong>Adquirente</strong><small>Total informado nos arquivos da adquirente</small>
           </div>
-          <span>{{ formatCurrency(c.acquirerAmount) }}</span>
+          <span>{{ c.acquirerAmount | csCurrency }}</span>
         </div>
         <div class="cs-chart-row">
           <div><strong>Diferença</strong><small>Valor ainda não equalizado</small></div>

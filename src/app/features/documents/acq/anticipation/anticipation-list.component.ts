@@ -31,6 +31,7 @@ import { EstablishmentFacade } from '@features/facade/establishment.facade';
 import { buildListQuery } from '@shared/features/list-query/list-query.builder';
 import { allPeriodEnum, PeriodEnum, periodEnumLabel } from '@models/enums/period.enum';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
+import { ModalityEnum, allModalityEnum, modalityEnumLabel } from '@models/enums/modality.enum';
 import { CsColumnFilterShellComponent } from '@features/list-base/cs-column-filter-shell.component';
 import { CsAdvancedPeriodDateFilterComponent } from '@features/list-base/cs-advanced-period-date-filter.component';
 import { CsAdvancedMultiselectFilterComponent } from '@features/list-base/cs-advanced-multiselect-filter.component';
@@ -54,12 +55,6 @@ import {
   AnticipationModel,
   createEmptyAnticipationAdvancedFilters,
 } from '@models/anticipation.model';
-import {
-  ModalityEnum,
-  allModalityEnum,
-  modalityEnumLabel,
-  modalityEnumSeverity,
-} from '@models/enums/modality.enum';
 import {
   StatusTransactionEnum,
   allStatusTransactionEnum,
@@ -312,11 +307,11 @@ export class AnticipationListComponent
     const flag = this.flags();
     const bank = this.banks();
     const company = this.companies();
+    const modality = this.modality();
     const acquirer = this.acquirers();
     const establishment = this.establishments();
-    const modality = this.modality();
-    const transactionsStatus = this.transactionsStatus();
     const statusPaymentBank = this.statusPaymentBank();
+    const transactionsStatus = this.transactionsStatus();
 
     const releaseDateValue = this.formatActiveFilterPeriodDateValue(
       this.periodReleaseDate(),
@@ -690,8 +685,11 @@ export class AnticipationListComponent
   protected searchOnFileSales(row: AnticipationModel): void {
     const targetFilters = this.buildTargetFileFilters(row);
 
-    localStorage.setItem(STATE_KEY.CARDSYNC.FILE.FILTERS.V1, JSON.stringify(targetFilters));
-    localStorage.removeItem(STATE_KEY.CARDSYNC.FILE.TABLE.STATE.V1);
+    localStorage.setItem(
+      STATE_KEY.CARDSYNC.PROCESSED_FILES.FILES.FILTERS.V1,
+      JSON.stringify(targetFilters),
+    );
+    localStorage.removeItem(STATE_KEY.CARDSYNC.PROCESSED_FILES.FILES.TABLE.STATE.V1);
 
     this.openRouteInNewTab(['/file-processing/files']);
   }

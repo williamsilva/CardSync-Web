@@ -1,3 +1,127 @@
+export type ImportedFileGroup = 'ERP' | 'ADQ' | 'BANK';
+
+export type FileGroupStatus = 'complete' | 'partial' | 'missing';
+
+export interface ImportedFileCalendarEntityStatus {
+  name: string;
+  filesReceived: number;
+  status: FileGroupStatus;
+}
+
+export interface ImportedFileCalendarGroupInfo {
+  status: FileGroupStatus;
+  received: number;
+  expected: number;
+  entities: ImportedFileCalendarEntityStatus[];
+}
+
+export interface ImportedFileCalendarGroupStatus {
+  erp: ImportedFileCalendarGroupInfo;
+  adq: ImportedFileCalendarGroupInfo;
+  bank: ImportedFileCalendarGroupInfo;
+}
+
+export interface ImportedFileCalendarItemModel {
+  id: string;
+  file: string;
+  group: ImportedFileGroup;
+  category: string;
+  categoryLabel: string;
+  typeFile?: string | null;
+  origin?: string | null;
+  status: FileProcessingStatus;
+  dateFile?: string | null;
+  dateImport: string;
+}
+
+export interface ImportedFileCalendarDayModel {
+  date: string;
+  hasFiles: boolean;
+  future: boolean;
+  totalFiles: number;
+  erpFiles: number;
+  adqFiles: number;
+  bankFiles: number;
+  groupStatus?: ImportedFileCalendarGroupStatus;
+  files: ImportedFileCalendarItemModel[];
+}
+
+export interface ImportedFileCalendarModel {
+  month: string;
+  startDate: string;
+  endDate: string;
+  daysWithFiles: number;
+  daysWithoutFiles: number;
+  totalFiles: number;
+  days: ImportedFileCalendarDayModel[];
+}
+
+export interface ProcessedFileModel {
+  id: string;
+
+  file: string;
+  originFile?: string | null;
+  group?: string | null;
+  status: FileProcessingStatus;
+  dateFile?: string | null;
+  dateImport?: string | null;
+  startedAt?: string | null;
+  finishedAt?: string | null;
+  totalLines?: number | null;
+  processedLines?: number | null;
+  ignoredLines?: number | null;
+  warningLines?: number | null;
+  errorLines?: number | null;
+  pendingContractLines?: number | null;
+  pendingBusinessContextLines?: number | null;
+  statusMessage?: string | null;
+  errorMessage?: string | null;
+}
+
+export interface ProcessedFileCreateInput {}
+
+export interface ProcessedFileUpdateInput {}
+
+/**
+ * Payload bruto vindo da API.
+ * Aceita status numérico ou string para tolerar mudanças no backend.
+ */
+export interface ProcessedFileApiModel {
+  id: string;
+
+  file: string;
+  originFile?: string | null;
+  group?: string | null;
+  status: FileProcessingStatus;
+  dateFile?: string | null;
+  dateImport?: string | null;
+  startedAt?: string | null;
+  finishedAt?: string | null;
+  totalLines?: number | null;
+  processedLines?: number | null;
+  ignoredLines?: number | null;
+  warningLines?: number | null;
+  errorLines?: number | null;
+  pendingContractLines?: number | null;
+  pendingBusinessContextLines?: number | null;
+  statusMessage?: string | null;
+  errorMessage?: string | null;
+}
+
+export function mapProcessedFileApiModel(input: ProcessedFileApiModel): ProcessedFileModel {
+  return {
+    ...input,
+  };
+}
+
+export function mapProcessedFilesApiModels(
+  items: ProcessedFileApiModel[] | null | undefined,
+): ProcessedFileModel[] {
+  return (items ?? []).map(mapProcessedFileApiModel);
+}
+
+/* Verificar a nessecidade desses metodos */
+
 export interface PageResponse<T> {
   content: T[];
   totalElements: number;
@@ -31,27 +155,6 @@ export type ErpCommercialStatus =
   | 'PENDING_ESTABLISHMENT'
   | 'PENDING_CONTRACT'
   | 'PENDING_BUSINESS_CONTEXT';
-
-export interface ProcessedFileModel {
-  id: string;
-  file: string;
-  originFile?: string | null;
-  group?: string | null;
-  status: FileProcessingStatus;
-  dateFile?: string | null;
-  dateImport?: string | null;
-  startedAt?: string | null;
-  finishedAt?: string | null;
-  totalLines?: number | null;
-  processedLines?: number | null;
-  ignoredLines?: number | null;
-  warningLines?: number | null;
-  errorLines?: number | null;
-  pendingContractLines?: number | null;
-  pendingBusinessContextLines?: number | null;
-  statusMessage?: string | null;
-  errorMessage?: string | null;
-}
 
 export interface ProcessedFileSummaryModel {
   id: string;
@@ -129,113 +232,6 @@ export interface ErpPendingSaleModel {
   commercialStatusMessage?: string | null;
 }
 
-export interface RedeCreditOrderModel {
-  id: string;
-  processedFile?: string | null;
-  lineNumber?: number | null;
-  creditOrderNumber?: number | null;
-  rvNumber?: number | null;
-  originalPvNumber?: number | null;
-  installmentNumber?: number | null;
-  installmentTotal?: number | null;
-  rvDate?: string | null;
-  releaseDate?: string | null;
-  creditOrderDate?: string | null;
-  releaseValue?: number | null;
-  grossRvValue?: number | null;
-  discountRateValue?: number | null;
-  acquirer?: string | null;
-  flag?: string | null;
-  company?: string | null;
-}
-
-export interface RedeAdjustmentModel {
-  id: string;
-  processedFile?: string | null;
-  lineNumber?: number | null;
-  recordType?: string | null;
-  sourceRecordIdentifier?: string | null;
-  ecommerce?: boolean | null;
-  pvNumber?: number | null;
-  nsu?: number | null;
-  authorization?: string | null;
-  tid?: string | null;
-  adjustmentReason?: number | null;
-  adjustmentDescription?: string | null;
-  adjustmentDate?: string | null;
-  creditDate?: string | null;
-  releaseDate?: string | null;
-  adjustmentValue?: number | null;
-  grossValue?: number | null;
-  liquidValue?: number | null;
-  discountValue?: number | null;
-  acquirer?: string | null;
-  company?: string | null;
-  establishment?: string | null;
-}
-
-export interface RedeSettledDebtModel {
-  id: string;
-  processedFile?: string | null;
-  lineNumber?: number | null;
-  recordType?: string | null;
-  pvNumber?: number | null;
-  nsu?: number | null;
-  authorization?: string | null;
-  tid?: string | null;
-  numberDebitOrder?: number | null;
-  dateDebitOrder?: string | null;
-  liquidatedDate?: string | null;
-  valueDebitOrder?: number | null;
-  liquidatedValue?: number | null;
-  reasonCode?: number | null;
-  reasonDescription?: string | null;
-  acquirer?: string | null;
-  flag?: string | null;
-}
-
-export interface RedePendingDebtModel {
-  id: string;
-  processedFile?: string | null;
-  lineNumber?: number | null;
-  recordType?: string | null;
-  pvNumber?: number | null;
-  nsu?: number | null;
-  authorization?: string | null;
-  tid?: string | null;
-  numberDebitOrder?: number | null;
-  dateDebitOrder?: string | null;
-  valueDebitOrder?: number | null;
-  compensatedValue?: number | null;
-  reasonCode?: number | null;
-  reasonDescription?: string | null;
-  acquirer?: string | null;
-  flag?: string | null;
-  company?: string | null;
-  establishment?: string | null;
-}
-
-export interface RedeTotalizerModel {
-  id: string;
-  type: 'CREDIT_TOTALIZER' | 'MATRIX_TOTALIZER' | string;
-  processedFile?: string | null;
-  lineNumber?: number | null;
-  pvNumber?: number | null;
-  creditDate?: string | null;
-  totalCreditValue?: number | null;
-  totalValueAdvanceCredits?: number | null;
-  totalNumberMatrixSummaries?: number | null;
-  totalValueNormalCredits?: number | null;
-  totalValueAnticipated?: number | null;
-  amountCreditAdjustments?: number | null;
-  totalValueCreditAdjustments?: number | null;
-  amountDebitAdjustments?: number | null;
-  totalValueDebitAdjustments?: number | null;
-  acquirer?: string | null;
-  company?: string | null;
-  establishment?: string | null;
-}
-
 export interface FileProcessingMetricModel {
   key: string;
   label: string;
@@ -282,6 +278,16 @@ export interface FileProcessingDashboardModel {
   reconciliationByStatus: ReconciliationStatusAmountModel[];
   divergenceContexts: FileProcessingDivergenceContextModel[];
   topFilesWithErrors: FileProcessingTopErrorFileModel[];
+}
+
+export interface FileProcessingTotalsModel {
+  processed: number;
+  warnings: number;
+  errors: number;
+  invalid: number;
+  duplicate: number;
+  pendingContract: number;
+  pendingContext: number;
 }
 
 export interface BankReleaseModel {

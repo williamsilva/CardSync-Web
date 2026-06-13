@@ -39,6 +39,9 @@ export const PERMISSIONS = {
     CREDIT_ORDER: {
       VIEW: 'CREDIT_ORDER_CONSULT',
     },
+    BANK_STATEMENT: {
+      VIEW: 'BANK_STATEMENT_CONSULT',
+    },
   },
 
   USERS: {

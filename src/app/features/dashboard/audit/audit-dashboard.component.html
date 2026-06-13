@@ -1,0 +1,282 @@
+<div class="cs-audit">
+  <div class="cs-audit__grid">
+    <!-- Col 1: Resumo de Vendas Consolidado -->
+    <div class="cs-audit__panel">
+      <div class="cs-audit__panel-header">
+        <span>{{ 'auditDashboard.salesSummary.title' | translate }}</span>
+        <button class="cs-audit__icon-btn" (click)="reloadSalesSummary()">
+          <i class="pi pi-refresh"></i>
+        </button>
+      </div>
+      <div class="cs-audit__panel-body">
+        @if (loading()) {
+          <div class="cs-audit__loading"><i class="pi pi-spin pi-spinner"></i></div>
+        } @else {
+          <table class="cs-audit__table">
+            <thead>
+              <tr>
+                <th>{{ 'auditDashboard.salesSummary.total' | translate }}</th>
+                <th></th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (row of salesSummary(); track row.date; let odd = $odd) {
+                <tr class="cs-audit__table-row" [class.cs-audit__table-row--odd]="odd">
+                  <td>{{ row.date }}</td>
+                  <td class="cs-audit__col-right">{{ formatCurrency(row.value) }}</td>
+                  <td class="cs-audit__col-right cs-audit__col-cv">{{ row.cvCount }} CVs</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+
+          @if (showAcquirerDetail()) {
+            <a class="cs-audit__toggle-link" (click)="toggleAcquirerDetail()">
+              {{ 'auditDashboard.salesSummary.collapse' | translate }}
+            </a>
+            <div class="cs-audit__detail-grid">
+              @for (detail of acquirerDetails(); track detail.acquirerName) {
+                <div class="cs-audit__detail-card">
+                  <div class="cs-audit__detail-header">
+                    <span>{{ detail.acquirerName }}</span>
+                    <button
+                      class="cs-audit__icon-btn cs-audit__icon-btn--dark"
+                      (click)="toggleAcquirerDetail()"
+                    >
+                      <i class="pi pi-times"></i>
+                    </button>
+                  </div>
+                  <table class="cs-audit__table cs-audit__table--detail">
+                    <tbody>
+                      @for (row of detail.rows; track row.date; let odd = $odd) {
+                        <tr [class.cs-audit__table-row--odd]="odd">
+                          <td>{{ row.date }}</td>
+                          <td class="cs-audit__col-right">{{ formatCurrency(row.value) }}</td>
+                          <td class="cs-audit__col-right cs-audit__col-cv">
+                            ({{ row.cvCount }} CVs)
+                          </td>
+                        </tr>
+                      }
+                    </tbody>
+                  </table>
+                </div>
+              }
+            </div>
+          } @else {
+            <a class="cs-audit__toggle-link" (click)="toggleAcquirerDetail()">
+              {{ 'auditDashboard.salesSummary.expand' | translate }}
+            </a>
+          }
+
+          <div class="cs-audit__consult-wrap">
+            <a class="cs-audit__consult-link" routerLink="/documents/acq/sales-summary">
+              {{ 'auditDashboard.salesSummary.consultMore' | translate }}
+            </a>
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- Col 2: Conciliação de Vendas -->
+    <div class="cs-audit__panel">
+      <div class="cs-audit__panel-header">
+        <span>{{ 'auditDashboard.conciliation.title' | translate }}</span>
+        <button class="cs-audit__icon-btn" (click)="reloadUnreconciled()">
+          <i class="pi pi-refresh"></i>
+        </button>
+      </div>
+      <div class="cs-audit__panel-body">
+        <p class="cs-audit__section-title">
+          {{ 'auditDashboard.conciliation.lastImports' | translate }}
+        </p>
+        <ul class="cs-audit__list">
+          @for (item of lastImports(); track item.name; let odd = $odd) {
+            <li class="cs-audit__list-item" [class.cs-audit__list-item--odd]="odd">
+              <span class="cs-audit__list-name">{{ item.name }}</span>
+              @if (item.date) {
+                <span class="cs-audit__list-date">{{ item.date }}</span>
+              } @else {
+                <span class="cs-audit__list-empty">{{
+                  'auditDashboard.conciliation.noImport' | translate
+                }}</span>
+              }
+            </li>
+          }
+        </ul>
+
+        <p class="cs-audit__section-title cs-audit__section-title--mt">
+          {{ 'auditDashboard.conciliation.unreconciled' | translate }}
+        </p>
+        @if (unreconciledLoading()) {
+          <div class="cs-audit__loading"><i class="pi pi-spin pi-spinner"></i></div>
+        } @else {
+          <ul class="cs-audit__list">
+            @for (item of unreconciledAcquirers(); track item.acquirerId; let odd = $odd) {
+              <li class="cs-audit__list-item" [class.cs-audit__list-item--odd]="odd">
+                <span class="cs-audit__list-name">{{ item.acquirer }}</span>
+                <div class="cs-audit__list-actions">
+                  <span class="cs-audit__list-count">{{ unreconciledCountLabel(item.count) }}</span>
+                  <button class="cs-audit__add-btn" (click)="toggleUnreconciled(item.acquirerId)">
+                    <i
+                      class="pi"
+                      [class.pi-plus]="expandedAcquirerId() !== item.acquirerId"
+                      [class.pi-minus]="expandedAcquirerId() === item.acquirerId"
+                    ></i>
+                  </button>
+                </div>
+              </li>
+              @if (expandedAcquirerId() === item.acquirerId) {
+                <li class="cs-audit__unreconciled-detail">
+                  <div class="cs-audit__unreconciled-scroll">
+                    <table class="cs-audit__table cs-audit__table--detail">
+                      <thead>
+                        <tr>
+                          <th>{{ 'auditDashboard.conciliation.colDate' | translate }}</th>
+                          <th class="cs-audit__col-right">
+                            {{ 'auditDashboard.conciliation.colErpAcq' | translate }}
+                          </th>
+                          <th class="cs-audit__col-right">
+                            {{ 'auditDashboard.conciliation.colErp' | translate }}
+                          </th>
+                          <th class="cs-audit__col-right">
+                            {{ 'auditDashboard.conciliation.colAcq' | translate }}
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        @for (d of item.details; track d.date; let odd = $odd) {
+                          <tr [class.cs-audit__table-row--odd]="odd">
+                            <td>{{ d.date }}</td>
+                            <td class="cs-audit__col-right">
+                              <span
+                                [class.cs-audit__val--nonzero]="d.erpAcq > 0"
+                                [class.cs-audit__val--max]="isMaxInRow(d.erpAcq, d)"
+                              >
+                                {{ d.erpAcq }}
+                              </span>
+                            </td>
+                            <td class="cs-audit__col-right">
+                              @if (d.onlyInErp > 0) {
+                                <a
+                                  class="cs-audit__val--nonzero"
+                                  [class.cs-audit__val--max]="isMaxInRow(d.onlyInErp, d)"
+                                  (click)="navigateToMissingErp(d, item)"
+                                >
+                                  {{ d.onlyInErp }}
+                                </a>
+                              } @else {
+                                {{ d.onlyInErp }}
+                              }
+                            </td>
+                            <td class="cs-audit__col-right">
+                              @if (d.onlyInAcquirer > 0) {
+                                <a
+                                  class="cs-audit__val--nonzero"
+                                  [class.cs-audit__val--max]="isMaxInRow(d.onlyInAcquirer, d)"
+                                  (click)="navigateToMissingAcq(d, item)"
+                                >
+                                  {{ d.onlyInAcquirer }}
+                                </a>
+                              } @else {
+                                {{ d.onlyInAcquirer }}
+                              }
+                            </td>
+                          </tr>
+                        }
+                      </tbody>
+                    </table>
+                  </div>
+                </li>
+              }
+            }
+          </ul>
+        }
+      </div>
+    </div>
+
+    <!-- Col 3: CVs com taxas contestáveis -->
+    <div class="cs-audit__panel">
+      <div class="cs-audit__panel-header">
+        <span>{{ 'auditDashboard.contestable.title' | translate }}</span>
+        <button class="cs-audit__icon-btn"><i class="pi pi-refresh"></i></button>
+      </div>
+      <div class="cs-audit__panel-body">
+        <p class="cs-audit__section-title">
+          {{ 'auditDashboard.contestable.subtitle' | translate }}
+        </p>
+        <ul class="cs-audit__list">
+          @for (item of contestable(); track item.name; let odd = $odd) {
+            <li class="cs-audit__list-item" [class.cs-audit__list-item--odd]="odd">
+              <span class="cs-audit__list-name">{{ item.name }}</span>
+              <div class="cs-audit__list-actions">
+                <span class="cs-audit__list-count">{{ item.count }}</span>
+                <button class="cs-audit__add-btn"><i class="pi pi-plus"></i></button>
+              </div>
+            </li>
+          }
+        </ul>
+      </div>
+    </div>
+
+    <!-- Col 4: Arquivos -->
+    <div class="cs-audit__panel">
+      <div class="cs-audit__panel-header">
+        <span>{{ 'auditDashboard.files.title' | translate }}</span>
+        <button class="cs-audit__icon-btn"><i class="pi pi-refresh"></i></button>
+      </div>
+      <div class="cs-audit__panel-body">
+        <p class="cs-audit__section-title">{{ 'auditDashboard.files.lastImported' | translate }}</p>
+
+        @for (group of fileGroups(); track group.category) {
+          <p class="cs-audit__file-category">{{ group.category }}</p>
+          <ul class="cs-audit__list">
+            @for (file of group.files; track file.date + file.name; let odd = $odd) {
+              <li class="cs-audit__list-item" [class.cs-audit__list-item--odd]="odd">
+                <span class="cs-audit__list-name">{{ file.name }}</span>
+                <div class="cs-audit__list-actions">
+                  <span class="cs-audit__list-date">{{ file.date }}</span>
+                  @if (file.hasAlert) {
+                    <span class="cs-audit__dot cs-audit__dot--red"></span>
+                  }
+                </div>
+              </li>
+            }
+          </ul>
+        }
+
+        <p class="cs-audit__file-category cs-audit__file-category--mt">
+          {{ 'auditDashboard.files.today' | translate }}
+        </p>
+        <ul class="cs-audit__list">
+          <li class="cs-audit__list-item">
+            <span class="cs-audit__list-name">{{
+              'auditDashboard.files.processed' | translate
+            }}</span>
+            <span class="cs-audit__list-count">{{ fileStatsToday() }}</span>
+          </li>
+        </ul>
+
+        <p class="cs-audit__file-category">{{ 'auditDashboard.files.yesterday' | translate }}</p>
+        <ul class="cs-audit__list">
+          <li class="cs-audit__list-item">
+            <span class="cs-audit__list-name">{{
+              'auditDashboard.files.processed' | translate
+            }}</span>
+            <span class="cs-audit__list-count">{{ fileStatsYesterday() }}</span>
+          </li>
+        </ul>
+
+        <p class="cs-audit__file-category">{{ 'auditDashboard.files.last7days' | translate }}</p>
+        <ul class="cs-audit__list">
+          <li class="cs-audit__list-item">
+            <span class="cs-audit__list-name">{{
+              'auditDashboard.files.processed' | translate
+            }}</span>
+            <span class="cs-audit__list-count">{{ fileStatsLast7() }}</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

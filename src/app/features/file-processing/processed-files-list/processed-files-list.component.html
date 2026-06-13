@@ -1,81 +1,418 @@
-<div class="cs-list-page">
-  <div class="cs-list-page__header">
-    <div>
-      <p class="cs-list-page__eyebrow">Importação</p>
-      <h1>Arquivos processados</h1>
-      <span>Acompanhe arquivos ERP/Rede, status, erros, avisos e pendências comerciais.</span>
-    </div>
-    <a pButton routerLink="../" icon="pi pi-chart-line" label="Dashboard" severity="secondary"></a>
+<cs-page-header
+  [compact]="false"
+  [subtitle]="'processedFiles.subtitle' | translate"
+  [breadcrumb]="[
+    { label: ('breadcrumb.dashboard.title' | translate), url: '/' },
+    { label: ('menu.file.processing.title' | translate) },
+    { label: ('menu.file.processing.file' | translate) },
+  ]"
+>
+  <button
+    pButton
+    type="button"
+    (click)="refresh()"
+    icon="pi pi-refresh"
+    class="p-button-text p-button-sm"
+    [label]="'common.update' | translate"
+  ></button>
+</cs-page-header>
+
+<cs-filters-panel
+  (clear)="clear()"
+  [collapsed]="true"
+  (search)="search()"
+  [actionsAlign]="'start'"
+  [activeCount]="activeFiltersCount()"
+  [title]="'common.filter' | translate"
+  [activeFilterGroups]="activeFilterGroups()"
+>
+  <div class="grid formgrid gap-0 align-items-end">
+    <cs-advanced-period-date-filter
+      inputId="dateFile"
+      [value]="dateFile()"
+      [period]="periodDateFile()"
+      periodInputId="periodDateFile"
+      [disabled]="isDateFileDisabled()"
+      class="col-12 md:col-3 xl:col-2 p-1"
+      [periodOptions]="periodEnumOptions()"
+      (valueChange)="dateFile.set($event)"
+      [view]="setViewFormat(periodDateFile())"
+      [dateFormat]="setDateFormat(periodDateFile())"
+      [selectionMode]="setSelectionMode(periodDateFile())"
+      [dateLabel]="'processedFiles.fields.dateFile' | translate"
+      [periodLabel]="'processedFiles.fields.periodDateFile' | translate"
+      (periodChange)="onPeriodColumnChange(periodDateFile, dateFile, $event)"
+    ></cs-advanced-period-date-filter>
+
+    <cs-advanced-period-date-filter
+      inputId="dateImport"
+      [value]="dateImport()"
+      [period]="periodDateImport()"
+      periodInputId="periodDateImport"
+      [disabled]="isDateImportDisabled()"
+      class="col-12 md:col-3 xl:col-2 p-1"
+      [periodOptions]="periodEnumOptions()"
+      (valueChange)="dateImport.set($event)"
+      [view]="setViewFormat(periodDateImport())"
+      [dateFormat]="setDateFormat(periodDateImport())"
+      [selectionMode]="setSelectionMode(periodDateImport())"
+      [dateLabel]="'processedFiles.fields.dateImport' | translate"
+      [periodLabel]="'processedFiles.fields.periodDateImport' | translate"
+      (periodChange)="onPeriodColumnChange(periodDateImport, dateImport, $event)"
+    ></cs-advanced-period-date-filter>
+
+    <cs-advanced-multiselect-filter
+      inputId="group"
+      [value]="group()"
+      optionLabel="label"
+      optionValue="value"
+      [options]="groupOptions"
+      class="col-12 md:col-3 xl:col-2 p-1"
+      (valueChange)="group.set($event)"
+      [label]="'processedFiles.fields.origin' | translate"
+    ></cs-advanced-multiselect-filter>
+
+    <cs-advanced-multiselect-filter
+      inputId="status"
+      [value]="status()"
+      optionLabel="label"
+      optionValue="value"
+      [options]="statusOptions"
+      class="col-12 md:col-3 xl:col-2 p-1"
+      (valueChange)="status.set($event)"
+      [label]="'processedFiles.fields.status' | translate"
+    ></cs-advanced-multiselect-filter>
+
+    <cs-advanced-text-filter
+      inputId="fileName"
+      [value]="fileName()"
+      class="col-12 md:col-3 xl:col-2 p-1"
+      (valueChange)="fileName.set($event)"
+      [label]="'processedFiles.fields.fileName' | translate"
+    ></cs-advanced-text-filter>
   </div>
+</cs-filters-panel>
 
-  <p-card>
-    <p-table
-      [value]="rows()"
-      [lazy]="true"
-      [loading]="loading()"
-      [paginator]="true"
-      [rows]="pageSize()"
-      [totalRecords]="totalRecords()"
-      [rowsPerPageOptions]="[10, 15, 25, 50]"
-      sortField="dateImport"
-      [sortOrder]="-1"
-      styleClass="p-datatable-sm"
-      (onLazyLoad)="load($event)"
-    >
-      <ng-template pTemplate="header">
-        <tr>
-          <th pSortableColumn="file">Arquivo <p-sortIcon field="file"></p-sortIcon></th>
-          <th>Origem</th>
-          <th pSortableColumn="status">Status <p-sortIcon field="status"></p-sortIcon></th>
-          <th>Linhas</th>
-          <th>Pendências</th>
-          <th pSortableColumn="dateImport">
-            Importação <p-sortIcon field="dateImport"></p-sortIcon>
-          </th>
-          <th></th>
-        </tr>
-      </ng-template>
+<div class="surface-card border-round p-3 mt-3">
+  <p-table
+    #dt
+    stripedRows
+    dataKey="id"
+    size="small"
+    [rows]="rows"
+    [lazy]="true"
+    showGridlines
+    [value]="items()"
+    [rowHover]="true"
+    [paginator]="true"
+    sortMode="multiple"
+    stateStorage="local"
+    filterDisplay="menu"
+    class="cs-admin-table"
+    [loading]="facade.loading()"
+    [stateKey]="tableStateKey()"
+    [showCurrentPageReport]="true"
+    [totalRecords]="totalRecords()"
+    (onPage)="onPageChange($event)"
+    (onLazyLoad)="onLazyLoad($event)"
+    [paginatorDropdownAppendTo]="'body'"
+    [rowsPerPageOptions]="rowsPerPageOptions"
+    [currentPageReportTemplate]="'pagination.report' | translate"
+    [tableStyle]="{ width: '100%', 'min-width': '64rem', 'table-layout': 'fixed' }"
+  >
+    <ng-template pTemplate="colgroup">
+      <colgroup>
+        <!-- file -->
+        <col style="width: 220px" />
+        <!-- group/origin -->
+        <col style="width: 80px" />
+        <!-- status -->
+        <col style="width: 130px" />
+        <!-- lines -->
+        <col style="width: 140px" />
+        <!-- pending -->
+        <col style="width: 90px" />
+        <!-- dateImport -->
+        <col style="width: 110px" />
+        <!-- actions -->
+        <col style="width: 55px" />
+      </colgroup>
+    </ng-template>
 
-      <ng-template pTemplate="body" let-file>
-        <tr>
-          <td class="cs-file-cell">
-            <strong>{{ file.file }}</strong
-            ><small>{{ file.statusMessage || file.errorMessage }}</small>
-          </td>
-          <td>{{ file.originFile || file.group || '-' }}</td>
-          <td><cs-tag [value]="file.status" [tone]="fileStatusSeverity(file.status)"></cs-tag></td>
-          <td>
-            <span>{{ file.processedLines || 0 }}/{{ file.totalLines || 0 }}</span>
-            <small>{{ file.warningLines || 0 }} avisos · {{ file.errorLines || 0 }} erros</small>
-          </td>
-          <td>
-            <span>{{
-              (file.pendingContractLines || 0) + (file.pendingBusinessContextLines || 0)
-            }}</span>
-            <small
-              >Contrato: {{ file.pendingContractLines || 0 }} · Contexto:
-              {{ file.pendingBusinessContextLines || 0 }}</small
+    <ng-template pTemplate="header">
+      <tr>
+        <th pSortableColumn="file">
+          <div class="th-flex">
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'processedFiles.fields.fileName' | translate"
             >
-          </td>
-          <td>{{ file.dateImport | date: 'short' }}</td>
-          <td class="text-right">
-            <a
-              pButton
-              [routerLink]="[file.id]"
-              icon="pi pi-eye"
-              text
-              rounded
-              pTooltip="Detalhar"
-            ></a>
-          </td>
-        </tr>
-      </ng-template>
+              {{ 'processedFiles.fields.fileNameShort' | translate }}
+            </span>
+            <span class="th-icons">
+              <p-sortIcon field="file"></p-sortIcon>
+              <p-columnFilter
+                display="menu"
+                field="file"
+                #fileNameColumnFilter
+                [showOperator]="false"
+                [showAddButton]="false"
+                [showMatchModes]="false"
+                [showClearButton]="false"
+                [showApplyButton]="false"
+                styleClass="cs-colfilter"
+              >
+                <ng-template pTemplate="filter" let-filter="filterCallback">
+                  <cs-column-filter-shell
+                    minWidth="20rem"
+                    [clearLabel]="'common.clear' | translate"
+                    [applyLabel]="'common.apply' | translate"
+                    (clear)="
+                      clearTextColumnFilter(fileNameColumnDraft, filter, fileNameColumnFilter)
+                    "
+                    (apply)="
+                      applyTextColumnFilter(fileNameColumnDraft, filter, fileNameColumnFilter)
+                    "
+                  >
+                    <input
+                      pInputText
+                      class="w-full"
+                      [placeholder]="'processedFiles.fields.fileName' | translate"
+                      [ngModel]="fileNameColumnDraft()"
+                      (ngModelChange)="fileNameColumnDraft.set($event)"
+                    />
+                  </cs-column-filter-shell>
+                </ng-template>
+              </p-columnFilter>
+            </span>
+          </div>
+        </th>
 
-      <ng-template pTemplate="emptymessage">
-        <tr>
-          <td colspan="7">Nenhum arquivo processado encontrado.</td>
-        </tr>
-      </ng-template>
-    </p-table>
-  </p-card>
+        <th>
+          <div class="th-flex text-center">
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'processedFiles.fields.origin' | translate"
+            >
+              {{ 'processedFiles.fields.origin' | translate }}
+            </span>
+            <span class="th-icons">
+              <p-columnFilter
+                display="menu"
+                matchMode="in"
+                field="group"
+                #groupColumnFilter
+                [showOperator]="false"
+                [showAddButton]="false"
+                [showMatchModes]="false"
+                [showClearButton]="false"
+                [showApplyButton]="false"
+                styleClass="cs-colfilter"
+              >
+                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                  <cs-column-filter-shell
+                    minWidth="14rem"
+                    [clearLabel]="'common.clear' | translate"
+                    [applyLabel]="'common.apply' | translate"
+                    (clear)="clearArrayColumnFilter(groupColumnDraft, filter, groupColumnFilter)"
+                    (apply)="applyArrayColumnFilter(groupColumnDraft, filter, groupColumnFilter)"
+                  >
+                    <p-multiSelect
+                      class="w-full"
+                      optionLabel="label"
+                      optionValue="value"
+                      [showClear]="true"
+                      [showToggleAll]="false"
+                      [options]="groupOptions"
+                      [ngModel]="groupColumnDraft()"
+                      [placeholder]="'common.all' | translate"
+                      (ngModelChange)="setArrayColumnDraft(groupColumnDraft, $event)"
+                    ></p-multiSelect>
+                  </cs-column-filter-shell>
+                </ng-template>
+              </p-columnFilter>
+            </span>
+          </div>
+        </th>
+
+        <th pSortableColumn="status">
+          <div class="th-flex text-center">
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'processedFiles.fields.status' | translate"
+            >
+              {{ 'processedFiles.fields.status' | translate }}
+            </span>
+            <span class="th-icons">
+              <p-sortIcon field="status"></p-sortIcon>
+              <p-columnFilter
+                display="menu"
+                matchMode="in"
+                field="status"
+                #statusColumnFilter
+                [showOperator]="false"
+                [showAddButton]="false"
+                [showMatchModes]="false"
+                [showClearButton]="false"
+                [showApplyButton]="false"
+                styleClass="cs-colfilter"
+              >
+                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                  <cs-column-filter-shell
+                    minWidth="16rem"
+                    [clearLabel]="'common.clear' | translate"
+                    [applyLabel]="'common.apply' | translate"
+                    (clear)="clearArrayColumnFilter(statusColumnDraft, filter, statusColumnFilter)"
+                    (apply)="applyArrayColumnFilter(statusColumnDraft, filter, statusColumnFilter)"
+                  >
+                    <p-multiSelect
+                      class="w-full"
+                      optionLabel="label"
+                      optionValue="value"
+                      [showClear]="true"
+                      [showToggleAll]="false"
+                      [options]="statusOptions"
+                      [ngModel]="statusColumnDraft()"
+                      [placeholder]="'common.all' | translate"
+                      (ngModelChange)="setArrayColumnDraft(statusColumnDraft, $event)"
+                    ></p-multiSelect>
+                  </cs-column-filter-shell>
+                </ng-template>
+              </p-columnFilter>
+            </span>
+          </div>
+        </th>
+
+        <th>
+          <div class="th-flex text-center">
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'processedFiles.fields.lines' | translate"
+            >
+              {{ 'processedFiles.fields.lines' | translate }}
+            </span>
+          </div>
+        </th>
+
+        <th>
+          <div class="th-flex text-center">
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'processedFiles.fields.pending' | translate"
+            >
+              {{ 'processedFiles.fields.pending' | translate }}
+            </span>
+          </div>
+        </th>
+
+        <th pSortableColumn="dateImport">
+          <div class="th-flex text-center">
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'processedFiles.fields.dateImport' | translate"
+            >
+              {{ 'processedFiles.fields.dateImportShort' | translate }}
+            </span>
+            <span class="th-icons">
+              <p-sortIcon field="dateImport"></p-sortIcon>
+            </span>
+          </div>
+        </th>
+
+        <th class="text-center">
+          <div class="th-flex th-flex--compact th-flex--center">
+            <span class="th-label" tooltipPosition="top" [pTooltip]="'common.actions' | translate">
+              {{ 'common.actions' | translate }}
+            </span>
+          </div>
+        </th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-row>
+      <tr>
+        <td>
+          <strong class="cs-file-name" [pTooltip]="row.file" tooltipPosition="top">
+            {{ row.file }}
+          </strong>
+          @if (row.statusMessage || row.errorMessage) {
+            <small class="cs-file-message">{{ row.statusMessage || row.errorMessage }}</small>
+          }
+        </td>
+
+        <td class="text-center">
+          <cs-tag tone="secondary" [value]="row.originFile || row.group || '-'"></cs-tag>
+        </td>
+
+        <td class="text-center">
+          <cs-tag [value]="row.status" [tone]="fileStatusSeverity(row.status)"></cs-tag>
+        </td>
+
+        <td>
+          <div class="cs-file-lines">
+            <span class="cs-file-lines__count">
+              {{ row.processedLines || 0 }}/{{ row.totalLines || 0 }}
+            </span>
+            @if ((row.warningLines || 0) > 0 || (row.errorLines || 0) > 0) {
+              <small class="cs-file-lines__detail">
+                @if ((row.warningLines || 0) > 0) {
+                  {{ row.warningLines }} avisos
+                }
+                @if ((row.warningLines || 0) > 0 && (row.errorLines || 0) > 0) {
+                  ·
+                }
+                @if ((row.errorLines || 0) > 0) {
+                  {{ row.errorLines }} erros
+                }
+              </small>
+            }
+          </div>
+        </td>
+
+        <td class="text-center">
+          {{ (row.pendingContractLines || 0) + (row.pendingBusinessContextLines || 0) }}
+        </td>
+
+        <td class="text-center">
+          <span
+            [pTooltip]="(row.dateImport | date: 'dd/MM/yyyy HH:mm') || ''"
+            tooltipPosition="top"
+          >
+            {{ row.dateImport | date: 'dd/MM/yyyy' }}
+          </span>
+        </td>
+
+        <td class="text-center">
+          <div class="table-actions justify-content-center">
+            <a
+              text
+              pButton
+              rounded
+              size="small"
+              type="button"
+              icon="pi pi-eye"
+              tooltipPosition="left"
+              class="p-button-text p-button-sm"
+              [routerLink]="[row.id]"
+              [pTooltip]="'common.view' | translate"
+            ></a>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="7" class="text-center">
+          {{ 'common.noRecordsFound' | translate }}
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
 </div>

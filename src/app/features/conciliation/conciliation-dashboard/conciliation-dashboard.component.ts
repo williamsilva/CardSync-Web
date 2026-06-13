@@ -2,6 +2,7 @@ import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Component, computed, inject, signal } from '@angular/core';
 
+import { finalize } from 'rxjs';
 import { CardModule } from 'primeng/card';
 import { Tooltip } from 'primeng/tooltip';
 import { ButtonModule } from 'primeng/button';
@@ -10,26 +11,27 @@ import { ProgressBarModule } from 'primeng/progressbar';
 
 import { CsTagComponent } from '@shared/ui';
 import { formatCurrency } from '../conciliation-ui';
+import { CsCurrencyPipe } from '@shared/pipes/cs-currency.pipe';
 import { ConciliationDashboardModel } from '@models/conciliation.models';
 import { ConciliationService } from '@features/service/conciliation.service';
 import { ConciliationWaitingFacade } from '@features/facade/conciliation-waiting.facade';
-import { finalize } from 'rxjs';
 
 @Component({
-  selector: 'cs-conciliation-dashboard',
   standalone: true,
+  selector: 'cs-conciliation-dashboard',
+  styleUrl: './conciliation-dashboard.component.scss',
+  templateUrl: './conciliation-dashboard.component.html',
   imports: [
     CommonModule,
+    Tooltip,
     RouterLink,
-    ButtonModule,
     CardModule,
+    ButtonModule,
+    CsCurrencyPipe,
+    CsTagComponent,
     TranslateModule,
     ProgressBarModule,
-    CsTagComponent,
-    Tooltip,
   ],
-  templateUrl: './conciliation-dashboard.component.html',
-  styleUrl: './conciliation-dashboard.component.scss',
 })
 export class ConciliationDashboardComponent {
   private readonly service = inject(ConciliationService);
@@ -37,6 +39,7 @@ export class ConciliationDashboardComponent {
   protected readonly loading = signal(false);
   protected readonly reconcilingBank = signal(false);
   protected readonly reconcilingFees = signal(false);
+  protected readonly reconcileManualSwapped = signal(false);
   protected readonly reconcilingErpVsAcquirer = signal(false);
 
   readonly facade = inject(ConciliationWaitingFacade);
@@ -74,6 +77,19 @@ export class ConciliationDashboardComponent {
     this.facade
       .reconcileErpVsAcquirer()
       .pipe(finalize(() => this.reconcilingErpVsAcquirer.set(false)))
+      .subscribe({
+        next: () => {},
+      });
+  }
+
+  protected processReconcileManualSwapped(): void {
+    if (this.reconcilingErpVsAcquirer()) return;
+
+    this.reconcileManualSwapped.set(true);
+
+    this.facade
+      .reconcileManualSwapped()
+      .pipe(finalize(() => this.reconcileManualSwapped.set(false)))
       .subscribe({
         next: () => {},
       });

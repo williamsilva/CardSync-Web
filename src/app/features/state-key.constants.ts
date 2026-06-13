@@ -1,19 +1,5 @@
 export const STATE_KEY = {
   CARDSYNC: {
-    FILE: {
-      TABLE: {
-        ROWS: {
-          V1: 'cardsync.file.table.rows',
-        },
-        STATE: {
-          V1: 'cardsync.file.table.state.v1',
-        },
-      },
-
-      FILTERS: {
-        V1: 'cardsync.file.filters.v1',
-      },
-    },
     ACQ: {
       SALES: {
         TABLE: {
@@ -116,6 +102,77 @@ export const STATE_KEY = {
         V1: 'cardsync.sales_summary.filters.v1',
       },
     },
+    /* Extratos bancarios */
+    BANK_STATEMENT: {
+      TABLE: {
+        ROWS: {
+          V1: 'cardsync.bank_statement.table.rows',
+        },
+        STATE: {
+          V1: 'cardsync.bank_statement.table.state.v1',
+        },
+      },
+
+      FILTERS: {
+        V1: 'cardsync.bank_statement.filters.v1',
+      },
+    },
+    /* Arquivos Porcessados */
+    PROCESSED_FILES: {
+      FILES: {
+        TABLE: {
+          ROWS: {
+            V1: 'cardsync.processed_files.files.table.rows.v1',
+          },
+          STATE: {
+            V1: 'cardsync.processed_files.files.table.state.v1',
+          },
+        },
+
+        FILTERS: {
+          V1: 'cardsync.processed_files.files.filters.v1',
+        },
+      },
+      DASHBOARD: {
+        TABLE: {
+          ROWS: { V1: 'cardsync.file_processing_dashboard.table.rows' },
+          STATE: { V1: 'cardsync.file_processing_dashboard.table.state.v1' },
+        },
+        FILTERS: { V1: 'cardsync.file_processing_dashboard.filters.v1' },
+      },
+    },
+    /* Ajustamentos */
+    ADJUSTMENT: {
+      CHARGEBACK_REQUESTS: {
+        TABLE: {
+          ROWS: { V1: 'cardsync.adjustment.chargeback-requests.table.rows' },
+          STATE: { V1: 'cardsync.adjustment.chargeback-requests.table.state.v1' },
+        },
+        FILTERS: { V1: 'cardsync.adjustment.chargeback-requests.filters.v1' },
+      },
+      CANCELLATION: {
+        TABLE: {
+          ROWS: { V1: 'cardsync.adjustment.cancellation.table.rows' },
+          STATE: { V1: 'cardsync.adjustment.cancellation.table.state.v1' },
+        },
+        FILTERS: { V1: 'cardsync.adjustment.cancellation.filters.v1' },
+      },
+      TARIFFS: {
+        TABLE: {
+          ROWS: {
+            V1: 'cardsync.adjustment.tariffs.table.rows',
+          },
+          STATE: {
+            V1: 'cardsync.adjustment.tariffs.table.state.v1',
+          },
+        },
+
+        FILTERS: {
+          V1: 'cardsync.adjustment.tariffs.filters.v1',
+        },
+      },
+    },
+    /* Conciliação */
     CONCILIATION: {
       FEES: {
         TABLE: {

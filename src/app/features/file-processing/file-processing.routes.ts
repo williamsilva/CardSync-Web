@@ -20,6 +20,14 @@ export const FILE_PROCESSING_ROUTES: Routes = [
       ),
   },
   {
+    path: 'calendar',
+    title: 'Agenda de Arquivos Importados',
+    loadComponent: () =>
+      import('./imported-files-calendar/imported-files-calendar.component').then(
+        (m) => m.ImportedFilesCalendarComponent,
+      ),
+  },
+  {
     path: 'files',
     title: 'Arquivos Processados',
     loadComponent: () =>
@@ -31,7 +39,7 @@ export const FILE_PROCESSING_ROUTES: Routes = [
     path: 'files/:id',
     title: 'Detalhe do Arquivo',
     loadComponent: () =>
-      import('./processed-file-detail/processed-file-detail.component').then(
+      import('./file-processing-dashboard/detail/detail.component').then(
         (m) => m.ProcessedFileDetailComponent,
       ),
   },
@@ -51,45 +59,7 @@ export const FILE_PROCESSING_ROUTES: Routes = [
         (m) => m.ErpPendingSalesComponent,
       ),
   },
-  {
-    path: 'rede/movements',
-    title: 'Movimentos Rede',
-    loadComponent: () =>
-      import('./rede-movements/rede-movements.component').then((m) => m.RedeMovementsComponent),
-  },
-  {
-    path: 'rede/credit-orders',
-    title: 'Ordens de Crédito Rede',
-    loadComponent: () =>
-      import('./rede-credit-orders/rede-credit-orders.component').then(
-        (m) => m.RedeCreditOrdersComponent,
-      ),
-  },
-  {
-    path: 'rede/adjustments',
-    title: 'Ajustes Rede',
-    loadComponent: () =>
-      import('./rede-adjustments/rede-adjustments.component').then(
-        (m) => m.RedeAdjustmentsComponent,
-      ),
-  },
 
-  {
-    path: 'rede/pending-debts',
-    title: 'Débitos Pendentes Rede',
-    loadComponent: () =>
-      import('./rede-pending-debts/rede-pending-debts.component').then(
-        (m) => m.RedePendingDebtsComponent,
-      ),
-  },
-  {
-    path: 'rede/settled-debts',
-    title: 'Débitos Liquidados Rede',
-    loadComponent: () =>
-      import('./rede-settled-debts/rede-settled-debts.component').then(
-        (m) => m.RedeSettledDebtsComponent,
-      ),
-  },
   {
     path: 'rede/totalizers',
     title: 'Totalizadores Rede',

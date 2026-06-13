@@ -2,7 +2,7 @@
   [compact]="false"
   [subtitle]="'conciliation.pageDescription.missingOther' | translate"
   [breadcrumb]="[
-    { label: ('breadcrumb.dashboard' | translate), url: '/' },
+    { label: ('breadcrumb.dashboard.title' | translate), url: '/' },
     { label: ('breadcrumb.conciliation.title' | translate), url: '/conciliation' },
     { label: 'conciliation.pageTitle.missingOther' | translate },
   ]"
@@ -241,17 +241,11 @@
             >{{ 'common.grossValue' | translate }}: {{ totals.totalGrossValue | csCurrency }}</span
           >
           <span class="px-2 py-1 border-round surface-100"
-            >{{ 'common.discountValue' | translate }}: {{ totals.totalFeeValue | csCurrency }}</span
-          >
-          <span class="px-2 py-1 border-round surface-100"
             >{{ 'common.liquidValue' | translate }}: {{ totals.totalNetValue | csCurrency }}</span
-          >
-          <span class="px-2 py-1 border-round surface-100"
-            >{{ 'common.adjustmentValue' | translate }}:
-            {{ totals.totalAdjustments | csCurrency }}</span
           >
         </div>
       }
+      <div class="flex flex-wrap justify-content-end gap-2 w-full md:w-auto md:ml-auto"></div>
     </div>
   </div>
 

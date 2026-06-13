@@ -17,7 +17,7 @@ export enum AdjustmentReasonEnum {
   AL_POS_PINPAD_TX_CONECT = 'AL_POS_PINPAD_TX_CONECT',
 }
 
-export type StatusTransactionInput = AdjustmentReasonEnum | string | number | null | undefined;
+export type AdjustmentReasonInput = AdjustmentReasonEnum | string | number | null | undefined;
 
 export const STATUS_CODE_MAP: Record<number, AdjustmentReasonEnum> = {
   0: AdjustmentReasonEnum.NULL,
@@ -36,15 +36,15 @@ export const STATUS_CODE_MAP: Record<number, AdjustmentReasonEnum> = {
 };
 
 export function normalizeAdjustmentReasonEnum(
-  statusTransaction: StatusTransactionInput,
+  value: AdjustmentReasonInput,
 ): AdjustmentReasonEnum | null {
-  if (statusTransaction == null) return null;
+  if (value == null) return null;
 
-  if (typeof statusTransaction === 'number') {
-    return STATUS_CODE_MAP[statusTransaction] ?? null;
+  if (typeof value === 'number') {
+    return STATUS_CODE_MAP[value] ?? null;
   }
 
-  const normalized = String(statusTransaction).trim().toUpperCase();
+  const normalized = String(value).trim().toUpperCase();
 
   switch (normalized) {
     case AdjustmentReasonEnum.NULL:
@@ -71,13 +71,28 @@ export function normalizeAdjustmentReasonEnum(
     case AdjustmentReasonEnum.NAO_TOKENIZADAS:
       return AdjustmentReasonEnum.NAO_TOKENIZADAS;
 
+    case AdjustmentReasonEnum.CANCEL_VENDA_DEBITO:
+      return AdjustmentReasonEnum.CANCEL_VENDA_DEBITO;
+
+    case AdjustmentReasonEnum.CANCEL_CHBK_MAESTRO:
+      return AdjustmentReasonEnum.CANCEL_CHBK_MAESTRO;
+
+    case AdjustmentReasonEnum.POS_INATIV_CONEC_PIN:
+      return AdjustmentReasonEnum.POS_INATIV_CONEC_PIN;
+
+    case AdjustmentReasonEnum.AL_POS_PINPAD_TX_CONECT:
+      return AdjustmentReasonEnum.AL_POS_PINPAD_TX_CONECT;
+
+    case AdjustmentReasonEnum.TRF_AD_EXCESSO_CBACK:
+      return AdjustmentReasonEnum.TRF_AD_EXCESSO_CBACK;
+
     default:
       return null;
   }
 }
 
-export function adjustmentReasonEnumSeverity(statusTransaction: StatusTransactionInput): CsTagTone {
-  switch (normalizeAdjustmentReasonEnum(statusTransaction)) {
+export function adjustmentReasonEnumSeverity(value: AdjustmentReasonInput): CsTagTone {
+  switch (normalizeAdjustmentReasonEnum(value)) {
     case AdjustmentReasonEnum.TX_MAN_TEF:
       return 'warn';
 
@@ -99,16 +114,28 @@ export function adjustmentReasonEnumSeverity(statusTransaction: StatusTransactio
     case AdjustmentReasonEnum.NAO_TOKENIZADAS:
       return 'money';
 
+    case AdjustmentReasonEnum.CANCEL_VENDA_DEBITO:
+      return 'info';
+
+    case AdjustmentReasonEnum.CANCEL_CHBK_MAESTRO:
+      return 'orange';
+
+    case AdjustmentReasonEnum.POS_INATIV_CONEC_PIN:
+      return 'warn';
+
+    case AdjustmentReasonEnum.AL_POS_PINPAD_TX_CONECT:
+      return 'warn';
+
+    case AdjustmentReasonEnum.TRF_AD_EXCESSO_CBACK:
+      return 'danger';
+
     default:
       return 'contrast';
   }
 }
 
-export function adjustmentReasonEnumLabel(
-  statusTransaction: StatusTransactionInput,
-  i18n: I18nService,
-): string {
-  switch (normalizeAdjustmentReasonEnum(statusTransaction)) {
+export function adjustmentReasonEnumLabel(value: AdjustmentReasonInput, i18n: I18nService): string {
+  switch (normalizeAdjustmentReasonEnum(value)) {
     case AdjustmentReasonEnum.TX_MAN_TEF:
       return i18n.tUi('enum.adjustmentReasonEnum.txManTef');
 
@@ -130,6 +157,21 @@ export function adjustmentReasonEnumLabel(
     case AdjustmentReasonEnum.NAO_TOKENIZADAS:
       return i18n.tUi('enum.adjustmentReasonEnum.naoTokenizadas');
 
+    case AdjustmentReasonEnum.CANCEL_VENDA_DEBITO:
+      return i18n.tUi('enum.adjustmentReasonEnum.cancelVendaDebito');
+
+    case AdjustmentReasonEnum.CANCEL_CHBK_MAESTRO:
+      return i18n.tUi('enum.adjustmentReasonEnum.cancelChbkMaestro');
+
+    case AdjustmentReasonEnum.POS_INATIV_CONEC_PIN:
+      return i18n.tUi('enum.adjustmentReasonEnum.posInativConecPin');
+
+    case AdjustmentReasonEnum.AL_POS_PINPAD_TX_CONECT:
+      return i18n.tUi('enum.adjustmentReasonEnum.alPosPinpadTxConect');
+
+    case AdjustmentReasonEnum.TRF_AD_EXCESSO_CBACK:
+      return i18n.tUi('enum.adjustmentReasonEnum.trfAdExcessoCback');
+
     case AdjustmentReasonEnum.NULL:
       return i18n.tUi('enum.adjustmentReasonEnum.null', 'N/A');
 
@@ -138,14 +180,18 @@ export function adjustmentReasonEnumLabel(
   }
 }
 
-export function allAdjustmentReasonEnum(): AdjustmentReasonEnum[] {
+export function allAdjustmentCancellationReasonEnum(): AdjustmentReasonEnum[] {
+  return [AdjustmentReasonEnum.CANCEL_VENDAS, AdjustmentReasonEnum.CANCEL_VENDA_DEBITO];
+}
+export function allAdjustmentTariffsReasonEnum(): AdjustmentReasonEnum[] {
   return [
-    AdjustmentReasonEnum.SALES_ANTICIPATION,
-    AdjustmentReasonEnum.CANCEL_VENDAS,
-    AdjustmentReasonEnum.NAO_TOKENIZADAS,
     AdjustmentReasonEnum.TX_MAN_TEF,
-    AdjustmentReasonEnum.SALE_DISPUTE,
-    AdjustmentReasonEnum.CHARGEBACK,
     AdjustmentReasonEnum.TARIFA_CBK,
+    AdjustmentReasonEnum.SALES_ANTICIPATION,
+    AdjustmentReasonEnum.TRF_AD_EXCESSO_CBACK,
+    AdjustmentReasonEnum.NAO_TOKENIZADAS,
+    AdjustmentReasonEnum.AL_POS_PINPAD_TX_CONECT,
+    AdjustmentReasonEnum.POS_INATIV_CONEC_PIN,
+    AdjustmentReasonEnum.CANCEL_CHBK_MAESTRO,
   ];
 }

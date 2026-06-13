@@ -1,0 +1,297 @@
+.cs-mgmt {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 0.25rem;
+
+  // ─── 2×2 Grid ────────────────────────────────────────────────────────────────
+
+  &__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+
+    @media (max-width: 1024px) {
+      grid-template-columns: 1fr;
+    }
+
+    > * {
+      min-width: 0;
+    }
+  }
+
+  // ─── Card header ─────────────────────────────────────────────────────────────
+
+  &__card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 1rem 1.25rem 0;
+  }
+
+  &__card-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--text-color);
+  }
+
+  &__card-icon {
+    font-size: 1rem;
+
+    &--green {
+      color: #27ae60;
+    }
+    &--blue {
+      color: #3b82f6;
+    }
+  }
+
+  &__card-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  &__groupby-label {
+    font-size: 0.8125rem;
+    color: var(--text-color-secondary);
+    white-space: nowrap;
+  }
+
+  &__kebab {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    border: none;
+    background: transparent;
+    color: var(--text-color-secondary);
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background 0.15s;
+    font-size: 0.875rem;
+
+    &:hover {
+      background: var(--surface-hover);
+    }
+  }
+
+  // ─── Chart ───────────────────────────────────────────────────────────────────
+
+  &__chart-wrap {
+    position: relative;
+    height: 200px;
+    margin-bottom: 0.75rem;
+  }
+
+  // ─── Table ───────────────────────────────────────────────────────────────────
+
+  &__table-wrap {
+    overflow-x: auto;
+  }
+
+  &__table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.8rem;
+
+    thead tr {
+      background: #1e293b;
+
+      th {
+        color: #fff;
+        font-weight: 600;
+        font-size: 0.75rem;
+        padding: 0.45rem 0.6rem;
+        white-space: nowrap;
+        text-align: left;
+
+        &.cs-mgmt__col-right {
+          text-align: right;
+        }
+        &.cs-mgmt__col-pct {
+          text-align: center;
+          min-width: 110px;
+        }
+      }
+    }
+
+    tbody tr {
+      border-bottom: 1px solid var(--surface-border);
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      &:hover {
+        background: var(--surface-hover);
+      }
+
+      td {
+        padding: 0.4rem 0.6rem;
+        color: var(--text-color);
+        white-space: nowrap;
+
+        &.cs-mgmt__col-right {
+          text-align: right;
+        }
+        &.cs-mgmt__col-pct {
+          min-width: 110px;
+        }
+      }
+    }
+  }
+
+  &__table-total {
+    font-weight: 600;
+    background: color-mix(in srgb, var(--surface-border) 30%, var(--surface-card)) !important;
+  }
+
+  // ─── Progress bar cell ───────────────────────────────────────────────────────
+
+  &__progress-wrap {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
+  &__pct-text {
+    font-size: 0.75rem;
+    color: var(--text-color-secondary);
+    white-space: nowrap;
+    min-width: 2.75rem;
+    text-align: right;
+  }
+
+  // ─── Show more ───────────────────────────────────────────────────────────────
+
+  &__show-more {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.375rem;
+    width: 100%;
+    padding: 0.4rem;
+    font-size: 0.8125rem;
+    color: var(--primary-color);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+    margin-top: 0.25rem;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  // ─── States ──────────────────────────────────────────────────────────────────
+
+  &__loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 3rem;
+    color: var(--text-color-secondary);
+    font-size: 1.5rem;
+  }
+
+  &__empty {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 3rem;
+    color: var(--text-color-secondary);
+    font-size: 0.875rem;
+  }
+
+  // ─── Debit summary cards ─────────────────────────────────────────────────────
+
+  &__debit-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+    margin-top: 0.75rem;
+
+    @media (max-width: 600px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__debit-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 0.875rem 1rem;
+    border-radius: 8px;
+
+    &--yellow {
+      background: #f59e0b;
+      color: #fff;
+    }
+    &--red {
+      background: #ef4444;
+      color: #fff;
+    }
+    &--blue {
+      background: #3b82f6;
+      color: #fff;
+    }
+  }
+
+  &__debit-card-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    opacity: 0.9;
+  }
+
+  &__debit-card-value {
+    font-size: 1.25rem;
+    font-weight: 700;
+    line-height: 1.2;
+    margin: 0.1rem 0;
+  }
+
+  &__debit-card-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    font-size: 0.75rem;
+    opacity: 0.88;
+
+    i {
+      margin-right: 0.2rem;
+      font-size: 0.7rem;
+    }
+  }
+}
+
+// ─── PrimeNG overrides (::ng-deep must be at root level) ─────────────────────
+
+:host ::ng-deep {
+  .cs-mgmt__section-card .p-card-body {
+    padding: 0.75rem 1.25rem 1rem;
+  }
+  .cs-mgmt__section-card .p-card-header {
+    padding: 0;
+  }
+
+  .cs-mgmt__progress {
+    flex: 1;
+    height: 10px;
+    border-radius: 999px;
+    overflow: hidden;
+
+    .p-progressbar-value {
+      background: #27ae60;
+    }
+  }
+}

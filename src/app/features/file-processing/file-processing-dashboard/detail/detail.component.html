@@ -1,0 +1,116 @@
+<div class="cs-detail-page">
+  <div class="cs-detail-page__header">
+    <div>
+      <p class="cs-detail-page__eyebrow">{{ 'processedFileDetail.eyebrow' | translate }}</p>
+      <h1>{{ file()?.file || ('processedFileDetail.fileFallback' | translate) }}</h1>
+      <span>{{
+        file()?.statusMessage ||
+          file()?.errorMessage ||
+          ('processedFileDetail.subtitleFallback' | translate)
+      }}</span>
+    </div>
+    <div class="cs-detail-page__actions">
+      <a
+        pButton
+        routerLink="../"
+        icon="pi pi-arrow-left"
+        severity="secondary"
+        [label]="'common.back' | translate"
+      ></a>
+      <button
+        pButton
+        icon="pi pi-refresh"
+        [label]="'common.update' | translate"
+        [loading]="loading()"
+        (click)="reload()"
+      ></button>
+    </div>
+  </div>
+
+  @if (summary(); as s) {
+    <section class="cs-summary">
+      <p-card>
+        <div class="cs-summary__top">
+          <div>
+            <strong>{{ 'processedFileDetail.summary.status' | translate }}</strong>
+            <cs-tag [value]="s.status" [tone]="fileStatusSeverity(s.status)"></cs-tag>
+          </div>
+          <div>
+            <strong>{{ 'processedFileDetail.summary.processed' | translate }}</strong>
+            <span>{{ processedPercent() }}%</span>
+          </div>
+          <div>
+            <strong>{{ 'processedFileDetail.summary.startedAt' | translate }}</strong>
+            <span>{{ s.startedAt | date: 'short' }}</span>
+          </div>
+          <div>
+            <strong>{{ 'processedFileDetail.summary.finishedAt' | translate }}</strong>
+            <span>{{ s.finishedAt | date: 'short' }}</span>
+          </div>
+        </div>
+      </p-card>
+
+      <p-card>
+        <div class="cs-kpis">
+          <div>
+            <strong>{{ s.totalLines || 0 }}</strong>
+            <span>{{ 'processedFileDetail.kpis.totalLines' | translate }}</span>
+          </div>
+          <div>
+            <strong>{{ s.processedLines || 0 }}</strong>
+            <span>{{ 'processedFileDetail.kpis.processedLines' | translate }}</span>
+          </div>
+          <div>
+            <strong>{{ s.warningLines || 0 }}</strong>
+            <span>{{ 'processedFileDetail.kpis.warningLines' | translate }}</span>
+          </div>
+          <div>
+            <strong>{{ s.errorLines || 0 }}</strong>
+            <span>{{ 'processedFileDetail.kpis.errorLines' | translate }}</span>
+          </div>
+          <div>
+            <strong>{{ s.pendingContractLines || 0 }}</strong>
+            <span>{{ 'processedFileDetail.kpis.pendingContract' | translate }}</span>
+          </div>
+          <div>
+            <strong>{{ s.pendingBusinessContextLines || 0 }}</strong>
+            <span>{{ 'processedFileDetail.kpis.pendingContext' | translate }}</span>
+          </div>
+        </div>
+      </p-card>
+    </section>
+  }
+
+  <p-card [header]="'processedFileDetail.errors.tableHeader' | translate">
+    <p-table [rows]="10" size="small" [value]="errors()" [paginator]="true" [loading]="loading()">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>{{ 'processedFileDetail.errors.lineNumber' | translate }}</th>
+          <th>{{ 'processedFileDetail.errors.type' | translate }}</th>
+          <th>{{ 'processedFileDetail.errors.code' | translate }}</th>
+          <th>{{ 'processedFileDetail.errors.message' | translate }}</th>
+          <th>{{ 'processedFileDetail.errors.date' | translate }}</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-error>
+        <tr>
+          <td>{{ error.lineNumber || '-' }}</td>
+          <td><cs-tag [value]="error.errorType || '-'" severity="warn"></cs-tag></td>
+          <td>
+            <code>{{ error.errorCode }}</code>
+          </td>
+          <td>
+            <strong>{{ error.message }}</strong>
+            <small>{{ error.rawLine }}</small>
+          </td>
+          <td>{{ error.createdAt | date: 'short' }}</td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="5">{{ 'processedFileDetail.errors.empty' | translate }}</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </p-card>
+</div>

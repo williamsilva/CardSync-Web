@@ -1,27 +1,30 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import { Observable } from 'rxjs';
+import { HttpClient, HttpParams } from '@angular/common/http';
 
+import { map, Observable } from 'rxjs';
+
+import { environment } from 'environments/environment';
+import { HalPagedResponse } from '@core/api/page.model';
+import { ListQueryDto } from '@shared/features/list-query/list-query.types';
+import { ProcessedFilesAdvancedFilters } from '@features/filter/processed-files.filters';
 import {
-  BankReconciliationResultModel,
-  BankReleaseModel,
-  ErpPendingSaleModel,
-  FileProcessingDashboardModel,
-  FileProcessingDivergenceContextModel,
   PageQuery,
   PageResponse,
-  ProcessedFileErrorModel,
+  BankReleaseModel,
   ProcessedFileModel,
-  ProcessedFileSummaryModel,
-  RedeAdjustmentModel,
-  RedeCreditOrderModel,
-  RedePendingDebtModel,
-  RedeSettledDebtModel,
-  RedeTotalizerModel,
-  ReprocessPendingErpResultModel,
+  ErpPendingSaleModel,
+  ProcessedFileApiModel,
   ScheduleStatusResponse,
+  ProcessedFileErrorModel,
+  ProcessedFileSummaryModel,
+  ImportedFileCalendarModel,
+  FileProcessingTotalsModel,
+  mapProcessedFilesApiModels,
+  FileProcessingDashboardModel,
+  BankReconciliationResultModel,
+  ReprocessPendingErpResultModel,
+  FileProcessingDivergenceContextModel,
 } from '../models/file-processing.models';
-import { environment } from 'environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class FileProcessingService {
@@ -59,12 +62,36 @@ export class FileProcessingService {
     });
   }
 
+  getImportedFilesCalendar(month: string): Observable<ImportedFileCalendarModel> {
+    return this.http.get<ImportedFileCalendarModel>(`${this.baseUrl}/files/calendar`, {
+      params: { month },
+      withCredentials: true,
+    });
+  }
+
   processErp(): Observable<void> {
     return this.http.post<void>(`${this.baseUrl}/erp/process`, {}, { withCredentials: true });
   }
 
   processRede(): Observable<void> {
     return this.http.post<void>(`${this.baseUrl}/rede/process`, {}, { withCredentials: true });
+  }
+
+  searchFilesPaged(body: ListQueryDto<ProcessedFilesAdvancedFilters>) {
+    return this.http
+      .post<HalPagedResponse<ProcessedFileApiModel>>(`${this.baseUrl}/files/search`, body)
+      .pipe(
+        map(
+          (res) =>
+            ({
+              ...res,
+              _embedded: {
+                ...res?._embedded,
+                content: mapProcessedFilesApiModels(res?._embedded?.content),
+              },
+            }) as HalPagedResponse<ProcessedFileApiModel>,
+        ),
+      );
   }
 
   processBank(): Observable<void> {
@@ -77,6 +104,14 @@ export class FileProcessingService {
       {},
       { withCredentials: true },
     );
+  }
+
+  getFilesTotals(
+    filters: Partial<ProcessedFilesAdvancedFilters> = {},
+  ): Observable<FileProcessingTotalsModel> {
+    return this.http.post<FileProcessingTotalsModel>(`${this.baseUrl}/files/totals`, filters, {
+      withCredentials: true,
+    });
   }
 
   getDashboard(): Observable<FileProcessingDashboardModel> {
@@ -113,36 +148,8 @@ export class FileProcessingService {
     );
   }
 
-  listRedeCreditOrders(query: PageQuery = {}): Observable<PageResponse<RedeCreditOrderModel>> {
-    return this.http.get<PageResponse<RedeCreditOrderModel>>(`${this.baseUrl}/rede/credit-orders`, {
-      params: this.toParams(query),
-      withCredentials: true,
-    });
-  }
-
-  listRedeAdjustments(query: PageQuery = {}): Observable<PageResponse<RedeAdjustmentModel>> {
-    return this.http.get<PageResponse<RedeAdjustmentModel>>(`${this.baseUrl}/rede/adjustments`, {
-      params: this.toParams(query),
-      withCredentials: true,
-    });
-  }
-
-  listRedeSettledDebts(query: PageQuery = {}): Observable<PageResponse<RedeSettledDebtModel>> {
-    return this.http.get<PageResponse<RedeSettledDebtModel>>(`${this.baseUrl}/rede/settled-debts`, {
-      params: this.toParams(query),
-      withCredentials: true,
-    });
-  }
-
-  listRedePendingDebts(query: PageQuery = {}): Observable<PageResponse<RedePendingDebtModel>> {
-    return this.http.get<PageResponse<RedePendingDebtModel>>(`${this.baseUrl}/rede/pending-debts`, {
-      params: this.toParams(query),
-      withCredentials: true,
-    });
-  }
-
-  listRedeTotalizers(query: PageQuery = {}): Observable<PageResponse<RedeTotalizerModel>> {
-    return this.http.get<PageResponse<RedeTotalizerModel>>(`${this.baseUrl}/rede/totalizers`, {
+  listRedeTotalizers(query: PageQuery = {}): Observable<PageResponse<any>> {
+    return this.http.get<PageResponse<any>>(`${this.baseUrl}/rede/totalizers`, {
       params: this.toParams(query),
       withCredentials: true,
     });

@@ -491,7 +491,9 @@ export class SaleSummaryListComponent
       establishments: this.establishments()?.length ? this.establishments()! : undefined,
 
       modality: this.modality()?.length ? this.modality()! : undefined,
-      transactionsStatus: this.transactionsStatus()?.length ? this.transactionsStatus()! : undefined,
+      transactionsStatus: this.transactionsStatus()?.length
+        ? this.transactionsStatus()!
+        : undefined,
       creditOrderStatus: this.creditOrderStatus()?.length ? this.creditOrderStatus()! : undefined,
       statusPaymentBank: this.statusPaymentBank()?.length ? this.statusPaymentBank()! : undefined,
     };
@@ -749,8 +751,11 @@ export class SaleSummaryListComponent
   protected searchOnFileSales(row: SaleSummaryModel): void {
     const targetFilters = this.buildTargetFileFilters(row);
 
-    localStorage.setItem(STATE_KEY.CARDSYNC.FILE.FILTERS.V1, JSON.stringify(targetFilters));
-    localStorage.removeItem(STATE_KEY.CARDSYNC.FILE.TABLE.STATE.V1);
+    localStorage.setItem(
+      STATE_KEY.CARDSYNC.PROCESSED_FILES.FILES.FILTERS.V1,
+      JSON.stringify(targetFilters),
+    );
+    localStorage.removeItem(STATE_KEY.CARDSYNC.PROCESSED_FILES.FILES.TABLE.STATE.V1);
 
     this.openRouteInNewTab(['/file-processing/files']);
   }

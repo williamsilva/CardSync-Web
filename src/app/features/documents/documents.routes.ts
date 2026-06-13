@@ -15,6 +15,10 @@ export const DOCUMENTS_ROUTES: Routes = [
     loadChildren: () => import('./acq/acq.routes').then((m) => m.ACQUIRERS_ROUTES),
   },
   {
+    path: 'bank',
+    loadChildren: () => import('./bank/bank.routes').then((m) => m.BANK_ROUTES),
+  },
+  {
     path: 'forbidden',
     title: 'routes.forbidden.title',
     loadComponent: () => import('../error/forbidden/forbidden.page').then((m) => m.ForbiddenPage),

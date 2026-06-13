@@ -189,23 +189,6 @@ export interface ErpAcquirerBatchRequestModel {
   transactionIds: string[];
 }
 
-export interface DebitAnalysisModel {
-  id: string;
-  debitDate?: string | null;
-  settlementDate?: string | null;
-  company?: string | null;
-  establishment?: string | null;
-  acquirer?: string | null;
-  flag?: string | null;
-  type?: string | null;
-  reasonCode?: string | number | null;
-  reasonDescription?: string | null;
-  debitValue?: number | null;
-  settledValue?: number | null;
-  status?: ConciliationStatus | null;
-  processedFile?: string | null;
-}
-
 export interface ChargebackAnalysisModel {
   id: string;
 
@@ -356,45 +339,4 @@ export interface ChargebackAnalysisFilter {
   reason?: string | null;
   pvNumber?: string | null;
   rvNumber?: string | null;
-}
-
-export interface BankSettlementAnalysisModel {
-  id: string;
-  expectedDate?: string | null;
-  settlementDate?: string | null;
-  company?: string | null;
-  establishment?: string | null;
-  acquirer?: string | null;
-  bank?: string | null;
-  flag?: string | null;
-  modality?: string | null;
-  creditOrderNumber?: string | number | null;
-  releaseReference?: string | number | null;
-  expectedValue?: number | null;
-  settledValue?: number | null;
-  differenceValue?: number | null;
-  status?: ConciliationStatus | null;
-}
-
-export type DivergenceSeverity = 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL' | string;
-
-export interface DivergenceAnalysisModel {
-  id: string;
-  type?: string | null;
-  severity?: DivergenceSeverity | null;
-  status?: ConciliationStatus | null;
-  source?: string | null;
-  referenceDate?: string | null;
-  company?: string | null;
-  establishment?: string | null;
-  acquirer?: string | null;
-  flag?: string | null;
-  modality?: string | null;
-  identifier?: string | number | null;
-  expectedValue?: number | null;
-  actualValue?: number | null;
-  differenceValue?: number | null;
-  message?: string | null;
-  actionHint?: string | null;
-  fileName?: string | null;
 }

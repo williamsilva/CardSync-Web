@@ -1,0 +1,484 @@
+<div class="cs-mgmt">
+  <cs-page-header
+    [compact]="false"
+    [subtitle]="'breadcrumb.dashboard.management.subtitle' | translate"
+    [breadcrumb]="[
+      { label: ('breadcrumb.dashboard.title' | translate), url: '/' },
+      { label: 'breadcrumb.dashboard.management.title' | translate },
+    ]"
+  >
+  </cs-page-header>
+
+  <cs-filters-panel
+    (clear)="clear()"
+    [collapsed]="true"
+    (search)="search()"
+    [actionsAlign]="'start'"
+    [activeCount]="activeFiltersCount()"
+    [title]="'common.filter' | translate"
+    [activeFilterGroups]="activeFilterGroups()"
+  >
+    <div class="grid formgrid gap-0 align-items-end">
+      <cs-advanced-period-date-filter
+        inputId="filterDate"
+        periodInputId="filterPeriod"
+        [value]="filterDate()"
+        [period]="filterPeriod()"
+        [disabled]="isDateDisabled()"
+        [periodOptions]="periodEnumOptions()"
+        dateColClass="col-12 md:col-2 xl:col-2 p-1"
+        [view]="setViewFormat(filterPeriod())"
+        (valueChange)="filterDate.set($event)"
+        periodColClass="col-12 md:col-2 xl:col-1 p-1"
+        (periodChange)="onPeriodChange($event)"
+        [dateFormat]="setDateFormat(filterPeriod())"
+        [selectionMode]="setSelectionMode(filterPeriod())"
+        [dateLabel]="'managementDashboard.filter.date' | translate"
+        [periodLabel]="'managementDashboard.filter.period' | translate"
+      />
+
+      <cs-advanced-multiselect-filter
+        optionValue="id"
+        inputId="companyIds"
+        optionLabel="fantasyName"
+        [value]="selectedCompanyIds()"
+        [options]="companyFacade.options()"
+        class="col-12 md:col-3 xl:col-2 p-1"
+        [label]="'managementDashboard.filter.company' | translate"
+        (valueChange)="selectedCompanyIds.set($event ?? [])"
+      />
+
+      <cs-advanced-multiselect-filter
+        optionValue="id"
+        inputId="acquirerIds"
+        optionLabel="fantasyName"
+        [value]="selectedAcquirerIds()"
+        class="col-12 md:col-3 xl:col-2 p-1"
+        [options]="acquirerFacade.options()"
+        [label]="'managementDashboard.filter.acquirer' | translate"
+        (valueChange)="selectedAcquirerIds.set($event ?? [])"
+      />
+
+      <cs-advanced-multiselect-filter
+        inputId="flagIds"
+        optionLabel="name"
+        optionValue="id"
+        [value]="selectedFlagIds()"
+        [options]="flagFacade.options()"
+        class="col-12 md:col-3 xl:col-2 p-1"
+        [label]="'managementDashboard.filter.flag' | translate"
+        (valueChange)="selectedFlagIds.set($event ?? [])"
+      />
+
+      <cs-advanced-multiselect-filter
+        optionLabel="label"
+        optionValue="value"
+        inputId="modalities"
+        [options]="modalityOptions()"
+        [value]="selectedModalities()"
+        class="col-12 md:col-3 xl:col-2 p-1"
+        [label]="'managementDashboard.filter.modality' | translate"
+        (valueChange)="selectedModalities.set($event ?? [])"
+      />
+    </div>
+  </cs-filters-panel>
+
+  <!-- Dashboard Grid -->
+  <div class="cs-mgmt__grid">
+    <!-- Vendas -->
+    <p-card class="cs-mgmt__section-card">
+      <ng-template pTemplate="header">
+        <div class="cs-mgmt__card-header">
+          <div class="cs-mgmt__card-title">
+            <i class="pi pi-chart-bar cs-mgmt__card-icon cs-mgmt__card-icon--green"></i>
+            <span>{{ 'managementDashboard.sales.title' | translate }}</span>
+          </div>
+          <div class="cs-mgmt__card-controls">
+            <span class="cs-mgmt__groupby-label">{{
+              'managementDashboard.groupBy.label' | translate
+            }}</span>
+            <p-select
+              [options]="groupByOptions"
+              optionLabel="label"
+              optionValue="value"
+              [ngModel]="salesGroupBy()"
+              (ngModelChange)="salesGroupBy.set($event)"
+              appendTo="body"
+            />
+            <button class="cs-mgmt__kebab"><i class="pi pi-ellipsis-v"></i></button>
+          </div>
+        </div>
+      </ng-template>
+
+      @if (loading()) {
+        <div class="cs-mgmt__loading"><i class="pi pi-spin pi-spinner"></i></div>
+      } @else if (salesData()) {
+        <div class="cs-mgmt__chart-wrap">
+          <p-chart type="bar" [data]="salesData()" [options]="chartOptions" height="200" />
+        </div>
+        <div class="cs-mgmt__table-wrap">
+          <table class="cs-mgmt__table">
+            <thead>
+              <tr>
+                <th>{{ 'managementDashboard.table.description' | translate }}</th>
+                <th class="cs-mgmt__col-right">
+                  {{ 'managementDashboard.table.transactions' | translate }}
+                </th>
+                <th class="cs-mgmt__col-right">
+                  {{ 'managementDashboard.sales.colValue' | translate }}
+                </th>
+                <th class="cs-mgmt__col-right">
+                  {{ 'managementDashboard.table.discount' | translate }}
+                </th>
+                <th class="cs-mgmt__col-right">
+                  {{ 'managementDashboard.table.liquid' | translate }}
+                </th>
+                <th class="cs-mgmt__col-pct">{{ 'managementDashboard.table.pct' | translate }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (row of salesRows(); track row.label) {
+                <tr>
+                  <td>{{ row.label }}</td>
+                  <td class="cs-mgmt__col-right">{{ formatNumber(row.transactions) }}</td>
+                  <td class="cs-mgmt__col-right">{{ formatCurrency(row.value) }}</td>
+                  <td class="cs-mgmt__col-right">{{ formatCurrency(row.discount) }}</td>
+                  <td class="cs-mgmt__col-right">{{ formatCurrency(row.liquid) }}</td>
+                  <td class="cs-mgmt__col-pct">
+                    <div class="cs-mgmt__progress-wrap">
+                      <p-progressbar
+                        [value]="row.percentage"
+                        [showValue]="false"
+                        class="cs-mgmt__progress"
+                      />
+                      <span class="cs-mgmt__pct-text">{{ formatPercent(row.percentage) }}</span>
+                    </div>
+                  </td>
+                </tr>
+              }
+              <tr class="cs-mgmt__table-total">
+                <td>{{ 'managementDashboard.table.total' | translate }}</td>
+                <td class="cs-mgmt__col-right">{{ formatNumber(salesTotal().transactions) }}</td>
+                <td class="cs-mgmt__col-right">{{ formatCurrency(salesTotal().value) }}</td>
+                <td class="cs-mgmt__col-right">{{ formatCurrency(salesTotal().discount) }}</td>
+                <td class="cs-mgmt__col-right">{{ formatCurrency(salesTotal().liquid) }}</td>
+                <td class="cs-mgmt__col-pct">
+                  <div class="cs-mgmt__progress-wrap">
+                    <p-progressbar [value]="100" [showValue]="false" class="cs-mgmt__progress" />
+                    <span class="cs-mgmt__pct-text">100%</span>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          @if ((dashboard()?.sales?.rows?.length ?? 0) > MAX_ROWS) {
+            <button class="cs-mgmt__show-more" (click)="showAllSales.set(!showAllSales())">
+              <i [class]="showAllSales() ? 'pi pi-chevron-up' : 'pi pi-chevron-down'"></i>
+              {{
+                showAllSales()
+                  ? ('managementDashboard.showLess' | translate)
+                  : ('managementDashboard.showAll' | translate)
+              }}
+            </button>
+          }
+        </div>
+      } @else {
+        <div class="cs-mgmt__empty">{{ 'managementDashboard.noData' | translate }}</div>
+      }
+    </p-card>
+
+    <!-- Pagamentos -->
+    <p-card class="cs-mgmt__section-card">
+      <ng-template pTemplate="header">
+        <div class="cs-mgmt__card-header">
+          <div class="cs-mgmt__card-title">
+            <i class="pi pi-wallet cs-mgmt__card-icon cs-mgmt__card-icon--green"></i>
+            <span>{{ 'managementDashboard.payments.title' | translate }}</span>
+          </div>
+          <div class="cs-mgmt__card-controls">
+            <span class="cs-mgmt__groupby-label">{{
+              'managementDashboard.groupBy.label' | translate
+            }}</span>
+            <p-select
+              [options]="groupByOptions"
+              optionLabel="label"
+              optionValue="value"
+              [ngModel]="paymentsGroupBy()"
+              (ngModelChange)="paymentsGroupBy.set($event)"
+              appendTo="body"
+            />
+            <button class="cs-mgmt__kebab"><i class="pi pi-ellipsis-v"></i></button>
+          </div>
+        </div>
+      </ng-template>
+
+      @if (loading()) {
+        <div class="cs-mgmt__loading"><i class="pi pi-spin pi-spinner"></i></div>
+      } @else if (paymentsData()) {
+        <div class="cs-mgmt__chart-wrap">
+          <p-chart type="bar" [data]="paymentsData()" [options]="chartOptions" height="200" />
+        </div>
+        <div class="cs-mgmt__table-wrap">
+          <table class="cs-mgmt__table">
+            <thead>
+              <tr>
+                <th>{{ 'managementDashboard.table.description' | translate }}</th>
+                <th class="cs-mgmt__col-right">
+                  {{ 'managementDashboard.table.transactions' | translate }}
+                </th>
+                <th class="cs-mgmt__col-right">
+                  {{ 'managementDashboard.payments.colSales' | translate }}
+                </th>
+                <th class="cs-mgmt__col-right">
+                  {{ 'managementDashboard.table.discount' | translate }}
+                </th>
+                <th class="cs-mgmt__col-right">
+                  {{ 'managementDashboard.table.liquid' | translate }}
+                </th>
+                <th class="cs-mgmt__col-pct">{{ 'managementDashboard.table.pct' | translate }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (row of paymentsRows(); track row.label) {
+                <tr>
+                  <td>{{ row.label }}</td>
+                  <td class="cs-mgmt__col-right">{{ formatNumber(row.transactions) }}</td>
+                  <td class="cs-mgmt__col-right">{{ formatCurrency(row.value) }}</td>
+                  <td class="cs-mgmt__col-right">{{ formatCurrency(row.discount) }}</td>
+                  <td class="cs-mgmt__col-right">{{ formatCurrency(row.liquid) }}</td>
+                  <td class="cs-mgmt__col-pct">
+                    <div class="cs-mgmt__progress-wrap">
+                      <p-progressbar
+                        [value]="row.percentage"
+                        [showValue]="false"
+                        class="cs-mgmt__progress"
+                      />
+                      <span class="cs-mgmt__pct-text">{{ formatPercent(row.percentage) }}</span>
+                    </div>
+                  </td>
+                </tr>
+              }
+              <tr class="cs-mgmt__table-total">
+                <td>{{ 'managementDashboard.table.total' | translate }}</td>
+                <td class="cs-mgmt__col-right">{{ formatNumber(paymentsTotal().transactions) }}</td>
+                <td class="cs-mgmt__col-right">{{ formatCurrency(paymentsTotal().value) }}</td>
+                <td class="cs-mgmt__col-right">{{ formatCurrency(paymentsTotal().discount) }}</td>
+                <td class="cs-mgmt__col-right">{{ formatCurrency(paymentsTotal().liquid) }}</td>
+                <td class="cs-mgmt__col-pct">
+                  <div class="cs-mgmt__progress-wrap">
+                    <p-progressbar [value]="100" [showValue]="false" class="cs-mgmt__progress" />
+                    <span class="cs-mgmt__pct-text">100%</span>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          @if ((dashboard()?.payments?.rows?.length ?? 0) > MAX_ROWS) {
+            <button class="cs-mgmt__show-more" (click)="showAllPayments.set(!showAllPayments())">
+              <i [class]="showAllPayments() ? 'pi pi-chevron-up' : 'pi pi-chevron-down'"></i>
+              {{
+                showAllPayments()
+                  ? ('managementDashboard.showLess' | translate)
+                  : ('managementDashboard.showAll' | translate)
+              }}
+            </button>
+          }
+        </div>
+      } @else {
+        <div class="cs-mgmt__empty">{{ 'managementDashboard.noData' | translate }}</div>
+      }
+    </p-card>
+
+    <!-- Taxas Aplicadas -->
+    <p-card class="cs-mgmt__section-card">
+      <ng-template pTemplate="header">
+        <div class="cs-mgmt__card-header">
+          <div class="cs-mgmt__card-title">
+            <i class="pi pi-percentage cs-mgmt__card-icon cs-mgmt__card-icon--green"></i>
+            <span>{{ 'managementDashboard.fees.title' | translate }}</span>
+          </div>
+          <div class="cs-mgmt__card-controls">
+            <span class="cs-mgmt__groupby-label">{{
+              'managementDashboard.groupBy.label' | translate
+            }}</span>
+            <p-select
+              [options]="groupByOptions"
+              optionLabel="label"
+              optionValue="value"
+              [ngModel]="feesGroupBy()"
+              (ngModelChange)="feesGroupBy.set($event)"
+              appendTo="body"
+            />
+            <button class="cs-mgmt__kebab"><i class="pi pi-ellipsis-v"></i></button>
+          </div>
+        </div>
+      </ng-template>
+
+      @if (loading()) {
+        <div class="cs-mgmt__loading"><i class="pi pi-spin pi-spinner"></i></div>
+      } @else if (feesData()) {
+        <div class="cs-mgmt__chart-wrap">
+          <p-chart type="line" [data]="feesData()" [options]="lineChartOptions" height="200" />
+        </div>
+        <div class="cs-mgmt__table-wrap">
+          <table class="cs-mgmt__table">
+            <thead>
+              <tr>
+                <th>{{ 'managementDashboard.table.description' | translate }}</th>
+                <th class="cs-mgmt__col-right">
+                  {{ 'managementDashboard.table.transactions' | translate }}
+                </th>
+                <th class="cs-mgmt__col-right">
+                  {{ 'managementDashboard.fees.colEffectiveRate' | translate }}
+                </th>
+                <th class="cs-mgmt__col-right">
+                  {{ 'managementDashboard.table.discount' | translate }}
+                </th>
+                <th class="cs-mgmt__col-pct">{{ 'managementDashboard.table.pct' | translate }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (row of feesRows(); track row.label) {
+                <tr>
+                  <td>{{ row.label }}</td>
+                  <td class="cs-mgmt__col-right">{{ formatNumber(row.transactions) }}</td>
+                  <td class="cs-mgmt__col-right">{{ formatPercent(row.effectiveRate) }}</td>
+                  <td class="cs-mgmt__col-right">{{ formatCurrency(row.discount) }}</td>
+                  <td class="cs-mgmt__col-pct">
+                    <div class="cs-mgmt__progress-wrap">
+                      <p-progressbar
+                        [value]="row.percentage"
+                        [showValue]="false"
+                        class="cs-mgmt__progress"
+                      />
+                      <span class="cs-mgmt__pct-text">{{ formatPercent(row.percentage) }}</span>
+                    </div>
+                  </td>
+                </tr>
+              }
+              <tr class="cs-mgmt__table-total">
+                <td>{{ 'managementDashboard.table.total' | translate }}</td>
+                <td class="cs-mgmt__col-right">{{ formatNumber(feesTotal().transactions) }}</td>
+                <td class="cs-mgmt__col-right">{{ formatPercent(feesTotal().effectiveRate) }}</td>
+                <td class="cs-mgmt__col-right">{{ formatCurrency(feesTotal().discount) }}</td>
+                <td class="cs-mgmt__col-pct">
+                  <div class="cs-mgmt__progress-wrap">
+                    <p-progressbar [value]="100" [showValue]="false" class="cs-mgmt__progress" />
+                    <span class="cs-mgmt__pct-text">100%</span>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          @if ((dashboard()?.fees?.rows?.length ?? 0) > MAX_ROWS) {
+            <button class="cs-mgmt__show-more" (click)="showAllFees.set(!showAllFees())">
+              <i [class]="showAllFees() ? 'pi pi-chevron-up' : 'pi pi-chevron-down'"></i>
+              {{
+                showAllFees()
+                  ? ('managementDashboard.showLess' | translate)
+                  : ('managementDashboard.showAll' | translate)
+              }}
+            </button>
+          }
+        </div>
+      } @else {
+        <div class="cs-mgmt__empty">{{ 'managementDashboard.noData' | translate }}</div>
+      }
+    </p-card>
+
+    <!-- Débitos -->
+    <p-card class="cs-mgmt__section-card">
+      <ng-template pTemplate="header">
+        <div class="cs-mgmt__card-header">
+          <div class="cs-mgmt__card-title">
+            <i class="pi pi-chart-line cs-mgmt__card-icon cs-mgmt__card-icon--blue"></i>
+            <span>{{ 'managementDashboard.debits.title' | translate }}</span>
+          </div>
+          <div class="cs-mgmt__card-controls">
+            <span class="cs-mgmt__groupby-label">{{
+              'managementDashboard.groupBy.label' | translate
+            }}</span>
+            <p-select
+              [options]="groupByOptions"
+              optionLabel="label"
+              optionValue="value"
+              [ngModel]="debitsGroupBy()"
+              (ngModelChange)="debitsGroupBy.set($event)"
+              appendTo="body"
+            />
+            <button class="cs-mgmt__kebab"><i class="pi pi-ellipsis-v"></i></button>
+          </div>
+        </div>
+      </ng-template>
+
+      @if (loading()) {
+        <div class="cs-mgmt__loading"><i class="pi pi-spin pi-spinner"></i></div>
+      } @else if (debitsData()) {
+        <div class="cs-mgmt__chart-wrap">
+          <p-chart type="line" [data]="debitsData()" [options]="lineChartOptions" height="200" />
+        </div>
+        <div class="cs-mgmt__debit-cards">
+          <div class="cs-mgmt__debit-card cs-mgmt__debit-card--yellow">
+            <span class="cs-mgmt__debit-card-label">{{
+              'managementDashboard.debits.totalFees' | translate
+            }}</span>
+            <span class="cs-mgmt__debit-card-value">{{
+              formatCurrency(dashboard()!.debits.fees.total)
+            }}</span>
+            <div class="cs-mgmt__debit-card-meta">
+              <span
+                ><i class="pi pi-hashtag"></i> {{ 'managementDashboard.debits.qty' | translate }}:
+                {{ formatNumber(dashboard()!.debits.fees.quantity) }}</span
+              >
+              <span
+                ><i class="pi pi-chart-bar"></i>
+                {{ 'managementDashboard.debits.average' | translate }}:
+                {{ formatCurrency(dashboard()!.debits.fees.average) }}</span
+              >
+            </div>
+          </div>
+          <div class="cs-mgmt__debit-card cs-mgmt__debit-card--red">
+            <span class="cs-mgmt__debit-card-label">{{
+              'managementDashboard.debits.totalChargeback' | translate
+            }}</span>
+            <span class="cs-mgmt__debit-card-value">{{
+              formatCurrency(dashboard()!.debits.chargeback.total)
+            }}</span>
+            <div class="cs-mgmt__debit-card-meta">
+              <span
+                ><i class="pi pi-hashtag"></i> {{ 'managementDashboard.debits.qty' | translate }}:
+                {{ formatNumber(dashboard()!.debits.chargeback.quantity) }}</span
+              >
+              <span
+                ><i class="pi pi-chart-bar"></i>
+                {{ 'managementDashboard.debits.average' | translate }}:
+                {{ formatCurrency(dashboard()!.debits.chargeback.average) }}</span
+              >
+            </div>
+          </div>
+          <div class="cs-mgmt__debit-card cs-mgmt__debit-card--blue">
+            <span class="cs-mgmt__debit-card-label">{{
+              'managementDashboard.debits.totalCancellation' | translate
+            }}</span>
+            <span class="cs-mgmt__debit-card-value">{{
+              formatCurrency(dashboard()!.debits.cancellation.total)
+            }}</span>
+            <div class="cs-mgmt__debit-card-meta">
+              <span
+                ><i class="pi pi-hashtag"></i> {{ 'managementDashboard.debits.qty' | translate }}:
+                {{ formatNumber(dashboard()!.debits.cancellation.quantity) }}</span
+              >
+              <span
+                ><i class="pi pi-chart-bar"></i>
+                {{ 'managementDashboard.debits.average' | translate }}:
+                {{ formatCurrency(dashboard()!.debits.cancellation.average) }}</span
+              >
+            </div>
+          </div>
+        </div>
+      } @else {
+        <div class="cs-mgmt__empty">{{ 'managementDashboard.noData' | translate }}</div>
+      }
+    </p-card>
+  </div>
+</div>

@@ -1,6 +1,6 @@
 {
   "app": {
-    "name": "CardSync"
+    "name": "CS"
   },
   "routes": {
     "register": {
@@ -22,6 +22,7 @@
       "contracts": {
         "title": "Contratos"
       }
+
     },
     "security": {
       "users": {
@@ -38,6 +39,20 @@
       },
       "groupDetail": {
         "title": "Detalhe do grupo"
+      }
+    },
+    "adjustment": {
+      "chargebacks": {
+        "title": "Chargebacks"
+      },
+      "tariffs": {
+        "title": "Tarifas"
+      },
+      "cancellation": {
+        "title": "Cancelamentos"
+      },
+      "chargebackRequests":{
+        "title": "Solicitações de Chargeback"
       }
     },
     "conciliation": {
@@ -62,20 +77,8 @@
           "title": "Outras vendas não conciliadas"
         }
       },
-      "debits": {
-        "title": "Débitos"
-      },
-      "chargebacks": {
-        "title": "Chargebacks"
-      },
-      "bankSettlement": {
-        "title": "Liquidação Bancária"
-      },
       "aging": {
         "title": "Aging de Pendências"
-      },
-      "divergences": {
-        "title": "Divergências operacionais"
       }
     },
     "transactions": {
@@ -103,6 +106,12 @@
       },
       "creditOrder": {
         "title": "Ordens de Pagamento"
+      },
+      "bankStatement": {
+        "title": "Extrato Bancário"
+      },
+      "files": {
+        "title": "Arquivos"
       }
     },
     "audit": {
@@ -110,6 +119,9 @@
     },
     "dashboard": {
       "title": "Dashboard"
+    },
+    "managementDashboard": {
+      "title": "Dashboard Gerencial"
     },
     "forbidden": {
       "title": "Acesso negado"
@@ -132,6 +144,11 @@
     "sessionExpiredTooltip": "Faça login novamente"
   },
   "menu": {
+    "me": "Minha conta",
+    "dashboard": "Dashboard",
+    "managementDashboard": "Dashboard Gerencial",
+    "dashboardManagement": "Gerenciamento",
+    "dashboardAudit": "Auditoria",
     "transactions": {
       "erp": {
         "title": "ERP",
@@ -151,13 +168,32 @@
       },
       "creditOrder": {
         "title": "Ordens de Pagamento"
+      },
+      "banks": {
+        "title": "Bancos",
+        "bankStatement": "Extrato Bancário"
       }
+
     },
-    "me": "Minha conta",
-    "dashboard": "Dashboard",
     "audit": {
       "title": "Auditoria",
       "mail": "E-mail Logs"
+    },
+    "adjustment": {
+      "title": "Ajustes",
+      "tariffs": {
+        "title": "Tarifas"
+      },
+      "cancellation": {
+        "title": "Cancelamentos"
+      },
+      "chargebackRequests": {
+        "title": "Solicitações de Chargeback"
+      },
+      "chargebacks": {
+        "title": "Chargebacks"
+      }
+
     },
     "register": {
       "title": "Cadastros",
@@ -175,7 +211,6 @@
       "erpVsAcquirer": "ERP x Adquirente",
       "bankSettlement": "Liquidação bancária",
       "debits": "Débitos",
-      "chargebacks": "Chargebacks",
       "divergences": "Divergências",
       "aging": "Aging de pendências",
       "erpMissingAcquirer": "Não localizada na adquirente",
@@ -199,12 +234,7 @@
         "title": "Processamento",
         "dashboard": "Dashboard",
         "erpPendent": "ERP Pendentes",
-        "movementRede": "Movimentos Rede",
         "scheduler": "Scheduler",
-        "creditOrders": "Ordens de crédito",
-        "adjustments": "Ajustes Rede",
-        "pendingDebts": "Débitos pendentes",
-        "settledDebts": "Débitos liquidados",
         "totalizers": "Totalizadores",
         "bankReleases": "Lançamentos bancários",
         "divergences": "Divergências"
@@ -218,7 +248,13 @@
   "breadcrumb": {
     "groups": "Grupos",
     "users": "Usuários",
-    "dashboard": "Dashboard",
+    "dashboard": {
+      "title": "Dashboard",
+      "management": {
+        "title": "Painel de Conciliação Bancária",
+        "subtitle": "Análise das operações, taxas e recebíveis"
+      }
+    },
     "register": {
       "flag": "Bandeiras",
       "company": "Empresas",
@@ -244,6 +280,9 @@
     },
     "anticipation": {
       "title": "Antecipações"
+    },
+    "bankStatement": {
+      "title": "Extrato Bancário"
     },
     "saleSummary": {
       "title": "Resumo de Vendas"
@@ -449,13 +488,62 @@
       "reconciledAutomatically": "Conciliado Automaticamente"
     },
     "adjustmentReasonEnum": {
+      "null": "N/A",
       "unknown": "Não Informado",
       "chargeback": "ChargeBack",
       "tarifaCbk": "Tarifa ChargBack",
       "saleDispute": "Disputa de Venda",
       "txManTef": "Tarifa Manutenção Tef",
       "cancelVendas": "Cancelamento de Vendas",
-      "salesAnticipation": "Antecipação de Vendas"
+      "naoTokenizadas": "Não Tokenizadas",
+      "salesAnticipation": "Antecipação de Vendas",
+      "cancelVendaDebito": "Cancelamento Venda Débito",
+      "cancelChbkMaestro": "Cancelamento Chargeback Maestro",
+      "posInativConecPin": "Pos Inativo/Conectividade",
+      "alPosPinpadTxConect": "Aluguel POS/PINPAD/Conectividade",
+      "trfAdExcessoCback": "Transf. Ad. Excesso Chargeback"
+    },
+    "adjustmentStatusEnum": {
+      "unknown": "Não Informado",
+      "adjusted": "Ajustado",
+      "analysis": "Análise",
+      "pending": "Pendente",
+      "favoredClient": "Favoreceu Cliente",
+      "favoredCompany": "Favoreceu Empresa",
+      "notLocatedErpAcq": "Não Localizada"
+    },
+    "chargebackRequestReasonEnum": {
+      "fraud": "Fraude",
+      "other": "Outros",
+      "unknown": "Não Informado",
+      "defectiveProduct": "Defeito no Produto",
+      "duplicateRequest": "Solicitação Duplicada",
+      "duplicateTransaction": "Transacao duplicada",
+      "serviceNotProvided": "Serviço não fornecido",
+      "creditNotProcessed": "Credito nao processado",
+      "transactionCancellation": "Transação Cancelada",
+      "productNotReceived": "Produto/servico nao recebido",
+      "documentationRequest": "Solicitacao de comprovante/documentos"
+    },
+    "chargebackRequestStatusEnum": {
+      "unknown": "Não Informado",
+      "aguardandoDecisao": "Aguardando decisao",
+      "aprovado": "Aprovado",
+      "reprovado": "Reprovado",
+      "pendente": "Pendente",
+      "cancelado": "Cancelado"
+    },
+    "deleteErpReasonEnum": {
+      "other": "Outros",
+      "undone": "Desfeita",
+      "deleted": "Excluído",
+      "canceled": "Cancelada",
+      "duplicity": "Duplicidade",
+      "unknown": "Desconhecido",
+      "invalid_data": "Dados Invalidos",
+      "cvNotFoundAdq": "CV não encontrado na ADQ",
+      "cvNotFoundErp": "CV não encontrado no ERP",
+      "transaction_already_conciliated": "Transação já conciliada"
     },
     "saleSummaryEnum": {
       "unknown": "Não Informado"
@@ -1053,6 +1141,289 @@
       "expectedPaymentDate": "Prev. Pagamento"
     }
   },
+  "processedFileDetail": {
+    "eyebrow": "Detalhe do arquivo",
+    "fileFallback": "Arquivo",
+    "subtitleFallback": "Resumo do processamento e erros por linha.",
+    "summary": {
+      "status": "Status",
+      "processed": "Processado",
+      "startedAt": "Início",
+      "finishedAt": "Fim"
+    },
+    "kpis": {
+      "totalLines": "Linhas",
+      "processedLines": "Processadas",
+      "warningLines": "Avisos",
+      "errorLines": "Erros",
+      "pendingContract": "Pend. contrato",
+      "pendingContext": "Pend. contexto"
+    },
+    "errors": {
+      "tableHeader": "Erros e avisos por linha",
+      "lineNumber": "Linha",
+      "type": "Tipo",
+      "code": "Código",
+      "message": "Mensagem",
+      "date": "Data",
+      "empty": "Nenhum erro/aviso registrado."
+    }
+  },
+  "processedFiles": {
+    "subtitle": "Acompanhe os arquivos importados ERP/Rede/CNAB, status, erros e pendências.",
+    "fields": {
+      "fileName": "Arquivo",
+      "fileNameShort": "Arquivo",
+      "origin": "Origem",
+      "status": "Status",
+      "dateFile": "Data do Arquivo",
+      "dateFileShort": "Data Arq.",
+      "periodDateFile": "Período Data Arquivo",
+      "dateImport": "Data Importação",
+      "dateImportShort": "Importação",
+      "periodDateImport": "Período Data Importação",
+      "lines": "Linhas",
+      "pending": "Pendências"
+    }
+  },
+  "importedFilesCalendar": {
+    "eyebrow": "Monitoramento de importações",
+    "title": "Agenda de arquivos importados",
+    "description": "Visualize os dias com e sem arquivos ERP, Rede e bancários.",
+    "viewFiles": "Ver arquivos",
+    "refresh": "Atualizar",
+    "files": "{count, plural, one {# arquivo} other {# arquivos}}",
+    "waiting": "Aguardando",
+    "noImport": "Sem importação",
+    "groups": {
+      "erp": "ERP",
+      "adq": "ADQ",
+      "bank": "BANK"
+    },
+    "tooltip": {
+      "allReceived": "todos os arquivos recebidos",
+      "noneReceived": "nenhum arquivo recebido",
+      "statusComplete": "Completo",
+      "statusPartial": "Parcial",
+      "statusMissing": "Ausente",
+      "received": "Recebidos",
+      "pending": "Pendências",
+      "allDone": "Todos recebidos",
+      "filesAbbrev": "arq."
+    },
+    "summary": {
+      "total": "Total importado",
+      "totalSub": "arquivos no mês",
+      "withImport": "Dias com importação",
+      "withImportSub": "dias com ao menos um arquivo",
+      "withoutImport": "Dias sem importação",
+      "withoutImportSub": "dias sem arquivo registrado"
+    },
+    "weekdays": {
+      "sun": "Dom",
+      "mon": "Seg",
+      "tue": "Ter",
+      "wed": "Qua",
+      "thu": "Qui",
+      "fri": "Sex",
+      "sat": "Sáb"
+    },
+    "detail": {
+      "title": "Detalhes do dia",
+      "futureDate": "Data futura",
+      "noImportation": "Sem importação",
+      "futureDateMessage": "Esta data ainda não chegou.",
+      "futureDateSubMessage": "A agenda será atualizada conforme os arquivos forem processados.",
+      "noFileMessage": "Nenhum arquivo foi importado neste dia.",
+      "noFileSubMessage": "O dia permanece destacado na agenda para facilitar a identificação de lacunas.",
+      "typeOrigin": "Tipo / origem"
+    },
+    "status": {
+      "RECEIVED": "Recebido",
+      "PROCESSING": "Processando",
+      "PROCESSED": "Processado",
+      "PROCESSED_WITH_WARNINGS": "Com avisos",
+      "ERROR": "Erro",
+      "DUPLICATE": "Duplicado",
+      "INVALID": "Inválido"
+    },
+    "missingByType": {
+      "title": "Pendências por tipo de arquivo",
+      "noDays": "Sem pendências",
+      "erp": "ERP",
+      "adq": "ADQ / Adquirentes",
+      "bank": "Banco"
+    }
+  },
+  "fileProcessingDashboard": {
+    "subtitle": "Monitore importações ERP, Rede e CNAB, pendências e conciliação bancária.",
+    "metrics": {
+      "errors": "Com erro",
+      "invalid": "Invalidos",
+      "warnings": "Com avisos",
+      "processed": "Processados",
+      "pending": "Pendências ERP"
+    },
+    "scheduler": {
+      "ok": "OK",
+      "erp": "ERP",
+      "rede": "Rede",
+      "bank": "Banco / CNAB",
+      "attention": "Atenção",
+      "running": "Executando",
+      "noRun": "Sem execução registrada",
+      "loading": "Carregando status do scheduler..."
+    },
+    "shortcuts": {
+      "files": {
+        "title": "Arquivos processados",
+        "description": "Histórico de importações ERP, Rede e CNAB"
+      },
+      "erpPending": {
+        "title": "Vendas ERP pendentes",
+        "description": "Vendas sem contexto de negócio ou contrato"
+      },
+      "redeMovements": {
+        "title": "Movimentos Rede",
+        "description": "Relatório de movimento da adquirente Rede"
+      },
+      "bankReleases": {
+        "title": "Lançamentos bancários",
+        "description": "Extrato CNAB do período reconciliado"
+      },
+      "divergences": {
+        "title": "Divergências",
+        "description": "Arquivos com inconsistências detectadas"
+      }
+    }
+  },
+  "bankStatement": {
+    "subtitle": "Analise lançamentos bancários e status de pagamento.",
+    "fields": {
+      "bank": "Banco",
+      "flag": "Bandeira",
+      "type": "Tipo",
+      "value": "Valor",
+      "company": "Empresa",
+      "category": "Categoria",
+      "acquirer": "Adquirente",
+      "document": "Documento",
+      "statusShort": "Status",
+      "launchDate": "Data lançamento",
+      "bankHistory": "Histórico banco",
+      "launchDateShort": "Lança.",
+      "establishment": "Estabelecimento",
+      "establishmentShort": "Estab.",
+      "bankingDomicile": "Domicílio",
+      "statusPaymentBank": "Status pagamento banco",
+      "periodLaunchDate": "Período data lançamento"
+    }
+  },
+  "chargebackRequest": {
+    "subtitle": "Analise solicitacoes de chargeback enviadas pela adquirente.",
+    "totals": {
+      "quantity": "Request: {{count}}",
+      "totalGrossValue": "Bruto"
+    },
+    "fields": {
+      "flag": "Bandeira",
+      "cvNsu": "CV/NSU",
+      "cvNsuShort": "CV/NSU",
+      "company": "Empresa",
+      "acquirer": "Adquirente",
+      "authorization": "Autorizacao",
+      "rvNumber": "Resumo Vendas",
+      "rvNumberShort": "Resumo",
+      "cardNumber": "Numero Cartao",
+      "establishment": "Estabelecimento",
+      "establishmentShort": "Estab.",
+      "modality": "Modalidade",
+      "modalityShort": "Modal.",
+      "saleDate": "Data Venda",
+      "saleDateShort": "Venda",
+      "periodSaleDate": "Periodo Data Venda",
+      "deadline": "Data da Limite",
+      "deadlineShort": "Data Limite",
+      "periodDeadline": "Periodo Request",
+      "transactionValue": "Valor Transação",
+      "transactionValueShort": "Valor",
+      "requestReason": "Motivo do Request",
+      "requestReasonShort": "Motivo",
+      "adjustmentStatus": "Status do Request",
+      "adjustmentStatusShort": "Status"
+    }
+  },
+  "cancellation": {
+    "subtitle": "Analise cancelamentos de vendas aplicados pela adquirente.",
+    "totals": {
+      "quantity": "Ajustes: {{count}}",
+      "totalValue": "Valor"
+    },
+    "fields": {
+      "flag": "Bandeira",
+      "cvNsu": "CV/NSU",
+      "cvNsuShort": "CV/NSU",
+      "company": "Empresa",
+      "acquirer": "Adquirente",
+      "authorization": "Autorização",
+      "authorizationShort": "Auto.",
+      "rvNumber": "RV Ajustado",
+      "rvNumberShort": "RV Aj.",
+      "pvNumber": "PV Ajustado",
+      "pvNumberShort": "PV Aj.",
+      "establishment": "Estabelecimento",
+      "establishmentShort": "Estab.",
+      "saleDate": "Data Venda",
+      "saleDateShort": "Venda",
+      "periodSaleDate": "Período Data Venda",
+      "adjustmentDate": "Data Solicitação",
+      "adjustmentDateShort": "Solicitação",
+      "periodAdjustmentDate": "Período Solicitação",
+      "creditDate": "Data Crédito",
+      "creditDateShort": "Crédito",
+      "periodCreditDate": "Período Crédito",
+      "saleValue": "Valor Venda",
+      "saleValueShort": "Valor",
+      "valueStart": "Valor Inicial",
+      "valueEnd": "Valor Final",
+      "adjustmentValue": "Ajuste",
+      "adjustmentValueShort": "Ajuste",
+      "adjustmentValueStart": "Valor Ajuste Inicial",
+      "adjustmentValueEnd": "Valor Ajuste Final",
+      "adjustmentReason": "Ajuste",
+      "adjustmentReasonShort": "Ajustes",
+      "status": "Status",
+      "statusShort": "Status"
+    }
+  },
+  "adjustment": {
+    "subtitle": "Analise ajustes e tarifas aplicadas pela adquirente.",
+    "totals": {
+      "quantity": "Taxas: {{count}}",
+      "totalValue": "Valor"
+    },
+    "fields": {
+      "flag": "Bandeira",
+      "company": "Empresa",
+      "acquirer": "Adquirente",
+      "rvNumber": "RV Ajuste",
+      "rvNumberShort": "RV Ajuste",
+      "establishment": "Estabelecimento",
+      "establishmentShort": "Estab.",
+      "adjustmentDate": "Data Ajuste",
+      "adjustmentDateShort": "Data Ajuste",
+      "periodAdjustmentDate": "Período Data Ajuste",
+      "creditDate": "Data Crédito",
+      "creditDateShort": "Data Crédito",
+      "periodCreditDate": "Período Data Crédito",
+      "adjustmentValue": "Ajuste",
+      "adjustmentValueShort": "Ajuste",
+      "adjustmentReason": "Motivo Ajuste",
+      "adjustmentReasonShort": "Tipo",
+      "status": "Status",
+      "statusShort": "Status"
+    }
+  },
   "anticipation":{
     "subtitle": "Analise antecipações e respectivos descontos financeiros.",
     "fields": {
@@ -1480,6 +1851,7 @@
     "errorReconciliation": "Erro na conciliação",
     "reconcileUsingAcquirer": "Conciliar usando adquirente",
     "reconciliationFinalizedTitle": "Conciliação finalizada",
+    "processReconcileManualSwapped": "Conciliar Nsu Invertido",
     "finishedWithWarningsTitle": "Lote finalizado com alertas",
     "processReconciliationErpVsAcquirer": "Conciliar ERP vs ADQ",
     "noEligibleSelectedTitle": "Nenhuma venda elegível selecionada",
@@ -1594,7 +1966,13 @@
         "createErp": "Criar vendas ERP",
         "deleteErp": "Marcar como excluídas"
       },
-      "securityAuditNotice": "Por segurança, os dados do responsável por esta ação serão armazenados para futuras consultas."
+      "securityAuditNotice": "Por segurança, os dados do responsável por esta ação serão armazenados para futuras consultas.",
+      "deleteReason": {
+        "label": "Motivo",
+        "required": "é obrigatório.",
+        "observations": "Observações",
+        "observationsPlaceholder": "Descreva detalhes adicionais sobre o motivo (opcional)"
+      }
     },
     "selection": {
       "createErp": "Criar venda ERP",
@@ -1620,6 +1998,12 @@
       "compareErrorDetail": "Não foi possível carregar a comparação detalhada. Confira se o endpoint de comparação está disponível no backend."
     },
     "actionDialog": {
+      "deleteReason": {
+        "label": "Motivo",
+        "required": "é obrigatório.",
+        "observations": "Observações",
+        "observationsPlaceholder": "Descreva detalhes adicionais sobre o motivo (opcional)"
+      },
       "titles": {
         "createErp": "Criar venda no ERP",
         "deleteErp": "Remover venda",
@@ -1748,6 +2132,7 @@
     "info": "Informação",
     "warning": "Atenção",
     "view": "Visualizar",
+    "shortcuts": "Atalhos",
     "company": "Empresa",
     "grossValue": "Bruto",
     "notNow": "Agora não",
@@ -1815,6 +2200,93 @@
         "invalid": "{label} está inválido.",
         "passwordMismatch": "As senhas devem ser iguais."
       }
+    }
+  },
+  "managementDashboard": {
+    "noData": "Nenhum dado disponível para o período selecionado.",
+    "showAll": "Mostrar todos",
+    "showLess": "Mostrar menos",
+    "groupBy": {
+      "label": "Agrupar por"
+    },
+    "table": {
+      "description": "Descrição",
+      "transactions": "Transações",
+      "discount": "Desconto",
+      "liquid": "Líquido",
+      "total": "Total",
+      "pct": "(%)"
+    },
+    "filter": {
+      "company": "Empresa",
+      "companyPlaceholder": "Selecione empresas",
+      "acquirer": "Adquirente",
+      "acquirerPlaceholder": "Selecione adquirentes",
+      "flag": "Bandeira",
+      "flagPlaceholder": "Selecione bandeiras",
+      "modality": "Modalidade",
+      "modalityPlaceholder": "Selecione modalidades",
+      "period": "Período",
+      "date": "Data",
+      "search": "Filtrar",
+      "clear": "Limpar"
+    },
+    "sales": {
+      "title": "Vendas",
+      "colLabel": "Agrupamento",
+      "colValue": "Total Vendas",
+      "colToReceive": "A Receber"
+    },
+    "payments": {
+      "title": "Pagamentos",
+      "colLabel": "Agrupamento",
+      "colSales": "Vendas",
+      "colReceived": "Recebido"
+    },
+    "fees": {
+      "title": "Taxas Aplicadas",
+      "colLabel": "Agrupamento",
+      "colEffectiveRate": "Taxa Efetiva %",
+      "colAverageRate": "Média %"
+    },
+    "debits": {
+      "title": "Débitos",
+      "totalFees": "Total de Taxas",
+      "totalChargeback": "Total Chargeback",
+      "totalCancellation": "Cancelamentos",
+      "qty": "Qtd",
+      "average": "Média"
+    }
+  },
+  "auditDashboard": {
+    "salesSummary": {
+      "title": "Resumo de Vendas Consolidado",
+      "total": "Total",
+      "collapse": "- Recolher",
+      "expand": "+ Expandir por Adquirente",
+      "consultMore": "Consultar mais..."
+    },
+    "conciliation": {
+      "title": "Conciliação de Vendas",
+      "lastImports": "Últimas Conciliações",
+      "noImport": "Sem importação",
+      "unreconciled": "Comprovantes não conciliados",
+      "colDate": "Data",
+      "colErpAcq": "ADQ X ERP",
+      "colErp": "ERP",
+      "colAcq": "ADQ"
+    },
+    "contestable": {
+      "title": "CVs com taxas contestáveis",
+      "subtitle": "CVs para solicitar ressarcimento"
+    },
+    "files": {
+      "title": "Arquivos",
+      "lastImported": "Últimos Arquivos Importados",
+      "today": "HOJE",
+      "yesterday": "ONTEM",
+      "last7days": "ÚLTIMOS 7 DIAS",
+      "processed": "Arquivos Processados"
     }
   },
   "notFound": {

@@ -105,10 +105,14 @@ export class ConciliationWaitingApiService {
     );
   }
 
-  markErpAsDeleted(erpTransactionId: string): Observable<ErpAcquirerResolutionResultModel> {
+  markErpAsDeleted(
+    erpTransactionId: string,
+    reason: string,
+    observations: string,
+  ): Observable<ErpAcquirerResolutionResultModel> {
     return this.http.post<ErpAcquirerResolutionResultModel>(
       `${this.baseUrl}/erp/${erpTransactionId}/mark-deleted`,
-      {},
+      { reason, observations },
       { withCredentials: true },
     );
   }
@@ -125,10 +129,12 @@ export class ConciliationWaitingApiService {
 
   markErpAsDeletedBatch(
     erpTransactionIds: string[],
+    reason: string,
+    observations: string,
   ): Observable<ErpAcquirerBatchResolutionResultModel> {
     return this.http.post<ErpAcquirerBatchResolutionResultModel>(
       `${this.baseUrl}/erp/mark-deleted-batch`,
-      { transactionIds: erpTransactionIds },
+      { transactionIds: erpTransactionIds, reason, observations },
       { withCredentials: true },
     );
   }
@@ -166,6 +172,14 @@ export class ConciliationWaitingApiService {
   reconcileErpVsAcquirer(): Observable<ReconcileErpAcquirerResultModel> {
     return this.http.post<ReconcileErpAcquirerResultModel>(
       `${this.baseUrl}/reconcile`,
+      {},
+      { withCredentials: true },
+    );
+  }
+
+  reconcileManualSwapped(): Observable<ReconcileErpAcquirerResultModel> {
+    return this.http.post<ReconcileErpAcquirerResultModel>(
+      `${this.baseUrl}/reconcile-manual-swapped`,
       {},
       { withCredentials: true },
     );

@@ -33,12 +33,11 @@ export abstract class StatefulListPage<
   );
 
   abstract rows: number;
-  public rowsPerPageOptions: number[] = [13, 15, 20, 30, 50, 100];
-
-  protected abstract tableRowsKey(): string;
-  protected abstract tableStateKey(): string;
+  public rowsPerPageOptions: number[] = [13, 15, 20, 30, 50, 100, 300, 500, 1000];
 
   protected abstract loadFirstPage(): void;
+  protected abstract tableRowsKey(): string;
+  protected abstract tableStateKey(): string;
 
   protected abstract advancedActiveFilters: () => ActiveFilterItem[];
   protected abstract buildAdvancedFilters(): Partial<TAdvancedFilter>;

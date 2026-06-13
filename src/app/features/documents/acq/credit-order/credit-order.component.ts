@@ -32,10 +32,10 @@ import { buildListQuery } from '@shared/features/list-query/list-query.builder';
 import { allPeriodEnum, PeriodEnum, periodEnumLabel } from '@models/enums/period.enum';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
 import { CsColumnFilterShellComponent } from '@features/list-base/cs-column-filter-shell.component';
+import { CsAdvancedTextFilterComponent } from '@features/list-base/cs-advanced-text-filter.component';
 import { CsAdvancedPeriodDateFilterComponent } from '@features/list-base/cs-advanced-period-date-filter.component';
 import { CsAdvancedMultiselectFilterComponent } from '@features/list-base/cs-advanced-multiselect-filter.component';
 import { CsAdvancedFilterItemTemplateDirective } from '@features/list-base/cs-advanced-filter-item-template.directive';
-import { CsAdvancedTextFilterComponent } from '@features/list-base/cs-advanced-text-filter.component';
 import {
   currencyRangeLabel,
   CsCurrencyRangeValue,
@@ -169,7 +169,7 @@ export class CreditOrderListComponent
   readonly periodCreditOrderDate = signal<PeriodEnum | null>(null);
   readonly creditOrderDate = signal<string | string[] | null>(null);
 
-  readonly rvNumber = signal<string | null>(null);
+  readonly rvNumber = signal<string>('');
   readonly pvOriginal = signal<string | null>(null);
 
   readonly modality = signal<ModalityEnum[] | null>(null);
@@ -809,7 +809,7 @@ export class CreditOrderListComponent
     this.creditOrderDate.set(s.creditOrderDate ?? null);
     this.periodCreditOrderDate.set(s.periodCreditOrderDate ?? null);
 
-    this.rvNumber.set(s.rvNumber ?? null);
+    this.rvNumber.set(s.rvNumber ?? '');
     this.pvOriginal.set(s.pvOriginal ?? null);
 
     this.modality.set(s.modality ?? null);
@@ -860,8 +860,11 @@ export class CreditOrderListComponent
   protected searchOnFileSales(row: CreditOrderModel): void {
     const targetFilters = this.buildTargetFileFilters(row);
 
-    localStorage.setItem(STATE_KEY.CARDSYNC.FILE.FILTERS.V1, JSON.stringify(targetFilters));
-    localStorage.removeItem(STATE_KEY.CARDSYNC.FILE.TABLE.STATE.V1);
+    localStorage.setItem(
+      STATE_KEY.CARDSYNC.PROCESSED_FILES.FILES.FILTERS.V1,
+      JSON.stringify(targetFilters),
+    );
+    localStorage.removeItem(STATE_KEY.CARDSYNC.PROCESSED_FILES.FILES.TABLE.STATE.V1);
 
     this.openRouteInNewTab(['/file-processing/files']);
   }

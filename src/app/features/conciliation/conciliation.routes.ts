@@ -83,46 +83,6 @@ export const CONCILIATION_ROUTES: Routes = [
       ),
   },
   {
-    path: 'debits',
-    title: 'routes.conciliation.debits.title',
-    canActivate: [permissionGuard],
-    data: { requireAll: false, redirectTo: '/forbidden', permissions: defaultPermissions },
-    loadComponent: () =>
-      import('./conciliation-debits-list/conciliation-debits-list.component').then(
-        (m) => m.ConciliationDebitsListComponent,
-      ),
-  },
-  {
-    path: 'chargebacks',
-    title: 'routes.conciliation.chargebacks.title',
-    canActivate: [permissionGuard],
-    data: { requireAll: false, redirectTo: '/forbidden', permissions: defaultPermissions },
-    loadComponent: () =>
-      import('./conciliation-chargebacks-list/conciliation-chargebacks-list.component').then(
-        (m) => m.ConciliationChargebacksListComponent,
-      ),
-  },
-  {
-    path: 'bank-settlement',
-    title: 'routes.conciliation.bankSettlement.title',
-    canActivate: [permissionGuard],
-    data: { requireAll: false, redirectTo: '/forbidden', permissions: defaultPermissions },
-    loadComponent: () =>
-      import('./bank-settlement-list/bank-settlement-list.component').then(
-        (m) => m.BankSettlementListComponent,
-      ),
-  },
-  {
-    path: 'divergences',
-    title: 'routes.conciliation.divergences.title',
-    canActivate: [permissionGuard],
-    data: { requireAll: false, redirectTo: '/forbidden', permissions: defaultPermissions },
-    loadComponent: () =>
-      import('./conciliation-divergences-list/conciliation-divergences-list.component').then(
-        (m) => m.ConciliationDivergencesListComponent,
-      ),
-  },
-  {
     path: 'aging',
     title: 'routes.conciliation.aging.title',
     canActivate: [permissionGuard],

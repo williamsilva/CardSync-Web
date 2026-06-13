@@ -7,7 +7,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { Lang } from '../../core/i18n/i18n.types';
 import { I18nService } from '../../core/i18n/i18n.service';
 
-type CsDatePreset = 'short' | 'medium' | 'date' | 'datetime' | 'time';
+type CsDatePreset = 'short' | 'medium' | 'date' | 'datetime' | 'time' | 'full' | 'dayMonth';
 
 @Pipe({
   name: 'csDate',
@@ -43,8 +43,21 @@ export class CsDatePipe implements PipeTransform {
       return '-';
     }
 
-    const lang = this.i18n.getAppliedLang();
     const resolvedLocale = locale ?? this.i18n.getDateLocale();
+
+    if (preset === 'full' || preset === 'dayMonth') {
+      try {
+        const options: Intl.DateTimeFormatOptions =
+          preset === 'full'
+            ? { dateStyle: 'full' }
+            : { day: '2-digit', month: '2-digit' };
+        return new Intl.DateTimeFormat(resolvedLocale, options).format(parsed);
+      } catch {
+        return '-';
+      }
+    }
+
+    const lang = this.i18n.getAppliedLang();
     const resolvedTimezone = timezone ?? this.i18n.getDateTimeZone();
     const format = this.resolveFormat(preset, lang);
 

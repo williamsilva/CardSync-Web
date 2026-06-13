@@ -1,6 +1,6 @@
 {
   "app": {
-    "name": "CardSync"
+    "name": "CS"
   },
   "routes": {
     "register": {
@@ -102,6 +102,9 @@
     "dashboard": {
       "title": "Dashboard"
     },
+    "managementDashboard": {
+      "title": "Management Dashboard"
+    },
     "forbidden": {
       "title": "Access denied"
     },
@@ -137,6 +140,9 @@
     },
     "me": "My account",
     "dashboard": "Dashboard",
+    "managementDashboard": "Management Dashboard",
+    "dashboardManagement": "Management",
+    "dashboardAudit": "Audit",
     "audit": {
       "title": "Audit",
       "mail": "E-mail Logs"
@@ -441,6 +447,69 @@
       "end": "End",
       "start": "Start",
       "interval": "Interval"
+    },
+    "adjustmentReasonEnum": {
+      "null": "N/A",
+      "unknown": "Not informed",
+      "chargeback": "Chargeback",
+      "tarifaCbk": "Chargeback fee",
+      "saleDispute": "Sale dispute",
+      "txManTef": "TEF maintenance fee",
+      "cancelVendas": "Sale cancellation",
+      "naoTokenizadas": "Non-tokenized",
+      "salesAnticipation": "Sales anticipation",
+      "cancelVendaDebito": "Debit sale cancellation",
+      "cancelChbkMaestro": "Chargeback Maestro cancellation",
+      "posInativConecPin": "POS inactive/connectivity",
+      "alPosPinpadTxConect": "POS/PINPAD rental/connectivity",
+      "trfAdExcessoCback": "Transfer excess chargeback"
+    },
+    "adjustmentStatusEnum": {
+      "unknown": "Not informed",
+      "adjusted": "Adjusted",
+      "pending": "Pending",
+      "analysis": "Analysis"
+    },
+    "chargebackRequestReasonEnum": {
+      "unknown": "Not informed",
+      "documentationRequest": "Documentation request",
+      "duplicateTransaction": "Duplicate transaction",
+      "fraud": "Fraud",
+      "productNotReceived": "Product/service not received",
+      "creditNotProcessed": "Credit not processed",
+      "other": "Other"
+    },
+    "chargebackRequestStatusEnum": {
+      "unknown": "Not informed",
+      "aguardandoDecisao": "Awaiting decision",
+      "aprovado": "Approved",
+      "reprovado": "Rejected",
+      "pendente": "Pending",
+      "cancelado": "Canceled"
+    },
+    "deleteErpReasonEnum": {
+      "duplicity": "Duplicate",
+      "undone": "Undone",
+      "cvNotFoundAdq": "CV not found in Acquirer",
+      "cvNotFoundErp": "CV not found in ERP",
+      "transaction_already_conciliated": "Transaction already reconciled",
+      "invalid_data": "Invalid data",
+      "canceled": "Canceled",
+      "deleted": "Deleted",
+      "other": "Other",
+      "unknown": "Unknown"
+    },
+    "saleSummaryEnum": {
+      "unknown": "Not informed"
+    },
+    "statusReconciliationEnum": {
+      "null": "N/A",
+      "unknown": "Not informed",
+      "pending": "Pending",
+      "canceled": "Canceled",
+      "divergent": "Divergent",
+      "reconciled": "Reconciled",
+      "partiallyReconciled": "Partially reconciled"
     }
   },
   "company": {
@@ -1407,7 +1476,13 @@
         "createErp": "Create ERP sales",
         "deleteErp": "Mark as deleted"
       },
-      "securityAuditNotice": "For security reasons, the data of the person responsible for this action will be stored for future queries."
+      "securityAuditNotice": "For security reasons, the data of the person responsible for this action will be stored for future queries.",
+      "deleteReason": {
+        "label": "Reason",
+        "required": "is required.",
+        "observations": "Observations",
+        "observationsPlaceholder": "Describe additional details about the reason (optional)"
+      }
     },
     "selection": {
       "createErp": "Create ERP sale",
@@ -1442,6 +1517,12 @@
         "createErp": "You selected 1 sales transaction to create the corresponding sale in ERP.",
         "deleteErp": "You selected 1 sales transaction to mark as deleted in ERP.",
         "generic": "You selected 1 sales transaction to confirm the action."
+      },
+      "deleteReason": {
+        "label": "Reason",
+        "required": "is required.",
+        "observations": "Observations",
+        "observationsPlaceholder": "Describe additional details about the reason (optional)"
       },
       "description": {
         "createErp": "CardSync will create a sale in ERP based on the acquirer data and keep the link between both sources.",
@@ -1543,6 +1624,7 @@
     "info": "Information",
     "warning": "Warning",
     "view": "View",
+    "shortcuts": "Shortcuts",
     "company": "Company",
     "grossValue": "Gross",
     "notNow": "Not now",
@@ -1608,6 +1690,451 @@
         "invalid": "{label} is invalid.",
         "passwordMismatch": "Passwords must match."
       }
+    }
+  },
+  "cancellation": {
+    "subtitle": "Analyze sale cancellations applied by the acquirer.",
+    "totals": {
+      "quantity": "Adjustments: {{count}}",
+      "totalValue": "Amount"
+    },
+    "fields": {
+      "flag": "Flag",
+      "cvNsu": "CV/NSU",
+      "cvNsuShort": "CV/NSU",
+      "company": "Company",
+      "acquirer": "Acquirer",
+      "authorization": "Authorization",
+      "authorizationShort": "Auth.",
+      "rvNumber": "RV Adjusted",
+      "rvNumberShort": "RV Adj.",
+      "pvNumber": "PV Adjusted",
+      "pvNumberShort": "PV Adj.",
+      "establishment": "Establishment",
+      "establishmentShort": "Estab.",
+      "saleDate": "Sale date",
+      "saleDateShort": "Sale",
+      "periodSaleDate": "Sale date period",
+      "adjustmentDate": "Solicitation",
+      "adjustmentDateShort": "Solicit.",
+      "periodAdjustmentDate": "Solicitation period",
+      "creditDate": "Credit date",
+      "creditDateShort": "Credit",
+      "periodCreditDate": "Credit date period",
+      "saleValue": "Sale amount",
+      "saleValueShort": "Amount",
+      "valueStart": "Min. value",
+      "valueEnd": "Max. value",
+      "adjustmentValue": "Adjustment",
+      "adjustmentValueShort": "Adj.",
+      "adjustmentValueStart": "Min. adj. value",
+      "adjustmentValueEnd": "Max. adj. value",
+      "adjustmentReason": "Adjustment type",
+      "adjustmentReasonShort": "Adjustments",
+      "status": "Status",
+      "statusShort": "Status"
+    }
+  },
+  "chargebackRequest": {
+    "subtitle": "Analyze chargeback requests sent by the acquirer.",
+    "totals": {
+      "quantity": "Requests: {{count}}",
+      "totalGrossValue": "Gross"
+    },
+    "fields": {
+      "flag": "Flag",
+      "cvNsu": "CV/NSU",
+      "cvNsuShort": "CV/NSU",
+      "company": "Company",
+      "acquirer": "Acquirer",
+      "authorization": "Authorization",
+      "rvNumber": "Sales summary",
+      "rvNumberShort": "Summary",
+      "cardNumber": "Card number",
+      "establishment": "Establishment",
+      "establishmentShort": "Estab.",
+      "modality": "Modality",
+      "modalityShort": "Modal.",
+      "saleDate": "Sale date",
+      "saleDateShort": "Sale",
+      "periodSaleDate": "Sale date period",
+      "deadline": "Limit date",
+      "deadlineShort": "Limit",
+      "periodDeadline": "Request period",
+      "transactionValue": "Transaction Value",
+      "transactionValueShort": "Value",
+      "requestReason": "Request reason",
+      "requestReasonShort": "Reason",
+      "adjustmentStatus": "Request status",
+      "adjustmentStatusShort": "Status"
+    }
+  },
+  "adjustment": {
+    "subtitle": "Analyze adjustments and fees charged by the acquirer.",
+    "totals": {
+      "quantity": "Fees: {{count}}",
+      "totalValue": "Amount"
+    },
+    "fields": {
+      "flag": "Flag",
+      "company": "Company",
+      "acquirer": "Acquirer",
+      "rvNumber": "RV Adjustment",
+      "rvNumberShort": "RV Adj.",
+      "establishment": "Establishment",
+      "establishmentShort": "Estab.",
+      "adjustmentDate": "Adjustment date",
+      "adjustmentDateShort": "Adj. date",
+      "periodAdjustmentDate": "Adjustment date period",
+      "creditDate": "Credit date",
+      "creditDateShort": "Credit date",
+      "periodCreditDate": "Credit date period",
+      "adjustmentValue": "Adjustment",
+      "adjustmentValueShort": "Adj.",
+      "adjustmentReason": "Adjustment reason",
+      "adjustmentReasonShort": "Type",
+      "status": "Status",
+      "statusShort": "Status"
+    }
+  },
+  "processedFileDetail": {
+    "eyebrow": "File detail",
+    "fileFallback": "File",
+    "subtitleFallback": "Processing summary and errors by line.",
+    "summary": {
+      "status": "Status",
+      "processed": "Processed",
+      "startedAt": "Start",
+      "finishedAt": "End"
+    },
+    "kpis": {
+      "totalLines": "Lines",
+      "processedLines": "Processed",
+      "warningLines": "Warnings",
+      "errorLines": "Errors",
+      "pendingContract": "Pend. contract",
+      "pendingContext": "Pend. context"
+    },
+    "errors": {
+      "tableHeader": "Errors and warnings by line",
+      "lineNumber": "Line",
+      "type": "Type",
+      "code": "Code",
+      "message": "Message",
+      "date": "Date",
+      "empty": "No errors/warnings recorded."
+    }
+  },
+  "processedFiles": {
+    "subtitle": "Track ERP/Rede/CNAB imported files, status, errors and pending items.",
+    "fields": {
+      "fileName": "File",
+      "fileNameShort": "File",
+      "origin": "Origin",
+      "status": "Status",
+      "dateFile": "File date",
+      "dateFileShort": "File date",
+      "periodDateFile": "File date period",
+      "dateImport": "Import date",
+      "dateImportShort": "Import",
+      "periodDateImport": "Import date period",
+      "lines": "Lines",
+      "pending": "Pending"
+    }
+  },
+  "importedFilesCalendar": {
+    "eyebrow": "Import monitoring",
+    "title": "Imported files calendar",
+    "description": "View days with and without ERP, Rede and bank files.",
+    "viewFiles": "View files",
+    "refresh": "Refresh",
+    "files": "{count, plural, one {# file} other {# files}}",
+    "waiting": "Waiting",
+    "noImport": "No import",
+    "groups": {
+      "erp": "ERP",
+      "adq": "ADQ",
+      "bank": "BANK"
+    },
+    "tooltip": {
+      "allReceived": "all files received",
+      "noneReceived": "no files received",
+      "statusComplete": "Complete",
+      "statusPartial": "Partial",
+      "statusMissing": "Missing",
+      "received": "Received",
+      "pending": "Pending",
+      "allDone": "All received",
+      "filesAbbrev": "files"
+    },
+    "summary": {
+      "total": "Total imported",
+      "totalSub": "files this month",
+      "withImport": "Days with import",
+      "withImportSub": "days with at least one file",
+      "withoutImport": "Days without import",
+      "withoutImportSub": "days without any file"
+    },
+    "weekdays": {
+      "sun": "Sun",
+      "mon": "Mon",
+      "tue": "Tue",
+      "wed": "Wed",
+      "thu": "Thu",
+      "fri": "Fri",
+      "sat": "Sat"
+    },
+    "detail": {
+      "title": "Day details",
+      "filesCount": "file(s)",
+      "futureDate": "Future date",
+      "noImportation": "No import",
+      "futureDateMessage": "This date has not arrived yet.",
+      "futureDateSubMessage": "The calendar will be updated as files are processed.",
+      "noFileMessage": "No files were imported on this day.",
+      "noFileSubMessage": "The day remains highlighted in the calendar to help identify gaps.",
+      "typeOrigin": "Type / origin"
+    },
+    "status": {
+      "RECEIVED": "Received",
+      "PROCESSING": "Processing",
+      "PROCESSED": "Processed",
+      "PROCESSED_WITH_WARNINGS": "With warnings",
+      "ERROR": "Error",
+      "DUPLICATE": "Duplicate",
+      "INVALID": "Invalid"
+    },
+    "missingByType": {
+      "title": "Pending by file type",
+      "noDays": "No pending days",
+      "erp": "ERP",
+      "adq": "ACQ / Acquirers",
+      "bank": "Bank"
+    }
+  },
+  "fileProcessingDashboard": {
+    "subtitle": "Monitor ERP, Rede and CNAB imports, pending items and bank reconciliation.",
+    "metrics": {
+      "processed": "Processed",
+      "warnings": "With warnings",
+      "errors": "With errors",
+      "pending": "ERP pending"
+    },
+    "scheduler": {
+      "erp": "ERP",
+      "rede": "Rede",
+      "bank": "Bank / CNAB",
+      "noRun": "No execution recorded",
+      "running": "Running",
+      "ok": "OK",
+      "attention": "Attention",
+      "loading": "Loading scheduler status..."
+    },
+    "shortcuts": {
+      "files": {
+        "title": "Processed files",
+        "description": "ERP, Rede and CNAB import history"
+      },
+      "erpPending": {
+        "title": "ERP pending sales",
+        "description": "Sales without business context or contract"
+      },
+      "redeMovements": {
+        "title": "Rede movements",
+        "description": "Acquirer Rede movement report"
+      },
+      "bankReleases": {
+        "title": "Bank releases",
+        "description": "Reconciled CNAB statement"
+      },
+      "divergences": {
+        "title": "Divergences",
+        "description": "Files with detected inconsistencies"
+      }
+    }
+  },
+  "bankStatement": {
+    "subtitle": "Analyze bank entries and payment status.",
+    "fields": {
+      "bank": "Bank",
+      "flag": "Flag",
+      "type": "Type",
+      "value": "Amount",
+      "company": "Company",
+      "category": "Category",
+      "acquirer": "Acquirer",
+      "document": "Document",
+      "statusShort": "Status",
+      "launchDate": "Launch date",
+      "bankHistory": "Bank history",
+      "launchDateShort": "Launch",
+      "establishment": "Establishment",
+      "establishmentShort": "Estab.",
+      "bankingDomicile": "Domicile",
+      "statusPaymentBank": "Bank payment status",
+      "periodLaunchDate": "Launch date period"
+    }
+  },
+  "anticipation": {
+    "subtitle": "Analyze anticipations and respective financial discounts.",
+    "fields": {
+      "bank": "Bank",
+      "flag": "Flag",
+      "company": "Company",
+      "acquirer": "Acquirer",
+      "modality": "Modality",
+      "releaseDate": "Release date",
+      "establishment": "Establishment",
+      "bankingDomicile": "Banking domicile",
+      "periodReleaseDate": "Release date period",
+      "transactionsStatusEnum": "Sale status",
+      "statusPaymentBankEnum": "Bank payment status"
+    }
+  },
+  "saleSummary": {
+    "subtitle": "Analyze sales summary.",
+    "fields": {
+      "flag": "Flag",
+      "bank": "Bank",
+      "company": "Company",
+      "acquirer": "Acquirer",
+      "modality": "Modality",
+      "rvDate": "Sales summary date",
+      "rvNumber": "Sales summary number",
+      "establishment": "Establishment",
+      "bankingDomicile": "Banking domicile",
+      "periodRvDate": "Sales summary period",
+      "transactionsStatusEnum": "Sale status",
+      "creditOrderStatusEnum": "Credit order status",
+      "statusPaymentBankEnum": "Bank payment status"
+    }
+  },
+  "creditOrders": {
+    "title": "Credit orders",
+    "subtitle": "Credit orders.",
+    "fields": {
+      "flag": "Flag",
+      "bank": "Bank",
+      "rv": "Sales summary",
+      "company": "Company",
+      "acquirer": "Acquirer",
+      "modality": "Modality",
+      "rvDate": "Sales summary date",
+      "rvNumber": "Sales summary number",
+      "pvOriginal": "Original PV",
+      "grossValue": "Gross value",
+      "liquidValue": "Net value",
+      "discountValue": "Discount",
+      "releaseDate": "Release date",
+      "establishment": "Establishment",
+      "bankingDomicile": "Banking domicile",
+      "creditOrderDate": "Credit order date",
+      "salesSummaryStatus": "Sales summary status",
+      "statusPaymentBank": "Bank payment status",
+      "periodRvDate": "Sales summary period",
+      "periodReleaseDate": "Release date period",
+      "periodCreditOrderDate": "Credit order date period"
+    }
+  },
+  "adjustments": {
+    "title": "Adjustments",
+    "fields": {
+      "nsu": "CV/NSU",
+      "reason": "Reason",
+      "credit": "Credit",
+      "adjustment": "Adjustments",
+      "installment": "Installment",
+      "creditDate": "Credit date",
+      "adjustmentValue": "Adjustment value",
+      "adjustmentReason": "Adjustment reason",
+      "rvNumberOriginal": "Original summary number"
+    }
+  },
+  "managementDashboard": {
+    "noData": "No data available for the selected period.",
+    "showAll": "Show all",
+    "showLess": "Show less",
+    "groupBy": {
+      "label": "Group by"
+    },
+    "table": {
+      "description": "Description",
+      "transactions": "Transactions",
+      "discount": "Discount",
+      "liquid": "Net",
+      "total": "Total",
+      "pct": "(%)"
+    },
+    "filter": {
+      "company": "Company",
+      "companyPlaceholder": "Select companies",
+      "acquirer": "Acquirer",
+      "acquirerPlaceholder": "Select acquirers",
+      "flag": "Flag",
+      "flagPlaceholder": "Select flags",
+      "modality": "Modality",
+      "modalityPlaceholder": "Select modalities",
+      "period": "Period",
+      "date": "Date",
+      "search": "Filter",
+      "clear": "Clear"
+    },
+    "sales": {
+      "title": "Sales",
+      "colLabel": "Group",
+      "colValue": "Total Sales",
+      "colToReceive": "Receivable"
+    },
+    "payments": {
+      "title": "Payments",
+      "colLabel": "Group",
+      "colSales": "Sales",
+      "colReceived": "Received"
+    },
+    "fees": {
+      "title": "Applied Fees",
+      "colLabel": "Group",
+      "colEffectiveRate": "Effective Rate %",
+      "colAverageRate": "Average %"
+    },
+    "debits": {
+      "title": "Debits",
+      "totalFees": "Total Fees",
+      "totalChargeback": "Total Chargeback",
+      "totalCancellation": "Cancellations",
+      "qty": "Qty",
+      "average": "Average"
+    }
+  },
+  "auditDashboard": {
+    "salesSummary": {
+      "title": "Consolidated Sales Summary",
+      "total": "Total",
+      "collapse": "- Collapse",
+      "expand": "+ Expand by Acquirer",
+      "consultMore": "View more..."
+    },
+    "conciliation": {
+      "title": "Sales Conciliation",
+      "lastImports": "Last Conciliations",
+      "noImport": "No import",
+      "unreconciled": "Unreconciled Vouchers",
+      "colDate": "Date",
+      "colErpAcq": "ACQ X ERP",
+      "colErp": "ERP",
+      "colAcq": "ACQ"
+    },
+    "contestable": {
+      "title": "CVs with contestable fees",
+      "subtitle": "CVs to request reimbursement"
+    },
+    "files": {
+      "title": "Files",
+      "lastImported": "Last Imported Files",
+      "today": "TODAY",
+      "yesterday": "YESTERDAY",
+      "last7days": "LAST 7 DAYS",
+      "processed": "Processed Files"
     }
   },
   "notFound": {

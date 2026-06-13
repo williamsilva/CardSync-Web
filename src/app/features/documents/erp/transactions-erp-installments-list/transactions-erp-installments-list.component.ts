@@ -360,8 +360,11 @@ export class ErpInstallmentsListComponent
   protected searchOnFileSales(row: TransactionsErpInstallmentModel): void {
     const targetFilters = this.buildTargetFileFilters(row);
 
-    localStorage.setItem(STATE_KEY.CARDSYNC.FILE.FILTERS.V1, JSON.stringify(targetFilters));
-    localStorage.removeItem(STATE_KEY.CARDSYNC.FILE.TABLE.STATE.V1);
+    localStorage.setItem(
+      STATE_KEY.CARDSYNC.PROCESSED_FILES.FILES.FILTERS.V1,
+      JSON.stringify(targetFilters),
+    );
+    localStorage.removeItem(STATE_KEY.CARDSYNC.PROCESSED_FILES.FILES.TABLE.STATE.V1);
 
     this.openRouteInNewTab(['/file-processing/files']);
   }
