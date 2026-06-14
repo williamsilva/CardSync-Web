@@ -172,6 +172,99 @@ export const STATE_KEY = {
         },
       },
     },
+    /* Cadastros */
+    REGISTER: {
+      HOLIDAYS: {
+        TABLE: {
+          ROWS: { V1: 'cardsync.register.holidays.table.rows' },
+          STATE: { V1: 'cardsync.register.holidays.table.state.v1' },
+        },
+        FILTERS: { V1: 'cardsync.register.holidays.filters.v1' },
+      },
+      BANKS: {
+        TABLE: {
+          ROWS: { V1: 'cardsync.register.banks.table.rows' },
+          STATE: { V1: 'cardsync.register.banks.table.state.v1' },
+        },
+        FILTERS: { V1: 'cardsync.register.banks.filters.v1' },
+      },
+      BANKING_DOMICILE: {
+        TABLE: {
+          ROWS: { V1: 'cardsync.register.banking-domicile.table.rows' },
+          STATE: { V1: 'cardsync.register.banking-domicile.table.state.v1' },
+        },
+        FILTERS: { V1: 'cardsync.register.banking-domicile.filters.v1' },
+      },
+      COMPANY: {
+        TABLE: {
+          ROWS: { V1: 'company.table.rows' },
+          STATE: { V1: 'cardsync.company.table.state.v1' },
+        },
+        FILTERS: { V1: 'cardsync.company.filters.v1' },
+      },
+      ACQUIRER: {
+        TABLE: {
+          ROWS: { V1: 'acquirer.table.rows' },
+          STATE: { V1: 'cardsync.acquirer.table.state.v1' },
+        },
+        FILTERS: { V1: 'cardsync.acquirer.filters.v1' },
+      },
+      CONTRACT: {
+        TABLE: {
+          ROWS: { V1: 'contract.table.rows' },
+          STATE: { V1: 'cardsync.contract.table.state.v1' },
+        },
+        FILTERS: { V1: 'cardsync.contract.filters.v1' },
+      },
+      FLAG: {
+        TABLE: {
+          ROWS: { V1: 'flag.table.rows' },
+          STATE: { V1: 'cardsync.flag.table.state.v1' },
+        },
+        FILTERS: { V1: 'cardsync.flag.filters.v1' },
+      },
+      ESTABLISHMENT: {
+        TABLE: {
+          ROWS: { V1: 'establishment.table.rows' },
+          STATE: { V1: 'cardsync.establishment.table.state.v1' },
+        },
+        FILTERS: { V1: 'cardsync.establishment.filters.v1' },
+      },
+      NO_FILE_DAY: {
+        TABLE: {
+          ROWS: { V1: 'cardsync.register.no-file-day.table.rows' },
+          STATE: { V1: 'cardsync.register.no-file-day.table.state.v1' },
+        },
+        FILTERS: { V1: 'cardsync.register.no-file-day.filters.v1' },
+      },
+    },
+    /* Segurança */
+    SECURITY: {
+      USERS: {
+        TABLE: {
+          ROWS: { V1: 'users.table.rows' },
+          STATE: { V1: 'cardsync.users.table.state.v1' },
+        },
+        FILTERS: { V1: 'cardsync.users.filters.v1' },
+      },
+      GROUPS: {
+        TABLE: {
+          ROWS: { V1: 'groups.table.rows' },
+          STATE: { V1: 'cardsync.groups.table.state.v1' },
+        },
+        FILTERS: { V1: 'cardsync.groups.filters.v1' },
+      },
+    },
+    /* Auditoria */
+    AUDIT: {
+      EMAIL_LOGS: {
+        TABLE: {
+          ROWS: { V1: 'audit.emailLog.table.rows' },
+          STATE: { V1: 'cardsync.audit.emailLog.table.state.v1' },
+        },
+        FILTERS: { V1: 'cardsync.audit.mailLog.filters.v1' },
+      },
+    },
     /* Conciliação */
     CONCILIATION: {
       FEES: {

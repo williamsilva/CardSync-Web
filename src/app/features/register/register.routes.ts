@@ -72,6 +72,58 @@ export const REGISTER_ROUTES: Routes = [
       ),
   },
   {
+    path: 'holidays',
+    title: 'routes.register.holidays.title',
+    canActivate: [permissionGuard],
+    data: {
+      requireAll: false,
+      redirectTo: '/forbidden',
+      permissions: [PERMISSIONS.HOLIDAYS.VIEW],
+    },
+    loadComponent: () =>
+      import('./holiday/holiday-list/holiday-list.component').then((m) => m.HolidayListComponent),
+  },
+  {
+    path: 'banks',
+    title: 'routes.register.banks.title',
+    canActivate: [permissionGuard],
+    data: {
+      requireAll: false,
+      redirectTo: '/forbidden',
+      permissions: [PERMISSIONS.BANKS.VIEW],
+    },
+    loadComponent: () =>
+      import('./bank/bank-list/bank-list.component').then((m) => m.BankListComponent),
+  },
+  {
+    path: 'banking-domicile',
+    title: 'routes.register.bankingDomicile.title',
+    canActivate: [permissionGuard],
+    data: {
+      requireAll: false,
+      redirectTo: '/forbidden',
+      permissions: [PERMISSIONS.BANKING_DOMICILE.VIEW],
+    },
+    loadComponent: () =>
+      import('./banking-domicile/banking-domicile-list/banking-domicile-list.component').then(
+        (m) => m.BankingDomicileListComponent,
+      ),
+  },
+  {
+    path: 'no-file-day',
+    title: 'routes.register.noFileDay.title',
+    canActivate: [permissionGuard],
+    data: {
+      requireAll: false,
+      redirectTo: '/forbidden',
+      permissions: [PERMISSIONS.NO_FILE_DAY.VIEW],
+    },
+    loadComponent: () =>
+      import('./no-file-day/no-file-day-list/no-file-day-list.component').then(
+        (m) => m.NoFileDayListComponent,
+      ),
+  },
+  {
     path: '**',
     title: 'routes.notFound.title',
     loadComponent: () => import('../error/not-found/not-found.page').then((m) => m.NotFoundPage),

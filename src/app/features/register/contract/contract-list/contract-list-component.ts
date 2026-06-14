@@ -24,6 +24,7 @@ import { CompanyFacade } from '@features/facade/company.facade';
 import { CsDocumentPipe } from '@shared/pipes/cs-document.pipe';
 import { ContractFacade } from '@features/facade/contract.facade';
 import { AcquirerFacade } from '@features/facade/acquirer.facade';
+import { STATE_KEY } from '@features/state-key.constants';
 import { StatefulListPage } from '@features/list-base/stateful-list-page';
 import { ContractAdvancedFilters } from '@features/filter/contract.filters';
 import { EstablishmentFacade } from '@features/facade/establishment.facade';
@@ -564,15 +565,15 @@ export class ContractListComponent
   }
 
   protected override tableStateKey(): string {
-    return 'cardsync.contract.table.state.v1';
+    return STATE_KEY.CARDSYNC.REGISTER.CONTRACT.TABLE.STATE.V1;
   }
 
   protected override tableRowsKey(): string {
-    return 'contract.table.rows';
+    return STATE_KEY.CARDSYNC.REGISTER.CONTRACT.TABLE.ROWS.V1;
   }
 
   protected override filtersKey(): string {
-    return 'cardsync.contract.filters.v1';
+    return STATE_KEY.CARDSYNC.REGISTER.CONTRACT.FILTERS.V1;
   }
 
   protected override loadFirstPage() {

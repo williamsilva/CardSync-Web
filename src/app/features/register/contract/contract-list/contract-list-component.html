@@ -254,7 +254,7 @@
   [loading]="facadeContract.loading()"
   [paginatorDropdownAppendTo]="'body'"
   [rowsPerPageOptions]="rowsPerPageOptions"
-  stateKey="cardsync.contract.table.state.v1"
+  [stateKey]="tableStateKey()"
   [tableStyle]="{ width: '100%', 'min-width': '90rem' }"
   [currentPageReportTemplate]="'pagination.report' | translate"
 >

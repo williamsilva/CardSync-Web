@@ -229,7 +229,7 @@
   (onLazyLoad)="onLazyLoad($event)"
   [paginatorDropdownAppendTo]="'body'"
   [rowsPerPageOptions]="rowsPerPageOptions"
-  stateKey="cardsync.company.table.state.v1"
+  [stateKey]="tableStateKey()"
   [tableStyle]="{ width: '100%', 'min-width': '62rem' }"
   [currentPageReportTemplate]="'pagination.report' | translate"
 >

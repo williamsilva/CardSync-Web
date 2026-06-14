@@ -18,6 +18,7 @@ import { I18nService } from '@core/i18n/i18n.service';
 import { FlagFacade } from '@features/facade/flag.facade';
 import { FlagFiltersState, FlagModel } from '@models/flag.models';
 import { FlagAdvancedFilters } from '@features/filter/flag.filters';
+import { STATE_KEY } from '@features/state-key.constants';
 import { StatefulListPage } from '@features/list-base/stateful-list-page';
 import { BulkActionListPage } from '@features/list-base/bulk-action-list-page';
 import { buildListQuery } from '@shared/features/list-query/list-query.builder';
@@ -370,15 +371,15 @@ export class FlagListComponent extends StatefulListPage<FlagFiltersState, FlagAd
   }
 
   protected override tableStateKey(): string {
-    return 'cardsync.flag.table.state.v1';
+    return STATE_KEY.CARDSYNC.REGISTER.FLAG.TABLE.STATE.V1;
   }
 
   protected override tableRowsKey(): string {
-    return 'flag.table.rows';
+    return STATE_KEY.CARDSYNC.REGISTER.FLAG.TABLE.ROWS.V1;
   }
 
   protected override filtersKey(): string {
-    return 'cardsync.flag.filters.v1';
+    return STATE_KEY.CARDSYNC.REGISTER.FLAG.FILTERS.V1;
   }
 
   protected override readonly advancedActiveFilters = computed<ActiveFilterItem[]>(() => {

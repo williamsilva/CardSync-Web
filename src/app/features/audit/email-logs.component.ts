@@ -25,6 +25,7 @@ import {
   ActiveFilterItem,
   FiltersPanelComponent,
 } from '@shared/features/filters-panel/filters-panel.component';
+import { STATE_KEY } from '@features/state-key.constants';
 import { StatefulListPage } from '@features/list-base/stateful-list-page';
 import {
   readSingleFilterValue,
@@ -166,15 +167,15 @@ export class EmailLogsComponent extends StatefulListPage<EmailLogsFiltersState, 
   }
 
   protected override tableStateKey(): string {
-    return 'cardsync.audit.emailLog.table.state.v1';
+    return STATE_KEY.CARDSYNC.AUDIT.EMAIL_LOGS.TABLE.STATE.V1;
   }
 
   protected override tableRowsKey(): string {
-    return 'audit.emailLog.table.rows';
+    return STATE_KEY.CARDSYNC.AUDIT.EMAIL_LOGS.TABLE.ROWS.V1;
   }
 
   protected override filtersKey(): string {
-    return 'cardsync.audit.mailLog.filters.v1';
+    return STATE_KEY.CARDSYNC.AUDIT.EMAIL_LOGS.FILTERS.V1;
   }
 
   protected override refresh(): void {

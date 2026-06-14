@@ -26,6 +26,7 @@ import { UsersFacade } from '@features/facade/users.facade';
 import { CsDocumentPipe } from '@shared/pipes/cs-document.pipe';
 import { AcquirerFacade } from '@features/facade/acquirer.facade';
 import { PermissionService } from '@core/auth/permission.service';
+import { STATE_KEY } from '@features/state-key.constants';
 import { StatefulListPage } from '@features/list-base/stateful-list-page';
 import { AcquirerAdvancedFilters } from '@features/filter/acquirer.filters';
 import { AcquirerModel, AcquirerFiltersState } from '@models/acquirer.models';
@@ -482,15 +483,15 @@ export class AcquirerListComponent extends StatefulListPage<
   }
 
   protected override tableStateKey(): string {
-    return 'cardsync.acquirer.table.state.v1';
+    return STATE_KEY.CARDSYNC.REGISTER.ACQUIRER.TABLE.STATE.V1;
   }
 
   protected override tableRowsKey(): string {
-    return 'acquirer.table.rows';
+    return STATE_KEY.CARDSYNC.REGISTER.ACQUIRER.TABLE.ROWS.V1;
   }
 
   protected override filtersKey(): string {
-    return 'cardsync.acquirer.filters.v1';
+    return STATE_KEY.CARDSYNC.REGISTER.ACQUIRER.FILTERS.V1;
   }
 
   protected override refresh(): void {

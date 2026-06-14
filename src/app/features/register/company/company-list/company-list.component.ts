@@ -27,6 +27,7 @@ import { CompanyFacade } from '@features/facade/company.facade';
 import { CsDocumentPipe } from '@shared/pipes/cs-document.pipe';
 import { PermissionService } from '@core/auth/permission.service';
 import { CompanyAdvancedFilters } from '@features/filter/company.filters';
+import { STATE_KEY } from '@features/state-key.constants';
 import { StatefulListPage } from '@features/list-base/stateful-list-page';
 import { CompanyModel, CompanyFiltersState } from '@models/company.models';
 import { BulkActionListPage } from '@features/list-base/bulk-action-list-page';
@@ -484,15 +485,15 @@ export class CompanyListComponent extends StatefulListPage<
   }
 
   protected override tableStateKey(): string {
-    return 'cardsync.company.table.state.v1';
+    return STATE_KEY.CARDSYNC.REGISTER.COMPANY.TABLE.STATE.V1;
   }
 
   protected override tableRowsKey(): string {
-    return 'company.table.rows';
+    return STATE_KEY.CARDSYNC.REGISTER.COMPANY.TABLE.ROWS.V1;
   }
 
   protected override filtersKey(): string {
-    return 'cardsync.company.filters.v1';
+    return STATE_KEY.CARDSYNC.REGISTER.COMPANY.FILTERS.V1;
   }
 
   protected override refresh(): void {

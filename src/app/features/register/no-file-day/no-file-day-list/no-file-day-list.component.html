@@ -1,0 +1,521 @@
+<cs-page-header
+  [subtitle]="'noFileDay.subtitle' | translate"
+  [breadcrumb]="[
+    { label: ('breadcrumb.dashboard.title' | translate), url: '/' },
+    { label: ('breadcrumb.register.noFileDay' | translate) },
+  ]"
+  [compact]="false"
+>
+  <button
+    pButton
+    type="button"
+    (click)="refresh()"
+    icon="pi pi-refresh"
+    class="p-button-text p-button-sm"
+    [label]="'common.update' | translate"
+  ></button>
+
+  <button
+    pButton
+    type="button"
+    icon="pi pi-check-circle"
+    (click)="confirmActivateSelected()"
+    [disabled]="!canActivateSelected()"
+    class="p-button-success p-button-sm"
+    [label]="'noFileDay.activate.selected' | translate"
+  ></button>
+
+  <button
+    pButton
+    type="button"
+    icon="pi pi-lock"
+    (click)="confirmBlockSelected()"
+    [disabled]="!canBlockSelected()"
+    class="p-button-warn p-button-sm"
+    [label]="'noFileDay.block.selected' | translate"
+  ></button>
+
+  <button
+    pButton
+    type="button"
+    icon="pi pi-ban"
+    class="p-button-danger p-button-sm"
+    (click)="confirmDeactivateSelected()"
+    [disabled]="!canDeactivateSelected()"
+    [label]="'noFileDay.deactivate.selected' | translate"
+  ></button>
+
+  <button
+    pButton
+    type="button"
+    (click)="goNew()"
+    icon="pi pi-plus"
+    class="p-button-info p-button-sm"
+    [disabled]="!secPolicy.canCreate()"
+    [label]="'noFileDay.new.title' | translate"
+  ></button>
+</cs-page-header>
+
+<app-no-file-day-create-dialog
+  (saved)="onSaved()"
+  [noFileDay]="noFileDay()"
+  [visible]="upsertVisible()"
+  (visibleChange)="onUpsertVisibleChange($event)"
+></app-no-file-day-create-dialog>
+
+<cs-filters-panel
+  (clear)="clear()"
+  [collapsed]="true"
+  (search)="search()"
+  [actionsAlign]="'start'"
+  [activeFilterGroups]="activeFilterGroups()"
+  [activeCount]="activeFiltersCount()"
+  [title]="'common.filter' | translate"
+>
+  <div class="grid formgrid gap-0 align-items-end">
+    <div class="col-12 md:col-4 p-1">
+      <p-floatLabel variant="on" class="w-full">
+        <input
+          pInputText
+          id="description"
+          [ngModel]="description()"
+          class="w-full p-inputtext-sm"
+          (ngModelChange)="description.set($event ?? '')"
+        />
+        <label for="description">{{ 'noFileDay.fields.description' | translate }}</label>
+      </p-floatLabel>
+    </div>
+
+    <div class="col-12 md:col-4 p-1">
+      <p-floatLabel variant="on" class="w-full">
+        <p-datepicker
+          inputId="noFileDateRange"
+          class="w-full"
+          size="small"
+          appendTo="body"
+          [showIcon]="true"
+          [readonlyInput]="true"
+          selectionMode="range"
+          dateFormat="dd/mm/yy"
+          [ngModel]="noFileDateRange()"
+          (ngModelChange)="noFileDateRange.set($event ?? null)"
+        ></p-datepicker>
+        <label for="noFileDateRange">{{ 'noFileDay.fields.noFileDate' | translate }}</label>
+      </p-floatLabel>
+    </div>
+
+    <div class="col-12 md:col-4 p-1">
+      <p-floatLabel variant="on" class="w-full">
+        <p-multiSelect
+          size="small"
+          class="w-full"
+          appendTo="body"
+          display="chip"
+          [filter]="false"
+          [showClear]="true"
+          optionLabel="label"
+          optionValue="value"
+          inputId="statusEnum"
+          [showToggleAll]="false"
+          [ngModel]="statusEnum()"
+          [options]="statusEnumOptions()"
+          (ngModelChange)="statusEnum.set($event?.length ? $event : null)"
+        />
+        <label for="statusEnum">{{ 'noFileDay.fields.statusEnum' | translate }}</label>
+      </p-floatLabel>
+    </div>
+
+    <div class="col-12 md:col-4 p-1">
+      <p-floatLabel variant="on" class="w-full">
+        <p-multiSelect
+          size="small"
+          class="w-full"
+          appendTo="body"
+          display="chip"
+          [filter]="false"
+          [showClear]="true"
+          optionLabel="label"
+          optionValue="value"
+          inputId="dayType"
+          [showToggleAll]="false"
+          [ngModel]="dayType()"
+          [options]="dayTypeOptions()"
+          (ngModelChange)="dayType.set($event?.length ? $event : null)"
+        />
+        <label for="dayType">{{ 'noFileDay.fields.dayType' | translate }}</label>
+      </p-floatLabel>
+    </div>
+
+    <div class="col-12 md:col-4 p-1">
+      <p-floatLabel variant="on" class="w-full">
+        <p-multiSelect
+          size="small"
+          class="w-full"
+          appendTo="body"
+          display="chip"
+          [filter]="false"
+          [showClear]="true"
+          optionLabel="label"
+          optionValue="value"
+          inputId="fileGroup"
+          [showToggleAll]="false"
+          [ngModel]="fileGroup()"
+          [options]="fileGroupOptions()"
+          (ngModelChange)="fileGroup.set($event?.length ? $event : null)"
+        />
+        <label for="fileGroup">{{ 'noFileDay.fields.fileGroup' | translate }}</label>
+      </p-floatLabel>
+    </div>
+  </div>
+</cs-filters-panel>
+
+<div class="flex align-items-center justify-content-between mb-2 px-1">
+  <small class="opacity-80">
+    {{ 'noFileDay.selection.currentMode' | translate }}:
+    {{ selectionModeLabel() }}
+  </small>
+
+  @if (selectedRows().length) {
+    <small class="opacity-80">
+      {{ 'noFileDay.selection.count' | translate: { count: selectedRows().length } }}
+    </small>
+  }
+</div>
+
+<p-table
+  #dt
+  stripedRows
+  dataKey="id"
+  size="small"
+  [rows]="rows"
+  [lazy]="true"
+  showGridlines
+  [rowHover]="true"
+  [paginator]="true"
+  sortMode="multiple"
+  filterDisplay="menu"
+  stateStorage="local"
+  [value]="noFileDays()"
+  class="p-datatable-sm mt-1"
+  styleClass="cs-admin-table"
+  [loading]="facade.loading()"
+  [showCurrentPageReport]="true"
+  [totalRecords]="totalRecords()"
+  (onPage)="onPageChange($event)"
+  (onLazyLoad)="onLazyLoad($event)"
+  [paginatorDropdownAppendTo]="'body'"
+  [rowsPerPageOptions]="rowsPerPageOptions"
+  [stateKey]="tableStateKey()"
+  [tableStyle]="{ width: '100%', 'min-width': '68rem' }"
+  [currentPageReportTemplate]="'pagination.report' | translate"
+>
+  <ng-template pTemplate="colgroup">
+    <colgroup>
+      <col style="width: 44px" />
+      <col style="width: auto" />
+      <col style="width: 130px" />
+      <col style="width: 130px" />
+      <col style="width: 130px" />
+      <col style="width: 130px" />
+      <col style="width: 130px" />
+      <col style="width: 150px" />
+      <col style="width: 150px" />
+      <col style="width: 100px" />
+    </colgroup>
+  </ng-template>
+
+  <ng-template pTemplate="header">
+    <tr>
+      <th class="text-center">
+        @if (selectionStatus()) {
+          <p-checkbox
+            [binary]="true"
+            [ngModel]="headerChecked()"
+            [indeterminate]="headerIndeterminate()"
+            (onChange)="toggleHeaderSelection(!!$event.checked)"
+          ></p-checkbox>
+        } @else {
+          <i
+            class="pi pi-info-circle opacity-70"
+            [pTooltip]="'noFileDay.selection.pickOneFirst' | translate"
+            tooltipPosition="top"
+          ></i>
+        }
+      </th>
+
+      <th pSortableColumn="description">
+        <div class="th-flex">
+          <span class="th-label">{{ 'noFileDay.columns.description' | translate }}</span>
+          <span class="th-icons">
+            <p-sortIcon field="description"></p-sortIcon>
+            <p-columnFilter
+              type="text"
+              display="menu"
+              field="description"
+              matchMode="contains"
+              [useGrouping]="false"
+              [showOperator]="false"
+              [showAddButton]="false"
+              styleClass="cs-colfilter"
+            ></p-columnFilter>
+          </span>
+        </div>
+      </th>
+
+      <th pSortableColumn="noFileDate">
+        <div class="th-flex">
+          <span class="th-label">{{ 'noFileDay.columns.noFileDate' | translate }}</span>
+          <span class="th-icons">
+            <p-sortIcon field="noFileDate"></p-sortIcon>
+          </span>
+        </div>
+      </th>
+
+      <th pSortableColumn="fileGroup">
+        <div class="th-flex">
+          <span class="th-label">{{ 'noFileDay.columns.fileGroup' | translate }}</span>
+          <span class="th-icons">
+            <p-sortIcon field="fileGroup"></p-sortIcon>
+            <p-columnFilter
+              display="menu"
+              matchMode="in"
+              field="fileGroup"
+              [showOperator]="false"
+              [showAddButton]="false"
+              [showMatchModes]="false"
+              styleClass="cs-colfilter"
+            >
+              <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                <p-multiSelect
+                  class="w-full"
+                  appendTo="body"
+                  [ngModel]="value"
+                  [showClear]="true"
+                  optionLabel="label"
+                  optionValue="value"
+                  [options]="fileGroupOptions()"
+                  (onChange)="filter($event.value)"
+                  [placeholder]="'common.all' | translate"
+                ></p-multiSelect>
+              </ng-template>
+            </p-columnFilter>
+          </span>
+        </div>
+      </th>
+
+      <th pSortableColumn="dayType">
+        <div class="th-flex">
+          <span class="th-label">{{ 'noFileDay.columns.dayType' | translate }}</span>
+          <span class="th-icons">
+            <p-sortIcon field="dayType"></p-sortIcon>
+            <p-columnFilter
+              display="menu"
+              matchMode="in"
+              field="dayType"
+              [showOperator]="false"
+              [showAddButton]="false"
+              [showMatchModes]="false"
+              styleClass="cs-colfilter"
+            >
+              <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                <p-multiSelect
+                  class="w-full"
+                  appendTo="body"
+                  [ngModel]="value"
+                  [showClear]="true"
+                  optionLabel="label"
+                  optionValue="value"
+                  [options]="dayTypeOptions()"
+                  (onChange)="filter($event.value)"
+                  [placeholder]="'common.all' | translate"
+                ></p-multiSelect>
+              </ng-template>
+            </p-columnFilter>
+          </span>
+        </div>
+      </th>
+
+      <th pSortableColumn="statusEnum">
+        <div class="th-flex">
+          <span class="th-label">{{ 'noFileDay.columns.statusEnum' | translate }}</span>
+          <span class="th-icons">
+            <p-sortIcon field="statusEnum"></p-sortIcon>
+            <p-columnFilter
+              field="statusEnum"
+              display="menu"
+              matchMode="in"
+              [showOperator]="false"
+              [showAddButton]="false"
+              [showMatchModes]="false"
+              styleClass="cs-colfilter"
+            >
+              <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                <p-multiSelect
+                  class="w-full"
+                  appendTo="body"
+                  [ngModel]="value"
+                  [showClear]="true"
+                  optionLabel="label"
+                  optionValue="value"
+                  [options]="statusEnumOptions()"
+                  (onChange)="filter($event.value)"
+                  [placeholder]="'common.all' | translate"
+                ></p-multiSelect>
+              </ng-template>
+            </p-columnFilter>
+          </span>
+        </div>
+      </th>
+
+      <th pSortableColumn="bank">
+        <div class="th-flex">
+          <span class="th-label">{{ 'noFileDay.columns.bank' | translate }}</span>
+          <span class="th-icons">
+            <p-sortIcon field="bank"></p-sortIcon>
+          </span>
+        </div>
+      </th>
+
+      <th pSortableColumn="statusDate">
+        <div class="th-flex">
+          <span class="th-label">{{ 'noFileDay.columns.statusDate' | translate }}</span>
+          <span class="th-icons">
+            <p-sortIcon field="statusDate"></p-sortIcon>
+          </span>
+        </div>
+      </th>
+
+      <th pSortableColumn="createdAt">
+        <div class="th-flex">
+          <span class="th-label">{{ 'noFileDay.columns.createdAt' | translate }}</span>
+          <span class="th-icons">
+            <p-sortIcon field="createdAt"></p-sortIcon>
+          </span>
+        </div>
+      </th>
+
+      <th class="text-center">
+        <div class="th-flex justify-content-center">
+          <span class="th-label">{{ 'common.actions' | translate }}</span>
+        </div>
+      </th>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="body" let-row>
+    <tr>
+      <td class="text-center">
+        <p-checkbox
+          [binary]="true"
+          [ngModel]="isRowSelected(row)"
+          [disabled]="isRowCheckboxDisabled(row)"
+          (onChange)="toggleRowSelection(row, !!$event.checked)"
+        ></p-checkbox>
+      </td>
+
+      <td class="cell-strong">{{ row.description }}</td>
+
+      <td class="cell-muted text-center">
+        {{ row.noFileDate ? (row.noFileDate | csDate: 'date') : '-' }}
+      </td>
+
+      <td class="cell-muted text-center">
+        <cs-tag [value]="fileGroupLabel(row.fileGroup)" [tone]="fileGroupSeverity(row.fileGroup)" />
+      </td>
+
+      <td class="cell-muted text-center">
+        <cs-tag [value]="dayTypeLabel(row.dayType)" [tone]="dayTypeSeverity(row.dayType)" />
+      </td>
+
+      <td class="cell-muted text-center">
+        <cs-tag [value]="statusEnumLabel(row.status)" [tone]="severityEnum(row.status)" />
+      </td>
+
+      <td class="cell-muted text-center">
+        {{ row.bank ? (row.bank.code ? row.bank.code + ' - ' : '') + (row.bank.name ?? '') : '-' }}
+      </td>
+
+      <td class="cell-muted text-center">
+        {{ row.statusDate ? (row.statusDate | csDate: 'short') : '-' }}
+      </td>
+
+      <td class="cell-muted text-center">
+        {{ row.createdAt ? (row.createdAt | csDate: 'short') : '-' }}
+      </td>
+
+      <td class="text-center">
+        <div class="table-actions">
+          <button
+            pButton
+            type="button"
+            icon="pi pi-pencil"
+            (click)="edit(row)"
+            tooltipPosition="top"
+            class="p-button-text p-button-sm"
+            [disabled]="!secPolicy.canEdit(row)"
+            [pTooltip]="secPolicy.canEdit(row) ? ('common.edit' | translate) : undefined"
+          ></button>
+
+          <button
+            pButton
+            type="button"
+            tooltipPosition="top"
+            icon="pi pi-check-circle"
+            class="p-button-text p-button-sm"
+            [disabled]="!secPolicy.canActivate(row)"
+            [pTooltip]="secPolicy.canActivate(row) ? ('common.activate' | translate) : undefined"
+            (click)="confirmActivate(row)"
+          ></button>
+
+          <button
+            pButton
+            type="button"
+            icon="pi pi-ban"
+            tooltipPosition="top"
+            class="p-button-text p-button-sm"
+            [disabled]="!secPolicy.canDeactivate(row)"
+            [pTooltip]="secPolicy.canDeactivate(row) ? ('common.deactivate' | translate) : undefined"
+            (click)="confirmDeactivate(row)"
+          ></button>
+
+          <button
+            pButton
+            type="button"
+            icon="pi pi-lock"
+            tooltipPosition="top"
+            class="p-button-text p-button-sm"
+            [disabled]="!secPolicy.canBlock(row)"
+            [pTooltip]="secPolicy.canBlock(row) ? ('noFileDay.block.header' | translate) : undefined"
+            (click)="confirmBlock(row)"
+          ></button>
+        </div>
+      </td>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="emptymessage">
+    <tr>
+      <td [attr.colspan]="10" class="empty-td">
+        <div class="empty empty-center">
+          <div class="empty-title">
+            {{
+              facade.loadedOnce()
+                ? ('common.noRecordsFound' | translate)
+                : ('common.loading' | translate)
+            }}
+          </div>
+        </div>
+      </td>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="loadingbody">
+    @for (row of skeletonRows; track $index) {
+      <tr>
+        @for (_ of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; track $index) {
+          <td><p-skeleton></p-skeleton></td>
+        }
+      </tr>
+    }
+  </ng-template>
+</p-table>

@@ -1445,7 +1445,6 @@
             {{ row.company?.fantasyName || '-' }}
           </span>
         </td>
-
         <td>
           <span
             tooltipPosition="top"
@@ -1455,18 +1454,15 @@
             {{ row.establishment?.pvNumber || '-' }}
           </span>
         </td>
-
         <td class="cell-muted text-center">
           <cs-tag [value]="modalityLabel(row.modality)" [tone]="modalitySeverity(row.modality)" />
         </td>
-
         <td class="cell-muted text-center">
           <cs-tag
             [value]="captureEnumLabel(row.capture)"
             [tone]="captureEnumSeverity(row.capture)"
           />
         </td>
-
         <td>
           <span
             class="cs-table-cell-ellipsis"
@@ -1476,7 +1472,6 @@
             {{ row.acquirer?.fantasyName || '-' }}
           </span>
         </td>
-
         <td>
           <span
             class="cs-table-cell-ellipsis"
@@ -1486,9 +1481,7 @@
             {{ row.flag?.name || '-' }}
           </span>
         </td>
-
         <td class="text-right">{{ row.grossValue | csCurrency }}</td>
-
         <td class="text-right">
           <div class="cs-cell-with-info justify-content-end">
             <span>{{ row.discountValue | csCurrency }}</span>

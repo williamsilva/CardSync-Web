@@ -1,0 +1,273 @@
+<p-dialog
+  [modal]="true"
+  appendTo="body"
+  [closable]="false"
+  (onHide)="onHide()"
+  [draggable]="false"
+  [resizable]="false"
+  [visible]="visible()"
+  [contentStyle]="{ overflow: 'visible' }"
+  [style]="{ width: '720px', maxWidth: '95vw' }"
+  [header]="
+    bankingDomicile()?.id
+      ? ('bankingDomicile.edit.title' | translate)
+      : ('bankingDomicile.new.title' | translate)
+  "
+>
+  <form [formGroup]="form" class="cs-dialog-form">
+    <div class="grid formgrid gap-0">
+      <div class="col-12 md:col-4 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <input
+            pInputText
+            type="number"
+            id="agency"
+            formControlName="agency"
+            class="w-full p-inputtext-sm"
+          />
+          <app-error-msg
+            [field]="'agency'"
+            [forId]="'agency'"
+            [control]="form.controls.agency"
+            [label]="'bankingDomicile.columns.agency' | translate"
+          />
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 md:col-2 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <input
+            pInputText
+            type="text"
+            id="agencyDigit"
+            formControlName="agencyDigit"
+            class="w-full p-inputtext-sm"
+          />
+          <app-error-msg
+            [required]="false"
+            [field]="'agencyDigit'"
+            [forId]="'agencyDigit'"
+            [control]="form.controls.agencyDigit"
+            [label]="'bankingDomicile.columns.agencyDigit' | translate"
+          />
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 md:col-4 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <input
+            pInputText
+            type="number"
+            id="currentAccount"
+            formControlName="currentAccount"
+            class="w-full p-inputtext-sm"
+          />
+          <app-error-msg
+            [field]="'currentAccount'"
+            [forId]="'currentAccount'"
+            [control]="form.controls.currentAccount"
+            [label]="'bankingDomicile.columns.currentAccount' | translate"
+          />
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 md:col-2 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <input
+            pInputText
+            type="text"
+            id="accountDigit"
+            formControlName="accountDigit"
+            class="w-full p-inputtext-sm"
+          />
+          <app-error-msg
+            [required]="false"
+            [field]="'accountDigit'"
+            [forId]="'accountDigit'"
+            [control]="form.controls.accountDigit"
+            [label]="'bankingDomicile.columns.accountDigit' | translate"
+          />
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 md:col-6 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-datepicker
+            size="small"
+            class="w-full"
+            appendTo="body"
+            [showIcon]="true"
+            dateFormat="dd/mm/yy"
+            [readonlyInput]="true"
+            inputId="accountOpeningDate"
+            formControlName="accountOpeningDate"
+            [invalid]="
+              form.controls.accountOpeningDate.invalid &&
+              (form.controls.accountOpeningDate.dirty || form.controls.accountOpeningDate.touched)
+            "
+          ></p-datepicker>
+          <app-error-msg
+            [field]="'accountOpeningDate'"
+            [forId]="'accountOpeningDate'"
+            [control]="form.controls.accountOpeningDate"
+            [label]="'bankingDomicile.columns.accountOpeningDate' | translate"
+          />
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 md:col-6 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-datepicker
+            size="small"
+            class="w-full"
+            appendTo="body"
+            [showIcon]="true"
+            dateFormat="dd/mm/yy"
+            [readonlyInput]="true"
+            inputId="accountClosingDate"
+            formControlName="accountClosingDate"
+            [invalid]="
+              form.controls.accountClosingDate.invalid &&
+              (form.controls.accountClosingDate.dirty || form.controls.accountClosingDate.touched)
+            "
+          ></p-datepicker>
+          <app-error-msg
+            [field]="'accountClosingDate'"
+            [forId]="'accountClosingDate'"
+            [control]="form.controls.accountClosingDate"
+            [label]="'bankingDomicile.columns.accountClosingDate' | translate"
+          />
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 md:col-6 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-select
+            size="small"
+            class="w-full"
+            appendTo="body"
+            inputId="expectsFile"
+            [filter]="false"
+            [showClear]="false"
+            optionValue="value"
+            optionLabel="label"
+            formControlName="expectsFile"
+            [options]="expectsFileOptions()"
+            [invalid]="
+              form.controls.expectsFile.invalid &&
+              (form.controls.expectsFile.dirty || form.controls.expectsFile.touched)
+            "
+          ></p-select>
+          <app-error-msg
+            [field]="'expectsFile'"
+            [forId]="'expectsFile'"
+            [control]="form.controls.expectsFile"
+            [label]="'bankingDomicile.fields.expectsFile' | translate"
+          />
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 md:col-6 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-select
+            size="small"
+            class="w-full"
+            appendTo="body"
+            inputId="bankId"
+            [filter]="true"
+            [showClear]="true"
+            optionValue="value"
+            optionLabel="label"
+            formControlName="bankId"
+            [options]="bankOptions()"
+            [invalid]="
+              form.controls.bankId.invalid &&
+              (form.controls.bankId.dirty || form.controls.bankId.touched)
+            "
+          ></p-select>
+          <app-error-msg
+            [field]="'bankId'"
+            [forId]="'bankId'"
+            [control]="form.controls.bankId"
+            [label]="'bankingDomicile.columns.bank' | translate"
+          />
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 md:col-6 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-select
+            size="small"
+            class="w-full"
+            appendTo="body"
+            [filter]="true"
+            [showClear]="true"
+            inputId="companyId"
+            optionValue="value"
+            optionLabel="label"
+            formControlName="companyId"
+            [options]="companyOptions()"
+            [invalid]="
+              form.controls.companyId.invalid &&
+              (form.controls.companyId.dirty || form.controls.companyId.touched)
+            "
+          ></p-select>
+          <app-error-msg
+            [field]="'companyId'"
+            [forId]="'companyId'"
+            [control]="form.controls.companyId"
+            [label]="'bankingDomicile.columns.company' | translate"
+          />
+        </p-floatLabel>
+      </div>
+
+      @if (isEdit()) {
+        <div class="col-12 md:col-6 p-2">
+          <p-floatLabel variant="on" class="w-full">
+            <p-select
+              size="small"
+              class="w-full"
+              appendTo="body"
+              inputId="status"
+              [filter]="false"
+              [showClear]="true"
+              optionValue="value"
+              optionLabel="label"
+              formControlName="status"
+              [options]="statusOptions()"
+            ></p-select>
+            <app-error-msg
+              [field]="'status'"
+              [forId]="'status'"
+              [required]="false"
+              [control]="form.controls.status"
+              [label]="'bankingDomicile.columns.status' | translate"
+            />
+          </p-floatLabel>
+        </div>
+      }
+    </div>
+  </form>
+
+  <ng-template pTemplate="footer">
+    <button
+      pButton
+      type="button"
+      (click)="close()"
+      icon="pi pi-times"
+      class="p-button-text p-button-sm"
+      [label]="'common.cancel' | translate"
+      [disabled]="saving()"
+    ></button>
+    <button
+      pButton
+      type="button"
+      (click)="save()"
+      icon="pi pi-save"
+      class="p-button-sm"
+      [loading]="saving()"
+      [label]="'common.save' | translate"
+      [disabled]="saving()"
+    ></button>
+  </ng-template>
+</p-dialog>

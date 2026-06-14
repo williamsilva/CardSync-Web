@@ -21,6 +21,7 @@ import { UsersFacade } from '@features/facade/users.facade';
 import { GroupsFacade } from '@features/facade/groups.facade';
 import { GroupModel, GroupsFiltersState } from '@models/groups.models';
 import { GroupsAdvancedFilters } from '@features/filter/groups.filters';
+import { STATE_KEY } from '@features/state-key.constants';
 import { StatefulListPage } from '@features/list-base/stateful-list-page';
 import { BulkActionListPage } from '@features/list-base/bulk-action-list-page';
 import { buildListQuery } from '@shared/features/list-query/list-query.builder';
@@ -195,15 +196,15 @@ export class GroupsListComponent extends StatefulListPage<
   }
 
   protected override tableStateKey(): string {
-    return 'cardsync.groups.table.state.v1';
+    return STATE_KEY.CARDSYNC.SECURITY.GROUPS.TABLE.STATE.V1;
   }
 
   protected override tableRowsKey(): string {
-    return 'groups.table.rows';
+    return STATE_KEY.CARDSYNC.SECURITY.GROUPS.TABLE.ROWS.V1;
   }
 
   protected override filtersKey(): string {
-    return 'cardsync.groups.filters.v1';
+    return STATE_KEY.CARDSYNC.SECURITY.GROUPS.FILTERS.V1;
   }
 
   protected override refresh(): void {

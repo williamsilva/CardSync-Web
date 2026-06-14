@@ -21,6 +21,18 @@
       },
       "contracts": {
         "title": "Contracts"
+      },
+      "holidays": {
+        "title": "Holidays"
+      },
+      "banks": {
+        "title": "Banks"
+      },
+      "bankingDomicile": {
+        "title": "Banking Domiciles"
+      },
+      "noFileDay": {
+        "title": "No File Days"
       }
     },
     "security": {
@@ -153,7 +165,11 @@
       "company": "Companies",
       "contracts": "Contracts",
       "acquirer": "Acquirers",
-      "establishment": "Establishments"
+      "establishment": "Establishments",
+      "holidays": "Holidays",
+      "banks": "Banks",
+      "bankingDomicile": "Banking Domiciles",
+      "noFileDay": "No File Days"
     },
     "conciliation": {
       "fees": "Applied fees",
@@ -213,7 +229,11 @@
       "company": "Companies",
       "acquirer": "Acquirers",
       "contract": "Contracts",
-      "establishment": "Establishments"
+      "establishment": "Establishments",
+      "holiday": "Holidays",
+      "bank": "Banks",
+      "bankingDomicile": "Banking Domiciles",
+      "noFileDay": "No File Days"
     },
     "transactions": {
       "erp": {
@@ -510,6 +530,19 @@
       "divergent": "Divergent",
       "reconciled": "Reconciled",
       "partiallyReconciled": "Partially reconciled"
+    },
+    "fileGroupEnum": {
+      "erp": "ERP",
+      "adq": "Acquirer",
+      "bank": "Bank",
+      "unknown": "-"
+    },
+    "noFileDayTypeEnum": {
+      "null": "N/A",
+      "noMovement": "No Movement",
+      "holiday": "Holiday",
+      "systemOutage": "System Outage",
+      "other": "Other"
     }
   },
   "company": {
@@ -600,6 +633,240 @@
     },
     "empty": {
       "title": "No company found"
+    }
+  },
+  "holiday": {
+    "subtitle": "Consult registered holidays",
+    "new": { "title": "New Holiday" },
+    "edit": { "title": "Edit Holiday" },
+    "form": {
+      "created": "Holiday created successfully.",
+      "updated": "Holiday updated successfully."
+    },
+    "columns": {
+      "name": "Holiday",
+      "holidayDate": "Date",
+      "statusEnum": "Status",
+      "statusDate": "Status Date",
+      "createdAt": "Registered on",
+      "updatedAt": "Updated on"
+    },
+    "fields": {
+      "name": "Holiday",
+      "holidayDate": "Holiday Date",
+      "statusEnum": "Status",
+      "statusDate": "Status Date",
+      "createdAt": "Registered on",
+      "updatedAt": "Updated on"
+    },
+    "selection": {
+      "mode": { "none": "None" },
+      "currentMode": "Selection mode",
+      "count": "{{count}} selected",
+      "pickOneFirst": "Select one item first"
+    },
+    "activate": {
+      "header": "Activate Holiday",
+      "messageSingle": "Do you want to activate the holiday <b>{{name}}</b>?",
+      "messageBulk": "Do you want to activate the <b>{{count}}</b> selected holidays?",
+      "successSingle": "Holiday activated successfully.",
+      "successBulk": "{{count}} holidays activated successfully.",
+      "selected": "Activate selected"
+    },
+    "deactivate": {
+      "header": "Deactivate Holiday",
+      "messageSingle": "Do you want to deactivate the holiday <b>{{name}}</b>?",
+      "messageBulk": "Do you want to deactivate the <b>{{count}}</b> selected holidays?",
+      "successSingle": "Holiday deactivated successfully.",
+      "successBulk": "{{count}} holidays deactivated successfully.",
+      "selected": "Deactivate selected"
+    },
+    "block": {
+      "header": "Block Holiday",
+      "messageSingle": "Do you want to block the holiday <b>{{name}}</b>?",
+      "messageBulk": "Do you want to block the <b>{{count}}</b> selected holidays?",
+      "successSingle": "Holiday blocked successfully.",
+      "successBulk": "{{count}} holidays blocked successfully.",
+      "selected": "Block selected"
+    }
+  },
+  "noFileDay": {
+    "subtitle": "Consult registered no file days",
+    "new": { "title": "New No File Day" },
+    "edit": { "title": "Edit No File Day" },
+    "form": {
+      "created": "No file day created successfully.",
+      "updated": "No file day updated successfully."
+    },
+    "columns": {
+      "description": "Description",
+      "noFileDate": "Date",
+      "fileGroup": "Group",
+      "dayType": "Type",
+      "statusEnum": "Status",
+      "bank": "Bank",
+      "statusDate": "Status Date",
+      "createdAt": "Registered on",
+      "updatedAt": "Updated on"
+    },
+    "fields": {
+      "description": "Description",
+      "noFileDate": "No File Date",
+      "fileGroup": "File Group",
+      "dayType": "Day Type",
+      "bank": "Bank",
+      "acquirer": "Acquirer",
+      "statusEnum": "Status",
+      "statusDate": "Status Date",
+      "createdAt": "Registered on",
+      "updatedAt": "Updated on"
+    },
+    "selection": {
+      "mode": { "none": "None" },
+      "currentMode": "Selection mode",
+      "count": "{{count}} selected",
+      "pickOneFirst": "Select one item first"
+    },
+    "activate": {
+      "header": "Activate No File Day",
+      "messageSingle": "Do you want to activate the no file day <b>{{name}}</b>?",
+      "messageBulk": "Do you want to activate the <b>{{count}}</b> selected days?",
+      "successSingle": "No file day activated successfully.",
+      "successBulk": "{{count}} days activated successfully.",
+      "selected": "Activate selected"
+    },
+    "deactivate": {
+      "header": "Deactivate No File Day",
+      "messageSingle": "Do you want to deactivate the no file day <b>{{name}}</b>?",
+      "messageBulk": "Do you want to deactivate the <b>{{count}}</b> selected days?",
+      "successSingle": "No file day deactivated successfully.",
+      "successBulk": "{{count}} days deactivated successfully.",
+      "selected": "Deactivate selected"
+    },
+    "block": {
+      "header": "Block No File Day",
+      "messageSingle": "Do you want to block the no file day <b>{{name}}</b>?",
+      "messageBulk": "Do you want to block the <b>{{count}}</b> selected days?",
+      "successSingle": "No file day blocked successfully.",
+      "successBulk": "{{count}} days blocked successfully.",
+      "selected": "Block selected"
+    }
+  },
+  "bank": {
+    "subtitle": "Consult registered banks",
+    "new": { "title": "New Bank" },
+    "edit": { "title": "Edit Bank" },
+    "form": {
+      "created": "Bank created successfully.",
+      "updated": "Bank updated successfully."
+    },
+    "columns": {
+      "code": "Code",
+      "name": "Bank",
+      "ispb": "ISPB",
+      "statusEnum": "Status",
+      "statusDate": "Status Date",
+      "createdAt": "Registered on",
+      "updatedAt": "Updated on"
+    },
+    "fields": {
+      "code": "Code",
+      "name": "Bank",
+      "ispb": "ISPB",
+      "statusEnum": "Status",
+      "statusDate": "Status Date",
+      "createdAt": "Registered on",
+      "updatedAt": "Updated on"
+    },
+    "selection": {
+      "mode": { "none": "None" },
+      "currentMode": "Selection mode",
+      "count": "{{count}} selected",
+      "pickOneFirst": "Select one item first"
+    },
+    "activate": {
+      "header": "Activate Bank",
+      "messageSingle": "Do you want to activate the bank <b>{{name}}</b>?",
+      "messageBulk": "Do you want to activate the <b>{{count}}</b> selected banks?",
+      "successSingle": "Bank activated successfully.",
+      "successBulk": "{{count}} banks activated successfully.",
+      "selected": "Activate selected"
+    },
+    "deactivate": {
+      "header": "Deactivate Bank",
+      "messageSingle": "Do you want to deactivate the bank <b>{{name}}</b>?",
+      "messageBulk": "Do you want to deactivate the <b>{{count}}</b> selected banks?",
+      "successSingle": "Bank deactivated successfully.",
+      "successBulk": "{{count}} banks deactivated successfully.",
+      "selected": "Deactivate selected"
+    },
+    "block": {
+      "header": "Block Bank",
+      "messageSingle": "Do you want to block the bank <b>{{name}}</b>?",
+      "messageBulk": "Do you want to block the <b>{{count}}</b> selected banks?",
+      "successSingle": "Bank blocked successfully.",
+      "successBulk": "{{count}} banks blocked successfully.",
+      "selected": "Block selected"
+    }
+  },
+  "bankingDomicile": {
+    "subtitle": "Consult registered banking domiciles",
+    "new": { "title": "New Banking Domicile" },
+    "edit": { "title": "Edit Banking Domicile" },
+    "form": {
+      "created": "Banking domicile created successfully.",
+      "updated": "Banking domicile updated successfully."
+    },
+    "columns": {
+      "agency": "Agency",
+      "currentAccount": "Current Account",
+      "holderDocument": "Document",
+      "holderName": "Holder",
+      "active": "Status",
+      "bank": "Bank",
+      "createdAt": "Registered on",
+      "updatedAt": "Updated on",
+      "expectsFile": "Expects File"
+    },
+    "fields": {
+      "agency": "Agency",
+      "agencyDigit": "Agency Digit",
+      "currentAccount": "Current Account",
+      "accountDigit": "Account Digit",
+      "holderDocument": "Holder Document",
+      "holderName": "Holder Name",
+      "active": "Status",
+      "bank": "Bank",
+      "status": "Status",
+      "company": "Company",
+      "establishment": "Establishment",
+      "createdAt": "Registered on",
+      "updatedAt": "Updated on",
+      "accountOpeningDate": "Opening Date",
+      "accountClosingDate": "Closing Date",
+      "expectsFile": "Expects File"
+    },
+    "selection": {
+      "mode": { "none": "None" },
+      "currentMode": "Selection mode",
+      "count": "{{count}} selected",
+      "pickOneFirst": "Select one item first"
+    },
+    "activate": {
+      "header": "Activate Banking Domicile",
+      "messageSingle": "Do you want to activate the banking domicile of <b>{{name}}</b>?",
+      "messageBulk": "Do you want to activate the <b>{{count}}</b> selected domiciles?",
+      "successSingle": "Banking domicile activated successfully.",
+      "successBulk": "{{count}} banking domiciles activated successfully.",
+      "selected": "Activate selected"
+    },
+    "deactivate": {
+      "header": "Deactivate Banking Domicile",
+      "messageSingle": "Do you want to deactivate the banking domicile of <b>{{name}}</b>?",
+      "messageBulk": "Do you want to deactivate the <b>{{count}}</b> selected domiciles?",
+      "successSingle": "Banking domicile deactivated successfully.",
+      "successBulk": "{{count}} banking domiciles deactivated successfully.",
+      "selected": "Deactivate selected"
     }
   },
   "acquirer": {

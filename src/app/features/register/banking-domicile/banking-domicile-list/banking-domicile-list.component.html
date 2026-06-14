@@ -1,0 +1,659 @@
+<cs-page-header
+  [subtitle]="'bankingDomicile.subtitle' | translate"
+  [breadcrumb]="[
+    { label: ('breadcrumb.dashboard.title' | translate), url: '/' },
+    { label: ('breadcrumb.register.bankingDomicile' | translate) },
+  ]"
+  [compact]="false"
+>
+  <button
+    pButton
+    type="button"
+    (click)="refresh()"
+    icon="pi pi-refresh"
+    class="p-button-text p-button-sm"
+    [label]="'common.update' | translate"
+  ></button>
+
+  <button
+    pButton
+    type="button"
+    icon="pi pi-check-circle"
+    (click)="confirmActivateSelected()"
+    [disabled]="!canActivateSelected()"
+    class="p-button-success p-button-sm"
+    [label]="'bankingDomicile.activate.selected' | translate"
+  ></button>
+
+  <button
+    pButton
+    type="button"
+    icon="pi pi-ban"
+    class="p-button-danger p-button-sm"
+    (click)="confirmDeactivateSelected()"
+    [disabled]="!canDeactivateSelected()"
+    [label]="'bankingDomicile.deactivate.selected' | translate"
+  ></button>
+
+  <button
+    pButton
+    type="button"
+    (click)="goNew()"
+    icon="pi pi-plus"
+    class="p-button-info p-button-sm"
+    [disabled]="!secPolicy.canCreate()"
+    [label]="'bankingDomicile.new.title' | translate"
+  ></button>
+</cs-page-header>
+
+<app-banking-domicile-create-dialog
+  (saved)="onSaved()"
+  [visible]="upsertVisible()"
+  [bankingDomicile]="bankingDomicile()"
+  (visibleChange)="onUpsertVisibleChange($event)"
+></app-banking-domicile-create-dialog>
+
+<cs-filters-panel
+  (clear)="clear()"
+  [collapsed]="true"
+  (search)="search()"
+  [actionsAlign]="'start'"
+  [activeCount]="activeFiltersCount()"
+  [title]="'common.filter' | translate"
+  [activeFilterGroups]="activeFilterGroups()"
+>
+  <div class="grid formgrid gap-0 align-items-end">
+    <cs-advanced-multiselect-filter
+      optionValue="id"
+      inputId="companies"
+      [value]="companies()"
+      optionLabel="fantasyName"
+      [options]="companiesOptions()"
+      class="col-12 md:col-3 xl:col-3 p-1"
+      (valueChange)="companies.set($event)"
+      [label]="'bankingDomicile.fields.company' | translate"
+    >
+      <ng-template csAdvancedFilterItem let-option>
+        <div class="cs-option-item">
+          <div class="cs-option-item__label">{{ option.fantasyName }}</div>
+          <div class="cs-option-item__subtext">
+            {{ 'common.registrationNumber' | translate }}: {{ option.cnpj | csDocument }}
+          </div>
+        </div>
+      </ng-template>
+    </cs-advanced-multiselect-filter>
+
+    <cs-advanced-multiselect-filter
+      optionValue="id"
+      inputId="banks"
+      [value]="banks()"
+      optionLabel="name"
+      [options]="banksOptions()"
+      (valueChange)="banks.set($event)"
+      class="col-12 md:col-3 xl:col-2 p-1"
+      [label]="'bankingDomicile.fields.bank' | translate"
+    >
+      <ng-template csAdvancedFilterItem let-option>
+        <div class="cs-option-item">
+          <div class="cs-option-item__label">{{ option.name }}</div>
+          <div class="cs-option-item__subtext">
+            {{ 'common.code' | translate }}: {{ option.code }}
+          </div>
+        </div>
+      </ng-template>
+    </cs-advanced-multiselect-filter>
+
+    <div class="col-12 md:col-2 p-1">
+      <p-floatLabel variant="on" class="w-full">
+        <p-select
+          size="small"
+          class="w-full"
+          appendTo="body"
+          [filter]="false"
+          [showClear]="true"
+          optionLabel="label"
+          optionValue="value"
+          [ngModel]="status()"
+          inputId="statusFilter"
+          [options]="statusFilterOptions()"
+          (ngModelChange)="status.set($event ?? null)"
+        ></p-select>
+        <label for="statusFilter">{{ 'bankingDomicile.fields.status' | translate }}</label>
+      </p-floatLabel>
+    </div>
+  </div>
+</cs-filters-panel>
+
+<div class="flex align-items-center justify-content-between mb-2 px-1">
+  <small class="opacity-80">
+    {{ 'bankingDomicile.selection.currentMode' | translate }}:
+    {{ selectionModeLabel() }}
+  </small>
+
+  @if (selectedRows().length) {
+    <small class="opacity-80">
+      {{ 'bankingDomicile.selection.count' | translate: { count: selectedRows().length } }}
+    </small>
+  }
+</div>
+
+<p-table
+  #dt
+  stripedRows
+  dataKey="id"
+  size="small"
+  [rows]="rows"
+  [lazy]="true"
+  showGridlines
+  [rowHover]="true"
+  [paginator]="true"
+  sortMode="multiple"
+  filterDisplay="menu"
+  stateStorage="local"
+  class="cs-admin-table"
+  [stateKey]="tableStateKey()"
+  [loading]="facade.loading()"
+  [value]="bankingDomiciles()"
+  [showCurrentPageReport]="true"
+  [totalRecords]="totalRecords()"
+  (onPage)="onPageChange($event)"
+  (onLazyLoad)="onLazyLoad($event)"
+  [paginatorDropdownAppendTo]="'body'"
+  [rowsPerPageOptions]="rowsPerPageOptions"
+  [tableStyle]="{ width: '100%', 'min-width': '80rem' }"
+  [currentPageReportTemplate]="'pagination.report' | translate"
+>
+  <ng-template pTemplate="colgroup">
+    <colgroup>
+      <col style="width: 44px" />
+      <col style="width: auto" />
+      <col style="width: 160px" />
+      <col style="width: 140px" />
+      <col style="width: 130px" />
+      <col style="width: 150px" />
+      <col style="width: 150px" />
+      <col style="width: 100px" />
+      <col style="width: 110px" />
+      <col style="width: 150px" />
+      <col style="width: 150px" />
+      <col style="width: 90px" />
+    </colgroup>
+  </ng-template>
+
+  <ng-template pTemplate="header">
+    <tr>
+      <th class="text-center">
+        @if (hasSelectionMode()) {
+          <p-checkbox
+            [binary]="true"
+            [ngModel]="headerChecked()"
+            [indeterminate]="headerIndeterminate()"
+            (onChange)="toggleHeaderSelection(!!$event.checked)"
+          ></p-checkbox>
+        } @else {
+          <i
+            tooltipPosition="top"
+            class="pi pi-info-circle opacity-70"
+            [pTooltip]="'bankingDomicile.selection.pickOneFirst' | translate"
+          ></i>
+        }
+      </th>
+      <th pSortableColumn="company">
+        <div class="th-flex text-center">
+          <span
+            class="th-label"
+            tooltipPosition="top"
+            [pTooltip]="'bankingDomicile.columns.company' | translate"
+          >
+            {{ 'bankingDomicile.columns.company' | translate }}
+          </span>
+          <span class="th-icons">
+            <p-sortIcon field="company"></p-sortIcon>
+            <p-columnFilter
+              display="menu"
+              matchMode="in"
+              field="company"
+              #companyColumnFilter
+              [showOperator]="false"
+              [showAddButton]="false"
+              [showMatchModes]="false"
+              [showClearButton]="false"
+              [showApplyButton]="false"
+              styleClass="cs-colfilter"
+            >
+              <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                <cs-column-filter-shell
+                  minWidth="20rem"
+                  [clearLabel]="'common.clear' | translate"
+                  [applyLabel]="'common.apply' | translate"
+                  (clear)="clearArrayColumnFilter(companyColumnDraft, filter, companyColumnFilter)"
+                  (apply)="applyArrayColumnFilter(companyColumnDraft, filter, companyColumnFilter)"
+                >
+                  <p-multiSelect
+                    class="w-full"
+                    [filter]="true"
+                    optionValue="id"
+                    [showClear]="true"
+                    [showToggleAll]="false"
+                    optionLabel="fantasyName"
+                    [options]="companiesOptions()"
+                    [ngModel]="companyColumnDraft()"
+                    [placeholder]="'common.all' | translate"
+                    (ngModelChange)="setArrayColumnDraft(companyColumnDraft, $event)"
+                  >
+                    <ng-template let-option pTemplate="item">
+                      <div class="cs-option-item">
+                        <div class="cs-option-item__label">{{ option.fantasyName }}</div>
+                        <div class="cs-option-item__subtext">
+                          {{ 'common.registrationNumber' | translate }}:
+                          {{ option.cnpj | csDocument }}
+                        </div>
+                      </div>
+                    </ng-template>
+
+                    <ng-template let-selectedOptions pTemplate="selectedItems">
+                      @if (selectedOptions?.length === 1) {
+                        <span>
+                          {{ selectedOptions[0]?.fantasyName }}
+                        </span>
+                      }
+
+                      @if ((selectedOptions?.length ?? 0) > 1) {
+                        <span>
+                          {{
+                            'common.selectedFemale' | translate: { count: selectedOptions.length }
+                          }}
+                        </span>
+                      }
+                    </ng-template>
+                  </p-multiSelect>
+                </cs-column-filter-shell>
+              </ng-template>
+            </p-columnFilter>
+          </span>
+        </div>
+      </th>
+      <th pSortableColumn="bank">
+        <div class="th-flex text-center">
+          <span
+            class="th-label"
+            tooltipPosition="top"
+            [pTooltip]="'bankingDomicile.fields.bank' | translate"
+          >
+            {{ 'bankingDomicile.fields.bank' | translate }}
+          </span>
+          <span class="th-icons">
+            <p-sortIcon field="bank"></p-sortIcon>
+            <p-columnFilter
+              field="bank"
+              display="menu"
+              matchMode="in"
+              #bankColumnFilter
+              [showOperator]="false"
+              [showAddButton]="false"
+              [showMatchModes]="false"
+              [showClearButton]="false"
+              [showApplyButton]="false"
+              styleClass="cs-colfilter"
+            >
+              <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                <cs-column-filter-shell
+                  minWidth="20rem"
+                  [clearLabel]="'common.clear' | translate"
+                  [applyLabel]="'common.apply' | translate"
+                  (clear)="clearArrayColumnFilter(bankColumnDraft, filter, bankColumnFilter)"
+                  (apply)="applyArrayColumnFilter(bankColumnDraft, filter, bankColumnFilter)"
+                >
+                  <p-multiSelect
+                    class="w-full"
+                    [filter]="true"
+                    optionValue="id"
+                    optionLabel="name"
+                    [showClear]="true"
+                    [showToggleAll]="false"
+                    [options]="banksOptions()"
+                    [ngModel]="bankColumnDraft()"
+                    [placeholder]="'common.all' | translate"
+                    (ngModelChange)="setArrayColumnDraft(bankColumnDraft, $event)"
+                  >
+                    <ng-template let-option pTemplate="item">
+                      <div class="cs-option-item">
+                        <div class="cs-option-item__label">{{ option.name }}</div>
+                        <div class="cs-option-item__subtext">
+                          {{ 'common.code' | translate }}:
+                          {{ option.code }}
+                        </div>
+                        <div class="cs-option-item__subtext">
+                          {{ 'common.status' | translate }}:
+                          {{ statusEnumLabel(option.status) }}
+                        </div>
+                      </div>
+                    </ng-template>
+
+                    <ng-template let-selectedOptions pTemplate="selectedItems">
+                      @if (selectedOptions?.length === 1) {
+                        <span>
+                          {{ selectedOptions[0]?.fantasyName }}
+                        </span>
+                      }
+
+                      @if ((selectedOptions?.length ?? 0) > 1) {
+                        <span>
+                          {{
+                            'common.selectedFemale' | translate: { count: selectedOptions.length }
+                          }}
+                        </span>
+                      }
+                    </ng-template>
+                  </p-multiSelect>
+                </cs-column-filter-shell>
+              </ng-template>
+            </p-columnFilter>
+          </span>
+        </div>
+      </th>
+      <th pSortableColumn="agency">
+        <div class="th-flex text-center">
+          <span
+            class="th-label"
+            tooltipPosition="top"
+            [pTooltip]="'bankingDomicile.columns.agency' | translate"
+          >
+            {{ 'bankingDomicile.columns.agency' | translate }}
+          </span>
+          <span class="th-icons">
+            <p-sortIcon field="agency"></p-sortIcon>
+            <p-columnFilter
+              field="agency"
+              display="menu"
+              matchMode="equals"
+              #agencyColumnFilter
+              [useGrouping]="false"
+              [showOperator]="false"
+              [showAddButton]="false"
+              [showMatchModes]="true"
+              [showClearButton]="false"
+              [showApplyButton]="false"
+              styleClass="cs-colfilter"
+            >
+              <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                <cs-column-filter-shell
+                  [clearLabel]="'common.clear' | translate"
+                  [applyLabel]="'common.apply' | translate"
+                  (clear)="clearIntegerColumnFilter(agencyColumnDraft, filter, agencyColumnFilter)"
+                  (apply)="applyIntegerColumnFilter(agencyColumnDraft, filter, agencyColumnFilter)"
+                >
+                  <input
+                    pInputText
+                    type="text"
+                    pattern="[0-9]*"
+                    inputmode="numeric"
+                    [ngModel]="agencyColumnDraft()"
+                    class="w-full p-inputtext-sm"
+                    [placeholder]="'bankingDomicile.fields.agency' | translate"
+                    (ngModelChange)="setIntegerColumnDraft(agencyColumnDraft, $event)"
+                  />
+                </cs-column-filter-shell>
+              </ng-template>
+            </p-columnFilter>
+          </span>
+        </div>
+      </th>
+      <th pSortableColumn="currentAccount">
+        <div class="th-flex text-center">
+          <span
+            class="th-label"
+            tooltipPosition="top"
+            [pTooltip]="'bankingDomicile.columns.currentAccount' | translate"
+          >
+            {{ 'bankingDomicile.columns.currentAccountShort' | translate }}
+          </span>
+          <span class="th-icons">
+            <p-sortIcon field="currentAccount"></p-sortIcon>
+            <p-columnFilter
+              field="currentAccount"
+              display="menu"
+              matchMode="equals"
+              #currentAccountColumnFilter
+              [useGrouping]="false"
+              [showOperator]="false"
+              [showAddButton]="false"
+              [showMatchModes]="true"
+              [showClearButton]="false"
+              [showApplyButton]="false"
+              styleClass="cs-colfilter"
+            >
+              <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                <cs-column-filter-shell
+                  [clearLabel]="'common.clear' | translate"
+                  [applyLabel]="'common.apply' | translate"
+                  (clear)="
+                    clearIntegerColumnFilter(
+                      currentAccountColumnDraft,
+                      filter,
+                      currentAccountColumnFilter
+                    )
+                  "
+                  (apply)="
+                    applyIntegerColumnFilter(
+                      currentAccountColumnDraft,
+                      filter,
+                      currentAccountColumnFilter
+                    )
+                  "
+                >
+                  <input
+                    pInputText
+                    type="text"
+                    pattern="[0-9]*"
+                    inputmode="numeric"
+                    [ngModel]="currentAccountColumnDraft()"
+                    class="w-full p-inputtext-sm"
+                    [placeholder]="'bankingDomicile.fields.currentAccount' | translate"
+                    (ngModelChange)="setIntegerColumnDraft(currentAccountColumnDraft, $event)"
+                  />
+                </cs-column-filter-shell>
+              </ng-template>
+            </p-columnFilter>
+          </span>
+        </div>
+      </th>
+
+      <th pSortableColumn="accountOpeningDate">
+        <div class="th-flex">
+          <span class="th-label">{{
+            'bankingDomicile.columns.accountOpeningDate' | translate
+          }}</span>
+          <span class="th-icons">
+            <p-sortIcon field="accountOpeningDate"></p-sortIcon>
+          </span>
+        </div>
+      </th>
+
+      <th pSortableColumn="accountClosingDate">
+        <div class="th-flex">
+          <span class="th-label">{{
+            'bankingDomicile.columns.accountClosingDate' | translate
+          }}</span>
+          <span class="th-icons">
+            <p-sortIcon field="accountClosingDate"></p-sortIcon>
+          </span>
+        </div>
+      </th>
+
+      <th pSortableColumn="expectsFile">
+        <div class="th-flex">
+          <span class="th-label">{{ 'bankingDomicile.columns.expectsFile' | translate }}</span>
+          <span class="th-icons">
+            <p-sortIcon field="expectsFile"></p-sortIcon>
+          </span>
+        </div>
+      </th>
+
+      <th pSortableColumn="status">
+        <div class="th-flex">
+          <span class="th-label">{{ 'bankingDomicile.columns.status' | translate }}</span>
+          <span class="th-icons">
+            <p-sortIcon field="status"></p-sortIcon>
+          </span>
+        </div>
+      </th>
+
+      <th pSortableColumn="statusDate">
+        <div class="th-flex">
+          <span class="th-label">{{ 'bankingDomicile.columns.statusDate' | translate }}</span>
+          <span class="th-icons">
+            <p-sortIcon field="statusDate"></p-sortIcon>
+          </span>
+        </div>
+      </th>
+
+      <th pSortableColumn="createdAt">
+        <div class="th-flex">
+          <span class="th-label">{{ 'bankingDomicile.columns.createdAt' | translate }}</span>
+          <span class="th-icons">
+            <p-sortIcon field="createdAt"></p-sortIcon>
+          </span>
+        </div>
+      </th>
+
+      <th class="text-center">
+        <div class="th-flex justify-content-center">
+          <span class="th-label">{{ 'common.actions' | translate }}</span>
+        </div>
+      </th>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="body" let-row>
+    <tr>
+      <td class="text-center">
+        <p-checkbox
+          [binary]="true"
+          [ngModel]="isRowSelected(row)"
+          [disabled]="isRowCheckboxDisabled(row)"
+          (onChange)="toggleRowSelection(row, !!$event.checked)"
+        ></p-checkbox>
+      </td>
+      <td>
+        <span
+          tooltipPosition="top"
+          class="cs-table-cell-ellipsis"
+          [pTooltip]="row.company?.fantasyName || ''"
+        >
+          {{ row.company?.fantasyName }}
+        </span>
+      </td>
+      <td>
+        <span tooltipPosition="top" class="cs-table-cell-ellipsis" [pTooltip]="row.bank?.name">
+          {{ row.bank?.name | titlecase }}
+        </span>
+      </td>
+
+      <td class="text-center">
+        <span tooltipPosition="top" class="cs-table-cell-ellipsis" [pTooltip]="row.agency">
+          {{ row.agency }}
+        </span>
+      </td>
+
+      <td class="cell-muted text-center">
+        {{
+          row.currentAccount != null
+            ? row.currentAccount + (row.accountDigit ? '-' + row.accountDigit : '')
+            : '-'
+        }}
+      </td>
+
+      <td class="cell-muted text-center">
+        {{ row.accountOpeningDate ? (row.accountOpeningDate | csDate: 'short') : '-' }}
+      </td>
+      <td class="cell-muted text-center">
+        {{ row.accountClosingDate ? (row.accountClosingDate | csDate: 'short') : '-' }}
+      </td>
+
+      <td class="text-center">
+        @if (row.expectsFile) {
+          <i class="pi pi-check" style="color: var(--p-green-500)"></i>
+        } @else {
+          <i class="pi pi-times" style="color: var(--p-red-500)"></i>
+        }
+      </td>
+
+      <td class="cell-muted text-center">
+        <cs-tag [value]="statusEnumLabel(row.status)" [tone]="statusSeverity(row.status)" />
+      </td>
+
+      <td class="cell-muted text-center">
+        {{ row.createdAt ? (row.createdAt | csDate: 'short') : '-' }}
+      </td>
+      <td class="cell-muted text-center">
+        {{ row.statusDate ? (row.statusDate | csDate: 'short') : '-' }}
+      </td>
+
+      <td class="text-center">
+        <div class="table-actions">
+          <button
+            pButton
+            type="button"
+            icon="pi pi-pencil"
+            (click)="edit(row)"
+            tooltipPosition="top"
+            class="p-button-text p-button-sm"
+            [disabled]="!secPolicy.canEdit(row)"
+            [pTooltip]="secPolicy.canEdit(row) ? ('common.edit' | translate) : undefined"
+          ></button>
+
+          <button
+            pButton
+            type="button"
+            tooltipPosition="top"
+            icon="pi pi-check-circle"
+            (click)="confirmActivate(row)"
+            class="p-button-text p-button-sm"
+            [disabled]="!secPolicy.canActivate(row)"
+            [pTooltip]="secPolicy.canActivate(row) ? ('common.activate' | translate) : undefined"
+          ></button>
+
+          <button
+            pButton
+            type="button"
+            icon="pi pi-ban"
+            tooltipPosition="top"
+            (click)="confirmDeactivate(row)"
+            class="p-button-text p-button-sm"
+            [disabled]="!secPolicy.canDeactivate(row)"
+            [pTooltip]="
+              secPolicy.canDeactivate(row) ? ('common.deactivate' | translate) : undefined
+            "
+          ></button>
+        </div>
+      </td>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="emptymessage">
+    <tr>
+      <td [attr.colspan]="10" class="empty-td">
+        <div class="empty empty-center">
+          <div class="empty-title">
+            {{
+              facade.loadedOnce()
+                ? ('common.noRecordsFound' | translate)
+                : ('common.loading' | translate)
+            }}
+          </div>
+        </div>
+      </td>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="loadingbody">
+    @for (row of skeletonRows; track $index) {
+      <tr>
+        @for (_ of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; track $index) {
+          <td><p-skeleton></p-skeleton></td>
+        }
+      </tr>
+    }
+  </ng-template>
+</p-table>

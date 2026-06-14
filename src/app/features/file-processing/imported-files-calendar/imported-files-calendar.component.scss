@@ -644,6 +644,18 @@
   }
 }
 
+// ─── Pill tooltip override ────────────────────────────────────────────────────
+
+// stylelint-disable-next-line selector-pseudo-element-no-unknown
+::ng-deep .pill-tooltip.p-tooltip {
+  max-width: none;
+
+  .p-tooltip-text {
+    max-width: none;
+    white-space: normal;
+  }
+}
+
 // ─── Responsive ───────────────────────────────────────────────────────────────
 
 @media (max-width: 960px) {

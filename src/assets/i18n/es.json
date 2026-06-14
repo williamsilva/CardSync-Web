@@ -21,6 +21,18 @@
       },
       "contracts": {
         "title": "Contratos"
+      },
+      "holidays": {
+        "title": "Festivos"
+      },
+      "banks": {
+        "title": "Bancos"
+      },
+      "bankingDomicile": {
+        "title": "Domicilios Bancarios"
+      },
+      "noFileDay": {
+        "title": "Días sin Archivo"
       }
     },
     "security": {
@@ -153,7 +165,11 @@
       "company": "Empresas",
       "contracts": "Contratos",
       "acquirer": "Adquirentes",
-      "establishment": "Establecimientos"
+      "establishment": "Establecimientos",
+      "holidays": "Festivos",
+      "banks": "Bancos",
+      "bankingDomicile": "Domicilios Bancarios",
+      "noFileDay": "Días sin Archivo"
     },
     "conciliation": {
       "fees": "Tarifas aplicadas",
@@ -213,7 +229,11 @@
       "company": "Empresas",
       "acquirer": "Adquirentes",
       "contract": "Contratos",
-      "establishment": "Establecimientos"
+      "establishment": "Establecimientos",
+      "holiday": "Festivos",
+      "bank": "Bancos",
+      "bankingDomicile": "Domicilios Bancarios",
+      "noFileDay": "Días sin Archivo"
     },
     "transactions": {
       "erp": {
@@ -510,6 +530,19 @@
       "divergent": "Divergente",
       "reconciled": "Conciliado",
       "partiallyReconciled": "Conciliado parcialmente"
+    },
+    "fileGroupEnum": {
+      "erp": "ERP",
+      "adq": "Adquirente",
+      "bank": "Banco",
+      "unknown": "-"
+    },
+    "noFileDayTypeEnum": {
+      "null": "N/A",
+      "noMovement": "Sin Movimiento",
+      "holiday": "Festivo",
+      "systemOutage": "Interrupción del Sistema",
+      "other": "Otros"
     }
   },
   "company": {
@@ -600,6 +633,240 @@
     },
     "empty": {
       "title": "Ninguna empresa encontrada"
+    }
+  },
+  "holiday": {
+    "subtitle": "Consulte los festivos registrados",
+    "new": { "title": "Nuevo Festivo" },
+    "edit": { "title": "Editar Festivo" },
+    "form": {
+      "created": "Festivo creado exitosamente.",
+      "updated": "Festivo actualizado exitosamente."
+    },
+    "columns": {
+      "name": "Festivo",
+      "holidayDate": "Fecha",
+      "statusEnum": "Estado",
+      "statusDate": "Fecha de Estado",
+      "createdAt": "Registrado el",
+      "updatedAt": "Actualizado el"
+    },
+    "fields": {
+      "name": "Festivo",
+      "holidayDate": "Fecha del Festivo",
+      "statusEnum": "Estado",
+      "statusDate": "Fecha de Estado",
+      "createdAt": "Registrado el",
+      "updatedAt": "Actualizado el"
+    },
+    "selection": {
+      "mode": { "none": "Ninguno" },
+      "currentMode": "Modo de selección",
+      "count": "{{count}} seleccionados",
+      "pickOneFirst": "Seleccione un elemento primero"
+    },
+    "activate": {
+      "header": "Activar Festivo",
+      "messageSingle": "¿Desea activar el festivo <b>{{name}}</b>?",
+      "messageBulk": "¿Desea activar los <b>{{count}}</b> festivos seleccionados?",
+      "successSingle": "Festivo activado exitosamente.",
+      "successBulk": "{{count}} festivos activados exitosamente.",
+      "selected": "Activar seleccionados"
+    },
+    "deactivate": {
+      "header": "Inactivar Festivo",
+      "messageSingle": "¿Desea inactivar el festivo <b>{{name}}</b>?",
+      "messageBulk": "¿Desea inactivar los <b>{{count}}</b> festivos seleccionados?",
+      "successSingle": "Festivo inactivado exitosamente.",
+      "successBulk": "{{count}} festivos inactivados exitosamente.",
+      "selected": "Inactivar seleccionados"
+    },
+    "block": {
+      "header": "Bloquear Festivo",
+      "messageSingle": "¿Desea bloquear el festivo <b>{{name}}</b>?",
+      "messageBulk": "¿Desea bloquear los <b>{{count}}</b> festivos seleccionados?",
+      "successSingle": "Festivo bloqueado exitosamente.",
+      "successBulk": "{{count}} festivos bloqueados exitosamente.",
+      "selected": "Bloquear seleccionados"
+    }
+  },
+  "bank": {
+    "subtitle": "Consulte los bancos registrados",
+    "new": { "title": "Nuevo Banco" },
+    "edit": { "title": "Editar Banco" },
+    "form": {
+      "created": "Banco creado exitosamente.",
+      "updated": "Banco actualizado exitosamente."
+    },
+    "columns": {
+      "code": "Código",
+      "name": "Banco",
+      "ispb": "ISPB",
+      "statusEnum": "Estado",
+      "statusDate": "Fecha de Estado",
+      "createdAt": "Registrado el",
+      "updatedAt": "Actualizado el"
+    },
+    "fields": {
+      "code": "Código",
+      "name": "Banco",
+      "ispb": "ISPB",
+      "statusEnum": "Estado",
+      "statusDate": "Fecha de Estado",
+      "createdAt": "Registrado el",
+      "updatedAt": "Actualizado el"
+    },
+    "selection": {
+      "mode": { "none": "Ninguno" },
+      "currentMode": "Modo de selección",
+      "count": "{{count}} seleccionados",
+      "pickOneFirst": "Seleccione un elemento primero"
+    },
+    "activate": {
+      "header": "Activar Banco",
+      "messageSingle": "¿Desea activar el banco <b>{{name}}</b>?",
+      "messageBulk": "¿Desea activar los <b>{{count}}</b> bancos seleccionados?",
+      "successSingle": "Banco activado exitosamente.",
+      "successBulk": "{{count}} bancos activados exitosamente.",
+      "selected": "Activar seleccionados"
+    },
+    "deactivate": {
+      "header": "Inactivar Banco",
+      "messageSingle": "¿Desea inactivar el banco <b>{{name}}</b>?",
+      "messageBulk": "¿Desea inactivar los <b>{{count}}</b> bancos seleccionados?",
+      "successSingle": "Banco inactivado exitosamente.",
+      "successBulk": "{{count}} bancos inactivados exitosamente.",
+      "selected": "Inactivar seleccionados"
+    },
+    "block": {
+      "header": "Bloquear Banco",
+      "messageSingle": "¿Desea bloquear el banco <b>{{name}}</b>?",
+      "messageBulk": "¿Desea bloquear los <b>{{count}}</b> bancos seleccionados?",
+      "successSingle": "Banco bloqueado exitosamente.",
+      "successBulk": "{{count}} bancos bloqueados exitosamente.",
+      "selected": "Bloquear seleccionados"
+    }
+  },
+  "bankingDomicile": {
+    "subtitle": "Consulte los domicilios bancarios registrados",
+    "new": { "title": "Nuevo Domicilio Bancario" },
+    "edit": { "title": "Editar Domicilio Bancario" },
+    "form": {
+      "created": "Domicilio bancario creado exitosamente.",
+      "updated": "Domicilio bancario actualizado exitosamente."
+    },
+    "columns": {
+      "agency": "Agencia",
+      "currentAccount": "Cuenta Corriente",
+      "holderDocument": "Documento",
+      "holderName": "Titular",
+      "active": "Estado",
+      "bank": "Banco",
+      "createdAt": "Registrado el",
+      "updatedAt": "Actualizado el",
+      "expectsFile": "Recibe Archivo"
+    },
+    "fields": {
+      "agency": "Agencia",
+      "agencyDigit": "Dígito de Agencia",
+      "currentAccount": "Cuenta Corriente",
+      "accountDigit": "Dígito de Cuenta",
+      "holderDocument": "Documento del Titular",
+      "holderName": "Nombre del Titular",
+      "active": "Estado",
+      "bank": "Banco",
+      "status": "Estado",
+      "company": "Empresa",
+      "establishment": "Establecimiento",
+      "createdAt": "Registrado el",
+      "updatedAt": "Actualizado el",
+      "accountOpeningDate": "Fecha de Apertura",
+      "accountClosingDate": "Fecha de Cierre",
+      "expectsFile": "Recibe Archivo"
+    },
+    "selection": {
+      "mode": { "none": "Ninguno" },
+      "currentMode": "Modo de selección",
+      "count": "{{count}} seleccionados",
+      "pickOneFirst": "Seleccione un elemento primero"
+    },
+    "activate": {
+      "header": "Activar Domicilio Bancario",
+      "messageSingle": "¿Desea activar el domicilio bancario de <b>{{name}}</b>?",
+      "messageBulk": "¿Desea activar los <b>{{count}}</b> domicilios seleccionados?",
+      "successSingle": "Domicilio bancario activado exitosamente.",
+      "successBulk": "{{count}} domicilios bancarios activados exitosamente.",
+      "selected": "Activar seleccionados"
+    },
+    "deactivate": {
+      "header": "Inactivar Domicilio Bancario",
+      "messageSingle": "¿Desea inactivar el domicilio bancario de <b>{{name}}</b>?",
+      "messageBulk": "¿Desea inactivar los <b>{{count}}</b> domicilios seleccionados?",
+      "successSingle": "Domicilio bancario inactivado exitosamente.",
+      "successBulk": "{{count}} domicilios bancarios inactivados exitosamente.",
+      "selected": "Inactivar seleccionados"
+    }
+  },
+  "noFileDay": {
+    "subtitle": "Consulte los días sin archivos registrados",
+    "new": { "title": "Nuevo Día sin Archivo" },
+    "edit": { "title": "Editar Día sin Archivo" },
+    "form": {
+      "created": "Día sin archivo creado exitosamente.",
+      "updated": "Día sin archivo actualizado exitosamente."
+    },
+    "columns": {
+      "description": "Descripción",
+      "noFileDate": "Fecha",
+      "fileGroup": "Grupo",
+      "dayType": "Tipo",
+      "statusEnum": "Estado",
+      "bank": "Banco",
+      "statusDate": "Fecha de Estado",
+      "createdAt": "Registrado el",
+      "updatedAt": "Actualizado el"
+    },
+    "fields": {
+      "description": "Descripción",
+      "noFileDate": "Fecha sin Archivo",
+      "fileGroup": "Grupo de Archivo",
+      "dayType": "Tipo de Día",
+      "bank": "Banco",
+      "acquirer": "Adquirente",
+      "statusEnum": "Estado",
+      "statusDate": "Fecha de Estado",
+      "createdAt": "Registrado el",
+      "updatedAt": "Actualizado el"
+    },
+    "selection": {
+      "mode": { "none": "Ninguno" },
+      "currentMode": "Modo de selección",
+      "count": "{{count}} seleccionados",
+      "pickOneFirst": "Seleccione un elemento primero"
+    },
+    "activate": {
+      "header": "Activar Día sin Archivo",
+      "messageSingle": "¿Desea activar el día sin archivo <b>{{name}}</b>?",
+      "messageBulk": "¿Desea activar los <b>{{count}}</b> días seleccionados?",
+      "successSingle": "Día sin archivo activado exitosamente.",
+      "successBulk": "{{count}} días activados exitosamente.",
+      "selected": "Activar seleccionados"
+    },
+    "deactivate": {
+      "header": "Inactivar Día sin Archivo",
+      "messageSingle": "¿Desea inactivar el día sin archivo <b>{{name}}</b>?",
+      "messageBulk": "¿Desea inactivar los <b>{{count}}</b> días seleccionados?",
+      "successSingle": "Día sin archivo inactivado exitosamente.",
+      "successBulk": "{{count}} días inactivados exitosamente.",
+      "selected": "Inactivar seleccionados"
+    },
+    "block": {
+      "header": "Bloquear Día sin Archivo",
+      "messageSingle": "¿Desea bloquear el día sin archivo <b>{{name}}</b>?",
+      "messageBulk": "¿Desea bloquear los <b>{{count}}</b> días seleccionados?",
+      "successSingle": "Día sin archivo bloqueado exitosamente.",
+      "successBulk": "{{count}} días bloqueados exitosamente.",
+      "selected": "Bloquear seleccionados"
     }
   },
   "acquirer": {

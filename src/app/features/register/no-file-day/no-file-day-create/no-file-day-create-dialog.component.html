@@ -1,0 +1,216 @@
+<p-dialog
+  [modal]="true"
+  appendTo="body"
+  [closable]="false"
+  (onHide)="onHide()"
+  [draggable]="false"
+  [resizable]="false"
+  [visible]="visible()"
+  [contentStyle]="{ overflow: 'hidden', height: '100%' }"
+  [style]="{ width: '720px', maxWidth: '95vw', height: '40vh' }"
+  [header]="
+    noFileDay()?.id ? ('noFileDay.edit.title' | translate) : ('noFileDay.new.title' | translate)
+  "
+>
+  <form [formGroup]="form" class="cs-dialog-form">
+    <div class="grid formgrid gap-0">
+      <div class="col-12 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <input
+            pInputText
+            type="text"
+            id="description"
+            formControlName="description"
+            class="w-full p-inputtext-sm"
+          />
+          <app-error-msg
+            [field]="'description'"
+            [forId]="'description'"
+            [control]="form.controls.description"
+            [label]="'noFileDay.fields.description' | translate"
+          />
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 md:col-6 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-datepicker
+            size="small"
+            class="w-full"
+            appendTo="body"
+            [showIcon]="true"
+            inputId="noFileDate"
+            dateFormat="dd/mm/yy"
+            [readonlyInput]="true"
+            formControlName="noFileDate"
+            [invalid]="
+              form.controls.noFileDate.invalid &&
+              (form.controls.noFileDate.dirty || form.controls.noFileDate.touched)
+            "
+          ></p-datepicker>
+          <app-error-msg
+            [field]="'noFileDate'"
+            [forId]="'noFileDate'"
+            [control]="form.controls.noFileDate"
+            [label]="'noFileDay.fields.noFileDate' | translate"
+          />
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 md:col-6 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-select
+            size="small"
+            class="w-full"
+            appendTo="body"
+            [filter]="false"
+            [showClear]="true"
+            inputId="fileGroup"
+            optionValue="value"
+            optionLabel="label"
+            formControlName="fileGroup"
+            [options]="fileGroupOptions()"
+            [invalid]="
+              form.controls.fileGroup.invalid &&
+              (form.controls.fileGroup.dirty || form.controls.fileGroup.touched)
+            "
+          ></p-select>
+          <app-error-msg
+            [field]="'fileGroup'"
+            [forId]="'fileGroup'"
+            [control]="form.controls.fileGroup"
+            [label]="'noFileDay.fields.fileGroup' | translate"
+          />
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 md:col-6 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-select
+            size="small"
+            class="w-full"
+            appendTo="body"
+            [filter]="false"
+            inputId="dayType"
+            [showClear]="true"
+            optionValue="value"
+            optionLabel="label"
+            formControlName="dayType"
+            [options]="dayTypeOptions()"
+            [invalid]="
+              form.controls.dayType.invalid &&
+              (form.controls.dayType.dirty || form.controls.dayType.touched)
+            "
+          ></p-select>
+          <app-error-msg
+            [field]="'dayType'"
+            [forId]="'dayType'"
+            [control]="form.controls.dayType"
+            [label]="'noFileDay.fields.dayType' | translate"
+          />
+        </p-floatLabel>
+      </div>
+
+      @if (showBankField()) {
+        <div class="col-12 md:col-6 p-2">
+          <p-floatLabel variant="on" class="w-full">
+            <p-select
+              size="small"
+              class="w-full"
+              appendTo="body"
+              [filter]="true"
+              inputId="bankId"
+              [showClear]="true"
+              optionValue="value"
+              optionLabel="label"
+              formControlName="bankId"
+              [options]="bankOptions()"
+            ></p-select>
+            <app-error-msg
+              [field]="'bankId'"
+              [forId]="'bankId'"
+              [required]="false"
+              [control]="form.controls.bankId"
+              [label]="'noFileDay.fields.bank' | translate"
+            />
+          </p-floatLabel>
+        </div>
+      }
+
+      @if (showAcquirerField()) {
+        <div class="col-12 md:col-6 p-2">
+          <p-floatLabel variant="on" class="w-full">
+            <p-select
+              size="small"
+              class="w-full"
+              appendTo="body"
+              [filter]="true"
+              [showClear]="true"
+              optionValue="value"
+              optionLabel="label"
+              inputId="acquirerId"
+              formControlName="acquirerId"
+              [options]="acquirerOptions()"
+            ></p-select>
+            <app-error-msg
+              [required]="false"
+              [field]="'acquirerId'"
+              [forId]="'acquirerId'"
+              [control]="form.controls.acquirerId"
+              [label]="'noFileDay.fields.acquirer' | translate"
+            />
+          </p-floatLabel>
+        </div>
+      }
+
+      @if (isEdit()) {
+        <div class="col-12 md:col-6 p-2">
+          <p-floatLabel variant="on" class="w-full">
+            <p-select
+              size="small"
+              class="w-full"
+              appendTo="body"
+              inputId="status"
+              [filter]="false"
+              [showClear]="true"
+              optionValue="value"
+              optionLabel="label"
+              formControlName="status"
+              [options]="statusOptions()"
+            ></p-select>
+            <app-error-msg
+              [field]="'status'"
+              [forId]="'status'"
+              [required]="false"
+              [control]="form.controls.status"
+              [label]="'noFileDay.fields.statusEnum' | translate"
+            />
+          </p-floatLabel>
+        </div>
+      }
+    </div>
+  </form>
+
+  <ng-template pTemplate="footer">
+    <button
+      pButton
+      type="button"
+      (click)="close()"
+      icon="pi pi-times"
+      [disabled]="saving()"
+      class="p-button-text p-button-sm"
+      [label]="'common.cancel' | translate"
+    ></button>
+
+    <button
+      pButton
+      type="button"
+      (click)="save()"
+      icon="pi pi-save"
+      class="p-button-sm"
+      [loading]="saving()"
+      [disabled]="saving()"
+      [label]="'common.save' | translate"
+    ></button>
+  </ng-template>
+</p-dialog>

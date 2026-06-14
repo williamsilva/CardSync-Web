@@ -1,3 +1,7 @@
+import { StatusEnum } from '@models/enums/status.enum';
+
 export interface BankAdvancedFilters {
-  name: string | null;
+  code?: string;
+  name?: string;
+  statusEnum?: StatusEnum[] | null;
 }

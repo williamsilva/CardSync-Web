@@ -28,6 +28,7 @@ import { CsDocumentPipe } from '@shared/pipes/cs-document.pipe';
 import { PermissionService } from '@core/auth/permission.service';
 import { UserModel, UsersFiltersState } from '@models/users.models';
 import { UsersAdvancedFilters } from '@features/filter/users.filters';
+import { STATE_KEY } from '@features/state-key.constants';
 import { StatefulListPage } from '@features/list-base/stateful-list-page';
 import { BulkActionListPage } from '@features/list-base/bulk-action-list-page';
 import { buildListQuery } from '@shared/features/list-query/list-query.builder';
@@ -437,15 +438,15 @@ export class UsersListComponent extends StatefulListPage<UsersFiltersState, User
   }
 
   protected override tableStateKey(): string {
-    return 'cardsync.users.table.state.v1';
+    return STATE_KEY.CARDSYNC.SECURITY.USERS.TABLE.STATE.V1;
   }
 
   protected override tableRowsKey(): string {
-    return 'users.table.rows';
+    return STATE_KEY.CARDSYNC.SECURITY.USERS.TABLE.ROWS.V1;
   }
 
   protected override filtersKey(): string {
-    return 'cardsync.users.filters.v1';
+    return STATE_KEY.CARDSYNC.SECURITY.USERS.FILTERS.V1;
   }
 
   protected override refresh(): void {

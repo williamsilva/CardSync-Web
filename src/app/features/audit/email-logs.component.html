@@ -148,7 +148,7 @@
   (onLazyLoad)="onLazyLoad($event)"
   [paginatorDropdownAppendTo]="'body'"
   [rowsPerPageOptions]="rowsPerPageOptions"
-  stateKey="cardsync.audit.emailLog.table.state.v1"
+  [stateKey]="tableStateKey()"
   [tableStyle]="{ width: '100%', 'min-width': '48rem' }"
   [currentPageReportTemplate]="'pagination.report' | translate"
 >

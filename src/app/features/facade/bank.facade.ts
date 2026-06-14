@@ -2,7 +2,7 @@ import { Injectable, inject, signal } from '@angular/core';
 
 import { finalize, Observable, tap } from 'rxjs';
 
-import { BankModel } from '@models/bank.models';
+import { BankModel, BankCreateInput, BankUpdateInput } from '@models/bank.models';
 import { BankMinimalModel } from '@models/bank-minimal.models';
 import { BankAdvancedFilters } from '@features/filter/bank.filters';
 import { BankApiService } from '@features/service/bank.api.service';
@@ -24,7 +24,7 @@ export class BankFacade {
   private readonly _options = signal<BankMinimalModel[]>([]);
   private readonly _lastQuery = signal<LastQuery | null>(null);
 
-  readonly bank = this._data.asReadonly();
+  readonly banks = this._data.asReadonly();
   readonly options = this._options.asReadonly();
   readonly loading = this._loading.asReadonly();
   readonly totalRecords = this._total.asReadonly();
@@ -86,6 +86,32 @@ export class BankFacade {
     this.loadPage(last);
   }
 
+  getById(id: string): Observable<BankModel> {
+    return this.api.getById(id);
+  }
+
+  create(input: BankCreateInput): Observable<BankModel> {
+    this._loading.set(true);
+    return this.api.create(input).pipe(
+      tap(() => {
+        this._loading.set(false);
+        this.reloadLast();
+      }),
+      finalize(() => this._loading.set(false)),
+    );
+  }
+
+  update(id: string, input: BankUpdateInput): Observable<BankModel> {
+    this._loading.set(true);
+    return this.api.update(id, input).pipe(
+      tap(() => {
+        this._loading.set(false);
+        this.reloadLast();
+      }),
+      finalize(() => this._loading.set(false)),
+    );
+  }
+
   activate(id: string): Observable<void> {
     this._loading.set(true);
     return this.api.activate(id).pipe(
@@ -119,17 +145,6 @@ export class BankFacade {
     );
   }
 
-  blockBulk(ids: string[]): Observable<void> {
-    this._loading.set(true);
-    return this.api.blockBulk({ ids }).pipe(
-      tap(() => {
-        this._loading.set(false);
-        this.reloadLast();
-      }),
-      finalize(() => this._loading.set(false)),
-    );
-  }
-
   activateBulk(ids: string[]): Observable<void> {
     this._loading.set(true);
     return this.api.activateBulk({ ids }).pipe(
@@ -144,6 +159,17 @@ export class BankFacade {
   deactivateBulk(ids: string[]): Observable<void> {
     this._loading.set(true);
     return this.api.deactivateBulk({ ids }).pipe(
+      tap(() => {
+        this._loading.set(false);
+        this.reloadLast();
+      }),
+      finalize(() => this._loading.set(false)),
+    );
+  }
+
+  blockBulk(ids: string[]): Observable<void> {
+    this._loading.set(true);
+    return this.api.blockBulk({ ids }).pipe(
       tap(() => {
         this._loading.set(false);
         this.reloadLast();

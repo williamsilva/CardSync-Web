@@ -5,7 +5,12 @@ export type FileGroupStatus = 'complete' | 'partial' | 'missing';
 export interface ImportedFileCalendarEntityStatus {
   name: string;
   filesReceived: number;
+  expected?: number;
   status: FileGroupStatus;
+  entityStatus?: string | null;
+  statusDate?: string | null;
+  presentFiles?: string[];
+  missingFiles?: string[];
 }
 
 export interface ImportedFileCalendarGroupInfo {

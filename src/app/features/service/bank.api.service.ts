@@ -7,13 +7,16 @@ import { API } from '@core/api/api.config';
 import { HalPagedResponse } from '@core/api/page.model';
 import { BankAdvancedFilters } from '@features/filter/bank.filters';
 import { ListQueryDto } from '@shared/features/list-query/list-query.types';
-import { BankMinimalModel, mapBankMinimalApiModels } from '@models/bank-minimal.models';
 import {
   BankModel,
   BankApiModel,
-  mapBankApiModels,
+  BankCreateInput,
+  BankUpdateInput,
   BankBulkStatusInput,
+  mapBankApiModel,
+  mapBankApiModels,
 } from '@models/bank.models';
+import { BankMinimalModel, mapBankMinimalApiModels } from '@models/bank-minimal.models';
 
 @Injectable({ providedIn: 'root' })
 export class BankApiService {
@@ -21,15 +24,17 @@ export class BankApiService {
   private readonly baseUrl = `${API.bff}/v1/banks`;
 
   getOptions() {
-    return this.http.get<HalPagedResponse<BankMinimalModel>>(`${this.baseUrl}/options-filter`).pipe(
-      map(
-        (res) =>
-          ({
-            ...res,
-            content: mapBankMinimalApiModels(res?._embedded?.content),
-          }) as HalPagedResponse<BankMinimalModel>,
-      ),
-    );
+    return this.http
+      .get<HalPagedResponse<BankMinimalModel>>(`${this.baseUrl}/options-filter`)
+      .pipe(
+        map(
+          (res) =>
+            ({
+              ...res,
+              content: mapBankMinimalApiModels(res?._embedded?.content),
+            }) as HalPagedResponse<BankMinimalModel>,
+        ),
+      );
   }
 
   searchPaged(body: ListQueryDto<BankAdvancedFilters>) {
@@ -44,6 +49,20 @@ export class BankApiService {
     );
   }
 
+  getById(id: string) {
+    return this.http.get<BankApiModel>(`${this.baseUrl}/${id}`).pipe(map(mapBankApiModel));
+  }
+
+  create(input: BankCreateInput) {
+    return this.http.post<BankApiModel>(`${this.baseUrl}`, input).pipe(map(mapBankApiModel));
+  }
+
+  update(id: string, input: BankUpdateInput) {
+    return this.http
+      .put<BankApiModel>(`${this.baseUrl}/${id}`, input)
+      .pipe(map(mapBankApiModel));
+  }
+
   activate(id: string) {
     return this.http.post<void>(`${this.baseUrl}/${id}/activate`, null);
   }
@@ -56,15 +75,15 @@ export class BankApiService {
     return this.http.post<void>(`${this.baseUrl}/${id}/block`, null);
   }
 
-  blockBulk(input: BankBulkStatusInput) {
-    return this.http.post<void>(`${this.baseUrl}/block`, input);
-  }
-
   activateBulk(input: BankBulkStatusInput) {
     return this.http.post<void>(`${this.baseUrl}/activate`, input);
   }
 
   deactivateBulk(input: BankBulkStatusInput) {
     return this.http.post<void>(`${this.baseUrl}/deactivate`, input);
+  }
+
+  blockBulk(input: BankBulkStatusInput) {
+    return this.http.post<void>(`${this.baseUrl}/block`, input);
   }
 }

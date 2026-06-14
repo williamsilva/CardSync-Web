@@ -272,25 +272,71 @@ export class ImportedFilesCalendarComponent {
           ? t('statusPartial')
           : t('statusMissing');
 
+    const row = (content: string) =>
+      `<div style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${content}</div>`;
+
     const rows: string[] = [
-      `<b>${label}</b> &mdash; ${statusLabel}`,
-      `<span style="opacity:.75;font-size:.85em">${t('received')}: ${info.received} / ${info.expected}</span>`,
+      row(`<b>${label}</b> &mdash; ${statusLabel}`),
+      row(`<span style="opacity:.75;font-size:.85em">${t('received')}: ${info.received} / ${status === 'complete' ? info.received : info.expected}</span>`),
     ];
 
-    const pending = info.entities.filter((e) => e.status !== 'complete');
-    if (pending.length) {
-      rows.push(`<span style="opacity:.75;font-size:.85em">${t('pending')}:</span>`);
-      for (const e of pending) {
-        const icon = e.status === 'partial' ? '◑' : '✗';
-        const color = e.status === 'partial' ? 'var(--p-orange-500)' : 'var(--p-red-500)';
-        const detail = e.filesReceived > 0 ? ` (${e.filesReceived} ${t('filesAbbrev')})` : '';
-        rows.push(`<span style="color:${color}">${icon} ${e.name}${detail}</span>`);
+    const activeEntities = info.entities.filter(
+      (e) => !e.entityStatus || e.entityStatus === 'ACTIVE' || (e.filesReceived ?? 0) > 0,
+    );
+
+    if (activeEntities.length === 0) {
+      const fallbackColor =
+        status === 'complete'
+          ? 'var(--p-green-500)'
+          : status === 'partial'
+            ? 'var(--p-orange-500)'
+            : 'var(--p-red-500)';
+      const fallbackIcon = status === 'complete' ? '✓' : status === 'partial' ? '◑' : '✗';
+      const fallbackDetail = info.received > 0 ? ` (${info.received} ${t('filesAbbrev')})` : '';
+      rows.push(row(`<span style="color:${fallbackColor}">${fallbackIcon}${fallbackDetail}</span>`));
+    } else {
+      for (const e of activeEntities) {
+        const icon = e.status === 'complete' ? '✓' : e.status === 'partial' ? '◑' : '✗';
+        const color =
+          e.status === 'complete'
+            ? 'var(--p-green-500)'
+            : e.status === 'partial'
+              ? 'var(--p-orange-500)'
+              : 'var(--p-red-500)';
+        const recv = e.filesReceived ?? 0;
+        const exp = e.expected ?? 0;
+        const detail =
+          exp > 0
+            ? ` (${recv} / ${exp} ${t('filesAbbrev')})`
+            : recv > 0
+              ? ` (${recv} ${t('filesAbbrev')})`
+              : '';
+        rows.push(row(`<span style="color:${color}">${icon} ${e.name}${detail}</span>`));
+
+        const renderSubFile = (sf: string, sfColor: string) => {
+          const dashIdx = sf.indexOf(' - ');
+          const account = dashIdx >= 0 ? sf.slice(0, dashIdx) : sf;
+          const company = dashIdx >= 0 ? sf.slice(dashIdx + 3) : null;
+          rows.push(
+            row(`<span style="color:${sfColor};opacity:.8;padding-left:1.2em;font-size:.85em">↳ ${account}</span>`),
+          );
+          if (company) {
+            rows.push(
+              row(`<span style="color:${sfColor};opacity:.65;padding-left:2.2em;font-size:.8em">${company}</span>`),
+            );
+          }
+        };
+
+        for (const pf of e.presentFiles ?? []) {
+          renderSubFile(pf, 'var(--p-green-500)');
+        }
+        for (const mf of e.missingFiles ?? []) {
+          renderSubFile(mf, color);
+        }
       }
-    } else if (status === 'complete') {
-      rows.push(`<span style="opacity:.75;font-size:.85em">✓ ${t('allDone')}</span>`);
     }
 
-    return `<div style="line-height:1.8;min-width:150px">${rows.join('<br>')}</div>`;
+    return `<div style="line-height:1.8;width:420px">${rows.join('')}</div>`;
   }
 
   protected navigateToFiles(): void {

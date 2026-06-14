@@ -12,6 +12,7 @@ import { Table, TableLazyLoadEvent, TableModule } from 'primeng/table';
 import { FlagModel } from '@models/flag.models';
 import { I18nService } from '@core/i18n/i18n.service';
 import { CsTagComponent, CsTagTone } from '@shared/ui';
+import { STATE_KEY } from '@features/state-key.constants';
 import { FlagPermissionPolicy } from '@features/security/policy/flag-permission.policy';
 import { FlagRowActionsComponent } from '../flag-row-actions/flag-row-actions.component';
 import { FlagCompanyRelationsComponent } from '@features/register/flag/flag-relations/flag-company-relations.component';
@@ -43,6 +44,8 @@ import {
   ],
 })
 export class FlagTableComponent {
+  protected readonly tableStateKey = STATE_KEY.CARDSYNC.REGISTER.FLAG.TABLE.STATE.V1;
+
   @ViewChild('dt') private dt?: Table;
 
   @Output() pageChange = new EventEmitter<any>();

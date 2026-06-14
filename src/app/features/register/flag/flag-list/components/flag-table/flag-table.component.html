@@ -20,7 +20,7 @@
   [totalRecords]="totalRecords()"
   (onLazyLoad)="onLazyLoad($event)"
   [paginatorDropdownAppendTo]="'body'"
-  stateKey="cardsync.flag.table.state.v1"
+  [stateKey]="tableStateKey"
   [rowsPerPageOptions]="rowsPerPageOptions()"
   [tableStyle]="{ width: '100%', 'min-width': '62rem' }"
   [currentPageReportTemplate]="'pagination.report' | translate"

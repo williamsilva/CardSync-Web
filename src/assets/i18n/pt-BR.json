@@ -21,8 +21,19 @@
       },
       "contracts": {
         "title": "Contratos"
+      },
+      "holidays": {
+        "title": "Feriados"
+      },
+      "banks": {
+        "title": "Bancos"
+      },
+      "bankingDomicile": {
+        "title": "Domicílios Bancários"
+      },
+      "noFileDay": {
+        "title": "Dias sem Arquivo"
       }
-
     },
     "security": {
       "users": {
@@ -201,7 +212,11 @@
       "company": "Empresas",
       "contracts": "Contratos",
       "acquirer": "Adquirentes",
-      "establishment": "Estabelecimentos"
+      "establishment": "Estabelecimentos",
+      "holidays": "Feriados",
+      "banks": "Bancos",
+      "bankingDomicile": "Domicílios Bancários",
+      "noFileDay": "Dias sem Arquivo"
     },
     "conciliation": {
       "contractAudit": "Taxas Aplicadas",
@@ -260,7 +275,11 @@
       "company": "Empresas",
       "acquirer": "Adquirentes",
       "contract": "Contratos",
-      "establishment": "Estabelecimentos"
+      "establishment": "Estabelecimentos",
+      "holiday": "Feriados",
+      "bank": "Bancos",
+      "bankingDomicile": "Domicílios Bancários",
+      "noFileDay": "Dias sem Arquivo"
     },
     "transactions": {
       "erp": {
@@ -584,6 +603,19 @@
       "end": "Final",
       "start": "Inicio",
       "interval": "Intervalo"
+    },
+    "fileGroupEnum": {
+      "erp": "ERP",
+      "adq": "Adquirente",
+      "bank": "Banco",
+      "unknown": "-"
+    },
+    "noFileDayTypeEnum": {
+      "null": "N/A",
+      "noMovement": "Sem Movimento",
+      "holiday": "Feriado",
+      "systemOutage": "Indisponibilidade",
+      "other": "Outros"
     }
   },
   "company": {
@@ -674,6 +706,243 @@
     },
     "empty": {
       "title": "Nenhuma empresa encontrada"
+    }
+  },
+  "holiday": {
+    "subtitle": "Consulte os feriados cadastrados",
+    "new": { "title": "Novo Feriado" },
+    "edit": { "title": "Editar Feriado" },
+    "form": {
+      "created": "Feriado cadastrado com sucesso.",
+      "updated": "Feriado atualizado com sucesso."
+    },
+    "columns": {
+      "name": "Feriado",
+      "holidayDate": "Data",
+      "statusEnum": "Status",
+      "statusDate": "Data do Status",
+      "createdAt": "Cadastrado em",
+      "updatedAt": "Atualizado em"
+    },
+    "fields": {
+      "name": "Feriado",
+      "holidayDate": "Data do Feriado",
+      "statusEnum": "Status",
+      "statusDate": "Data do Status",
+      "createdAt": "Cadastrado em",
+      "updatedAt": "Atualizado em"
+    },
+    "selection": {
+      "mode": { "none": "Nenhum" },
+      "currentMode": "Modo de seleção",
+      "count": "{{count}} selecionados",
+      "pickOneFirst": "Selecione um item primeiro"
+    },
+    "activate": {
+      "header": "Ativar Feriado",
+      "messageSingle": "Deseja ativar o feriado <b>{{name}}</b>?",
+      "messageBulk": "Deseja ativar os <b>{{count}}</b> feriados selecionados?",
+      "successSingle": "Feriado ativado com sucesso.",
+      "successBulk": "{{count}} feriados ativados com sucesso.",
+      "selected": "Ativar selecionados"
+    },
+    "deactivate": {
+      "header": "Inativar Feriado",
+      "messageSingle": "Deseja inativar o feriado <b>{{name}}</b>?",
+      "messageBulk": "Deseja inativar os <b>{{count}}</b> feriados selecionados?",
+      "successSingle": "Feriado inativado com sucesso.",
+      "successBulk": "{{count}} feriados inativados com sucesso.",
+      "selected": "Inativar selecionados"
+    },
+    "block": {
+      "header": "Bloquear Feriado",
+      "messageSingle": "Deseja bloquear o feriado <b>{{name}}</b>?",
+      "messageBulk": "Deseja bloquear os <b>{{count}}</b> feriados selecionados?",
+      "successSingle": "Feriado bloqueado com sucesso.",
+      "successBulk": "{{count}} feriados bloqueados com sucesso.",
+      "selected": "Bloquear selecionados"
+    }
+  },
+  "bank": {
+    "subtitle": "Consulte os bancos cadastrados",
+    "new": { "title": "Novo Banco" },
+    "edit": { "title": "Editar Banco" },
+    "form": {
+      "created": "Banco cadastrado com sucesso.",
+      "updated": "Banco atualizado com sucesso."
+    },
+    "columns": {
+      "code": "Código",
+      "name": "Banco",
+      "ispb": "ISPB",
+      "statusEnum": "Status",
+      "statusDate": "Data do Status",
+      "createdAt": "Cadastrado em",
+      "updatedAt": "Atualizado em"
+    },
+    "fields": {
+      "code": "Código",
+      "name": "Banco",
+      "ispb": "ISPB",
+      "statusEnum": "Status",
+      "statusDate": "Data do Status",
+      "createdAt": "Cadastrado em",
+      "updatedAt": "Atualizado em"
+    },
+    "selection": {
+      "mode": { "none": "Nenhum" },
+      "currentMode": "Modo de seleção",
+      "count": "{{count}} selecionados",
+      "pickOneFirst": "Selecione um item primeiro"
+    },
+    "activate": {
+      "header": "Ativar Banco",
+      "messageSingle": "Deseja ativar o banco <b>{{name}}</b>?",
+      "messageBulk": "Deseja ativar os <b>{{count}}</b> bancos selecionados?",
+      "successSingle": "Banco ativado com sucesso.",
+      "successBulk": "{{count}} bancos ativados com sucesso.",
+      "selected": "Ativar selecionados"
+    },
+    "deactivate": {
+      "header": "Inativar Banco",
+      "messageSingle": "Deseja inativar o banco <b>{{name}}</b>?",
+      "messageBulk": "Deseja inativar os <b>{{count}}</b> bancos selecionados?",
+      "successSingle": "Banco inativado com sucesso.",
+      "successBulk": "{{count}} bancos inativados com sucesso.",
+      "selected": "Inativar selecionados"
+    },
+    "block": {
+      "header": "Bloquear Banco",
+      "messageSingle": "Deseja bloquear o banco <b>{{name}}</b>?",
+      "messageBulk": "Deseja bloquear os <b>{{count}}</b> bancos selecionados?",
+      "successSingle": "Banco bloqueado com sucesso.",
+      "successBulk": "{{count}} bancos bloqueados com sucesso.",
+      "selected": "Bloquear selecionados"
+    }
+  },
+  "bankingDomicile": {
+    "subtitle": "Consulte os domicílios bancários cadastrados",
+    "new": { "title": "Novo Domicílio Bancário" },
+    "edit": { "title": "Editar Domicílio Bancário" },
+    "form": {
+      "created": "Domicílio bancário cadastrado com sucesso.",
+      "updated": "Domicílio bancário atualizado com sucesso."
+    },
+    "columns": {
+      "bank": "Banco",
+      "agency": "Agência",
+      "status": "Status",
+      "company": "Empresa",
+      "agencyDigit": "Dígito Ag.",
+      "statusDateShort": "Status",
+      "createdAt": "Cadastrado em",
+      "updatedAt": "Atualizado em",
+      "accountDigit": "Dígito Cc.",
+      "statusDate": "Data do Status",
+      "currentAccountShort": "Conta",
+      "currentAccount": "Conta Corrente",
+      "accountOpeningDateShort": "Abertura",
+      "accountClosingDateShort": "Fechamento",
+      "accountOpeningDate": "Data de Abertura",
+      "accountClosingDate": "Data de Fechamento",
+      "expectsFile": "Recebe Arquivo"
+    },
+    "fields": {
+      "bank": "Banco",
+      "status": "Status",
+      "agency": "Agência",
+      "company": "Empresa",
+      "agencyDigit": "Dígito Ag.",
+      "currentAccount": "Conta Corrente",
+      "accountDigit": "Dígito Cc.",
+      "accountOpeningDate": "Data de Abertura",
+      "accountClosingDate": "Data de Fechamento",
+      "expectsFile": "Recebe Arquivo"
+    },
+
+    "selection": {
+      "mode": { "none": "Nenhum" },
+      "currentMode": "Modo de seleção",
+      "count": "{{count}} selecionados",
+      "pickOneFirst": "Selecione um item primeiro"
+    },
+    "activate": {
+      "header": "Ativar Domicílio Bancário",
+      "messageSingle": "Deseja ativar o domicílio bancário de <b>{{name}}</b>?",
+      "messageBulk": "Deseja ativar os <b>{{count}}</b> domicílios selecionados?",
+      "successSingle": "Domicílio bancário ativado com sucesso.",
+      "successBulk": "{{count}} domicílios bancários ativados com sucesso.",
+      "selected": "Ativar selecionados"
+    },
+    "deactivate": {
+      "header": "Inativar Domicílio Bancário",
+      "messageSingle": "Deseja inativar o domicílio bancário de <b>{{name}}</b>?",
+      "messageBulk": "Deseja inativar os <b>{{count}}</b> domicílios selecionados?",
+      "successSingle": "Domicílio bancário inativado com sucesso.",
+      "successBulk": "{{count}} domicílios bancários inativados com sucesso.",
+      "selected": "Inativar selecionados"
+    }
+  },
+  "noFileDay": {
+    "subtitle": "Consulte os dias sem arquivos cadastrados",
+    "new": { "title": "Novo Dia sem Arquivo" },
+    "edit": { "title": "Editar Dia sem Arquivo" },
+    "form": {
+      "created": "Dia sem arquivo cadastrado com sucesso.",
+      "updated": "Dia sem arquivo atualizado com sucesso."
+    },
+    "columns": {
+      "description": "Descrição",
+      "noFileDate": "Data",
+      "fileGroup": "Grupo",
+      "dayType": "Tipo",
+      "statusEnum": "Status",
+      "bank": "Banco",
+      "statusDate": "Data do Status",
+      "createdAt": "Cadastrado em",
+      "updatedAt": "Atualizado em"
+    },
+    "fields": {
+      "description": "Descrição",
+      "noFileDate": "Data sem Arquivo",
+      "fileGroup": "Grupo de Arquivo",
+      "dayType": "Tipo de Dia",
+      "bank": "Banco",
+      "acquirer": "Adquirente",
+      "statusEnum": "Status",
+      "statusDate": "Data do Status",
+      "createdAt": "Cadastrado em",
+      "updatedAt": "Atualizado em"
+    },
+    "selection": {
+      "mode": { "none": "Nenhum" },
+      "currentMode": "Modo de seleção",
+      "count": "{{count}} selecionados",
+      "pickOneFirst": "Selecione um item primeiro"
+    },
+    "activate": {
+      "header": "Ativar Dia sem Arquivo",
+      "messageSingle": "Deseja ativar o dia sem arquivo <b>{{name}}</b>?",
+      "messageBulk": "Deseja ativar os <b>{{count}}</b> dias selecionados?",
+      "successSingle": "Dia sem arquivo ativado com sucesso.",
+      "successBulk": "{{count}} dias ativados com sucesso.",
+      "selected": "Ativar selecionados"
+    },
+    "deactivate": {
+      "header": "Inativar Dia sem Arquivo",
+      "messageSingle": "Deseja inativar o dia sem arquivo <b>{{name}}</b>?",
+      "messageBulk": "Deseja inativar os <b>{{count}}</b> dias selecionados?",
+      "successSingle": "Dia sem arquivo inativado com sucesso.",
+      "successBulk": "{{count}} dias inativados com sucesso.",
+      "selected": "Inativar selecionados"
+    },
+    "block": {
+      "header": "Bloquear Dia sem Arquivo",
+      "messageSingle": "Deseja bloquear o dia sem arquivo <b>{{name}}</b>?",
+      "messageBulk": "Deseja bloquear os <b>{{count}}</b> dias selecionados?",
+      "successSingle": "Dia sem arquivo bloqueado com sucesso.",
+      "successBulk": "{{count}} dias bloqueados com sucesso.",
+      "selected": "Bloquear selecionados"
     }
   },
   "acquirer": {
@@ -2119,6 +2388,7 @@
     "close": "Fechar",
     "clear": "Limpar",
     "quantity": "Qtd.",
+    "status": "Status",
     "apply": "Aplicar",
     "actions": "Ações",
     "filter": "Filtrar",

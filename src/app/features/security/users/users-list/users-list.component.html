@@ -252,7 +252,7 @@
   (onPage)="onPageChange($event)"
   (onLazyLoad)="onLazyLoad($event)"
   [paginatorDropdownAppendTo]="'body'"
-  stateKey="cardsync.users.table.state.v1"
+  [stateKey]="tableStateKey()"
   [rowsPerPageOptions]="rowsPerPageOptions"
   [tableStyle]="{ width: '100%', 'min-width': '62rem' }"
   [currentPageReportTemplate]="'pagination.report' | translate"

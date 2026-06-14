@@ -1,0 +1,405 @@
+<cs-page-header
+  [subtitle]="'holiday.subtitle' | translate"
+  [breadcrumb]="[
+    { label: ('breadcrumb.dashboard.title' | translate), url: '/' },
+    { label: ('breadcrumb.register.holiday' | translate) },
+  ]"
+  [compact]="false"
+>
+  <button
+    pButton
+    type="button"
+    (click)="refresh()"
+    icon="pi pi-refresh"
+    class="p-button-text p-button-sm"
+    [label]="'common.update' | translate"
+  ></button>
+
+  <button
+    pButton
+    type="button"
+    icon="pi pi-check-circle"
+    (click)="confirmActivateSelected()"
+    [disabled]="!canActivateSelected()"
+    class="p-button-success p-button-sm"
+    [label]="'holiday.activate.selected' | translate"
+  ></button>
+
+  <button
+    pButton
+    type="button"
+    icon="pi pi-lock"
+    (click)="confirmBlockSelected()"
+    [disabled]="!canBlockSelected()"
+    class="p-button-warn p-button-sm"
+    [label]="'holiday.block.selected' | translate"
+  ></button>
+
+  <button
+    pButton
+    type="button"
+    icon="pi pi-ban"
+    class="p-button-danger p-button-sm"
+    (click)="confirmDeactivateSelected()"
+    [disabled]="!canDeactivateSelected()"
+    [label]="'holiday.deactivate.selected' | translate"
+  ></button>
+
+  <button
+    pButton
+    type="button"
+    (click)="goNew()"
+    icon="pi pi-plus"
+    class="p-button-info p-button-sm"
+    [disabled]="!secPolicy.canCreate()"
+    [label]="'holiday.new.title' | translate"
+  ></button>
+</cs-page-header>
+
+<app-holiday-create-dialog
+  (saved)="onSaved()"
+  [holiday]="holiday()"
+  [visible]="upsertVisible()"
+  (visibleChange)="onUpsertVisibleChange($event)"
+></app-holiday-create-dialog>
+
+<cs-filters-panel
+  (clear)="clear()"
+  [collapsed]="true"
+  (search)="search()"
+  [actionsAlign]="'start'"
+  [activeFilterGroups]="activeFilterGroups()"
+  [activeCount]="activeFiltersCount()"
+  [title]="'common.filter' | translate"
+>
+  <div class="grid formgrid gap-0 align-items-end">
+    <div class="col-12 md:col-4 p-1">
+      <p-floatLabel variant="on" class="w-full">
+        <input
+          pInputText
+          id="name"
+          [ngModel]="name()"
+          class="w-full p-inputtext-sm"
+          (ngModelChange)="name.set($event ?? '')"
+        />
+        <label for="name">{{ 'holiday.fields.name' | translate }}</label>
+      </p-floatLabel>
+    </div>
+
+    <div class="col-12 md:col-4 p-1">
+      <p-floatLabel variant="on" class="w-full">
+        <p-datepicker
+          inputId="holidayDateRange"
+          class="w-full"
+          size="small"
+          appendTo="body"
+          [showIcon]="true"
+          [readonlyInput]="true"
+          selectionMode="range"
+          dateFormat="dd/mm/yy"
+          [ngModel]="holidayDateRange()"
+          (ngModelChange)="holidayDateRange.set($event ?? null)"
+        ></p-datepicker>
+        <label for="holidayDateRange">{{ 'holiday.fields.holidayDate' | translate }}</label>
+      </p-floatLabel>
+    </div>
+
+    <div class="col-12 md:col-4 p-1">
+      <p-floatLabel variant="on" class="w-full">
+        <p-multiSelect
+          size="small"
+          class="w-full"
+          appendTo="body"
+          display="chip"
+          [filter]="false"
+          [showClear]="true"
+          optionLabel="label"
+          optionValue="value"
+          inputId="statusEnum"
+          [showToggleAll]="false"
+          [ngModel]="statusEnum()"
+          [options]="statusEnumOptions()"
+          (ngModelChange)="statusEnum.set($event?.length ? $event : null)"
+        />
+        <label for="statusEnum">{{ 'holiday.fields.statusEnum' | translate }}</label>
+      </p-floatLabel>
+    </div>
+  </div>
+</cs-filters-panel>
+
+<div class="flex align-items-center justify-content-between mb-2 px-1">
+  <small class="opacity-80">
+    {{ 'holiday.selection.currentMode' | translate }}:
+    {{ selectionModeLabel() }}
+  </small>
+
+  @if (selectedRows().length) {
+    <small class="opacity-80">
+      {{ 'holiday.selection.count' | translate: { count: selectedRows().length } }}
+    </small>
+  }
+</div>
+
+<p-table
+  #dt
+  stripedRows
+  dataKey="id"
+  size="small"
+  [rows]="rows"
+  [lazy]="true"
+  showGridlines
+  [rowHover]="true"
+  [paginator]="true"
+  sortMode="multiple"
+  filterDisplay="menu"
+  stateStorage="local"
+  [value]="holidays()"
+  class="p-datatable-sm mt-1"
+  styleClass="cs-admin-table"
+  [loading]="facade.loading()"
+  [showCurrentPageReport]="true"
+  [totalRecords]="totalRecords()"
+  (onPage)="onPageChange($event)"
+  (onLazyLoad)="onLazyLoad($event)"
+  [paginatorDropdownAppendTo]="'body'"
+  [rowsPerPageOptions]="rowsPerPageOptions"
+  [stateKey]="tableStateKey()"
+  [tableStyle]="{ width: '100%', 'min-width': '58rem' }"
+  [currentPageReportTemplate]="'pagination.report' | translate"
+>
+  <ng-template pTemplate="colgroup">
+    <colgroup>
+      <col style="width: 44px" />
+      <col style="width: auto" />
+      <col style="width: 150px" />
+      <col style="width: 120px" />
+      <col style="width: 150px" />
+      <col style="width: 150px" />
+      <col style="width: 150px" />
+      <col style="width: 100px" />
+    </colgroup>
+  </ng-template>
+
+  <ng-template pTemplate="header">
+    <tr>
+      <th class="text-center">
+        @if (selectionStatus()) {
+          <p-checkbox
+            [binary]="true"
+            [ngModel]="headerChecked()"
+            [indeterminate]="headerIndeterminate()"
+            (onChange)="toggleHeaderSelection(!!$event.checked)"
+          ></p-checkbox>
+        } @else {
+          <i
+            class="pi pi-info-circle opacity-70"
+            [pTooltip]="'holiday.selection.pickOneFirst' | translate"
+            tooltipPosition="top"
+          ></i>
+        }
+      </th>
+
+      <th pSortableColumn="name">
+        <div class="th-flex">
+          <span class="th-label">{{ 'holiday.columns.name' | translate }}</span>
+          <span class="th-icons">
+            <p-sortIcon field="name"></p-sortIcon>
+            <p-columnFilter
+              type="text"
+              display="menu"
+              field="name"
+              matchMode="contains"
+              [useGrouping]="false"
+              [showOperator]="false"
+              [showAddButton]="false"
+              styleClass="cs-colfilter"
+            ></p-columnFilter>
+          </span>
+        </div>
+      </th>
+
+      <th pSortableColumn="holidayDate">
+        <div class="th-flex">
+          <span class="th-label">{{ 'holiday.columns.holidayDate' | translate }}</span>
+          <span class="th-icons">
+            <p-sortIcon field="holidayDate"></p-sortIcon>
+          </span>
+        </div>
+      </th>
+
+      <th pSortableColumn="statusEnum">
+        <div class="th-flex">
+          <span class="th-label">{{ 'holiday.columns.statusEnum' | translate }}</span>
+          <span class="th-icons">
+            <p-sortIcon field="statusEnum"></p-sortIcon>
+            <p-columnFilter
+              field="statusEnum"
+              display="menu"
+              matchMode="in"
+              [showOperator]="false"
+              [showAddButton]="false"
+              [showMatchModes]="false"
+              styleClass="cs-colfilter"
+            >
+              <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                <p-multiSelect
+                  class="w-full"
+                  appendTo="body"
+                  [ngModel]="value"
+                  [showClear]="true"
+                  optionLabel="label"
+                  optionValue="value"
+                  [options]="statusEnumOptions()"
+                  (onChange)="filter($event.value)"
+                  [placeholder]="'common.all' | translate"
+                ></p-multiSelect>
+              </ng-template>
+            </p-columnFilter>
+          </span>
+        </div>
+      </th>
+
+      <th pSortableColumn="statusDate">
+        <div class="th-flex">
+          <span class="th-label">{{ 'holiday.columns.statusDate' | translate }}</span>
+          <span class="th-icons">
+            <p-sortIcon field="statusDate"></p-sortIcon>
+          </span>
+        </div>
+      </th>
+
+      <th pSortableColumn="createdAt">
+        <div class="th-flex">
+          <span class="th-label">{{ 'holiday.columns.createdAt' | translate }}</span>
+          <span class="th-icons">
+            <p-sortIcon field="createdAt"></p-sortIcon>
+          </span>
+        </div>
+      </th>
+
+      <th pSortableColumn="updatedAt">
+        <div class="th-flex">
+          <span class="th-label">{{ 'holiday.columns.updatedAt' | translate }}</span>
+          <span class="th-icons">
+            <p-sortIcon field="updatedAt"></p-sortIcon>
+          </span>
+        </div>
+      </th>
+
+      <th class="text-center">
+        <div class="th-flex justify-content-center">
+          <span class="th-label">{{ 'common.actions' | translate }}</span>
+        </div>
+      </th>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="body" let-row>
+    <tr>
+      <td class="text-center">
+        <p-checkbox
+          [binary]="true"
+          [ngModel]="isRowSelected(row)"
+          [disabled]="isRowCheckboxDisabled(row)"
+          (onChange)="toggleRowSelection(row, !!$event.checked)"
+        ></p-checkbox>
+      </td>
+
+      <td class="cell-strong">{{ row.name }}</td>
+
+      <td class="cell-muted text-center">
+        {{ row.holidayDate ? (row.holidayDate | csDate: 'date') : '-' }}
+      </td>
+
+      <td class="cell-muted text-center">
+        <cs-tag [value]="statusEnumLabel(row.status)" [tone]="severityEnum(row.status)" />
+      </td>
+
+      <td class="cell-muted text-center">
+        {{ row.statusDate ? (row.statusDate | csDate: 'short') : '-' }}
+      </td>
+
+      <td class="cell-muted text-center">
+        {{ row.createdAt ? (row.createdAt | csDate: 'short') : '-' }}
+      </td>
+
+      <td class="cell-muted text-center">
+        {{ row.updatedAt ? (row.updatedAt | csDate: 'short') : '-' }}
+      </td>
+
+      <td class="text-center">
+        <div class="table-actions">
+          <button
+            pButton
+            type="button"
+            icon="pi pi-pencil"
+            (click)="edit(row)"
+            tooltipPosition="top"
+            class="p-button-text p-button-sm"
+            [disabled]="!secPolicy.canEdit(row)"
+            [pTooltip]="secPolicy.canEdit(row) ? ('common.edit' | translate) : undefined"
+          ></button>
+
+          <button
+            pButton
+            type="button"
+            tooltipPosition="top"
+            icon="pi pi-check-circle"
+            class="p-button-text p-button-sm"
+            [disabled]="!secPolicy.canActivate(row)"
+            [pTooltip]="secPolicy.canActivate(row) ? ('common.activate' | translate) : undefined"
+            (click)="confirmActivate(row)"
+          ></button>
+
+          <button
+            pButton
+            type="button"
+            icon="pi pi-ban"
+            tooltipPosition="top"
+            class="p-button-text p-button-sm"
+            [disabled]="!secPolicy.canDeactivate(row)"
+            [pTooltip]="secPolicy.canDeactivate(row) ? ('common.deactivate' | translate) : undefined"
+            (click)="confirmDeactivate(row)"
+          ></button>
+
+          <button
+            pButton
+            type="button"
+            icon="pi pi-lock"
+            tooltipPosition="top"
+            class="p-button-text p-button-sm"
+            [disabled]="!secPolicy.canBlock(row)"
+            [pTooltip]="secPolicy.canBlock(row) ? ('holiday.block.header' | translate) : undefined"
+            (click)="confirmBlock(row)"
+          ></button>
+        </div>
+      </td>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="emptymessage">
+    <tr>
+      <td [attr.colspan]="8" class="empty-td">
+        <div class="empty empty-center">
+          <div class="empty-title">
+            {{
+              facade.loadedOnce()
+                ? ('common.noRecordsFound' | translate)
+                : ('common.loading' | translate)
+            }}
+          </div>
+        </div>
+      </td>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="loadingbody">
+    @for (row of skeletonRows; track $index) {
+      <tr>
+        @for (_ of [1, 2, 3, 4, 5, 6, 7, 8]; track $index) {
+          <td><p-skeleton></p-skeleton></td>
+        }
+      </tr>
+    }
+  </ng-template>
+</p-table>

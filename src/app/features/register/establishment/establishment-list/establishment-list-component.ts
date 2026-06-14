@@ -26,6 +26,7 @@ import { UsersFacade } from '@features/facade/users.facade';
 import { CsDocumentPipe } from '@shared/pipes/cs-document.pipe';
 import { CompanyFacade } from '@features/facade/company.facade';
 import { AcquirerFacade } from '@features/facade/acquirer.facade';
+import { STATE_KEY } from '@features/state-key.constants';
 import { StatefulListPage } from '@features/list-base/stateful-list-page';
 import { EstablishmentFacade } from '@features/facade/establishment.facade';
 import { BulkActionListPage } from '@features/list-base/bulk-action-list-page';
@@ -619,15 +620,15 @@ export class EstablishmentListComponent
   }
 
   protected override tableStateKey(): string {
-    return 'cardsync.establishment.table.state.v1';
+    return STATE_KEY.CARDSYNC.REGISTER.ESTABLISHMENT.TABLE.STATE.V1;
   }
 
   protected override tableRowsKey(): string {
-    return 'establishment.table.rows';
+    return STATE_KEY.CARDSYNC.REGISTER.ESTABLISHMENT.TABLE.ROWS.V1;
   }
 
   protected override filtersKey(): string {
-    return 'cardsync.establishment.filters.v1';
+    return STATE_KEY.CARDSYNC.REGISTER.ESTABLISHMENT.FILTERS.V1;
   }
 
   protected override refresh(): void {

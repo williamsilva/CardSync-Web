@@ -12,7 +12,7 @@ export const BANK_ROUTES: Routes = [
     data: {
       requireAll: false,
       redirectTo: '/forbidden',
-      permissions: [PERMISSIONS.DOCUMENTS.BANK_STATEMENT.VIEW],
+      permissions: [PERMISSIONS.BANKS.BANK_STATEMENT],
     },
     loadComponent: () =>
       import('./bank-statement/bank-statement-list.component').then(
