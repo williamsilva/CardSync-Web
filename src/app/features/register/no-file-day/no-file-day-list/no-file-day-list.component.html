@@ -28,21 +28,21 @@
   <button
     pButton
     type="button"
-    icon="pi pi-lock"
-    (click)="confirmBlockSelected()"
-    [disabled]="!canBlockSelected()"
+    icon="pi pi-ban"
     class="p-button-warn p-button-sm"
-    [label]="'noFileDay.block.selected' | translate"
+    (click)="confirmDeactivateSelected()"
+    [disabled]="!canDeactivateSelected()"
+    [label]="'noFileDay.deactivate.selected' | translate"
   ></button>
 
   <button
     pButton
     type="button"
-    icon="pi pi-ban"
+    icon="pi pi-trash"
+    (click)="confirmDeleteSelected()"
+    [disabled]="!canDeleteSelected()"
     class="p-button-danger p-button-sm"
-    (click)="confirmDeactivateSelected()"
-    [disabled]="!canDeactivateSelected()"
-    [label]="'noFileDay.deactivate.selected' | translate"
+    [label]="'noFileDay.delete.selected' | translate"
   ></button>
 
   <button
@@ -198,6 +198,7 @@
   [value]="noFileDays()"
   class="p-datatable-sm mt-1"
   styleClass="cs-admin-table"
+  [stateKey]="tableStateKey()"
   [loading]="facade.loading()"
   [showCurrentPageReport]="true"
   [totalRecords]="totalRecords()"
@@ -205,7 +206,6 @@
   (onLazyLoad)="onLazyLoad($event)"
   [paginatorDropdownAppendTo]="'body'"
   [rowsPerPageOptions]="rowsPerPageOptions"
-  [stateKey]="tableStateKey()"
   [tableStyle]="{ width: '100%', 'min-width': '68rem' }"
   [currentPageReportTemplate]="'pagination.report' | translate"
 >
@@ -213,13 +213,15 @@
     <colgroup>
       <col style="width: 44px" />
       <col style="width: auto" />
-      <col style="width: 130px" />
-      <col style="width: 130px" />
-      <col style="width: 130px" />
-      <col style="width: 130px" />
-      <col style="width: 130px" />
+      <col style="width: 200px" />
       <col style="width: 150px" />
-      <col style="width: 150px" />
+      <col style="width: 200px" />
+      <col style="width: 110px" />
+      <col style="width: 120px" />
+      <col style="width: 140px" />
+      <col style="width: 120px" />
+      <col style="width: 120px" />
+      <col style="width: 120px" />
       <col style="width: 100px" />
     </colgroup>
   </ng-template>
@@ -259,6 +261,26 @@
               styleClass="cs-colfilter"
             ></p-columnFilter>
           </span>
+        </div>
+      </th>
+
+      <th pSortableColumn="company">
+        <div class="th-flex">
+          <span class="th-label">{{ 'noFileDay.columns.company' | translate }}</span>
+          <span class="th-icons">
+            <p-sortIcon field="company"></p-sortIcon>
+          </span>
+        </div>
+      </th>
+
+      <th class="text-center justify-content-center">
+        <div class="th-flex">
+          <span class="th-label">{{ 'noFileDay.columns.origen' | translate }}</span>
+        </div>
+      </th>
+      <th class="text-center justify-content-center">
+        <div class="th-flex">
+          <span class="th-label">{{ 'noFileDay.columns.acquirerFileType' | translate }}</span>
         </div>
       </th>
 
@@ -367,15 +389,6 @@
         </div>
       </th>
 
-      <th pSortableColumn="bank">
-        <div class="th-flex">
-          <span class="th-label">{{ 'noFileDay.columns.bank' | translate }}</span>
-          <span class="th-icons">
-            <p-sortIcon field="bank"></p-sortIcon>
-          </span>
-        </div>
-      </th>
-
       <th pSortableColumn="statusDate">
         <div class="th-flex">
           <span class="th-label">{{ 'noFileDay.columns.statusDate' | translate }}</span>
@@ -412,8 +425,42 @@
           (onChange)="toggleRowSelection(row, !!$event.checked)"
         ></p-checkbox>
       </td>
-
       <td class="cell-strong">{{ row.description }}</td>
+      <td>
+        @if (row.bankingDomicile) {
+          <div tooltipPosition="top" [pTooltip]="row.bankingDomicile.company?.fantasyName || null">
+            {{ row.bankingDomicile.company?.fantasyName }}
+          </div>
+        }
+      </td>
+
+      <td>
+        @if (row.bankingDomicile) {
+          <div tooltipPosition="top" [pTooltip]="row.bankingDomicile.bank?.name || null">
+            {{ row.bankingDomicile.bank?.name }}
+          </div>
+        }
+
+        @if (row.acquirer) {
+          <div tooltipPosition="top" [pTooltip]="row.acquirer.fantasyName || null">
+            {{ row.acquirer.fantasyName }}
+          </div>
+        }
+      </td>
+
+      <td>
+        @if (row.bankingDomicile) {
+          <div tooltipPosition="top" [pTooltip]="formatBankingDomicile(row.bankingDomicile)">
+            {{ formatBankingDomicile(row.bankingDomicile) }}
+          </div>
+        }
+
+        @if (row.acquirerFileType) {
+          <div tooltipPosition="top" [pTooltip]="row.acquirerFileType || null">
+            {{ row.acquirerFileType }}
+          </div>
+        }
+      </td>
 
       <td class="cell-muted text-center">
         {{ row.noFileDate ? (row.noFileDate | csDate: 'date') : '-' }}
@@ -429,10 +476,6 @@
 
       <td class="cell-muted text-center">
         <cs-tag [value]="statusEnumLabel(row.status)" [tone]="severityEnum(row.status)" />
-      </td>
-
-      <td class="cell-muted text-center">
-        {{ row.bank ? (row.bank.code ? row.bank.code + ' - ' : '') + (row.bank.name ?? '') : '-' }}
       </td>
 
       <td class="cell-muted text-center">
@@ -461,10 +504,10 @@
             type="button"
             tooltipPosition="top"
             icon="pi pi-check-circle"
+            (click)="confirmActivate(row)"
             class="p-button-text p-button-sm"
             [disabled]="!secPolicy.canActivate(row)"
             [pTooltip]="secPolicy.canActivate(row) ? ('common.activate' | translate) : undefined"
-            (click)="confirmActivate(row)"
           ></button>
 
           <button
@@ -472,21 +515,25 @@
             type="button"
             icon="pi pi-ban"
             tooltipPosition="top"
+            (click)="confirmDeactivate(row)"
             class="p-button-text p-button-sm"
             [disabled]="!secPolicy.canDeactivate(row)"
-            [pTooltip]="secPolicy.canDeactivate(row) ? ('common.deactivate' | translate) : undefined"
-            (click)="confirmDeactivate(row)"
+            [pTooltip]="
+              secPolicy.canDeactivate(row) ? ('common.deactivate' | translate) : undefined
+            "
           ></button>
 
           <button
             pButton
             type="button"
-            icon="pi pi-lock"
+            icon="pi pi-trash"
             tooltipPosition="top"
             class="p-button-text p-button-sm"
-            [disabled]="!secPolicy.canBlock(row)"
-            [pTooltip]="secPolicy.canBlock(row) ? ('noFileDay.block.header' | translate) : undefined"
-            (click)="confirmBlock(row)"
+            (click)="confirmDelete(row)"
+            [disabled]="!secPolicy.canDelete(row)"
+            [pTooltip]="
+              secPolicy.canDelete(row) ? ('noFileDay.delete.header' | translate) : undefined
+            "
           ></button>
         </div>
       </td>
@@ -495,7 +542,7 @@
 
   <ng-template pTemplate="emptymessage">
     <tr>
-      <td [attr.colspan]="10" class="empty-td">
+      <td [attr.colspan]="9" class="empty-td">
         <div class="empty empty-center">
           <div class="empty-title">
             {{
@@ -512,7 +559,7 @@
   <ng-template pTemplate="loadingbody">
     @for (row of skeletonRows; track $index) {
       <tr>
-        @for (_ of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; track $index) {
+        @for (_ of [1, 2, 3, 4, 5, 6, 7, 8, 9]; track $index) {
           <td><p-skeleton></p-skeleton></td>
         }
       </tr>

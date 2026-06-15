@@ -5,8 +5,8 @@ import { map } from 'rxjs/operators';
 
 import { API } from '@core/api/api.config';
 import { HalPagedResponse } from '@core/api/page.model';
-import { BankingDomicileAdvancedFilters } from '@features/filter/banking-domicile.filters';
 import { ListQueryDto } from '@shared/features/list-query/list-query.types';
+import { BankingDomicileAdvancedFilters } from '@features/filter/banking-domicile.filters';
 import {
   BankingDomicileModel,
   BankingDomicileApiModel,
@@ -21,6 +21,23 @@ import {
 export class BankingDomicileApiService {
   private readonly http = inject(HttpClient);
   private readonly baseUrl = `${API.bff}/v1/banking-domiciles`;
+
+  getOptions() {
+    return this.http
+      .get<HalPagedResponse<BankingDomicileApiModel>>(`${this.baseUrl}/options-filter`)
+      .pipe(
+        map(
+          (res) =>
+            ({
+              ...res,
+              _embedded: {
+                ...res._embedded,
+                content: mapBankingDomicileApiModels(res?._embedded?.content),
+              },
+            }) as HalPagedResponse<BankingDomicileModel>,
+        ),
+      );
+  }
 
   searchPaged(body: ListQueryDto<BankingDomicileAdvancedFilters>) {
     return this.http

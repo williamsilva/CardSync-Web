@@ -20,13 +20,41 @@ export class BankingDomicileFacade {
   private readonly _total = signal(0);
   private readonly _loading = signal(false);
   private readonly _loadedOnce = signal(false);
+  private readonly _optionsLoading = signal(false);
+  private readonly _optionsLoadedOnce = signal(false);
   private readonly _data = signal<BankingDomicileModel[]>([]);
+  private readonly _options = signal<BankingDomicileModel[]>([]);
   private readonly _lastQuery = signal<LastQuery | null>(null);
 
   readonly loading = this._loading.asReadonly();
+  readonly options = this._options.asReadonly();
   readonly loadedOnce = this._loadedOnce.asReadonly();
   readonly totalRecords = this._total.asReadonly();
   readonly bankingDomiciles = this._data.asReadonly();
+
+  loadBankingDomicileOptionsFilter(force = false): void {
+    if (this._optionsLoading()) return;
+    if (!force && this._optionsLoadedOnce()) return;
+
+    this._optionsLoading.set(true);
+
+    this.api
+      .getOptions()
+      .pipe(
+        finalize(() => {
+          this._optionsLoading.set(false);
+          this._optionsLoadedOnce.set(true);
+        }),
+      )
+      .subscribe({
+        next: (res) => {
+          this._options.set(res?._embedded?.content ?? []);
+        },
+        error: () => {
+          this._options.set([]);
+        },
+      });
+  }
 
   loadPage(q: LastQuery): void {
     if (this._loading()) return;

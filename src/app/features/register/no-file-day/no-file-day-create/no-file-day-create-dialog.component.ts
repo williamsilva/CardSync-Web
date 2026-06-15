@@ -23,11 +23,16 @@ import { FloatLabelModule } from 'primeng/floatlabel';
 import { DatePickerModule } from 'primeng/datepicker';
 
 import { I18nService } from '@core/i18n/i18n.service';
-import { BankFacade } from '@features/facade/bank.facade';
 import { AcquirerFacade } from '@features/facade/acquirer.facade';
 import { NoFileDayFacade } from '@features/facade/no-file-day.facade';
+import { BankingDomicileFacade } from '@features/facade/banking-domicile.facade';
 import { ErrorMsgComponent } from '@shared/error-msg/error-msg.component';
 import { FileGroupEnum, allFileGroupEnum, fileGroupEnumLabel } from '@models/enums/file-group.enum';
+import {
+  AcquirerFileTypeEnum,
+  allAcquirerFileTypeEnum,
+  acquirerFileTypeEnumLabel,
+} from '@models/enums/acquirer-file-type.enum';
 import {
   StatusEnum,
   allStatusEnum,
@@ -74,8 +79,8 @@ export class NoFileDayCreateDialogComponent {
   readonly saving = signal(false);
   readonly i18n = inject(I18nService);
   readonly facade = inject(NoFileDayFacade);
-  readonly bankFacade = inject(BankFacade);
   readonly acquirerFacade = inject(AcquirerFacade);
+  readonly bankingDomicileFacade = inject(BankingDomicileFacade);
 
   private readonly fb = inject(FormBuilder);
   private readonly toast = inject(MessageService);
@@ -87,7 +92,7 @@ export class NoFileDayCreateDialogComponent {
   readonly isEdit = computed(() => !!this.noFileDay()?.id);
 
   private readonly _fileGroupValue = signal<FileGroupEnum | null>(null);
-  readonly showBankField = computed(() => this._fileGroupValue() === FileGroupEnum.BANK);
+  readonly showBankingDomicileField = computed(() => this._fileGroupValue() === FileGroupEnum.BANK);
   readonly showAcquirerField = computed(() => this._fileGroupValue() === FileGroupEnum.ADQ);
 
   readonly statusOptions = computed(() => {
@@ -114,11 +119,16 @@ export class NoFileDayCreateDialogComponent {
     }));
   });
 
-  readonly bankOptions = computed(() =>
-    this.bankFacade.options().map((b) => ({
-      label: `${b.code ?? ''} - ${b.name ?? ''}`.trim().replace(/^-\s*/, ''),
-      value: b.id,
-    })),
+  readonly bankingDomicileOptions = computed(() =>
+    this.bankingDomicileFacade.options().map((d) => {
+      const agency = `${d.agency}${d.agencyDigit ? '-' + d.agencyDigit : ''}`;
+      const account = `${d.currentAccount}${d.accountDigit ? '-' + d.accountDigit : ''}`;
+      const company = d.company?.fantasyName ?? '';
+      return {
+        label: `Ag. ${agency} / Cc. ${account}${company ? ' - ' + company : ''}`,
+        value: d.id,
+      };
+    }),
   );
 
   readonly acquirerOptions = computed(() =>
@@ -128,19 +138,28 @@ export class NoFileDayCreateDialogComponent {
     })),
   );
 
+  readonly acquirerFileTypeOptions = computed(() => {
+    this.i18n.getAppliedLang();
+    return allAcquirerFileTypeEnum().map((value) => ({
+      label: acquirerFileTypeEnumLabel(value, this.i18n),
+      value,
+    }));
+  });
+
   readonly form = this.fb.group({
     description: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(255)]],
     noFileDate: [null as Date | null, [Validators.required]],
     fileGroup: [null as FileGroupEnum | null, [Validators.required]],
     dayType: [null as NoFileDayTypeEnum | null, [Validators.required]],
-    bankId: [null as string | null],
+    bankingDomicileId: [null as string | null],
     acquirerId: [null as string | null],
+    acquirerFileType: [null as AcquirerFileTypeEnum | null],
     status: [null as StatusEnum | null],
   });
 
   constructor() {
-    this.bankFacade.loadBankOptionsFilter();
     this.acquirerFacade.loadAcquirerOptionsFilter();
+    this.bankingDomicileFacade.loadBankingDomicileOptionsFilter();
 
     effect(() => {
       const visible = this.visible();
@@ -170,11 +189,14 @@ export class NoFileDayCreateDialogComponent {
         noFileDate: noFileDay.noFileDate ? new Date(noFileDay.noFileDate + 'T00:00:00') : null,
         fileGroup: noFileDay.fileGroup ?? null,
         dayType: noFileDay.dayType ?? null,
-        bankId: noFileDay.bank?.id ?? null,
+        bankingDomicileId: noFileDay.bankingDomicile?.id ?? null,
         acquirerId: noFileDay.acquirer?.id ?? null,
+        acquirerFileType: noFileDay.acquirerFileType ?? null,
         status: normalizeStatusEnum(noFileDay.status),
       });
 
+      this._fileGroupValue.set(noFileDay.fileGroup ?? null);
+      this.applyConditionalValidators(noFileDay.fileGroup ?? null);
       this.lastBoundId.set(id);
     });
 
@@ -182,13 +204,37 @@ export class NoFileDayCreateDialogComponent {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((value) => {
         this._fileGroupValue.set(value);
+        this.applyConditionalValidators(value);
         if (value !== FileGroupEnum.BANK) {
-          this.form.controls.bankId.setValue(null, { emitEvent: false });
+          this.form.controls.bankingDomicileId.setValue(null, { emitEvent: false });
         }
         if (value !== FileGroupEnum.ADQ) {
           this.form.controls.acquirerId.setValue(null, { emitEvent: false });
+          this.form.controls.acquirerFileType.setValue(null, { emitEvent: false });
         }
       });
+  }
+
+  private applyConditionalValidators(group: FileGroupEnum | null): void {
+    const { bankingDomicileId, acquirerId, acquirerFileType } = this.form.controls;
+
+    if (group === FileGroupEnum.BANK) {
+      bankingDomicileId.setValidators([Validators.required]);
+      acquirerId.clearValidators();
+      acquirerFileType.clearValidators();
+    } else if (group === FileGroupEnum.ADQ) {
+      bankingDomicileId.clearValidators();
+      acquirerId.setValidators([Validators.required]);
+      acquirerFileType.setValidators([Validators.required]);
+    } else {
+      bankingDomicileId.clearValidators();
+      acquirerId.clearValidators();
+      acquirerFileType.clearValidators();
+    }
+
+    bankingDomicileId.updateValueAndValidity({ emitEvent: false });
+    acquirerId.updateValueAndValidity({ emitEvent: false });
+    acquirerFileType.updateValueAndValidity({ emitEvent: false });
   }
 
   onHide() {
@@ -222,8 +268,9 @@ export class NoFileDayCreateDialogComponent {
       noFileDate: isoDate,
       fileGroup: v.fileGroup!,
       dayType: v.dayType!,
-      bankId: v.bankId ?? undefined,
+      bankingDomicileId: v.bankingDomicileId ?? undefined,
       acquirerId: v.acquirerId ?? undefined,
+      acquirerFileType: v.acquirerFileType ?? undefined,
     };
 
     const updatePayload: NoFileDayUpdateInput = {
@@ -231,8 +278,9 @@ export class NoFileDayCreateDialogComponent {
       noFileDate: isoDate,
       fileGroup: v.fileGroup ?? undefined,
       dayType: v.dayType ?? undefined,
-      bankId: v.bankId ?? undefined,
+      bankingDomicileId: v.bankingDomicileId ?? undefined,
       acquirerId: v.acquirerId ?? undefined,
+      acquirerFileType: v.acquirerFileType ?? undefined,
       status: this.isEdit() ? (v.status ?? undefined) : undefined,
     };
 
@@ -265,14 +313,17 @@ export class NoFileDayCreateDialogComponent {
   }
 
   private resetFormForCreate() {
+    this.applyConditionalValidators(null);
     this.form.reset({
       description: '',
       noFileDate: null,
       fileGroup: null,
       dayType: null,
-      bankId: null,
+      bankingDomicileId: null,
       acquirerId: null,
+      acquirerFileType: null,
       status: null,
     });
+    this._fileGroupValue.set(null);
   }
 }

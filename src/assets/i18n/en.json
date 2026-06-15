@@ -543,6 +543,13 @@
       "holiday": "Holiday",
       "systemOutage": "System Outage",
       "other": "Other"
+    },
+    "acquirerFileTypeEnum": {
+      "generic": "Daily File",
+      "eevc": "EEVC - Sales Movement Statement",
+      "eevd": "EEVD - Daily Debit Card Movement",
+      "eefi": "EEFI - Financial Movement Statement",
+      "unknown": "-"
     }
   },
   "company": {
@@ -743,13 +750,13 @@
       "successBulk": "{{count}} days deactivated successfully.",
       "selected": "Deactivate selected"
     },
-    "block": {
-      "header": "Block No File Day",
-      "messageSingle": "Do you want to block the no file day <b>{{name}}</b>?",
-      "messageBulk": "Do you want to block the <b>{{count}}</b> selected days?",
-      "successSingle": "No file day blocked successfully.",
-      "successBulk": "{{count}} days blocked successfully.",
-      "selected": "Block selected"
+    "delete": {
+      "header": "Delete No File Day",
+      "messageSingle": "Do you want to delete the no file day <b>{{name}}</b>? This action cannot be undone.",
+      "messageBulk": "Do you want to delete the <b>{{count}}</b> selected days? This action cannot be undone.",
+      "successSingle": "No file day deleted successfully.",
+      "successBulk": "{{count}} days deleted successfully.",
+      "selected": "Delete selected"
     }
   },
   "bank": {

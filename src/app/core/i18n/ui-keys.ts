@@ -519,13 +519,13 @@ export const UI_KEYS = {
       successSingle: 'noFileDay.deactivate.successSingle',
       selected: 'noFileDay.deactivate.selected',
     },
-    block: {
-      header: 'noFileDay.block.header',
-      messageBulk: 'noFileDay.block.messageBulk',
-      successBulk: 'noFileDay.block.successBulk',
-      messageSingle: 'noFileDay.block.messageSingle',
-      successSingle: 'noFileDay.block.successSingle',
-      selected: 'noFileDay.block.selected',
+    delete: {
+      header: 'noFileDay.delete.header',
+      messageBulk: 'noFileDay.delete.messageBulk',
+      successBulk: 'noFileDay.delete.successBulk',
+      messageSingle: 'noFileDay.delete.messageSingle',
+      successSingle: 'noFileDay.delete.successSingle',
+      selected: 'noFileDay.delete.selected',
     },
   },
   users: {
@@ -1320,6 +1320,13 @@ export const UI_KEYS = {
       holiday: 'enum.noFileDayTypeEnum.holiday',
       systemOutage: 'enum.noFileDayTypeEnum.systemOutage',
       other: 'enum.noFileDayTypeEnum.other',
+    },
+    acquirerFileTypeEnum: {
+      generic: 'enum.acquirerFileTypeEnum.generic',
+      eevc: 'enum.acquirerFileTypeEnum.eevc',
+      eevd: 'enum.acquirerFileTypeEnum.eevd',
+      eefi: 'enum.acquirerFileTypeEnum.eefi',
+      unknown: 'enum.acquirerFileTypeEnum.unknown',
     },
   },
   company: {

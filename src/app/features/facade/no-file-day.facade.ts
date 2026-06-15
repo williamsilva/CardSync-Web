@@ -104,9 +104,9 @@ export class NoFileDayFacade {
     );
   }
 
-  block(id: string): Observable<void> {
+  delete(id: string): Observable<void> {
     this._loading.set(true);
-    return this.api.block(id).pipe(
+    return this.api.delete(id).pipe(
       tap(() => {
         this._loading.set(false);
         this.reloadLast();
@@ -137,9 +137,9 @@ export class NoFileDayFacade {
     );
   }
 
-  blockBulk(ids: string[]): Observable<void> {
+  deleteBulk(ids: string[]): Observable<void> {
     this._loading.set(true);
-    return this.api.blockBulk({ ids }).pipe(
+    return this.api.deleteBulk({ ids }).pipe(
       tap(() => {
         this._loading.set(false);
         this.reloadLast();

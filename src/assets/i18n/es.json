@@ -543,6 +543,13 @@
       "holiday": "Festivo",
       "systemOutage": "Interrupción del Sistema",
       "other": "Otros"
+    },
+    "acquirerFileTypeEnum": {
+      "generic": "Archivo diario",
+      "eevc": "EEVC - Extracto de movimiento de ventas",
+      "eevd": "EEVD - Movimiento diario de tarjetas de débito",
+      "eefi": "EEFI - Extracto de movimiento financiero",
+      "unknown": "-"
     }
   },
   "company": {
@@ -860,13 +867,13 @@
       "successBulk": "{{count}} días inactivados exitosamente.",
       "selected": "Inactivar seleccionados"
     },
-    "block": {
-      "header": "Bloquear Día sin Archivo",
-      "messageSingle": "¿Desea bloquear el día sin archivo <b>{{name}}</b>?",
-      "messageBulk": "¿Desea bloquear los <b>{{count}}</b> días seleccionados?",
-      "successSingle": "Día sin archivo bloqueado exitosamente.",
-      "successBulk": "{{count}} días bloqueados exitosamente.",
-      "selected": "Bloquear seleccionados"
+    "delete": {
+      "header": "Eliminar Día sin Archivo",
+      "messageSingle": "¿Desea eliminar el día sin archivo <b>{{name}}</b>? Esta acción no se puede deshacer.",
+      "messageBulk": "¿Desea eliminar los <b>{{count}}</b> días seleccionados? Esta acción no se puede deshacer.",
+      "successSingle": "Día sin archivo eliminado exitosamente.",
+      "successBulk": "{{count}} días eliminados exitosamente.",
+      "selected": "Eliminar seleccionados"
     }
   },
   "acquirer": {

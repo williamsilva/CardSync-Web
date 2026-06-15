@@ -27,7 +27,7 @@
             [field]="'description'"
             [forId]="'description'"
             [control]="form.controls.description"
-            [label]="'noFileDay.fields.description' | translate"
+            [label]="'noFileDay.columns.description' | translate"
           />
         </p-floatLabel>
       </div>
@@ -52,7 +52,7 @@
             [field]="'noFileDate'"
             [forId]="'noFileDate'"
             [control]="form.controls.noFileDate"
-            [label]="'noFileDay.fields.noFileDate' | translate"
+            [label]="'noFileDay.columns.noFileDate' | translate"
           />
         </p-floatLabel>
       </div>
@@ -79,7 +79,7 @@
             [field]="'fileGroup'"
             [forId]="'fileGroup'"
             [control]="form.controls.fileGroup"
-            [label]="'noFileDay.fields.fileGroup' | translate"
+            [label]="'noFileDay.columns.fileGroup' | translate"
           />
         </p-floatLabel>
       </div>
@@ -106,12 +106,12 @@
             [field]="'dayType'"
             [forId]="'dayType'"
             [control]="form.controls.dayType"
-            [label]="'noFileDay.fields.dayType' | translate"
+            [label]="'noFileDay.columns.dayType' | translate"
           />
         </p-floatLabel>
       </div>
 
-      @if (showBankField()) {
+      @if (showBankingDomicileField()) {
         <div class="col-12 md:col-6 p-2">
           <p-floatLabel variant="on" class="w-full">
             <p-select
@@ -119,19 +119,19 @@
               class="w-full"
               appendTo="body"
               [filter]="true"
-              inputId="bankId"
               [showClear]="true"
               optionValue="value"
               optionLabel="label"
-              formControlName="bankId"
-              [options]="bankOptions()"
+              inputId="bankingDomicileId"
+              formControlName="bankingDomicileId"
+              [options]="bankingDomicileOptions()"
             ></p-select>
             <app-error-msg
-              [field]="'bankId'"
-              [forId]="'bankId'"
               [required]="false"
-              [control]="form.controls.bankId"
-              [label]="'noFileDay.fields.bank' | translate"
+              [field]="'bankingDomicileId'"
+              [forId]="'bankingDomicileId'"
+              [control]="form.controls.bankingDomicileId"
+              [label]="'noFileDay.columns.bankingDomicile' | translate"
             />
           </p-floatLabel>
         </div>
@@ -157,7 +157,31 @@
               [field]="'acquirerId'"
               [forId]="'acquirerId'"
               [control]="form.controls.acquirerId"
-              [label]="'noFileDay.fields.acquirer' | translate"
+              [label]="'noFileDay.columns.acquirer' | translate"
+            />
+          </p-floatLabel>
+        </div>
+
+        <div class="col-12 md:col-6 p-2">
+          <p-floatLabel variant="on" class="w-full">
+            <p-select
+              size="small"
+              class="w-full"
+              appendTo="body"
+              [filter]="false"
+              [showClear]="true"
+              optionValue="value"
+              optionLabel="label"
+              inputId="acquirerFileType"
+              formControlName="acquirerFileType"
+              [options]="acquirerFileTypeOptions()"
+            ></p-select>
+            <app-error-msg
+              [required]="false"
+              [field]="'acquirerFileType'"
+              [forId]="'acquirerFileType'"
+              [control]="form.controls.acquirerFileType"
+              [label]="'noFileDay.columns.acquirerFileType' | translate"
             />
           </p-floatLabel>
         </div>
@@ -183,7 +207,7 @@
               [forId]="'status'"
               [required]="false"
               [control]="form.controls.status"
-              [label]="'noFileDay.fields.statusEnum' | translate"
+              [label]="'noFileDay.columns.statusEnum' | translate"
             />
           </p-floatLabel>
         </div>

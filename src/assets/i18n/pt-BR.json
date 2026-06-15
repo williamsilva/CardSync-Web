@@ -616,6 +616,13 @@
       "holiday": "Feriado",
       "systemOutage": "Indisponibilidade",
       "other": "Outros"
+    },
+    "acquirerFileTypeEnum": {
+      "generic": "Arquivo diário",
+      "eevc": "EEVC - Extrato de movimento de vendas",
+      "eevd": "EEVD - Movimentação diária de cartões de débito",
+      "eefi": "EEFI - Extrato de movimentação financeira",
+      "unknown": "-"
     }
   },
   "company": {
@@ -892,23 +899,25 @@
       "updated": "Dia sem arquivo atualizado com sucesso."
     },
     "columns": {
-      "description": "Descrição",
-      "noFileDate": "Data",
-      "fileGroup": "Grupo",
       "dayType": "Tipo",
+      "origen": "Origem",
+      "noFileDate": "Data",
+      "company" :"Empresa",
+      "fileGroup": "Grupo",
       "statusEnum": "Status",
-      "bank": "Banco",
-      "statusDate": "Data do Status",
+      "acquirer": "Adquirente",
+      "description": "Descrição",
+      "updatedAt": "Atualizado em",
       "createdAt": "Cadastrado em",
-      "updatedAt": "Atualizado em"
+      "statusDate": "Data do Status",
+      "acquirerFileType": "Tipo de Arquivo",
+      "bankingDomicile": "Domicílio Bancário"
     },
     "fields": {
-      "description": "Descrição",
+
       "noFileDate": "Data sem Arquivo",
       "fileGroup": "Grupo de Arquivo",
       "dayType": "Tipo de Dia",
-      "bank": "Banco",
-      "acquirer": "Adquirente",
       "statusEnum": "Status",
       "statusDate": "Data do Status",
       "createdAt": "Cadastrado em",
@@ -936,13 +945,13 @@
       "successBulk": "{{count}} dias inativados com sucesso.",
       "selected": "Inativar selecionados"
     },
-    "block": {
-      "header": "Bloquear Dia sem Arquivo",
-      "messageSingle": "Deseja bloquear o dia sem arquivo <b>{{name}}</b>?",
-      "messageBulk": "Deseja bloquear os <b>{{count}}</b> dias selecionados?",
-      "successSingle": "Dia sem arquivo bloqueado com sucesso.",
-      "successBulk": "{{count}} dias bloqueados com sucesso.",
-      "selected": "Bloquear selecionados"
+    "delete": {
+      "header": "Excluir Dia sem Arquivo",
+      "messageSingle": "Deseja excluir o dia sem arquivo <b>{{name}}</b>? Esta ação não pode ser desfeita.",
+      "messageBulk": "Deseja excluir os <b>{{count}}</b> dias selecionados? Esta ação não pode ser desfeita.",
+      "successSingle": "Dia sem arquivo excluído com sucesso.",
+      "successBulk": "{{count}} dias excluídos com sucesso.",
+      "selected": "Excluir selecionados"
     }
   },
   "acquirer": {

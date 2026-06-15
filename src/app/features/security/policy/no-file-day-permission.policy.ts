@@ -32,9 +32,8 @@ export class NoFileDayPermissionPolicy {
     return normalizeStatusEnum(row.status) === StatusEnum.ACTIVE;
   }
 
-  canBlock(row: NoFileDayModel): boolean {
-    if (!this.perms.hasSupportOr(PERMISSIONS.NO_FILE_DAY.ACTIVE_OR_INACTIVE)) return false;
-    return normalizeStatusEnum(row.status) === StatusEnum.ACTIVE;
+  canDelete(_row: NoFileDayModel): boolean {
+    return this.perms.hasSupportOr(PERMISSIONS.NO_FILE_DAY.DELETE);
   }
 
   selectableStatus(row: NoFileDayModel): StatusEnum | null {
@@ -67,9 +66,7 @@ export class NoFileDayPermissionPolicy {
     );
   }
 
-  canBlockBulk(rows: ReadonlyArray<NoFileDayModel> | null | undefined): boolean {
-    return (
-      !!rows?.length && rows.every((row) => normalizeStatusEnum(row.status) === StatusEnum.ACTIVE)
-    );
+  canDeleteBulk(rows: ReadonlyArray<NoFileDayModel> | null | undefined): boolean {
+    return !!rows?.length && this.perms.hasSupportOr(PERMISSIONS.NO_FILE_DAY.DELETE);
   }
 }

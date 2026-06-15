@@ -238,10 +238,7 @@ export class NoFileDayListComponent extends StatefulListPage<
     return status === StatusEnum.ACTIVE && this.secPolicy.canDeactivateBulk(this.selectedRows());
   });
 
-  canBlockSelected = computed(() => {
-    const status = this.selectionStatus();
-    return status === StatusEnum.ACTIVE && this.secPolicy.canBlockBulk(this.selectedRows());
-  });
+  canDeleteSelected = computed(() => this.secPolicy.canDeleteBulk(this.selectedRows()));
 
   selectionModeLabel = computed(() => {
     const status = this.selectionStatus();
@@ -307,10 +304,10 @@ export class NoFileDayListComponent extends StatefulListPage<
     );
   }
 
-  block(row: NoFileDayModel): void {
+  delete(row: NoFileDayModel): void {
     this.bulk.executeAction(
-      this.facade.block(row.id),
-      this.i18n.tUi('noFileDay.block.successSingle'),
+      this.facade.delete(row.id),
+      this.i18n.tUi('noFileDay.delete.successSingle'),
     );
   }
 
@@ -332,12 +329,12 @@ export class NoFileDayListComponent extends StatefulListPage<
     });
   }
 
-  confirmBlock(row: NoFileDayModel): void {
+  confirmDelete(row: NoFileDayModel): void {
     this.bulk.confirmAction({
-      header: this.i18n.tUi('noFileDay.block.header'),
-      message: this.i18n.tUi('noFileDay.block.messageSingle', { name: row.description }),
-      icon: 'pi pi-lock',
-      accept: () => this.block(row),
+      header: this.i18n.tUi('noFileDay.delete.header'),
+      message: this.i18n.tUi('noFileDay.delete.messageSingle', { name: row.description }),
+      icon: 'pi pi-trash',
+      accept: () => this.delete(row),
     });
   }
 
@@ -359,12 +356,12 @@ export class NoFileDayListComponent extends StatefulListPage<
     );
   }
 
-  blockSelected(): void {
+  deleteSelected(): void {
     const rows = this.selectedRows();
     if (!rows.length) return;
     this.bulk.executeAction(
-      this.facade.blockBulk(rows.map((r) => r.id)),
-      this.i18n.tUi('noFileDay.block.successBulk', { count: rows.length }),
+      this.facade.deleteBulk(rows.map((r) => r.id)),
+      this.i18n.tUi('noFileDay.delete.successBulk', { count: rows.length }),
     );
   }
 
@@ -390,14 +387,14 @@ export class NoFileDayListComponent extends StatefulListPage<
     });
   }
 
-  confirmBlockSelected(): void {
+  confirmDeleteSelected(): void {
     const rows = this.selectedRows();
     if (!rows.length) return;
     this.bulk.confirmAction({
-      header: this.i18n.tUi('noFileDay.block.header'),
-      message: this.i18n.tUi('noFileDay.block.messageBulk', { count: rows.length }),
-      icon: 'pi pi-lock',
-      accept: () => this.blockSelected(),
+      header: this.i18n.tUi('noFileDay.delete.header'),
+      message: this.i18n.tUi('noFileDay.delete.messageBulk', { count: rows.length }),
+      icon: 'pi pi-trash',
+      accept: () => this.deleteSelected(),
     });
   }
 
@@ -423,6 +420,13 @@ export class NoFileDayListComponent extends StatefulListPage<
 
   dayTypeSeverity(value: NoFileDayTypeEnum | null) {
     return noFileDayTypeEnumSeverity(value);
+  }
+
+  formatBankingDomicile(domicile: NoFileDayModel['bankingDomicile']): string {
+    if (!domicile) return '-';
+    const agency = `${domicile.agency}${domicile.agencyDigit ? '-' + domicile.agencyDigit : ''}`;
+    const account = `${domicile.currentAccount}${domicile.accountDigit ? '-' + domicile.accountDigit : ''}`;
+    return `Ag. ${agency} / Cc. ${account}`;
   }
 
   goNew() {
