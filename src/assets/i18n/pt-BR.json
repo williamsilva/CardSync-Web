@@ -499,11 +499,9 @@
       "reconciled": "Conciliado",
       "unknown": "Não Informado",
       "excludedSale": "Venda Excluída",
-      "notReconciled": "Não conciliado",
       "canceledSale": "Venda Cancelada",
       "naoTokenizadas": "Não Tokenizada",
       "manuallyReconciled": "Conciliado Manual",
-      "partiallyReconciled": "Conciliado Parcial",
       "reconciledAutomatically": "Conciliado Automaticamente"
     },
     "adjustmentReasonEnum": {
@@ -1587,9 +1585,9 @@
       "acquirer": "Adquirente",
       "document": "Documento",
       "statusShort": "Status",
-      "launchDate": "Data lançamento",
+      "releaseDate": "Data lançamento",
       "bankHistory": "Histórico banco",
-      "launchDateShort": "Lança.",
+      "releaseDateShort": "Lança.",
       "establishment": "Estabelecimento",
       "establishmentShort": "Estab.",
       "bankingDomicile": "Domicílio",

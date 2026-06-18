@@ -111,7 +111,7 @@ export class BankStatementListComponent
   readonly totalRecords = computed(() => this.facade.totalRecords());
   readonly items = computed<BankStatementModel[]>(() => this.facade.items());
 
-  readonly isLaunchDateColumnDisabled = computed(() => !this.launchDateColumnPeriod());
+  readonly isReleaseDateColumnDisabled = computed(() => !this.releaseDateColumnPeriod());
 
   override rows =
     Number(localStorage.getItem(this.tableRowsKey())) || StatefulListPage.DEFAULT_ROWS;
@@ -130,11 +130,11 @@ export class BankStatementListComponent
   readonly companies = signal<string[] | null>(null);
   readonly acquirers = signal<string[] | null>(null);
   readonly establishments = signal<string[] | null>(null);
-  readonly periodLaunchDate = signal<PeriodEnum | null>(null);
-  readonly launchDate = signal<string | string[] | null>(null);
+  readonly periodReleaseDate = signal<PeriodEnum | null>(null);
+  readonly releaseDate = signal<string | string[] | null>(null);
   readonly statusPaymentBank = signal<StatusPaymentBankEnum[] | null>(null);
 
-  readonly isLaunchDateDisabled = computed(() => !this.periodLaunchDate());
+  readonly isReleaseDateDisabled = computed(() => !this.periodReleaseDate());
 
   /* Campos Tabela */
   readonly valueColumnDraft = signal('');
@@ -146,8 +146,8 @@ export class BankStatementListComponent
   readonly companyColumnDraft = signal<string[] | null>(null);
   readonly acquirerColumnDraft = signal<string[] | null>(null);
   readonly establishmentColumnDraft = signal<string[] | null>(null);
-  readonly launchDateColumnPeriod = signal<PeriodEnum | null>(null);
-  readonly launchDateColumnDraft = signal<string | string[] | null>(null);
+  readonly releaseDateColumnPeriod = signal<PeriodEnum | null>(null);
+  readonly releaseDateColumnDraft = signal<string | string[] | null>(null);
   readonly statusPaymentBankColumnDraft = signal<StatusPaymentBankEnum[] | null>(null);
 
   readonly statusPaymentBankOptions = computed(() => {
@@ -189,8 +189,8 @@ export class BankStatementListComponent
     this.bankColumnDraft.set(null);
     this.companyColumnDraft.set(null);
     this.acquirerColumnDraft.set(null);
-    this.launchDateColumnDraft.set(null);
-    this.launchDateColumnPeriod.set(null);
+    this.releaseDateColumnDraft.set(null);
+    this.releaseDateColumnPeriod.set(null);
     this.establishmentColumnDraft.set(null);
     this.statusPaymentBankColumnDraft.set(null);
 
@@ -250,15 +250,15 @@ export class BankStatementListComponent
     const establishment = this.establishments();
     const statusPaymentBank = this.statusPaymentBank();
 
-    const launchDateValue = this.formatActiveFilterPeriodDateValue(
-      this.periodLaunchDate(),
-      this.launchDate(),
+    const releaseDateValue = this.formatActiveFilterPeriodDateValue(
+      this.periodReleaseDate(),
+      this.releaseDate(),
       this.i18n,
     );
-    if (launchDateValue) {
+    if (releaseDateValue) {
       items.push({
-        label: this.i18n.tUi('bankStatement.fields.launchDate'),
-        value: launchDateValue,
+        label: this.i18n.tUi('bankStatement.fields.releaseDate'),
+        value: releaseDateValue,
       });
     }
 
@@ -314,8 +314,8 @@ export class BankStatementListComponent
 
   protected override buildAdvancedFilters(): Partial<BankStatementAdvancedFilters> {
     return {
-      launchDate: this.launchDate() ?? undefined,
-      periodLaunchDate: this.periodLaunchDate() ?? undefined,
+      releaseDate: this.releaseDate() ?? undefined,
+      periodReleaseDate: this.periodReleaseDate() ?? undefined,
 
       statusPaymentBank: this.statusPaymentBank()?.length ? this.statusPaymentBank()! : undefined,
 
@@ -396,9 +396,9 @@ export class BankStatementListComponent
 
     this.syncPeriodColumnDraftFromTableState(
       filters,
-      'launchDate',
-      this.launchDateColumnPeriod,
-      this.launchDateColumnDraft,
+      'releaseDate',
+      this.releaseDateColumnPeriod,
+      this.releaseDateColumnDraft,
       readPeriodFilterValue,
     );
   }
@@ -467,8 +467,8 @@ export class BankStatementListComponent
 
   protected override toFiltersState(): BankStatementFiltersState {
     return {
-      launchDate: this.launchDate(),
-      periodLaunchDate: this.periodLaunchDate(),
+      releaseDate: this.releaseDate(),
+      periodReleaseDate: this.periodReleaseDate(),
 
       statusPaymentBank: this.statusPaymentBank(),
 
@@ -487,8 +487,8 @@ export class BankStatementListComponent
     this.companies.set(s.companies ?? null);
     this.establishments.set(s.establishments ?? null);
 
-    this.launchDate.set(s.launchDate ?? null);
-    this.periodLaunchDate.set(s.periodLaunchDate ?? null);
+    this.releaseDate.set(s.releaseDate ?? null);
+    this.periodReleaseDate.set(s.periodReleaseDate ?? null);
 
     this.statusPaymentBank.set(s.statusPaymentBank ?? null);
   }

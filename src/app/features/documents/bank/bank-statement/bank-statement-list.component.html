@@ -27,20 +27,20 @@
 >
   <div class="grid formgrid gap-0 align-items-end">
     <cs-advanced-period-date-filter
-      inputId="launchDate"
-      [value]="launchDate()"
-      [period]="periodLaunchDate()"
-      periodInputId="periodLaunchDate"
-      [disabled]="isLaunchDateDisabled()"
+      inputId=""
+      [value]="releaseDate()"
+      [period]="periodReleaseDate()"
+      periodInputId="periodReleaseDate"
+      [disabled]="isReleaseDateDisabled()"
       class="col-12 md:col-3 xl:col-2 p-1"
       [periodOptions]="periodEnumOptions()"
-      (valueChange)="launchDate.set($event)"
-      [view]="setViewFormat(periodLaunchDate())"
-      [dateFormat]="setDateFormat(periodLaunchDate())"
-      [selectionMode]="setSelectionMode(periodLaunchDate())"
-      [dateLabel]="'bankStatement.fields.launchDate' | translate"
-      [periodLabel]="'bankStatement.fields.periodLaunchDate' | translate"
-      (periodChange)="onPeriodColumnChange(periodLaunchDate, launchDate, $event)"
+      (valueChange)="releaseDate.set($event)"
+      [view]="setViewFormat(periodReleaseDate())"
+      [dateFormat]="setDateFormat(periodReleaseDate())"
+      [selectionMode]="setSelectionMode(periodReleaseDate())"
+      [dateLabel]="'bankStatement.fields.releaseDate' | translate"
+      [periodLabel]="'bankStatement.fields.periodReleaseDate' | translate"
+      (periodChange)="onPeriodColumnChange(periodReleaseDate, releaseDate, $event)"
     ></cs-advanced-period-date-filter>
 
     <cs-advanced-multiselect-filter
@@ -180,7 +180,7 @@
 >
   <ng-template pTemplate="colgroup">
     <colgroup>
-      <!-- launchDate -->
+      <!-- releaseDate -->
       <col style="width: 90px" />
       <!-- company -->
       <col style="width: 150px" />
@@ -189,7 +189,7 @@
       <!-- bank -->
       <col style="width: 90px" />
       <!-- bankingDomicile -->
-      <col style="width: 110px" />
+      <col style="width: 130px" />
       <!-- acquirer -->
       <col style="width: 100px" />
       <!-- flag -->
@@ -213,21 +213,21 @@
 
   <ng-template pTemplate="header">
     <tr>
-      <th pSortableColumn="launchDate">
+      <th pSortableColumn="releaseDate">
         <div class="th-flex text-center">
           <span
             class="th-label"
             tooltipPosition="top"
-            [pTooltip]="'bankStatement.fields.launchDate' | translate"
+            [pTooltip]="'bankStatement.fields.releaseDate' | translate"
           >
-            {{ 'bankStatement.fields.launchDateShort' | translate }}
+            {{ 'bankStatement.fields.releaseDateShort' | translate }}
           </span>
           <span class="th-icons">
-            <p-sortIcon field="launchDate"></p-sortIcon>
+            <p-sortIcon field="releaseDate"></p-sortIcon>
             <p-columnFilter
               display="menu"
-              field="launchDate"
-              #launchDateColumnFilter
+              field="releaseDate"
+              #releaseDateColumnFilter
               [showOperator]="false"
               [showAddButton]="false"
               [showMatchModes]="false"
@@ -242,39 +242,39 @@
                   [applyLabel]="'common.apply' | translate"
                   (clear)="
                     clearPeriodColumnFilter(
-                      launchDateColumnPeriod,
-                      launchDateColumnDraft,
+                      releaseDateColumnPeriod,
+                      releaseDateColumnDraft,
                       filter,
-                      launchDateColumnFilter
+                      releaseDateColumnFilter
                     )
                   "
                   (apply)="
                     applyPeriodColumnFilter(
-                      launchDateColumnPeriod,
-                      launchDateColumnDraft,
+                      releaseDateColumnPeriod,
+                      releaseDateColumnDraft,
                       filter,
-                      launchDateColumnFilter
+                      releaseDateColumnFilter
                     )
                   "
                 >
                   <p-select
                     class="w-full mb-2"
                     [options]="periodEnumOptions()"
-                    [ngModel]="launchDateColumnPeriod()"
+                    [ngModel]="releaseDateColumnPeriod()"
                     [placeholder]="'common.period' | translate"
                     (ngModelChange)="
-                      onPeriodColumnChange(launchDateColumnPeriod, launchDateColumnDraft, $event)
+                      onPeriodColumnChange(releaseDateColumnPeriod, releaseDateColumnDraft, $event)
                     "
                   ></p-select>
                   <p-datePicker
                     class="w-full"
                     appendTo="body"
-                    [ngModel]="launchDateColumnDraft()"
-                    [disabled]="isLaunchDateColumnDisabled()"
-                    [view]="setViewFormat(launchDateColumnPeriod())"
-                    [dateFormat]="setDateFormat(launchDateColumnPeriod())"
-                    [selectionMode]="setSelectionMode(launchDateColumnPeriod())"
-                    (ngModelChange)="launchDateColumnDraft.set($event)"
+                    [ngModel]="releaseDateColumnDraft()"
+                    [disabled]="isReleaseDateColumnDisabled()"
+                    [view]="setViewFormat(releaseDateColumnPeriod())"
+                    [dateFormat]="setDateFormat(releaseDateColumnPeriod())"
+                    [selectionMode]="setSelectionMode(releaseDateColumnPeriod())"
+                    (ngModelChange)="releaseDateColumnDraft.set($event)"
                   ></p-datePicker>
                 </cs-column-filter-shell>
               </ng-template>
@@ -809,29 +809,25 @@
   <ng-template pTemplate="body" let-row>
     <tr>
       <td class="text-center">
-        <span [pTooltip]="row.launchDate | csDate: 'date'" tooltipPosition="top">
-          {{ row.launchDate | csDate: 'date' }}
+        <span [pTooltip]="row.releaseDate | csDate: 'date'" tooltipPosition="top">
+          {{ row.releaseDate | csDate: 'date' }}
         </span>
       </td>
-
       <td>
         <span [pTooltip]="row.company?.fantasyName" tooltipPosition="top">
           {{ row.company?.fantasyName ?? '-' }}
         </span>
       </td>
-
       <td class="text-center">
         <span [pTooltip]="row.establishment?.pvNumber" tooltipPosition="top">
           {{ row.establishment?.pvNumber ?? '-' }}
         </span>
       </td>
-
       <td class="text-center">
         <span [pTooltip]="row.bank?.name" tooltipPosition="top">
           {{ row.bank?.name ?? '-' }}
         </span>
       </td>
-
       <td class="text-center">
         <span [pTooltip]="bankingDomicileLabel(row)" tooltipPosition="top">
           {{ bankingDomicileLabel(row) }}
@@ -851,8 +847,8 @@
       </td>
 
       <td class="text-center">
-        <span [pTooltip]="row.category" tooltipPosition="top">
-          {{ row.category ?? '-' }}
+        <span [pTooltip]="row.releaseCategory" tooltipPosition="top">
+          {{ row.releaseCategory ?? '-' }}
         </span>
       </td>
 

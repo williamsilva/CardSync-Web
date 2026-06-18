@@ -6,9 +6,7 @@ export enum StatusTransactionEnum {
   PENDING = 'PENDING',
   DELETED = 'DELETED',
   CANCELED = 'CANCELED',
-  NOT_RECONCILED = 'NOT_RECONCILED',
   MANUALLY_RECONCILED = 'MANUALLY_RECONCILED',
-  PARTIALLY_RECONCILED = 'PARTIALLY_RECONCILED',
   AUTOMATICALLY_RECONCILED = 'AUTOMATICALLY_RECONCILED',
 }
 
@@ -19,10 +17,8 @@ export const STATUS_CODE_MAP: Record<number, StatusTransactionEnum> = {
   1: StatusTransactionEnum.PENDING,
   2: StatusTransactionEnum.AUTOMATICALLY_RECONCILED,
   3: StatusTransactionEnum.MANUALLY_RECONCILED,
-  4: StatusTransactionEnum.NOT_RECONCILED,
+  4: StatusTransactionEnum.DELETED,
   5: StatusTransactionEnum.CANCELED,
-  6: StatusTransactionEnum.DELETED,
-  7: StatusTransactionEnum.PARTIALLY_RECONCILED,
 };
 
 export function normalizeStatusTransactionEnum(
@@ -49,17 +45,11 @@ export function normalizeStatusTransactionEnum(
     case StatusTransactionEnum.AUTOMATICALLY_RECONCILED:
       return StatusTransactionEnum.AUTOMATICALLY_RECONCILED;
 
-    case StatusTransactionEnum.NOT_RECONCILED:
-      return StatusTransactionEnum.NOT_RECONCILED;
-
     case StatusTransactionEnum.DELETED:
       return StatusTransactionEnum.DELETED;
 
     case StatusTransactionEnum.CANCELED:
       return StatusTransactionEnum.CANCELED;
-
-    case StatusTransactionEnum.PARTIALLY_RECONCILED:
-      return StatusTransactionEnum.PARTIALLY_RECONCILED;
 
     default:
       return null;
@@ -85,12 +75,6 @@ export function statusTransactionEnumSeverity(
     case StatusTransactionEnum.DELETED:
       return 'danger';
 
-    case StatusTransactionEnum.NOT_RECONCILED:
-      return 'blue';
-
-    case StatusTransactionEnum.PARTIALLY_RECONCILED:
-      return 'money';
-
     default:
       return 'contrast';
   }
@@ -115,12 +99,6 @@ export function statusTransactionEnumLabel(
 
     case StatusTransactionEnum.DELETED:
       return i18n.tUi('enum.statusTransactionEnum.deleted');
-
-    case StatusTransactionEnum.NOT_RECONCILED:
-      return i18n.tUi('enum.statusTransactionEnum.notReconciled');
-
-    case StatusTransactionEnum.PARTIALLY_RECONCILED:
-      return i18n.tUi('enum.statusTransactionEnum.partiallyReconciled');
 
     case StatusTransactionEnum.NULL:
       return i18n.tUi('enum.statusTransactionEnum.null', 'N/A');
@@ -148,10 +126,9 @@ export function installmentTooltipStatusLabel(
       return i18n.tUi('enum.statusTransactionEnum.excludedSale');
 
     case StatusTransactionEnum.PENDING:
-    case StatusTransactionEnum.NOT_RECONCILED:
     case StatusTransactionEnum.NULL:
     default:
-      return i18n.tUi('enum.statusTransactionEnum.notReconciled');
+      return i18n.tUi('enum.statusTransactionEnum.pending');
   }
 }
 
@@ -166,7 +143,6 @@ export function installmentStatusTooltipTone(statusTransaction: StatusTransactio
       return 'warn';
 
     case StatusTransactionEnum.PENDING:
-    case StatusTransactionEnum.NOT_RECONCILED:
     case StatusTransactionEnum.NULL:
     default:
       return 'danger';
@@ -177,9 +153,7 @@ export function allStatusTransactionEnum(): StatusTransactionEnum[] {
   return [
     StatusTransactionEnum.AUTOMATICALLY_RECONCILED,
     StatusTransactionEnum.MANUALLY_RECONCILED,
-    StatusTransactionEnum.PARTIALLY_RECONCILED,
     StatusTransactionEnum.PENDING,
-    StatusTransactionEnum.NOT_RECONCILED,
     StatusTransactionEnum.DELETED,
     StatusTransactionEnum.CANCELED,
   ];

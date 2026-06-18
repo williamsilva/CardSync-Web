@@ -4,8 +4,8 @@ import { PeriodEnum } from '@models/enums/period.enum';
 import { StatusPaymentBankEnum } from '@models/enums/status-payment-bank.enum';
 
 export type BankStatementFiltersState = {
-  launchDate: string | string[] | null;
-  periodLaunchDate: PeriodEnum | null;
+  releaseDate: string | string[] | null;
+  periodReleaseDate: PeriodEnum | null;
 
   statusPaymentBank: StatusPaymentBankEnum[] | null;
 
@@ -24,8 +24,8 @@ export type BankStatementAdvancedFilterSignals = {
 
 export function createEmptyBankStatementFiltersState(): BankStatementFiltersState {
   return {
-    launchDate: null,
-    periodLaunchDate: null,
+    releaseDate: null,
+    periodReleaseDate: null,
 
     statusPaymentBank: null,
 
@@ -48,8 +48,8 @@ export function resetBankStatementAdvancedFilters(
   filters.companies.set(empty.companies);
   filters.establishments.set(empty.establishments);
 
-  filters.launchDate.set(empty.launchDate);
-  filters.periodLaunchDate.set(empty.periodLaunchDate);
+  filters.releaseDate.set(empty.releaseDate);
+  filters.periodReleaseDate.set(empty.periodReleaseDate);
 
   filters.statusPaymentBank.set(empty.statusPaymentBank);
 }
