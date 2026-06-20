@@ -310,3 +310,27 @@ export interface BankReconciliationResultModel {
   totalCreditOrderValueReconciled?: number | null;
   totalInstallmentValueReconciled?: number | null;
 }
+
+export interface FinancialReconciliationStepResultModel {
+  step: string;
+  status: string;
+  message?: string | null;
+  analyzed?: number | null;
+  reconciled?: number | null;
+  partiallyReconciled?: number | null;
+  pending?: number | null;
+  blocked?: number | null;
+  updated?: number | null;
+  divergent?: number | null;
+  withoutMatch?: number | null;
+  generated?: number | null;
+  startedAt?: string | null;
+  finishedAt?: string | null;
+}
+
+export interface FinancialReconciliationPipelineResultModel {
+  trigger: string;
+  startedAt?: string | null;
+  finishedAt?: string | null;
+  steps?: FinancialReconciliationStepResultModel[] | null;
+}

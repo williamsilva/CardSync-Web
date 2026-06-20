@@ -21,6 +21,10 @@ export class HolidayPermissionPolicy {
     return this.perms.hasSupportOr(PERMISSIONS.HOLIDAYS.CHANGE);
   }
 
+  canDelete(_row: HolidayModel): boolean {
+    return this.perms.hasSupportOr(PERMISSIONS.HOLIDAYS.DELETE);
+  }
+
   canActivate(row: HolidayModel): boolean {
     if (!this.perms.hasSupportOr(PERMISSIONS.HOLIDAYS.ACTIVE_OR_INACTIVE)) return false;
     const status = normalizeStatusEnum(row.status);

@@ -10,6 +10,7 @@ import { CsTagComponent } from '@shared/ui';
 import { boolSeverity as getBoolSeverity } from '../file-processing-ui';
 import { ScheduleStatusResponse } from '@models/file-processing.models';
 import { FileProcessingService } from '@features/service/file-processing.service';
+import { FinancialReconciliationPipelineResultModel } from '@models/file-processing.models';
 import { ConciliationWaitingApiService } from '@features/service/conciliation-waiting.api.service';
 import {
   ReconcileBankResultModel,
@@ -37,6 +38,10 @@ export class SchedulerStatusComponent {
   protected readonly schedule = signal<ScheduleStatusResponse | null>(null);
   protected readonly reconcileBankResult = signal<ReconcileBankResultModel | null>(null);
   protected readonly reconcileErpAcqResult = signal<ReconcileErpAcquirerResultModel | null>(null);
+  protected readonly runningPipeline = signal(false);
+  protected readonly pipelineResult = signal<FinancialReconciliationPipelineResultModel | null>(
+    null,
+  );
 
   protected readonly boolSeverity = getBoolSeverity;
 
@@ -97,6 +102,16 @@ export class SchedulerStatusComponent {
       next: (result) => this.reconcileErpAcqResult.set(result),
       error: () => this.reconcilingErpAcq.set(false),
       complete: () => this.reconcilingErpAcq.set(false),
+    });
+  }
+
+  protected runFullPipeline(): void {
+    this.runningPipeline.set(true);
+    this.pipelineResult.set(null);
+    this.service.runFinancialPipeline().subscribe({
+      next: (result) => this.pipelineResult.set(result),
+      error: () => this.runningPipeline.set(false),
+      complete: () => this.runningPipeline.set(false),
     });
   }
 }

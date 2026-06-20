@@ -23,6 +23,7 @@ import {
   BankReconciliationResultModel,
   ReprocessPendingErpResultModel,
   FileProcessingDivergenceContextModel,
+  FinancialReconciliationPipelineResultModel,
 } from '../models/file-processing.models';
 
 @Injectable({ providedIn: 'root' })
@@ -100,6 +101,14 @@ export class FileProcessingService {
   reconcileBank(): Observable<BankReconciliationResultModel> {
     return this.http.post<BankReconciliationResultModel>(
       `${this.baseUrl}/bank/reconcile`,
+      {},
+      { withCredentials: true },
+    );
+  }
+
+  runFinancialPipeline(): Observable<FinancialReconciliationPipelineResultModel> {
+    return this.http.post<FinancialReconciliationPipelineResultModel>(
+      `${environment.bffBaseUrl}/bff/v1/conciliation/financial-pipeline/run`,
       {},
       { withCredentials: true },
     );

@@ -12,6 +12,8 @@ import { ProgressBarModule } from 'primeng/progressbar';
 import { CsTagComponent } from '@shared/ui';
 import { formatCurrency } from '../conciliation-ui';
 import { CsCurrencyPipe } from '@shared/pipes/cs-currency.pipe';
+import { PERMISSIONS } from '@core/auth/permissions.constants';
+import { PermissionService } from '@core/auth/permission.service';
 import { ConciliationDashboardModel } from '@models/conciliation.models';
 import { ConciliationService } from '@features/service/conciliation.service';
 import { ConciliationWaitingFacade } from '@features/facade/conciliation-waiting.facade';
@@ -35,6 +37,11 @@ import { ConciliationWaitingFacade } from '@features/facade/conciliation-waiting
 })
 export class ConciliationDashboardComponent {
   private readonly service = inject(ConciliationService);
+  private readonly perms = inject(PermissionService);
+
+  protected readonly canProcess = computed(() =>
+    this.perms.hasSupportOr(PERMISSIONS.FILE_PROCESSING.PROCESS),
+  );
 
   protected readonly loading = signal(false);
   protected readonly reconcilingBank = signal(false);
