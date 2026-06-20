@@ -1,3 +1,5 @@
+import { WritableSignal } from '@angular/core';
+
 import { FlagMinimalModel } from './flag-minimal.models';
 import { BankMinimalModel } from './bank-minimal.models';
 import { CompanyMinimalModel } from './company-minimal.models';
@@ -10,7 +12,6 @@ import {
   BankStatementAdvancedFilters,
   createEmptyBankStatementFiltersState,
 } from '@features/filter/bank-statement.filters';
-import { WritableSignal } from '@angular/core';
 
 export interface BankStatementModel {
   id: string;
@@ -18,6 +19,8 @@ export interface BankStatementModel {
   category: string | null;
   type: string | null;
   document: string | null;
+  historicalCodeBank: string | null;
+  descriptionHistoricalBank: string | null;
   bankHistory: string | null;
   value: number | null;
   statusPaymentBank: StatusPaymentBankEnum | null;
@@ -39,6 +42,8 @@ export interface BankStatementApiModel {
   document: string | null;
   bankHistory: string | null;
   value: number | null;
+  historicalCodeBank: string | null;
+  descriptionHistoricalBank: string | null;
   statusPaymentBank: StatusPaymentBankEnum | null;
 
   flag: FlagMinimalModel | null;

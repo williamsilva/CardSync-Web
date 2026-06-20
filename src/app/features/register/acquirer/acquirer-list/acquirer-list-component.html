@@ -203,6 +203,8 @@
       <col style="width: 170px" />
       <col style="width: 150px" />
       <col style="width: 150px" />
+      <col style="width: 150px" />
+      <col style="width: 150px" />
       <col style="width: 170px" />
       <col style="width: 80px" />
       <col style="width: 80px" />
@@ -285,6 +287,24 @@
               [showAddButton]="false"
               styleClass="cs-colfilter"
             ></p-columnFilter>
+          </span>
+        </div>
+      </th>
+
+      <th pSortableColumn="openingDate">
+        <div class="th-flex">
+          <span class="th-label">{{ 'acquirer.columns.openingDate' | translate }}</span>
+          <span class="th-icons">
+            <p-sortIcon field="openingDate"></p-sortIcon>
+          </span>
+        </div>
+      </th>
+
+      <th pSortableColumn="closingDate">
+        <div class="th-flex">
+          <span class="th-label">{{ 'acquirer.columns.closingDate' | translate }}</span>
+          <span class="th-icons">
+            <p-sortIcon field="closingDate"></p-sortIcon>
           </span>
         </div>
       </th>
@@ -420,7 +440,12 @@
           {{ row.cnpj | csDocument }}
         </span>
       </td>
-
+      <td class="cell-muted text-center">
+        {{ row.openingDate ? (row.openingDate | csDate: 'date') : '-' }}
+      </td>
+      <td class="cell-muted text-center">
+        {{ row.closingDate ? (row.closingDate | csDate: 'date') : '-' }}
+      </td>
       <td class="cell-muted text-center">
         <cs-tag [value]="statusEnumLabel(row.status)" [tone]="severityEnum(row.status)" />
       </td>

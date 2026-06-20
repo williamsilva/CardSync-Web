@@ -295,31 +295,6 @@ export interface FileProcessingTotalsModel {
   pendingContext: number;
 }
 
-export interface BankReleaseModel {
-  id: string;
-  processedFile?: string | null;
-  lineNumber?: number | null;
-  bank?: string | null;
-  company?: string | null;
-  acquirer?: string | null;
-  flag?: string | null;
-  establishment?: string | null;
-  bankingDomicile?: string | null;
-  releaseDate?: string | null;
-  accountingDate?: string | null;
-  releaseValue?: number | null;
-  releaseType?: string | null;
-  releaseCategory?: number | null;
-  releaseCategoryCode?: number | null;
-  historicalCodeBank?: number | null;
-  descriptionHistoricalBank?: string | null;
-  documentComplementNumber?: string | null;
-  reconciliationStatus?: number | null;
-  numberReconciliations?: number | null;
-  numberCreditOrders?: number | null;
-  numberParcels?: number | null;
-}
-
 export interface BankReconciliationResultModel {
   releasesAnalyzed: number;
   releasesReconciled: number;

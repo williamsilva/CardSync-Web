@@ -184,3 +184,12 @@ export function allStatusPaymentBankEnum(): StatusPaymentBankEnum[] {
     StatusPaymentBankEnum.CANCELED,
   ];
 }
+
+export function allStatusPaymentBankStatementEnum(): StatusPaymentBankEnum[] {
+  return [
+    StatusPaymentBankEnum.PENDING,
+    StatusPaymentBankEnum.PAID,
+    StatusPaymentBankEnum.PARTIALLY_PAID,
+    StatusPaymentBankEnum.DIVERGENT,
+  ];
+}

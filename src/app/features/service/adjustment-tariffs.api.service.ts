@@ -5,7 +5,7 @@ import { map } from 'rxjs/operators';
 
 import { API } from '@core/api/api.config';
 import { HalPagedResponse } from '@core/api/page.model';
-import { AdjustmentTotalsModel } from '@models/adjustmentTotalsModel';
+import { ValueTotalsModel } from '@models/value-totals-model';
 import { ListQueryDto } from '@shared/features/list-query/list-query.types';
 import { AdjustmentAdvancedFilters } from '@features/filter/adjustment-tariffs.filters';
 import {
@@ -36,6 +36,6 @@ export class AdjustmentApiService {
   }
 
   calculateTotals(body: ListQueryDto<AdjustmentAdvancedFilters>) {
-    return this.http.post<AdjustmentTotalsModel>(`${this.baseUrl}/tariffs-totals`, body);
+    return this.http.post<ValueTotalsModel>(`${this.baseUrl}/tariffs-totals`, body);
   }
 }

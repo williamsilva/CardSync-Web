@@ -5,7 +5,7 @@ import { map } from 'rxjs/operators';
 
 import { API } from '@core/api/api.config';
 import { HalPagedResponse } from '@core/api/page.model';
-import { AdjustmentTotalsModel } from '@models/adjustmentTotalsModel';
+import { ValueTotalsModel } from '@models/value-totals-model';
 import { ListQueryDto } from '@shared/features/list-query/list-query.types';
 import { CancellationAdvancedFilters } from '@features/filter/adjustment-cancellation.filters';
 import {
@@ -36,6 +36,6 @@ export class AdjustmentCancellationApiService {
   }
 
   calculateTotals(body: ListQueryDto<CancellationAdvancedFilters>) {
-    return this.http.post<AdjustmentTotalsModel>(`${this.baseUrl}/cancellation-totals`, body);
+    return this.http.post<ValueTotalsModel>(`${this.baseUrl}/cancellation-totals`, body);
   }
 }

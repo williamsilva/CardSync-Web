@@ -248,11 +248,12 @@
         "file": "Arquivos",
         "title": "Processamento",
         "dashboard": "Dashboard",
-        "erpPendent": "ERP Pendentes",
         "scheduler": "Scheduler",
+        "erpPendent": "ERP Pendentes",
         "totalizers": "Totalizadores",
-        "bankReleases": "Lançamentos bancários",
-        "divergences": "Divergências"
+        "divergences": "Divergências",
+        "calendar": "Agendar de Arquivos",
+        "bankReleases": "Lançamentos bancários"
       }
     }
   },
@@ -565,6 +566,14 @@
     "saleSummaryEnum": {
       "unknown": "Não Informado"
     },
+    "releaseCategory": {
+      "unknown": "Não Informado",
+      "pix": "Pix",
+      "tfPix": "Tarifa Pix",
+      "payment": "Pagamento",
+      "receipt": "Recebimento",
+      "aplAut": "Aplicação Automatica"
+    },
     "statusReconciliationEnum": {
       "pending": "Pendente",
       "canceled": "Cancelado",
@@ -572,6 +581,15 @@
       "reconciled": "Conciliado",
       "unknown": "Não Informado",
       "partiallyReconciled": "Conciliado Parcial"
+    },
+    "modalityPaymentBank": {
+      "unknown": "Não Informado",
+      "pixEnv": "Pix Enviado",
+      "pixRec": "Pix Recebido",
+      "pixDev": "Pix Devolvido",
+      "cashDebit": "Cartão de Débito",
+      "cashCredit": "Cartão de Crédito",
+      "antecipCred": "Antecipação de Crédito"
     },
     "statusPaymentBankEnum": {
       "paid": "Pago",
@@ -963,6 +981,10 @@
       "subtitle": "Edição de adquirente"
     },
     "columns": {
+      "closingDate": "Data de Fechamento",
+      "closingDateShort": "Fechamento",
+      "openingDate": "Data de Abertura",
+      "openingDateShort": "Abertura",
       "cnpj": "CNPJ",
       "typeEnum": "Tipo",
       "name": "Adquirente",
@@ -1576,23 +1598,25 @@
   "bankStatement": {
     "subtitle": "Analise lançamentos bancários e status de pagamento.",
     "fields": {
-      "bank": "Banco",
-      "flag": "Bandeira",
       "type": "Tipo",
+      "bank": "Banco",
       "value": "Valor",
+      "flag": "Bandeira",
       "company": "Empresa",
       "category": "Categoria",
-      "acquirer": "Adquirente",
       "document": "Documento",
       "statusShort": "Status",
-      "releaseDate": "Data lançamento",
-      "bankHistory": "Histórico banco",
+      "acquirer": "Adquirente",
       "releaseDateShort": "Lança.",
-      "establishment": "Estabelecimento",
       "establishmentShort": "Estab.",
       "bankingDomicile": "Domicílio",
+      "releaseDate": "Data lançamento",
+      "bankHistory": "Histórico banco",
+      "establishment": "Estabelecimento",
+      "releaseCategory": "Categoria lançamento",
       "statusPaymentBank": "Status pagamento banco",
-      "periodLaunchDate": "Período data lançamento"
+      "periodReleaseDate": "Período data lançamento",
+      "modalityPaymentBank": "Modalidade pagamento banco"
     }
   },
   "chargebackRequest": {
@@ -1774,6 +1798,7 @@
     "title": "Ordens de Pagamento",
     "subtitle": "Ordens de Pagamento.",
     "fields": {
+      "bank": "Banco",
       "gross": " Bruto",
       "flag": "Bandeira",
       "orders": "Ordens",
@@ -1788,6 +1813,7 @@
       "acquirer": "Adquirente",
       "installment": "Parcela",
       "grossValue": "Valor Bruto",
+      "pvOriginal": "Pv Original",
       "liquidValue": "Valor Líquido",
       "installmentNumber" :"Parcela",
       "creditOrder": "Ordem Crédito",
@@ -1797,16 +1823,14 @@
       "paymentBank": "Pagamento Banco",
       "rvDate": "Data resumo de vendas",
       "releaseValue": "Valor Lançamento",
+      "establishment": "Estabelecimento",
       "rvNumber":"Número resumo de vendas",
       "creditOrderDate": "Data Ordem Crédito",
+      "bankingDomicile": "Domicílio Bancário",
+      "periodReleaseDate": "Período Lançamento",
+      "periodRvDate": "Período Resumo de Vendas",
       "salesSummaryStatus": "Status Resumo Vendas",
       "statusPaymentBank": "Status Pagamento Banco",
-      "bank": "Banco",
-      "establishment": "Estabelecimento",
-      "bankingDomicile": "Domicílio Bancário",
-      "pvOriginal": "Pv Original",
-      "periodRvDate": "Período Resumo de Vendas",
-      "periodReleaseDate": "Período Lançamento",
       "periodCreditOrderDate": "Período Ordem Crédito"
     }
   },

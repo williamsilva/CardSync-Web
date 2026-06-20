@@ -10,7 +10,6 @@ import { ProcessedFilesAdvancedFilters } from '@features/filter/processed-files.
 import {
   PageQuery,
   PageResponse,
-  BankReleaseModel,
   ProcessedFileModel,
   ErpPendingSaleModel,
   ProcessedFileApiModel,
@@ -150,13 +149,6 @@ export class FileProcessingService {
 
   listRedeTotalizers(query: PageQuery = {}): Observable<PageResponse<any>> {
     return this.http.get<PageResponse<any>>(`${this.baseUrl}/rede/totalizers`, {
-      params: this.toParams(query),
-      withCredentials: true,
-    });
-  }
-
-  listBankReleases(query: PageQuery = {}): Observable<PageResponse<BankReleaseModel>> {
-    return this.http.get<PageResponse<BankReleaseModel>>(`${this.baseUrl}/bank/releases`, {
       params: this.toParams(query),
       withCredentials: true,
     });

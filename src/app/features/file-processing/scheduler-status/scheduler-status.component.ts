@@ -17,11 +17,11 @@ import {
 } from '@models/conciliation-waiting.model';
 
 @Component({
-  selector: 'cs-scheduler-status',
   standalone: true,
-  imports: [CommonModule, RouterLink, ButtonModule, CardModule, DividerModule, CsTagComponent],
-  templateUrl: './scheduler-status.component.html',
+  selector: 'cs-scheduler-status',
   styleUrl: './scheduler-status.component.scss',
+  templateUrl: './scheduler-status.component.html',
+  imports: [CommonModule, RouterLink, ButtonModule, CardModule, DividerModule, CsTagComponent],
 })
 export class SchedulerStatusComponent {
   private readonly service = inject(FileProcessingService);

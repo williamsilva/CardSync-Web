@@ -66,12 +66,7 @@ export const FILE_PROCESSING_ROUTES: Routes = [
     loadComponent: () =>
       import('./rede-totalizers/rede-totalizers.component').then((m) => m.RedeTotalizersComponent),
   },
-  {
-    path: 'bank/releases',
-    title: 'Lançamentos Bancários',
-    loadComponent: () =>
-      import('./bank-releases/bank-releases.component').then((m) => m.BankReleasesComponent),
-  },
+
   {
     path: 'divergences',
     title: 'Análise de Divergências',

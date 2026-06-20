@@ -984,10 +984,12 @@ export const UI_KEYS = {
       bankHistory: 'bankStatement.fields.bankHistory',
       establishment: 'bankStatement.fields.establishment',
       bankingDomicile: 'bankStatement.fields.bankingDomicile',
+      releaseCategory: 'bankStatement.fields.releaseCategory',
       releaseDateShort: 'bankStatement.fields.releaseDateShort',
       periodLaunchDate: 'bankStatement.fields.periodLaunchDate',
       statusPaymentBank: 'bankStatement.fields.statusPaymentBank',
       establishmentShort: 'bankStatement.fields.establishmentShort',
+      modalityPaymentBank: 'bankStatement.fields.modalityPaymentBank',
     },
   },
   chargebackRequest: {
@@ -1244,6 +1246,16 @@ export const UI_KEYS = {
     saleSummaryEnum: {
       null: 'enum.saleSummaryEnum.null',
       unknown: 'enum.saleSummaryEnum.unknown',
+    },
+    modalityPaymentBank: {
+      null: 'enum.modalityPaymentBank.null',
+      unknown: 'enum.modalityPaymentBank.unknown',
+      pixRec: 'enum.modalityPaymentBank.pixRec',
+      pixEnv: 'enum.modalityPaymentBank.pixEnv',
+      pixDev: 'enum.modalityPaymentBank.pixDev',
+      cashDebit: 'enum.modalityPaymentBank.cashDebit',
+      cashCredit: 'enum.modalityPaymentBank.cashCredit',
+      antecipCred: 'enum.modalityPaymentBank.antecipCred',
     },
     statusPaymentBankEnum: {
       null: 'enum.statusPaymentBankEnum.null',

@@ -2,7 +2,7 @@ import { Injectable, inject, signal } from '@angular/core';
 
 import { finalize } from 'rxjs';
 
-import { AdjustmentTotalsModel } from '@models/adjustmentTotalsModel';
+import { ValueTotalsModel } from '@models/value-totals-model';
 import { ListQueryDto } from '@shared/features/list-query/list-query.types';
 import { AdjustmentTariffsApiModel } from '@models/adjustment-tariffs.model';
 import { AdjustmentAdvancedFilters } from '@features/filter/adjustment-tariffs.filters';
@@ -20,7 +20,7 @@ export class AdjustmentTariffsFacade {
 
   private readonly _lastQuery = signal<LastQuery | null>(null);
   private readonly _data = signal<AdjustmentTariffsApiModel[]>([]);
-  private readonly _totals = signal<AdjustmentTotalsModel | null>(null);
+  private readonly _totals = signal<ValueTotalsModel | null>(null);
 
   readonly items = this._data.asReadonly();
   readonly totals = this._totals.asReadonly();

@@ -2,6 +2,7 @@ import { Injectable, inject, signal } from '@angular/core';
 
 import { finalize } from 'rxjs';
 
+import { ValueTotalsModel } from '@models/value-totals-model';
 import { BankStatementApiModel } from '@models/bank-statement.model';
 import { ListQueryDto } from '@shared/features/list-query/list-query.types';
 import { BankStatementAdvancedFilters } from '@features/filter/bank-statement.filters';
@@ -15,12 +16,16 @@ export class BankStatementFacade {
 
   private readonly _total = signal(0);
   private readonly _loading = signal(false);
+  private readonly _totalsLoading = signal(false);
   private readonly _lastQuery = signal<LastQuery | null>(null);
   private readonly _data = signal<BankStatementApiModel[]>([]);
+  private readonly _totals = signal<ValueTotalsModel | null>(null);
 
   readonly items = this._data.asReadonly();
+  readonly totals = this._totals.asReadonly();
   readonly loading = this._loading.asReadonly();
   readonly totalRecords = this._total.asReadonly();
+  readonly totalsLoading = this._totalsLoading.asReadonly();
 
   loadPage(q: LastQuery): void {
     if (this._loading()) return;
@@ -43,8 +48,26 @@ export class BankStatementFacade {
       });
   }
 
+  calculateTotals(q = this._lastQuery()): void {
+    if (!q || this._totalsLoading()) return;
+
+    this._totalsLoading.set(true);
+
+    this.api
+      .calculateTotals(q)
+      .pipe(finalize(() => this._totalsLoading.set(false)))
+      .subscribe({
+        next: (totals) => this._totals.set(totals),
+        error: () => this._totals.set(null),
+      });
+  }
+
   reloadLast(): void {
     const q = this._lastQuery();
     if (q) this.loadPage(q);
+  }
+
+  clearTotals(): void {
+    this._totals.set(null);
   }
 }

@@ -6,13 +6,13 @@ import { AfterViewInit, Component, computed, inject, signal, ViewChild } from '@
 import { MenuItem } from 'primeng/api';
 import { MenuModule } from 'primeng/menu';
 import { SelectModule } from 'primeng/select';
-import { TooltipModule } from 'primeng/tooltip';
 import { ButtonModule } from 'primeng/button';
-import { DatePickerModule } from 'primeng/datepicker';
-import { MultiSelectModule } from 'primeng/multiselect';
+import { TooltipModule } from 'primeng/tooltip';
 import { Table, TableModule } from 'primeng/table';
 import { InputTextModule } from 'primeng/inputtext';
+import { DatePickerModule } from 'primeng/datepicker';
 import { TranslateModule } from '@ngx-translate/core';
+import { MultiSelectModule } from 'primeng/multiselect';
 
 import { CsTagTone, CsTagComponent } from '@shared/ui';
 import { I18nService } from '@core/i18n/i18n.service';
@@ -24,9 +24,10 @@ import { CsDocumentPipe } from '@shared/pipes/cs-document.pipe';
 import { CompanyFacade } from '@features/facade/company.facade';
 import { CsCurrencyPipe } from '@shared/pipes/cs-currency.pipe';
 import { AcquirerFacade } from '@features/facade/acquirer.facade';
+import { BankStatementModel } from '@models/bank-statement.model';
 import { StatefulListPage } from '@features/list-base/stateful-list-page';
-import { BankStatementFacade } from '@features/facade/bank-statement.facade';
 import { EstablishmentFacade } from '@features/facade/establishment.facade';
+import { BankStatementFacade } from '@features/facade/bank-statement.facade';
 import { buildListQuery } from '@shared/features/list-query/list-query.builder';
 import { allPeriodEnum, PeriodEnum, periodEnumLabel } from '@models/enums/period.enum';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
@@ -49,13 +50,24 @@ import {
   ActiveFilterItem,
   FiltersPanelComponent,
 } from '@shared/features/filters-panel/filters-panel.component';
-import { BankStatementModel } from '@models/bank-statement.model';
 import {
   StatusPaymentBankEnum,
-  allStatusPaymentBankEnum,
   statusPaymentBankEnumLabel,
   statusPaymentBankEnumSeverity,
+  allStatusPaymentBankStatementEnum,
 } from '@models/enums/status-payment-bank.enum';
+import {
+  ModalityPaymentBankEnum,
+  modalityPaymentBankLabel,
+  allModalityPaymentBankEnum,
+  modalityPaymentBankSeverity,
+} from '@models/enums/modality-payment-bank.enum';
+import {
+  ReleaseCategoryEnum,
+  releaseCategoryLabel,
+  allReleaseCategoryEnum,
+  releaseCategorySeverity,
+} from '@models/enums/release-category.enum';
 
 @Component({
   standalone: true,
@@ -64,20 +76,20 @@ import {
   templateUrl: './bank-statement-list.component.html',
   imports: [
     CommonModule,
-    MenuModule,
-    SelectModule,
-    TooltipModule,
     CsDatePipe,
-    DatePickerModule,
-    TableModule,
-    MultiSelectModule,
+    MenuModule,
     FormsModule,
+    TableModule,
+    SelectModule,
     ButtonModule,
+    TooltipModule,
     CsCurrencyPipe,
     CsDocumentPipe,
     CsTagComponent,
     InputTextModule,
     TranslateModule,
+    DatePickerModule,
+    MultiSelectModule,
     PageHeaderComponent,
     FiltersPanelComponent,
     CsColumnFilterShellComponent,
@@ -132,7 +144,9 @@ export class BankStatementListComponent
   readonly establishments = signal<string[] | null>(null);
   readonly periodReleaseDate = signal<PeriodEnum | null>(null);
   readonly releaseDate = signal<string | string[] | null>(null);
+  readonly releaseCategory = signal<ReleaseCategoryEnum[] | null>(null);
   readonly statusPaymentBank = signal<StatusPaymentBankEnum[] | null>(null);
+  readonly modalityPaymentBank = signal<ModalityPaymentBankEnum[] | null>(null);
 
   readonly isReleaseDateDisabled = computed(() => !this.periodReleaseDate());
 
@@ -148,12 +162,30 @@ export class BankStatementListComponent
   readonly establishmentColumnDraft = signal<string[] | null>(null);
   readonly releaseDateColumnPeriod = signal<PeriodEnum | null>(null);
   readonly releaseDateColumnDraft = signal<string | string[] | null>(null);
+  readonly releaseCategoryColumnDraft = signal<ReleaseCategoryEnum[] | null>(null);
   readonly statusPaymentBankColumnDraft = signal<StatusPaymentBankEnum[] | null>(null);
+  readonly modalityPaymentBankColumnDraft = signal<ModalityPaymentBankEnum[] | null>(null);
 
   readonly statusPaymentBankOptions = computed(() => {
     this.i18n.getAppliedLang();
-    return allStatusPaymentBankEnum().map((value) => ({
+    return allStatusPaymentBankStatementEnum().map((value) => ({
       label: statusPaymentBankEnumLabel(value, this.i18n),
+      value,
+    }));
+  });
+
+  readonly releaseCategoryOptions = computed(() => {
+    this.i18n.getAppliedLang();
+    return allReleaseCategoryEnum().map((value) => ({
+      label: releaseCategoryLabel(value, this.i18n),
+      value,
+    }));
+  });
+
+  readonly modalityPaymentBankOptions = computed(() => {
+    this.i18n.getAppliedLang();
+    return allModalityPaymentBankEnum().map((value) => ({
+      label: modalityPaymentBankLabel(value, this.i18n),
       value,
     }));
   });
@@ -192,10 +224,20 @@ export class BankStatementListComponent
     this.releaseDateColumnDraft.set(null);
     this.releaseDateColumnPeriod.set(null);
     this.establishmentColumnDraft.set(null);
+    this.releaseCategoryColumnDraft.set(null);
     this.statusPaymentBankColumnDraft.set(null);
+    this.modalityPaymentBankColumnDraft.set(null);
 
     this.dt?.clear();
     this.clearTableAndReload(this.dt);
+  }
+
+  modalityPaymentBankLabel(value: ModalityPaymentBankEnum | null): string {
+    return modalityPaymentBankLabel(value, this.i18n);
+  }
+
+  modalityPaymentBankSeverity(value: ModalityPaymentBankEnum | null): CsTagTone {
+    return modalityPaymentBankSeverity(value);
   }
 
   statusPaymentBankLabel(value: StatusPaymentBankEnum | null): string {
@@ -204,6 +246,14 @@ export class BankStatementListComponent
 
   statusPaymentBankSeverity(value: StatusPaymentBankEnum | null): CsTagTone {
     return statusPaymentBankEnumSeverity(value);
+  }
+
+  releaseCategoryLabel(value: ReleaseCategoryEnum | null): string {
+    return releaseCategoryLabel(value, this.i18n);
+  }
+
+  releaseCategorySeverity(value: ReleaseCategoryEnum | null): CsTagTone {
+    return releaseCategorySeverity(value);
   }
 
   protected override tableStateKey(): string {
@@ -248,7 +298,9 @@ export class BankStatementListComponent
     const company = this.companies();
     const acquirer = this.acquirers();
     const establishment = this.establishments();
+    const releaseCategory = this.releaseCategory();
     const statusPaymentBank = this.statusPaymentBank();
+    const modalityPaymentBank = this.modalityPaymentBank();
 
     const releaseDateValue = this.formatActiveFilterPeriodDateValue(
       this.periodReleaseDate(),
@@ -309,6 +361,20 @@ export class BankStatementListComponent
       });
     }
 
+    if (releaseCategory?.length) {
+      items.push({
+        label: this.i18n.tUi('bankStatement.fields.releaseCategory'),
+        value: releaseCategory.map((v) => releaseCategoryLabel(v, this.i18n)).join(', '),
+      });
+    }
+
+    if (modalityPaymentBank?.length) {
+      items.push({
+        label: this.i18n.tUi('bankStatement.fields.modalityPaymentBank'),
+        value: modalityPaymentBank.map((v) => modalityPaymentBankLabel(v, this.i18n)).join(', '),
+      });
+    }
+
     return items;
   });
 
@@ -317,7 +383,11 @@ export class BankStatementListComponent
       releaseDate: this.releaseDate() ?? undefined,
       periodReleaseDate: this.periodReleaseDate() ?? undefined,
 
+      releaseCategory: this.releaseCategory()?.length ? this.releaseCategory()! : undefined,
       statusPaymentBank: this.statusPaymentBank()?.length ? this.statusPaymentBank()! : undefined,
+      modalityPaymentBank: this.modalityPaymentBank()?.length
+        ? this.modalityPaymentBank()!
+        : undefined,
 
       flags: this.flags()?.length ? this.flags()! : undefined,
       banks: this.banks()?.length ? this.banks()! : undefined,
@@ -333,8 +403,22 @@ export class BankStatementListComponent
 
     this.syncArrayColumnDraftFromTableState(
       filters,
+      'releaseCategory',
+      this.releaseCategoryColumnDraft,
+      readArrayFilterValues,
+    );
+
+    this.syncArrayColumnDraftFromTableState(
+      filters,
       'statusPaymentBank',
       this.statusPaymentBankColumnDraft,
+      readArrayFilterValues,
+    );
+
+    this.syncArrayColumnDraftFromTableState(
+      filters,
+      'modalityPaymentBank',
+      this.modalityPaymentBankColumnDraft,
       readArrayFilterValues,
     );
 
@@ -470,7 +554,9 @@ export class BankStatementListComponent
       releaseDate: this.releaseDate(),
       periodReleaseDate: this.periodReleaseDate(),
 
+      releaseCategory: this.releaseCategory(),
       statusPaymentBank: this.statusPaymentBank(),
+      modalityPaymentBank: this.modalityPaymentBank(),
 
       banks: this.banks(),
       flags: this.flags(),
@@ -490,13 +576,22 @@ export class BankStatementListComponent
     this.releaseDate.set(s.releaseDate ?? null);
     this.periodReleaseDate.set(s.periodReleaseDate ?? null);
 
+    this.releaseCategory.set(s.releaseCategory ?? null);
     this.statusPaymentBank.set(s.statusPaymentBank ?? null);
+    this.modalityPaymentBank.set(s.modalityPaymentBank ?? null);
   }
 
   protected bankingDomicileLabel(row: BankStatementModel): string {
     const agency = row.bankingDomicile?.agency ?? '-';
     const account = row.bankingDomicile?.currentAccount ?? '-';
     return `Ag. ${agency} Cc. ${account}`;
+  }
+
+  protected formatHistoric(domicile: BankStatementModel): string {
+    if (domicile) {
+      return `${domicile?.historicalCodeBank} - ${domicile?.descriptionHistoricalBank} `;
+    }
+    return ``;
   }
 
   protected searchActions(row: BankStatementModel): MenuItem[] {

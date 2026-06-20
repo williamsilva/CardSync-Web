@@ -5,6 +5,7 @@ import { map } from 'rxjs/operators';
 
 import { API } from '@core/api/api.config';
 import { HalPagedResponse } from '@core/api/page.model';
+import { ValueTotalsModel } from '@models/value-totals-model';
 import { ListQueryDto } from '@shared/features/list-query/list-query.types';
 import { BankStatementAdvancedFilters } from '@features/filter/bank-statement.filters';
 import { BankStatementApiModel, mapBankStatementApiModels } from '@models/bank-statement.model';
@@ -29,5 +30,9 @@ export class BankStatementApiService {
             }) as HalPagedResponse<BankStatementApiModel>,
         ),
       );
+  }
+
+  calculateTotals(body: ListQueryDto<BankStatementAdvancedFilters>) {
+    return this.http.post<ValueTotalsModel>(`${this.baseUrl}/totals`, body);
   }
 }

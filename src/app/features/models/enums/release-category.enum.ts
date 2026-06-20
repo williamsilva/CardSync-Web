@@ -107,11 +107,5 @@ export function releaseCategoryLabel(
 }
 
 export function allReleaseCategoryEnum(): ReleaseCategoryEnum[] {
-  return [
-    ReleaseCategoryEnum.PAYMENT,
-    ReleaseCategoryEnum.RECEIPT,
-    ReleaseCategoryEnum.PIX,
-    ReleaseCategoryEnum.TF_PIX,
-    ReleaseCategoryEnum.APL_AUT,
-  ];
+  return [ReleaseCategoryEnum.RECEIPT];
 }

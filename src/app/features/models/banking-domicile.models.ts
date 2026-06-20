@@ -28,7 +28,7 @@ export interface BankingDomicileCreateInput {
   currentAccount: number;
   accountDigit?: string;
   accountOpeningDate: string;
-  accountClosingDate: string;
+  accountClosingDate?: string | null;
   expectsFile: boolean;
   bankId: string;
   companyId: string;
