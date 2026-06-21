@@ -1,0 +1,65 @@
+<p-dialog
+  [modal]="true"
+  position="top"
+  appendTo="body"
+  [closable]="false"
+  [draggable]="false"
+  [resizable]="false"
+  [baseZIndex]="1100"
+  [visible]="visible"
+  [showHeader]="false"
+  (onHide)="closeDialog.emit()"
+  [dismissableMask]="!resolving"
+  (visibleChange)="onVisibleChange($event)"
+  [contentStyle]="{ padding: '1.5rem 1.75rem 1.75rem' }"
+  [style]="{ width: 'min(420px, 94vw)', marginTop: '5rem' }"
+>
+  <div class="flex flex-column gap-4">
+    <div class="flex align-items-center gap-2 text-lg text-color">
+      <i class="pi pi-undo"></i>
+      <span>{{ 'conciliation.cancellationReprocess.dialogTitle' | translate }}</span>
+    </div>
+
+    <p class="m-0 text-color-secondary text-sm">
+      {{ 'conciliation.cancellationReprocess.dialogDescription' | translate }}
+    </p>
+
+    <p-floatlabel>
+      <p-datepicker
+        inputId="reprocessMonth"
+        view="month"
+        appendTo="body"
+        dateFormat="mm/yy"
+        [showIcon]="true"
+        [(ngModel)]="selectedDate"
+        [style]="{ width: '100%' }"
+      ></p-datepicker>
+      <label for="reprocessMonth">
+        {{ 'conciliation.cancellationReprocess.monthLabel' | translate }}
+      </label>
+    </p-floatlabel>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <button
+      pButton
+      type="button"
+      icon="pi pi-times"
+      [disabled]="resolving"
+      (click)="closeDialog.emit()"
+      class="p-button-text p-button-sm"
+      [label]="'common.cancel' | translate"
+    ></button>
+
+    <button
+      pButton
+      type="button"
+      icon="pi pi-play"
+      [loading]="resolving"
+      [disabled]="!selectedDate"
+      (click)="onConfirmClick()"
+      class="p-button-warning"
+      [label]="'common.confirm' | translate"
+    ></button>
+  </ng-template>
+</p-dialog>

@@ -1279,6 +1279,18 @@
         </td>
         <td class="text-center">
           <div class="table-actions justify-content-center">
+            @if (canEditIdentity(row)) {
+              <button
+                pButton
+                type="button"
+                icon="pi pi-pencil"
+                tooltipPosition="top"
+                [disabled]="resolving()"
+                (click)="openEditIdentityDialog(row)"
+                class="p-button-text p-button-sm p-button-secondary"
+                [pTooltip]="'conciliation.selection.editIdentity' | translate"
+              ></button>
+            }
             <button
               pButton
               type="button"
@@ -1331,3 +1343,13 @@
   [confirmButtonClass]="confirmActionButtonClass()"
   (visibleChange)="actionDialogVisible.set($event)"
 ></cs-action-dialog>
+
+<cs-erp-edit-identity-dialog
+  [resolving]="resolving()"
+  [visible]="editIdentityDialogVisible()"
+  [initialNsu]="pendingEditNsu()"
+  [initialAuthorization]="pendingEditAuthorization()"
+  (closeDialog)="closeEditIdentityDialog()"
+  (confirmEdit)="confirmEditIdentity($event)"
+  (visibleChange)="editIdentityDialogVisible.set($event)"
+></cs-erp-edit-identity-dialog>

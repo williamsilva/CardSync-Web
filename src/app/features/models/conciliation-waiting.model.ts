@@ -152,6 +152,27 @@ export interface ConciliationWaitingModel {
   acquirerTransaction?: ConciliationWaitingSideModel | null;
 }
 
+export interface ErpUpdateIdentityRequest {
+  nsu: number | null;
+  authorization: string | null;
+}
+
+export interface ErpCancellationReprocessRequest {
+  year: number;
+  month: number;
+}
+
+export interface ErpCancellationReprocessResult {
+  year: number;
+  month: number;
+  acqSalesCancelled: number;
+  erpSalesCancelled: number;
+  erpInstallmentsCancelled: number;
+  erpLinkedBeforeCancel: number;
+  skippedAlreadyCancelled: number;
+  skippedNoErpLinked: number;
+}
+
 export interface ConciliationWaitingCreateInput {}
 
 export interface ConciliationWaitingUpdateInput {}

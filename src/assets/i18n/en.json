@@ -1859,6 +1859,15 @@
         "deleteErrorDetail": "Could not mark the ERP sale as deleted.",
         "deleteTitle": "ERP sale marked as deleted",
         "deleteDetail": "ERP sale marked as deleted."
+      },
+      "editIdentity": {
+        "title": "Edit NSU and Authorization",
+        "nsu": "NSU",
+        "authorization": "Authorization",
+        "successTitle": "Updated",
+        "successDetail": "NSU and authorization updated successfully.",
+        "errorTitle": "Update error",
+        "errorDetail": "Could not update the NSU and authorization of the ERP sale."
       }
     },
     "batchDialog": {
@@ -1900,6 +1909,7 @@
     },
     "selection": {
       "createErp": "Create ERP sale",
+      "editIdentity": "Edit NSU and Authorization",
       "currentMode": "Selection mode",
       "deleteErp": "To delete from ERP",
       "deleteErpSelected": "Mark ERP Deleted",
@@ -1952,6 +1962,17 @@
     "bank": {
       "processReconciliation": "Reconcile Bank",
       "textTooltip": "Manually runs bank reconciliation"
+    },
+    "cancellationReprocess": {
+      "buttonLabel": "Reprocess ERP Cancellations",
+      "textTooltip": "Reprocesses acquirer cancellations for a month, propagating cancellations to linked ERP sales",
+      "dialogTitle": "Reprocess ERP Cancellations",
+      "dialogDescription": "Select the month and year to reprocess acquirer cancellations and propagate them to linked ERP sales.",
+      "monthLabel": "Month / Year",
+      "successTitle": "Reprocessing completed",
+      "successDetail": "ACQ cancelled: {{ acq }} · ERP cancelled: {{ erp }} · Linked: {{ linked }} · Installments: {{ installments }} · Already cancelled: {{ skipped }}",
+      "errorTitle": "Reprocessing error",
+      "errorDetail": "Could not reprocess ERP cancellations."
     },
     "settings": {
       "eyebrow": "Conciliation",

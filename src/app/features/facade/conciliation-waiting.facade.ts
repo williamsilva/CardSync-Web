@@ -10,6 +10,9 @@ import { ConciliationWaitingApiService } from '@features/service/conciliation-wa
 import { ConciliationWaitingAdvancedFilters } from '@features/filter/conciliation-waiting.filter';
 import {
   ErpAcquirerTruthSource,
+  ErpUpdateIdentityRequest,
+  ErpCancellationReprocessRequest,
+  ErpCancellationReprocessResult,
   ConciliationWaitingModel,
   ReconcileFeesResultModel,
   ReconcileBankResultModel,
@@ -137,6 +140,13 @@ export class ConciliationWaitingFacade {
       .pipe(tap(() => this.clearTotals()));
   }
 
+  updateErpIdentity(
+    erpTransactionId: string,
+    request: ErpUpdateIdentityRequest,
+  ): Observable<ErpAcquirerResolutionResultModel> {
+    return this.api.updateErpIdentity(erpTransactionId, request);
+  }
+
   markErpAsDeleted(
     erpTransactionId: string,
     reason: string,
@@ -187,6 +197,12 @@ export class ConciliationWaitingFacade {
         // this.showReconciliationResultFeesToast(result);
       }),
     );
+  }
+
+  reprocessErpCancellations(
+    request: ErpCancellationReprocessRequest,
+  ): Observable<ErpCancellationReprocessResult> {
+    return this.api.reprocessErpCancellations(request);
   }
 
   private searchByView(view: ConciliationErpVsAcquirerView, q: ConciliationQuery) {

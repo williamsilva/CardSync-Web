@@ -50,6 +50,10 @@ import {
   ErpVsAcquirerActionDialogComponent,
 } from '../dialogs/action-dialog.component';
 import {
+  ErpEditIdentityPayload,
+  ErpEditIdentityDialogComponent,
+} from '../dialogs/erp-edit-identity-dialog.component';
+import {
   ConciliationWaitingFiltersState,
   ConciliationWaitingAdvancedFilters,
   resetConciliationWaitingAdvancedFilters,
@@ -121,6 +125,7 @@ import {
     CsColumnFilterShellComponent,
     CsAdvancedTextFilterComponent,
     CsCurrencyRangeFilterComponent,
+    ErpEditIdentityDialogComponent,
     ErpVsAcquirerActionDialogComponent,
     CsAdvancedPeriodDateFilterComponent,
     CsAdvancedMultiselectFilterComponent,
@@ -137,8 +142,21 @@ export class MissingAcquirerListComponent
   protected readonly resolving = signal(false);
   protected readonly batchDialogVisible = signal(false);
   protected readonly actionDialogVisible = signal(false);
+  protected readonly editIdentityDialogVisible = signal(false);
   protected readonly pendingBatchAction = signal<any | null>(null);
   protected readonly pendingConfirmAction = signal<ErpVsAcquirerConfirmAction | null>(null);
+  protected readonly pendingEditRow = signal<ConciliationWaitingModel | null>(null);
+
+  protected readonly pendingEditNsu = computed<number | null>(() => {
+    const nsu = this.pendingEditRow()?.cvNsu;
+    if (nsu == null) return null;
+    const n = Number(nsu);
+    return Number.isFinite(n) ? n : null;
+  });
+
+  protected readonly pendingEditAuthorization = computed<string | null>(() => {
+    return this.pendingEditRow()?.authorization ?? null;
+  });
 
   protected readonly toast = inject(ToastService);
   protected readonly facade = inject(ConciliationWaitingFacade);
@@ -807,6 +825,10 @@ export class MissingAcquirerListComponent
     return !!this.transactionId(row);
   }
 
+  protected canEditIdentity(row: ConciliationWaitingModel | null | undefined): boolean {
+    return !!this.transactionId(row) && row?.capture === CaptureEnum.MANUAL;
+  }
+
   protected isRowSelected(row: ConciliationWaitingModel): boolean {
     const id = this.transactionId(row);
     return !!id && this.selectedRows().some((item) => this.transactionId(item) === id);
@@ -975,6 +997,48 @@ export class MissingAcquirerListComponent
 
   protected confirmActionButtonClass(): string {
     return 'p-button-danger';
+  }
+
+  protected openEditIdentityDialog(row: ConciliationWaitingModel): void {
+    if (!this.canEditIdentity(row)) return;
+    this.pendingEditRow.set(row);
+    this.editIdentityDialogVisible.set(true);
+  }
+
+  protected closeEditIdentityDialog(): void {
+    if (this.resolving()) return;
+    this.editIdentityDialogVisible.set(false);
+    this.pendingEditRow.set(null);
+  }
+
+  protected confirmEditIdentity(payload: ErpEditIdentityPayload): void {
+    const row = this.pendingEditRow();
+    const erpId = this.transactionId(row);
+
+    if (!row || !erpId || this.resolving()) return;
+
+    this.editIdentityDialogVisible.set(false);
+    this.resolving.set(true);
+
+    this.facade
+      .updateErpIdentity(erpId, { nsu: payload.nsu, authorization: payload.authorization })
+      .pipe(finalize(() => this.resolving.set(false)))
+      .subscribe({
+        next: () => {
+          this.pendingEditRow.set(null);
+          this.reloadWithCurrentState();
+          this.toast.success(
+            this.i18n.tUi('conciliation.missingAcq.editIdentity.successTitle'),
+            this.i18n.tUi('conciliation.missingAcq.editIdentity.successDetail'),
+          );
+        },
+        error: () => {
+          this.toast.error(
+            this.i18n.tUi('conciliation.missingAcq.editIdentity.errorTitle'),
+            this.i18n.tUi('conciliation.missingAcq.editIdentity.errorDetail'),
+          );
+        },
+      });
   }
 
   private markErpAsDeleted(erpTransactionId: string, reason: string, observations: string): void {

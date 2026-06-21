@@ -711,6 +711,12 @@ export const UI_KEYS = {
         createErrorDetail: 'conciliation.missingErp.batch.createErrorDetail',
         noEligibleSelectedDetail: 'conciliation.missingErp.batch.noEligibleSelectedDetail',
       },
+      editIdentity: {
+        errorTitle: 'conciliation.missingAcq.editIdentity.errorTitle',
+        errorDetail: 'conciliation.missingAcq.editIdentity.errorDetail',
+        successTitle: 'conciliation.missingAcq.editIdentity.successTitle',
+        successDetail: 'conciliation.missingAcq.editIdentity.successDetail',
+      },
       single: {
         description: 'conciliation.missingErp.single.description',
         createdTitle: 'conciliation.missingErp.single.createdTitle',
@@ -830,6 +836,12 @@ export const UI_KEYS = {
     reconciliationFinalized: 'conciliation.reconciliationFinalized',
     processReconciliationError: 'conciliation.processReconciliationError',
     reconciliationFinalizedTitle: 'conciliation.reconciliationFinalizedTitle',
+    cancellationReprocess: {
+      successTitle: 'conciliation.cancellationReprocess.successTitle',
+      successDetail: 'conciliation.cancellationReprocess.successDetail',
+      errorTitle: 'conciliation.cancellationReprocess.errorTitle',
+      errorDetail: 'conciliation.cancellationReprocess.errorDetail',
+    },
   },
   processedFileDetail: {
     eyebrow: 'processedFileDetail.eyebrow',

@@ -2239,6 +2239,15 @@
         "deleteErrorDetail": "Não foi possível marcar a venda ERP como excluída.",
         "deleteTitle": "Venda ERP marcada como excluída",
         "deleteDetail": "Venda ERP marcada como excluída."
+      },
+      "editIdentity": {
+        "title": "Editar NSU e Autorização",
+        "nsu": "NSU",
+        "authorization": "Autorização",
+        "successTitle": "Atualizado",
+        "successDetail": "NSU e autorização atualizados com sucesso.",
+        "errorTitle": "Erro ao atualizar",
+        "errorDetail": "Não foi possível atualizar o NSU e a autorização da venda ERP."
       }
     },
     "batchDialog": {
@@ -2280,6 +2289,7 @@
     },
     "selection": {
       "createErp": "Criar venda ERP",
+      "editIdentity": "Editar NSU e Autorização",
       "currentMode": "Modo da seleção",
       "deleteErp": "Para excluir do ERP",
       "deleteErpSelected": "Marcar ERP Excluídos",
@@ -2332,6 +2342,17 @@
     "bank": {
       "processReconciliation": "Conciliar Banco",
       "textTooltip": "Executa manualmente a conciliação bancaria"
+    },
+    "cancellationReprocess": {
+      "buttonLabel": "Reprocessar Cancelamentos ERP",
+      "textTooltip": "Reprocessa cancelamentos da adquirente para um mês, propagando o cancelamento para as vendas ERP vinculadas",
+      "dialogTitle": "Reprocessar Cancelamentos ERP",
+      "dialogDescription": "Selecione o mês e ano para reprocessar os cancelamentos da adquirente e propagar para as vendas ERP vinculadas.",
+      "monthLabel": "Mês / Ano",
+      "successTitle": "Reprocessamento concluído",
+      "successDetail": "ADQ canceladas: {{ acq }} · ERP canceladas: {{ erp }} · Vinculadas: {{ linked }} · Parcelas: {{ installments }} · Já canceladas: {{ skipped }}",
+      "errorTitle": "Erro no reprocessamento",
+      "errorDetail": "Não foi possível reprocessar os cancelamentos ERP."
     },
     "settings": {
       "eyebrow": "Conciliação",

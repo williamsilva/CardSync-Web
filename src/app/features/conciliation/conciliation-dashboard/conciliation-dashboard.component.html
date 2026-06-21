@@ -10,215 +10,387 @@
       <button
         pButton
         type="button"
-        class="p-button-success p-button-sm"
-        [icon]="loading() ? '' : 'pi pi-sync'"
-        [loading]="reconcilingErpVsAcquirer()"
-        [disabled]="!canProcess()"
-        (click)="processReconciliationErpVsAcquirer()"
-        [pTooltip]="'conciliation.textTooltipErpVsAcquirer' | translate"
-        [label]="'conciliation.processReconciliationErpVsAcquirer' | translate"
-      ></button>
-
-      <button
-        pButton
-        type="button"
-        [loading]="reconcileManualSwapped()"
-        class="p-button-success p-button-sm"
-        [icon]="loading() ? '' : 'pi pi-sync'"
-        [disabled]="!canProcess()"
-        (click)="processReconcileManualSwapped()"
-        [pTooltip]="'conciliation.textTooltipErpVsAcquirer' | translate"
-        [label]="'conciliation.processReconcileManualSwapped' | translate"
-      ></button>
-
-      <button
-        pButton
-        type="button"
-        [loading]="reconcilingFees()"
-        class="p-button-success p-button-sm"
-        [disabled]="!canProcess()"
-        (click)="processReconciliationFees()"
-        [icon]="loading() ? '' : 'pi pi-sync'"
-        [pTooltip]="'conciliation.contractAudit.textTooltip' | translate"
-        [label]="'conciliation.contractAudit.processReconciliation' | translate"
-      ></button>
-
-      <button
-        pButton
-        type="button"
-        severity="success"
-        [disabled]="!canProcess()"
-        (click)="reconcileBank()"
-        [loading]="reconcilingBank()"
-        class="p-button-success p-button-sm"
-        [icon]="loading() ? '' : 'pi pi-sync'"
-        [pTooltip]="'conciliation.bank.textTooltip' | translate"
-        [label]="'conciliation.bank.processReconciliation' | translate"
-      ></button>
-
-      <button
-        pButton
-        type="button"
         (click)="reload()"
         icon="pi pi-refresh"
         class="p-button-text p-button-sm"
+        [disabled]="anyProcessing()"
         [label]="'common.update' | translate"
       ></button>
     </div>
   </div>
 
-  <section class="cs-kpi-grid" *ngIf="summary() as s; else emptyDashboard">
-    <div class="cs-kpi-card">
-      <small>Vendas ERP</small>
-      <strong>{{ s.erpGrossAmount | csCurrency }}</strong>
-      <span>{{ s.erpSalesQuantity || 0 }} vendas</span>
+  <!-- Reconciliation action cards -->
+  <div class="grid">
+    <!-- ERP x Adquirente -->
+    <div class="col-12 lg:col-4">
+      <p-card>
+        <ng-template pTemplate="title">ERP x Adquirente</ng-template>
+        <div class="flex flex-column gap-3">
+          @if (comparison(); as c) {
+            <div class="flex align-items-center justify-content-between">
+              <span>Total ERP</span>
+              <strong>{{ c.erpAmount | csCurrency }}</strong>
+            </div>
+            <div class="flex align-items-center justify-content-between">
+              <span>Total Adquirente</span>
+              <strong>{{ c.acquirerAmount | csCurrency }}</strong>
+            </div>
+            <div class="flex align-items-center justify-content-between">
+              <span>Conciliado</span>
+              <strong>{{ c.matchedAmount | csCurrency }}</strong>
+            </div>
+            <div class="flex align-items-center justify-content-between">
+              <span>Diferença</span>
+              <cs-tag [value]="formatCurrency(c.differenceAmount)" severity="warn"></cs-tag>
+            </div>
+          }
+          @if (reconcileErpAcqResult(); as r) {
+            <cs-tag value="Conciliação concluída" tone="success"></cs-tag>
+            <div class="grid text-sm">
+              <div class="col-6 flex justify-content-between">
+                <span>Analisados</span><strong>{{ r.analyzed }}</strong>
+              </div>
+              <div class="col-6 flex justify-content-between">
+                <span>Conciliados</span><strong>{{ r.matched }}</strong>
+              </div>
+              <div class="col-6 flex justify-content-between">
+                <span>Atualizados</span><strong>{{ r.updated }}</strong>
+              </div>
+              <div class="col-6 flex justify-content-between">
+                <span>Não conciliados</span><strong>{{ r.notMatched }}</strong>
+              </div>
+              <div class="col-6 flex justify-content-between">
+                <span>Divergências valor</span><strong>{{ r.valueDivergences }}</strong>
+              </div>
+              <div class="col-6 flex justify-content-between">
+                <span>Divergências adquirente</span><strong>{{ r.acquirerDivergences }}</strong>
+              </div>
+              <div class="col-6 flex justify-content-between">
+                <span>Matches ambíguos</span><strong>{{ r.ambiguousMatches }}</strong>
+              </div>
+              <div class="col-6 flex justify-content-between">
+                <span>Flag atualizada</span><strong>{{ r.flagUpdated }}</strong>
+              </div>
+              <div class="col-6 flex justify-content-between">
+                <span>Contexto atualizado</span><strong>{{ r.businessContextUpdated }}</strong>
+              </div>
+              <div class="col-6 flex justify-content-between">
+                <span>Pulados</span><strong>{{ r.skippedDivergent }}</strong>
+              </div>
+            </div>
+          }
+          <button
+            pButton
+            type="button"
+            icon="pi pi-sync"
+            [label]="'conciliation.processReconciliationErpVsAcquirer' | translate"
+            [loading]="reconcilingErpVsAcquirer()"
+            [disabled]="!canProcess() || anyProcessing()"
+            (click)="processReconciliationErpVsAcquirer()"
+          ></button>
+        </div>
+      </p-card>
     </div>
-    <div class="cs-kpi-card">
-      <small>Vendas adquirente</small>
-      <strong>{{ s.acquirerGrossAmount | csCurrency }}</strong>
-      <span>{{ s.acquirerSalesQuantity || 0 }} vendas</span>
-    </div>
-    <div class="cs-kpi-card">
-      <small>Taxas cobradas</small>
-      <strong>{{ s.feeAmount | csCurrency }}</strong>
-      <span>Diferença {{ s.feeDifferenceAmount | csCurrency }}</span>
-    </div>
-    <div class="cs-kpi-card">
-      <small>Liquidado no banco</small>
-      <strong>{{ s.bankSettledAmount | csCurrency }}</strong>
-      <span>Pendente {{ s.bankPendingAmount | csCurrency }}</span>
-    </div>
-    <div class="cs-kpi-card">
-      <small>Pendências</small>
-      <strong>{{ s.pendingAmount | csCurrency }}</strong>
-      <span>{{ s.pendingSalesQuantity || 0 }} vendas</span>
-    </div>
-    <div class="cs-kpi-card">
-      <small>Débitos pendentes</small>
-      <strong>{{ s.debitPendingAmount | csCurrency }}</strong>
-      <span>Débitos e ajustes a liquidar</span>
-    </div>
-    <div class="cs-kpi-card">
-      <small>Chargebacks abertos</small>
-      <strong>{{ s.chargebackOpenAmount | csCurrency }}</strong>
-      <span>Valor em disputa</span>
-    </div>
-    <div class="cs-kpi-card">
-      <small>Divergências</small>
-      <strong>{{ s.divergenceAmount | csCurrency }}</strong>
-      <span>{{ s.divergenceQuantity || 0 }} ocorrências</span>
-    </div>
-  </section>
 
-  <section class="cs-grid-two" *ngIf="dashboard() as d">
-    <p-card header="ERP x Adquirente">
-      <div *ngIf="comparison() as c" class="cs-chart-list">
-        <div>
-          <div class="flex justify-content-between mb-2">
-            <strong>Valor conciliado</strong>
-            <span>{{ c.matchedAmount | csCurrency }}</span>
-          </div>
-          <p-progressBar [value]="progress(c.matchedAmount, c.erpAmount)"></p-progressBar>
+    <!-- Swapped Manual -->
+    <div class="col-12 lg:col-4">
+      <p-card>
+        <ng-template pTemplate="title">Swapped Manual</ng-template>
+        <div class="flex flex-column gap-3">
+          @if (summary(); as s) {
+            <div class="flex align-items-center justify-content-between">
+              <span>Pendências</span>
+              <strong>{{ s.pendingAmount | csCurrency }}</strong>
+            </div>
+            <div class="flex align-items-center justify-content-between">
+              <span></span>
+              <small>{{ s.pendingSalesQuantity || 0 }} vendas</small>
+            </div>
+            <div class="flex align-items-center justify-content-between">
+              <span>Divergências</span>
+              <strong>{{ s.divergenceAmount | csCurrency }}</strong>
+            </div>
+            <div class="flex align-items-center justify-content-between">
+              <span></span>
+              <small>{{ s.divergenceQuantity || 0 }} ocorrências</small>
+            </div>
+          }
+          @if (reconcileManualSwappedResult(); as r) {
+            <cs-tag value="Conciliação concluída" tone="success"></cs-tag>
+            <div class="grid text-sm">
+              <div class="col-6 flex justify-content-between">
+                <span>Analisados</span><strong>{{ r.analyzed }}</strong>
+              </div>
+              <div class="col-6 flex justify-content-between">
+                <span>Conciliados</span><strong>{{ r.matched }}</strong>
+              </div>
+              <div class="col-6 flex justify-content-between">
+                <span>Atualizados</span><strong>{{ r.updated }}</strong>
+              </div>
+              <div class="col-6 flex justify-content-between">
+                <span>Não conciliados</span><strong>{{ r.notMatched }}</strong>
+              </div>
+            </div>
+          }
+          <button
+            pButton
+            type="button"
+            icon="pi pi-sync"
+            [label]="'conciliation.processReconcileManualSwapped' | translate"
+            [loading]="reconcileManualSwapped()"
+            [disabled]="!canProcess() || anyProcessing()"
+            (click)="processReconcileManualSwapped()"
+          ></button>
         </div>
-        <div class="cs-chart-row">
-          <div><strong>ERP</strong><small>Total importado do sistema comercial</small></div>
-          <span>{{ c.erpAmount | csCurrency }}</span>
-        </div>
-        <div class="cs-chart-row">
-          <div>
-            <strong>Adquirente</strong><small>Total informado nos arquivos da adquirente</small>
-          </div>
-          <span>{{ c.acquirerAmount | csCurrency }}</span>
-        </div>
-        <div class="cs-chart-row">
-          <div><strong>Diferença</strong><small>Valor ainda não equalizado</small></div>
-          <cs-tag [value]="formatCurrency(c.differenceAmount)" severity="warn"></cs-tag>
-        </div>
-      </div>
-    </p-card>
+      </p-card>
+    </div>
 
-    <p-card header="Atalhos de análise">
-      <div class="cs-shortcuts">
-        <a
-          pButton
-          routerLink="../sales"
-          label="Vendas adquirente"
-          icon="pi pi-credit-card"
-          severity="secondary"
-        ></a>
-        <a
-          pButton
-          routerLink="../../erp/sales"
-          label="Vendas ERP"
-          icon="pi pi-shopping-bag"
-          severity="secondary"
-        ></a>
-        <a
-          pButton
-          routerLink="../fees"
-          label="Taxas"
-          icon="pi pi-percentage"
-          severity="secondary"
-        ></a>
-        <a
-          pButton
-          routerLink="../debits"
-          label="Débitos"
-          icon="pi pi-minus-circle"
-          severity="secondary"
-        ></a>
-        <a
-          pButton
-          routerLink="../chargebacks"
-          label="Chargebacks"
-          icon="pi pi-shield"
-          severity="secondary"
-        ></a>
-        <a
-          pButton
-          routerLink="../bank-settlement"
-          label="Liquidação"
-          icon="pi pi-wallet"
-          severity="secondary"
-        ></a>
-      </div>
-    </p-card>
-  </section>
-
-  <section class="cs-grid-two" *ngIf="dashboard() as d">
-    <p-card header="Divergências por tipo">
-      <div class="cs-chart-list">
-        <div class="cs-chart-row" *ngFor="let item of d.divergencesByType">
-          <div>
-            <strong>{{ item.label }}</strong
-            ><small>{{ item.quantity || 0 }} ocorrências</small>
-          </div>
-          <span>{{ formatCurrency(item.value) }}</span>
+    <!-- Taxas -->
+    <div class="col-12 lg:col-4">
+      <p-card>
+        <ng-template pTemplate="title">Taxas</ng-template>
+        <div class="flex flex-column gap-3">
+          @if (summary(); as s) {
+            <div class="flex align-items-center justify-content-between">
+              <span>Cobradas</span>
+              <strong>{{ s.feeAmount | csCurrency }}</strong>
+            </div>
+            <div class="flex align-items-center justify-content-between">
+              <span>Esperado</span>
+              <strong>{{ s.expectedFeeAmount | csCurrency }}</strong>
+            </div>
+            <div class="flex align-items-center justify-content-between">
+              <span>Diferença</span>
+              <cs-tag [value]="(s.feeDifferenceAmount | csCurrency) ?? ''" severity="warn"></cs-tag>
+            </div>
+          }
+          @if (reconcileFeesResult(); as r) {
+            <cs-tag value="Conciliação concluída" tone="success"></cs-tag>
+            <div class="grid text-sm">
+              <div class="col-6 flex justify-content-between">
+                <span>Analisados</span><strong>{{ r.analyzed }}</strong>
+              </div>
+              <div class="col-6 flex justify-content-between">
+                <span>OK</span><strong>{{ r.okRates }}</strong>
+              </div>
+              <div class="col-6 flex justify-content-between">
+                <span>ERP atualizados</span><strong>{{ r.updatedErpSales }}</strong>
+              </div>
+              <div class="col-6 flex justify-content-between">
+                <span>Divergentes</span><strong>{{ r.divergentRates }}</strong>
+              </div>
+              <div class="col-6 flex justify-content-between">
+                <span>Sem contrato</span><strong>{{ r.missingValidContracts }}</strong>
+              </div>
+              <div class="col-6 flex justify-content-between">
+                <span>Sem adquirente</span><strong>{{ r.skippedWithoutAcquire }}</strong>
+              </div>
+            </div>
+          }
+          <button
+            pButton
+            type="button"
+            icon="pi pi-sync"
+            [label]="'conciliation.contractAudit.processReconciliation' | translate"
+            [loading]="reconcilingFees()"
+            [disabled]="!canProcess() || anyProcessing()"
+            (click)="processReconciliationFees()"
+          ></button>
         </div>
-        <span *ngIf="!d.divergencesByType.length">Nenhuma divergência encontrada.</span>
-      </div>
-    </p-card>
+      </p-card>
+    </div>
 
-    <p-card header="Aging de pendências">
-      <div class="cs-chart-list">
-        <div class="cs-chart-row" *ngFor="let item of d.pendingAging">
-          <div>
-            <strong>{{ item.bucket }}</strong
-            ><small>{{ item.quantity || 0 }} pendências</small>
-          </div>
-          <span>{{ formatCurrency(item.amount) }}</span>
+    <!-- Banco -->
+    <div class="col-12 lg:col-6">
+      <p-card>
+        <ng-template pTemplate="title">Banco / CNAB</ng-template>
+        <div class="flex flex-column gap-3">
+          @if (summary(); as s) {
+            <div class="flex align-items-center justify-content-between">
+              <span>Liquidado</span>
+              <strong>{{ s.bankSettledAmount | csCurrency }}</strong>
+            </div>
+            <div class="flex align-items-center justify-content-between">
+              <span>Pendente</span>
+              <strong>{{ s.bankPendingAmount | csCurrency }}</strong>
+            </div>
+          }
+          @if (reconcileBankResult() !== null) {
+            <cs-tag value="Conciliação bancária concluída" tone="success"></cs-tag>
+          }
+          <button
+            pButton
+            type="button"
+            icon="pi pi-sync"
+            [label]="'conciliation.bank.processReconciliation' | translate"
+            [loading]="reconcilingBank()"
+            [disabled]="!canProcess() || anyProcessing()"
+            (click)="reconcileBank()"
+          ></button>
         </div>
-        <span *ngIf="!d.pendingAging.length">Nenhuma pendência encontrada.</span>
+      </p-card>
+    </div>
+
+    <!-- Reprocessar Cancelamentos -->
+    <div class="col-12 lg:col-6">
+      <p-card>
+        <ng-template pTemplate="title">Reprocessar Cancelamentos ERP</ng-template>
+        <div class="flex flex-column gap-3">
+          @if (summary(); as s) {
+            <div class="flex align-items-center justify-content-between">
+              <span>Débitos pendentes</span>
+              <strong>{{ s.debitPendingAmount | csCurrency }}</strong>
+            </div>
+            <div class="flex align-items-center justify-content-between">
+              <span>Chargebacks abertos</span>
+              <strong>{{ s.chargebackOpenAmount | csCurrency }}</strong>
+            </div>
+          }
+          <button
+            pButton
+            type="button"
+            severity="warn"
+            icon="pi pi-undo"
+            [label]="'conciliation.cancellationReprocess.buttonLabel' | translate"
+            [loading]="reprocessingCancellations()"
+            [disabled]="!canProcess() || anyProcessing()"
+            (click)="openCancellationReprocessDialog()"
+          ></button>
+        </div>
+      </p-card>
+    </div>
+  </div>
+
+  <!-- KPI summary -->
+  @if (summary(); as s) {
+    <section class="cs-kpi-grid">
+      <div class="cs-kpi-card">
+        <small>Vendas ERP</small>
+        <strong>{{ s.erpGrossAmount | csCurrency }}</strong>
+        <span>{{ s.erpSalesQuantity || 0 }} vendas</span>
       </div>
+      <div class="cs-kpi-card">
+        <small>Vendas adquirente</small>
+        <strong>{{ s.acquirerGrossAmount | csCurrency }}</strong>
+        <span>{{ s.acquirerSalesQuantity || 0 }} vendas</span>
+      </div>
+      <div class="cs-kpi-card">
+        <small>Taxas cobradas</small>
+        <strong>{{ s.feeAmount | csCurrency }}</strong>
+        <span>Diferença {{ s.feeDifferenceAmount | csCurrency }}</span>
+      </div>
+      <div class="cs-kpi-card">
+        <small>Liquidado no banco</small>
+        <strong>{{ s.bankSettledAmount | csCurrency }}</strong>
+        <span>Pendente {{ s.bankPendingAmount | csCurrency }}</span>
+      </div>
+      <div class="cs-kpi-card">
+        <small>Pendências</small>
+        <strong>{{ s.pendingAmount | csCurrency }}</strong>
+        <span>{{ s.pendingSalesQuantity || 0 }} vendas</span>
+      </div>
+      <div class="cs-kpi-card">
+        <small>Débitos pendentes</small>
+        <strong>{{ s.debitPendingAmount | csCurrency }}</strong>
+        <span>Débitos e ajustes a liquidar</span>
+      </div>
+      <div class="cs-kpi-card">
+        <small>Chargebacks abertos</small>
+        <strong>{{ s.chargebackOpenAmount | csCurrency }}</strong>
+        <span>Valor em disputa</span>
+      </div>
+      <div class="cs-kpi-card">
+        <small>Divergências</small>
+        <strong>{{ s.divergenceAmount | csCurrency }}</strong>
+        <span>{{ s.divergenceQuantity || 0 }} ocorrências</span>
+      </div>
+    </section>
+  } @else {
+    <p-card>
+      <span>Não foi possível carregar os indicadores. Verifique se o endpoint de conciliação já está disponível.</span>
     </p-card>
-  </section>
+  }
+
+  @if (dashboard(); as d) {
+    <section class="cs-grid-two">
+      <p-card header="ERP x Adquirente">
+        @if (comparison(); as c) {
+          <div class="cs-chart-list">
+            <div>
+              <div class="flex justify-content-between mb-2">
+                <strong>Valor conciliado</strong>
+                <span>{{ c.matchedAmount | csCurrency }}</span>
+              </div>
+              <p-progressBar [value]="progress(c.matchedAmount, c.erpAmount)"></p-progressBar>
+            </div>
+            <div class="cs-chart-row">
+              <div><strong>ERP</strong><small>Total importado do sistema comercial</small></div>
+              <span>{{ c.erpAmount | csCurrency }}</span>
+            </div>
+            <div class="cs-chart-row">
+              <div><strong>Adquirente</strong><small>Total informado nos arquivos da adquirente</small></div>
+              <span>{{ c.acquirerAmount | csCurrency }}</span>
+            </div>
+            <div class="cs-chart-row">
+              <div><strong>Diferença</strong><small>Valor ainda não equalizado</small></div>
+              <cs-tag [value]="formatCurrency(c.differenceAmount)" severity="warn"></cs-tag>
+            </div>
+          </div>
+        }
+      </p-card>
+
+      <p-card header="Atalhos de análise">
+        <div class="cs-shortcuts">
+          <a pButton routerLink="../sales" label="Vendas adquirente" icon="pi pi-credit-card" severity="secondary"></a>
+          <a pButton routerLink="../../erp/sales" label="Vendas ERP" icon="pi pi-shopping-bag" severity="secondary"></a>
+          <a pButton routerLink="../fees" label="Taxas" icon="pi pi-percentage" severity="secondary"></a>
+          <a pButton routerLink="../debits" label="Débitos" icon="pi pi-minus-circle" severity="secondary"></a>
+          <a pButton routerLink="../chargebacks" label="Chargebacks" icon="pi pi-shield" severity="secondary"></a>
+          <a pButton routerLink="../bank-settlement" label="Liquidação" icon="pi pi-wallet" severity="secondary"></a>
+        </div>
+      </p-card>
+    </section>
+
+    <section class="cs-grid-two">
+      <p-card header="Divergências por tipo">
+        <div class="cs-chart-list">
+          @for (item of d.divergencesByType; track item.label) {
+            <div class="cs-chart-row">
+              <div>
+                <strong>{{ item.label }}</strong>
+                <small>{{ item.quantity || 0 }} ocorrências</small>
+              </div>
+              <span>{{ formatCurrency(item.value) }}</span>
+            </div>
+          } @empty {
+            <span>Nenhuma divergência encontrada.</span>
+          }
+        </div>
+      </p-card>
+
+      <p-card header="Aging de pendências">
+        <div class="cs-chart-list">
+          @for (item of d.pendingAging; track item.bucket) {
+            <div class="cs-chart-row">
+              <div>
+                <strong>{{ item.bucket }}</strong>
+                <small>{{ item.quantity || 0 }} pendências</small>
+              </div>
+              <span>{{ formatCurrency(item.amount) }}</span>
+            </div>
+          } @empty {
+            <span>Nenhuma pendência encontrada.</span>
+          }
+        </div>
+      </p-card>
+    </section>
+  }
 </div>
 
-<ng-template #emptyDashboard>
-  <p-card>
-    <span
-      >Não foi possível carregar os indicadores. Verifique se o endpoint de conciliação já está
-      disponível.</span
-    >
-  </p-card>
-</ng-template>
+<cs-cancellation-reprocess-dialog
+  [visible]="cancellationReprocessDialogVisible()"
+  [resolving]="reprocessingCancellations()"
+  (closeDialog)="cancellationReprocessDialogVisible.set(false)"
+  (visibleChange)="cancellationReprocessDialogVisible.set($event)"
+  (confirm)="confirmCancellationReprocess($event)"
+></cs-cancellation-reprocess-dialog>

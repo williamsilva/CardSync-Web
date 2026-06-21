@@ -11,6 +11,9 @@ import { ListQueryDto } from '@shared/features/list-query/list-query.types';
 import { ConciliationWaitingAdvancedFilters } from '@features/filter/conciliation-waiting.filter';
 import {
   ErpAcquirerTruthSource,
+  ErpUpdateIdentityRequest,
+  ErpCancellationReprocessRequest,
+  ErpCancellationReprocessResult,
   ConciliationWaitingModel,
   ReconcileFeesResultModel,
   ReconcileBankResultModel,
@@ -101,6 +104,17 @@ export class ConciliationWaitingApiService {
     return this.http.post<ErpAcquirerResolutionResultModel>(
       `${this.baseUrl}/acquirer/${acquirerTransactionId}/create-erp`,
       {},
+      { withCredentials: true },
+    );
+  }
+
+  updateErpIdentity(
+    erpTransactionId: string,
+    request: ErpUpdateIdentityRequest,
+  ): Observable<ErpAcquirerResolutionResultModel> {
+    return this.http.patch<ErpAcquirerResolutionResultModel>(
+      `${this.baseUrl}/erp/${erpTransactionId}/update-identity`,
+      request,
       { withCredentials: true },
     );
   }
@@ -197,6 +211,16 @@ export class ConciliationWaitingApiService {
     return this.http.post<ReconcileFeesResultModel>(
       `${this.baseUrl}/reconcile-bank`,
       {},
+      { withCredentials: true },
+    );
+  }
+
+  reprocessErpCancellations(
+    request: ErpCancellationReprocessRequest,
+  ): Observable<ErpCancellationReprocessResult> {
+    return this.http.post<ErpCancellationReprocessResult>(
+      `${this.baseUrl}/reprocess-erp-cancellations`,
+      request,
       { withCredentials: true },
     );
   }
