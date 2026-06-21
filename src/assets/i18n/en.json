@@ -52,7 +52,24 @@
         "title": "Group detail"
       }
     },
+    "adjustment": {
+      "chargebacks": {
+        "title": "Chargebacks"
+      },
+      "tariffs": {
+        "title": "Fees"
+      },
+      "cancellation": {
+        "title": "Cancellations"
+      },
+      "chargebackRequests": {
+        "title": "Chargeback Requests"
+      }
+    },
     "conciliation": {
+      "contractAudit": {
+        "title": "Applied Fees"
+      },
       "fees": {
         "title": "Fees"
       },
@@ -86,6 +103,9 @@
       "aging": {
         "title": "Pending Aging"
       },
+      "settings": {
+        "title": "Reconciliation Settings"
+      },
       "divergences": {
         "title": "Operational divergences"
       }
@@ -106,6 +126,21 @@
         "sales": {
           "title": "ADQ Sales"
         }
+      },
+      "anticipation": {
+        "title": "Anticipations"
+      },
+      "saleSummary": {
+        "title": "Sales Summary"
+      },
+      "creditOrder": {
+        "title": "Payment Orders"
+      },
+      "bankStatement": {
+        "title": "Bank Statement"
+      },
+      "files": {
+        "title": "Files"
       }
     },
     "audit": {
@@ -148,6 +183,19 @@
         "title": "Acquirers",
         "sales": "Sales",
         "installments": "Installments"
+      },
+      "anticipation": {
+        "title": "Anticipations"
+      },
+      "saleSummary": {
+        "title": "Sales Summary"
+      },
+      "creditOrder": {
+        "title": "Payment Orders"
+      },
+      "banks": {
+        "title": "Banks",
+        "bankStatement": "Bank Statement"
       }
     },
     "me": "My account",
@@ -172,6 +220,7 @@
       "noFileDay": "No File Days"
     },
     "conciliation": {
+      "contractAudit": "Applied Fees",
       "fees": "Applied fees",
       "sales": "Acquirer sales",
       "title": "Reconciliation",
@@ -182,9 +231,17 @@
       "chargebacks": "Chargebacks",
       "divergences": "Divergences",
       "aging": "Pending aging",
+      "settings": "Settings",
       "erpMissingAcquirer": "Not found in acquirer",
       "acquirerMissingErp": "Not found in ERP",
       "erpVsAcquirerDivergences": "Other unreconciled"
+    },
+    "adjustment": {
+      "title": "Adjustments",
+      "tariffs": { "title": "Fees" },
+      "cancellation": { "title": "Cancellations" },
+      "chargebackRequests": { "title": "Chargeback Requests" },
+      "chargebacks": { "title": "Chargebacks" }
     },
     "security": {
       "title": "Security",
@@ -205,6 +262,7 @@
         "erpPendent": "Pending ERP",
         "movementRede": "Rede movements",
         "scheduler": "Scheduler",
+        "calendar": "File Calendar",
         "creditOrders": "Credit orders",
         "adjustments": "Rede adjustments",
         "anticipations": "Anticipations",
@@ -223,7 +281,13 @@
   "breadcrumb": {
     "groups": "Groups",
     "users": "Users",
-    "dashboard": "Dashboard",
+    "dashboard": {
+      "title": "Dashboard",
+      "management": {
+        "title": "Banking Reconciliation Panel",
+        "subtitle": "Analysis of operations, fees and receivables"
+      }
+    },
     "register": {
       "flag": "Flags",
       "company": "Companies",
@@ -250,6 +314,18 @@
     },
     "conciliation": {
       "title": "Reconciliation"
+    },
+    "anticipation": {
+      "title": "Anticipations"
+    },
+    "bankStatement": {
+      "title": "Bank Statement"
+    },
+    "saleSummary": {
+      "title": "Sales Summary"
+    },
+    "creditOrders": {
+      "title": "Payment Orders"
     }
   },
   "footer": {
@@ -426,7 +502,13 @@
       "cvNotFoundErp": "CV not found in ERP",
       "cvNotFoundAdq": "CV not found in ADQ",
       "ambiguousMatch": "Ambiguous match",
-      "acquirerMismatch": "Acquirer divergence"
+      "acquirerMismatch": "Acquirer divergence",
+      "cancellationFraud": "Fraud cancellation",
+      "cancellationReturn": "Return cancellation",
+      "cancellationRefound": "Refund cancellation",
+      "cancellationAcquirer": "Acquirer cancellation",
+      "cancellationDuplicate": "Duplicate cancellation",
+      "cancellationOperationalError": "Operational error cancellation"
     },
     "statusTransactionEnum": {
       "pending": "Pending",
@@ -437,6 +519,7 @@
       "notReconciled": "Unreconciled",
       "excludedSale": "Deleted sale",
       "canceledSale": "Canceled sale",
+      "naoTokenizadas": "Not tokenized",
       "manuallyReconciled": "Manually reconciled",
       "reconciledAutomatically": "Automatically reconciled"
     },
@@ -449,7 +532,17 @@
       "unknown": "Not informed",
       "divergent": "Divergent",
       "excludedSale": "Deleted sale",
-      "canceledSale": "Canceled sale"
+      "canceledSale": "Canceled sale",
+      "partiallyPaid": "Partial Payment"
+    },
+    "modalityPaymentBank": {
+      "unknown": "Not Informed",
+      "pixEnv": "Pix Sent",
+      "pixRec": "Pix Received",
+      "pixDev": "Pix Returned",
+      "cashDebit": "Debit Card",
+      "cashCredit": "Credit Card",
+      "antecipCred": "Credit Anticipation"
     },
     "modalityEnum": {
       "outros": "Other",
@@ -488,7 +581,10 @@
       "unknown": "Not informed",
       "adjusted": "Adjusted",
       "pending": "Pending",
-      "analysis": "Analysis"
+      "analysis": "Analysis",
+      "favoredClient": "Favored Client",
+      "favoredCompany": "Favored Company",
+      "notLocatedErpAcq": "Not Located"
     },
     "chargebackRequestReasonEnum": {
       "unknown": "Not informed",
@@ -497,7 +593,19 @@
       "fraud": "Fraud",
       "productNotReceived": "Product/service not received",
       "creditNotProcessed": "Credit not processed",
+      "defectiveProduct": "Defective product",
+      "duplicateRequest": "Duplicate request",
+      "serviceNotProvided": "Service not provided",
+      "transactionCancellation": "Canceled transaction",
       "other": "Other"
+    },
+    "releaseCategory": {
+      "unknown": "Not informed",
+      "pix": "Pix",
+      "tfPix": "Pix fee",
+      "payment": "Payment",
+      "receipt": "Receipt",
+      "aplAut": "Automatic application"
     },
     "chargebackRequestStatusEnum": {
       "unknown": "Not informed",
@@ -712,6 +820,11 @@
       "dayType": "Type",
       "statusEnum": "Status",
       "bank": "Bank",
+      "origen": "Origin",
+      "company": "Company",
+      "acquirer": "Acquirer",
+      "acquirerFileType": "File Type",
+      "bankingDomicile": "Banking Domicile",
       "statusDate": "Status Date",
       "createdAt": "Registered on",
       "updatedAt": "Updated on"
@@ -831,6 +944,17 @@
       "holderName": "Holder",
       "active": "Status",
       "bank": "Bank",
+      "status": "Status",
+      "company": "Company",
+      "agencyDigit": "Ag. Digit",
+      "statusDateShort": "Status",
+      "accountDigit": "Acc. Digit",
+      "statusDate": "Status Date",
+      "currentAccountShort": "Account",
+      "accountOpeningDateShort": "Opening",
+      "accountClosingDateShort": "Closing",
+      "accountOpeningDate": "Opening Date",
+      "accountClosingDate": "Closing Date",
       "createdAt": "Registered on",
       "updatedAt": "Updated on",
       "expectsFile": "Expects File"
@@ -894,6 +1018,10 @@
       "statusEnum": "Status",
       "pvNumber": "PV Number",
       "adqCode": "ADQ Code",
+      "closingDate": "Closing Date",
+      "closingDateShort": "Closing",
+      "openingDate": "Opening Date",
+      "openingDateShort": "Opening",
       "createdAt": "Registered on",
       "createdBy": "Registered by",
       "socialReason": "Corporate name",
@@ -1312,7 +1440,10 @@
       "expectedPaymentDate": "Expected Payment",
       "periodPaymentDate": "Payment Period",
       "periodConciliationDate": "Reconciliation Period",
-      "periodExpectedPaymentDate": "Expected Payment Period"
+      "periodExpectedPaymentDate": "Expected Payment Period",
+      "totalValue": "Total Amount",
+      "rvNumber": "Sales Summary",
+      "rateContract": "Expected rate"
     },
     "columns": {
       "sale": "Sale",
@@ -1644,6 +1775,10 @@
     "reconciliationFinalized": "ERP x acquirer reconciliation was processed.",
     "noDiscrepancyFound": "No divergent field was found in this comparison.",
     "processReconciliationError": "Could not process ERP x acquirer reconciliation.",
+    "processReconcileManualSwapped": "Reconcile Swapped NSU",
+    "processReconciliationErpVsAcquirer": "Reconcile ERP vs ACQ",
+    "textTooltipErpVsAcquirer": "Manually runs ERP x acquirer reconciliation",
+    "processReconciliationErrorErpVsAcquirer": "Could not process ERP x acquirer reconciliation.",
     "dialog": {
       "compareSales": "Compare sales",
       "displayingFieldsDiscrepancies": "Displaying only fields with divergence.",
@@ -1674,7 +1809,12 @@
       "skippedDivergent": "Skipped due to divergence",
       "ambiguousMatches": "Ambiguous matches",
       "businessContextUpdated": "Contexts updated",
-      "acquirerDivergences": "Acquirer divergences"
+      "acquirerDivergences": "Acquirer divergences",
+      "okRates": "Correct rates",
+      "divergentRates": "Divergent rates",
+      "updatedErpSales": "Updated ERP sales",
+      "missingValidContracts": "Missing contracts",
+      "skippedWithoutAcquire": "Skipped without acquirer"
     },
     "finishedTitle": "Batch finalized",
     "errorTitle": "Error processing batch",
@@ -1809,6 +1949,67 @@
       },
       "securityAuditNotice": "For security reasons, the details of the user responsible for this action will be stored for future reference."
     },
+    "bank": {
+      "processReconciliation": "Reconcile Bank",
+      "textTooltip": "Manually runs bank reconciliation"
+    },
+    "settings": {
+      "eyebrow": "Conciliation",
+      "title": "Reconciliation Settings",
+      "subtitle": "Parameters for the ERP x Acquirer reconciliation process.",
+      "erpAcquirerPreviousDaysLookback": "Previous days in acquirer",
+      "erpAcquirerPreviousDaysLookbackHint": "Defines how many days before the ERP sale date the acquirer may have recorded the transaction. Set to 0 to disable this filter.",
+      "erpAcquirerFutureDaysLookback": "Future days in acquirer",
+      "erpAcquirerFutureDaysLookbackHint": "Defines how many days after the ERP sale date the acquirer may have recorded the transaction. Set to 0 to disable this filter.",
+      "saved": "Settings saved successfully."
+    },
+    "contractAudit": {
+      "title": "Applied Fees",
+      "processReconciliation": "Reconcile Fees",
+      "textTooltip": "Manually runs fee reconciliation",
+      "processReconciliationError": "Could not process fee reconciliation.",
+      "subtitle": "Compare contracted fee, applied fee, and difference charged by the acquirer.",
+      "fields": {
+        "fees": "Fees",
+        "cvNsu": "CV/NSU",
+        "flag": "Card brand",
+        "status": "Status",
+        "period": "Period",
+        "company": "Company",
+        "analysis": "Analysis",
+        "acquirer": "Acquirer",
+        "grossValue": "Gross value",
+        "saleDate": "Sale date",
+        "differenceValue": "Difference",
+        "liquidValue": "Net value",
+        "authorization": "Authorization",
+        "rateContract": "Expected rate",
+        "establishment": "Establishment",
+        "appliedFeeValue": "Applied fee",
+        "periodSaleDate": "Sale date period"
+      },
+      "columns": {
+        "date": "Date",
+        "fees": "Fees",
+        "value": "Value",
+        "establishmentShort": "PV",
+        "authorizationShort": "Auth.",
+        "analysis": "Analysis"
+      },
+      "table": {
+        "appliedRate": "Applied",
+        "expectedFee": "Expected",
+        "differenceShort": "Diff.",
+        "contractRate": "Contract"
+      },
+      "status": {
+        "ok": "OK",
+        "missingContract": "Missing contract",
+        "rateDivergence": "Fee divergence",
+        "valueDivergence": "Value divergence",
+        "missingAcquirerSale": "Missing acquirer sale"
+      }
+    },
     "fees": {
       "title": "Applied fees",
       "subtitle": "Compare contracted fee, applied fee, and difference charged by the acquirer.",
@@ -1885,7 +2086,17 @@
     "close": "Close",
     "clear": "Clear",
     "quantity": "Qty.",
-    "search": "Search",
+    "search": {
+      "line": "Line",
+      "title": "Search",
+      "process": "Process",
+      "transactions": "Transactions",
+      "salesSummary": "Sales Summary"
+    },
+    "code": "Code",
+    "sales": "Sales",
+    "status": "Status",
+    "audit": "Audit",
     "apply": "Apply",
     "actions": "Actions",
     "filter": "Filter",
@@ -1921,6 +2132,8 @@
     "registrationNumber": "Registration No.",
     "advancedFilters": "Advanced filters",
     "viewInstallments": "View installments",
+    "viewAdjustments": "View transaction adjustments",
+    "viewCreditOrders": "View payment orders",
     "selected": "{count, plural, =0 {None selected} one {# selected} other {# selected}}",
     "selectedFemale": "{count, plural, =0 {None selected} one {# selected} other {# selected}}",
     "noRecordsFound": "No records found."
@@ -2192,6 +2405,7 @@
       "processed": "Processed",
       "warnings": "With warnings",
       "errors": "With errors",
+      "invalid": "Invalid",
       "pending": "ERP pending"
     },
     "scheduler": {
@@ -2240,29 +2454,56 @@
       "document": "Document",
       "statusShort": "Status",
       "launchDate": "Launch date",
+      "releaseDate": "Release date",
       "bankHistory": "Bank history",
       "launchDateShort": "Launch",
+      "releaseDateShort": "Rel.",
       "establishment": "Establishment",
       "establishmentShort": "Estab.",
       "bankingDomicile": "Domicile",
+      "releaseCategory": "Release category",
       "statusPaymentBank": "Bank payment status",
-      "periodLaunchDate": "Launch date period"
+      "periodLaunchDate": "Launch date period",
+      "periodReleaseDate": "Release date period",
+      "modalityPaymentBank": "Bank payment modality"
     }
   },
   "anticipation": {
     "subtitle": "Analyze anticipations and respective financial discounts.",
     "fields": {
       "bank": "Bank",
+      "gross": "Gross",
       "flag": "Flag",
       "company": "Company",
+      "release": "Release",
       "acquirer": "Acquirer",
       "modality": "Modality",
+      "discountRate": "Discount",
+      "grossValue": "Gross value",
+      "statusPayment": "Payment",
+      "transactionsStatus": "Sale",
       "releaseDate": "Release date",
+      "releaseValue": "Release value",
       "establishment": "Establishment",
+      "originalCredit": "Original credit",
+      "originalDue": "Original release",
       "bankingDomicile": "Banking domicile",
-      "periodReleaseDate": "Release date period",
+      "advanceDiscount": "Anticipation discount",
       "transactionsStatusEnum": "Sale status",
-      "statusPaymentBankEnum": "Bank payment status"
+      "discountRateValue": "Sale discount value",
+      "statusPaymentBank": "Bank payment status",
+      "originalDueDate": "Original release date",
+      "originalCreditValue": "Original credit value",
+      "periodReleaseDate": "Release date period",
+      "statusPaymentBankEnum": "Bank payment status",
+      "advanceDiscountValue": "Anticipation discount value"
+    },
+    "columns": {
+      "installmentNumber": "Installment",
+      "releaseDate": "Release date",
+      "numberCvNsu": "No. of sales",
+      "numberRvCorresponding": "Sales summary",
+      "originalDueDate": "Original release date"
     }
   },
   "saleSummary": {
@@ -2270,14 +2511,28 @@
     "fields": {
       "flag": "Flag",
       "bank": "Bank",
+      "gross": "Gross",
+      "orders": "Orders",
+      "liquid": "Net",
       "company": "Company",
+      "rv": "Sales summary",
+      "discount": "Discount",
+      "pvNumber": "PV No.",
+      "adjustments": "Adjustments",
       "acquirer": "Acquirer",
       "modality": "Modality",
+      "grossValue": "Gross value",
+      "transactionsStatus": "Sale",
+      "liquidValue": "Net value",
+      "discountValue": "Discount value",
+      "numberCvNsu": "No. of sales",
       "rvDate": "Sales summary date",
+      "creditOrderStatus": "Credit order",
       "rvNumber": "Sales summary number",
+      "statusPaymentBank": "Bank payment",
+      "periodRvDate": "Sales summary period",
       "establishment": "Establishment",
       "bankingDomicile": "Banking domicile",
-      "periodRvDate": "Sales summary period",
       "transactionsStatusEnum": "Sale status",
       "creditOrderStatusEnum": "Credit order status",
       "statusPaymentBankEnum": "Bank payment status"
@@ -2289,24 +2544,37 @@
     "fields": {
       "flag": "Flag",
       "bank": "Bank",
+      "gross": "Gross",
+      "orders": "Orders",
+      "liquid": "Net",
       "rv": "Sales summary",
       "company": "Company",
-      "acquirer": "Acquirer",
+      "discount": "Discount",
+      "pvNumber": "PV No.",
+      "statusRv": "Summary status",
+      "release": "Release",
       "modality": "Modality",
-      "rvDate": "Sales summary date",
-      "rvNumber": "Sales summary number",
-      "pvOriginal": "Original PV",
+      "acquirer": "Acquirer",
+      "installment": "Installment",
       "grossValue": "Gross value",
+      "pvOriginal": "Original PV",
       "liquidValue": "Net value",
+      "installmentNumber": "Installment",
+      "creditOrder": "Credit order",
+      "salesSummary": "Sales summary",
       "discountValue": "Discount",
       "releaseDate": "Release date",
+      "paymentBank": "Bank payment",
+      "rvDate": "Sales summary date",
+      "releaseValue": "Release value",
       "establishment": "Establishment",
-      "bankingDomicile": "Banking domicile",
+      "rvNumber": "Sales summary number",
       "creditOrderDate": "Credit order date",
+      "bankingDomicile": "Banking domicile",
+      "periodReleaseDate": "Release date period",
+      "periodRvDate": "Sales summary period",
       "salesSummaryStatus": "Sales summary status",
       "statusPaymentBank": "Bank payment status",
-      "periodRvDate": "Sales summary period",
-      "periodReleaseDate": "Release date period",
       "periodCreditOrderDate": "Credit order date period"
     }
   },

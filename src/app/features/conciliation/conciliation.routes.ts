@@ -93,6 +93,16 @@ export const CONCILIATION_ROUTES: Routes = [
       ),
   },
   {
+    path: 'settings',
+    title: 'routes.conciliation.settings.title',
+    canActivate: [permissionGuard],
+    data: { requireAll: false, redirectTo: '/forbidden', permissions: defaultPermissions },
+    loadComponent: () =>
+      import('./reconciliation-settings/reconciliation-settings.component').then(
+        (m) => m.ReconciliationSettingsComponent,
+      ),
+  },
+  {
     path: '**',
     title: 'routes.notFound.title',
     loadComponent: () => import('../error/not-found/not-found.page').then((m) => m.NotFoundPage),

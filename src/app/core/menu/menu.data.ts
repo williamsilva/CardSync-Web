@@ -166,6 +166,13 @@ export const APP_MENU: AppMenuItem[] = [
         labelKey: 'menu.conciliation.aging',
         icon: 'pi pi-hourglass text-purple-400',
       },
+      {
+        exact: false,
+        route: '/conciliation/settings',
+        labelKey: 'menu.conciliation.settings',
+        icon: 'pi pi-cog text-purple-400',
+        permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.FILE_PROCESSING.READ],
+      },
     ],
   },
   /* Security */

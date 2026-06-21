@@ -77,6 +77,7 @@ export const UI_KEYS = {
     conciliation: {
       title: 'menu.conciliation.title',
       aging: 'menu.conciliation.aging',
+      settings: 'menu.conciliation.settings',
       dashboard: 'menu.conciliation.dashboard',
       contractAudit: 'menu.conciliation.contractAudit',
       erpVsAcquirer: 'menu.conciliation.erpVsAcquirer',
@@ -676,6 +677,9 @@ export const UI_KEYS = {
       missing: 'conciliation.pageDescription.missing',
       missingErp: 'conciliation.pageDescription.missingErp',
       missingAcquirer: 'conciliation.pageDescription.missingAcquirer',
+    },
+    settings: {
+      saved: 'conciliation.settings.saved',
     },
     result: {
       okRates: 'conciliation.result.okRates',

@@ -90,6 +90,9 @@
       },
       "aging": {
         "title": "Aging de Pendências"
+      },
+      "settings": {
+        "title": "Configurações de Conciliação"
       }
     },
     "transactions": {
@@ -228,6 +231,7 @@
       "debits": "Débitos",
       "divergences": "Divergências",
       "aging": "Aging de pendências",
+      "settings": "Configurações",
       "erpMissingAcquirer": "Não localizada na adquirente",
       "acquirerMissingErp": "Não localizada no ERP",
       "erpVsAcquirerDivergences": "Outras não conciliadas"
@@ -2328,6 +2332,16 @@
     "bank": {
       "processReconciliation": "Conciliar Banco",
       "textTooltip": "Executa manualmente a conciliação bancaria"
+    },
+    "settings": {
+      "eyebrow": "Conciliação",
+      "title": "Configurações de Conciliação",
+      "subtitle": "Parâmetros do processo de conciliação ERP x Adquirente.",
+      "erpAcquirerPreviousDaysLookback": "Dias retroativos na adquirente",
+      "erpAcquirerPreviousDaysLookbackHint": "Define quantos dias antes da data do ERP a adquirente pode ter registrado a transação. Use 0 para desabilitar este filtro.",
+      "erpAcquirerFutureDaysLookback": "Dias futuros na adquirente",
+      "erpAcquirerFutureDaysLookbackHint": "Define quantos dias após a data do ERP a adquirente pode ter registrado a transação. Use 0 para desabilitar este filtro.",
+      "saved": "Configurações salvas com sucesso."
     },
     "contractAudit": {
       "title": "Taxas Aplicadas",

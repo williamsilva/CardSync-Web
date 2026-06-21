@@ -1,0 +1,63 @@
+<div class="cs-page">
+  <div class="cs-page__header">
+    <div>
+      <p class="cs-page__eyebrow">{{ 'conciliation.settings.eyebrow' | translate }}</p>
+      <h1>{{ 'conciliation.settings.title' | translate }}</h1>
+      <span>{{ 'conciliation.settings.subtitle' | translate }}</span>
+    </div>
+  </div>
+
+  <p-card>
+    <form [formGroup]="form" (ngSubmit)="save()">
+      <div class="cs-settings-grid">
+        <div class="cs-settings-field">
+          <p-floatlabel>
+            <p-inputnumber
+              inputId="erpAcquirerPreviousDaysLookback"
+              formControlName="erpAcquirerPreviousDaysLookback"
+              [min]="0"
+              [max]="365"
+              [showButtons]="true"
+              [allowEmpty]="false"
+            ></p-inputnumber>
+            <label for="erpAcquirerPreviousDaysLookback">
+              {{ 'conciliation.settings.erpAcquirerPreviousDaysLookback' | translate }}
+            </label>
+          </p-floatlabel>
+          <small class="cs-field-hint">
+            {{ 'conciliation.settings.erpAcquirerPreviousDaysLookbackHint' | translate }}
+          </small>
+        </div>
+
+        <div class="cs-settings-field">
+          <p-floatlabel>
+            <p-inputnumber
+              inputId="erpAcquirerFutureDaysLookback"
+              formControlName="erpAcquirerFutureDaysLookback"
+              [min]="0"
+              [max]="365"
+              [showButtons]="true"
+              [allowEmpty]="false"
+            ></p-inputnumber>
+            <label for="erpAcquirerFutureDaysLookback">
+              {{ 'conciliation.settings.erpAcquirerFutureDaysLookback' | translate }}
+            </label>
+          </p-floatlabel>
+          <small class="cs-field-hint">
+            {{ 'conciliation.settings.erpAcquirerFutureDaysLookbackHint' | translate }}
+          </small>
+        </div>
+      </div>
+
+      <div class="cs-settings-actions" *ngIf="canEdit()">
+        <p-button
+          type="submit"
+          icon="pi pi-save"
+          [label]="'common.save' | translate"
+          [loading]="saving()"
+          [disabled]="loading() || form.invalid"
+        ></p-button>
+      </div>
+    </form>
+  </p-card>
+</div>
