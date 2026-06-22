@@ -2362,6 +2362,8 @@
       "erpAcquirerPreviousDaysLookbackHint": "Define quantos dias antes da data do ERP a adquirente pode ter registrado a transação. Use 0 para desabilitar este filtro.",
       "erpAcquirerFutureDaysLookback": "Dias futuros na adquirente",
       "erpAcquirerFutureDaysLookbackHint": "Define quantos dias após a data do ERP a adquirente pode ter registrado a transação. Use 0 para desabilitar este filtro.",
+      "reconciliationLookbackMonths": "Meses retroativos para conciliação",
+      "reconciliationLookbackMonthsHint": "Define quantos meses anteriores à data atual devem ser considerados na busca de transações para conciliação. Padrão: 6 meses.",
       "saved": "Configurações salvas com sucesso."
     },
     "contractAudit": {

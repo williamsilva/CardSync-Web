@@ -10,6 +10,8 @@ export type SaleSummaryFiltersState = {
   periodRvDate: PeriodEnum | null;
   rvDate: string | string[] | null;
 
+  rvNumber: string;
+
   flags: string[] | null;
   banks: string[] | null;
   acquirers: string[] | null;
@@ -17,9 +19,9 @@ export type SaleSummaryFiltersState = {
   establishments: string[] | null;
 
   modality: ModalityEnum[] | null;
+  statusPaymentBank: StatusPaymentBankEnum[] | null;
   transactionsStatus: StatusTransactionEnum[] | null;
   creditOrderStatus: StatusReconciliationEnum[] | null;
-  statusPaymentBank: StatusPaymentBankEnum[] | null;
 };
 
 export type SaleSummaryAdvancedFilters = Partial<SaleSummaryFiltersState>;
@@ -30,8 +32,10 @@ export type SaleSummaryAdvancedFilterSignals = {
 
 export function createEmptySaleSummaryFiltersState(): SaleSummaryFiltersState {
   return {
-    periodRvDate: null,
     rvDate: null,
+    periodRvDate: null,
+
+    rvNumber: '',
 
     flags: null,
     banks: null,
@@ -40,14 +44,16 @@ export function createEmptySaleSummaryFiltersState(): SaleSummaryFiltersState {
     establishments: null,
 
     modality: null,
-    transactionsStatus: null,
     creditOrderStatus: null,
     statusPaymentBank: null,
+    transactionsStatus: null,
   };
 }
 
 export function resetSaleSummaryAdvancedFilters(filters: SaleSummaryAdvancedFilterSignals): void {
   const empty = createEmptySaleSummaryFiltersState();
+
+  filters.rvNumber.set(empty.rvNumber);
 
   filters.rvDate.set(empty.rvDate);
   filters.periodRvDate.set(empty.periodRvDate);
@@ -59,7 +65,7 @@ export function resetSaleSummaryAdvancedFilters(filters: SaleSummaryAdvancedFilt
   filters.establishments.set(empty.establishments);
 
   filters.modality.set(empty.modality);
-  filters.transactionsStatus.set(empty.transactionsStatus);
   filters.creditOrderStatus.set(empty.creditOrderStatus);
   filters.statusPaymentBank.set(empty.statusPaymentBank);
+  filters.transactionsStatus.set(empty.transactionsStatus);
 }

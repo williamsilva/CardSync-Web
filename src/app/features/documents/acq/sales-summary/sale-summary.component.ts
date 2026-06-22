@@ -150,6 +150,8 @@ export class SaleSummaryListComponent
   readonly periodRvDate = signal<PeriodEnum | null>(null);
   readonly rvDate = signal<string | string[] | null>(null);
 
+  readonly rvNumber = signal('');
+
   readonly flags = signal<string[] | null>(null);
   readonly banks = signal<string[] | null>(null);
   readonly companies = signal<string[] | null>(null);
@@ -157,9 +159,9 @@ export class SaleSummaryListComponent
   readonly establishments = signal<string[] | null>(null);
 
   readonly modality = signal<ModalityEnum[] | null>(null);
+  readonly statusPaymentBank = signal<StatusPaymentBankEnum[] | null>(null);
   readonly transactionsStatus = signal<StatusTransactionEnum[] | null>(null);
   readonly creditOrderStatus = signal<StatusReconciliationEnum[] | null>(null);
-  readonly statusPaymentBank = signal<StatusPaymentBankEnum[] | null>(null);
 
   readonly isRvDateDisabled = computed(() => !this.periodRvDate());
 
@@ -369,7 +371,6 @@ export class SaleSummaryListComponent
 
     const rvDate = this.rvDate();
     const periodRvDate = this.periodRvDate();
-
     const rvDateValue = this.formatActiveFilterPeriodDateValue(periodRvDate, rvDate, this.i18n);
     if (rvDateValue) {
       items.push({
@@ -378,16 +379,15 @@ export class SaleSummaryListComponent
       });
     }
 
-    const flag = this.flags();
-    const bank = this.banks();
-    const company = this.companies();
-    const acquirer = this.acquirers();
-    const establishment = this.establishments();
-    const modality = this.modality();
-    const transactionsStatus = this.transactionsStatus();
-    const creditOrderStatus = this.creditOrderStatus();
-    const statusPaymentBank = this.statusPaymentBank();
+    const rvNumber = this.rvNumber();
+    if (rvNumber) {
+      items.push({
+        label: this.i18n.tUi('saleSummary.fields.rvNumber'),
+        value: rvNumber,
+      });
+    }
 
+    const acquirer = this.acquirers();
     if (acquirer?.length) {
       const labels = this.acquirersOptions()
         .filter((opt) => acquirer.includes(opt.id))
@@ -400,6 +400,7 @@ export class SaleSummaryListComponent
       });
     }
 
+    const flag = this.flags();
     if (flag?.length) {
       const labels = this.flagsOptions()
         .filter((opt) => flag.includes(opt.id))
@@ -412,6 +413,7 @@ export class SaleSummaryListComponent
       });
     }
 
+    const bank = this.banks();
     if (bank?.length) {
       const labels = this.banksOptions()
         .filter((opt) => bank.includes(opt.id))
@@ -424,6 +426,7 @@ export class SaleSummaryListComponent
       });
     }
 
+    const company = this.companies();
     if (company?.length) {
       const labels = this.companiesOptions()
         .filter((opt) => company.includes(opt.id))
@@ -436,9 +439,10 @@ export class SaleSummaryListComponent
       });
     }
 
+    const establishment = this.establishments();
     if (establishment?.length) {
       const labels = this.establishmentsOptions()
-        .filter((opt) => establishment.includes(opt.id))
+        .filter((opt) => establishment.includes(opt.pvNumber))
         .map((opt) => opt.pvNumber)
         .join(', ');
 
@@ -448,6 +452,7 @@ export class SaleSummaryListComponent
       });
     }
 
+    const modality = this.modality();
     if (modality?.length) {
       items.push({
         label: this.i18n.tUi('saleSummary.fields.modality'),
@@ -455,6 +460,7 @@ export class SaleSummaryListComponent
       });
     }
 
+    const transactionsStatus = this.transactionsStatus();
     if (transactionsStatus?.length) {
       items.push({
         label: this.i18n.tUi('saleSummary.fields.transactionsStatusEnum'),
@@ -462,6 +468,7 @@ export class SaleSummaryListComponent
       });
     }
 
+    const creditOrderStatus = this.creditOrderStatus();
     if (creditOrderStatus?.length) {
       items.push({
         label: this.i18n.tUi('saleSummary.fields.creditOrderStatusEnum'),
@@ -469,6 +476,7 @@ export class SaleSummaryListComponent
       });
     }
 
+    const statusPaymentBank = this.statusPaymentBank();
     if (statusPaymentBank?.length) {
       items.push({
         label: this.i18n.tUi('saleSummary.fields.statusPaymentBankEnum'),
@@ -483,6 +491,8 @@ export class SaleSummaryListComponent
     return {
       rvDate: this.rvDate() ?? undefined,
       periodRvDate: this.periodRvDate() ?? undefined,
+
+      rvNumber: this.rvNumber() ?? undefined,
 
       flags: this.flags()?.length ? this.flags()! : undefined,
       banks: this.banks()?.length ? this.banks()! : undefined,
@@ -701,6 +711,7 @@ export class SaleSummaryListComponent
     return {
       rvDate: this.rvDate(),
       periodRvDate: this.periodRvDate(),
+      rvNumber: this.rvNumber(),
 
       flags: this.flags(),
       banks: this.banks(),
@@ -778,12 +789,13 @@ export class SaleSummaryListComponent
   protected buildTargetSalesSummary(row: SaleSummaryModel): SaleSummaryAdvancedFilters {
     return {
       ...createEmptySaleSummaryFiltersState(),
-      rvDate: row.rvNumber ? String(row.rvNumber) : undefined,
+      rvDate: row.rvDate ? String(row.rvDate) : undefined,
+
+      rvNumber: row.rvNumber ? row.rvNumber : '',
 
       flags: row.flag?.id ? [row.flag.id] : null,
       companies: row.company?.id ? [row.company.id] : null,
       acquirers: row.acquirer?.id ? [row.acquirer.id] : null,
-      establishments: row.establishment?.id ? [row.establishment.id] : null,
     };
   }
 

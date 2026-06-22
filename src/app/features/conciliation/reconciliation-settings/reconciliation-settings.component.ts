@@ -46,6 +46,7 @@ export class ReconciliationSettingsComponent {
   readonly form = this.fb.group({
     erpAcquirerPreviousDaysLookback: [0, [Validators.required, Validators.min(0), Validators.max(365)]],
     erpAcquirerFutureDaysLookback: [0, [Validators.required, Validators.min(0), Validators.max(365)]],
+    reconciliationLookbackMonths: [6, [Validators.required, Validators.min(1), Validators.max(36)]],
   });
 
   constructor() {
@@ -59,6 +60,7 @@ export class ReconciliationSettingsComponent {
         this.form.patchValue({
           erpAcquirerPreviousDaysLookback: settings.erpAcquirerPreviousDaysLookback,
           erpAcquirerFutureDaysLookback: settings.erpAcquirerFutureDaysLookback,
+          reconciliationLookbackMonths: settings.reconciliationLookbackMonths,
         });
         if (!this.canEdit()) {
           this.form.disable();
@@ -79,6 +81,7 @@ export class ReconciliationSettingsComponent {
       .updateSettings({
         erpAcquirerPreviousDaysLookback: v.erpAcquirerPreviousDaysLookback ?? 0,
         erpAcquirerFutureDaysLookback: v.erpAcquirerFutureDaysLookback ?? 0,
+        reconciliationLookbackMonths: v.reconciliationLookbackMonths ?? 6,
       })
       .subscribe({
         next: () => {

@@ -47,6 +47,25 @@
             {{ 'conciliation.settings.erpAcquirerFutureDaysLookbackHint' | translate }}
           </small>
         </div>
+
+        <div class="cs-settings-field">
+          <p-floatlabel>
+            <p-inputnumber
+              inputId="reconciliationLookbackMonths"
+              formControlName="reconciliationLookbackMonths"
+              [min]="1"
+              [max]="36"
+              [showButtons]="true"
+              [allowEmpty]="false"
+            ></p-inputnumber>
+            <label for="reconciliationLookbackMonths">
+              {{ 'conciliation.settings.reconciliationLookbackMonths' | translate }}
+            </label>
+          </p-floatlabel>
+          <small class="cs-field-hint">
+            {{ 'conciliation.settings.reconciliationLookbackMonthsHint' | translate }}
+          </small>
+        </div>
       </div>
 
       <div class="cs-settings-actions" *ngIf="canEdit()">

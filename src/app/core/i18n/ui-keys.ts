@@ -655,16 +655,18 @@ export const UI_KEYS = {
   },
   saleSummary: {
     fields: {
-      rvDate: 'saleSummary.fields.rvDate',
       flag: 'saleSummary.fields.flag',
       bank: 'saleSummary.fields.bank',
+      rvDate: 'saleSummary.fields.rvDate',
       company: 'saleSummary.fields.company',
+      rvNumber: 'saleSummary.fields.rvNumber',
+      pvNumber: 'saleSummary.fields.pvNumber',
       acquirer: 'saleSummary.fields.acquirer',
-      establishment: 'saleSummary.fields.establishment',
       modality: 'saleSummary.fields.modality',
-      transactionsStatusEnum: 'saleSummary.fields.transactionsStatusEnum',
+      establishment: 'saleSummary.fields.establishment',
       creditOrderStatusEnum: 'saleSummary.fields.creditOrderStatusEnum',
       statusPaymentBankEnum: 'saleSummary.fields.statusPaymentBankEnum',
+      transactionsStatusEnum: 'saleSummary.fields.transactionsStatusEnum',
     },
   },
   conciliation: {

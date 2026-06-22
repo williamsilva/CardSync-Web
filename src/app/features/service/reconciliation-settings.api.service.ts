@@ -7,11 +7,13 @@ import { environment } from 'environments/environment';
 export interface ReconciliationSettingsModel {
   erpAcquirerPreviousDaysLookback: number;
   erpAcquirerFutureDaysLookback: number;
+  reconciliationLookbackMonths: number;
 }
 
 export interface ReconciliationSettingsRequest {
   erpAcquirerPreviousDaysLookback: number;
   erpAcquirerFutureDaysLookback: number;
+  reconciliationLookbackMonths: number;
 }
 
 @Injectable({ providedIn: 'root' })

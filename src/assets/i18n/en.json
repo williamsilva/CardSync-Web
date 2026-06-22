@@ -1982,6 +1982,8 @@
       "erpAcquirerPreviousDaysLookbackHint": "Defines how many days before the ERP sale date the acquirer may have recorded the transaction. Set to 0 to disable this filter.",
       "erpAcquirerFutureDaysLookback": "Future days in acquirer",
       "erpAcquirerFutureDaysLookbackHint": "Defines how many days after the ERP sale date the acquirer may have recorded the transaction. Set to 0 to disable this filter.",
+      "reconciliationLookbackMonths": "Reconciliation lookback months",
+      "reconciliationLookbackMonthsHint": "Defines how many months prior to the current date should be searched for transactions during reconciliation. Default: 6 months.",
       "saved": "Settings saved successfully."
     },
     "contractAudit": {

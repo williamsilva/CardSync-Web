@@ -1167,9 +1167,7 @@
             {{ row.company?.fantasyName || '-' }}
           </span>
         </td>
-
         <td class="cell-muted text-center">{{ row.saleDate | csDate: 'short' }}</td>
-
         <td class="text-center">
           <div class="cs-cell-with-info justify-content-center">
             <span
@@ -1181,7 +1179,6 @@
             </span>
           </div>
         </td>
-
         <td>
           <span
             tooltipPosition="top"
@@ -1191,7 +1188,6 @@
             {{ row.authorization || '-' }}
           </span>
         </td>
-
         <td>
           <span
             tooltipPosition="top"
@@ -1201,7 +1197,6 @@
             {{ row.establishment?.pvNumber || '-' }}
           </span>
         </td>
-
         <td>
           <span
             tooltipPosition="top"
@@ -1211,11 +1206,9 @@
             {{ row.acquirer?.fantasyName || '-' }}
           </span>
         </td>
-
         <td class="text-right">{{ row.grossValue | csCurrency }}</td>
         <td class="text-right">{{ row.liquidValue | csCurrency }}</td>
         <td class="text-center">{{ row.installment }}</td>
-
         <td>
           <span
             tooltipPosition="top"
@@ -1225,25 +1218,21 @@
             {{ row.flag?.name || '-' }}
           </span>
         </td>
-
         <td class="cell-muted text-center">
           <cs-tag [value]="modalityLabel(row.modality)" [tone]="modalitySeverity(row.modality)" />
         </td>
-
         <td class="cell-muted text-center">
           <cs-tag
             [value]="captureEnumLabel(row.capture)"
             [tone]="captureEnumSeverity(row.capture)"
           />
         </td>
-
         <td class="text-center">
           <cs-tag
             [value]="statusTransactionReasonEnumLabel(row.statusTransactionReason)"
             [tone]="statusTransactionReasonEnumSeverity(row.statusTransactionReason)"
           ></cs-tag>
         </td>
-
         <td class="text-center">
           <div class="table-actions justify-content-center">
             <button

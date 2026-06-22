@@ -5,24 +5,23 @@ import { CompanyMinimalModel } from './company-minimal.models';
 import { AcquirerMinimalModel } from './acquirer-minimal.models';
 import { AdjustmentsMinimalModel } from './adjustments-minimal.models';
 import { CreditOrdersMinimalModel } from './credit-orders-minimal.models';
-import { EstablishmentMinimalModel } from './establishment-minimal.models';
 import { ProcessedFileMinimalModel } from './processed-file-minimal.models';
 import {
-  SaleSummaryAdvancedFilters,
   SaleSummaryFiltersState,
+  SaleSummaryAdvancedFilters,
   createEmptySaleSummaryFiltersState,
 } from '@features/filter/sale-summary.filters';
 
 export interface SaleSummaryModel {
   id: string;
-  rvNumber: number;
+  rvDate: string;
+  rvNumber: string;
   lineNumber: number;
 
   flag: FlagMinimalModel;
   company: CompanyMinimalModel;
   acquirer: AcquirerMinimalModel;
   processedFile: ProcessedFileMinimalModel;
-  establishment: EstablishmentMinimalModel;
   adjustments?: AdjustmentsMinimalModel[] | null;
   creditOrders?: CreditOrdersMinimalModel[] | null;
 }
@@ -33,14 +32,14 @@ export interface SaleSummaryUpdateInput {}
 
 export interface SaleSummaryApiModel {
   id: string;
-  rvNumber: number;
+  rvDate: string;
+  rvNumber: string;
   lineNumber: number;
 
   flag: FlagMinimalModel;
   company: CompanyMinimalModel;
   acquirer: AcquirerMinimalModel;
   processedFile: ProcessedFileMinimalModel;
-  establishment: EstablishmentMinimalModel;
 }
 
 export function mapSaleSummaryApiModel(input: SaleSummaryApiModel): SaleSummaryModel {
@@ -67,16 +66,16 @@ export function resetSaleSummaryAdvancedFilters(filters: SaleSummaryAdvancedFilt
   const empty = createEmptySaleSummaryFiltersState();
 
   filters.rvDate.set(empty.rvDate);
+  filters.rvNumber.set(empty.rvNumber);
   filters.periodRvDate.set(empty.periodRvDate);
 
   filters.banks.set(empty.banks);
   filters.flags.set(empty.flags);
   filters.acquirers.set(empty.acquirers);
   filters.companies.set(empty.companies);
-  filters.establishments.set(empty.establishments);
 
   filters.modality.set(empty.modality);
-  filters.transactionsStatus.set(empty.transactionsStatus);
   filters.creditOrderStatus.set(empty.creditOrderStatus);
   filters.statusPaymentBank.set(empty.statusPaymentBank);
+  filters.transactionsStatus.set(empty.transactionsStatus);
 }
