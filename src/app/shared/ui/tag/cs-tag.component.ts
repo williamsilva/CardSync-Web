@@ -8,7 +8,24 @@ import { CsTagTone, tagClassFromTone, tagSeverityFromTone } from './tag-tone.typ
   standalone: true,
   selector: 'cs-tag',
   imports: [TagModule],
-  template: ` <p-tag [value]="displayValue()" [severity]="severity()" [class]="tagClass()" /> `,
+  template: `<p-tag [value]="displayValue()" [severity]="severity()" [class]="tagClass()" [title]="displayValue()" />`,
+  styles: [`
+    :host {
+      display: inline-block;
+      max-width: 100%;
+      overflow: hidden;
+    }
+    :host ::ng-deep .p-tag {
+      max-width: 100%;
+      overflow: hidden;
+    }
+    :host ::ng-deep .p-tag-label {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      min-width: 0;
+    }
+  `],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CsTagComponent {

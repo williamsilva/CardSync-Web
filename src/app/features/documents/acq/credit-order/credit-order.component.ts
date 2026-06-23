@@ -170,7 +170,6 @@ export class CreditOrderListComponent
   readonly creditOrderDate = signal<string | string[] | null>(null);
 
   readonly rvNumber = signal<string>('');
-  readonly pvOriginal = signal<string | null>(null);
 
   readonly modality = signal<ModalityEnum[] | null>(null);
 
@@ -371,9 +370,8 @@ export class CreditOrderListComponent
     const acquirer = this.acquirers();
     const modality = this.modality();
     const rvNumber = this.rvNumber();
-    const pvOriginal = this.pvOriginal();
-    const salesSummaryStatus = this.salesSummaryStatus();
     const statusPaymentBank = this.statusPaymentBank();
+    const salesSummaryStatus = this.salesSummaryStatus();
 
     const grossValueLabel = currencyRangeLabel(
       this.i18n,
@@ -489,13 +487,6 @@ export class CreditOrderListComponent
       });
     }
 
-    if (pvOriginal) {
-      items.push({
-        label: this.i18n.tUi('creditOrders.fields.pvOriginal'),
-        value: pvOriginal,
-      });
-    }
-
     if (grossValueLabel) {
       items.push({
         label: this.i18n.tUi('creditOrders.fields.grossValue'),
@@ -533,6 +524,19 @@ export class CreditOrderListComponent
       });
     }
 
+    const establishment = this.establishments();
+    if (establishment?.length) {
+      const labels = this.establishmentsOptions()
+        .filter((opt) => establishment.includes(opt.pvNumber))
+        .map((opt) => opt.pvNumber)
+        .join(', ');
+
+      items.push({
+        label: this.i18n.tUi('saleSummary.fields.establishment'),
+        value: labels,
+      });
+    }
+
     return items;
   });
 
@@ -554,7 +558,6 @@ export class CreditOrderListComponent
       periodCreditOrderDate: this.periodCreditOrderDate() ?? undefined,
 
       rvNumber: this.rvNumber() || undefined,
-      pvOriginal: this.pvOriginal() || undefined,
 
       modality: this.modality()?.length ? this.modality()! : undefined,
 
@@ -777,7 +780,6 @@ export class CreditOrderListComponent
       periodCreditOrderDate: this.periodCreditOrderDate(),
 
       rvNumber: this.rvNumber(),
-      pvOriginal: this.pvOriginal(),
 
       modality: this.modality(),
 
@@ -810,8 +812,6 @@ export class CreditOrderListComponent
     this.periodCreditOrderDate.set(s.periodCreditOrderDate ?? null);
 
     this.rvNumber.set(s.rvNumber ?? '');
-    this.pvOriginal.set(s.pvOriginal ?? null);
-
     this.modality.set(s.modality ?? null);
 
     this.grossValueStart.set(s.grossValueStart ?? null);

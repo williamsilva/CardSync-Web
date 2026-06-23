@@ -2554,7 +2554,6 @@
       "acquirer": "Adquirente",
       "installment": "Cuota",
       "grossValue": "Valor bruto",
-      "pvOriginal": "PV original",
       "liquidValue": "Valor neto",
       "installmentNumber": "Cuota",
       "creditOrder": "Orden crédito",

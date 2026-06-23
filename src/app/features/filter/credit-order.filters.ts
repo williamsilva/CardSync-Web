@@ -16,7 +16,6 @@ export type CreditOrderFiltersState = {
   creditOrderDate: string | string[] | null;
 
   rvNumber: string | null;
-  pvOriginal: string | null;
 
   modality: ModalityEnum[] | null;
 
@@ -57,7 +56,6 @@ export function createEmptyCreditOrderFiltersState(): CreditOrderFiltersState {
     creditOrderDate: null,
 
     rvNumber: null,
-    pvOriginal: null,
 
     modality: null,
 
@@ -98,7 +96,6 @@ export function resetCreditOrderAdvancedFilters(filters: CreditOrderAdvancedFilt
   filters.periodCreditOrderDate.set(empty.periodCreditOrderDate);
 
   filters.rvNumber.set(empty.rvNumber);
-  filters.pvOriginal.set(empty.pvOriginal);
 
   filters.modality.set(empty.modality);
 

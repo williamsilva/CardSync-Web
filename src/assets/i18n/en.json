@@ -2580,7 +2580,6 @@
       "acquirer": "Acquirer",
       "installment": "Installment",
       "grossValue": "Gross value",
-      "pvOriginal": "Original PV",
       "liquidValue": "Net value",
       "installmentNumber": "Installment",
       "creditOrder": "Credit order",

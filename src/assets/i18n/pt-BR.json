@@ -1817,7 +1817,6 @@
       "acquirer": "Adquirente",
       "installment": "Parcela",
       "grossValue": "Valor Bruto",
-      "pvOriginal": "Pv Original",
       "liquidValue": "Valor Líquido",
       "installmentNumber" :"Parcela",
       "creditOrder": "Ordem Crédito",

@@ -1140,7 +1140,6 @@ export const UI_KEYS = {
       rvNumber: 'creditOrders.fields.rvNumber',
       acquirer: 'creditOrders.fields.acquirer',
       modality: 'creditOrders.fields.modality',
-      pvOriginal: 'creditOrders.fields.pvOriginal',
       grossValue: 'creditOrders.fields.grossValue',
       liquidValue: 'creditOrders.fields.liquidValue',
       releaseDate: 'creditOrders.fields.releaseDate',
