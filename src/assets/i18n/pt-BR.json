@@ -1111,7 +1111,9 @@
       "acquirer": "Adquirente",
       "createdAt": "Cadastrado em",
       "createdBy": "Cadastrado por",
-      "establishment": "Estabelecimento"
+      "openingDate": "Data de Abertura",
+      "establishment": "Estabelecimento",
+      "closingDate": "Data de Fechamento"
     },
     "fields": {
       "typeEnum": "Tipo",
