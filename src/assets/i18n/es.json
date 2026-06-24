@@ -2349,7 +2349,8 @@
       "received": "Recibidos",
       "pending": "Pendientes",
       "allDone": "Todos recibidos",
-      "filesAbbrev": "arch."
+      "filesAbbrev": "arch.",
+      "missingEst": "sin archivo"
     },
     "summary": {
       "total": "Total importado",

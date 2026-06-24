@@ -1513,7 +1513,8 @@
       "received": "Recebidos",
       "pending": "Pendências",
       "allDone": "Todos recebidos",
-      "filesAbbrev": "arq."
+      "filesAbbrev": "arq.",
+      "missingEst": "sem arquivo"
     },
     "summary": {
       "total": "Total importado",

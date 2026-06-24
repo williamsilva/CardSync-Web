@@ -26,6 +26,12 @@ export interface ImportedFileCalendarGroupStatus {
   bank: ImportedFileCalendarGroupInfo;
 }
 
+export interface ProcessedFileEstablishmentModel {
+  pvNumber: number;
+  companyName?: string | null;
+  companyId?: string | null;
+}
+
 export interface ImportedFileCalendarItemModel {
   id: string;
   file: string;
@@ -37,6 +43,7 @@ export interface ImportedFileCalendarItemModel {
   status: FileProcessingStatus;
   dateFile?: string | null;
   dateImport: string;
+  establishments?: ProcessedFileEstablishmentModel[] | null;
 }
 
 export interface ImportedFileCalendarDayModel {

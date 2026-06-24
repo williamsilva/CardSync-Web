@@ -93,7 +93,7 @@
               type="button"
               class="calendar-day"
               (click)="selectDay(day)"
-              [class.is-future]="day.future"
+              [class.is-future]="isDayFuture(day)"
               [ngClass]="overallDayClass(day)"
               [class.is-selected]="selectedDay()?.date === day.date"
             >
@@ -103,7 +103,7 @@
                   'importedFilesCalendar.files' | translate: { count: day.totalFiles }
                 }}</span>
               }
-              @if (!day.future) {
+              @if (!isDayFuture(day)) {
                 <div class="day-groups">
                   <span
                     [escape]="false"
@@ -159,7 +159,7 @@
           <strong>
             {{ 'importedFilesCalendar.files' | translate: { count: day.totalFiles } }}</strong
           >
-        } @else if (day.future) {
+        } @else if (isDayFuture(day)) {
           <strong class="no-import">{{
             'importedFilesCalendar.detail.futureDate' | translate
           }}</strong>
@@ -172,16 +172,16 @@
 
       @if (!day.hasFiles) {
         <div class="empty-detail">
-          <i [class]="day.future ? 'pi pi-clock' : 'pi pi-calendar-times'"></i>
+          <i [class]="isDayFuture(day) ? 'pi pi-clock' : 'pi pi-calendar-times'"></i>
           <div>
             <strong>{{
-              (day.future
+              (isDayFuture(day)
                 ? 'importedFilesCalendar.detail.futureDateMessage'
                 : 'importedFilesCalendar.detail.noFileMessage'
               ) | translate
             }}</strong>
             <span>{{
-              (day.future
+              (isDayFuture(day)
                 ? 'importedFilesCalendar.detail.futureDateSubMessage'
                 : 'importedFilesCalendar.detail.noFileSubMessage'
               ) | translate
@@ -203,19 +203,31 @@
               <div class="file-list">
                 @for (file of group.files; track file.id) {
                   <a [routerLink]="['../files', file.id]" class="file-row">
-                    <div class="file-main">
-                      <i class="pi pi-file"></i>
-                      <div>
-                        <strong>{{ file.file }}</strong>
-                        <span>{{ file.typeFile || file.origin || file.categoryLabel }}</span>
+                    <div class="file-row-top">
+                      <div class="file-main">
+                        <i class="pi pi-file"></i>
+                        <div>
+                          <strong>{{ file.file }}</strong>
+                          <span>{{ file.typeFile || file.origin || file.categoryLabel }}</span>
+                        </div>
+                      </div>
+                      <div class="file-meta">
+                        <span class="status-pill" [ngClass]="statusClass(file.status)">
+                          {{ 'importedFilesCalendar.status.' + file.status | translate }}
+                        </span>
+                        <small>{{ file.dateImport | date: 'HH:mm' }}</small>
                       </div>
                     </div>
-                    <div class="file-meta">
-                      <span class="status-pill" [ngClass]="statusClass(file.status)">
-                        {{ 'importedFilesCalendar.status.' + file.status | translate }}
-                      </span>
-                      <small>{{ file.dateImport | date: 'HH:mm' }}</small>
-                    </div>
+                    @if (file.establishments?.length) {
+                      <div class="file-establishments">
+                        @for (est of file.establishments!; track est.pvNumber) {
+                          <span
+                            class="establishment-chip"
+                            [title]="'PV ' + est.pvNumber + (est.companyName ? ' · ' + est.companyName : '')"
+                          >{{ est.companyName || ('PV ' + est.pvNumber) }}</span>
+                        }
+                      </div>
+                    }
                   </a>
                 }
               </div>

@@ -133,9 +133,18 @@ export class ImportedFilesCalendarComponent {
   protected readonly missingByType = computed<MissingByType>(() => {
     const past = (this.calendar()?.days ?? []).filter((d) => !d.future);
     return {
-      erp: past.filter((d) => this.dayGroupStatus(d, 'erp') !== 'complete'),
-      adq: past.filter((d) => this.dayGroupStatus(d, 'adq') !== 'complete'),
-      bank: past.filter((d) => this.dayGroupStatus(d, 'bank') !== 'complete'),
+      erp: past.filter((d) => {
+        const s = this.dayGroupStatus(d, 'erp');
+        return s !== 'complete' && s !== 'future';
+      }),
+      adq: past.filter((d) => {
+        const s = this.dayGroupStatus(d, 'adq');
+        return s !== 'complete' && s !== 'future';
+      }),
+      bank: past.filter((d) => {
+        const s = this.dayGroupStatus(d, 'bank');
+        return s !== 'complete' && s !== 'future';
+      }),
     };
   });
 
@@ -192,6 +201,7 @@ export class ImportedFilesCalendarComponent {
     group: 'erp' | 'adq' | 'bank',
   ): FileGroupStatus | 'future' {
     if (day.future) return 'future';
+    if (day.date >= this.adqCutoffDate()) return 'future';
     if (day.groupStatus) return day.groupStatus[group].status;
     if (group === 'erp') return day.erpFiles > 0 ? 'complete' : 'missing';
     if (group === 'adq') return day.adqFiles > 0 ? 'complete' : 'missing';
@@ -277,7 +287,9 @@ export class ImportedFilesCalendarComponent {
 
     const rows: string[] = [
       row(`<b>${label}</b> &mdash; ${statusLabel}`),
-      row(`<span style="opacity:.75;font-size:.85em">${t('received')}: ${info.received} / ${status === 'complete' ? info.received : info.expected}</span>`),
+      row(
+        `<span style="opacity:.75;font-size:.85em">${t('received')}: ${info.received} / ${status === 'complete' ? info.received : info.expected}</span>`,
+      ),
     ];
 
     const activeEntities = info.entities.filter(
@@ -293,7 +305,9 @@ export class ImportedFilesCalendarComponent {
             : 'var(--p-red-500)';
       const fallbackIcon = status === 'complete' ? '✓' : status === 'partial' ? '◑' : '✗';
       const fallbackDetail = info.received > 0 ? ` (${info.received} ${t('filesAbbrev')})` : '';
-      rows.push(row(`<span style="color:${fallbackColor}">${fallbackIcon}${fallbackDetail}</span>`));
+      rows.push(
+        row(`<span style="color:${fallbackColor}">${fallbackIcon}${fallbackDetail}</span>`),
+      );
     } else {
       for (const e of activeEntities) {
         const icon = e.status === 'complete' ? '✓' : e.status === 'partial' ? '◑' : '✗';
@@ -316,27 +330,49 @@ export class ImportedFilesCalendarComponent {
         const renderSubFile = (sf: string, sfColor: string) => {
           const dashIdx = sf.indexOf(' - ');
           const account = dashIdx >= 0 ? sf.slice(0, dashIdx) : sf;
-          const company = dashIdx >= 0 ? sf.slice(dashIdx + 3) : null;
+          const companyPart = dashIdx >= 0 ? sf.slice(dashIdx + 3) : null;
           rows.push(
-            row(`<span style="color:${sfColor};opacity:.8;padding-left:1.2em;font-size:.85em">↳ ${account}</span>`),
+            row(
+              `<span style="color:${sfColor};opacity:.8;padding-left:1.2em;font-size:.85em">↳ ${account}</span>`,
+            ),
           );
-          if (company) {
-            rows.push(
-              row(`<span style="color:${sfColor};opacity:.65;padding-left:2.2em;font-size:.8em">${company}</span>`),
-            );
+          if (companyPart) {
+            for (const company of companyPart.split(' | ')) {
+              rows.push(
+                row(
+                  `<span style="color:${sfColor};opacity:.65;padding-left:2.2em;font-size:.8em">${company}</span>`,
+                ),
+              );
+            }
           }
         };
 
         for (const pf of e.presentFiles ?? []) {
           renderSubFile(pf, 'var(--p-green-500)');
         }
-        for (const mf of e.missingFiles ?? []) {
+
+        const missingSubtypes = (e.missingFiles ?? []).filter((mf) => !mf.startsWith('PV '));
+        const missingEsts = (e.missingFiles ?? []).filter((mf) => mf.startsWith('PV '));
+
+        for (const mf of missingSubtypes) {
           renderSubFile(mf, color);
+        }
+        if (missingEsts.length > 0) {
+          if ((e.presentFiles ?? []).length > 0 || missingSubtypes.length > 0) {
+            rows.push(
+              row(
+                `<span style="color:${color};opacity:.5;font-size:.78em;padding-left:1em">— ${t('missingEst')}</span>`,
+              ),
+            );
+          }
+          for (const mf of missingEsts) {
+            renderSubFile(mf, color);
+          }
         }
       }
     }
 
-    return `<div style="line-height:1.8;width:420px">${rows.join('')}</div>`;
+    return `<div style="line-height:1.8;width:500px">${rows.join('')}</div>`;
   }
 
   protected navigateToFiles(): void {
@@ -356,6 +392,7 @@ export class ImportedFilesCalendarComponent {
 
   protected overallDayClass(day: ImportedFileCalendarDayModel): Record<string, boolean> {
     if (day.future) return {};
+    if (day.date >= this.adqCutoffDate()) return {};
     const erp = this.dayGroupStatus(day, 'erp');
     const adq = this.dayGroupStatus(day, 'adq');
     const bank = this.dayGroupStatus(day, 'bank');
@@ -381,6 +418,15 @@ export class ImportedFilesCalendarComponent {
     const newMonth = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
     this.selectedMonth.set(newMonth);
     this.facade.loadCalendar(newMonth);
+  }
+
+  protected isDayFuture(day: ImportedFileCalendarDayModel): boolean {
+    return day.future || day.date >= this.adqCutoffDate();
+  }
+
+  private adqCutoffDate(): string {
+    const now = new Date();
+    return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
   }
 
   private currentMonth(): string {

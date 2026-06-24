@@ -2375,7 +2375,8 @@
       "received": "Received",
       "pending": "Pending",
       "allDone": "All received",
-      "filesAbbrev": "files"
+      "filesAbbrev": "files",
+      "missingEst": "no file"
     },
     "summary": {
       "total": "Total imported",
