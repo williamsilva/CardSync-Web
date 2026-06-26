@@ -231,7 +231,7 @@
         @for (group of fileGroups(); track group.category) {
           <p class="cs-audit__file-category">{{ group.category }}</p>
           <ul class="cs-audit__list">
-            @for (file of group.files; track file.date + file.name; let odd = $odd) {
+            @for (file of group.files; track $index; let odd = $odd) {
               <li class="cs-audit__list-item" [class.cs-audit__list-item--odd]="odd">
                 <span class="cs-audit__list-name">{{ file.name }}</span>
                 <div class="cs-audit__list-actions">

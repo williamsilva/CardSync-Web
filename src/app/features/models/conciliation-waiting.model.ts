@@ -22,7 +22,30 @@ export interface ErpAcquirerFieldDiffModel {
   different: boolean;
 }
 
-export interface ReconcileBankResultModel {}
+export interface ReconcileBankResultModel {
+  releasesAnalyzed: number;
+  releasesReconciled: number;
+  releasesWithoutMatch: number;
+  releasesKeptPending: number;
+  creditOrdersReconciled: number;
+  installmentsReconciled: number;
+  totalReleaseValueReconciled: number;
+  totalCreditOrderValueReconciled: number;
+  totalInstallmentValueReconciled: number;
+}
+
+export interface ReconcileSalesSummaryCreditOrderResultModel {
+  summariesAnalyzed: number;
+  summariesReconciled: number;
+  summariesPartiallyReconciled: number;
+  summariesPending: number;
+  summariesBlockedByPreviousStep: number;
+  summariesWithoutCreditOrders: number;
+  generatedCreditOrders: number;
+  creditOrdersAnalyzed: number;
+  totalGrossValueReconciled: number;
+  totalGrossValuePending: number;
+}
 
 export interface ReconcileFeesResultModel {
   okRates: number;

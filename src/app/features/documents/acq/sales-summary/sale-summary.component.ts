@@ -34,6 +34,7 @@ import { PageHeaderComponent } from '@shared/features/page-header/page-header.co
 import { AdjustmentTableComponent } from './adjustments-table/adjustments-table.component';
 import { CreditOrdersTableComponent } from './credit-orders-table/credit-orders-table.component';
 import { CsColumnFilterShellComponent } from '@features/list-base/cs-column-filter-shell.component';
+import { CsAdvancedTextFilterComponent } from '@features/list-base/cs-advanced-text-filter.component';
 import { CsAdvancedPeriodDateFilterComponent } from '@features/list-base/cs-advanced-period-date-filter.component';
 import { CsAdvancedMultiselectFilterComponent } from '@features/list-base/cs-advanced-multiselect-filter.component';
 import { CsAdvancedFilterItemTemplateDirective } from '@features/list-base/cs-advanced-filter-item-template.directive';
@@ -108,6 +109,7 @@ import {
     AdjustmentTableComponent,
     CreditOrdersTableComponent,
     CsColumnFilterShellComponent,
+    CsAdvancedTextFilterComponent,
     CsAdvancedPeriodDateFilterComponent,
     CsAdvancedMultiselectFilterComponent,
     CsAdvancedFilterItemTemplateDirective,

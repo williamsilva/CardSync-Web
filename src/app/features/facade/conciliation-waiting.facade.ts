@@ -6,20 +6,21 @@ import { I18nService } from '@core/i18n/i18n.service';
 import { ToastService } from '@core/toast/toast.service';
 import { TransactionsTotalsModel } from '@models/transactionsTotalsModel';
 import { ListQueryDto } from '@shared/features/list-query/list-query.types';
-import { ConciliationWaitingApiService } from '@features/service/conciliation-waiting.api.service';
 import { ConciliationWaitingAdvancedFilters } from '@features/filter/conciliation-waiting.filter';
+import { ConciliationWaitingApiService } from '@features/service/conciliation-waiting.api.service';
 import {
   ErpAcquirerTruthSource,
   ErpUpdateIdentityRequest,
-  ErpCancellationReprocessRequest,
-  ErpCancellationReprocessResult,
   ConciliationWaitingModel,
   ReconcileFeesResultModel,
   ReconcileBankResultModel,
   ErpAcquirerComparisonModel,
+  ErpCancellationReprocessResult,
+  ErpCancellationReprocessRequest,
   ReconcileErpAcquirerResultModel,
   ErpAcquirerResolutionResultModel,
   ErpAcquirerBatchResolutionResultModel,
+  ReconcileSalesSummaryCreditOrderResultModel,
 } from '@models/conciliation-waiting.model';
 
 export type ConciliationErpVsAcquirerView =
@@ -170,7 +171,7 @@ export class ConciliationWaitingFacade {
   reconcileErpVsAcquirer(): Observable<ReconcileErpAcquirerResultModel> {
     return this.api.reconcileErpVsAcquirer().pipe(
       tap((result) => {
-        this.showReconciliationResultErpAcquirerToast(result);
+        //this.showReconciliationResultErpAcquirerToast(result);
       }),
     );
   }
@@ -178,7 +179,7 @@ export class ConciliationWaitingFacade {
   reconcileManualSwapped(): Observable<ReconcileErpAcquirerResultModel> {
     return this.api.reconcileManualSwapped().pipe(
       tap((result) => {
-        this.showReconciliationResultErpAcquirerToast(result);
+        //this.showReconciliationResultErpAcquirerToast(result);
       }),
     );
   }
@@ -186,7 +187,7 @@ export class ConciliationWaitingFacade {
   reconcileFees(): Observable<ReconcileFeesResultModel> {
     return this.api.reconcileFees().pipe(
       tap((result) => {
-        this.showReconciliationResultFeesToast(result);
+        //this.showReconciliationResultFeesToast(result);
       }),
     );
   }
@@ -202,7 +203,19 @@ export class ConciliationWaitingFacade {
   reprocessErpCancellations(
     request: ErpCancellationReprocessRequest,
   ): Observable<ErpCancellationReprocessResult> {
-    return this.api.reprocessErpCancellations(request);
+    return this.api.reprocessErpCancellations(request).pipe(
+      tap((result) => {
+        //this.showCancellationReprocessToast(result)
+      }),
+    );
+  }
+
+  reconcileSalesSummaryCreditOrder(): Observable<ReconcileSalesSummaryCreditOrderResultModel> {
+    return this.api.reconcileSalesSummaryCreditOrder().pipe(
+      tap((result) => {
+        // this.showSalesSummaryCreditOrderToast(result)
+      }),
+    );
   }
 
   private searchByView(view: ConciliationErpVsAcquirerView, q: ConciliationQuery) {
@@ -322,6 +335,42 @@ export class ConciliationWaitingFacade {
       result.skippedWithoutAcquire > 0 ||
       result.divergentRates > 0 ||
       result.missingValidContracts > 0
+    );
+  }
+
+  private showSalesSummaryCreditOrderToast(
+    result: ReconcileSalesSummaryCreditOrderResultModel,
+  ): void {
+    const summary = this.i18n.tUi('conciliation.reconciliationFinalizedTitle');
+    const detail = [
+      `${this.i18n.tUi('conciliation.result.analyzed')}: ${this.formatInteger(result.summariesAnalyzed)}`,
+      `${this.i18n.tUi('conciliation.result.matched')}: ${this.formatInteger(result.summariesReconciled)}`,
+      `${this.i18n.tUi('conciliation.result.partiallyReconciled')}: ${this.formatInteger(result.summariesPartiallyReconciled)}`,
+      `${this.i18n.tUi('conciliation.result.pending')}: ${this.formatInteger(result.summariesPending)}`,
+      `${this.i18n.tUi('conciliation.result.generatedCreditOrders')}: ${this.formatInteger(result.generatedCreditOrders)}`,
+    ].join(' • ');
+    const life = 9000;
+
+    if (result.summariesReconciled > 0 || result.generatedCreditOrders > 0) {
+      this.toast.success(summary, detail, life);
+    } else if (result.summariesPending > 0 || result.summariesWithoutCreditOrders > 0) {
+      this.toast.warn(summary, detail, life);
+    } else {
+      this.toast.info(summary, detail, life);
+    }
+  }
+
+  private showCancellationReprocessToast(result: ErpCancellationReprocessResult): void {
+    this.toast.success(
+      this.i18n.tUi('conciliation.cancellationReprocess.successTitle'),
+      this.i18n.tUi('conciliation.cancellationReprocess.successDetail', {
+        acq: result.acqSalesCancelled,
+        erp: result.erpSalesCancelled,
+        linked: result.erpLinkedBeforeCancel,
+        installments: result.erpInstallmentsCancelled,
+        skipped: result.skippedAlreadyCancelled,
+      }),
+      12000,
     );
   }
 

@@ -46,9 +46,6 @@ export function normalizeAdjustmentStatusEnum(
     case AdjustmentStatusEnum.FAVORED_CLIENT:
       return AdjustmentStatusEnum.FAVORED_CLIENT;
 
-    case AdjustmentStatusEnum.FAVORED_CLIENT:
-      return AdjustmentStatusEnum.FAVORED_CLIENT;
-
     case AdjustmentStatusEnum.FAVORED_COMPANY:
       return AdjustmentStatusEnum.FAVORED_COMPANY;
 

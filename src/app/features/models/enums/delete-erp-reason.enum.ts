@@ -5,7 +5,7 @@ export enum DeleteErpReasonEnum {
   NULL = 'NULL',
   OTHER = 'OTHER',
   UNDONE = 'UNDONE',
-  DELETED = 'DELETED',
+  REVERSED = 'REVERSED',
   DUPLICITY = 'DUPLICITY',
   CANCELED = 'CANCELED',
   INVALID_DATA = 'INVALID_DATA',
@@ -23,7 +23,7 @@ export const STATUS_CODE_MAP: Record<number, DeleteErpReasonEnum> = {
   4: DeleteErpReasonEnum.CV_NOT_FOUND_ERP,
   5: DeleteErpReasonEnum.INVALID_DATA,
   6: DeleteErpReasonEnum.CANCELED,
-  7: DeleteErpReasonEnum.DELETED,
+  7: DeleteErpReasonEnum.REVERSED,
   8: DeleteErpReasonEnum.TRANSACTION_ALREADY_CONCILIATED,
   9: DeleteErpReasonEnum.OTHER,
 };
@@ -52,9 +52,6 @@ export function normalizeDeleteErpReasonEnum(
     case DeleteErpReasonEnum.CV_NOT_FOUND_ERP:
       return DeleteErpReasonEnum.CV_NOT_FOUND_ERP;
 
-    case DeleteErpReasonEnum.CV_NOT_FOUND_ERP:
-      return DeleteErpReasonEnum.CV_NOT_FOUND_ERP;
-
     case DeleteErpReasonEnum.INVALID_DATA:
       return DeleteErpReasonEnum.INVALID_DATA;
 
@@ -64,8 +61,8 @@ export function normalizeDeleteErpReasonEnum(
     case DeleteErpReasonEnum.OTHER:
       return DeleteErpReasonEnum.OTHER;
 
-    case DeleteErpReasonEnum.DELETED:
-      return DeleteErpReasonEnum.DELETED;
+    case DeleteErpReasonEnum.REVERSED:
+      return DeleteErpReasonEnum.REVERSED;
 
     case DeleteErpReasonEnum.TRANSACTION_ALREADY_CONCILIATED:
       return DeleteErpReasonEnum.TRANSACTION_ALREADY_CONCILIATED;
@@ -95,7 +92,7 @@ export function deleteErpReasonEnumSeverity(value: DeleteErpReasonInput): CsTagT
     case DeleteErpReasonEnum.CANCELED:
       return 'info';
 
-    case DeleteErpReasonEnum.DELETED:
+    case DeleteErpReasonEnum.REVERSED:
       return 'error';
 
     case DeleteErpReasonEnum.OTHER:
@@ -129,8 +126,8 @@ export function deleteErpReasonEnumLabel(value: DeleteErpReasonInput, i18n: I18n
     case DeleteErpReasonEnum.CANCELED:
       return i18n.tUi('enum.deleteErpReasonEnum.canceled');
 
-    case DeleteErpReasonEnum.DELETED:
-      return i18n.tUi('enum.deleteErpReasonEnum.deleted');
+    case DeleteErpReasonEnum.REVERSED:
+      return i18n.tUi('enum.deleteErpReasonEnum.reversed');
 
     case DeleteErpReasonEnum.TRANSACTION_ALREADY_CONCILIATED:
       return i18n.tUi('enum.deleteErpReasonEnum.transaction_already_conciliated');
@@ -146,13 +143,13 @@ export function deleteErpReasonEnumLabel(value: DeleteErpReasonInput, i18n: I18n
 export function allDeleteErpReasonStatusEnum(): DeleteErpReasonEnum[] {
   return [
     DeleteErpReasonEnum.UNDONE,
+    DeleteErpReasonEnum.REVERSED,
     DeleteErpReasonEnum.DUPLICITY,
-    DeleteErpReasonEnum.CV_NOT_FOUND_ADQ,
     DeleteErpReasonEnum.CANCELED,
-    DeleteErpReasonEnum.DELETED,
-    DeleteErpReasonEnum.CV_NOT_FOUND_ERP,
     DeleteErpReasonEnum.INVALID_DATA,
     DeleteErpReasonEnum.TRANSACTION_ALREADY_CONCILIATED,
+    DeleteErpReasonEnum.CV_NOT_FOUND_ADQ,
+    DeleteErpReasonEnum.CV_NOT_FOUND_ERP,
     DeleteErpReasonEnum.OTHER,
   ];
 }

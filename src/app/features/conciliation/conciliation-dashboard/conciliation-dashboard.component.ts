@@ -8,23 +8,24 @@ import { TranslateModule } from '@ngx-translate/core';
 import { ProgressBarModule } from 'primeng/progressbar';
 
 import { CsTagComponent } from '@shared/ui';
-import { formatCurrency } from '../conciliation-ui';
-import { CsCurrencyPipe } from '@shared/pipes/cs-currency.pipe';
 import { PERMISSIONS } from '@core/auth/permissions.constants';
-import { I18nService } from '@core/i18n/i18n.service';
-import { ToastService } from '@core/toast/toast.service';
+import { CsCurrencyPipe } from '@shared/pipes/cs-currency.pipe';
 import { PermissionService } from '@core/auth/permission.service';
 import { ConciliationDashboardModel } from '@models/conciliation.models';
 import { ConciliationService } from '@features/service/conciliation.service';
+import { FileProcessingService } from '@features/service/file-processing.service';
 import { ConciliationWaitingFacade } from '@features/facade/conciliation-waiting.facade';
+import { FinancialReconciliationPipelineResultModel } from '@models/file-processing.models';
 import {
   ReconcileBankResultModel,
-  ReconcileErpAcquirerResultModel,
   ReconcileFeesResultModel,
+  ErpCancellationReprocessResult,
+  ReconcileErpAcquirerResultModel,
+  ReconcileSalesSummaryCreditOrderResultModel,
 } from '@models/conciliation-waiting.model';
 import {
-  CancellationReprocessDialogComponent,
   CancellationReprocessPayload,
+  CancellationReprocessDialogComponent,
 } from './cancellation-reprocess-dialog.component';
 
 @Component({
@@ -44,22 +45,43 @@ import {
   ],
 })
 export class ConciliationDashboardComponent {
-  private readonly i18n = inject(I18nService);
-  private readonly toast = inject(ToastService);
-  private readonly service = inject(ConciliationService);
   private readonly perms = inject(PermissionService);
+  private readonly service = inject(ConciliationService);
+  private readonly facade = inject(ConciliationWaitingFacade);
+  private readonly fileProcessingService = inject(FileProcessingService);
+
+  protected readonly loading = signal(false);
+  protected readonly reconcilingBank = signal(false);
+  protected readonly reconcilingFees = signal(false);
+  protected readonly runningPipeline = signal(false);
+  protected readonly reconcileManualSwapped = signal(false);
+  protected readonly reconcilingErpVsAcquirer = signal(false);
+  protected readonly reprocessingCancellations = signal(false);
+  protected readonly cancellationReprocessDialogVisible = signal(false);
+
+  protected readonly dashboard = signal<ConciliationDashboardModel | null>(null);
+  protected readonly reconcileBankResult = signal<ReconcileBankResultModel | null>(null);
+  protected readonly reconcileFeesResult = signal<ReconcileFeesResultModel | null>(null);
+  protected readonly reconcileErpAcqResult = signal<ReconcileErpAcquirerResultModel | null>(null);
+  protected readonly pipelineResult = signal<FinancialReconciliationPipelineResultModel | null>(
+    null,
+  );
+  protected readonly reconcileManualSwappedResult = signal<ReconcileErpAcquirerResultModel | null>(
+    null,
+  );
+  protected readonly reconcilingCreditOrder = signal(false);
+  protected readonly cancellationReprocessResult = signal<ErpCancellationReprocessResult | null>(
+    null,
+  );
+  protected readonly reconcileSalesSummaryCreditOrderResult =
+    signal<ReconcileSalesSummaryCreditOrderResultModel | null>(null);
 
   protected readonly canProcess = computed(() =>
     this.perms.hasSupportOr(PERMISSIONS.FILE_PROCESSING.PROCESS),
   );
 
-  protected readonly loading = signal(false);
-  protected readonly reconcilingBank = signal(false);
-  protected readonly reconcilingFees = signal(false);
-  protected readonly reconcileManualSwapped = signal(false);
-  protected readonly reconcilingErpVsAcquirer = signal(false);
-  protected readonly reprocessingCancellations = signal(false);
-  protected readonly cancellationReprocessDialogVisible = signal(false);
+  protected readonly summary = computed(() => this.dashboard()?.summary ?? null);
+  protected readonly comparison = computed(() => this.dashboard()?.erpVsAcquirer ?? null);
 
   protected readonly anyProcessing = computed(
     () =>
@@ -67,19 +89,10 @@ export class ConciliationDashboardComponent {
       this.reconcilingFees() ||
       this.reconcileManualSwapped() ||
       this.reconcilingErpVsAcquirer() ||
-      this.reprocessingCancellations(),
+      this.reprocessingCancellations() ||
+      this.runningPipeline() ||
+      this.reconcilingCreditOrder(),
   );
-
-  protected readonly reconcileBankResult = signal<ReconcileBankResultModel | null>(null);
-  protected readonly reconcileErpAcqResult = signal<ReconcileErpAcquirerResultModel | null>(null);
-  protected readonly reconcileManualSwappedResult = signal<ReconcileErpAcquirerResultModel | null>(null);
-  protected readonly reconcileFeesResult = signal<ReconcileFeesResultModel | null>(null);
-
-  readonly facade = inject(ConciliationWaitingFacade);
-  protected readonly dashboard = signal<ConciliationDashboardModel | null>(null);
-
-  protected readonly summary = computed(() => this.dashboard()?.summary ?? null);
-  protected readonly comparison = computed(() => this.dashboard()?.erpVsAcquirer ?? null);
 
   constructor() {
     this.reload();
@@ -161,33 +174,39 @@ export class ConciliationDashboardComponent {
   protected confirmCancellationReprocess(payload: CancellationReprocessPayload): void {
     if (this.reprocessingCancellations()) return;
     this.reprocessingCancellations.set(true);
+    this.cancellationReprocessResult.set(null);
 
     this.facade
       .reprocessErpCancellations({ year: payload.year, month: payload.month })
       .pipe(finalize(() => this.reprocessingCancellations.set(false)))
       .subscribe({
         next: (result) => {
+          this.cancellationReprocessResult.set(result);
           this.cancellationReprocessDialogVisible.set(false);
-          this.toast.success(
-            this.i18n.tUi('conciliation.cancellationReprocess.successTitle'),
-            this.i18n.tUi('conciliation.cancellationReprocess.successDetail', {
-              acq: result.acqSalesCancelled,
-              erp: result.erpSalesCancelled,
-              linked: result.erpLinkedBeforeCancel,
-              installments: result.erpInstallmentsCancelled,
-              skipped: result.skippedAlreadyCancelled,
-            }),
-            12000,
-          );
-        },
-        error: () => {
-          this.toast.error(
-            this.i18n.tUi('conciliation.cancellationReprocess.errorTitle'),
-            this.i18n.tUi('conciliation.cancellationReprocess.errorDetail'),
-          );
         },
       });
   }
 
-  protected readonly formatCurrency = formatCurrency;
+  protected processReconcileSalesSummaryCreditOrder(): void {
+    if (this.reconcilingCreditOrder()) return;
+    this.reconcilingCreditOrder.set(true);
+    this.reconcileSalesSummaryCreditOrderResult.set(null);
+
+    this.facade
+      .reconcileSalesSummaryCreditOrder()
+      .pipe(finalize(() => this.reconcilingCreditOrder.set(false)))
+      .subscribe({
+        next: (result) => this.reconcileSalesSummaryCreditOrderResult.set(result),
+      });
+  }
+
+  protected runFullPipeline(): void {
+    this.runningPipeline.set(true);
+    this.pipelineResult.set(null);
+    this.fileProcessingService.runFinancialPipeline().subscribe({
+      next: (result) => this.pipelineResult.set(result),
+      error: () => this.runningPipeline.set(false),
+      complete: () => this.runningPipeline.set(false),
+    });
+  }
 }

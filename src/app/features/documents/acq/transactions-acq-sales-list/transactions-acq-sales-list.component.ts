@@ -962,7 +962,7 @@ export class TransactionsAcquirersSalesListComponent
       tid: this.tid().trim() || undefined,
       cvNsu: this.cvNsu().trim() || undefined,
       machine: this.machine().trim() || undefined,
-      rvNumber: this.rvNumber().trim() || undefined,
+      rvNumber: this.rvNumber() || undefined,
       cardNumber: this.cardNumber().trim() || undefined,
       authorization: this.authorization().trim() || undefined,
 

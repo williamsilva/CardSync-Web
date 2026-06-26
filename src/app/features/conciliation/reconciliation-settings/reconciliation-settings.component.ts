@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component, computed, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
@@ -20,7 +19,6 @@ import { ReconciliationSettingsApiService } from '@features/service/reconciliati
   styleUrl: './reconciliation-settings.component.scss',
   templateUrl: './reconciliation-settings.component.html',
   imports: [
-    CommonModule,
     CardModule,
     ButtonModule,
     TranslateModule,
@@ -36,6 +34,11 @@ export class ReconciliationSettingsComponent {
   private readonly perms = inject(PermissionService);
   private readonly service = inject(ReconciliationSettingsApiService);
 
+  protected readonly MIN_DAYS_LOOKBACK = 0;
+  protected readonly MAX_DAYS_LOOKBACK = 365;
+  protected readonly MIN_LOOKBACK_MONTHS = 1;
+  protected readonly MAX_LOOKBACK_MONTHS = 120;
+
   protected readonly loading = signal(false);
   protected readonly saving = signal(false);
 
@@ -44,9 +47,18 @@ export class ReconciliationSettingsComponent {
   );
 
   readonly form = this.fb.group({
-    erpAcquirerPreviousDaysLookback: [0, [Validators.required, Validators.min(0), Validators.max(365)]],
-    erpAcquirerFutureDaysLookback: [0, [Validators.required, Validators.min(0), Validators.max(365)]],
-    reconciliationLookbackMonths: [6, [Validators.required, Validators.min(1), Validators.max(36)]],
+    erpAcquirerPreviousDaysLookback: [
+      this.MIN_DAYS_LOOKBACK,
+      [Validators.required, Validators.min(this.MIN_DAYS_LOOKBACK), Validators.max(this.MAX_DAYS_LOOKBACK)],
+    ],
+    erpAcquirerFutureDaysLookback: [
+      this.MIN_DAYS_LOOKBACK,
+      [Validators.required, Validators.min(this.MIN_DAYS_LOOKBACK), Validators.max(this.MAX_DAYS_LOOKBACK)],
+    ],
+    reconciliationLookbackMonths: [
+      this.MAX_LOOKBACK_MONTHS,
+      [Validators.required, Validators.min(this.MIN_LOOKBACK_MONTHS), Validators.max(this.MAX_LOOKBACK_MONTHS)],
+    ],
   });
 
   constructor() {
@@ -81,7 +93,7 @@ export class ReconciliationSettingsComponent {
       .updateSettings({
         erpAcquirerPreviousDaysLookback: v.erpAcquirerPreviousDaysLookback ?? 0,
         erpAcquirerFutureDaysLookback: v.erpAcquirerFutureDaysLookback ?? 0,
-        reconciliationLookbackMonths: v.reconciliationLookbackMonths ?? 6,
+        reconciliationLookbackMonths: v.reconciliationLookbackMonths ?? this.MAX_LOOKBACK_MONTHS,
       })
       .subscribe({
         next: () => {

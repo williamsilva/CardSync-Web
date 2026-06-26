@@ -623,7 +623,7 @@
       "transaction_already_conciliated": "Transaction already reconciled",
       "invalid_data": "Invalid data",
       "canceled": "Canceled",
-      "deleted": "Deleted",
+      "reversed": "Reversed",
       "other": "Other",
       "unknown": "Unknown"
     },
@@ -1814,7 +1814,10 @@
       "divergentRates": "Divergent rates",
       "updatedErpSales": "Updated ERP sales",
       "missingValidContracts": "Missing contracts",
-      "skippedWithoutAcquire": "Skipped without acquirer"
+      "skippedWithoutAcquire": "Skipped without acquirer",
+      "partiallyReconciled": "Partially reconciled",
+      "pending": "Pending",
+      "generatedCreditOrders": "Generated orders"
     },
     "finishedTitle": "Batch finalized",
     "errorTitle": "Error processing batch",
@@ -1983,7 +1986,7 @@
       "erpAcquirerFutureDaysLookback": "Future days in acquirer",
       "erpAcquirerFutureDaysLookbackHint": "Defines how many days after the ERP sale date the acquirer may have recorded the transaction. Set to 0 to disable this filter.",
       "reconciliationLookbackMonths": "Reconciliation lookback months",
-      "reconciliationLookbackMonthsHint": "Defines how many months prior to the current date should be searched for transactions during reconciliation. Default: 6 months.",
+      "reconciliationLookbackMonthsHint": "Defines how many months prior to the current date should be searched for transactions during reconciliation. Default: 120 months.",
       "saved": "Settings saved successfully."
     },
     "contractAudit": {
@@ -2031,6 +2034,127 @@
         "rateDivergence": "Fee divergence",
         "valueDivergence": "Value divergence",
         "missingAcquirerSale": "Missing acquirer sale"
+      }
+    },
+    "dashboard": {
+      "eyebrow": "Reconciliation",
+      "subtitle": "Executive view of ERP sales, acquirer, fees, bank, debits and chargebacks.",
+      "completed": "Reconciliation completed",
+      "difference": "Difference",
+      "loadError": "Could not load indicators. Check if the reconciliation endpoint is available.",
+      "result": {
+        "analyzed": "Analyzed",
+        "matched": "Reconciled",
+        "updated": "Updated",
+        "notMatched": "Not reconciled",
+        "valueDivergences": "Value divergences",
+        "acquirerDivergences": "Acquirer divergences",
+        "ambiguousMatches": "Ambiguous matches",
+        "flagUpdated": "Flag updated",
+        "businessContextUpdated": "Context updated",
+        "skippedDivergent": "Skipped"
+      },
+      "erpVsAcquirer": {
+        "cardTitle": "ERP vs Acquirer",
+        "totalErp": "Total ERP",
+        "totalAcquirer": "Total Acquirer",
+        "matched": "Reconciled"
+      },
+      "swappedManual": {
+        "cardTitle": "Swapped Manual",
+        "pendencies": "Pending",
+        "salesCount": "{{ count }} sales",
+        "divergences": "Divergences",
+        "occurrencesCount": "{{ count }} occurrences"
+      },
+      "fees": {
+        "cardTitle": "Fees",
+        "charged": "Charged",
+        "expected": "Expected",
+        "ok": "OK",
+        "updatedErp": "ERP updated",
+        "divergent": "Divergent",
+        "missingContract": "No contract",
+        "missingAcquirer": "No acquirer"
+      },
+      "bank": {
+        "cardTitle": "Bank / CNAB",
+        "settled": "Settled",
+        "pending": "Pending",
+        "completed": "Bank reconciliation completed",
+        "releasesAnalyzed": "Releases analyzed",
+        "releasesReconciled": "Reconciled",
+        "releasesWithoutMatch": "Without match",
+        "totalReleaseValue": "Reconciled value",
+        "totalCreditOrderValue": "Credit orders value"
+      },
+      "cancellation": {
+        "cardTitle": "Reprocess ERP Cancellations",
+        "debitPending": "Pending debits",
+        "chargebackOpen": "Open chargebacks",
+        "acqCancelled": "ACQ cancelled",
+        "erpCancelled": "ERP cancelled",
+        "erpInstallments": "Installments cancelled",
+        "linkedBeforeCancel": "Linked before cancel",
+        "skippedAlready": "Already cancelled",
+        "skippedNoErp": "No ERP linked"
+      },
+      "salesSummaryCreditOrder": {
+        "cardTitle": "Sales Summary vs Credit Order",
+        "partiallyReconciled": "Partially reconciled",
+        "pending": "Pending",
+        "withoutCreditOrders": "Without credit order",
+        "generated": "Generated orders",
+        "creditOrdersAnalyzed": "Orders analyzed",
+        "totalValueReconciled": "Reconciled value",
+        "totalValuePending": "Pending value",
+        "button": "Reconcile Summary vs Credit Order"
+      },
+      "pipeline": {
+        "cardTitle": "Full Reconciliation Pipeline",
+        "description": "Runs the full financial reconciliation pipeline in sequence (ERP, Rede, Bank and reconciliations).",
+        "completed": "Pipeline completed",
+        "partiallyReconciled": "Partially reconciled",
+        "pending": "Pending",
+        "divergent": "Divergent",
+        "withoutMatch": "Without match",
+        "generated": "Generated",
+        "runButton": "Run full pipeline"
+      },
+      "kpi": {
+        "erpSales": "ERP Sales",
+        "salesCount": "{{ count }} sales",
+        "acquirerSales": "Acquirer sales",
+        "chargedFees": "Charged fees",
+        "feeDifference": "Difference",
+        "bankSettled": "Bank settled",
+        "pendencies": "Pending",
+        "debitsPendingSubtitle": "Debits and adjustments to settle",
+        "chargebackSubtitle": "Amount in dispute",
+        "divergences": "Divergences",
+        "occurrencesCount": "{{ count }} occurrences"
+      },
+      "chart": {
+        "erpVsAcquirer": "ERP vs Acquirer",
+        "matchedValue": "Reconciled value",
+        "erpLabel": "ERP",
+        "erpSubtitle": "Total imported from commercial system",
+        "acquirerLabel": "Acquirer",
+        "acquirerSubtitle": "Total reported in acquirer files",
+        "differenceSubtitle": "Value not yet equalized",
+        "shortcuts": "Analysis shortcuts",
+        "shortcutAcquirerSales": "Acquirer sales",
+        "shortcutErpSales": "ERP sales",
+        "shortcutFees": "Fees",
+        "shortcutDebits": "Debits",
+        "shortcutChargebacks": "Chargebacks",
+        "shortcutBankSettlement": "Settlement",
+        "divergencesByType": "Divergences by type",
+        "occurrencesCount": "{{ count }} occurrences",
+        "noDivergences": "No divergences found.",
+        "pendingAging": "Pending aging",
+        "pendenciesCount": "{{ count }} pending",
+        "noPendencies": "No pending items found."
       }
     },
     "fees": {

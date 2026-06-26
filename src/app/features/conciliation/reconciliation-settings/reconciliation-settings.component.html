@@ -13,12 +13,12 @@
         <div class="cs-settings-field">
           <p-floatlabel>
             <p-inputnumber
+              [allowEmpty]="false"
+              [showButtons]="true"
+              [min]="MIN_DAYS_LOOKBACK"
+              [max]="MAX_DAYS_LOOKBACK"
               inputId="erpAcquirerPreviousDaysLookback"
               formControlName="erpAcquirerPreviousDaysLookback"
-              [min]="0"
-              [max]="365"
-              [showButtons]="true"
-              [allowEmpty]="false"
             ></p-inputnumber>
             <label for="erpAcquirerPreviousDaysLookback">
               {{ 'conciliation.settings.erpAcquirerPreviousDaysLookback' | translate }}
@@ -32,12 +32,12 @@
         <div class="cs-settings-field">
           <p-floatlabel>
             <p-inputnumber
+              [allowEmpty]="false"
+              [showButtons]="true"
+              [min]="MIN_DAYS_LOOKBACK"
+              [max]="MAX_DAYS_LOOKBACK"
               inputId="erpAcquirerFutureDaysLookback"
               formControlName="erpAcquirerFutureDaysLookback"
-              [min]="0"
-              [max]="365"
-              [showButtons]="true"
-              [allowEmpty]="false"
             ></p-inputnumber>
             <label for="erpAcquirerFutureDaysLookback">
               {{ 'conciliation.settings.erpAcquirerFutureDaysLookback' | translate }}
@@ -51,12 +51,12 @@
         <div class="cs-settings-field">
           <p-floatlabel>
             <p-inputnumber
-              inputId="reconciliationLookbackMonths"
-              formControlName="reconciliationLookbackMonths"
-              [min]="1"
-              [max]="36"
               [showButtons]="true"
               [allowEmpty]="false"
+              [min]="MIN_LOOKBACK_MONTHS"
+              [max]="MAX_LOOKBACK_MONTHS"
+              inputId="reconciliationLookbackMonths"
+              formControlName="reconciliationLookbackMonths"
             ></p-inputnumber>
             <label for="reconciliationLookbackMonths">
               {{ 'conciliation.settings.reconciliationLookbackMonths' | translate }}
@@ -68,15 +68,17 @@
         </div>
       </div>
 
-      <div class="cs-settings-actions" *ngIf="canEdit()">
-        <p-button
-          type="submit"
-          icon="pi pi-save"
-          [label]="'common.save' | translate"
-          [loading]="saving()"
-          [disabled]="loading() || form.invalid"
-        ></p-button>
-      </div>
+      @if (canEdit()) {
+        <div class="cs-settings-actions">
+          <p-button
+            type="submit"
+            icon="pi pi-save"
+            [loading]="saving()"
+            [label]="'common.save' | translate"
+            [disabled]="loading() || form.invalid"
+          ></p-button>
+        </div>
+      }
     </form>
   </p-card>
 </div>

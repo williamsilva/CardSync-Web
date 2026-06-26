@@ -558,7 +558,7 @@
     "deleteErpReasonEnum": {
       "other": "Outros",
       "undone": "Desfeita",
-      "deleted": "Excluído",
+      "reversed": "Estornada",
       "canceled": "Cancelada",
       "duplicity": "Duplicidade",
       "unknown": "Desconhecido",
@@ -2201,7 +2201,10 @@
       "missingValidContracts": "Contextos atualizados",
       "skippedWithoutAcquire": "Ignorado sem adquirir",
       "acquirerDivergences": "Divergências de adquirente",
-      "businessContextUpdated": "Faltano Contratos válidos"
+      "businessContextUpdated": "Faltano Contratos válidos",
+      "partiallyReconciled": "Parcialmente conciliadas",
+      "pending": "Pendentes",
+      "generatedCreditOrders": "Ordens geradas"
     },
     "missingErp": {
       "batch": {
@@ -2365,7 +2368,7 @@
       "erpAcquirerFutureDaysLookback": "Dias futuros na adquirente",
       "erpAcquirerFutureDaysLookbackHint": "Define quantos dias após a data do ERP a adquirente pode ter registrado a transação. Use 0 para desabilitar este filtro.",
       "reconciliationLookbackMonths": "Meses retroativos para conciliação",
-      "reconciliationLookbackMonthsHint": "Define quantos meses anteriores à data atual devem ser considerados na busca de transações para conciliação. Padrão: 6 meses.",
+      "reconciliationLookbackMonthsHint": "Define quantos meses anteriores à data atual devem ser considerados na busca de transações para conciliação. Padrão: 120 meses.",
       "saved": "Configurações salvas com sucesso."
     },
     "contractAudit": {
@@ -2413,6 +2416,127 @@
         "rateDivergence": "Divergência de taxa",
         "valueDivergence": "Divergência de valor",
         "missingAcquirerSale": "Venda adquirente ausente"
+      }
+    },
+    "dashboard": {
+      "eyebrow": "Conciliação",
+      "subtitle": "Visão executiva de vendas ERP, adquirente, taxas, banco, débitos e chargebacks.",
+      "completed": "Conciliação concluída",
+      "difference": "Diferença",
+      "loadError": "Não foi possível carregar os indicadores. Verifique se o endpoint de conciliação já está disponível.",
+      "result": {
+        "analyzed": "Analisados",
+        "matched": "Conciliados",
+        "updated": "Atualizados",
+        "notMatched": "Não conciliados",
+        "valueDivergences": "Divergências valor",
+        "acquirerDivergences": "Divergências adquirente",
+        "ambiguousMatches": "Matches ambíguos",
+        "flagUpdated": "Flag atualizada",
+        "businessContextUpdated": "Contexto atualizado",
+        "skippedDivergent": "Pulados"
+      },
+      "erpVsAcquirer": {
+        "cardTitle": "ERP x Adquirente",
+        "totalErp": "Total ERP",
+        "totalAcquirer": "Total Adquirente",
+        "matched": "Conciliado"
+      },
+      "swappedManual": {
+        "cardTitle": "Swapped Manual",
+        "pendencies": "Pendências",
+        "salesCount": "{{ count }} vendas",
+        "divergences": "Divergências",
+        "occurrencesCount": "{{ count }} ocorrências"
+      },
+      "fees": {
+        "cardTitle": "Taxas",
+        "charged": "Cobradas",
+        "expected": "Esperado",
+        "ok": "OK",
+        "updatedErp": "ERP atualizados",
+        "divergent": "Divergentes",
+        "missingContract": "Sem contrato",
+        "missingAcquirer": "Sem adquirente"
+      },
+      "bank": {
+        "cardTitle": "Banco / CNAB",
+        "settled": "Liquidado",
+        "pending": "Pendente",
+        "completed": "Conciliação bancária concluída",
+        "releasesAnalyzed": "Lançamentos analisados",
+        "releasesReconciled": "Conciliados",
+        "releasesWithoutMatch": "Sem correspondência",
+        "totalReleaseValue": "Valor conciliado",
+        "totalCreditOrderValue": "Valor ordens de crédito"
+      },
+      "cancellation": {
+        "cardTitle": "Reprocessar Cancelamentos ERP",
+        "debitPending": "Débitos pendentes",
+        "chargebackOpen": "Chargebacks abertos",
+        "acqCancelled": "ACQ canceladas",
+        "erpCancelled": "ERP canceladas",
+        "erpInstallments": "Parcelas canceladas",
+        "linkedBeforeCancel": "Vinculadas antes",
+        "skippedAlready": "Já canceladas",
+        "skippedNoErp": "Sem ERP vinculado"
+      },
+      "salesSummaryCreditOrder": {
+        "cardTitle": "Resumo de Vendas x Ordem de Crédito",
+        "partiallyReconciled": "Parcialmente conciliados",
+        "pending": "Pendentes",
+        "withoutCreditOrders": "Sem ordem de crédito",
+        "generated": "Ordens geradas",
+        "creditOrdersAnalyzed": "Ordens analisadas",
+        "totalValueReconciled": "Valor conciliado",
+        "totalValuePending": "Valor pendente",
+        "button": "Conciliar Resumo x Ordem de Crédito"
+      },
+      "pipeline": {
+        "cardTitle": "Esteira Financeira Completa",
+        "description": "Executa toda a pipeline de conciliação financeira em sequência (ERP, Rede, Banco e conciliações).",
+        "completed": "Pipeline concluída",
+        "partiallyReconciled": "Parcialmente conciliados",
+        "pending": "Pendentes",
+        "divergent": "Divergentes",
+        "withoutMatch": "Sem correspondência",
+        "generated": "Gerados",
+        "runButton": "Executar esteira completa"
+      },
+      "kpi": {
+        "erpSales": "Vendas ERP",
+        "salesCount": "{{ count }} vendas",
+        "acquirerSales": "Vendas adquirente",
+        "chargedFees": "Taxas cobradas",
+        "feeDifference": "Diferença",
+        "bankSettled": "Liquidado no banco",
+        "pendencies": "Pendências",
+        "debitsPendingSubtitle": "Débitos e ajustes a liquidar",
+        "chargebackSubtitle": "Valor em disputa",
+        "divergences": "Divergências",
+        "occurrencesCount": "{{ count }} ocorrências"
+      },
+      "chart": {
+        "erpVsAcquirer": "ERP x Adquirente",
+        "matchedValue": "Valor conciliado",
+        "erpLabel": "ERP",
+        "erpSubtitle": "Total importado do sistema comercial",
+        "acquirerLabel": "Adquirente",
+        "acquirerSubtitle": "Total informado nos arquivos da adquirente",
+        "differenceSubtitle": "Valor ainda não equalizado",
+        "shortcuts": "Atalhos de análise",
+        "shortcutAcquirerSales": "Vendas adquirente",
+        "shortcutErpSales": "Vendas ERP",
+        "shortcutFees": "Taxas",
+        "shortcutDebits": "Débitos",
+        "shortcutChargebacks": "Chargebacks",
+        "shortcutBankSettlement": "Liquidação",
+        "divergencesByType": "Divergências por tipo",
+        "occurrencesCount": "{{ count }} ocorrências",
+        "noDivergences": "Nenhuma divergência encontrada.",
+        "pendingAging": "Aging de pendências",
+        "pendenciesCount": "{{ count }} pendências",
+        "noPendencies": "Nenhuma pendência encontrada."
       }
     }
   },

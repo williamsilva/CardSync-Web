@@ -105,6 +105,14 @@
         </div>
       </ng-template>
     </cs-advanced-multiselect-filter>
+
+    <cs-advanced-text-filter
+      inputId="rvNumber"
+      [value]="rvNumber()"
+      class="col-12 md:col-3 xl:col-2 p-1"
+      (valueChange)="rvNumber.set($event || '')"
+      [label]="'creditOrders.fields.rvNumber' | translate"
+    ></cs-advanced-text-filter>
   </div>
 
   <div class="grid formgrid gap-0 align-items-end">

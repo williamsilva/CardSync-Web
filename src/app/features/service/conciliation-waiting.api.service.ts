@@ -12,17 +12,18 @@ import { ConciliationWaitingAdvancedFilters } from '@features/filter/conciliatio
 import {
   ErpAcquirerTruthSource,
   ErpUpdateIdentityRequest,
-  ErpCancellationReprocessRequest,
-  ErpCancellationReprocessResult,
   ConciliationWaitingModel,
   ReconcileFeesResultModel,
   ReconcileBankResultModel,
   ErpAcquirerComparisonModel,
   ConciliationWaitingApiModel,
+  ErpCancellationReprocessResult,
+  ErpCancellationReprocessRequest,
   ReconcileErpAcquirerResultModel,
   mapConciliationWaitingApiModels,
   ErpAcquirerResolutionResultModel,
   ErpAcquirerBatchResolutionResultModel,
+  ReconcileSalesSummaryCreditOrderResultModel,
 } from '@models/conciliation-waiting.model';
 
 @Injectable({ providedIn: 'root' })
@@ -208,7 +209,7 @@ export class ConciliationWaitingApiService {
   }
 
   reconcilingBank(): Observable<ReconcileBankResultModel> {
-    return this.http.post<ReconcileFeesResultModel>(
+    return this.http.post<ReconcileBankResultModel>(
       `${this.baseUrl}/reconcile-bank`,
       {},
       { withCredentials: true },
@@ -221,6 +222,14 @@ export class ConciliationWaitingApiService {
     return this.http.post<ErpCancellationReprocessResult>(
       `${this.baseUrl}/reprocess-erp-cancellations`,
       request,
+      { withCredentials: true },
+    );
+  }
+
+  reconcileSalesSummaryCreditOrder(): Observable<ReconcileSalesSummaryCreditOrderResultModel> {
+    return this.http.post<ReconcileSalesSummaryCreditOrderResultModel>(
+      `${this.baseUrl}/reconcile-sales-summary-credit-order`,
+      {},
       { withCredentials: true },
     );
   }
