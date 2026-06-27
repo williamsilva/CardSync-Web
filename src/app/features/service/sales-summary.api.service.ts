@@ -8,7 +8,7 @@ import { HalPagedResponse } from '@core/api/page.model';
 import { TransactionsTotalsModel } from '@models/transactionsTotalsModel';
 import { ListQueryDto } from '@shared/features/list-query/list-query.types';
 import { SaleSummaryAdvancedFilters } from '@features/filter/sale-summary.filters';
-import { mapSaleSummaryApiModels, SaleSummaryApiModel } from '@models/sales-summary.model';
+import { mapSaleSummaryApiModels, SaleSummaryApiModel, SalesSummaryManualCreateInput } from '@models/sales-summary.model';
 
 @Injectable({ providedIn: 'root' })
 export class SaleSummaryApiService {
@@ -34,5 +34,9 @@ export class SaleSummaryApiService {
 
   calculateTotals(body: ListQueryDto<SaleSummaryAdvancedFilters>) {
     return this.http.post<TransactionsTotalsModel>(`${this.baseUrl}/totals`, body);
+  }
+
+  createManual(body: SalesSummaryManualCreateInput) {
+    return this.http.post<SaleSummaryApiModel>(`${this.baseUrl}/manual`, body);
   }
 }

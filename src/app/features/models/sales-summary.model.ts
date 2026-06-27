@@ -30,6 +30,42 @@ export interface SaleSummaryCreateInput {}
 
 export interface SaleSummaryUpdateInput {}
 
+export interface SalesSummaryManualTransactionInput {
+  nsu?: number | null;
+  cardNumber?: string | null;
+  authorization?: string | null;
+  referenceNumber?: string | null;
+  grossValue?: number | null;
+  discountValue?: number | null;
+  liquidValue?: number | null;
+  tipValue?: number | null;
+  saleDate?: string | null;
+  creditDate?: string | null;
+  installment?: number | null;
+  modality?: number | null;
+  flagName?: string | null;
+  tid?: string | null;
+  capture?: number | null;
+}
+
+export interface SalesSummaryManualCreateInput {
+  pvNumber: number;
+  acquirerId: string;
+  companyId?: string | null;
+  rvNumber: number;
+  rvDate: string;
+  grossValue: number;
+  discountValue?: number | null;
+  liquidValue?: number | null;
+  tipValue?: number | null;
+  rejectedValue?: number | null;
+  adjustedValue?: number | null;
+  numberCvNsu?: number | null;
+  firstInstallmentCreditDate?: string | null;
+  summaryType?: string | null;
+  transactions?: SalesSummaryManualTransactionInput[];
+}
+
 export interface SaleSummaryApiModel {
   id: string;
   rvDate: string;

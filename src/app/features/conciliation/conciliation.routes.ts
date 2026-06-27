@@ -73,6 +73,16 @@ export const CONCILIATION_ROUTES: Routes = [
       ),
   },
   {
+    path: 'manual-sales-summary',
+    title: 'routes.conciliation.manualSalesSummary.title',
+    canActivate: [permissionGuard],
+    data: { requireAll: false, redirectTo: '/forbidden', permissions: defaultPermissions },
+    loadComponent: () =>
+      import('./manual-sales-summary/manual-sales-summary.component').then(
+        (m) => m.ManualSalesSummaryComponent,
+      ),
+  },
+  {
     path: 'contract-audit',
     title: 'routes.conciliation.contractAudit.title',
     canActivate: [permissionGuard],

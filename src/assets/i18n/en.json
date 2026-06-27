@@ -106,6 +106,9 @@
       "settings": {
         "title": "Reconciliation Settings"
       },
+      "manualSalesSummary": {
+        "title": "Manual Sales Summary"
+      },
       "divergences": {
         "title": "Operational divergences"
       }
@@ -234,7 +237,8 @@
       "settings": "Settings",
       "erpMissingAcquirer": "Not found in acquirer",
       "acquirerMissingErp": "Not found in ERP",
-      "erpVsAcquirerDivergences": "Other unreconciled"
+      "erpVsAcquirerDivergences": "Other unreconciled",
+      "manualSalesSummary": "Manual Sales Summary"
     },
     "adjustment": {
       "title": "Adjustments",
@@ -1988,6 +1992,71 @@
       "reconciliationLookbackMonths": "Reconciliation lookback months",
       "reconciliationLookbackMonthsHint": "Defines how many months prior to the current date should be searched for transactions during reconciliation. Default: 120 months.",
       "saved": "Settings saved successfully."
+    },
+    "manualSalesSummary": {
+      "eyebrow": "Reconciliation",
+      "title": "Manual Sales Summary",
+      "subtitle": "Manually create a sales summary when the EEVC file is unavailable, allowing credit order reconciliation to proceed.",
+      "sectionSummaryRequired": "Sales summary — required data",
+      "sectionSummaryOptional": "Sales summary — optional data",
+      "sectionTransaction": "Transaction",
+      "establishmentPv": "Establishment (PV)",
+      "acquirer": "Acquirer",
+      "company": "Company",
+      "rvNumber": "RV number",
+      "rvDate": "RV date",
+      "grossValue": "Gross value",
+      "discountValue": "Discount value",
+      "liquidValue": "Net value",
+      "tipValue": "Tip / IATA",
+      "rejectedValue": "Rejected value",
+      "adjustedValue": "Adjusted value",
+      "numberCvNsu": "CV/NSU count",
+      "firstInstallmentCreditDate": "First installment date",
+      "summaryType": "Summary type",
+      "submit": "Create summary and transactions",
+      "saved": "Sales summary and transactions created successfully.",
+      "addTransaction": "Add transaction",
+      "removeTransaction": "Remove",
+      "modeManual": "Manual Entry",
+      "modeCsv": "Import CSV",
+      "tx": {
+        "label": "Transaction",
+        "nsu": "NSU",
+        "cardNumber": "Card number",
+        "authorization": "Authorization",
+        "referenceNumber": "Reference number",
+        "saleDate": "Sale date",
+        "creditDate": "Credit date",
+        "installment": "Installment count",
+        "modality": "Modality",
+        "flag": "Card brand",
+        "tid": "TID",
+        "capture": "Capture type"
+      },
+      "csv": {
+        "sectionConfig": "Import configuration",
+        "fileLabel": "Click to select the Rede CSV file",
+        "fileHint": ".csv file exported from the Rede portal",
+        "parsing": "Processing file...",
+        "noData": "Select a CSV file to preview summaries",
+        "preview": "Identified summaries",
+        "colRv": "RV",
+        "colEstablishment": "Establishment",
+        "colDate": "Date",
+        "colGross": "Gross (R$)",
+        "colDiscount": "Discount (R$)",
+        "colLiquid": "Net (R$)",
+        "colTxs": "Txs",
+        "colStatus": "Status",
+        "statusPending": "Pending",
+        "statusSubmitting": "Sending...",
+        "statusSuccess": "Imported",
+        "statusError": "Error",
+        "submit": "Import all",
+        "retryFailed": "Retry failed",
+        "importSuccess": "All summaries were imported successfully."
+      }
     },
     "contractAudit": {
       "title": "Applied Fees",

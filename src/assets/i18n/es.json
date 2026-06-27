@@ -98,6 +98,9 @@
       "settings": {
         "title": "Configuración de Conciliación"
       },
+      "manualSalesSummary": {
+        "title": "Resumen de Ventas Manual"
+      },
       "divergences": {
         "title": "Divergencias operativas"
       }
@@ -207,7 +210,8 @@
       "settings": "Configuración",
       "erpMissingAcquirer": "No localizada en la adquirente",
       "acquirerMissingErp": "No localizada en el ERP",
-      "erpVsAcquirerDivergences": "Otras no conciliadas"
+      "erpVsAcquirerDivergences": "Otras no conciliadas",
+      "manualSalesSummary": "Resumen de Ventas Manual"
     },
     "adjustment": {
       "title": "Ajustes",
@@ -1962,6 +1966,71 @@
       "reconciliationLookbackMonths": "Meses retroactivos para conciliación",
       "reconciliationLookbackMonthsHint": "Define cuántos meses anteriores a la fecha actual se deben considerar para buscar transacciones en la conciliación. Valor predeterminado: 120 meses.",
       "saved": "Configuración guardada exitosamente."
+    },
+    "manualSalesSummary": {
+      "eyebrow": "Conciliación",
+      "title": "Resumen de Ventas Manual",
+      "subtitle": "Cree manualmente un resumen de ventas cuando el archivo EEVC no esté disponible, permitiendo que la conciliación con las órdenes de crédito continúe.",
+      "sectionSummaryRequired": "Resumen de ventas — datos obligatorios",
+      "sectionSummaryOptional": "Resumen de ventas — datos opcionales",
+      "sectionTransaction": "Transacción",
+      "establishmentPv": "Establecimiento (PV)",
+      "acquirer": "Adquirente",
+      "company": "Empresa",
+      "rvNumber": "Número de RV",
+      "rvDate": "Fecha de RV",
+      "grossValue": "Valor bruto",
+      "discountValue": "Valor descuento",
+      "liquidValue": "Valor neto",
+      "tipValue": "Propina / IATA",
+      "rejectedValue": "Valor rechazado",
+      "adjustedValue": "Valor ajustado",
+      "numberCvNsu": "Cant. CV/NSU",
+      "firstInstallmentCreditDate": "Fecha 1ª cuota",
+      "summaryType": "Tipo de resumen",
+      "submit": "Crear resumen y transacciones",
+      "saved": "Resumen de ventas y transacciones creados exitosamente.",
+      "addTransaction": "Agregar transacción",
+      "removeTransaction": "Eliminar",
+      "modeManual": "Ingreso Manual",
+      "modeCsv": "Importar CSV",
+      "tx": {
+        "label": "Transacción",
+        "nsu": "NSU",
+        "cardNumber": "Número de tarjeta",
+        "authorization": "Autorización",
+        "referenceNumber": "Número de referencia",
+        "saleDate": "Fecha de venta",
+        "creditDate": "Fecha de crédito",
+        "installment": "Nº de cuotas",
+        "modality": "Modalidad",
+        "flag": "Marca",
+        "tid": "TID",
+        "capture": "Tipo de captura"
+      },
+      "csv": {
+        "sectionConfig": "Configuración de importación",
+        "fileLabel": "Haga clic para seleccionar el archivo CSV de Rede",
+        "fileHint": "Archivo .csv exportado desde el portal Rede",
+        "parsing": "Procesando archivo...",
+        "noData": "Seleccione un archivo CSV para previsualizar los resúmenes",
+        "preview": "Resúmenes identificados",
+        "colRv": "RV",
+        "colEstablishment": "Establecimiento",
+        "colDate": "Fecha",
+        "colGross": "Bruto (R$)",
+        "colDiscount": "Descuento (R$)",
+        "colLiquid": "Neto (R$)",
+        "colTxs": "Txs",
+        "colStatus": "Estado",
+        "statusPending": "Pendiente",
+        "statusSubmitting": "Enviando...",
+        "statusSuccess": "Importado",
+        "statusError": "Error",
+        "submit": "Importar todos",
+        "retryFailed": "Reintentar fallidos",
+        "importSuccess": "Todos los resúmenes fueron importados exitosamente."
+      }
     },
     "contractAudit": {
       "title": "Tasas Aplicadas",

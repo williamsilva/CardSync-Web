@@ -84,6 +84,7 @@ export const UI_KEYS = {
       erpMissingAcquirer: 'menu.conciliation.erpMissingAcquirer',
       acquirerMissingErp: 'menu.conciliation.acquirerMissingErp',
       erpVsAcquirerDivergences: 'menu.conciliation.erpVsAcquirerDivergences',
+      manualSalesSummary: 'menu.conciliation.manualSalesSummary',
     },
     security: {
       title: 'menu.security.title',
@@ -682,6 +683,12 @@ export const UI_KEYS = {
     },
     settings: {
       saved: 'conciliation.settings.saved',
+    },
+    manualSalesSummary: {
+      saved: 'conciliation.manualSalesSummary.saved',
+      csv: {
+        importSuccess: 'conciliation.manualSalesSummary.csv.importSuccess',
+      },
     },
     result: {
       okRates: 'conciliation.result.okRates',

@@ -156,6 +156,13 @@ export const APP_MENU: AppMenuItem[] = [
       },
       {
         exact: false,
+        route: '/conciliation/manual-sales-summary',
+        labelKey: 'menu.conciliation.manualSalesSummary',
+        icon: 'pi pi-file-plus text-purple-400',
+        permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.FILE_PROCESSING.PROCESS],
+      },
+      {
+        exact: false,
         route: '/conciliation/contract-audit',
         labelKey: 'menu.conciliation.contractAudit',
         icon: 'pi pi-percentage text-purple-400',
