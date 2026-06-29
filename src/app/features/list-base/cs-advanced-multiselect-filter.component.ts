@@ -1,6 +1,14 @@
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { Component, ContentChild, EventEmitter, Input, Output } from '@angular/core';
+import {
+  Input,
+  Output,
+  Component,
+  OnChanges,
+  ContentChild,
+  EventEmitter,
+  SimpleChanges,
+} from '@angular/core';
 
 import { FloatLabel } from 'primeng/floatlabel';
 import { MultiSelectModule } from 'primeng/multiselect';
@@ -48,11 +56,11 @@ import { CsAdvancedFilterItemTemplateDirective } from './cs-advanced-filter-item
     </p-floatLabel>
   `,
 })
-export class CsAdvancedMultiselectFilterComponent {
-  @Input() inputId = '';
+export class CsAdvancedMultiselectFilterComponent implements OnChanges {
   @Input() label = '';
-  @Input() value: any[] | null = null;
+  @Input() inputId = '';
   @Input() options: any[] = [];
+  @Input() value: any[] | null = null;
 
   @Input() optionLabel = 'label';
   @Input() optionValue = 'value';
@@ -66,6 +74,19 @@ export class CsAdvancedMultiselectFilterComponent {
 
   @ContentChild(CsAdvancedFilterItemTemplateDirective)
   itemTemplate?: CsAdvancedFilterItemTemplateDirective;
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (
+      changes['options'] &&
+      this.options?.length === 1 &&
+      (!this.value || this.value.length === 0)
+    ) {
+      const raw = this.options[0];
+      const val = this.optionValue ? raw[this.optionValue] : raw;
+      this.value = [val];
+      this.valueChange.emit([val]);
+    }
+  }
 
   onValueChange(value: any[] | null | undefined): void {
     this.valueChange.emit(value?.length ? value : null);

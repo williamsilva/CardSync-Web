@@ -39,4 +39,21 @@ export class SaleSummaryApiService {
   createManual(body: SalesSummaryManualCreateInput) {
     return this.http.post<SaleSummaryApiModel>(`${this.baseUrl}/manual`, body);
   }
+
+  getPendingCreditOrders(body: ListQueryDto<SaleSummaryAdvancedFilters>) {
+    return this.http
+      .post<HalPagedResponse<SaleSummaryApiModel>>(`${this.baseUrl}/pending-credit-orders`, body)
+      .pipe(
+        map(
+          (res) =>
+            ({
+              ...res,
+              _embedded: {
+                ...res?._embedded,
+                content: mapSaleSummaryApiModels(res?._embedded?.content),
+              },
+            }) as HalPagedResponse<SaleSummaryApiModel>,
+        ),
+      );
+  }
 }

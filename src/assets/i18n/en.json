@@ -109,6 +109,9 @@
       "manualSalesSummary": {
         "title": "Manual Sales Summary"
       },
+      "manualCreditOrder": {
+        "title": "Manual Credit Order"
+      },
       "divergences": {
         "title": "Operational divergences"
       }
@@ -238,7 +241,8 @@
       "erpMissingAcquirer": "Not found in acquirer",
       "acquirerMissingErp": "Not found in ERP",
       "erpVsAcquirerDivergences": "Other unreconciled",
-      "manualSalesSummary": "Manual Sales Summary"
+      "manualSalesSummary": "Manual Sales Summary",
+      "manualCreditOrder": "Manual Credit Order"
     },
     "adjustment": {
       "title": "Adjustments",
@@ -1991,7 +1995,10 @@
       "erpAcquirerFutureDaysLookbackHint": "Defines how many days after the ERP sale date the acquirer may have recorded the transaction. Set to 0 to disable this filter.",
       "reconciliationLookbackMonths": "Reconciliation lookback months",
       "reconciliationLookbackMonthsHint": "Defines how many months prior to the current date should be searched for transactions during reconciliation. Default: 120 months.",
-      "saved": "Settings saved successfully."
+      "creditOrderPendingDays": "Days threshold for pending orders",
+      "creditOrderPendingDaysHint": "Summaries with an RV date older than this number of days and without payment orders are listed as pending for batch creation.",
+      "saved": "Settings saved successfully.",
+      "saveError": "Could not save the settings."
     },
     "manualSalesSummary": {
       "eyebrow": "Reconciliation",
@@ -2057,6 +2064,47 @@
         "retryFailed": "Retry failed",
         "importSuccess": "All summaries were imported successfully."
       }
+    },
+    "manualCreditOrder": {
+      "eyebrow": "Reconciliation",
+      "title": "Manual Credit Order",
+      "subtitle": "Search summaries or load pending ones and create payment orders automatically for the next open installment.",
+      "searchSection": "Search sales summaries",
+      "rvNumber": "RV number",
+      "acquirer": "Acquirer",
+      "search": "Search",
+      "loadPending": "Load pending",
+      "results": "Found summaries",
+      "noResults": "No summaries found with the given filters.",
+      "selected": "{{count}} selected",
+      "selectAll": "Select all",
+      "colRvNumber": "RV No.",
+      "colRvDate": "RV Date",
+      "colAcquirer": "Acquirer",
+      "colCompany": "Company",
+      "colFlag": "Card brand",
+      "installmentSection": "Installment configuration",
+      "installmentNumber": "Installment number",
+      "installmentTotal": "Total installments",
+      "releaseDate": "Release date (optional)",
+      "installmentRangeError": "Installment number cannot exceed total installments",
+      "submit": "Create payment orders",
+      "saved": "{created} created, {skipped} skipped.",
+      "createdCount": "{count, plural, one {# order created} other {# orders created}}",
+      "skippedCount": "{count, plural, one {# skipped} other {# skipped}}",
+      "skippedReasons": "Reasons for skipped orders",
+      "skipReason": {
+        "ALL_INSTALLMENTS_COVERED": "RV {rvNumber}: {installmentTotal, plural, =1 {the only installment already has a credit order} other {all # installments already have credit orders}}.",
+        "SUMMARY_NOT_FOUND": "Summary not found.",
+        "UNEXPECTED_ERROR": "RV {rvNumber}: unexpected error while creating the credit order."
+      },
+      "selectedSection": "Selected summaries",
+      "remove": "Remove",
+      "clearAll": "Clear selection",
+      "createSingle": "Create payment order",
+      "createSelected": "Create selected ({{count}})",
+      "clearTable": "Clear table",
+      "emptyTable": "No summaries loaded. Use the search or load pending ones."
     },
     "contractAudit": {
       "title": "Applied Fees",

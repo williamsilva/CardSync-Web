@@ -267,6 +267,13 @@ export const STATE_KEY = {
     },
     /* Conciliação */
     CONCILIATION: {
+      MANUAL_CREDIT_ORDER: {
+        TABLE: {
+          ROWS: { V1: 'cardsync.conciliation.manual-credit-order.table.rows' },
+          STATE: { V1: 'cardsync.conciliation.manual-credit-order.table.state.v1' },
+        },
+        FILTERS: { V1: 'cardsync.conciliation.manual-credit-order.filters.v1' },
+      },
       FEES: {
         TABLE: {
           ROWS: {

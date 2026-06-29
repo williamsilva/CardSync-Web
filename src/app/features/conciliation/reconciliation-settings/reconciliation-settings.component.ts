@@ -38,6 +38,8 @@ export class ReconciliationSettingsComponent {
   protected readonly MAX_DAYS_LOOKBACK = 365;
   protected readonly MIN_LOOKBACK_MONTHS = 1;
   protected readonly MAX_LOOKBACK_MONTHS = 120;
+  protected readonly MIN_PENDING_DAYS = 1;
+  protected readonly MAX_PENDING_DAYS = 365;
 
   protected readonly loading = signal(false);
   protected readonly saving = signal(false);
@@ -59,6 +61,10 @@ export class ReconciliationSettingsComponent {
       this.MAX_LOOKBACK_MONTHS,
       [Validators.required, Validators.min(this.MIN_LOOKBACK_MONTHS), Validators.max(this.MAX_LOOKBACK_MONTHS)],
     ],
+    creditOrderPendingDays: [
+      30,
+      [Validators.required, Validators.min(this.MIN_PENDING_DAYS), Validators.max(this.MAX_PENDING_DAYS)],
+    ],
   });
 
   constructor() {
@@ -73,6 +79,7 @@ export class ReconciliationSettingsComponent {
           erpAcquirerPreviousDaysLookback: settings.erpAcquirerPreviousDaysLookback,
           erpAcquirerFutureDaysLookback: settings.erpAcquirerFutureDaysLookback,
           reconciliationLookbackMonths: settings.reconciliationLookbackMonths,
+          creditOrderPendingDays: settings.creditOrderPendingDays,
         });
         if (!this.canEdit()) {
           this.form.disable();
@@ -94,17 +101,25 @@ export class ReconciliationSettingsComponent {
         erpAcquirerPreviousDaysLookback: v.erpAcquirerPreviousDaysLookback ?? 0,
         erpAcquirerFutureDaysLookback: v.erpAcquirerFutureDaysLookback ?? 0,
         reconciliationLookbackMonths: v.reconciliationLookbackMonths ?? this.MAX_LOOKBACK_MONTHS,
+        creditOrderPendingDays: v.creditOrderPendingDays ?? 30,
       })
       .subscribe({
         next: () => {
+          this.saving.set(false);
           this.toast.add({
             severity: 'success',
             summary: this.i18n.tUi('common.success'),
             detail: this.i18n.tUi('conciliation.settings.saved'),
           });
         },
-        error: () => this.saving.set(false),
-        complete: () => this.saving.set(false),
+        error: () => {
+          this.saving.set(false);
+          this.toast.add({
+            severity: 'error',
+            summary: this.i18n.tUi('common.error'),
+            detail: this.i18n.tUi('conciliation.settings.saveError'),
+          });
+        },
       });
   }
 }

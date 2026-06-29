@@ -1,7 +1,8 @@
-import { Injectable, inject, signal } from '@angular/core';
+import { computed, Injectable, inject, signal } from '@angular/core';
 
 import { finalize, Observable, tap } from 'rxjs';
 
+import { StatusEnum } from '@models/enums/status.enum';
 import { AcquirerMinimalModel } from '@models/acquirer-minimal.models';
 import { AcquirerAdvancedFilters } from '@features/filter/acquirer.filters';
 import { ListQueryDto } from '@shared/features/list-query/list-query.types';
@@ -28,6 +29,10 @@ export class AcquirerFacade {
   readonly loading = this._loading.asReadonly();
   readonly totalRecords = this._total.asReadonly();
   readonly loadedOnce = this._loadedOnce.asReadonly();
+
+  readonly activeOptions = computed(() =>
+    this._options().filter((o) => o.status === StatusEnum.ACTIVE),
+  );
 
   loadAcquirerOptionsFilter(force = false): void {
     if (this._optionsLoading()) return;

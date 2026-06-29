@@ -96,6 +96,9 @@
       },
       "manualSalesSummary": {
         "title": "Resumo de Vendas Manual"
+      },
+      "manualCreditOrder": {
+        "title": "Ordem de Pagamento Manual"
       }
     },
     "transactions": {
@@ -238,7 +241,8 @@
       "erpMissingAcquirer": "Não localizada na adquirente",
       "acquirerMissingErp": "Não localizada no ERP",
       "erpVsAcquirerDivergences": "Outras não conciliadas",
-      "manualSalesSummary": "Resumo de Vendas Manual"
+      "manualSalesSummary": "Resumo de Vendas Manual",
+      "manualCreditOrder": "Ordem de Pagamento Manual"
     },
     "security": {
       "title": "Segurança",
@@ -1776,6 +1780,7 @@
   "saleSummary": {
     "subtitle": "Analise resumo de vendas.",
     "fields": {
+      "bank": "Banco",
       "gross":" Bruto",
       "orders": "Ordens",
       "flag":" Bandeira",
@@ -1787,19 +1792,19 @@
       "adjustments": "Ajustes",
       "acquirer": "Adquirente",
       "modality": "Modalidade",
+      "rvNumberShort": "Resumo",
       "grossValue": "Valor Bruto",
       "transactionsStatus": "Venda",
       "liquidValue": "Valor Líquido",
       "discountValue": "Valor Desconto",
       "numberCvNsu": "Número de vendas",
       "rvDate": "Data Resumo de vendas",
+      "establishment": "Estabelecimento",
       "creditOrderStatus": "Ordem Crédito",
       "rvNumber": "Número resumo de vendas",
       "statusPaymentBank": "Pagamento Banco",
-      "periodRvDate": "Período Resumo de Vendas",
-      "bank": "Banco",
-      "establishment": "Estabelecimento",
       "bankingDomicile": "Domicílio Bancário",
+      "periodRvDate": "Período Resumo de Vendas",
       "transactionsStatusEnum": "Status da Venda",
       "creditOrderStatusEnum": "Status Ordem Crédito",
       "statusPaymentBankEnum": "Status Pagamento Banco"
@@ -2373,7 +2378,10 @@
       "erpAcquirerFutureDaysLookbackHint": "Define quantos dias após a data do ERP a adquirente pode ter registrado a transação. Use 0 para desabilitar este filtro.",
       "reconciliationLookbackMonths": "Meses retroativos para conciliação",
       "reconciliationLookbackMonthsHint": "Define quantos meses anteriores à data atual devem ser considerados na busca de transações para conciliação. Padrão: 120 meses.",
-      "saved": "Configurações salvas com sucesso."
+      "creditOrderPendingDays": "Dias de atraso para ordens pendentes",
+      "creditOrderPendingDaysHint": "Resumos com data de RV anterior a este número de dias e sem ordens de pagamento são listados como pendentes para criação em lote.",
+      "saved": "Configurações salvas com sucesso.",
+      "saveError": "Não foi possível salvar as configurações."
     },
     "manualSalesSummary": {
       "eyebrow": "Conciliação",
@@ -2439,6 +2447,48 @@
         "retryFailed": "Reenviar com erro",
         "importSuccess": "Todos os resumos foram importados com sucesso."
       }
+    },
+    "manualCreditOrder": {
+      "eyebrow": "Conciliação",
+      "title": "Ordem de Pagamento Manual",
+      "subtitle": "Busque resumos de vendas ou carregue os pendentes e crie as ordens de pagamento automaticamente pela próxima parcela em aberto.",
+      "searchSection": "Buscar resumos de vendas",
+      "rvNumber": "Número do RV",
+      "acquirer": "Adquirente",
+      "search": "Buscar",
+      "loadPending": "Carregar pendentes",
+      "results": "Resumos encontrados",
+      "noResults": "Nenhum resumo encontrado com os filtros informados.",
+      "selected": "{{count}} selecionado(s)",
+      "selectAll": "Selecionar todos",
+      "colRvNumber": "Nº RV",
+      "colRvDate": "Data RV",
+      "colCreditOrderStatus": "Status Ordem Crédito",
+      "colAcquirer": "Adquirente",
+      "colCompany": "Empresa",
+      "colFlag": "Bandeira",
+      "installmentSection": "Configuração da parcela",
+      "installmentNumber": "Número da parcela",
+      "installmentTotal": "Total de parcelas",
+      "releaseDate": "Data de lançamento (opcional)",
+      "installmentRangeError": "Número da parcela não pode ser maior que o total",
+      "submit": "Criar ordens de pagamento",
+      "saved": "{created} criada(s), {skipped} ignorada(s).",
+      "createdCount": "{count, plural, one {# ordem criada} other {# ordens criadas}}",
+      "skippedCount": "{count, plural, one {# ignorada} other {# ignoradas}}",
+      "skippedReasons": "Motivos das ordens ignoradas",
+      "skipReason": {
+        "ALL_INSTALLMENTS_COVERED": "RV {rvNumber}: {installmentTotal, plural, =1 {a única parcela já possui ordem de crédito} other {todas as # parcelas já possuem ordens de crédito}}.",
+        "SUMMARY_NOT_FOUND": "Resumo não encontrado.",
+        "UNEXPECTED_ERROR": "RV {rvNumber}: erro inesperado ao criar a ordem de crédito."
+      },
+      "selectedSection": "Resumos selecionados",
+      "remove": "Remover",
+      "clearAll": "Limpar seleção",
+      "createSingle": "Criar ordem de pagamento",
+      "createSelected": "Criar selecionados ({{count}})",
+      "clearTable": "Limpar tabela",
+      "emptyTable": "Nenhum resumo carregado. Use a busca ou carregue os pendentes."
     },
     "contractAudit": {
       "title": "Taxas Aplicadas",

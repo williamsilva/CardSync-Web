@@ -1,0 +1,249 @@
+.cs-page-title {
+  margin: 0.25rem 0 0.5rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.cs-page-subtitle {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--text-color-secondary);
+}
+
+.cs-section-label {
+  margin: 0 0 1rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-color-secondary);
+}
+
+.cs-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+
+  .cs-section-label {
+    margin: 0;
+  }
+}
+
+.cs-selected-badge {
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  background: var(--primary-100, #e0e7ff);
+  color: var(--primary-700, #4338ca);
+}
+
+// ── Form grid ─────────────────────────────────────────────────────────────────
+
+.cs-form-grid {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+
+  &--3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.cs-form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+
+  p-floatlabel {
+    display: block;
+  }
+
+  p-inputnumber,
+  p-datepicker {
+    width: 100%;
+  }
+
+  input.p-inputtext {
+    width: 100%;
+  }
+
+  &--action {
+    display: flex;
+    align-items: flex-end;
+
+    p-button {
+      width: 100%;
+    }
+  }
+}
+
+.cs-field-error {
+  color: var(--red-600, #dc2626);
+  font-size: 0.75rem;
+}
+
+.cs-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+}
+
+// ── Search state ──────────────────────────────────────────────────────────────
+
+.cs-searching {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 0;
+  color: var(--text-color-secondary);
+  font-size: 0.875rem;
+}
+
+.cs-csv-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1.5rem;
+  color: var(--text-color-secondary);
+  text-align: center;
+
+  i {
+    font-size: 2rem;
+    opacity: 0.5;
+  }
+}
+
+// ── Results table ─────────────────────────────────────────────────────────────
+
+.cs-csv-table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--surface-border);
+  border-radius: var(--border-radius);
+}
+
+.cs-csv-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+
+  th,
+  td {
+    padding: 0.5rem 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid var(--surface-border);
+    white-space: nowrap;
+  }
+
+  tbody tr:last-child td {
+    border-bottom: none;
+  }
+
+  th {
+    font-weight: 600;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text-color-secondary);
+    background: var(--surface-ground);
+  }
+
+  &__row--selected td {
+    background-color: color-mix(in srgb, var(--primary-100, #e0e7ff) 50%, transparent);
+  }
+}
+
+.cs-col-check {
+  width: 2.5rem;
+}
+
+.cs-col-action {
+  width: 3rem;
+  text-align: center;
+}
+
+.cs-result-row {
+  cursor: pointer;
+  transition: background-color 0.15s;
+
+  &:hover td {
+    background-color: var(--surface-hover);
+  }
+}
+
+// ── Result feedback ───────────────────────────────────────────────────────────
+
+.cs-result-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+
+  &__row {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  &__created {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-weight: 600;
+    color: var(--green-600, #16a34a);
+  }
+
+  &__skipped {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-weight: 600;
+    color: var(--orange-600, #ea580c);
+  }
+
+  &__reasons {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    border-top: 1px solid var(--surface-border);
+    padding-top: 0.75rem;
+
+    .cs-section-label {
+      margin-bottom: 0.5rem;
+    }
+  }
+
+  &__reason {
+    font-size: 0.8rem;
+    color: var(--text-color-secondary);
+    padding: 0.2rem 0;
+  }
+}
+
+// ── Responsive ────────────────────────────────────────────────────────────────
+
+@media (max-width: 1280px) {
+  .cs-form-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+
+    &--3 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+}
+
+@media (max-width: 900px) {
+  .cs-form-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .cs-form-grid,
+  .cs-form-grid--3 {
+    grid-template-columns: 1fr;
+  }
+}

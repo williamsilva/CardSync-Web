@@ -1,7 +1,8 @@
-import { Injectable, inject, signal } from '@angular/core';
+import { computed, Injectable, inject, signal } from '@angular/core';
 
 import { finalize, Observable, tap } from 'rxjs';
 
+import { StatusEnum } from '@models/enums/status.enum';
 import { CompanyMinimalModel } from '@models/company-minimal.models';
 import { CompanyAdvancedFilters } from '@features/filter/company.filters';
 import { CompanyApiService } from '@features/service/company.api.service';
@@ -28,6 +29,10 @@ export class CompanyFacade {
   readonly loading = this._loading.asReadonly();
   readonly totalRecords = this._total.asReadonly();
   readonly loadedOnce = this._loadedOnce.asReadonly();
+
+  readonly activeOptions = computed(() =>
+    this._options().filter((o) => o.status === StatusEnum.ACTIVE),
+  );
 
   loadCompanyOptionsFilter(force = false): void {
     if (this._optionsLoading()) return;

@@ -191,6 +191,36 @@
 }
 
 /* =========================================================
+   CHECKBOX
+   ========================================================= */
+
+.cs-admin-table .p-datatable-thead .p-checkbox,
+.cs-admin-table .p-datatable-tbody .p-checkbox {
+  width: 14px !important;
+  height: 14px !important;
+}
+
+.cs-admin-table .p-datatable-thead .p-checkbox .p-checkbox-box,
+.cs-admin-table .p-datatable-tbody .p-checkbox .p-checkbox-box {
+  width: 14px !important;
+  height: 14px !important;
+  border-radius: 3px !important;
+}
+
+.cs-admin-table .p-datatable-thead .p-checkbox .p-checkbox-icon,
+.cs-admin-table .p-datatable-tbody .p-checkbox .p-checkbox-icon {
+  font-size: 9px !important;
+  width: 9px !important;
+  height: 9px !important;
+}
+
+.cs-admin-table .p-datatable-thead .p-checkbox svg,
+.cs-admin-table .p-datatable-tbody .p-checkbox svg {
+  width: 9px !important;
+  height: 9px !important;
+}
+
+/* =========================================================
    TAG STATUS
    ========================================================= */
 

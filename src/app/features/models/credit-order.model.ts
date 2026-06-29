@@ -26,6 +26,25 @@ export interface CreditOrderCreateInput {}
 
 export interface CreditOrderUpdateInput {}
 
+export interface CreditOrderManualInput {
+  summaryIds: string[];
+}
+
+export type CreditOrderSkipCode = 'ALL_INSTALLMENTS_COVERED' | 'SUMMARY_NOT_FOUND' | 'UNEXPECTED_ERROR';
+
+export interface CreditOrderSkipReason {
+  rvNumber: string | null;
+  code: CreditOrderSkipCode;
+  installmentTotal: number;
+}
+
+export interface CreditOrderManualResult {
+  created: number;
+  skipped: number;
+  createdIds: string[];
+  skippedReasons: CreditOrderSkipReason[];
+}
+
 export interface CreditOrderApiModel {
   id: string;
 

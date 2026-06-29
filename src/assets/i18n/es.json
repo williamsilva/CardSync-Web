@@ -101,6 +101,9 @@
       "manualSalesSummary": {
         "title": "Resumen de Ventas Manual"
       },
+      "manualCreditOrder": {
+        "title": "Orden de Pago Manual"
+      },
       "divergences": {
         "title": "Divergencias operativas"
       }
@@ -211,7 +214,8 @@
       "erpMissingAcquirer": "No localizada en la adquirente",
       "acquirerMissingErp": "No localizada en el ERP",
       "erpVsAcquirerDivergences": "Otras no conciliadas",
-      "manualSalesSummary": "Resumen de Ventas Manual"
+      "manualSalesSummary": "Resumen de Ventas Manual",
+      "manualCreditOrder": "Orden de Pago Manual"
     },
     "adjustment": {
       "title": "Ajustes",
@@ -1965,7 +1969,10 @@
       "erpAcquirerFutureDaysLookbackHint": "Define cuántos días después de la fecha ERP puede haber registrado la transacción la adquirente. Use 0 para desactivar este filtro.",
       "reconciliationLookbackMonths": "Meses retroactivos para conciliación",
       "reconciliationLookbackMonthsHint": "Define cuántos meses anteriores a la fecha actual se deben considerar para buscar transacciones en la conciliación. Valor predeterminado: 120 meses.",
-      "saved": "Configuración guardada exitosamente."
+      "creditOrderPendingDays": "Días de atraso para órdenes pendientes",
+      "creditOrderPendingDaysHint": "Los resúmenes con fecha de RV anterior a este número de días y sin órdenes de pago se listan como pendientes para creación en lote.",
+      "saved": "Configuración guardada exitosamente.",
+      "saveError": "No fue posible guardar la configuración."
     },
     "manualSalesSummary": {
       "eyebrow": "Conciliación",
@@ -2031,6 +2038,47 @@
         "retryFailed": "Reintentar fallidos",
         "importSuccess": "Todos los resúmenes fueron importados exitosamente."
       }
+    },
+    "manualCreditOrder": {
+      "eyebrow": "Conciliación",
+      "title": "Orden de Pago Manual",
+      "subtitle": "Busque resúmenes o cargue los pendientes y cree las órdenes de pago automáticamente para la próxima cuota sin orden.",
+      "searchSection": "Buscar resúmenes de ventas",
+      "rvNumber": "Número de RV",
+      "acquirer": "Adquirente",
+      "search": "Buscar",
+      "loadPending": "Cargar pendientes",
+      "results": "Resúmenes encontrados",
+      "noResults": "No se encontraron resúmenes con los filtros indicados.",
+      "selected": "{{count}} seleccionado(s)",
+      "selectAll": "Seleccionar todos",
+      "colRvNumber": "Nº RV",
+      "colRvDate": "Fecha RV",
+      "colAcquirer": "Adquirente",
+      "colCompany": "Empresa",
+      "colFlag": "Bandera",
+      "installmentSection": "Configuración de cuota",
+      "installmentNumber": "Número de cuota",
+      "installmentTotal": "Total de cuotas",
+      "releaseDate": "Fecha de lanzamiento (opcional)",
+      "installmentRangeError": "El número de cuota no puede ser mayor que el total",
+      "submit": "Crear órdenes de pago",
+      "saved": "{created} creada(s), {skipped} ignorada(s).",
+      "createdCount": "{count, plural, one {# orden creada} other {# órdenes creadas}}",
+      "skippedCount": "{count, plural, one {# ignorada} other {# ignoradas}}",
+      "skippedReasons": "Motivos de órdenes ignoradas",
+      "skipReason": {
+        "ALL_INSTALLMENTS_COVERED": "RV {rvNumber}: {installmentTotal, plural, =1 {la única cuota ya tiene orden de crédito} other {todas las # cuotas ya tienen órdenes de crédito}}.",
+        "SUMMARY_NOT_FOUND": "Resumen no encontrado.",
+        "UNEXPECTED_ERROR": "RV {rvNumber}: error inesperado al crear la orden de crédito."
+      },
+      "selectedSection": "Resúmenes seleccionados",
+      "remove": "Eliminar",
+      "clearAll": "Limpiar selección",
+      "createSingle": "Crear orden de pago",
+      "createSelected": "Crear seleccionados ({{count}})",
+      "clearTable": "Limpiar tabla",
+      "emptyTable": "No hay resúmenes cargados. Use la búsqueda o cargue los pendientes."
     },
     "contractAudit": {
       "title": "Tasas Aplicadas",

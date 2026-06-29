@@ -8,7 +8,7 @@ import { HalPagedResponse } from '@core/api/page.model';
 import { TransactionsTotalsModel } from '@models/transactionsTotalsModel';
 import { ListQueryDto } from '@shared/features/list-query/list-query.types';
 import { CreditOrderAdvancedFilters } from '@features/filter/credit-order.filters';
-import { CreditOrderApiModel, mapCreditOrderApiModels } from '@models/credit-order.model';
+import { CreditOrderApiModel, CreditOrderManualInput, CreditOrderManualResult, mapCreditOrderApiModels } from '@models/credit-order.model';
 
 @Injectable({ providedIn: 'root' })
 export class CreditOrderApiService {
@@ -34,5 +34,9 @@ export class CreditOrderApiService {
 
   calculateTotals(body: ListQueryDto<CreditOrderAdvancedFilters>) {
     return this.http.post<TransactionsTotalsModel>(`${this.baseUrl}/totals`, body);
+  }
+
+  createManual(body: CreditOrderManualInput) {
+    return this.http.post<CreditOrderManualResult>(`${this.baseUrl}/manual`, body);
   }
 }

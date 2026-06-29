@@ -8,12 +8,14 @@ export interface ReconciliationSettingsModel {
   erpAcquirerPreviousDaysLookback: number;
   erpAcquirerFutureDaysLookback: number;
   reconciliationLookbackMonths: number;
+  creditOrderPendingDays: number;
 }
 
 export interface ReconciliationSettingsRequest {
   erpAcquirerPreviousDaysLookback: number;
   erpAcquirerFutureDaysLookback: number;
   reconciliationLookbackMonths: number;
+  creditOrderPendingDays: number;
 }
 
 @Injectable({ providedIn: 'root' })

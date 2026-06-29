@@ -1,7 +1,8 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { formatDate } from '@angular/common';
-import { forkJoin } from 'rxjs';
+import { forkJoin, from, of, Observable } from 'rxjs';
+import { concatMap, toArray, catchError, switchMap } from 'rxjs/operators';
 
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
@@ -21,6 +22,8 @@ import { EstablishmentApiService } from '@features/service/establishment.api.ser
 import { FlagApiService } from '@features/service/flag.api.service';
 import { FlagMinimalModel } from '@features/models/flag-minimal.models';
 import { SaleSummaryApiService } from '@features/service/sales-summary.api.service';
+import { CreditOrderApiService } from '@features/service/credit-order.api.service';
+import { CreditOrderManualResult } from '@features/models/credit-order.model';
 import { SalesSummaryManualTransactionInput } from '@features/models/sales-summary.model';
 import { AcquirerMinimalModel } from '@features/models/acquirer-minimal.models';
 import { CompanyMinimalModel } from '@features/models/company-minimal.models';
@@ -76,6 +79,7 @@ export class ManualSalesSummaryComponent implements OnInit {
   private readonly companyService = inject(CompanyApiService);
   private readonly establishmentService = inject(EstablishmentApiService);
   private readonly flagService = inject(FlagApiService);
+  private readonly creditOrderService = inject(CreditOrderApiService);
 
   protected readonly saving = signal(false);
   protected readonly loadingOptions = signal(true);
@@ -376,6 +380,10 @@ export class ManualSalesSummaryComponent implements OnInit {
 
       const establishment = this.rawEstablishments().find(e => e.pvNumber === group.pvNumber);
 
+      const installmentTotal = group.transactions.length > 0
+        ? Math.max(...group.transactions.map(tx => tx.installment ?? 1))
+        : 1;
+
       this.service.createManual({
         pvNumber: parseInt(group.pvNumber, 10),
         acquirerId,
@@ -404,7 +412,11 @@ export class ManualSalesSummaryComponent implements OnInit {
           tid: tx.tid ?? null,
           capture: tx.capture ?? null,
         })),
-      }).subscribe({
+      }).pipe(
+        switchMap(created =>
+          this.createCreditOrders(created.id, installmentTotal).pipe(catchError(() => of([])))
+        )
+      ).subscribe({
         next: () => {
           this.csvGroups.update(gs =>
             gs.map(g => g.key === group.key ? { ...g, submitStatus: 'success' } : g)
@@ -428,6 +440,16 @@ export class ManualSalesSummaryComponent implements OnInit {
       gs.map(g => g.submitStatus === 'error' ? { ...g, submitStatus: 'pending' } : g)
     );
     this.submitCsv();
+  }
+
+  private createCreditOrders(summaryId: string, installmentTotal: number): Observable<CreditOrderManualResult[]> {
+    const total = Math.max(installmentTotal, 1);
+    return from(Array.from({ length: total })).pipe(
+      concatMap(() =>
+        this.creditOrderService.createManual({ summaryIds: [summaryId] })
+      ),
+      toArray(),
+    );
   }
 
   protected formatDisplayDate(date: Date): string {
@@ -501,6 +523,10 @@ export class ManualSalesSummaryComponent implements OnInit {
 
     const v = this.form.getRawValue();
     const establishment = this.rawEstablishments().find(e => e.id === v.establishmentId);
+    const transactions = v.transactions ?? [];
+    const installmentTotal = transactions.length > 0
+      ? Math.max(...transactions.map(tx => (tx['installment'] as number | null) ?? 1))
+      : 1;
     this.saving.set(true);
 
     this.service
@@ -521,8 +547,13 @@ export class ManualSalesSummaryComponent implements OnInit {
           ? formatDate(v.firstInstallmentCreditDate, 'yyyy-MM-dd', 'pt-BR')
           : null,
         summaryType: v.summaryType,
-        transactions: (v.transactions ?? []).map(tx => this.mapTransaction(tx)),
+        transactions: transactions.map(tx => this.mapTransaction(tx)),
       })
+      .pipe(
+        switchMap(created =>
+          this.createCreditOrders(created.id, installmentTotal).pipe(catchError(() => of([])))
+        )
+      )
       .subscribe({
         next: () => {
           this.toast.add({

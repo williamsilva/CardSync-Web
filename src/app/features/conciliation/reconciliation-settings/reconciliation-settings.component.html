@@ -66,6 +66,25 @@
             {{ 'conciliation.settings.reconciliationLookbackMonthsHint' | translate }}
           </small>
         </div>
+
+        <div class="cs-settings-field">
+          <p-floatlabel>
+            <p-inputnumber
+              [showButtons]="true"
+              [allowEmpty]="false"
+              [min]="MIN_PENDING_DAYS"
+              [max]="MAX_PENDING_DAYS"
+              inputId="creditOrderPendingDays"
+              formControlName="creditOrderPendingDays"
+            ></p-inputnumber>
+            <label for="creditOrderPendingDays">
+              {{ 'conciliation.settings.creditOrderPendingDays' | translate }}
+            </label>
+          </p-floatlabel>
+          <small class="cs-field-hint">
+            {{ 'conciliation.settings.creditOrderPendingDaysHint' | translate }}
+          </small>
+        </div>
       </div>
 
       @if (canEdit()) {

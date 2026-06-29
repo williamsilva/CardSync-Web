@@ -163,6 +163,13 @@ export const APP_MENU: AppMenuItem[] = [
       },
       {
         exact: false,
+        route: '/conciliation/manual-credit-order',
+        labelKey: 'menu.conciliation.manualCreditOrder',
+        icon: 'pi pi-credit-card text-purple-400',
+        permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.FILE_PROCESSING.PROCESS],
+      },
+      {
+        exact: false,
         route: '/conciliation/contract-audit',
         labelKey: 'menu.conciliation.contractAudit',
         icon: 'pi pi-percentage text-purple-400',

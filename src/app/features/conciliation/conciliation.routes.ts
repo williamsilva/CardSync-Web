@@ -83,6 +83,16 @@ export const CONCILIATION_ROUTES: Routes = [
       ),
   },
   {
+    path: 'manual-credit-order',
+    title: 'routes.conciliation.manualCreditOrder.title',
+    canActivate: [permissionGuard],
+    data: { requireAll: false, redirectTo: '/forbidden', permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.FILE_PROCESSING.PROCESS] },
+    loadComponent: () =>
+      import('./manual-credit-order/manual-credit-order.component').then(
+        (m) => m.ManualCreditOrderComponent,
+      ),
+  },
+  {
     path: 'contract-audit',
     title: 'routes.conciliation.contractAudit.title',
     canActivate: [permissionGuard],
