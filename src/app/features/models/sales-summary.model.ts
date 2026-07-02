@@ -11,6 +11,7 @@ import {
   SaleSummaryAdvancedFilters,
   createEmptySaleSummaryFiltersState,
 } from '@features/filter/sale-summary.filters';
+import { BankingDomicileModel } from './banking-domicile.models';
 
 export interface SaleSummaryModel {
   id: string;
@@ -21,6 +22,7 @@ export interface SaleSummaryModel {
   flag: FlagMinimalModel;
   company: CompanyMinimalModel;
   acquirer: AcquirerMinimalModel;
+  bankingDomicile: BankingDomicileModel;
   processedFile: ProcessedFileMinimalModel;
   adjustments?: AdjustmentsMinimalModel[] | null;
   creditOrders?: CreditOrdersMinimalModel[] | null;
@@ -75,6 +77,7 @@ export interface SaleSummaryApiModel {
   flag: FlagMinimalModel;
   company: CompanyMinimalModel;
   acquirer: AcquirerMinimalModel;
+  bankingDomicile: BankingDomicileModel;
   processedFile: ProcessedFileMinimalModel;
 }
 

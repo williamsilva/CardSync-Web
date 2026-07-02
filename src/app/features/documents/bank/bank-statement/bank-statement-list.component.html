@@ -776,17 +776,17 @@
           </div>
         </th>
 
-        <th pSortableColumn="value">
+        <th pSortableColumn="releaseValue">
           <div class="th-flex text-center">
             <span
               class="th-label"
               tooltipPosition="top"
-              [pTooltip]="'bankStatement.fields.value' | translate"
+              [pTooltip]="'bankStatement.fields.releaseValue' | translate"
             >
-              {{ 'bankStatement.fields.value' | translate }}
+              {{ 'bankStatement.fields.releaseValueShort' | translate }}
             </span>
             <span class="th-icons">
-              <p-sortIcon field="value"></p-sortIcon>
+              <p-sortIcon field="releaseValue"></p-sortIcon>
             </span>
           </div>
         </th>
@@ -932,14 +932,16 @@
         </td>
 
         <td class="text-center">
-          <p-menu #menu [popup]="true" [model]="searchActions(row)" appendTo="body"></p-menu>
-          <button
-            pButton
-            type="button"
-            icon="pi pi-search"
-            (click)="menu.toggle($event)"
-            class="p-button-text p-button-sm p-button-rounded"
-          ></button>
+          <div class="table-actions justify-content-center">
+            <p-menu #menu [popup]="true" [model]="searchActions(row)" appendTo="body"></p-menu>
+            <button
+              pButton
+              type="button"
+              icon="pi pi-search"
+              (click)="menu.toggle($event)"
+              class="p-button-text p-button-sm p-button-rounded"
+            ></button>
+          </div>
         </td>
       </tr>
     </ng-template>

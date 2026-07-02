@@ -732,6 +732,8 @@ export class SaleSummaryListComponent
     this.rvDate.set(s.rvDate ?? null);
     this.periodRvDate.set(s.periodRvDate ?? null);
 
+    this.rvNumber.set(s.rvNumber ?? '');
+
     this.flags.set(s.flags ?? null);
     this.banks.set(s.banks ?? null);
     this.acquirers.set(s.acquirers ?? null);
@@ -739,9 +741,9 @@ export class SaleSummaryListComponent
     this.establishments.set(s.establishments ?? null);
 
     this.modality.set(s.modality ?? null);
-    this.transactionsStatus.set(s.transactionsStatus ?? null);
     this.creditOrderStatus.set(s.creditOrderStatus ?? null);
     this.statusPaymentBank.set(s.statusPaymentBank ?? null);
+    this.transactionsStatus.set(s.transactionsStatus ?? null);
   }
 
   /* Metodos busca */

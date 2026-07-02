@@ -1,0 +1,338 @@
+<cs-page-header
+  [subtitle]="'conciliation.settings.subtitle' | translate"
+  [breadcrumb]="[
+    { label: ('menu.settings.title' | translate), url: '/settings' },
+    { label: ('routes.settings.reconciliation.title' | translate) },
+  ]"
+></cs-page-header>
+
+<p-card class="mt-2 block">
+  <form [formGroup]="form" (ngSubmit)="save()">
+
+    <!-- Processamento -->
+    <div class="flex align-items-center gap-2 mb-2">
+      <span class="text-base font-semibold">{{
+        'conciliation.settings.processingTitle' | translate
+      }}</span>
+      <i
+        class="pi pi-info-circle text-color-secondary text-sm cursor-pointer"
+        [pTooltip]="'conciliation.settings.processingSubtitle' | translate"
+        tooltipPosition="right"
+      ></i>
+    </div>
+
+    <div class="grid formgrid gap-0">
+      <div class="col-12 md:col-3 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-inputnumber
+            class="w-full"
+            [allowEmpty]="false"
+            [showButtons]="true"
+            [min]="MIN_DAYS_LOOKBACK"
+            [max]="MAX_DAYS_LOOKBACK"
+            inputId="erpAcquirerPreviousDaysLookback"
+            formControlName="erpAcquirerPreviousDaysLookback"
+          ></p-inputnumber>
+          <label for="erpAcquirerPreviousDaysLookback">
+            {{ 'conciliation.settings.erpAcquirerPreviousDaysLookback' | translate }}
+            <i
+              class="pi pi-info-circle text-xs ml-1 text-color-secondary cursor-pointer"
+              style="pointer-events: auto"
+              [pTooltip]="'conciliation.settings.erpAcquirerPreviousDaysLookbackHint' | translate"
+              tooltipPosition="top"
+            ></i>
+          </label>
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 md:col-3 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-inputnumber
+            class="w-full"
+            [allowEmpty]="false"
+            [showButtons]="true"
+            [min]="MIN_DAYS_LOOKBACK"
+            [max]="MAX_DAYS_LOOKBACK"
+            inputId="erpAcquirerFutureDaysLookback"
+            formControlName="erpAcquirerFutureDaysLookback"
+          ></p-inputnumber>
+          <label for="erpAcquirerFutureDaysLookback">
+            {{ 'conciliation.settings.erpAcquirerFutureDaysLookback' | translate }}
+            <i
+              class="pi pi-info-circle text-xs ml-1 text-color-secondary cursor-pointer"
+              style="pointer-events: auto"
+              [pTooltip]="'conciliation.settings.erpAcquirerFutureDaysLookbackHint' | translate"
+              tooltipPosition="top"
+            ></i>
+          </label>
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 md:col-3 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-inputnumber
+            class="w-full"
+            [showButtons]="true"
+            [allowEmpty]="false"
+            [min]="MIN_LOOKBACK_MONTHS"
+            [max]="MAX_LOOKBACK_MONTHS"
+            inputId="reconciliationLookbackMonths"
+            formControlName="reconciliationLookbackMonths"
+          ></p-inputnumber>
+          <label for="reconciliationLookbackMonths">
+            {{ 'conciliation.settings.reconciliationLookbackMonths' | translate }}
+            <i
+              class="pi pi-info-circle text-xs ml-1 text-color-secondary cursor-pointer"
+              style="pointer-events: auto"
+              [pTooltip]="'conciliation.settings.reconciliationLookbackMonthsHint' | translate"
+              tooltipPosition="top"
+            ></i>
+          </label>
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 md:col-3 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-inputnumber
+            class="w-full"
+            [showButtons]="true"
+            [allowEmpty]="false"
+            [min]="MIN_PENDING_DAYS"
+            [max]="MAX_PENDING_DAYS"
+            inputId="creditOrderPendingDays"
+            formControlName="creditOrderPendingDays"
+          ></p-inputnumber>
+          <label for="creditOrderPendingDays">
+            {{ 'conciliation.settings.creditOrderPendingDays' | translate }}
+            <i
+              class="pi pi-info-circle text-xs ml-1 text-color-secondary cursor-pointer"
+              style="pointer-events: auto"
+              [pTooltip]="'conciliation.settings.creditOrderPendingDaysHint' | translate"
+              tooltipPosition="top"
+            ></i>
+          </label>
+        </p-floatLabel>
+      </div>
+    </div>
+
+    <p-divider></p-divider>
+
+    <!-- Conciliação -->
+    <div class="flex align-items-center gap-2 mb-2">
+      <span class="text-base font-semibold">{{
+        'conciliation.settings.reconciliationTitle' | translate
+      }}</span>
+      <i
+        class="pi pi-info-circle text-color-secondary text-sm cursor-pointer"
+        [pTooltip]="'conciliation.settings.reconciliationSubtitle' | translate"
+        tooltipPosition="right"
+      ></i>
+    </div>
+
+    <div class="grid formgrid gap-0">
+      <div class="col-12 md:col-4 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-inputnumber
+            class="w-full"
+            [showButtons]="true"
+            [allowEmpty]="false"
+            [min]="MIN_DATE_TOLERANCE"
+            [max]="MAX_DATE_TOLERANCE"
+            inputId="dateToleranceDays"
+            formControlName="dateToleranceDays"
+          ></p-inputnumber>
+          <label for="dateToleranceDays">
+            {{ 'conciliation.settings.dateToleranceDays' | translate }}
+            <i
+              class="pi pi-info-circle text-xs ml-1 text-color-secondary cursor-pointer"
+              style="pointer-events: auto"
+              [pTooltip]="'conciliation.settings.dateToleranceDaysHint' | translate"
+              tooltipPosition="top"
+            ></i>
+          </label>
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 md:col-4 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-inputnumber
+            class="w-full"
+            [showButtons]="true"
+            [allowEmpty]="false"
+            [minFractionDigits]="2"
+            [maxFractionDigits]="4"
+            [min]="MIN_VALUE_TOLERANCE"
+            [max]="MAX_VALUE_TOLERANCE"
+            inputId="valueTolerance"
+            formControlName="valueTolerance"
+          ></p-inputnumber>
+          <label for="valueTolerance">
+            {{ 'conciliation.settings.valueTolerance' | translate }}
+            <i
+              class="pi pi-info-circle text-xs ml-1 text-color-secondary cursor-pointer"
+              style="pointer-events: auto"
+              [pTooltip]="'conciliation.settings.valueToleranceHint' | translate"
+              tooltipPosition="top"
+            ></i>
+          </label>
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 md:col-4 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-inputnumber
+            class="w-full"
+            [showButtons]="true"
+            [allowEmpty]="false"
+            [min]="MIN_BANK_NOT_RECONCILED_DAYS"
+            [max]="MAX_BANK_NOT_RECONCILED_DAYS"
+            inputId="bankMarkNotReconciledAfterDays"
+            formControlName="bankMarkNotReconciledAfterDays"
+          ></p-inputnumber>
+          <label for="bankMarkNotReconciledAfterDays">
+            {{ 'conciliation.settings.bankMarkNotReconciledAfterDays' | translate }}
+            <i
+              class="pi pi-info-circle text-xs ml-1 text-color-secondary cursor-pointer"
+              style="pointer-events: auto"
+              [pTooltip]="'conciliation.settings.bankMarkNotReconciledAfterDaysHint' | translate"
+              tooltipPosition="top"
+            ></i>
+          </label>
+        </p-floatLabel>
+      </div>
+    </div>
+
+    <p-divider></p-divider>
+
+    <!-- Reprocessamento por Etapa -->
+    <div class="flex align-items-center gap-2 mb-2">
+      <span class="text-sm font-semibold">{{
+        'conciliation.settings.reprocessTitle' | translate
+      }}</span>
+      <i
+        class="pi pi-info-circle text-color-secondary text-sm cursor-pointer"
+        [pTooltip]="'conciliation.settings.reprocessSubtitle' | translate"
+        tooltipPosition="right"
+      ></i>
+    </div>
+
+    <div class="grid formgrid gap-0">
+      <div class="col-12 md:col-3 p-2">
+        <div class="flex align-items-center justify-content-between border-1 surface-border border-round p-3 h-full gap-3">
+          <label for="reprocessErpAcquirerSales" class="text-sm flex-1">
+            {{ 'conciliation.settings.reprocessErpAcquirerSales' | translate }}
+            <i
+              class="pi pi-info-circle text-xs ml-1 text-color-secondary cursor-pointer"
+              style="pointer-events: auto"
+              [pTooltip]="'conciliation.settings.reprocessErpAcquirerSalesHint' | translate"
+              tooltipPosition="top"
+            ></i>
+          </label>
+          <p-toggleswitch formControlName="reprocessErpAcquirerSales" inputId="reprocessErpAcquirerSales"></p-toggleswitch>
+        </div>
+      </div>
+
+      <div class="col-12 md:col-3 p-2">
+        <div class="flex align-items-center justify-content-between border-1 surface-border border-round p-3 h-full gap-3">
+          <label for="reprocessSalesSummaryTransactions" class="text-sm flex-1">
+            {{ 'conciliation.settings.reprocessSalesSummaryTransactions' | translate }}
+            <i
+              class="pi pi-info-circle text-xs ml-1 text-color-secondary cursor-pointer"
+              style="pointer-events: auto"
+              [pTooltip]="'conciliation.settings.reprocessSalesSummaryTransactionsHint' | translate"
+              tooltipPosition="top"
+            ></i>
+          </label>
+          <p-toggleswitch formControlName="reprocessSalesSummaryTransactions" inputId="reprocessSalesSummaryTransactions"></p-toggleswitch>
+        </div>
+      </div>
+
+      <div class="col-12 md:col-3 p-2">
+        <div class="flex align-items-center justify-content-between border-1 surface-border border-round p-3 h-full gap-3">
+          <label for="reprocessAcquirerSaleCancellations" class="text-sm flex-1">
+            {{ 'conciliation.settings.reprocessAcquirerSaleCancellations' | translate }}
+            <i
+              class="pi pi-info-circle text-xs ml-1 text-color-secondary cursor-pointer"
+              style="pointer-events: auto"
+              [pTooltip]="'conciliation.settings.reprocessAcquirerSaleCancellationsHint' | translate"
+              tooltipPosition="top"
+            ></i>
+          </label>
+          <p-toggleswitch formControlName="reprocessAcquirerSaleCancellations" inputId="reprocessAcquirerSaleCancellations"></p-toggleswitch>
+        </div>
+      </div>
+
+      <div class="col-12 md:col-3 p-2">
+        <div class="flex align-items-center justify-content-between border-1 surface-border border-round p-3 h-full gap-3">
+          <label for="reprocessErpAcquirerFees" class="text-sm flex-1">
+            {{ 'conciliation.settings.reprocessErpAcquirerFees' | translate }}
+            <i
+              class="pi pi-info-circle text-xs ml-1 text-color-secondary cursor-pointer"
+              style="pointer-events: auto"
+              [pTooltip]="'conciliation.settings.reprocessErpAcquirerFeesHint' | translate"
+              tooltipPosition="top"
+            ></i>
+          </label>
+          <p-toggleswitch formControlName="reprocessErpAcquirerFees" inputId="reprocessErpAcquirerFees"></p-toggleswitch>
+        </div>
+      </div>
+
+      <div class="col-12 md:col-3 p-2">
+        <div class="flex align-items-center justify-content-between border-1 surface-border border-round p-3 h-full gap-3">
+          <label for="reprocessAcquirerSaleSummary" class="text-sm flex-1">
+            {{ 'conciliation.settings.reprocessAcquirerSaleSummary' | translate }}
+            <i
+              class="pi pi-info-circle text-xs ml-1 text-color-secondary cursor-pointer"
+              style="pointer-events: auto"
+              [pTooltip]="'conciliation.settings.reprocessAcquirerSaleSummaryHint' | translate"
+              tooltipPosition="top"
+            ></i>
+          </label>
+          <p-toggleswitch formControlName="reprocessAcquirerSaleSummary" inputId="reprocessAcquirerSaleSummary"></p-toggleswitch>
+        </div>
+      </div>
+
+      <div class="col-12 md:col-3 p-2">
+        <div class="flex align-items-center justify-content-between border-1 surface-border border-round p-3 h-full gap-3">
+          <label for="reprocessSalesSummaryCreditOrder" class="text-sm flex-1">
+            {{ 'conciliation.settings.reprocessSalesSummaryCreditOrder' | translate }}
+            <i
+              class="pi pi-info-circle text-xs ml-1 text-color-secondary cursor-pointer"
+              style="pointer-events: auto"
+              [pTooltip]="'conciliation.settings.reprocessSalesSummaryCreditOrderHint' | translate"
+              tooltipPosition="top"
+            ></i>
+          </label>
+          <p-toggleswitch formControlName="reprocessSalesSummaryCreditOrder" inputId="reprocessSalesSummaryCreditOrder"></p-toggleswitch>
+        </div>
+      </div>
+
+      <div class="col-12 md:col-3 p-2">
+        <div class="flex align-items-center justify-content-between border-1 surface-border border-round p-3 h-full gap-3">
+          <label for="reprocessBankAcquirer" class="text-sm flex-1">
+            {{ 'conciliation.settings.reprocessBankAcquirer' | translate }}
+            <i
+              class="pi pi-info-circle text-xs ml-1 text-color-secondary cursor-pointer"
+              style="pointer-events: auto"
+              [pTooltip]="'conciliation.settings.reprocessBankAcquirerHint' | translate"
+              tooltipPosition="top"
+            ></i>
+          </label>
+          <p-toggleswitch formControlName="reprocessBankAcquirer" inputId="reprocessBankAcquirer"></p-toggleswitch>
+        </div>
+      </div>
+    </div>
+
+    @if (canEdit()) {
+      <div class="mt-4 px-2">
+        <p-button
+          type="submit"
+          icon="pi pi-save"
+          [loading]="saving()"
+          [label]="'common.save' | translate"
+          [disabled]="loading() || form.invalid"
+        ></p-button>
+      </div>
+    }
+  </form>
+</p-card>

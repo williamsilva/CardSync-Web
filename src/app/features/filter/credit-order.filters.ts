@@ -25,8 +25,8 @@ export type CreditOrderFiltersState = {
   discountValueEnd: number | null;
   discountValueStart: number | null;
 
-  liquidValueEnd: number | null;
-  liquidValueStart: number | null;
+  releaseValueEnd: number | null;
+  releaseValueStart: number | null;
 
   salesSummaryStatus: StatusReconciliationEnum[] | null;
   statusPaymentBank: StatusPaymentBankEnum[] | null;
@@ -63,8 +63,8 @@ export function createEmptyCreditOrderFiltersState(): CreditOrderFiltersState {
     grossValueEnd: null,
     discountValueStart: null,
     discountValueEnd: null,
-    liquidValueStart: null,
-    liquidValueEnd: null,
+    releaseValueStart: null,
+    releaseValueEnd: null,
 
     salesSummaryStatus: null,
     statusPaymentBank: null,
@@ -103,8 +103,8 @@ export function resetCreditOrderAdvancedFilters(filters: CreditOrderAdvancedFilt
   filters.grossValueEnd.set(empty.grossValueEnd);
   filters.discountValueStart.set(empty.discountValueStart);
   filters.discountValueEnd.set(empty.discountValueEnd);
-  filters.liquidValueStart.set(empty.liquidValueStart);
-  filters.liquidValueEnd.set(empty.liquidValueEnd);
+  filters.releaseValueStart.set(empty.releaseValueStart);
+  filters.releaseValueEnd.set(empty.releaseValueEnd);
 
   filters.salesSummaryStatus.set(empty.salesSummaryStatus);
   filters.statusPaymentBank.set(empty.statusPaymentBank);

@@ -1,0 +1,699 @@
+<cs-page-header
+  [compact]="false"
+  [subtitle]="'conciliation.reconciliationActions.subtitle' | translate"
+  [breadcrumb]="[
+    { label: ('breadcrumb.dashboard.title' | translate), url: '/' },
+    { label: ('routes.conciliation.reconciliationActions.title' | translate) },
+  ]"
+>
+  <button
+    pButton
+    type="button"
+    (click)="reload()"
+    icon="pi pi-refresh"
+    class="p-button-text p-button-sm"
+    [label]="'common.update' | translate"
+    [disabled]="loading() || anyProcessing()"
+  ></button>
+</cs-page-header>
+
+<div class="surface-card border-round px-3 pt-2 pb-3 mt-2">
+  <div>
+    <!-- Linha 1 — Etapas 1, 1b (Swapped Manual), 2, 3 -->
+    <div class="grid">
+      <!-- Etapa 1 — ERP x Adquirente -->
+      <div class="col-12 lg:col-3">
+        <p-card>
+          <ng-template pTemplate="title">{{
+            'conciliation.dashboard.erpVsAcquirer.cardTitle' | translate
+          }}</ng-template>
+          <div class="flex flex-column gap-3">
+            @if (comparison(); as c) {
+              <div class="flex align-items-center justify-content-between">
+                <span>{{ 'conciliation.dashboard.erpVsAcquirer.totalErp' | translate }}</span>
+                <strong>{{ c.erpAmount | csCurrency }}</strong>
+              </div>
+              <div class="flex align-items-center justify-content-between">
+                <span>{{ 'conciliation.dashboard.erpVsAcquirer.totalAcquirer' | translate }}</span>
+                <strong>{{ c.acquirerAmount | csCurrency }}</strong>
+              </div>
+              <div class="flex align-items-center justify-content-between">
+                <span>{{ 'conciliation.dashboard.erpVsAcquirer.matched' | translate }}</span>
+                <strong>{{ c.matchedAmount | csCurrency }}</strong>
+              </div>
+              <div class="flex align-items-center justify-content-between">
+                <span>{{ 'conciliation.dashboard.difference' | translate }}</span>
+                <cs-tag [value]="(c.differenceAmount | csCurrency) ?? ''" severity="warn"></cs-tag>
+              </div>
+            }
+            @if (reconcileErpAcqResult(); as r) {
+              <cs-tag
+                [value]="'conciliation.dashboard.completed' | translate"
+                tone="success"
+              ></cs-tag>
+              <div class="grid text-sm">
+                <div class="col-6 flex justify-content-between">
+                  <span>{{ 'conciliation.dashboard.result.analyzed' | translate }}</span
+                  ><strong>{{ r.analyzed }}</strong>
+                </div>
+                <div class="col-6 flex justify-content-between">
+                  <span>{{ 'conciliation.dashboard.result.matched' | translate }}</span
+                  ><strong>{{ r.matched }}</strong>
+                </div>
+                <div class="col-6 flex justify-content-between">
+                  <span>{{ 'conciliation.dashboard.result.updated' | translate }}</span
+                  ><strong>{{ r.updated }}</strong>
+                </div>
+                <div class="col-6 flex justify-content-between">
+                  <span>{{ 'conciliation.dashboard.result.notMatched' | translate }}</span
+                  ><strong>{{ r.notMatched }}</strong>
+                </div>
+                <div class="col-6 flex justify-content-between">
+                  <span>{{ 'conciliation.dashboard.result.valueDivergences' | translate }}</span
+                  ><strong>{{ r.valueDivergences }}</strong>
+                </div>
+                <div class="col-6 flex justify-content-between">
+                  <span>{{ 'conciliation.dashboard.result.acquirerDivergences' | translate }}</span
+                  ><strong>{{ r.acquirerDivergences }}</strong>
+                </div>
+                <div class="col-6 flex justify-content-between">
+                  <span>{{ 'conciliation.dashboard.result.ambiguousMatches' | translate }}</span
+                  ><strong>{{ r.ambiguousMatches }}</strong>
+                </div>
+                <div class="col-6 flex justify-content-between">
+                  <span>{{ 'conciliation.dashboard.result.flagUpdated' | translate }}</span
+                  ><strong>{{ r.flagUpdated }}</strong>
+                </div>
+                <div class="col-6 flex justify-content-between">
+                  <span>{{
+                    'conciliation.dashboard.result.businessContextUpdated' | translate
+                  }}</span
+                  ><strong>{{ r.businessContextUpdated }}</strong>
+                </div>
+                <div class="col-6 flex justify-content-between">
+                  <span>{{ 'conciliation.dashboard.result.skippedDivergent' | translate }}</span
+                  ><strong>{{ r.skippedDivergent }}</strong>
+                </div>
+              </div>
+            }
+            <button
+              pButton
+              type="button"
+              icon="pi pi-sync"
+              [loading]="reconcilingErpVsAcquirer()"
+              [disabled]="!canProcess() || anyProcessing()"
+              (click)="processReconciliationErpVsAcquirer()"
+              [label]="'conciliation.processReconciliationErpVsAcquirer' | translate"
+            ></button>
+          </div>
+        </p-card>
+      </div>
+
+      <!-- Etapa 1b — Swapped Manual -->
+      <div class="col-12 lg:col-3">
+        <p-card>
+          <ng-template pTemplate="title">{{
+            'conciliation.dashboard.swappedManual.cardTitle' | translate
+          }}</ng-template>
+          <div class="flex flex-column gap-3">
+            @if (summary(); as s) {
+              <div class="flex align-items-center justify-content-between">
+                <span>{{ 'conciliation.dashboard.swappedManual.pendencies' | translate }}</span>
+                <strong>{{ s.pendingAmount | csCurrency }}</strong>
+              </div>
+              <div class="flex align-items-center justify-content-between">
+                <span></span>
+                <small>{{
+                  'conciliation.dashboard.swappedManual.salesCount'
+                    | translate: { count: s.pendingSalesQuantity || 0 }
+                }}</small>
+              </div>
+              <div class="flex align-items-center justify-content-between">
+                <span>{{ 'conciliation.dashboard.swappedManual.divergences' | translate }}</span>
+                <strong>{{ s.divergenceAmount | csCurrency }}</strong>
+              </div>
+              <div class="flex align-items-center justify-content-between">
+                <span></span>
+                <small>{{
+                  'conciliation.dashboard.swappedManual.occurrencesCount'
+                    | translate: { count: s.divergenceQuantity || 0 }
+                }}</small>
+              </div>
+            }
+            @if (reconcileManualSwappedResult(); as r) {
+              <cs-tag
+                [value]="'conciliation.dashboard.completed' | translate"
+                tone="success"
+              ></cs-tag>
+              <div class="grid text-sm">
+                <div class="col-6 flex justify-content-between">
+                  <span>{{ 'conciliation.dashboard.result.analyzed' | translate }}</span
+                  ><strong>{{ r.analyzed }}</strong>
+                </div>
+                <div class="col-6 flex justify-content-between">
+                  <span>{{ 'conciliation.dashboard.result.matched' | translate }}</span
+                  ><strong>{{ r.matched }}</strong>
+                </div>
+                <div class="col-6 flex justify-content-between">
+                  <span>{{ 'conciliation.dashboard.result.updated' | translate }}</span
+                  ><strong>{{ r.updated }}</strong>
+                </div>
+                <div class="col-6 flex justify-content-between">
+                  <span>{{ 'conciliation.dashboard.result.notMatched' | translate }}</span
+                  ><strong>{{ r.notMatched }}</strong>
+                </div>
+              </div>
+            }
+            <button
+              pButton
+              type="button"
+              icon="pi pi-sync"
+              [loading]="reconcileManualSwapped()"
+              [disabled]="!canProcess() || anyProcessing()"
+              (click)="processReconcileManualSwapped()"
+              [label]="'conciliation.processReconcileManualSwapped' | translate"
+            ></button>
+          </div>
+        </p-card>
+      </div>
+
+      <!-- Etapa 2 — Resumo de Vendas x TransactionAcq -->
+      <div class="col-12 lg:col-3">
+        <p-card>
+          <ng-template pTemplate="title">{{
+            'conciliation.dashboard.salesSummaryTransactions.cardTitle' | translate
+          }}</ng-template>
+          <div class="flex flex-column gap-3">
+            @if (reconcileSalesSummaryTransactionsResult(); as r) {
+              <cs-tag
+                [value]="'conciliation.dashboard.completed' | translate"
+                tone="success"
+              ></cs-tag>
+              <div class="grid text-sm">
+                <div class="col-6 flex justify-content-between">
+                  <span>{{ 'conciliation.dashboard.result.analyzed' | translate }}</span
+                  ><strong>{{ r.summariesAnalyzed }}</strong>
+                </div>
+                <div class="col-6 flex justify-content-between">
+                  <span>{{ 'conciliation.dashboard.result.matched' | translate }}</span
+                  ><strong>{{ r.summariesReconciled }}</strong>
+                </div>
+                <div class="col-6 flex justify-content-between">
+                  <span>{{
+                    'conciliation.dashboard.salesSummaryTransactions.partiallyReconciled'
+                      | translate
+                  }}</span
+                  ><strong>{{ r.summariesPartiallyReconciled }}</strong>
+                </div>
+                <div class="col-6 flex justify-content-between">
+                  <span>{{
+                    'conciliation.dashboard.salesSummaryTransactions.pending' | translate
+                  }}</span
+                  ><strong>{{ r.summariesPending }}</strong>
+                </div>
+                <div class="col-6 flex justify-content-between">
+                  <span>{{
+                    'conciliation.dashboard.salesSummaryTransactions.allExcluded' | translate
+                  }}</span
+                  ><strong>{{ r.summariesAllExcluded }}</strong>
+                </div>
+                <div class="col-6 flex justify-content-between">
+                  <span>{{
+                    'conciliation.dashboard.salesSummaryTransactions.withoutTransactions'
+                      | translate
+                  }}</span
+                  ><strong>{{ r.summariesWithoutTransactions }}</strong>
+                </div>
+              </div>
+            }
+            <button
+              pButton
+              type="button"
+              icon="pi pi-sync"
+              [loading]="reconcilingSalesSummaryTransactions()"
+              [disabled]="!canProcess() || anyProcessing()"
+              (click)="processReconcileSalesSummaryTransactions()"
+              [label]="'conciliation.dashboard.salesSummaryTransactions.button' | translate"
+            ></button>
+          </div>
+        </p-card>
+      </div>
+
+      <!-- Etapa 3 — Reprocessar Cancelamentos -->
+      <div class="col-12 lg:col-3">
+        <p-card>
+          <ng-template pTemplate="title">{{
+            'conciliation.dashboard.cancellation.cardTitle' | translate
+          }}</ng-template>
+          <div class="flex flex-column gap-3">
+            @if (summary(); as s) {
+              <div class="flex align-items-center justify-content-between">
+                <span>{{ 'conciliation.dashboard.cancellation.debitPending' | translate }}</span>
+                <strong>{{ s.debitPendingAmount | csCurrency }}</strong>
+              </div>
+              <div class="flex align-items-center justify-content-between">
+                <span>{{ 'conciliation.dashboard.cancellation.chargebackOpen' | translate }}</span>
+                <strong>{{ s.chargebackOpenAmount | csCurrency }}</strong>
+              </div>
+            }
+            @if (cancellationReprocessResult(); as r) {
+              <cs-tag
+                [value]="'conciliation.dashboard.completed' | translate"
+                tone="success"
+              ></cs-tag>
+              <div class="grid text-sm">
+                <div class="col-6 flex justify-content-between">
+                  <span>{{ 'conciliation.dashboard.cancellation.acqCancelled' | translate }}</span
+                  ><strong>{{ r.acqSalesCancelled }}</strong>
+                </div>
+                <div class="col-6 flex justify-content-between">
+                  <span>{{ 'conciliation.dashboard.cancellation.erpCancelled' | translate }}</span
+                  ><strong>{{ r.erpSalesCancelled }}</strong>
+                </div>
+                <div class="col-6 flex justify-content-between">
+                  <span>{{
+                    'conciliation.dashboard.cancellation.erpInstallments' | translate
+                  }}</span
+                  ><strong>{{ r.erpInstallmentsCancelled }}</strong>
+                </div>
+                <div class="col-6 flex justify-content-between">
+                  <span>{{
+                    'conciliation.dashboard.cancellation.linkedBeforeCancel' | translate
+                  }}</span
+                  ><strong>{{ r.erpLinkedBeforeCancel }}</strong>
+                </div>
+                <div class="col-6 flex justify-content-between">
+                  <span>{{ 'conciliation.dashboard.cancellation.skippedAlready' | translate }}</span
+                  ><strong>{{ r.skippedAlreadyCancelled }}</strong>
+                </div>
+                <div class="col-6 flex justify-content-between">
+                  <span>{{ 'conciliation.dashboard.cancellation.skippedNoErp' | translate }}</span
+                  ><strong>{{ r.skippedNoErpLinked }}</strong>
+                </div>
+              </div>
+            }
+            <button
+              pButton
+              type="button"
+              icon="pi pi-sync"
+              [loading]="reprocessingCancellations()"
+              [disabled]="!canProcess() || anyProcessing()"
+              (click)="openCancellationReprocessDialog()"
+              [label]="'conciliation.cancellationReprocess.buttonLabel' | translate"
+            ></button>
+          </div>
+        </p-card>
+      </div>
+    </div>
+
+    <!-- Linha 2 — Etapas 4, 5, 6, 7 -->
+    <div class="grid">
+      <!-- Etapa 4 — Taxas ERP x Adquirente -->
+      <div class="col-12 lg:col-3">
+        <p-card>
+          <ng-template pTemplate="title">{{
+            'conciliation.dashboard.fees.cardTitle' | translate
+          }}</ng-template>
+          <div class="flex flex-column gap-3">
+            @if (summary(); as s) {
+              <div class="flex align-items-center justify-content-between">
+                <span>{{ 'conciliation.dashboard.fees.charged' | translate }}</span>
+                <strong>{{ s.feeAmount | csCurrency }}</strong>
+              </div>
+              <div class="flex align-items-center justify-content-between">
+                <span>{{ 'conciliation.dashboard.fees.expected' | translate }}</span>
+                <strong>{{ s.expectedFeeAmount | csCurrency }}</strong>
+              </div>
+              <div class="flex align-items-center justify-content-between">
+                <span>{{ 'conciliation.dashboard.difference' | translate }}</span>
+                <cs-tag
+                  [value]="(s.feeDifferenceAmount | csCurrency) ?? ''"
+                  severity="warn"
+                ></cs-tag>
+              </div>
+            }
+            @if (reconcileFeesResult(); as r) {
+              <cs-tag
+                [value]="'conciliation.dashboard.completed' | translate"
+                tone="success"
+              ></cs-tag>
+              <div class="grid text-sm">
+                <div class="col-6 flex justify-content-between">
+                  <span>{{ 'conciliation.dashboard.result.analyzed' | translate }}</span
+                  ><strong>{{ r.analyzed }}</strong>
+                </div>
+                <div class="col-6 flex justify-content-between">
+                  <span>{{ 'conciliation.dashboard.fees.ok' | translate }}</span
+                  ><strong>{{ r.okRates }}</strong>
+                </div>
+                <div class="col-6 flex justify-content-between">
+                  <span>{{ 'conciliation.dashboard.fees.updatedErp' | translate }}</span
+                  ><strong>{{ r.updatedErpSales }}</strong>
+                </div>
+                <div class="col-6 flex justify-content-between">
+                  <span>{{ 'conciliation.dashboard.fees.divergent' | translate }}</span
+                  ><strong>{{ r.divergentRates }}</strong>
+                </div>
+                <div class="col-6 flex justify-content-between">
+                  <span>{{ 'conciliation.dashboard.fees.missingContract' | translate }}</span
+                  ><strong>{{ r.missingValidContracts }}</strong>
+                </div>
+                <div class="col-6 flex justify-content-between">
+                  <span>{{ 'conciliation.dashboard.fees.missingAcquirer' | translate }}</span
+                  ><strong>{{ r.skippedWithoutAcquire }}</strong>
+                </div>
+              </div>
+            }
+            <button
+              pButton
+              type="button"
+              icon="pi pi-sync"
+              [loading]="reconcilingFees()"
+              [disabled]="!canProcess() || anyProcessing()"
+              (click)="processReconciliationFees()"
+              [label]="'conciliation.contractAudit.processReconciliation' | translate"
+            ></button>
+          </div>
+        </p-card>
+      </div>
+
+      <!-- Etapa 5 — Venda ADQ x Resumo de Vendas -->
+      <div class="col-12 lg:col-3">
+        <p-card>
+          <ng-template pTemplate="title">{{
+            'conciliation.dashboard.acquirerSaleSummary.cardTitle' | translate
+          }}</ng-template>
+          <div class="flex flex-column gap-3">
+            @if (reconcileAcquirerSaleSummaryResult(); as r) {
+              <cs-tag
+                [value]="'conciliation.dashboard.completed' | translate"
+                tone="success"
+              ></cs-tag>
+              <div class="grid text-sm">
+                <div class="col-6 flex justify-content-between">
+                  <span>{{ 'conciliation.dashboard.result.analyzed' | translate }}</span
+                  ><strong>{{ r.summariesAnalyzed }}</strong>
+                </div>
+                <div class="col-6 flex justify-content-between">
+                  <span>{{ 'conciliation.dashboard.result.matched' | translate }}</span
+                  ><strong>{{ r.summariesReconciled }}</strong>
+                </div>
+                <div class="col-6 flex justify-content-between">
+                  <span>{{
+                    'conciliation.dashboard.acquirerSaleSummary.partiallyReconciled' | translate
+                  }}</span
+                  ><strong>{{ r.summariesPartiallyReconciled }}</strong>
+                </div>
+                <div class="col-6 flex justify-content-between">
+                  <span>{{ 'conciliation.dashboard.acquirerSaleSummary.pending' | translate }}</span
+                  ><strong>{{ r.summariesPending }}</strong>
+                </div>
+                <div class="col-6 flex justify-content-between">
+                  <span>{{
+                    'conciliation.dashboard.acquirerSaleSummary.blockedByPreviousStep' | translate
+                  }}</span
+                  ><strong>{{ r.summariesBlockedByPreviousStep }}</strong>
+                </div>
+                <div class="col-6 flex justify-content-between">
+                  <span>{{
+                    'conciliation.dashboard.acquirerSaleSummary.transactionsAnalyzed' | translate
+                  }}</span
+                  ><strong>{{ r.transactionsAnalyzed }}</strong>
+                </div>
+                <div class="col-6 flex justify-content-between">
+                  <span>{{
+                    'conciliation.dashboard.acquirerSaleSummary.transactionsEligible' | translate
+                  }}</span
+                  ><strong>{{ r.transactionsEligible }}</strong>
+                </div>
+              </div>
+            }
+            <button
+              pButton
+              type="button"
+              icon="pi pi-sync"
+              [loading]="reconcilingAcquirerSaleSummary()"
+              [disabled]="!canProcess() || anyProcessing()"
+              (click)="processReconcileAcquirerSaleSummary()"
+              [label]="'conciliation.dashboard.acquirerSaleSummary.button' | translate"
+            ></button>
+          </div>
+        </p-card>
+      </div>
+
+      <!-- Etapa 6 — Resumo de Vendas x Ordem de Crédito -->
+      <div class="col-12 lg:col-3">
+        <p-card>
+          <ng-template pTemplate="title">{{
+            'conciliation.dashboard.salesSummaryCreditOrder.cardTitle' | translate
+          }}</ng-template>
+          <div class="flex flex-column gap-3">
+            @if (reconcileSalesSummaryCreditOrderResult(); as r) {
+              <cs-tag
+                [value]="'conciliation.dashboard.completed' | translate"
+                tone="success"
+              ></cs-tag>
+              <div class="grid text-sm">
+                <div class="col-6 flex justify-content-between">
+                  <span>{{ 'conciliation.dashboard.result.analyzed' | translate }}</span
+                  ><strong>{{ r.summariesAnalyzed }}</strong>
+                </div>
+                <div class="col-6 flex justify-content-between">
+                  <span>{{ 'conciliation.dashboard.result.matched' | translate }}</span
+                  ><strong>{{ r.summariesReconciled }}</strong>
+                </div>
+                <div class="col-6 flex justify-content-between">
+                  <span>{{
+                    'conciliation.dashboard.salesSummaryCreditOrder.partiallyReconciled' | translate
+                  }}</span
+                  ><strong>{{ r.summariesPartiallyReconciled }}</strong>
+                </div>
+                <div class="col-6 flex justify-content-between">
+                  <span>{{
+                    'conciliation.dashboard.salesSummaryCreditOrder.pending' | translate
+                  }}</span
+                  ><strong>{{ r.summariesPending }}</strong>
+                </div>
+                <div class="col-6 flex justify-content-between">
+                  <span>{{
+                    'conciliation.dashboard.salesSummaryCreditOrder.withoutCreditOrders' | translate
+                  }}</span
+                  ><strong>{{ r.summariesWithoutCreditOrders }}</strong>
+                </div>
+                <div class="col-6 flex justify-content-between">
+                  <span>{{
+                    'conciliation.dashboard.salesSummaryCreditOrder.generated' | translate
+                  }}</span
+                  ><strong>{{ r.generatedCreditOrders }}</strong>
+                </div>
+                <div class="col-6 flex justify-content-between">
+                  <span>{{
+                    'conciliation.dashboard.salesSummaryCreditOrder.creditOrdersAnalyzed'
+                      | translate
+                  }}</span
+                  ><strong>{{ r.creditOrdersAnalyzed }}</strong>
+                </div>
+                <div class="col-12 flex justify-content-between">
+                  <span>{{
+                    'conciliation.dashboard.salesSummaryCreditOrder.totalValueReconciled'
+                      | translate
+                  }}</span
+                  ><strong>{{ r.totalGrossValueReconciled | csCurrency }}</strong>
+                </div>
+                <div class="col-12 flex justify-content-between">
+                  <span>{{
+                    'conciliation.dashboard.salesSummaryCreditOrder.totalValuePending' | translate
+                  }}</span
+                  ><strong>{{ r.totalGrossValuePending | csCurrency }}</strong>
+                </div>
+              </div>
+            }
+            <button
+              pButton
+              type="button"
+              icon="pi pi-sync"
+              [loading]="reconcilingCreditOrder()"
+              [disabled]="!canProcess() || anyProcessing()"
+              (click)="processReconcileSalesSummaryCreditOrder()"
+              [label]="'conciliation.dashboard.salesSummaryCreditOrder.button' | translate"
+            ></button>
+          </div>
+        </p-card>
+      </div>
+
+      <!-- Etapa 7 — Banco / CNAB -->
+      <div class="col-12 lg:col-3">
+        <p-card>
+          <ng-template pTemplate="title">{{
+            'conciliation.dashboard.bank.cardTitle' | translate
+          }}</ng-template>
+          <div class="flex flex-column gap-3">
+            @if (summary(); as s) {
+              <div class="flex align-items-center justify-content-between">
+                <span>{{ 'conciliation.dashboard.bank.settled' | translate }}</span>
+                <strong>{{ s.bankSettledAmount | csCurrency }}</strong>
+              </div>
+              <div class="flex align-items-center justify-content-between">
+                <span>{{ 'conciliation.dashboard.bank.pending' | translate }}</span>
+                <strong>{{ s.bankPendingAmount | csCurrency }}</strong>
+              </div>
+            }
+            @if (reconcileBankResult(); as r) {
+              <cs-tag
+                [value]="'conciliation.dashboard.bank.completed' | translate"
+                tone="success"
+              ></cs-tag>
+              <div class="grid text-sm">
+                <div class="col-6 flex justify-content-between">
+                  <span>{{ 'conciliation.dashboard.bank.releasesAnalyzed' | translate }}</span
+                  ><strong>{{ r.releasesAnalyzed }}</strong>
+                </div>
+                <div class="col-6 flex justify-content-between">
+                  <span>{{ 'conciliation.dashboard.bank.releasesReconciled' | translate }}</span
+                  ><strong>{{ r.releasesReconciled }}</strong>
+                </div>
+                <div class="col-6 flex justify-content-between">
+                  <span>{{ 'conciliation.dashboard.bank.releasesWithoutMatch' | translate }}</span
+                  ><strong>{{ r.releasesWithoutMatch }}</strong>
+                </div>
+                <div class="col-12 flex justify-content-between">
+                  <span>{{ 'conciliation.dashboard.bank.totalReleaseValue' | translate }}</span
+                  ><strong>{{ r.totalReleaseValueReconciled | csCurrency }}</strong>
+                </div>
+                <div class="col-12 flex justify-content-between">
+                  <span>{{ 'conciliation.dashboard.bank.totalCreditOrderValue' | translate }}</span
+                  ><strong>{{ r.totalCreditOrderValueReconciled | csCurrency }}</strong>
+                </div>
+              </div>
+            }
+            <button
+              pButton
+              type="button"
+              icon="pi pi-sync"
+              [loading]="reconcilingBank()"
+              [disabled]="!canProcess() || anyProcessing()"
+              (click)="reconcileBank()"
+              [label]="'conciliation.bank.processReconciliation' | translate"
+            ></button>
+          </div>
+        </p-card>
+      </div>
+    </div>
+
+    <!-- Esteira Financeira Completa -->
+    <div class="grid">
+      <div class="col-12">
+        <p-card>
+          <ng-template pTemplate="title">
+            <span class="flex align-items-center gap-2">
+              <i class="pi pi-bolt"></i>
+              {{ 'conciliation.dashboard.pipeline.cardTitle' | translate }}
+            </span>
+          </ng-template>
+          <div class="flex flex-column gap-3">
+            <span class="text-color-secondary">
+              {{ 'conciliation.dashboard.pipeline.description' | translate }}
+            </span>
+
+            @if (pipelineResult(); as result) {
+              <div class="flex flex-column gap-2">
+                <cs-tag
+                  [value]="'conciliation.dashboard.pipeline.completed' | translate"
+                  tone="success"
+                ></cs-tag>
+
+                @for (step of result.steps; track step.step) {
+                  <div class="flex flex-column gap-1 border-1 surface-border border-round p-3">
+                    <div class="flex align-items-center justify-content-between">
+                      <strong>{{ step.step }}</strong>
+                      <cs-tag
+                        [value]="step.status"
+                        [tone]="step.status === 'SUCCESS' ? 'success' : 'danger'"
+                      ></cs-tag>
+                    </div>
+                    @if (step.message) {
+                      <span class="text-sm text-color-secondary">{{ step.message }}</span>
+                    }
+                    <div class="grid text-sm mt-1">
+                      @if (step.analyzed != null) {
+                        <div class="col-6 flex justify-content-between">
+                          <span>{{ 'conciliation.dashboard.result.analyzed' | translate }}</span
+                          ><strong>{{ step.analyzed }}</strong>
+                        </div>
+                      }
+                      @if (step.reconciled != null) {
+                        <div class="col-6 flex justify-content-between">
+                          <span>{{ 'conciliation.dashboard.result.matched' | translate }}</span
+                          ><strong>{{ step.reconciled }}</strong>
+                        </div>
+                      }
+                      @if (step.partiallyReconciled != null) {
+                        <div class="col-6 flex justify-content-between">
+                          <span>{{
+                            'conciliation.dashboard.pipeline.partiallyReconciled' | translate
+                          }}</span
+                          ><strong>{{ step.partiallyReconciled }}</strong>
+                        </div>
+                      }
+                      @if (step.pending != null) {
+                        <div class="col-6 flex justify-content-between">
+                          <span>{{ 'conciliation.dashboard.pipeline.pending' | translate }}</span
+                          ><strong>{{ step.pending }}</strong>
+                        </div>
+                      }
+                      @if (step.divergent != null) {
+                        <div class="col-6 flex justify-content-between">
+                          <span>{{ 'conciliation.dashboard.pipeline.divergent' | translate }}</span
+                          ><strong>{{ step.divergent }}</strong>
+                        </div>
+                      }
+                      @if (step.withoutMatch != null) {
+                        <div class="col-6 flex justify-content-between">
+                          <span>{{
+                            'conciliation.dashboard.pipeline.withoutMatch' | translate
+                          }}</span
+                          ><strong>{{ step.withoutMatch }}</strong>
+                        </div>
+                      }
+                      @if (step.updated != null) {
+                        <div class="col-6 flex justify-content-between">
+                          <span>{{ 'conciliation.dashboard.result.updated' | translate }}</span
+                          ><strong>{{ step.updated }}</strong>
+                        </div>
+                      }
+                      @if (step.generated != null) {
+                        <div class="col-6 flex justify-content-between">
+                          <span>{{ 'conciliation.dashboard.pipeline.generated' | translate }}</span
+                          ><strong>{{ step.generated }}</strong>
+                        </div>
+                      }
+                    </div>
+                  </div>
+                }
+              </div>
+            }
+
+            <button
+              pButton
+              type="button"
+              severity="warn"
+              icon="pi pi-play"
+              [loading]="runningPipeline()"
+              [disabled]="!canProcess() || anyProcessing()"
+              (click)="runFullPipeline()"
+              [label]="'conciliation.dashboard.pipeline.runButton' | translate"
+            ></button>
+          </div>
+        </p-card>
+      </div>
+    </div>
+
+    <cs-cancellation-reprocess-dialog
+      [resolving]="reprocessingCancellations()"
+      [visible]="cancellationReprocessDialogVisible()"
+      (confirm)="confirmCancellationReprocess($event)"
+      (closeDialog)="cancellationReprocessDialogVisible.set(false)"
+      (visibleChange)="cancellationReprocessDialogVisible.set($event)"
+    ></cs-cancellation-reprocess-dialog>
+  </div>
+</div>

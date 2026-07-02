@@ -34,6 +34,26 @@ export interface ReconcileBankResultModel {
   totalInstallmentValueReconciled: number;
 }
 
+export interface ReconcileSalesSummaryTransactionsResultModel {
+  summariesAnalyzed: number;
+  summariesReconciled: number;
+  summariesPartiallyReconciled: number;
+  summariesPending: number;
+  summariesAllExcluded: number;
+  summariesWithoutTransactions: number;
+}
+
+export interface ReconcileAcquirerSaleSummaryResultModel {
+  summariesAnalyzed: number;
+  summariesReconciled: number;
+  summariesPartiallyReconciled: number;
+  summariesPending: number;
+  summariesBlockedByPreviousStep: number;
+  transactionsAnalyzed: number;
+  transactionsEligible: number;
+  summariesWithoutTransactions: number;
+}
+
 export interface ReconcileSalesSummaryCreditOrderResultModel {
   summariesAnalyzed: number;
   summariesReconciled: number;

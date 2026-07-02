@@ -86,6 +86,7 @@ export const UI_KEYS = {
       erpVsAcquirerDivergences: 'menu.conciliation.erpVsAcquirerDivergences',
       manualSalesSummary: 'menu.conciliation.manualSalesSummary',
       manualCreditOrder: 'menu.conciliation.manualCreditOrder',
+      reconciliationActions: 'menu.conciliation.reconciliationActions',
     },
     security: {
       title: 'menu.security.title',
@@ -110,6 +111,8 @@ export const UI_KEYS = {
     settings: {
       title: 'menu.settings.title',
       email: 'menu.settings.email',
+      scheduler: 'menu.settings.scheduler',
+      reconciliation: 'menu.settings.reconciliation',
     },
     reconciliation: 'menu.reconciliation',
   },
@@ -685,6 +688,8 @@ export const UI_KEYS = {
     settings: {
       saved: 'conciliation.settings.saved',
       saveError: 'conciliation.settings.saveError',
+      schedulerSaved: 'conciliation.settings.schedulerSaved',
+      schedulerSaveError: 'conciliation.settings.schedulerSaveError',
     },
     manualSalesSummary: {
       saved: 'conciliation.manualSalesSummary.saved',
@@ -1007,7 +1012,6 @@ export const UI_KEYS = {
       bank: 'bankStatement.fields.bank',
       flag: 'bankStatement.fields.flag',
       type: 'bankStatement.fields.type',
-      value: 'bankStatement.fields.value',
       company: 'bankStatement.fields.company',
       category: 'bankStatement.fields.category',
       acquirer: 'bankStatement.fields.acquirer',
@@ -1015,6 +1019,7 @@ export const UI_KEYS = {
       statusShort: 'bankStatement.fields.statusShort',
       releaseDate: 'bankStatement.fields.releaseDate',
       bankHistory: 'bankStatement.fields.bankHistory',
+      releaseValue: 'bankStatement.fields.releaseValue',
       establishment: 'bankStatement.fields.establishment',
       bankingDomicile: 'bankStatement.fields.bankingDomicile',
       releaseCategory: 'bankStatement.fields.releaseCategory',
@@ -1156,7 +1161,7 @@ export const UI_KEYS = {
       acquirer: 'creditOrders.fields.acquirer',
       modality: 'creditOrders.fields.modality',
       grossValue: 'creditOrders.fields.grossValue',
-      liquidValue: 'creditOrders.fields.liquidValue',
+      releaseValue: 'creditOrders.fields.releaseValue',
       releaseDate: 'creditOrders.fields.releaseDate',
       periodRvDate: 'creditOrders.fields.periodRvDate',
       discountValue: 'creditOrders.fields.discountValue',
@@ -1527,6 +1532,12 @@ export const UI_KEYS = {
         passwordReset: 'audit.emailLog.eventType.passwordReset',
         firstPassword: 'audit.emailLog.eventType.firstPassword',
       },
+    },
+  },
+  email: {
+    settings: {
+      saved: 'email.settings.saved',
+      saveError: 'email.settings.saveError',
     },
   },
   validation: {

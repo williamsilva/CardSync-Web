@@ -179,8 +179,8 @@ export class CreditOrderListComponent
   readonly discountValueEnd = signal<number | null>(null);
   readonly discountValueStart = signal<number | null>(null);
 
-  readonly liquidValueEnd = signal<number | null>(null);
-  readonly liquidValueStart = signal<number | null>(null);
+  readonly releaseValueEnd = signal<number | null>(null);
+  readonly releaseValueStart = signal<number | null>(null);
 
   readonly statusPaymentBank = signal<StatusPaymentBankEnum[] | null>(null);
   readonly salesSummaryStatus = signal<StatusReconciliationEnum[] | null>(null);
@@ -199,16 +199,16 @@ export class CreditOrderListComponent
     end: this.discountValueEnd(),
   }));
 
-  readonly liquidValueRange = computed<CsCurrencyRangeValue>(() => ({
-    start: this.liquidValueStart(),
-    end: this.liquidValueEnd(),
+  readonly releaseValueRange = computed<CsCurrencyRangeValue>(() => ({
+    start: this.releaseValueStart(),
+    end: this.releaseValueEnd(),
   }));
 
   /* Campos Tabela */
   readonly rvNumberColumnDraft = signal('');
   readonly pvNumberColumnDraft = signal('');
   readonly grossValueColumnDraft = signal('');
-  readonly liquidValueColumnDraft = signal('');
+  readonly releaseValueColumnDraft = signal('');
   readonly discountValueColumnDraft = signal('');
   readonly installmentNumberColumnDraft = signal('');
 
@@ -276,7 +276,7 @@ export class CreditOrderListComponent
     this.rvNumberColumnDraft.set('');
     this.pvNumberColumnDraft.set('');
     this.grossValueColumnDraft.set('');
-    this.liquidValueColumnDraft.set('');
+    this.releaseValueColumnDraft.set('');
     this.discountValueColumnDraft.set('');
     this.installmentNumberColumnDraft.set('');
 
@@ -383,10 +383,10 @@ export class CreditOrderListComponent
       this.discountValueStart(),
       this.discountValueEnd(),
     );
-    const liquidValueLabel = currencyRangeLabel(
+    const releaseValueLabel = currencyRangeLabel(
       this.i18n,
-      this.liquidValueStart(),
-      this.liquidValueEnd(),
+      this.releaseValueStart(),
+      this.releaseValueEnd(),
     );
 
     const rvDateValue = this.formatActiveFilterPeriodDateValue(
@@ -501,10 +501,10 @@ export class CreditOrderListComponent
       });
     }
 
-    if (liquidValueLabel) {
+    if (releaseValueLabel) {
       items.push({
-        label: this.i18n.tUi('creditOrders.fields.liquidValue'),
-        value: liquidValueLabel,
+        label: this.i18n.tUi('creditOrders.fields.releaseValue'),
+        value: releaseValueLabel,
       });
     }
 
@@ -567,8 +567,8 @@ export class CreditOrderListComponent
       discountValueEnd: this.discountValueEnd() ?? undefined,
       discountValueStart: this.discountValueStart() ?? undefined,
 
-      liquidValueEnd: this.liquidValueEnd() ?? undefined,
-      liquidValueStart: this.liquidValueStart() ?? undefined,
+      releaseValueEnd: this.releaseValueEnd() ?? undefined,
+      releaseValueStart: this.releaseValueStart() ?? undefined,
 
       salesSummaryStatus: this.salesSummaryStatus()?.length
         ? this.salesSummaryStatus()!
@@ -598,8 +598,8 @@ export class CreditOrderListComponent
 
     this.syncTextColumnDraftFromTableState(
       filters,
-      'liquidValue',
-      this.liquidValueColumnDraft,
+      'releaseValue',
+      this.releaseValueColumnDraft,
       readSingleFilterValue,
     );
 
@@ -780,15 +780,14 @@ export class CreditOrderListComponent
       periodCreditOrderDate: this.periodCreditOrderDate(),
 
       rvNumber: this.rvNumber(),
-
       modality: this.modality(),
 
       grossValueStart: this.grossValueStart(),
       grossValueEnd: this.grossValueEnd(),
       discountValueStart: this.discountValueStart(),
       discountValueEnd: this.discountValueEnd(),
-      liquidValueStart: this.liquidValueStart(),
-      liquidValueEnd: this.liquidValueEnd(),
+      releaseValueStart: this.releaseValueStart(),
+      releaseValueEnd: this.releaseValueEnd(),
 
       salesSummaryStatus: this.salesSummaryStatus(),
       statusPaymentBank: this.statusPaymentBank(),
@@ -818,8 +817,8 @@ export class CreditOrderListComponent
     this.grossValueEnd.set(s.grossValueEnd ?? null);
     this.discountValueStart.set(s.discountValueStart ?? null);
     this.discountValueEnd.set(s.discountValueEnd ?? null);
-    this.liquidValueStart.set(s.liquidValueStart ?? null);
-    this.liquidValueEnd.set(s.liquidValueEnd ?? null);
+    this.releaseValueStart.set(s.releaseValueStart ?? null);
+    this.releaseValueEnd.set(s.releaseValueEnd ?? null);
 
     this.salesSummaryStatus.set(s.salesSummaryStatus ?? null);
     this.statusPaymentBank.set(s.statusPaymentBank ?? null);
@@ -836,8 +835,8 @@ export class CreditOrderListComponent
   }
 
   protected onLiquidValueRangeChange(value: CsCurrencyRangeValue): void {
-    this.liquidValueStart.set(value.start ?? null);
-    this.liquidValueEnd.set(value.end ?? null);
+    this.releaseValueStart.set(value.start ?? null);
+    this.releaseValueEnd.set(value.end ?? null);
   }
 
   /* Metodos busca */
@@ -892,6 +891,8 @@ export class CreditOrderListComponent
       ...createEmptySaleSummaryFiltersState(),
       rvDate: row.salesSummary?.rvNumber ? String(row.salesSummary.rvNumber) : undefined,
 
+      rvNumber: row.rvNumber ? row.rvNumber : undefined,
+
       flags: row.flag?.id ? [row.flag.id] : null,
       companies: row.company?.id ? [row.company.id] : null,
       acquirers: row.acquirer?.id ? [row.acquirer.id] : null,
@@ -905,5 +906,16 @@ export class CreditOrderListComponent
   ): void {
     const url = this.router.serializeUrl(this.router.createUrlTree(commands, extras));
     window.open(`${window.location.origin}${url}`, '_blank', 'noopener,noreferrer');
+  }
+
+  protected bankingDomicileLabel(row: CreditOrderModel): string {
+    const agency = row.bankingDomicile?.agency;
+    const account = row.bankingDomicile?.currentAccount;
+
+    if (!agency || !account) {
+      return '-';
+    }
+
+    return `Ag. ${agency} Cc. ${account}`;
   }
 }

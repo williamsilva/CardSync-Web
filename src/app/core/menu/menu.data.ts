@@ -80,7 +80,6 @@ export const APP_MENU: AppMenuItem[] = [
       },
     ],
   },
-
   /* Banks */
   {
     icon: 'pi pi-building-columns text-emerald-600',
@@ -138,6 +137,13 @@ export const APP_MENU: AppMenuItem[] = [
       },
       {
         exact: false,
+        route: '/conciliation/reconciliation-actions',
+        labelKey: 'menu.conciliation.reconciliationActions',
+        icon: 'pi pi-sync text-purple-400',
+        permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.FILE_PROCESSING.PROCESS],
+      },
+      {
+        exact: false,
         route: '/conciliation/erp-vs-acquirer/missing-acquirer',
         labelKey: 'menu.conciliation.erpMissingAcquirer',
         icon: 'pi pi-exclamation-circle text-purple-400',
@@ -179,13 +185,6 @@ export const APP_MENU: AppMenuItem[] = [
         route: '/conciliation/aging',
         labelKey: 'menu.conciliation.aging',
         icon: 'pi pi-hourglass text-purple-400',
-      },
-      {
-        exact: false,
-        route: '/conciliation/settings',
-        labelKey: 'menu.conciliation.settings',
-        icon: 'pi pi-cog text-purple-400',
-        permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.FILE_PROCESSING.READ],
       },
     ],
   },
@@ -358,16 +357,31 @@ export const APP_MENU: AppMenuItem[] = [
       },
     ],
   },
-  /* Settings */
+  /* Settings — cor slate */
   {
-    icon: 'pi pi-cog text-indigo-600',
+    icon: 'pi pi-cog text-slate-600',
     labelKey: 'menu.settings.title',
     children: [
       {
-        labelKey: 'menu.settings.email',
-        route: '/settings/email',
         exact: false,
-        icon: 'pi pi-envelope text-indigo-400',
+        route: '/settings/scheduler',
+        labelKey: 'menu.settings.scheduler',
+        icon: 'pi pi-clock text-slate-400',
+        permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.FILE_PROCESSING.READ],
+      },
+      {
+        exact: false,
+        route: '/settings/reconciliation',
+        labelKey: 'menu.settings.reconciliation',
+        icon: 'pi pi-sliders-v text-slate-400',
+        permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.FILE_PROCESSING.READ],
+      },
+      {
+        exact: false,
+        route: '/settings/email',
+        labelKey: 'menu.settings.email',
+        icon: 'pi pi-envelope text-slate-400',
+        permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.FILE_PROCESSING.READ],
       },
     ],
   },

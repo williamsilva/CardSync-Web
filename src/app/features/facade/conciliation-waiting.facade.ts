@@ -21,6 +21,8 @@ import {
   ErpAcquirerResolutionResultModel,
   ErpAcquirerBatchResolutionResultModel,
   ReconcileSalesSummaryCreditOrderResultModel,
+  ReconcileSalesSummaryTransactionsResultModel,
+  ReconcileAcquirerSaleSummaryResultModel,
 } from '@models/conciliation-waiting.model';
 
 export type ConciliationErpVsAcquirerView =
@@ -216,6 +218,14 @@ export class ConciliationWaitingFacade {
         // this.showSalesSummaryCreditOrderToast(result)
       }),
     );
+  }
+
+  reconcileSalesSummaryTransactions(): Observable<ReconcileSalesSummaryTransactionsResultModel> {
+    return this.api.reconcileSalesSummaryTransactions();
+  }
+
+  reconcileAcquirerSaleSummary(): Observable<ReconcileAcquirerSaleSummaryResultModel> {
+    return this.api.reconcileAcquirerSaleSummary();
   }
 
   private searchByView(view: ConciliationErpVsAcquirerView, q: ConciliationQuery) {

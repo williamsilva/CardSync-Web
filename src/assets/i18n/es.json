@@ -104,8 +104,22 @@
       "manualCreditOrder": {
         "title": "Orden de Pago Manual"
       },
+      "reconciliationActions": {
+        "title": "Acciones de Conciliación"
+      },
       "divergences": {
         "title": "Divergencias operativas"
+      }
+    },
+    "settings": {
+      "scheduler": {
+        "title": "Programación"
+      },
+      "reconciliation": {
+        "title": "Conciliación"
+      },
+      "email": {
+        "title": "E-mail"
       }
     },
     "transactions": {
@@ -215,7 +229,8 @@
       "acquirerMissingErp": "No localizada en el ERP",
       "erpVsAcquirerDivergences": "Otras no conciliadas",
       "manualSalesSummary": "Resumen de Ventas Manual",
-      "manualCreditOrder": "Orden de Pago Manual"
+      "manualCreditOrder": "Orden de Pago Manual",
+      "reconciliationActions": "Acciones de Conciliación"
     },
     "adjustment": {
       "title": "Ajustes",
@@ -233,7 +248,9 @@
     },
     "settings": {
       "title": "Configuraciones",
-      "email": "E-mail"
+      "email": "E-mail",
+      "scheduler": "Programación",
+      "reconciliation": "Conciliación"
     },
     "file": {
       "processing": {
@@ -1963,6 +1980,24 @@
       "eyebrow": "Conciliación",
       "title": "Configuración de Conciliación",
       "subtitle": "Parámetros del proceso de conciliación ERP x Adquirente.",
+      "schedulingTitle": "Programación",
+      "schedulingSubtitle": "Controla cuándo y cómo se ejecuta el pipeline automático de CardSync.",
+      "processingTitle": "Procesamiento",
+      "processingSubtitle": "Ventana de búsqueda de transacciones para la conciliación ERP x Adquirente.",
+      "reconciliationTitle": "Conciliación",
+      "reconciliationSubtitle": "Tolerancias y reprocesamiento por etapa del pipeline de conciliación.",
+      "schedulerEnabled": "Programación automática",
+      "schedulerEnabledHint": "Habilita o deshabilita la ejecución automática del pipeline. Los endpoints manuales siguen funcionando incluso con esta opción desactivada.",
+      "completePipelineEnabled": "Pipeline completo habilitado",
+      "completePipelineEnabledHint": "Habilita la ejecución del pipeline completo (ERP → Adquirente → Banco → Conciliaciones). Cuando está desactivado, el scheduler se despierta pero no hace nada.",
+      "completePipelineCron": "Expressão cron",
+      "completePipelineCronHint": "Cron Spring de 6 campos (segundos minutos horas día mes día-semana). Los cambios se aplican solo después de reiniciar el servidor.",
+      "completePipelineStopOnStepError": "Detener en error de etapa",
+      "completePipelineStopOnStepErrorHint": "Cuando está habilitado, el pipeline interrumpe las etapas siguientes si una etapa lanza una excepción. Los conflictos de ejecución paralela nunca detienen el pipeline.",
+      "logIdleCycles": "Registrar ciclos ociosos",
+      "logIdleCyclesHint": "Emite un log de depuración en cada ciclo en que el scheduler se despierta pero está desactivado. Se recomienda desactivar en producción para evitar ruido en los logs.",
+      "schedulerSaved": "Configuración de programación guardada con éxito.",
+      "schedulerSaveError": "No se pudo guardar la configuración de programación.",
       "erpAcquirerPreviousDaysLookback": "Días retroactivos en la adquirente",
       "erpAcquirerPreviousDaysLookbackHint": "Define cuántos días antes de la fecha ERP puede haber registrado la transacción la adquirente. Use 0 para desactivar este filtro.",
       "erpAcquirerFutureDaysLookback": "Días futuros en la adquirente",
@@ -1971,6 +2006,28 @@
       "reconciliationLookbackMonthsHint": "Define cuántos meses anteriores a la fecha actual se deben considerar para buscar transacciones en la conciliación. Valor predeterminado: 120 meses.",
       "creditOrderPendingDays": "Días de atraso para órdenes pendientes",
       "creditOrderPendingDaysHint": "Los resúmenes con fecha de RV anterior a este número de días y sin órdenes de pago se listan como pendientes para creación en lote.",
+      "reprocessTitle": "Reprocesamiento por Etapa del Pipeline",
+      "reprocessSubtitle": "Permite que cada etapa del pipeline procese registros ya conciliados. Use solo para auditorías o correcciones puntuales — desactive después del uso.",
+      "reprocessErpAcquirerSales": "Etapa 1 — ERP x Adquirente (Ventas)",
+      "reprocessErpAcquirerSalesHint": "Reprocesa ventas ERP ya conciliadas con la adquirente.",
+      "reprocessSalesSummaryTransactions": "Etapa 2 — Resumen x TransactionAcq",
+      "reprocessSalesSummaryTransactionsHint": "Reprocesa resúmenes de ventas cuyo transactionsStatus ya está conciliado.",
+      "reprocessAcquirerSaleCancellations": "Etapa 3 — Cancelaciones de la Adquirente",
+      "reprocessAcquirerSaleCancellationsHint": "Reprocesa ventas ya marcadas como canceladas por la adquirente.",
+      "reprocessErpAcquirerFees": "Etapa 4 — Tarifas ERP x Adquirente",
+      "reprocessErpAcquirerFeesHint": "Reprocesa transacciones cuyo feeReconciliationStatus ya está conciliado.",
+      "reprocessAcquirerSaleSummary": "Etapa 5 — Venta ADQ x Resumen de Ventas",
+      "reprocessAcquirerSaleSummaryHint": "Reprocesa resúmenes de ventas cuyo transactionsStatus ya está conciliado.",
+      "reprocessSalesSummaryCreditOrder": "Etapa 6 — Resumen x Orden de Pago",
+      "reprocessSalesSummaryCreditOrderHint": "Reprocesa resúmenes cuyo creditOrderStatus ya está conciliado.",
+      "reprocessBankAcquirer": "Etapa 7 — Orden de Pago x Extracto Bancario",
+      "reprocessBankAcquirerHint": "Reprocesa órdenes de crédito ya pagadas y lanzamientos bancarios ya conciliados.",
+      "dateToleranceDays": "Tolerancia de días (banco)",
+      "dateToleranceDaysHint": "Ventana en días para aceptar divergencia de fechas en la conciliación bancaria. Ej: 7 acepta lanzamientos hasta 7 días antes/después de la fecha de la orden.",
+      "valueTolerance": "Tolerancia de valor (R$)",
+      "valueToleranceHint": "Diferencia monetaria máxima tolerada en una conciliación. Ej: 0,05 acepta divergencias de hasta 5 centavos.",
+      "bankMarkNotReconciledAfterDays": "Días para marcar no conciliado",
+      "bankMarkNotReconciledAfterDaysHint": "Lanzamientos bancarios sin coincidencia en los últimos N días permanecen pendientes. Después de ese plazo, pasan a no conciliados.",
       "saved": "Configuración guardada exitosamente.",
       "saveError": "No fue posible guardar la configuración."
     },
@@ -2128,7 +2185,6 @@
       }
     },
     "dashboard": {
-      "eyebrow": "Conciliación",
       "subtitle": "Vista ejecutiva de ventas ERP, adquirente, tasas, banco, débitos y contracargos.",
       "completed": "Conciliación completada",
       "difference": "Diferencia",
@@ -2190,6 +2246,23 @@
         "skippedAlready": "Ya canceladas",
         "skippedNoErp": "Sin ERP vinculado"
       },
+      "salesSummaryTransactions": {
+        "cardTitle": "Resumen de Ventas x TransactionAcq",
+        "partiallyReconciled": "Parcialmente conciliados",
+        "pending": "Pendientes",
+        "allExcluded": "Todos excluidos",
+        "withoutTransactions": "Sin transacciones",
+        "button": "Conciliar Resumen x TransactionAcq"
+      },
+      "acquirerSaleSummary": {
+        "cardTitle": "Venta ADQ x Resumen de Ventas",
+        "partiallyReconciled": "Parcialmente conciliados",
+        "pending": "Pendientes",
+        "blockedByPreviousStep": "Bloqueados (etapa anterior)",
+        "transactionsAnalyzed": "Transacciones analizadas",
+        "transactionsEligible": "Transacciones elegibles",
+        "button": "Conciliar Venta ADQ x Resumen"
+      },
       "salesSummaryCreditOrder": {
         "cardTitle": "Resumen de Ventas x Orden de Crédito",
         "partiallyReconciled": "Parcialmente conciliados",
@@ -2247,6 +2320,9 @@
         "pendenciesCount": "{{ count }} pendencias",
         "noPendencies": "Ninguna pendencia encontrada."
       }
+    },
+    "reconciliationActions": {
+      "subtitle": "Ejecute cada paso de la pipeline de conciliación financiera individualmente o la pipeline completa de una vez."
     },
     "fees": {
       "title": "Tasas aplicadas",
@@ -2915,6 +2991,23 @@
       "yesterday": "AYER",
       "last7days": "ÚLTIMOS 7 DÍAS",
       "processed": "Archivos Procesados"
+    }
+  },
+  "email": {
+    "settings": {
+      "subtitle": "Configuración del proveedor de envío de correos.",
+      "impl": "Implementación",
+      "implHint": "Define el proveedor de envío. FAKE registra correos en el log (desarrollo), SMTP usa un servidor de correo configurado, BREVO usa la API de Brevo. Cambios de implementación y URL base se aplican tras reiniciar el servidor.",
+      "fromName": "Nombre del remitente",
+      "fromNameHint": "Nombre que aparece en el campo 'De' de los correos enviados.",
+      "fromEmail": "Correo del remitente",
+      "fromEmailHint": "Dirección de correo que aparece en el campo 'De'.",
+      "brevoApiKey": "Clave de API (Brevo)",
+      "brevoApiKeyHint": "Clave de autenticación para la API de Brevo. Necesaria cuando la implementación es BREVO.",
+      "brevoBaseUrl": "URL base (Brevo)",
+      "brevoBaseUrlHint": "URL base de la API de Brevo. Los cambios se aplican tras reiniciar el servidor.",
+      "saved": "Configuración de correo guardada con éxito.",
+      "saveError": "No fue posible guardar la configuración de correo."
     }
   },
   "notFound": {

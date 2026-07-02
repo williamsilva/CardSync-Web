@@ -24,6 +24,8 @@ import {
   ErpAcquirerResolutionResultModel,
   ErpAcquirerBatchResolutionResultModel,
   ReconcileSalesSummaryCreditOrderResultModel,
+  ReconcileSalesSummaryTransactionsResultModel,
+  ReconcileAcquirerSaleSummaryResultModel,
 } from '@models/conciliation-waiting.model';
 
 @Injectable({ providedIn: 'root' })
@@ -229,6 +231,22 @@ export class ConciliationWaitingApiService {
   reconcileSalesSummaryCreditOrder(): Observable<ReconcileSalesSummaryCreditOrderResultModel> {
     return this.http.post<ReconcileSalesSummaryCreditOrderResultModel>(
       `${this.baseUrl}/reconcile-sales-summary-credit-order`,
+      {},
+      { withCredentials: true },
+    );
+  }
+
+  reconcileSalesSummaryTransactions(): Observable<ReconcileSalesSummaryTransactionsResultModel> {
+    return this.http.post<ReconcileSalesSummaryTransactionsResultModel>(
+      `${this.baseUrl}/reconcile-sales-summary-transactions`,
+      {},
+      { withCredentials: true },
+    );
+  }
+
+  reconcileAcquirerSaleSummary(): Observable<ReconcileAcquirerSaleSummaryResultModel> {
+    return this.http.post<ReconcileAcquirerSaleSummaryResultModel>(
+      `${this.baseUrl}/reconcile-acquirer-sale-summary`,
       {},
       { withCredentials: true },
     );

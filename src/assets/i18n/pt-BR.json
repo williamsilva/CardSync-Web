@@ -99,6 +99,20 @@
       },
       "manualCreditOrder": {
         "title": "Ordem de Pagamento Manual"
+      },
+      "reconciliationActions": {
+        "title": "Ações de Conciliação"
+      }
+    },
+    "settings": {
+      "scheduler": {
+        "title": "Agendamento"
+      },
+      "reconciliation": {
+        "title": "Conciliação"
+      },
+      "email": {
+        "title": "E-mail"
       }
     },
     "transactions": {
@@ -242,7 +256,8 @@
       "acquirerMissingErp": "Não localizada no ERP",
       "erpVsAcquirerDivergences": "Outras não conciliadas",
       "manualSalesSummary": "Resumo de Vendas Manual",
-      "manualCreditOrder": "Ordem de Pagamento Manual"
+      "manualCreditOrder": "Ordem de Pagamento Manual",
+      "reconciliationActions": "Ações de Conciliação"
     },
     "security": {
       "title": "Segurança",
@@ -253,7 +268,9 @@
     },
     "settings": {
       "title": "Configurações",
-      "email": "E-mail"
+      "email": "E-mail",
+      "scheduler": "Agendamento",
+      "reconciliation": "Conciliação"
     },
     "file": {
       "processing": {
@@ -1615,7 +1632,6 @@
     "fields": {
       "type": "Tipo",
       "bank": "Banco",
-      "value": "Valor",
       "flag": "Bandeira",
       "company": "Empresa",
       "category": "Categoria",
@@ -1623,10 +1639,12 @@
       "statusShort": "Status",
       "acquirer": "Adquirente",
       "releaseDateShort": "Lança.",
+      "releaseValueShort": "Valor ",
       "establishmentShort": "Estab.",
       "bankingDomicile": "Domicílio",
       "releaseDate": "Data lançamento",
       "bankHistory": "Histórico banco",
+      "releaseValue": "Valor Lançamento",
       "establishment": "Estabelecimento",
       "releaseCategory": "Categoria lançamento",
       "statusPaymentBank": "Status pagamento banco",
@@ -1829,7 +1847,6 @@
       "acquirer": "Adquirente",
       "installment": "Parcela",
       "grossValue": "Valor Bruto",
-      "liquidValue": "Valor Líquido",
       "installmentNumber" :"Parcela",
       "creditOrder": "Ordem Crédito",
       "salesSummary": "Resumo Vendas",
@@ -1837,6 +1854,7 @@
       "releaseDate": "Data lançamento",
       "paymentBank": "Pagamento Banco",
       "rvDate": "Data resumo de vendas",
+      "releaseValueShort" : "Lançamento",
       "releaseValue": "Valor Lançamento",
       "establishment": "Estabelecimento",
       "rvNumber":"Número resumo de vendas",
@@ -2372,6 +2390,24 @@
       "eyebrow": "Conciliação",
       "title": "Configurações de Conciliação",
       "subtitle": "Parâmetros do processo de conciliação ERP x Adquirente.",
+      "schedulingTitle": "Agendamento",
+      "schedulingSubtitle": "Controla quando e como a esteira automática do CardSync é executada.",
+      "processingTitle": "Processamento",
+      "processingSubtitle": "Janela de busca de transações para conciliação ERP x Adquirente.",
+      "reconciliationTitle": "Conciliação",
+      "reconciliationSubtitle": "Tolerâncias e reprocessamento por etapa da esteira de conciliação.",
+      "schedulerEnabled": "Agendamento automático",
+      "schedulerEnabledHint": "Liga ou desliga a execução automática da esteira. Endpoints manuais continuam funcionando mesmo com esta flag desabilitada.",
+      "completePipelineEnabled": "Esteira completa habilitada",
+      "completePipelineEnabledHint": "Habilita a execução da esteira completa (ERP → Adquirente → Banco → Conciliações). Quando desabilitado, o scheduler acorda mas não executa.",
+      "completePipelineCron": "Expressão cron",
+      "completePipelineCronHint": "Cron Spring de 6 campos (segundos minutos horas dia mês dia-semana). Alterações aplicam-se somente após reinicialização do servidor.",
+      "completePipelineStopOnStepError": "Parar em erro de etapa",
+      "completePipelineStopOnStepErrorHint": "Quando habilitado, a esteira interrompe as etapas seguintes se uma etapa lançar exceção. Conflitos de execução paralela nunca interrompem a esteira.",
+      "logIdleCycles": "Registrar ciclos ociosos",
+      "logIdleCyclesHint": "Registra um log de depuração a cada ciclo em que o agendador acorda mas está desabilitado. Recomendado desabilitar em produção para evitar poluição nos logs.",
+      "schedulerSaved": "Configurações de agendamento salvas com sucesso.",
+      "schedulerSaveError": "Não foi possível salvar as configurações de agendamento.",
       "erpAcquirerPreviousDaysLookback": "Dias retroativos na adquirente",
       "erpAcquirerPreviousDaysLookbackHint": "Define quantos dias antes da data do ERP a adquirente pode ter registrado a transação. Use 0 para desabilitar este filtro.",
       "erpAcquirerFutureDaysLookback": "Dias futuros na adquirente",
@@ -2380,6 +2416,28 @@
       "reconciliationLookbackMonthsHint": "Define quantos meses anteriores à data atual devem ser considerados na busca de transações para conciliação. Padrão: 120 meses.",
       "creditOrderPendingDays": "Dias de atraso para ordens pendentes",
       "creditOrderPendingDaysHint": "Resumos com data de RV anterior a este número de dias e sem ordens de pagamento são listados como pendentes para criação em lote.",
+      "reprocessTitle": "Reprocessamento por Etapa",
+      "reprocessSubtitle": "Permite que cada etapa da esteira processe registros já conciliados. Use apenas para auditoria ou correção pontual — desative após o uso.",
+      "reprocessErpAcquirerSales": "Etapa 1 — ERP x Adquirente (Vendas)",
+      "reprocessErpAcquirerSalesHint": "Reprocessa vendas ERP já conciliadas com a adquirente.",
+      "reprocessSalesSummaryTransactions": "Etapa 2 — Resumo x TransactionAcq",
+      "reprocessSalesSummaryTransactionsHint": "Reprocessa resumos de vendas com transactionsStatus já conciliado.",
+      "reprocessAcquirerSaleCancellations": "Etapa 3 — Cancelamentos da Adquirente",
+      "reprocessAcquirerSaleCancellationsHint": "Reprocessa vendas já marcadas como canceladas pela adquirente.",
+      "reprocessErpAcquirerFees": "Etapa 4 — Taxas ERP x Adquirente",
+      "reprocessErpAcquirerFeesHint": "Reprocessa transações com feeReconciliationStatus já conciliado.",
+      "reprocessAcquirerSaleSummary": "Etapa 5 — Venda ADQ x Resumo de Vendas",
+      "reprocessAcquirerSaleSummaryHint": "Reprocessa resumos de vendas com transactionsStatus já conciliado.",
+      "reprocessSalesSummaryCreditOrder": "Etapa 6 — Resumo x Ordem de Pagamento",
+      "reprocessSalesSummaryCreditOrderHint": "Reprocessa resumos com creditOrderStatus já conciliado.",
+      "reprocessBankAcquirer": "Etapa 7 — Ordem de Pagamento x Banco",
+      "reprocessBankAcquirerHint": "Reprocessa ordens de crédito já pagas e lançamentos bancários já conciliados.",
+      "dateToleranceDays": "Tolerância de dias (banco)",
+      "dateToleranceDaysHint": "Janela em dias para aceitar divergência de datas na conciliação bancária. Ex: 7 aceita lançamentos até 7 dias antes/depois da data da ordem.",
+      "valueTolerance": "Tolerância de valor (R$)",
+      "valueToleranceHint": "Diferença monetária máxima tolerada numa conciliação. Ex: 0,05 aceita divergências de até 5 centavos.",
+      "bankMarkNotReconciledAfterDays": "Dias para marcar não conciliado",
+      "bankMarkNotReconciledAfterDaysHint": "Lançamentos bancários sem match são mantidos pendentes por N dias. Após esse prazo, passam a não conciliados.",
       "saved": "Configurações salvas com sucesso.",
       "saveError": "Não foi possível salvar as configurações."
     },
@@ -2538,7 +2596,6 @@
       }
     },
     "dashboard": {
-      "eyebrow": "Conciliação",
       "subtitle": "Visão executiva de vendas ERP, adquirente, taxas, banco, débitos e chargebacks.",
       "completed": "Conciliação concluída",
       "difference": "Diferença",
@@ -2600,6 +2657,23 @@
         "skippedAlready": "Já canceladas",
         "skippedNoErp": "Sem ERP vinculado"
       },
+      "salesSummaryTransactions": {
+        "cardTitle": "Resumo de Vendas x TransactionAcq",
+        "partiallyReconciled": "Parcialmente conciliados",
+        "pending": "Pendentes",
+        "allExcluded": "Todos excluídos",
+        "withoutTransactions": "Sem transações",
+        "button": "Conciliar Resumo x TransactionAcq"
+      },
+      "acquirerSaleSummary": {
+        "cardTitle": "Venda ADQ x Resumo de Vendas",
+        "partiallyReconciled": "Parcialmente conciliados",
+        "pending": "Pendentes",
+        "blockedByPreviousStep": "Bloqueados (etapa anterior)",
+        "transactionsAnalyzed": "Transações analisadas",
+        "transactionsEligible": "Transações elegíveis",
+        "button": "Conciliar Venda ADQ x Resumo"
+      },
       "salesSummaryCreditOrder": {
         "cardTitle": "Resumo de Vendas x Ordem de Crédito",
         "partiallyReconciled": "Parcialmente conciliados",
@@ -2657,6 +2731,9 @@
         "pendenciesCount": "{{ count }} pendências",
         "noPendencies": "Nenhuma pendência encontrada."
       }
+    },
+    "reconciliationActions": {
+      "subtitle": "Execute cada etapa da esteira de conciliação financeira individualmente ou a esteira completa."
     }
   },
   "session": {
@@ -2870,6 +2947,23 @@
       "yesterday": "ONTEM",
       "last7days": "ÚLTIMOS 7 DIAS",
       "processed": "Arquivos Processados"
+    }
+  },
+  "email": {
+    "settings": {
+      "subtitle": "Configuração do provedor de envio de e-mails.",
+      "impl": "Implementação",
+      "implHint": "Define o provedor de envio. FAKE registra e-mails no log (desenvolvimento), SMTP usa servidor de e-mail configurado, BREVO usa a API Brevo. Alterações de implementação e URL base aplicam-se após reinicialização do servidor.",
+      "fromName": "Nome do remetente",
+      "fromNameHint": "Nome exibido no campo 'De' dos e-mails enviados.",
+      "fromEmail": "E-mail do remetente",
+      "fromEmailHint": "Endereço de e-mail exibido no campo 'De'.",
+      "brevoApiKey": "Chave de API (Brevo)",
+      "brevoApiKeyHint": "Chave de autenticação para a API Brevo. Necessária quando a implementação é BREVO.",
+      "brevoBaseUrl": "URL base (Brevo)",
+      "brevoBaseUrlHint": "URL base da API Brevo. Alterações aplicam-se após reinicialização do servidor.",
+      "saved": "Configurações de e-mail salvas com sucesso.",
+      "saveError": "Não foi possível salvar as configurações de e-mail."
     }
   },
   "notFound": {

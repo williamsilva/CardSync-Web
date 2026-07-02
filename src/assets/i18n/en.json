@@ -112,8 +112,22 @@
       "manualCreditOrder": {
         "title": "Manual Credit Order"
       },
+      "reconciliationActions": {
+        "title": "Reconciliation Actions"
+      },
       "divergences": {
         "title": "Operational divergences"
+      }
+    },
+    "settings": {
+      "scheduler": {
+        "title": "Scheduler"
+      },
+      "reconciliation": {
+        "title": "Reconciliation"
+      },
+      "email": {
+        "title": "E-mail"
       }
     },
     "transactions": {
@@ -242,7 +256,8 @@
       "acquirerMissingErp": "Not found in ERP",
       "erpVsAcquirerDivergences": "Other unreconciled",
       "manualSalesSummary": "Manual Sales Summary",
-      "manualCreditOrder": "Manual Credit Order"
+      "manualCreditOrder": "Manual Credit Order",
+      "reconciliationActions": "Reconciliation Actions"
     },
     "adjustment": {
       "title": "Adjustments",
@@ -260,7 +275,9 @@
     },
     "settings": {
       "title": "Settings",
-      "email": "E-mail"
+      "email": "E-mail",
+      "scheduler": "Scheduler",
+      "reconciliation": "Reconciliation"
     },
     "file": {
       "processing": {
@@ -1989,6 +2006,24 @@
       "eyebrow": "Conciliation",
       "title": "Reconciliation Settings",
       "subtitle": "Parameters for the ERP x Acquirer reconciliation process.",
+      "schedulingTitle": "Scheduling",
+      "schedulingSubtitle": "Controls when and how the CardSync automatic pipeline runs.",
+      "processingTitle": "Processing",
+      "processingSubtitle": "Transaction lookup window for ERP x Acquirer reconciliation.",
+      "reconciliationTitle": "Reconciliation",
+      "reconciliationSubtitle": "Tolerances and per-step reprocessing for the reconciliation pipeline.",
+      "schedulerEnabled": "Automatic scheduling",
+      "schedulerEnabledHint": "Enables or disables automatic pipeline execution. Manual endpoints continue to work even when this flag is off.",
+      "completePipelineEnabled": "Complete pipeline enabled",
+      "completePipelineEnabledHint": "Enables the full pipeline run (ERP → Acquirer → Bank → Reconciliation). When disabled the scheduler wakes up but does nothing.",
+      "completePipelineCron": "Cron expression",
+      "completePipelineCronHint": "6-field Spring cron (seconds minutes hours day month weekday). Changes take effect only after a server restart.",
+      "completePipelineStopOnStepError": "Stop on step error",
+      "completePipelineStopOnStepErrorHint": "When enabled, the pipeline halts subsequent steps if a step throws an exception. Parallel-execution conflicts never stop the pipeline.",
+      "logIdleCycles": "Log idle cycles",
+      "logIdleCyclesHint": "Emits a debug log each cycle the scheduler wakes up but is disabled. Recommended off in production to avoid log noise.",
+      "schedulerSaved": "Scheduling settings saved successfully.",
+      "schedulerSaveError": "Could not save the scheduling settings.",
       "erpAcquirerPreviousDaysLookback": "Previous days in acquirer",
       "erpAcquirerPreviousDaysLookbackHint": "Defines how many days before the ERP sale date the acquirer may have recorded the transaction. Set to 0 to disable this filter.",
       "erpAcquirerFutureDaysLookback": "Future days in acquirer",
@@ -1997,6 +2032,28 @@
       "reconciliationLookbackMonthsHint": "Defines how many months prior to the current date should be searched for transactions during reconciliation. Default: 120 months.",
       "creditOrderPendingDays": "Days threshold for pending orders",
       "creditOrderPendingDaysHint": "Summaries with an RV date older than this number of days and without payment orders are listed as pending for batch creation.",
+      "reprocessTitle": "Reprocessing by Pipeline Step",
+      "reprocessSubtitle": "Allows each pipeline step to process already-reconciled records. Use only for audits or targeted corrections — disable after use.",
+      "reprocessErpAcquirerSales": "Step 1 — ERP x Acquirer (Sales)",
+      "reprocessErpAcquirerSalesHint": "Reprocesses ERP sales already reconciled with the acquirer.",
+      "reprocessSalesSummaryTransactions": "Step 2 — Sales Summary x TransactionAcq",
+      "reprocessSalesSummaryTransactionsHint": "Reprocesses summaries whose transactionsStatus is already reconciled.",
+      "reprocessAcquirerSaleCancellations": "Step 3 — Acquirer Sale Cancellations",
+      "reprocessAcquirerSaleCancellationsHint": "Reprocesses sales already marked as cancelled by the acquirer.",
+      "reprocessErpAcquirerFees": "Step 4 — ERP x Acquirer Fees",
+      "reprocessErpAcquirerFeesHint": "Reprocesses transactions whose feeReconciliationStatus is already reconciled.",
+      "reprocessAcquirerSaleSummary": "Step 5 — Acquirer Sale x Sales Summary",
+      "reprocessAcquirerSaleSummaryHint": "Reprocesses summaries whose transactionsStatus is already reconciled.",
+      "reprocessSalesSummaryCreditOrder": "Step 6 — Sales Summary x Payment Order",
+      "reprocessSalesSummaryCreditOrderHint": "Reprocesses summaries whose creditOrderStatus is already reconciled.",
+      "reprocessBankAcquirer": "Step 7 — Payment Order x Bank Statement",
+      "reprocessBankAcquirerHint": "Reprocesses already-paid credit orders and already-reconciled bank releases.",
+      "dateToleranceDays": "Date tolerance (bank)",
+      "dateToleranceDaysHint": "Day window for accepting date divergence in bank reconciliation. E.g. 7 accepts releases up to 7 days before/after the order date.",
+      "valueTolerance": "Value tolerance (R$)",
+      "valueToleranceHint": "Maximum monetary difference tolerated in a reconciliation. E.g. 0.05 accepts up to 5 cents of divergence.",
+      "bankMarkNotReconciledAfterDays": "Days to mark as unreconciled",
+      "bankMarkNotReconciledAfterDaysHint": "Bank releases without a match in the last N days remain pending. After this period, they are marked as unreconciled.",
       "saved": "Settings saved successfully.",
       "saveError": "Could not save the settings."
     },
@@ -2154,7 +2211,6 @@
       }
     },
     "dashboard": {
-      "eyebrow": "Reconciliation",
       "subtitle": "Executive view of ERP sales, acquirer, fees, bank, debits and chargebacks.",
       "completed": "Reconciliation completed",
       "difference": "Difference",
@@ -2216,6 +2272,23 @@
         "skippedAlready": "Already cancelled",
         "skippedNoErp": "No ERP linked"
       },
+      "salesSummaryTransactions": {
+        "cardTitle": "Sales Summary x TransactionAcq",
+        "partiallyReconciled": "Partially reconciled",
+        "pending": "Pending",
+        "allExcluded": "All excluded",
+        "withoutTransactions": "Without transactions",
+        "button": "Reconcile Summary x TransactionAcq"
+      },
+      "acquirerSaleSummary": {
+        "cardTitle": "Acquirer Sale x Sales Summary",
+        "partiallyReconciled": "Partially reconciled",
+        "pending": "Pending",
+        "blockedByPreviousStep": "Blocked (previous step)",
+        "transactionsAnalyzed": "Transactions analyzed",
+        "transactionsEligible": "Eligible transactions",
+        "button": "Reconcile Acquirer Sale x Summary"
+      },
       "salesSummaryCreditOrder": {
         "cardTitle": "Sales Summary vs Credit Order",
         "partiallyReconciled": "Partially reconciled",
@@ -2273,6 +2346,9 @@
         "pendenciesCount": "{{ count }} pending",
         "noPendencies": "No pending items found."
       }
+    },
+    "reconciliationActions": {
+      "subtitle": "Run each step of the financial reconciliation pipeline individually or the full pipeline at once."
     },
     "fees": {
       "title": "Applied fees",
@@ -2941,6 +3017,23 @@
       "yesterday": "YESTERDAY",
       "last7days": "LAST 7 DAYS",
       "processed": "Processed Files"
+    }
+  },
+  "email": {
+    "settings": {
+      "subtitle": "Email sending provider configuration.",
+      "impl": "Implementation",
+      "implHint": "Defines the email provider. FAKE logs emails (development), SMTP uses a configured mail server, BREVO uses the Brevo API. Implementation and base URL changes take effect after a server restart.",
+      "fromName": "Sender name",
+      "fromNameHint": "Name displayed in the 'From' field of sent emails.",
+      "fromEmail": "Sender email",
+      "fromEmailHint": "Email address displayed in the 'From' field.",
+      "brevoApiKey": "API Key (Brevo)",
+      "brevoApiKeyHint": "Authentication key for the Brevo API. Required when the implementation is BREVO.",
+      "brevoBaseUrl": "Base URL (Brevo)",
+      "brevoBaseUrlHint": "Brevo API base URL. Changes take effect after a server restart.",
+      "saved": "Email settings saved successfully.",
+      "saveError": "Could not save email settings."
     }
   },
   "notFound": {

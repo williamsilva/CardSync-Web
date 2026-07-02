@@ -239,13 +239,13 @@
     ></cs-currency-range-filter>
 
     <cs-currency-range-filter
-      inputId="liquidValue"
-      [value]="liquidValueRange()"
+      inputId="releaseValue"
+      [value]="releaseValueRange()"
       class="col-12 md:col-6 xl:col-3 p-2"
       [endLabel]="'common.filters.final' | translate"
       (valueChange)="onLiquidValueRangeChange($event)"
       [startLabel]="'common.filters.initial' | translate"
-      [label]="'creditOrders.fields.liquidValue' | translate"
+      [label]="'creditOrders.fields.releaseValue' | translate"
     ></cs-currency-range-filter>
   </div>
 </cs-filters-panel>
@@ -276,7 +276,7 @@
           >{{ 'common.discountValue' | translate }}: {{ totals.totalFeeValue | csCurrency }}</span
         >
         <span class="px-2 py-1 border-round surface-100"
-          >{{ 'common.liquidValue' | translate }}: {{ totals.totalNetValue | csCurrency }}</span
+          >{{ 'common.releaseValue' | translate }}: {{ totals.totalNetValue | csCurrency }}</span
         >
       </div>
     }
@@ -315,12 +315,12 @@
         <col style="width: 90px" />
         <!-- pvNumber -->
         <col style="width: 90px" />
+        <!-- bankingDomicile -->
+        <col style="width: 130px" />
         <!-- modality -->
         <col style="width: 100px" />
         <!-- Flag -->
         <col style="width: 120px" />
-        <!-- rvDate -->
-        <col style="width: 110px" />
         <!-- creditOrderDate -->
         <col style="width: 110px" />
         <!-- releaseDate -->
@@ -329,10 +329,7 @@
         <col style="width: 90px" />
         <!-- installmentNumber -->
         <col style="width: 90px" />
-        <!-- grossValue -->
-        <col style="width: 110px" />
-        <!-- liquidValue -->
-        <col style="width: 110px" />
+
         <!-- transactionsStatus -->
         <col style="width: 110px" />
         <!-- CreditOrderStatus -->
@@ -540,6 +537,18 @@
           </div>
         </th>
 
+        <th>
+          <div class="th-flex text-center">
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'creditOrders.fields.bankingDomicile' | translate"
+            >
+              {{ 'creditOrders.fields.bankingDomicile' | translate }}
+            </span>
+          </div>
+        </th>
+
         <th pSortableColumn="modality">
           <div class="th-flex text-center">
             <span
@@ -651,108 +660,6 @@
                       (ngModelChange)="setArrayColumnDraft(flagColumnDraft, $event)"
                     >
                     </p-multiSelect>
-                  </cs-column-filter-shell>
-                </ng-template>
-              </p-columnFilter>
-            </span>
-          </div>
-        </th>
-
-        <th pSortableColumn="rvDate">
-          <div class="th-flex text-center">
-            <span
-              class="th-label"
-              tooltipPosition="top"
-              [pTooltip]="'creditOrders.fields.rvDate' | translate"
-            >
-              {{ 'creditOrders.fields.rv' | translate }}
-            </span>
-            <span class="th-icons">
-              <p-sortIcon field="rvDate"></p-sortIcon>
-
-              <p-columnFilter
-                type="date"
-                field="rvDate"
-                display="menu"
-                matchMode="dateIs"
-                #rvDateColumnFilter
-                [showOperator]="false"
-                [showAddButton]="false"
-                [showMatchModes]="true"
-                [showClearButton]="false"
-                [showApplyButton]="false"
-                styleClass="cs-colfilter"
-              >
-                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                  <cs-column-filter-shell
-                    [clearLabel]="'common.clear' | translate"
-                    [applyLabel]="'common.apply' | translate"
-                    [applyDisabled]="
-                      !canApplyPeriodColumnFilter(rvDateColumnPeriod, rvDateColumnDraft)
-                    "
-                    (clear)="
-                      clearPeriodColumnFilter(
-                        rvDateColumnPeriod,
-                        rvDateColumnDraft,
-                        filter,
-                        rvDateColumnFilter
-                      )
-                    "
-                    (apply)="
-                      applyPeriodColumnFilter(
-                        rvDateColumnPeriod,
-                        rvDateColumnDraft,
-                        filter,
-                        rvDateColumnFilter
-                      )
-                    "
-                  >
-                    <p-floatLabel variant="on" class="w-full">
-                      <p-select
-                        size="small"
-                        class="w-full"
-                        [showClear]="true"
-                        optionValue="value"
-                        optionLabel="label"
-                        inputId="rvDateColumnPeriod"
-                        [options]="periodEnumOptions()"
-                        [ngModel]="rvDateColumnPeriod()"
-                        (ngModelChange)="
-                          onPeriodColumnChange(
-                            rvDateColumnPeriod,
-                            rvDateColumnDraft,
-                            $event ?? null
-                          )
-                        "
-                      ></p-select>
-
-                      <label for="rvDateColumnPeriod">
-                        {{ 'common.period' | translate }}
-                      </label>
-                    </p-floatLabel>
-
-                    <p-floatLabel variant="on" class="w-full">
-                      <p-datepicker
-                        size="small"
-                        class="w-full"
-                        dataType="string"
-                        [showIcon]="true"
-                        [readonlyInput]="true"
-                        inputId="rvDateColumnDraft"
-                        [ngModel]="rvDateColumnDraft()"
-                        [disabled]="isRvDateColumnDisabled()"
-                        [view]="setViewFormat(rvDateColumnPeriod())"
-                        [dateFormat]="setDateFormat(rvDateColumnPeriod())"
-                        [selectionMode]="setSelectionMode(rvDateColumnPeriod())"
-                        (ngModelChange)="
-                          onPeriodColumnDraftChange(rvDateColumnDraft, $event ?? null)
-                        "
-                      ></p-datepicker>
-
-                      <label for="rvDateColumnDraft">
-                        {{ 'creditOrders.fields.rvDate' | translate }}
-                      </label>
-                    </p-floatLabel>
                   </cs-column-filter-shell>
                 </ng-template>
               </p-columnFilter>
@@ -1077,30 +984,30 @@
           </div>
         </th>
 
-        <th pSortableColumn="grossRvValue">
+        <th pSortableColumn="releaseValue">
           <div class="th-flex text-center">
             <span
               class="th-label"
               tooltipPosition="top"
-              [pTooltip]="'creditOrders.fields.grossValue' | translate"
+              [pTooltip]="'creditOrders.fields.releaseValue' | translate"
             >
-              {{ 'creditOrders.fields.gross' | translate }}
+              {{ 'creditOrders.fields.releaseValueShort' | translate }}
             </span>
             <span class="th-icons">
-              <p-sortIcon field="grossValue"></p-sortIcon>
+              <p-sortIcon field="releaseValue"></p-sortIcon>
               <p-columnFilter
                 display="menu"
                 type="numeric"
-                field="grossValue"
                 matchMode="equals"
+                field="releaseValue"
                 [useGrouping]="false"
                 [showOperator]="false"
                 [showAddButton]="false"
                 [showMatchModes]="true"
-                #grossValueColumnFilter
                 [showClearButton]="false"
                 [showApplyButton]="false"
                 styleClass="cs-colfilter"
+                #releaseValueColumnFilter
               >
                 <ng-template pTemplate="filter" let-value let-filter="filterCallback">
                   <cs-column-filter-shell
@@ -1108,16 +1015,16 @@
                     [applyLabel]="'common.apply' | translate"
                     (clear)="
                       clearDecimalColumnFilter(
-                        grossValueColumnDraft,
+                        releaseValueColumnDraft,
                         filter,
-                        grossValueColumnFilter
+                        releaseValueColumnFilter
                       )
                     "
                     (apply)="
                       applyDecimalColumnFilter(
-                        grossValueColumnDraft,
+                        releaseValueColumnDraft,
                         filter,
-                        grossValueColumnFilter
+                        releaseValueColumnFilter
                       )
                     "
                   >
@@ -1126,129 +1033,9 @@
                       type="text"
                       inputmode="decimal"
                       class="w-full p-inputtext-sm"
-                      [ngModel]="grossValueColumnDraft()"
-                      (ngModelChange)="grossValueColumnDraft.set($event ?? '')"
-                      [placeholder]="'creditOrders.fields.grossValue' | translate"
-                    />
-                  </cs-column-filter-shell>
-                </ng-template>
-              </p-columnFilter>
-            </span>
-          </div>
-        </th>
-
-        <th pSortableColumn="discountValue">
-          <div class="th-flex text-center">
-            <span
-              class="th-label"
-              tooltipPosition="top"
-              [pTooltip]="'creditOrders.fields.discountValue' | translate"
-            >
-              {{ 'creditOrders.fields.discount' | translate }}
-            </span>
-            <span class="th-icons">
-              <p-sortIcon field="discountValue"></p-sortIcon>
-              <p-columnFilter
-                display="menu"
-                type="numeric"
-                matchMode="equals"
-                field="discountValue"
-                [useGrouping]="false"
-                [showOperator]="false"
-                [showAddButton]="false"
-                [showMatchModes]="true"
-                [showClearButton]="false"
-                [showApplyButton]="false"
-                styleClass="cs-colfilter"
-                #discountValueColumnFilter
-              >
-                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                  <cs-column-filter-shell
-                    [clearLabel]="'common.clear' | translate"
-                    [applyLabel]="'common.apply' | translate"
-                    (clear)="
-                      clearDecimalColumnFilter(
-                        discountValueColumnDraft,
-                        filter,
-                        discountValueColumnFilter
-                      )
-                    "
-                    (apply)="
-                      applyDecimalColumnFilter(
-                        discountValueColumnDraft,
-                        filter,
-                        discountValueColumnFilter
-                      )
-                    "
-                  >
-                    <input
-                      pInputText
-                      type="text"
-                      inputmode="decimal"
-                      class="w-full p-inputtext-sm"
-                      [ngModel]="discountValueColumnDraft()"
-                      (ngModelChange)="discountValueColumnDraft.set($event ?? '')"
-                      [placeholder]="'creditOrders.fields.discountValue' | translate"
-                    />
-                  </cs-column-filter-shell>
-                </ng-template>
-              </p-columnFilter>
-            </span>
-          </div>
-        </th>
-
-        <th pSortableColumn="liquidValue">
-          <div class="th-flex text-center">
-            <span
-              class="th-label"
-              tooltipPosition="top"
-              [pTooltip]="'creditOrders.fields.liquidValue' | translate"
-            >
-              {{ 'creditOrders.fields.liquid' | translate }}
-            </span>
-            <span class="th-icons">
-              <p-sortIcon field="liquidValue"></p-sortIcon>
-              <p-columnFilter
-                display="menu"
-                type="numeric"
-                matchMode="equals"
-                field="liquidValue"
-                [useGrouping]="false"
-                [showOperator]="false"
-                [showAddButton]="false"
-                [showMatchModes]="true"
-                [showClearButton]="false"
-                [showApplyButton]="false"
-                styleClass="cs-colfilter"
-                #liquidValueColumnFilter
-              >
-                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                  <cs-column-filter-shell
-                    [clearLabel]="'common.clear' | translate"
-                    [applyLabel]="'common.apply' | translate"
-                    (clear)="
-                      clearDecimalColumnFilter(
-                        liquidValueColumnDraft,
-                        filter,
-                        liquidValueColumnFilter
-                      )
-                    "
-                    (apply)="
-                      applyDecimalColumnFilter(
-                        liquidValueColumnDraft,
-                        filter,
-                        liquidValueColumnFilter
-                      )
-                    "
-                  >
-                    <input
-                      pInputText
-                      type="text"
-                      inputmode="decimal"
-                      class="w-full p-inputtext-sm"
-                      [ngModel]="liquidValueColumnDraft()"
-                      (ngModelChange)="liquidValueColumnDraft.set($event ?? '')"
-                      [placeholder]="'creditOrders.fields.liquidValue' | translate"
+                      [ngModel]="releaseValueColumnDraft()"
+                      (ngModelChange)="releaseValueColumnDraft.set($event ?? '')"
+                      [placeholder]="'creditOrders.fields.releaseValue' | translate"
                     />
                   </cs-column-filter-shell>
                 </ng-template>
@@ -1446,6 +1233,11 @@
             {{ row.originalPvNumber }}
           </span>
         </td>
+        <td class="text-center">
+          <span [pTooltip]="bankingDomicileLabel(row)" tooltipPosition="top">
+            {{ bankingDomicileLabel(row) }}
+          </span>
+        </td>
         <td class="cell-muted text-center">
           <cs-tag
             [value]="modalityLabel(row.salesSummary?.modality)"
@@ -1461,13 +1253,10 @@
             {{ row.flag?.name || '-' }}
           </span>
         </td>
-        <td>{{ row.rvDate | csDate: 'date' }}</td>
         <td>{{ row.creditOrderDate | csDate: 'date' }}</td>
         <td>{{ row.releaseDate | csDate: 'date' }}</td>
         <td class="text-center">{{ row.rvNumber }}</td>
         <td class="text-center">{{ row.installmentNumber }}/{{ row.installmentTotal }}</td>
-        <td class="text-right">{{ row.grossRvValue | csCurrency }}</td>
-        <td class="text-right">{{ row.discountRateValue | csCurrency }}</td>
         <td class="text-right">{{ row.releaseValue | csCurrency }}</td>
         <td class="cell-muted text-center">
           <cs-tag
@@ -1510,7 +1299,7 @@
 
     <ng-template pTemplate="emptymessage">
       <tr>
-        <td colspan="16" class="text-center py-4 text-500">
+        <td colspan="14" class="text-center py-4 text-500">
           {{ 'common.noRecordsFound' | translate }}
         </td>
       </tr>

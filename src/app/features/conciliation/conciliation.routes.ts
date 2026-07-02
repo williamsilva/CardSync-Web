@@ -23,6 +23,20 @@ export const CONCILIATION_ROUTES: Routes = [
   },
 
   {
+    path: 'reconciliation-actions',
+    title: 'routes.conciliation.reconciliationActions.title',
+    canActivate: [permissionGuard],
+    data: {
+      requireAll: false,
+      redirectTo: '/forbidden',
+      permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.FILE_PROCESSING.PROCESS],
+    },
+    loadComponent: () =>
+      import('./reconciliation-actions/reconciliation-actions.component').then(
+        (m) => m.ReconciliationActionsComponent,
+      ),
+  },
+  {
     path: 'erp-vs-acquirer',
     pathMatch: 'full',
     redirectTo: 'erp-vs-acquirer/missing-acquirer',
@@ -110,16 +124,6 @@ export const CONCILIATION_ROUTES: Routes = [
     loadComponent: () =>
       import('./conciliation-aging/conciliation-aging.component').then(
         (m) => m.ConciliationAgingComponent,
-      ),
-  },
-  {
-    path: 'settings',
-    title: 'routes.conciliation.settings.title',
-    canActivate: [permissionGuard],
-    data: { requireAll: false, redirectTo: '/forbidden', permissions: defaultPermissions },
-    loadComponent: () =>
-      import('./reconciliation-settings/reconciliation-settings.component').then(
-        (m) => m.ReconciliationSettingsComponent,
       ),
   },
   {

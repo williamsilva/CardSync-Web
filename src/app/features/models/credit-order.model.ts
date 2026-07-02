@@ -3,9 +3,10 @@ import { WritableSignal } from '@angular/core';
 import { FlagMinimalModel } from './flag-minimal.models';
 import { CompanyMinimalModel } from './company-minimal.models';
 import { AcquirerMinimalModel } from './acquirer-minimal.models';
-import { EstablishmentMinimalModel } from './establishment-minimal.models';
 import { SalesSummaryMinimalModel } from './sales-summary-minimal.models';
+import { EstablishmentMinimalModel } from './establishment-minimal.models';
 import { ProcessedFileMinimalModel } from './processed-file-minimal.models';
+import { BankingDomicileMinimalModel } from './bank-domicile-minimal.models';
 import {
   CreditOrderAdvancedFilters,
   createEmptyCreditOrderFiltersState,
@@ -13,13 +14,15 @@ import {
 
 export interface CreditOrderModel {
   id: string;
+  rvNumber: string;
 
   flag: FlagMinimalModel;
   company: CompanyMinimalModel;
   acquirer: AcquirerMinimalModel;
-  establishment: EstablishmentMinimalModel;
   salesSummary: SalesSummaryMinimalModel;
+  establishment: EstablishmentMinimalModel;
   processedFile: ProcessedFileMinimalModel;
+  bankingDomicile: BankingDomicileMinimalModel;
 }
 
 export interface CreditOrderCreateInput {}
@@ -30,7 +33,10 @@ export interface CreditOrderManualInput {
   summaryIds: string[];
 }
 
-export type CreditOrderSkipCode = 'ALL_INSTALLMENTS_COVERED' | 'SUMMARY_NOT_FOUND' | 'UNEXPECTED_ERROR';
+export type CreditOrderSkipCode =
+  | 'ALL_INSTALLMENTS_COVERED'
+  | 'SUMMARY_NOT_FOUND'
+  | 'UNEXPECTED_ERROR';
 
 export interface CreditOrderSkipReason {
   rvNumber: string | null;
@@ -47,13 +53,15 @@ export interface CreditOrderManualResult {
 
 export interface CreditOrderApiModel {
   id: string;
+  rvNumber: string;
 
   flag: FlagMinimalModel;
   company: CompanyMinimalModel;
   acquirer: AcquirerMinimalModel;
-  establishment: EstablishmentMinimalModel;
   salesSummary: SalesSummaryMinimalModel;
+  establishment: EstablishmentMinimalModel;
   processedFile: ProcessedFileMinimalModel;
+  bankingDomicile: BankingDomicileMinimalModel;
 }
 
 export function mapCreditOrderApiModel(input: CreditOrderApiModel): CreditOrderModel {

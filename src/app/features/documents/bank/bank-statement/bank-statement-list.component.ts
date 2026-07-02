@@ -151,7 +151,7 @@ export class BankStatementListComponent
   readonly isReleaseDateDisabled = computed(() => !this.periodReleaseDate());
 
   /* Campos Tabela */
-  readonly valueColumnDraft = signal('');
+  readonly releaseValueColumnDraft = signal('');
   readonly documentColumnDraft = signal('');
   readonly bankHistoryColumnDraft = signal('');
 
@@ -213,9 +213,9 @@ export class BankStatementListComponent
     sessionStorage.removeItem(key);
 
     this.resetFilters();
-    this.valueColumnDraft.set('');
     this.documentColumnDraft.set('');
     this.bankHistoryColumnDraft.set('');
+    this.releaseValueColumnDraft.set('');
 
     this.flagColumnDraft.set(null);
     this.bankColumnDraft.set(null);
@@ -438,8 +438,8 @@ export class BankStatementListComponent
 
     this.syncTextColumnDraftFromTableState(
       filters,
-      'value',
-      this.valueColumnDraft,
+      'releaseValue',
+      this.releaseValueColumnDraft,
       readSingleFilterValue,
     );
 

@@ -9,6 +9,18 @@ export interface ReconciliationSettingsModel {
   erpAcquirerFutureDaysLookback: number;
   reconciliationLookbackMonths: number;
   creditOrderPendingDays: number;
+  // Flags de reprocessamento — ordem = esteira de conciliação
+  reprocessErpAcquirerSales: boolean;
+  reprocessSalesSummaryTransactions: boolean;
+  reprocessAcquirerSaleCancellations: boolean;
+  reprocessErpAcquirerFees: boolean;
+  reprocessAcquirerSaleSummary: boolean;
+  reprocessSalesSummaryCreditOrder: boolean;
+  reprocessBankAcquirer: boolean;
+  // Parâmetros de tolerância
+  dateToleranceDays: number;
+  valueTolerance: number;
+  bankMarkNotReconciledAfterDays: number;
 }
 
 export interface ReconciliationSettingsRequest {
@@ -16,6 +28,18 @@ export interface ReconciliationSettingsRequest {
   erpAcquirerFutureDaysLookback: number;
   reconciliationLookbackMonths: number;
   creditOrderPendingDays: number;
+  // Flags de reprocessamento — ordem = esteira de conciliação
+  reprocessErpAcquirerSales: boolean;
+  reprocessSalesSummaryTransactions: boolean;
+  reprocessAcquirerSaleCancellations: boolean;
+  reprocessErpAcquirerFees: boolean;
+  reprocessAcquirerSaleSummary: boolean;
+  reprocessSalesSummaryCreditOrder: boolean;
+  reprocessBankAcquirer: boolean;
+  // Parâmetros de tolerância
+  dateToleranceDays: number;
+  valueTolerance: number;
+  bankMarkNotReconciledAfterDays: number;
 }
 
 @Injectable({ providedIn: 'root' })
