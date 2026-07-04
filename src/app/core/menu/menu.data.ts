@@ -327,13 +327,7 @@ export const APP_MENU: AppMenuItem[] = [
         exact: false,
         permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.COMPANIES.VIEW],
       },
-      {
-        labelKey: 'menu.file.processing.bankReleases',
-        icon: 'pi pi-wallet text-blue-400',
-        route: '/file-processing/bank/releases',
-        exact: false,
-        permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.COMPANIES.VIEW],
-      },
+
       {
         labelKey: 'menu.file.processing.divergences',
         icon: 'pi pi-exclamation-circle text-blue-400',

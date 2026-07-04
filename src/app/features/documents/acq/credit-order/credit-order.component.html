@@ -111,6 +111,39 @@
     ></cs-advanced-multiselect-filter>
 
     <cs-advanced-multiselect-filter
+      inputId="modality"
+      [value]="modality()"
+      optionLabel="label"
+      optionValue="value"
+      [options]="modalityOptions()"
+      (valueChange)="modality.set($event)"
+      class="col-12 md:col-3 xl:col-2 p-1"
+      [label]="'creditOrders.fields.modality' | translate"
+    ></cs-advanced-multiselect-filter>
+
+    <cs-advanced-multiselect-filter
+      optionValue="id"
+      inputId="banks"
+      [value]="banks()"
+      optionLabel="name"
+      [options]="banksOptions()"
+      (valueChange)="banks.set($event)"
+      class="col-12 md:col-3 xl:col-2 p-1"
+      [label]="'creditOrders.fields.bank' | translate"
+    >
+      <ng-template csAdvancedFilterItem let-option>
+        <div class="cs-option-item">
+          <div class="cs-option-item__label">{{ option.name }}</div>
+          <div class="cs-option-item__subtext">
+            {{ 'common.code' | translate }}: {{ option.code }}
+          </div>
+        </div>
+      </ng-template>
+    </cs-advanced-multiselect-filter>
+  </div>
+
+  <div class="grid formgrid gap-0 align-items-end">
+    <cs-advanced-multiselect-filter
       optionValue="id"
       inputId="acquirer"
       [value]="acquirers()"
@@ -130,39 +163,6 @@
       </ng-template>
     </cs-advanced-multiselect-filter>
 
-    <cs-advanced-multiselect-filter
-      inputId="modality"
-      [value]="modality()"
-      optionLabel="label"
-      optionValue="value"
-      [options]="modalityOptions()"
-      (valueChange)="modality.set($event)"
-      class="col-12 md:col-3 xl:col-2 p-1"
-      [label]="'creditOrders.fields.modality' | translate"
-    ></cs-advanced-multiselect-filter>
-
-    <cs-advanced-multiselect-filter
-      optionValue="id"
-      inputId="banks"
-      [value]="banks()"
-      optionLabel="name"
-      [options]="banksOptions()"
-      (valueChange)="banks.set($event)"
-      class="col-12 md:col-3 xl:col-2 p-1"
-      [label]="'creditOrders.fields.bankingDomicile' | translate"
-    >
-      <ng-template csAdvancedFilterItem let-option>
-        <div class="cs-option-item">
-          <div class="cs-option-item__label">{{ option.name }}</div>
-          <div class="cs-option-item__subtext">
-            {{ 'common.code' | translate }}: {{ option.code }}
-          </div>
-        </div>
-      </ng-template>
-    </cs-advanced-multiselect-filter>
-  </div>
-
-  <div class="grid formgrid gap-0 align-items-end">
     <cs-advanced-multiselect-filter
       optionValue="pvNumber"
       optionLabel="pvNumber"
@@ -315,6 +315,8 @@
         <col style="width: 90px" />
         <!-- pvNumber -->
         <col style="width: 90px" />
+        <!-- bank -->
+        <col style="width: 100px" />
         <!-- bankingDomicile -->
         <col style="width: 130px" />
         <!-- modality -->
@@ -329,7 +331,6 @@
         <col style="width: 90px" />
         <!-- installmentNumber -->
         <col style="width: 90px" />
-
         <!-- transactionsStatus -->
         <col style="width: 110px" />
         <!-- CreditOrderStatus -->
@@ -530,6 +531,77 @@
                       (ngModelChange)="pvNumberColumnDraft.set($event ?? '')"
                       [placeholder]="'creditOrders.fields.pvNumber' | translate"
                     />
+                  </cs-column-filter-shell>
+                </ng-template>
+              </p-columnFilter>
+            </span>
+          </div>
+        </th>
+
+        <th pSortableColumn="bank">
+          <div class="th-flex text-center">
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'bankStatement.fields.bank' | translate"
+            >
+              {{ 'bankStatement.fields.bank' | translate }}
+            </span>
+            <span class="th-icons">
+              <p-sortIcon field="bank"></p-sortIcon>
+              <p-columnFilter
+                field="bank"
+                display="menu"
+                matchMode="in"
+                #bankColumnFilter
+                [showOperator]="false"
+                [showAddButton]="false"
+                [showMatchModes]="false"
+                [showClearButton]="false"
+                [showApplyButton]="false"
+                styleClass="cs-colfilter"
+              >
+                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                  <cs-column-filter-shell
+                    minWidth="20rem"
+                    [clearLabel]="'common.clear' | translate"
+                    [applyLabel]="'common.apply' | translate"
+                    (clear)="clearArrayColumnFilter(bankColumnDraft, filter, bankColumnFilter)"
+                    (apply)="applyArrayColumnFilter(bankColumnDraft, filter, bankColumnFilter)"
+                  >
+                    <p-multiSelect
+                      class="w-full"
+                      [filter]="true"
+                      optionValue="id"
+                      optionLabel="name"
+                      [showClear]="true"
+                      [showToggleAll]="false"
+                      [options]="banksOptions()"
+                      [ngModel]="bankColumnDraft()"
+                      [placeholder]="'common.all' | translate"
+                      (ngModelChange)="setArrayColumnDraft(bankColumnDraft, $event)"
+                    >
+                      <ng-template let-option pTemplate="item">
+                        <div class="cs-option-item">
+                          <div class="cs-option-item__label">{{ option.name }}</div>
+                          <div class="cs-option-item__subtext">
+                            {{ 'common.code' | translate }}: {{ option.code }}
+                          </div>
+                        </div>
+                      </ng-template>
+                      <ng-template let-selectedOptions pTemplate="selectedItems">
+                        @if (selectedOptions?.length === 1) {
+                          <span>{{ selectedOptions[0]?.name }}</span>
+                        }
+                        @if ((selectedOptions?.length ?? 0) > 1) {
+                          <span>
+                            {{
+                              'common.selectedFemale' | translate: { count: selectedOptions.length }
+                            }}
+                          </span>
+                        }
+                      </ng-template>
+                    </p-multiSelect>
                   </cs-column-filter-shell>
                 </ng-template>
               </p-columnFilter>
@@ -1231,6 +1303,11 @@
             [pTooltip]="row.originalPvNumber"
           >
             {{ row.originalPvNumber }}
+          </span>
+        </td>
+        <td class="text-center">
+          <span [pTooltip]="row.bankingDomicile?.bank?.name" tooltipPosition="top">
+            {{ row.bankingDomicile?.bank?.name ?? '-' }}
           </span>
         </td>
         <td class="text-center">

@@ -1,7 +1,8 @@
-import { Injectable, inject, signal } from '@angular/core';
+import { computed, Injectable, inject, signal } from '@angular/core';
 
 import { finalize, Observable, tap } from 'rxjs';
 
+import { StatusEnum } from '@models/enums/status.enum';
 import { ListQueryDto } from '@shared/features/list-query/list-query.types';
 import { EstablishmentMinimalModel } from '@models/establishment-minimal.models';
 import { EstablishmentAdvancedFilters } from '@features/filter/establishment.filters';
@@ -32,6 +33,11 @@ export class EstablishmentFacade {
   readonly establishment = this._data.asReadonly();
   readonly totalRecords = this._total.asReadonly();
   readonly loadedOnce = this._loadedOnce.asReadonly();
+  readonly optionsLoadedOnce = this._optionsLoadedOnce.asReadonly();
+
+  readonly activeOptions = computed(() =>
+    this._options().filter((o) => o.status === StatusEnum.ACTIVE),
+  );
 
   loadEstablishmentOptionsFilter(force = false): void {
     if (this._optionsLoading()) return;

@@ -52,9 +52,9 @@ import {
 } from '@shared/features/filters-panel/filters-panel.component';
 import {
   StatusPaymentBankEnum,
-  allStatusPaymentBankEnum,
   statusPaymentBankEnumLabel,
   statusPaymentBankEnumSeverity,
+  allStatusPaymentCreditOrderEnum,
 } from '@models/enums/status-payment-bank.enum';
 import {
   ModalityEnum,
@@ -64,9 +64,9 @@ import {
 } from '@models/enums/modality.enum';
 import {
   StatusReconciliationEnum,
-  allStatusReconciliationEnum,
   statusReconciliationEnumLabel,
   statusReconciliationEnumSeverity,
+  allStatusReconciliationCreditOrder,
 } from '@models/enums/status-reconciliation.enum';
 import {
   CreditOrderFiltersState,
@@ -139,7 +139,6 @@ export class CreditOrderListComponent
 
   readonly totalRecords = computed(() => this.facade.totalRecords());
   readonly sales = computed<CreditOrderModel[]>(() => this.facade.sales());
-
   readonly isRvDateColumnDisabled = computed(() => !this.rvDateColumnPeriod());
 
   override rows =
@@ -213,6 +212,7 @@ export class CreditOrderListComponent
   readonly installmentNumberColumnDraft = signal('');
 
   readonly flagColumnDraft = signal<string[] | null>(null);
+  readonly bankColumnDraft = signal<string[] | null>(null);
   readonly companyColumnDraft = signal<string[] | null>(null);
   readonly acquirerColumnDraft = signal<string[] | null>(null);
   readonly rvDateColumnDraft = signal<string | string[] | null>(null);
@@ -236,7 +236,7 @@ export class CreditOrderListComponent
 
   readonly statusPaymentBankOptions = computed(() => {
     this.i18n.getAppliedLang();
-    return allStatusPaymentBankEnum().map((value) => ({
+    return allStatusPaymentCreditOrderEnum().map((value) => ({
       label: statusPaymentBankEnumLabel(value, this.i18n),
       value,
     }));
@@ -244,7 +244,7 @@ export class CreditOrderListComponent
 
   readonly statusReconciliationOptions = computed(() => {
     this.i18n.getAppliedLang();
-    return allStatusReconciliationEnum().map((value) => ({
+    return allStatusReconciliationCreditOrder().map((value) => ({
       label: statusReconciliationEnumLabel(value, this.i18n),
       value,
     }));
@@ -281,6 +281,7 @@ export class CreditOrderListComponent
     this.installmentNumberColumnDraft.set('');
 
     this.flagColumnDraft.set(null);
+    this.bankColumnDraft.set(null);
     this.rvDateColumnDraft.set(null);
     this.companyColumnDraft.set(null);
     this.rvDateColumnPeriod.set(null);
@@ -663,6 +664,13 @@ export class CreditOrderListComponent
       filters,
       'flag',
       this.flagColumnDraft,
+      readArrayFilterValues,
+    );
+
+    this.syncArrayColumnDraftFromTableState(
+      filters,
+      'bank',
+      this.bankColumnDraft,
       readArrayFilterValues,
     );
 

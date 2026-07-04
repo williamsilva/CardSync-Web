@@ -29,6 +29,7 @@ export class AcquirerFacade {
   readonly loading = this._loading.asReadonly();
   readonly totalRecords = this._total.asReadonly();
   readonly loadedOnce = this._loadedOnce.asReadonly();
+  readonly optionsLoadedOnce = this._optionsLoadedOnce.asReadonly();
 
   readonly activeOptions = computed(() =>
     this._options().filter((o) => o.status === StatusEnum.ACTIVE),

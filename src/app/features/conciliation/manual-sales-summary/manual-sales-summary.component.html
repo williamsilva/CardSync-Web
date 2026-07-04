@@ -1,29 +1,29 @@
-<div class="cs-page">
-  <div class="cs-page__header">
-    <div>
-      <p class="cs-page__eyebrow">{{ 'conciliation.manualSalesSummary.eyebrow' | translate }}</p>
-      <h1>{{ 'conciliation.manualSalesSummary.title' | translate }}</h1>
-      <span>{{ 'conciliation.manualSalesSummary.subtitle' | translate }}</span>
-    </div>
-  </div>
+<cs-page-header
+  [compact]="false"
+  [subtitle]="'conciliation.manualSalesSummary.subtitle' | translate"
+  [breadcrumb]="[
+    { label: ('breadcrumb.dashboard.title' | translate), url: '/' },
+    { label: ('breadcrumb.conciliation.title' | translate), url: '/conciliation' },
+    { label: ('conciliation.manualSalesSummary.title' | translate) },
+  ]"
+></cs-page-header>
 
-  <p-card>
-
+<p-card>
     <!-- Mode toggle -->
-    <div class="cs-mode-toggle">
+    <div class="flex gap-2 mb-3">
       <p-button
         type="button"
         icon="pi pi-pencil"
         [outlined]="importMode() !== 'manual'"
-        [label]="'conciliation.manualSalesSummary.modeManual' | translate"
         (onClick)="setImportMode('manual')"
+        [label]="'conciliation.manualSalesSummary.modeManual' | translate"
       ></p-button>
       <p-button
         type="button"
         icon="pi pi-upload"
         [outlined]="importMode() !== 'csv'"
-        [label]="'conciliation.manualSalesSummary.modeCsv' | translate"
         (onClick)="setImportMode('csv')"
+        [label]="'conciliation.manualSalesSummary.modeCsv' | translate"
       ></p-button>
     </div>
 
@@ -32,45 +32,55 @@
     <!-- ── CSV import mode ── -->
     @if (importMode() === 'csv') {
       <div class="cs-csv-section">
+        <div class="flex align-items-center gap-2 mb-2">
+          <span class="text-base font-semibold">
+            {{ 'conciliation.manualSalesSummary.csv.sectionConfig' | translate }}
+          </span>
+        </div>
 
-        <p class="cs-section-label">{{ 'conciliation.manualSalesSummary.csv.sectionConfig' | translate }}</p>
-
-        <div class="cs-form-grid">
-          <div class="cs-form-field">
-            <p-floatlabel>
+        <div class="grid formgrid gap-0">
+          <div class="col-12 md:col-4 p-2">
+            <p-floatLabel variant="on" class="w-full">
               <p-select
+                size="small"
                 class="w-full"
                 appendTo="body"
-                inputId="csvAcquirerId"
-                optionLabel="label"
-                optionValue="value"
                 [filter]="true"
                 filterBy="label"
                 [showClear]="true"
-                [options]="acquirerOptions()"
+                optionLabel="label"
+                optionValue="value"
+                inputId="csvAcquirerId"
                 [loading]="loadingOptions()"
+                [options]="acquirerOptions()"
                 [(ngModel)]="csvAcquirerIdValue"
               ></p-select>
-              <label for="csvAcquirerId">{{ 'conciliation.manualSalesSummary.acquirer' | translate }}</label>
-            </p-floatlabel>
+              <label for="csvAcquirerId">
+                {{ 'conciliation.manualSalesSummary.acquirer' | translate }}
+              </label>
+            </p-floatLabel>
           </div>
         </div>
 
         <label
-          class="cs-file-zone"
-          for="csvFileInput"
           tabindex="0"
           role="button"
+          for="csvFileInput"
+          class="cs-file-zone"
           (keydown.enter)="csvFileInput.click()"
         >
           <i class="pi pi-upload cs-file-zone__icon"></i>
-          <span class="cs-file-zone__label">{{ 'conciliation.manualSalesSummary.csv.fileLabel' | translate }}</span>
-          <span class="cs-file-zone__hint">{{ 'conciliation.manualSalesSummary.csv.fileHint' | translate }}</span>
+          <span class="cs-file-zone__label">{{
+            'conciliation.manualSalesSummary.csv.fileLabel' | translate
+          }}</span>
+          <span class="cs-file-zone__hint">{{
+            'conciliation.manualSalesSummary.csv.fileHint' | translate
+          }}</span>
           <input
-            #csvFileInput
-            id="csvFileInput"
             type="file"
             accept=".csv"
+            #csvFileInput
+            id="csvFileInput"
             class="cs-file-zone__input"
             (change)="onFileSelected($event)"
           />
@@ -105,10 +115,18 @@
                   <th>{{ 'conciliation.manualSalesSummary.csv.colRv' | translate }}</th>
                   <th>{{ 'conciliation.manualSalesSummary.csv.colEstablishment' | translate }}</th>
                   <th>{{ 'conciliation.manualSalesSummary.csv.colDate' | translate }}</th>
-                  <th class="cs-csv-table__num">{{ 'conciliation.manualSalesSummary.csv.colGross' | translate }}</th>
-                  <th class="cs-csv-table__num">{{ 'conciliation.manualSalesSummary.csv.colDiscount' | translate }}</th>
-                  <th class="cs-csv-table__num">{{ 'conciliation.manualSalesSummary.csv.colLiquid' | translate }}</th>
-                  <th class="cs-csv-table__num">{{ 'conciliation.manualSalesSummary.csv.colTxs' | translate }}</th>
+                  <th class="cs-csv-table__num">
+                    {{ 'conciliation.manualSalesSummary.csv.colGross' | translate }}
+                  </th>
+                  <th class="cs-csv-table__num">
+                    {{ 'conciliation.manualSalesSummary.csv.colDiscount' | translate }}
+                  </th>
+                  <th class="cs-csv-table__num">
+                    {{ 'conciliation.manualSalesSummary.csv.colLiquid' | translate }}
+                  </th>
+                  <th class="cs-csv-table__num">
+                    {{ 'conciliation.manualSalesSummary.csv.colTxs' | translate }}
+                  </th>
                   <th>{{ 'conciliation.manualSalesSummary.csv.colStatus' | translate }}</th>
                 </tr>
               </thead>
@@ -164,7 +182,7 @@
             </table>
           </div>
 
-          <div class="cs-form-actions">
+          <div class="flex justify-content-end gap-2 mt-3">
             @if (csvHasErrors()) {
               <p-button
                 type="button"
@@ -185,7 +203,6 @@
             ></p-button>
           </div>
         }
-
       </div>
     }
 
@@ -193,13 +210,18 @@
     @if (importMode() === 'manual') {
       <form [formGroup]="form" (ngSubmit)="submit()">
 
-        <p class="cs-section-label">{{ 'conciliation.manualSalesSummary.sectionSummaryRequired' | translate }}</p>
+        <!-- Dados obrigatórios -->
+        <div class="flex align-items-center gap-2 mb-2">
+          <span class="text-base font-semibold">
+            {{ 'conciliation.manualSalesSummary.sectionSummaryRequired' | translate }}
+          </span>
+        </div>
 
-        <div class="cs-form-grid">
-
-          <div class="cs-form-field">
-            <p-floatlabel>
+        <div class="grid formgrid gap-0">
+          <div class="col-12 md:col-3 p-2">
+            <p-floatLabel variant="on" class="w-full">
               <p-select
+                size="small"
                 class="w-full"
                 appendTo="body"
                 [filter]="true"
@@ -208,17 +230,20 @@
                 optionLabel="label"
                 optionValue="value"
                 inputId="establishmentId"
-                [options]="establishmentOptions()"
                 [loading]="loadingOptions()"
                 formControlName="establishmentId"
+                [options]="establishmentOptions()"
               ></p-select>
-              <label for="establishmentId">{{ 'conciliation.manualSalesSummary.establishmentPv' | translate }}</label>
-            </p-floatlabel>
+              <label for="establishmentId">
+                {{ 'conciliation.manualSalesSummary.establishmentPv' | translate }}
+              </label>
+            </p-floatLabel>
           </div>
 
-          <div class="cs-form-field">
-            <p-floatlabel>
+          <div class="col-12 md:col-3 p-2">
+            <p-floatLabel variant="on" class="w-full">
               <p-select
+                size="small"
                 class="w-full"
                 appendTo="body"
                 [filter]="true"
@@ -227,64 +252,83 @@
                 optionLabel="label"
                 optionValue="value"
                 inputId="acquirerId"
-                [options]="acquirerOptions()"
                 [loading]="loadingOptions()"
                 formControlName="acquirerId"
+                [options]="acquirerOptions()"
               ></p-select>
-              <label for="acquirerId">{{ 'conciliation.manualSalesSummary.acquirer' | translate }}</label>
-            </p-floatlabel>
+              <label for="acquirerId">
+                {{ 'conciliation.manualSalesSummary.acquirer' | translate }}
+              </label>
+            </p-floatLabel>
           </div>
 
-          <div class="cs-form-field">
-            <p-floatlabel>
+          <div class="col-12 md:col-2 p-2">
+            <p-floatLabel variant="on" class="w-full">
               <p-inputnumber
+                class="w-full"
+                inputId="rvNumber"
                 [allowEmpty]="false"
                 [showButtons]="false"
                 [useGrouping]="false"
-                inputId="rvNumber"
                 formControlName="rvNumber"
+                inputStyleClass="w-full p-inputtext-sm"
               ></p-inputnumber>
-              <label for="rvNumber">{{ 'conciliation.manualSalesSummary.rvNumber' | translate }}</label>
-            </p-floatlabel>
+              <label for="rvNumber">
+                {{ 'conciliation.manualSalesSummary.rvNumber' | translate }}
+              </label>
+            </p-floatLabel>
           </div>
 
-          <div class="cs-form-field">
-            <p-floatlabel>
+          <div class="col-12 md:col-2 p-2">
+            <p-floatLabel variant="on" class="w-full">
               <p-datepicker
                 appendTo="body"
-                dateFormat="dd/mm/yy"
-                [showIcon]="true"
-                [style]="{ width: '100%' }"
                 inputId="rvDate"
+                [showIcon]="true"
+                dateFormat="dd/mm/yy"
+                class="w-full"
                 formControlName="rvDate"
+                inputStyleClass="p-inputtext-sm"
               ></p-datepicker>
-              <label for="rvDate">{{ 'conciliation.manualSalesSummary.rvDate' | translate }}</label>
-            </p-floatlabel>
+              <label for="rvDate">
+                {{ 'conciliation.manualSalesSummary.rvDate' | translate }}
+              </label>
+            </p-floatLabel>
           </div>
 
-          <div class="cs-form-field">
-            <p-floatlabel>
+          <div class="col-12 md:col-2 p-2">
+            <p-floatLabel variant="on" class="w-full">
               <p-inputnumber
+                class="w-full"
                 mode="decimal"
                 locale="pt-BR"
+                inputId="grossValue"
                 [minFractionDigits]="2"
                 [maxFractionDigits]="2"
-                inputId="grossValue"
                 formControlName="grossValue"
+                inputStyleClass="w-full p-inputtext-sm"
               ></p-inputnumber>
-              <label for="grossValue">{{ 'conciliation.manualSalesSummary.grossValue' | translate }}</label>
-            </p-floatlabel>
+              <label for="grossValue">
+                {{ 'conciliation.manualSalesSummary.grossValue' | translate }}
+              </label>
+            </p-floatLabel>
           </div>
-
         </div>
 
-        <p class="cs-section-label cs-section-label--opt">{{ 'conciliation.manualSalesSummary.sectionSummaryOptional' | translate }}</p>
+        <p-divider></p-divider>
 
-        <div class="cs-form-grid">
+        <!-- Dados opcionais -->
+        <div class="flex align-items-center gap-2 mb-2">
+          <span class="text-base font-semibold">
+            {{ 'conciliation.manualSalesSummary.sectionSummaryOptional' | translate }}
+          </span>
+        </div>
 
-          <div class="cs-form-field">
-            <p-floatlabel>
+        <div class="grid formgrid gap-0">
+          <div class="col-12 md:col-4 p-2">
+            <p-floatLabel variant="on" class="w-full">
               <p-select
+                size="small"
                 class="w-full"
                 appendTo="body"
                 [filter]="true"
@@ -297,84 +341,163 @@
                 [loading]="loadingOptions()"
                 formControlName="companyId"
               ></p-select>
-              <label for="companyId">{{ 'conciliation.manualSalesSummary.company' | translate }}</label>
-            </p-floatlabel>
+              <label for="companyId">
+                {{ 'conciliation.manualSalesSummary.company' | translate }}
+              </label>
+            </p-floatLabel>
           </div>
 
-          <div class="cs-form-field">
-            <p-floatlabel>
-              <p-inputnumber mode="decimal" locale="pt-BR" [minFractionDigits]="2" [maxFractionDigits]="2"
-                inputId="discountValue" formControlName="discountValue"></p-inputnumber>
-              <label for="discountValue">{{ 'conciliation.manualSalesSummary.discountValue' | translate }}</label>
-            </p-floatlabel>
+          <div class="col-12 md:col-2 p-2">
+            <p-floatLabel variant="on" class="w-full">
+              <p-inputnumber
+                class="w-full"
+                mode="decimal"
+                locale="pt-BR"
+                [minFractionDigits]="2"
+                [maxFractionDigits]="2"
+                inputId="discountValue"
+                formControlName="discountValue"
+                inputStyleClass="w-full p-inputtext-sm"
+              ></p-inputnumber>
+              <label for="discountValue">
+                {{ 'conciliation.manualSalesSummary.discountValue' | translate }}
+              </label>
+            </p-floatLabel>
           </div>
 
-          <div class="cs-form-field">
-            <p-floatlabel>
-              <p-inputnumber mode="decimal" locale="pt-BR" [minFractionDigits]="2" [maxFractionDigits]="2"
-                inputId="liquidValue" formControlName="liquidValue"></p-inputnumber>
-              <label for="liquidValue">{{ 'conciliation.manualSalesSummary.liquidValue' | translate }}</label>
-            </p-floatlabel>
+          <div class="col-12 md:col-2 p-2">
+            <p-floatLabel variant="on" class="w-full">
+              <p-inputnumber
+                class="w-full"
+                mode="decimal"
+                locale="pt-BR"
+                [minFractionDigits]="2"
+                [maxFractionDigits]="2"
+                inputId="liquidValue"
+                formControlName="liquidValue"
+                inputStyleClass="w-full p-inputtext-sm"
+              ></p-inputnumber>
+              <label for="liquidValue">
+                {{ 'conciliation.manualSalesSummary.liquidValue' | translate }}
+              </label>
+            </p-floatLabel>
           </div>
 
-          <div class="cs-form-field">
-            <p-floatlabel>
-              <p-inputnumber mode="decimal" locale="pt-BR" [minFractionDigits]="2" [maxFractionDigits]="2"
-                inputId="tipValue" formControlName="tipValue"></p-inputnumber>
-              <label for="tipValue">{{ 'conciliation.manualSalesSummary.tipValue' | translate }}</label>
-            </p-floatlabel>
+          <div class="col-12 md:col-2 p-2">
+            <p-floatLabel variant="on" class="w-full">
+              <p-inputnumber
+                class="w-full"
+                mode="decimal"
+                locale="pt-BR"
+                [minFractionDigits]="2"
+                [maxFractionDigits]="2"
+                inputId="tipValue"
+                formControlName="tipValue"
+                inputStyleClass="w-full p-inputtext-sm"
+              ></p-inputnumber>
+              <label for="tipValue">
+                {{ 'conciliation.manualSalesSummary.tipValue' | translate }}
+              </label>
+            </p-floatLabel>
           </div>
 
-          <div class="cs-form-field">
-            <p-floatlabel>
-              <p-inputnumber mode="decimal" locale="pt-BR" [minFractionDigits]="2" [maxFractionDigits]="2"
-                inputId="rejectedValue" formControlName="rejectedValue"></p-inputnumber>
-              <label for="rejectedValue">{{ 'conciliation.manualSalesSummary.rejectedValue' | translate }}</label>
-            </p-floatlabel>
+          <div class="col-12 md:col-2 p-2">
+            <p-floatLabel variant="on" class="w-full">
+              <p-inputnumber
+                class="w-full"
+                mode="decimal"
+                locale="pt-BR"
+                [minFractionDigits]="2"
+                [maxFractionDigits]="2"
+                inputId="rejectedValue"
+                formControlName="rejectedValue"
+                inputStyleClass="w-full p-inputtext-sm"
+              ></p-inputnumber>
+              <label for="rejectedValue">
+                {{ 'conciliation.manualSalesSummary.rejectedValue' | translate }}
+              </label>
+            </p-floatLabel>
           </div>
 
-          <div class="cs-form-field">
-            <p-floatlabel>
-              <p-inputnumber mode="decimal" locale="pt-BR" [minFractionDigits]="2" [maxFractionDigits]="2"
-                inputId="adjustedValue" formControlName="adjustedValue"></p-inputnumber>
-              <label for="adjustedValue">{{ 'conciliation.manualSalesSummary.adjustedValue' | translate }}</label>
-            </p-floatlabel>
+          <div class="col-12 md:col-2 p-2">
+            <p-floatLabel variant="on" class="w-full">
+              <p-inputnumber
+                class="w-full"
+                mode="decimal"
+                locale="pt-BR"
+                [minFractionDigits]="2"
+                [maxFractionDigits]="2"
+                inputId="adjustedValue"
+                formControlName="adjustedValue"
+                inputStyleClass="w-full p-inputtext-sm"
+              ></p-inputnumber>
+              <label for="adjustedValue">
+                {{ 'conciliation.manualSalesSummary.adjustedValue' | translate }}
+              </label>
+            </p-floatLabel>
           </div>
 
-          <div class="cs-form-field">
-            <p-floatlabel>
-              <p-inputnumber [allowEmpty]="true" [showButtons]="false" [useGrouping]="false"
-                inputId="numberCvNsu" formControlName="numberCvNsu"></p-inputnumber>
-              <label for="numberCvNsu">{{ 'conciliation.manualSalesSummary.numberCvNsu' | translate }}</label>
-            </p-floatlabel>
+          <div class="col-12 md:col-2 p-2">
+            <p-floatLabel variant="on" class="w-full">
+              <p-inputnumber
+                class="w-full"
+                [allowEmpty]="true"
+                [showButtons]="false"
+                [useGrouping]="false"
+                inputId="numberCvNsu"
+                formControlName="numberCvNsu"
+                inputStyleClass="w-full p-inputtext-sm"
+              ></p-inputnumber>
+              <label for="numberCvNsu">
+                {{ 'conciliation.manualSalesSummary.numberCvNsu' | translate }}
+              </label>
+            </p-floatLabel>
           </div>
 
-          <div class="cs-form-field">
-            <p-floatlabel>
-              <p-datepicker appendTo="body" dateFormat="dd/mm/yy" [showIcon]="true" [style]="{ width: '100%' }"
-                inputId="firstInstallmentCreditDate" formControlName="firstInstallmentCreditDate"></p-datepicker>
-              <label for="firstInstallmentCreditDate">{{ 'conciliation.manualSalesSummary.firstInstallmentCreditDate' | translate }}</label>
-            </p-floatlabel>
+          <div class="col-12 md:col-4 p-2">
+            <p-floatLabel variant="on" class="w-full">
+              <p-datepicker
+                appendTo="body"
+                dateFormat="dd/mm/yy"
+                [showIcon]="true"
+                class="w-full"
+                inputStyleClass="p-inputtext-sm"
+                inputId="firstInstallmentCreditDate"
+                formControlName="firstInstallmentCreditDate"
+              ></p-datepicker>
+              <label for="firstInstallmentCreditDate">
+                {{ 'conciliation.manualSalesSummary.firstInstallmentCreditDate' | translate }}
+              </label>
+            </p-floatLabel>
           </div>
 
-          <div class="cs-form-field">
-            <p-floatlabel>
-              <input pInputText id="summaryType" class="w-full" formControlName="summaryType" />
-              <label for="summaryType">{{ 'conciliation.manualSalesSummary.summaryType' | translate }}</label>
-            </p-floatlabel>
+          <div class="col-12 md:col-4 p-2">
+            <p-floatLabel variant="on" class="w-full">
+              <input
+                pInputText
+                type="text"
+                id="summaryType"
+                class="w-full p-inputtext-sm"
+                formControlName="summaryType"
+              />
+              <label for="summaryType">
+                {{ 'conciliation.manualSalesSummary.summaryType' | translate }}
+              </label>
+            </p-floatLabel>
           </div>
-
         </div>
 
         <p-divider></p-divider>
 
         <!-- Transações -->
-        <div class="cs-section-header">
-          <p class="cs-section-label">{{ 'conciliation.manualSalesSummary.sectionTransaction' | translate }}</p>
+        <div class="flex align-items-center justify-content-between mb-2">
+          <span class="text-base font-semibold">
+            {{ 'conciliation.manualSalesSummary.sectionTransaction' | translate }}
+          </span>
           <p-button
             type="button"
-            icon="pi pi-plus"
             size="small"
+            icon="pi pi-plus"
             [label]="'conciliation.manualSalesSummary.addTransaction' | translate"
             (onClick)="addTransaction()"
           ></p-button>
@@ -382,16 +505,19 @@
 
         <div formArrayName="transactions">
           @for (txGroup of transactions.controls; track $index) {
-            <div class="cs-tx-card" [formGroupName]="$index">
-              <div class="cs-tx-card__header">
-                <span class="cs-tx-card__title">
+            <div
+              class="border-1 surface-border border-round p-3 mt-2"
+              [formGroupName]="$index"
+            >
+              <div class="flex align-items-center justify-content-between mb-2">
+                <span class="font-semibold text-sm">
                   {{ 'conciliation.manualSalesSummary.tx.label' | translate }} {{ $index + 1 }}
                 </span>
                 @if (transactions.length > 1) {
                   <p-button
                     type="button"
-                    icon="pi pi-trash"
                     size="small"
+                    icon="pi pi-trash"
                     severity="danger"
                     [text]="true"
                     [label]="'conciliation.manualSalesSummary.removeTransaction' | translate"
@@ -400,96 +526,47 @@
                 }
               </div>
 
-              <div class="cs-form-grid">
-
-                <div class="cs-form-field">
-                  <p-floatlabel>
-                    <p-inputnumber [allowEmpty]="true" [showButtons]="false" [useGrouping]="false"
-                      [inputId]="'txNsu_' + $index" formControlName="nsu"></p-inputnumber>
-                    <label [for]="'txNsu_' + $index">{{ 'conciliation.manualSalesSummary.tx.nsu' | translate }}</label>
-                  </p-floatlabel>
+              <div class="grid formgrid gap-0">
+                <!-- Linha 1: controles (spinner primeiro) -->
+                <div class="col-12 md:col-2 p-2">
+                  <p-floatLabel variant="on" class="w-full">
+                    <p-inputnumber
+                      class="w-full"
+                      [allowEmpty]="false"
+                      [showButtons]="true"
+                      [min]="1"
+                      [max]="99"
+                      [inputId]="'txInstallment_' + $index"
+                      formControlName="installment"
+                      inputStyleClass="w-full p-inputtext-sm"
+                    ></p-inputnumber>
+                    <label [for]="'txInstallment_' + $index">
+                      {{ 'conciliation.manualSalesSummary.tx.installment' | translate }}
+                    </label>
+                  </p-floatLabel>
                 </div>
 
-                <div class="cs-form-field">
-                  <p-floatlabel>
-                    <input pInputText [id]="'txCardNumber_' + $index" class="w-full" formControlName="cardNumber" />
-                    <label [for]="'txCardNumber_' + $index">{{ 'conciliation.manualSalesSummary.tx.cardNumber' | translate }}</label>
-                  </p-floatlabel>
+                <div class="col-12 md:col-2 p-2">
+                  <p-floatLabel variant="on" class="w-full">
+                    <p-inputnumber
+                      class="w-full"
+                      [allowEmpty]="true"
+                      [showButtons]="false"
+                      [useGrouping]="false"
+                      [inputId]="'txNsu_' + $index"
+                      formControlName="nsu"
+                      inputStyleClass="w-full p-inputtext-sm"
+                    ></p-inputnumber>
+                    <label [for]="'txNsu_' + $index">
+                      {{ 'conciliation.manualSalesSummary.tx.nsu' | translate }}
+                    </label>
+                  </p-floatLabel>
                 </div>
 
-                <div class="cs-form-field">
-                  <p-floatlabel>
-                    <input pInputText [id]="'txAuthorization_' + $index" class="w-full" formControlName="authorization" />
-                    <label [for]="'txAuthorization_' + $index">{{ 'conciliation.manualSalesSummary.tx.authorization' | translate }}</label>
-                  </p-floatlabel>
-                </div>
-
-                <div class="cs-form-field">
-                  <p-floatlabel>
-                    <input pInputText [id]="'txReferenceNumber_' + $index" class="w-full" formControlName="referenceNumber" />
-                    <label [for]="'txReferenceNumber_' + $index">{{ 'conciliation.manualSalesSummary.tx.referenceNumber' | translate }}</label>
-                  </p-floatlabel>
-                </div>
-
-                <div class="cs-form-field">
-                  <p-floatlabel>
-                    <p-inputnumber mode="decimal" locale="pt-BR" [minFractionDigits]="2" [maxFractionDigits]="2"
-                      [inputId]="'txGrossValue_' + $index" formControlName="grossValue"></p-inputnumber>
-                    <label [for]="'txGrossValue_' + $index">{{ 'conciliation.manualSalesSummary.grossValue' | translate }}</label>
-                  </p-floatlabel>
-                </div>
-
-                <div class="cs-form-field">
-                  <p-floatlabel>
-                    <p-inputnumber mode="decimal" locale="pt-BR" [minFractionDigits]="2" [maxFractionDigits]="2"
-                      [inputId]="'txDiscountValue_' + $index" formControlName="discountValue"></p-inputnumber>
-                    <label [for]="'txDiscountValue_' + $index">{{ 'conciliation.manualSalesSummary.discountValue' | translate }}</label>
-                  </p-floatlabel>
-                </div>
-
-                <div class="cs-form-field">
-                  <p-floatlabel>
-                    <p-inputnumber mode="decimal" locale="pt-BR" [minFractionDigits]="2" [maxFractionDigits]="2"
-                      [inputId]="'txLiquidValue_' + $index" formControlName="liquidValue"></p-inputnumber>
-                    <label [for]="'txLiquidValue_' + $index">{{ 'conciliation.manualSalesSummary.liquidValue' | translate }}</label>
-                  </p-floatlabel>
-                </div>
-
-                <div class="cs-form-field">
-                  <p-floatlabel>
-                    <p-inputnumber mode="decimal" locale="pt-BR" [minFractionDigits]="2" [maxFractionDigits]="2"
-                      [inputId]="'txTipValue_' + $index" formControlName="tipValue"></p-inputnumber>
-                    <label [for]="'txTipValue_' + $index">{{ 'conciliation.manualSalesSummary.tipValue' | translate }}</label>
-                  </p-floatlabel>
-                </div>
-
-                <div class="cs-form-field">
-                  <p-floatlabel>
-                    <p-datepicker appendTo="body" dateFormat="dd/mm/yy" [showIcon]="true" [style]="{ width: '100%' }"
-                      [inputId]="'txSaleDate_' + $index" formControlName="saleDate"></p-datepicker>
-                    <label [for]="'txSaleDate_' + $index">{{ 'conciliation.manualSalesSummary.tx.saleDate' | translate }}</label>
-                  </p-floatlabel>
-                </div>
-
-                <div class="cs-form-field">
-                  <p-floatlabel>
-                    <p-datepicker appendTo="body" dateFormat="dd/mm/yy" [showIcon]="true" [style]="{ width: '100%' }"
-                      [inputId]="'txCreditDate_' + $index" formControlName="creditDate"></p-datepicker>
-                    <label [for]="'txCreditDate_' + $index">{{ 'conciliation.manualSalesSummary.tx.creditDate' | translate }}</label>
-                  </p-floatlabel>
-                </div>
-
-                <div class="cs-form-field">
-                  <p-floatlabel>
-                    <p-inputnumber [allowEmpty]="false" [showButtons]="true" [min]="1" [max]="99"
-                      [inputId]="'txInstallment_' + $index" formControlName="installment"></p-inputnumber>
-                    <label [for]="'txInstallment_' + $index">{{ 'conciliation.manualSalesSummary.tx.installment' | translate }}</label>
-                  </p-floatlabel>
-                </div>
-
-                <div class="cs-form-field">
-                  <p-floatlabel>
+                <div class="col-12 md:col-2 p-2">
+                  <p-floatLabel variant="on" class="w-full">
                     <p-select
+                      size="small"
                       class="w-full"
                       appendTo="body"
                       optionLabel="label"
@@ -498,13 +575,16 @@
                       [options]="modalityOptions"
                       formControlName="modality"
                     ></p-select>
-                    <label [for]="'txModality_' + $index">{{ 'conciliation.manualSalesSummary.tx.modality' | translate }}</label>
-                  </p-floatlabel>
+                    <label [for]="'txModality_' + $index">
+                      {{ 'conciliation.manualSalesSummary.tx.modality' | translate }}
+                    </label>
+                  </p-floatLabel>
                 </div>
 
-                <div class="cs-form-field">
-                  <p-floatlabel>
+                <div class="col-12 md:col-2 p-2">
+                  <p-floatLabel variant="on" class="w-full">
                     <p-select
+                      size="small"
                       class="w-full"
                       appendTo="body"
                       optionLabel="label"
@@ -517,20 +597,16 @@
                       [options]="flagOptions()"
                       formControlName="flagId"
                     ></p-select>
-                    <label [for]="'txFlagId_' + $index">{{ 'conciliation.manualSalesSummary.tx.flag' | translate }}</label>
-                  </p-floatlabel>
+                    <label [for]="'txFlagId_' + $index">
+                      {{ 'conciliation.manualSalesSummary.tx.flag' | translate }}
+                    </label>
+                  </p-floatLabel>
                 </div>
 
-                <div class="cs-form-field">
-                  <p-floatlabel>
-                    <input pInputText [id]="'txTid_' + $index" class="w-full" formControlName="tid" />
-                    <label [for]="'txTid_' + $index">{{ 'conciliation.manualSalesSummary.tx.tid' | translate }}</label>
-                  </p-floatlabel>
-                </div>
-
-                <div class="cs-form-field">
-                  <p-floatlabel>
+                <div class="col-12 md:col-2 p-2">
+                  <p-floatLabel variant="on" class="w-full">
                     <p-select
+                      size="small"
                       class="w-full"
                       appendTo="body"
                       optionLabel="label"
@@ -540,16 +616,139 @@
                       [options]="captureOptions"
                       formControlName="capture"
                     ></p-select>
-                    <label [for]="'txCapture_' + $index">{{ 'conciliation.manualSalesSummary.tx.capture' | translate }}</label>
-                  </p-floatlabel>
+                    <label [for]="'txCapture_' + $index">
+                      {{ 'conciliation.manualSalesSummary.tx.capture' | translate }}
+                    </label>
+                  </p-floatLabel>
                 </div>
 
+                <div class="col-12 md:col-2 p-2">
+                  <p-floatLabel variant="on" class="w-full">
+                    <input
+                      pInputText
+                      type="text"
+                      [id]="'txCardNumber_' + $index"
+                      class="w-full p-inputtext-sm"
+                      formControlName="cardNumber"
+                    />
+                    <label [for]="'txCardNumber_' + $index">
+                      {{ 'conciliation.manualSalesSummary.tx.cardNumber' | translate }}
+                    </label>
+                  </p-floatLabel>
+                </div>
+
+                <!-- Linha 2: valores e datas -->
+                <div class="col-12 md:col-2 p-2">
+                  <p-floatLabel variant="on" class="w-full">
+                    <p-inputnumber
+                      class="w-full"
+                      mode="decimal"
+                      locale="pt-BR"
+                      [minFractionDigits]="2"
+                      [maxFractionDigits]="2"
+                      [inputId]="'txGrossValue_' + $index"
+                      formControlName="grossValue"
+                      inputStyleClass="w-full p-inputtext-sm"
+                    ></p-inputnumber>
+                    <label [for]="'txGrossValue_' + $index">
+                      {{ 'conciliation.manualSalesSummary.grossValue' | translate }}
+                    </label>
+                  </p-floatLabel>
+                </div>
+
+                <div class="col-12 md:col-2 p-2">
+                  <p-floatLabel variant="on" class="w-full">
+                    <p-inputnumber
+                      class="w-full"
+                      mode="decimal"
+                      locale="pt-BR"
+                      [minFractionDigits]="2"
+                      [maxFractionDigits]="2"
+                      [inputId]="'txDiscountValue_' + $index"
+                      formControlName="discountValue"
+                      inputStyleClass="w-full p-inputtext-sm"
+                    ></p-inputnumber>
+                    <label [for]="'txDiscountValue_' + $index">
+                      {{ 'conciliation.manualSalesSummary.discountValue' | translate }}
+                    </label>
+                  </p-floatLabel>
+                </div>
+
+                <div class="col-12 md:col-2 p-2">
+                  <p-floatLabel variant="on" class="w-full">
+                    <p-inputnumber
+                      class="w-full"
+                      mode="decimal"
+                      locale="pt-BR"
+                      [minFractionDigits]="2"
+                      [maxFractionDigits]="2"
+                      [inputId]="'txLiquidValue_' + $index"
+                      formControlName="liquidValue"
+                      inputStyleClass="w-full p-inputtext-sm"
+                    ></p-inputnumber>
+                    <label [for]="'txLiquidValue_' + $index">
+                      {{ 'conciliation.manualSalesSummary.liquidValue' | translate }}
+                    </label>
+                  </p-floatLabel>
+                </div>
+
+                <div class="col-12 md:col-2 p-2">
+                  <p-floatLabel variant="on" class="w-full">
+                    <p-inputnumber
+                      class="w-full"
+                      mode="decimal"
+                      locale="pt-BR"
+                      [minFractionDigits]="2"
+                      [maxFractionDigits]="2"
+                      [inputId]="'txTipValue_' + $index"
+                      formControlName="tipValue"
+                      inputStyleClass="w-full p-inputtext-sm"
+                    ></p-inputnumber>
+                    <label [for]="'txTipValue_' + $index">
+                      {{ 'conciliation.manualSalesSummary.tipValue' | translate }}
+                    </label>
+                  </p-floatLabel>
+                </div>
+
+                <div class="col-12 md:col-2 p-2">
+                  <p-floatLabel variant="on" class="w-full">
+                    <p-datepicker
+                      appendTo="body"
+                      dateFormat="dd/mm/yy"
+                      [showIcon]="true"
+                      class="w-full"
+                      inputStyleClass="p-inputtext-sm"
+                      [inputId]="'txSaleDate_' + $index"
+                      formControlName="saleDate"
+                    ></p-datepicker>
+                    <label [for]="'txSaleDate_' + $index">
+                      {{ 'conciliation.manualSalesSummary.tx.saleDate' | translate }}
+                    </label>
+                  </p-floatLabel>
+                </div>
+
+                <div class="col-12 md:col-2 p-2">
+                  <p-floatLabel variant="on" class="w-full">
+                    <p-datepicker
+                      appendTo="body"
+                      dateFormat="dd/mm/yy"
+                      [showIcon]="true"
+                      class="w-full"
+                      inputStyleClass="p-inputtext-sm"
+                      [inputId]="'txCreditDate_' + $index"
+                      formControlName="creditDate"
+                    ></p-datepicker>
+                    <label [for]="'txCreditDate_' + $index">
+                      {{ 'conciliation.manualSalesSummary.tx.creditDate' | translate }}
+                    </label>
+                  </p-floatLabel>
+                </div>
               </div>
             </div>
           }
         </div>
 
-        <div class="cs-form-actions">
+        <div class="flex justify-content-end mt-4">
           <p-button
             type="submit"
             icon="pi pi-plus"
@@ -558,9 +757,6 @@
             [disabled]="form.invalid"
           ></p-button>
         </div>
-
       </form>
     }
-
   </p-card>
-</div>

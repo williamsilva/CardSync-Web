@@ -8,6 +8,7 @@
 
 <p-card class="mt-2 block">
   <form [formGroup]="form" (ngSubmit)="save()">
+    <!-- Geral -->
     <div class="grid formgrid gap-0">
       <div class="col-12 md:col-3 p-2">
         <p-floatLabel variant="on" class="w-full">
@@ -24,10 +25,10 @@
           <label for="impl">
             {{ 'email.settings.impl' | translate }}
             <i
-              tooltipPosition="top"
+              class="pi pi-info-circle text-xs ml-1 text-color-secondary cursor-pointer"
               style="pointer-events: auto"
               [pTooltip]="'email.settings.implHint' | translate"
-              class="pi pi-info-circle text-xs ml-1 text-color-secondary cursor-pointer"
+              tooltipPosition="top"
             ></i>
           </label>
         </p-floatLabel>
@@ -74,44 +75,274 @@
           </label>
         </p-floatLabel>
       </div>
+    </div>
 
-      <div class="col-12 md:col-6 p-2">
-        <p-floatLabel variant="on" class="w-full">
-          <input
-            pInputText
-            type="text"
-            id="brevoApiKey"
-            formControlName="brevoApiKey"
-            class="w-full p-inputtext-sm"
-          />
-          <label for="brevoApiKey">
-            {{ 'email.settings.brevoApiKey' | translate }}
-            <i
-              class="pi pi-info-circle text-xs ml-1 text-color-secondary cursor-pointer"
-              style="pointer-events: auto"
-              [pTooltip]="'email.settings.brevoApiKeyHint' | translate"
-              tooltipPosition="top"
-            ></i>
-          </label>
-        </p-floatLabel>
+    <!-- SMTP -->
+    @if (implValue === 'SMTP') {
+      <p-divider></p-divider>
+      <div class="flex align-items-center gap-2 mb-2">
+        <span class="text-base font-semibold">{{ 'email.settings.smtpTitle' | translate }}</span>
       </div>
+      <div class="grid formgrid gap-0">
+        <div class="col-12 md:col-3 p-2">
+          <p-floatLabel variant="on" class="w-full">
+            <input
+              pInputText
+              type="text"
+              id="smtpHost"
+              formControlName="smtpHost"
+              class="w-full p-inputtext-sm"
+            />
+            <label for="smtpHost">
+              {{ 'email.settings.smtpHost' | translate }}
+              <i
+                tooltipPosition="top"
+                style="pointer-events: auto"
+                [pTooltip]="'email.settings.smtpHostHint' | translate"
+                class="pi pi-info-circle text-xs ml-1 text-color-secondary cursor-pointer"
+              ></i>
+            </label>
+          </p-floatLabel>
+        </div>
 
-      <div class="col-12 md:col-6 p-2">
+        <div class="col-12 md:col-2 p-2">
+          <p-floatLabel variant="on" class="w-full">
+            <p-inputnumber
+              [min]="1"
+              [max]="65535"
+              class="w-full"
+              inputId="smtpPort"
+              [useGrouping]="false"
+              inputStyleClass="w-full p-inputtext-sm"
+              formControlName="smtpPort"
+            ></p-inputnumber>
+            <label for="smtpPort">
+              {{ 'email.settings.smtpPort' | translate }}
+              <i
+                tooltipPosition="top"
+                style="pointer-events: auto"
+                [pTooltip]="'email.settings.smtpPortHint' | translate"
+                class="pi pi-info-circle text-xs ml-1 text-color-secondary cursor-pointer"
+              ></i>
+            </label>
+          </p-floatLabel>
+        </div>
+
+        <div class="col-12 md:col-3 p-2">
+          <p-floatLabel variant="on" class="w-full">
+            <input
+              pInputText
+              type="text"
+              id="smtpUsername"
+              class="w-full p-inputtext-sm"
+              formControlName="smtpUsername"
+            />
+            <label for="smtpUsername">
+              {{ 'email.settings.smtpUsername' | translate }}
+              <i
+                tooltipPosition="top"
+                style="pointer-events: auto"
+                [pTooltip]="'email.settings.smtpUsernameHint' | translate"
+                class="pi pi-info-circle text-xs ml-1 text-color-secondary cursor-pointer"
+              ></i>
+            </label>
+          </p-floatLabel>
+        </div>
+
+        <div class="col-12 md:col-3 p-2">
+          <p-floatLabel variant="on" class="w-full">
+            <input
+              pInputText
+              type="password"
+              id="smtpPassword"
+              class="w-full p-inputtext-sm"
+              formControlName="smtpPassword"
+            />
+            <label for="smtpPassword">
+              {{ 'email.settings.smtpPassword' | translate }}
+              <i
+                tooltipPosition="top"
+                style="pointer-events: auto"
+                [pTooltip]="'email.settings.smtpPasswordHint' | translate"
+                class="pi pi-info-circle text-xs ml-1 text-color-secondary cursor-pointer"
+              ></i>
+            </label>
+          </p-floatLabel>
+        </div>
+
+        <div class="col-12 md:col-3 p-2">
+          <div
+            class="flex align-items-center justify-content-between border-1 surface-border border-round p-3 h-full gap-3"
+          >
+            <label for="smtpAuth" class="text-sm flex-1">
+              {{ 'email.settings.smtpAuth' | translate }}
+              <i
+                tooltipPosition="top"
+                style="pointer-events: auto"
+                [pTooltip]="'email.settings.smtpAuthHint' | translate"
+                class="pi pi-info-circle text-xs ml-1 text-color-secondary cursor-pointer"
+              ></i>
+            </label>
+            <p-toggleswitch formControlName="smtpAuth" inputId="smtpAuth"></p-toggleswitch>
+          </div>
+        </div>
+
+        <div class="col-12 md:col-2 p-2">
+          <div
+            class="flex align-items-center justify-content-between border-1 surface-border border-round p-3 h-full gap-3"
+          >
+            <label for="smtpStarttls" class="text-sm flex-1">
+              {{ 'email.settings.smtpStarttls' | translate }}
+              <i
+                tooltipPosition="top"
+                style="pointer-events: auto"
+                [pTooltip]="'email.settings.smtpStarttlsHint' | translate"
+                class="pi pi-info-circle text-xs ml-1 text-color-secondary cursor-pointer"
+              ></i>
+            </label>
+            <p-toggleswitch formControlName="smtpStarttls" inputId="smtpStarttls"></p-toggleswitch>
+          </div>
+        </div>
+
+        <div class="col-12 md:col-2 p-2">
+          <div
+            class="flex align-items-center justify-content-between border-1 surface-border border-round p-3 h-full gap-3"
+          >
+            <label for="smtpSsl" class="text-sm flex-1">
+              {{ 'email.settings.smtpSsl' | translate }}
+              <i
+                tooltipPosition="top"
+                style="pointer-events: auto"
+                [pTooltip]="'email.settings.smtpSslHint' | translate"
+                class="pi pi-info-circle text-xs ml-1 text-color-secondary cursor-pointer"
+              ></i>
+            </label>
+            <p-toggleswitch formControlName="smtpSsl" inputId="smtpSsl"></p-toggleswitch>
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- Brevo -->
+    @if (implValue === 'BREVO') {
+      <p-divider></p-divider>
+      <div class="flex align-items-center gap-2 mb-2">
+        <span class="text-base font-semibold">{{ 'email.settings.brevoTitle' | translate }}</span>
+      </div>
+      <div class="grid formgrid gap-0">
+        <div class="col-12 md:col-4 p-2">
+          <p-floatLabel variant="on" class="w-full">
+            <input
+              pInputText
+              type="text"
+              id="brevoApiKey"
+              formControlName="brevoApiKey"
+              class="w-full p-inputtext-sm"
+            />
+            <label for="brevoApiKey">
+              {{ 'email.settings.brevoApiKey' | translate }}
+              <i
+                tooltipPosition="top"
+                style="pointer-events: auto"
+                [pTooltip]="'email.settings.brevoApiKeyHint' | translate"
+                class="pi pi-info-circle text-xs ml-1 text-color-secondary cursor-pointer"
+              ></i>
+            </label>
+          </p-floatLabel>
+        </div>
+
+        <div class="col-12 md:col-4 p-2">
+          <p-floatLabel variant="on" class="w-full">
+            <input
+              pInputText
+              type="text"
+              id="brevoBaseUrl"
+              class="w-full p-inputtext-sm"
+              formControlName="brevoBaseUrl"
+            />
+            <label for="brevoBaseUrl">
+              {{ 'email.settings.brevoBaseUrl' | translate }}
+              <i
+                tooltipPosition="top"
+                style="pointer-events: auto"
+                [pTooltip]="'email.settings.brevoBaseUrlHint' | translate"
+                class="pi pi-info-circle text-xs ml-1 text-color-secondary cursor-pointer"
+              ></i>
+            </label>
+          </p-floatLabel>
+        </div>
+
+        <div class="col-12 md:col-2 p-2">
+          <p-floatLabel variant="on" class="w-full">
+            <p-inputnumber
+              [min]="1"
+              [max]="65535"
+              class="w-full"
+              inputId="brevoPort"
+              [useGrouping]="false"
+              inputStyleClass="w-full p-inputtext-sm"
+              formControlName="brevoPort"
+            ></p-inputnumber>
+            <label for="brevoPort">
+              {{ 'email.settings.brevoPort' | translate }}
+              <i
+                tooltipPosition="top"
+                style="pointer-events: auto"
+                [pTooltip]="'email.settings.brevoPortHint' | translate"
+                class="pi pi-info-circle text-xs ml-1 text-color-secondary cursor-pointer"
+              ></i>
+            </label>
+          </p-floatLabel>
+        </div>
+
+        <div class="col-12 md:col-2 p-2">
+          <p-floatLabel variant="on" class="w-full">
+            <input
+              pInputText
+              type="text"
+              id="brevoUsername"
+              class="w-full p-inputtext-sm"
+              formControlName="brevoUsername"
+            />
+            <label for="brevoUsername">
+              {{ 'email.settings.brevoUsername' | translate }}
+              <i
+                tooltipPosition="top"
+                style="pointer-events: auto"
+                [pTooltip]="'email.settings.brevoUsernameHint' | translate"
+                class="pi pi-info-circle text-xs ml-1 text-color-secondary cursor-pointer"
+              ></i>
+            </label>
+          </p-floatLabel>
+        </div>
+      </div>
+    }
+
+    <!-- Destinatários de chargeback -->
+    <p-divider></p-divider>
+    <div class="flex align-items-center gap-2 mb-2">
+      <span class="text-base font-semibold">{{
+        'email.settings.notificationsTitle' | translate
+      }}</span>
+    </div>
+    <div class="grid formgrid gap-0">
+      <div class="col-12 p-2">
         <p-floatLabel variant="on" class="w-full">
-          <input
-            pInputText
-            type="text"
-            id="brevoBaseUrl"
-            formControlName="brevoBaseUrl"
-            class="w-full p-inputtext-sm"
-          />
-          <label for="brevoBaseUrl">
-            {{ 'email.settings.brevoBaseUrl' | translate }}
+          <textarea
+            rows="3"
+            pTextarea
+            class="w-full"
+            style="resize: vertical"
+            id="chargebackRecipients"
+            formControlName="chargebackRecipients"
+          ></textarea>
+          <label for="chargebackRecipients">
+            {{ 'email.settings.chargebackRecipients' | translate }}
             <i
-              class="pi pi-info-circle text-xs ml-1 text-color-secondary cursor-pointer"
-              style="pointer-events: auto"
-              [pTooltip]="'email.settings.brevoBaseUrlHint' | translate"
               tooltipPosition="top"
+              style="pointer-events: auto"
+              [pTooltip]="'email.settings.chargebackRecipientsHint' | translate"
+              class="pi pi-info-circle text-xs ml-1 text-color-secondary cursor-pointer"
             ></i>
           </label>
         </p-floatLabel>

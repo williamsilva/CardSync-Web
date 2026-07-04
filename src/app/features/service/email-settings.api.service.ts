@@ -10,6 +10,16 @@ export interface EmailSettingsModel {
   fromEmail: string;
   brevoApiKey: string | null;
   brevoBaseUrl: string | null;
+  brevoPort: number | null;
+  brevoUsername: string | null;
+  chargebackRecipients: string | null;
+  smtpHost: string | null;
+  smtpPort: number | null;
+  smtpUsername: string | null;
+  smtpPassword: string | null;
+  smtpAuth: boolean | null;
+  smtpStarttls: boolean | null;
+  smtpSsl: boolean | null;
 }
 
 export interface EmailSettingsRequest {
@@ -18,6 +28,16 @@ export interface EmailSettingsRequest {
   fromEmail: string;
   brevoApiKey: string | null;
   brevoBaseUrl: string | null;
+  brevoPort: number | null;
+  brevoUsername: string | null;
+  chargebackRecipients: string | null;
+  smtpHost: string | null;
+  smtpPort: number | null;
+  smtpUsername: string | null;
+  smtpPassword: string | null;
+  smtpAuth: boolean | null;
+  smtpStarttls: boolean | null;
+  smtpSsl: boolean | null;
 }
 
 @Injectable({ providedIn: 'root' })

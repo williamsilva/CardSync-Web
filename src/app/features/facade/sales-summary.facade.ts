@@ -2,7 +2,9 @@ import { Injectable, inject, signal } from '@angular/core';
 
 import { finalize } from 'rxjs';
 
-import { SaleSummaryApiModel } from '@models/sales-summary.model';
+import { Observable } from 'rxjs';
+
+import { SaleSummaryApiModel, SalesSummaryManualCreateInput } from '@models/sales-summary.model';
 import { TransactionsTotalsModel } from '@models/transactionsTotalsModel';
 import { ListQueryDto } from '@shared/features/list-query/list-query.types';
 import { SaleSummaryAdvancedFilters } from '@features/filter/sale-summary.filters';
@@ -70,5 +72,9 @@ export class SaleSummaryFacade {
 
   clearTotals(): void {
     this._totals.set(null);
+  }
+
+  createManual(input: SalesSummaryManualCreateInput): Observable<SaleSummaryApiModel> {
+    return this.api.createManual(input);
   }
 }

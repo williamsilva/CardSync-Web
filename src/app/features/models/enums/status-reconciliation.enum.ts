@@ -121,3 +121,7 @@ export function allStatusReconciliationEnum(): StatusReconciliationEnum[] {
 export function allStatusReconciliationManualCreditEnum(): StatusReconciliationEnum[] {
   return [StatusReconciliationEnum.PARTIALLY_RECONCILED, StatusReconciliationEnum.PENDING];
 }
+
+export function allStatusReconciliationCreditOrder(): StatusReconciliationEnum[] {
+  return [StatusReconciliationEnum.RECONCILED, StatusReconciliationEnum.PENDING];
+}

@@ -281,8 +281,7 @@
         "erpPendent": "ERP Pendentes",
         "totalizers": "Totalizadores",
         "divergences": "Divergências",
-        "calendar": "Agendar de Arquivos",
-        "bankReleases": "Lançamentos bancários"
+        "calendar": "Agendar de Arquivos"
       }
     }
   },
@@ -2953,7 +2952,7 @@
     "settings": {
       "subtitle": "Configuração do provedor de envio de e-mails.",
       "impl": "Implementação",
-      "implHint": "Define o provedor de envio. FAKE registra e-mails no log (desenvolvimento), SMTP usa servidor de e-mail configurado, BREVO usa a API Brevo. Alterações de implementação e URL base aplicam-se após reinicialização do servidor.",
+      "implHint": "Define o provedor de envio. FAKE registra e-mails no log (desenvolvimento), SMTP usa servidor de e-mail configurado, BREVO usa a API Brevo.",
       "fromName": "Nome do remetente",
       "fromNameHint": "Nome exibido no campo 'De' dos e-mails enviados.",
       "fromEmail": "E-mail do remetente",
@@ -2961,7 +2960,30 @@
       "brevoApiKey": "Chave de API (Brevo)",
       "brevoApiKeyHint": "Chave de autenticação para a API Brevo. Necessária quando a implementação é BREVO.",
       "brevoBaseUrl": "URL base (Brevo)",
-      "brevoBaseUrlHint": "URL base da API Brevo. Alterações aplicam-se após reinicialização do servidor.",
+      "brevoBaseUrlHint": "URL base da API Brevo.",
+      "brevoPort": "Porta",
+      "brevoPortHint": "Porta do relay SMTP do Brevo. Padrão: 587.",
+      "brevoUsername": "Usuário",
+      "brevoUsernameHint": "Usuário para autenticação no relay SMTP do Brevo, geralmente o e-mail da conta Brevo.",
+      "brevoTitle": "Configurações Brevo",
+      "smtpTitle": "Configurações SMTP",
+      "notificationsTitle": "Notificações",
+      "chargebackRecipients": "Destinatários de chargeback",
+      "chargebackRecipientsHint": "E-mails que receberão notificação quando chargebacks forem detectados no processamento de arquivos. Separe múltiplos endereços por vírgula.",
+      "smtpHost": "Host SMTP",
+      "smtpHostHint": "Endereço do servidor de e-mail (ex: smtp.gmail.com).",
+      "smtpPort": "Porta",
+      "smtpPortHint": "Porta do servidor SMTP. Padrão: 587 (STARTTLS) ou 465 (SSL).",
+      "smtpUsername": "Usuário",
+      "smtpUsernameHint": "Usuário para autenticação no servidor SMTP, geralmente o próprio e-mail.",
+      "smtpPassword": "Senha",
+      "smtpPasswordHint": "Senha para autenticação no servidor SMTP.",
+      "smtpAuth": "Autenticação",
+      "smtpAuthHint": "Habilita autenticação SMTP com usuário e senha.",
+      "smtpStarttls": "STARTTLS",
+      "smtpStarttlsHint": "Habilita upgrade da conexão para TLS usando STARTTLS. Recomendado para a porta 587.",
+      "smtpSsl": "SSL/TLS",
+      "smtpSslHint": "Habilita conexão SSL/TLS direta. Recomendado para a porta 465.",
       "saved": "Configurações de e-mail salvas com sucesso.",
       "saveError": "Não foi possível salvar as configurações de e-mail."
     }

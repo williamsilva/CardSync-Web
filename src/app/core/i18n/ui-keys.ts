@@ -81,12 +81,12 @@ export const UI_KEYS = {
       dashboard: 'menu.conciliation.dashboard',
       contractAudit: 'menu.conciliation.contractAudit',
       erpVsAcquirer: 'menu.conciliation.erpVsAcquirer',
+      manualCreditOrder: 'menu.conciliation.manualCreditOrder',
       erpMissingAcquirer: 'menu.conciliation.erpMissingAcquirer',
       acquirerMissingErp: 'menu.conciliation.acquirerMissingErp',
-      erpVsAcquirerDivergences: 'menu.conciliation.erpVsAcquirerDivergences',
       manualSalesSummary: 'menu.conciliation.manualSalesSummary',
-      manualCreditOrder: 'menu.conciliation.manualCreditOrder',
       reconciliationActions: 'menu.conciliation.reconciliationActions',
+      erpVsAcquirerDivergences: 'menu.conciliation.erpVsAcquirerDivergences',
     },
     security: {
       title: 'menu.security.title',
@@ -105,7 +105,6 @@ export const UI_KEYS = {
         totalizers: 'menu.file.processing.totalizers',
         erpPendent: 'menu.file.processing.erpPendent',
         divergences: 'menu.file.processing.divergences',
-        bankReleases: 'menu.file.processing.bankReleases',
       },
     },
     settings: {

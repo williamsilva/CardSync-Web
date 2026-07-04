@@ -187,9 +187,26 @@ export function allStatusPaymentBankEnum(): StatusPaymentBankEnum[] {
 
 export function allStatusPaymentBankStatementEnum(): StatusPaymentBankEnum[] {
   return [
-    StatusPaymentBankEnum.PENDING,
     StatusPaymentBankEnum.PAID,
     StatusPaymentBankEnum.PARTIALLY_PAID,
+    StatusPaymentBankEnum.PENDING,
+    StatusPaymentBankEnum.DIVERGENT,
+  ];
+}
+
+export function allStatusPaymentCreditOrderEnum(): StatusPaymentBankEnum[] {
+  return [
+    StatusPaymentBankEnum.PAID,
+    StatusPaymentBankEnum.PENDING,
+    StatusPaymentBankEnum.DIVERGENT,
+  ];
+}
+
+export function allStatusPaymentSaleSummaryEnum(): StatusPaymentBankEnum[] {
+  return [
+    StatusPaymentBankEnum.PAID,
+    StatusPaymentBankEnum.PARTIALLY_PAID,
+    StatusPaymentBankEnum.PENDING,
     StatusPaymentBankEnum.DIVERGENT,
   ];
 }

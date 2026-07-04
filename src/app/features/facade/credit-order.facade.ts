@@ -1,8 +1,8 @@
 import { Injectable, inject, signal } from '@angular/core';
 
-import { finalize } from 'rxjs';
+import { finalize, Observable } from 'rxjs';
 
-import { CreditOrderApiModel } from '@models/credit-order.model';
+import { CreditOrderApiModel, CreditOrderManualInput, CreditOrderManualResult } from '@models/credit-order.model';
 import { TransactionsTotalsModel } from '@models/transactionsTotalsModel';
 import { ListQueryDto } from '@shared/features/list-query/list-query.types';
 import { CreditOrderAdvancedFilters } from '@features/filter/credit-order.filters';
@@ -70,5 +70,9 @@ export class CreditOrderFacade {
 
   clearTotals(): void {
     this._totals.set(null);
+  }
+
+  createManual(input: CreditOrderManualInput): Observable<CreditOrderManualResult> {
+    return this.api.createManual(input);
   }
 }

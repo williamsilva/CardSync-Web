@@ -5,10 +5,15 @@ import { CardModule } from 'primeng/card';
 import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { SelectModule } from 'primeng/select';
+import { DividerModule } from 'primeng/divider';
 import { TooltipModule } from 'primeng/tooltip';
+import { CheckboxModule } from 'primeng/checkbox';
+import { TextareaModule } from 'primeng/textarea';
 import { InputTextModule } from 'primeng/inputtext';
 import { TranslateModule } from '@ngx-translate/core';
 import { FloatLabelModule } from 'primeng/floatlabel';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { ToggleSwitchModule } from 'primeng/toggleswitch';
 
 import { I18nService } from '@core/i18n/i18n.service';
 import { PERMISSIONS } from '@core/auth/permissions.constants';
@@ -30,10 +35,15 @@ export const EMAIL_IMPL_OPTIONS = [
     CardModule,
     ButtonModule,
     SelectModule,
+    DividerModule,
     TooltipModule,
+    CheckboxModule,
+    TextareaModule,
     TranslateModule,
     InputTextModule,
+    InputNumberModule,
     FloatLabelModule,
+    ToggleSwitchModule,
     ReactiveFormsModule,
     PageHeaderComponent,
   ],
@@ -59,10 +69,24 @@ export class EmailSettingsComponent {
     fromEmail: ['', [Validators.required, Validators.maxLength(255)]],
     brevoApiKey: ['', Validators.maxLength(500)],
     brevoBaseUrl: ['', Validators.maxLength(255)],
+    brevoPort: [587],
+    brevoUsername: ['', Validators.maxLength(255)],
+    chargebackRecipients: [''],
+    smtpHost: ['', Validators.maxLength(255)],
+    smtpPort: [587],
+    smtpUsername: ['', Validators.maxLength(255)],
+    smtpPassword: ['', Validators.maxLength(500)],
+    smtpAuth: [true],
+    smtpStarttls: [false],
+    smtpSsl: [false],
   });
 
   constructor() {
     this.load();
+  }
+
+  protected get implValue(): string {
+    return this.form.get('impl')?.value ?? '';
   }
 
   protected load(): void {
@@ -70,11 +94,21 @@ export class EmailSettingsComponent {
     this.service.getSettings().subscribe({
       next: (s) => {
         this.form.patchValue({
-          impl: s.impl,
-          fromName: s.fromName,
-          fromEmail: s.fromEmail,
+          impl: s.impl ?? 'FAKE',
+          fromName: s.fromName ?? '',
+          fromEmail: s.fromEmail ?? '',
           brevoApiKey: s.brevoApiKey ?? '',
           brevoBaseUrl: s.brevoBaseUrl ?? '',
+          brevoPort: s.brevoPort ?? 587,
+          brevoUsername: s.brevoUsername ?? '',
+          chargebackRecipients: s.chargebackRecipients ?? '',
+          smtpHost: s.smtpHost ?? '',
+          smtpPort: s.smtpPort ?? 587,
+          smtpUsername: s.smtpUsername ?? '',
+          smtpPassword: s.smtpPassword ?? '',
+          smtpAuth: s.smtpAuth ?? true,
+          smtpStarttls: s.smtpStarttls ?? false,
+          smtpSsl: s.smtpSsl ?? false,
         });
         if (!this.canEdit()) {
           this.form.disable();
@@ -98,6 +132,16 @@ export class EmailSettingsComponent {
         fromEmail: v.fromEmail ?? '',
         brevoApiKey: v.brevoApiKey || null,
         brevoBaseUrl: v.brevoBaseUrl || null,
+        brevoPort: v.brevoPort ?? null,
+        brevoUsername: v.brevoUsername || null,
+        chargebackRecipients: v.chargebackRecipients || null,
+        smtpHost: v.smtpHost || null,
+        smtpPort: v.smtpPort ?? null,
+        smtpUsername: v.smtpUsername || null,
+        smtpPassword: v.smtpPassword || null,
+        smtpAuth: v.smtpAuth ?? null,
+        smtpStarttls: v.smtpStarttls ?? null,
+        smtpSsl: v.smtpSsl ?? null,
       })
       .subscribe({
         next: () => {

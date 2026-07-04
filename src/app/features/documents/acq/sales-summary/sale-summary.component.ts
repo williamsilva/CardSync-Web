@@ -60,9 +60,9 @@ import {
 } from '@models/enums/status-transaction.enum';
 import {
   StatusPaymentBankEnum,
-  allStatusPaymentBankEnum,
   statusPaymentBankEnumLabel,
   statusPaymentBankEnumSeverity,
+  allStatusPaymentSaleSummaryEnum,
 } from '@models/enums/status-payment-bank.enum';
 import {
   SaleSummaryModel,
@@ -211,7 +211,7 @@ export class SaleSummaryListComponent
 
   readonly statusPaymentBankOptions = computed(() => {
     this.i18n.getAppliedLang();
-    return allStatusPaymentBankEnum().map((value) => ({
+    return allStatusPaymentSaleSummaryEnum().map((value) => ({
       label: statusPaymentBankEnumLabel(value, this.i18n),
       value,
     }));
