@@ -51,22 +51,30 @@ td small {
 
 .cs-kpi-card,
 .cs-metric-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
   border: 1px solid var(--surface-border);
   border-radius: 1.25rem;
   padding: 1rem;
   background: var(--surface-card);
+  transition: box-shadow 0.15s ease;
+
+  &:hover {
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  }
 }
 
 .cs-kpi-card small,
 .cs-metric-card small {
   color: var(--text-color-secondary);
+  font-size: 0.8rem;
 }
 
 .cs-kpi-card strong,
 .cs-metric-card strong {
   display: block;
   font-size: 1.55rem;
-  margin-top: 0.35rem;
 }
 
 .cs-grid-two {
@@ -110,6 +118,16 @@ td small {
 
 .text-right {
   text-align: right;
+}
+
+.cs-exec-row {
+  background: var(--surface-ground);
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+
+  &:hover {
+    background-color: var(--surface-100);
+  }
 }
 
 @media (max-width: 1024px) {

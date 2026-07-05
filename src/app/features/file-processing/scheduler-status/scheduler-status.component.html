@@ -1,128 +1,188 @@
-<div class="cs-list-page">
-  <div class="cs-list-page__header">
-    <div>
-      <p class="cs-list-page__eyebrow">Agendamento</p>
-      <h1>Status do Scheduler</h1>
-      <span>Acompanhe a última execução automática/manual do processamento ERP, Rede e Banco.</span>
-    </div>
+<cs-page-header
+  [compact]="false"
+  [subtitle]="'scheduler.status.subtitle' | translate"
+  [breadcrumb]="[
+    { label: ('menu.dashboard' | translate), url: '/' },
+    { label: ('scheduler.status.title' | translate) }
+  ]"
+></cs-page-header>
 
-    <div class="flex gap-2 flex-wrap">
-      <button
-        pButton
-        type="button"
-        icon="pi pi-refresh"
-        label="Atualizar"
-        severity="secondary"
-        [loading]="loading()"
-        [disabled]="anyProcessing()"
-        (click)="reload()"
-      ></button>
-      <a pButton routerLink="../files" icon="pi pi-list" label="Arquivos" severity="secondary"></a>
-    </div>
+<div class="flex justify-content-end gap-2 mb-3">
+  <a pButton routerLink="../files" icon="pi pi-list" [label]="'scheduler.status.files' | translate" severity="secondary"></a>
+  <button
+    pButton
+    type="button"
+    icon="pi pi-refresh"
+    [label]="'common.update' | translate"
+    severity="secondary"
+    [loading]="loading()"
+    [disabled]="anyProcessing()"
+    (click)="reload()"
+  ></button>
+</div>
+
+<div class="grid">
+
+  <!-- ERP -->
+  <div class="col-12 lg:col-4">
+    <p-card>
+      <ng-template pTemplate="title">{{ 'scheduler.erp.title' | translate }}</ng-template>
+      <div class="flex flex-column gap-3">
+
+        <div class="flex align-items-center justify-content-between">
+          <span class="text-sm text-color-secondary">{{ 'scheduler.status.lastResult' | translate }}</span>
+          @if (processingErp() || schedule()?.erp?.running) {
+            <cs-tag [value]="'scheduler.status.running' | translate" tone="info"></cs-tag>
+          } @else if (schedule()?.erp?.lastSuccess === true) {
+            <cs-tag [value]="'scheduler.status.success' | translate" tone="success"></cs-tag>
+          } @else if (schedule()?.erp?.lastSuccess === false) {
+            <cs-tag [value]="'scheduler.status.failed' | translate" tone="danger"></cs-tag>
+          } @else {
+            <span class="text-sm text-color-secondary">{{ 'scheduler.status.noRun' | translate }}</span>
+          }
+        </div>
+
+        <p-divider styleClass="my-0"></p-divider>
+
+        <div class="flex flex-column gap-2 text-sm">
+          <div class="flex justify-content-between gap-2">
+            <span class="text-color-secondary">{{ 'scheduler.status.lastStart' | translate }}</span>
+            <span>{{ schedule()?.erp?.lastStartedAt | csDate: 'short' }}</span>
+          </div>
+          <div class="flex justify-content-between gap-2">
+            <span class="text-color-secondary">{{ 'scheduler.status.lastEnd' | translate }}</span>
+            <span>{{ schedule()?.erp?.lastFinishedAt | csDate: 'short' }}</span>
+          </div>
+          <div class="flex justify-content-between gap-2">
+            <span class="text-color-secondary">{{ 'scheduler.status.trigger' | translate }}</span>
+            <span>{{ schedule()?.erp?.lastTrigger || '-' }}</span>
+          </div>
+        </div>
+
+        <div class="text-sm border-1 surface-border border-round surface-ground p-3">
+          <span class="font-semibold">{{ 'scheduler.status.message' | translate }}:</span>
+          <span class="ml-2 text-color-secondary">{{ formatMessage(schedule()?.erp?.lastMessage) }}</span>
+        </div>
+
+        <button
+          pButton
+          type="button"
+          icon="pi pi-play"
+          [label]="'scheduler.status.processErp' | translate"
+          [loading]="processingErp()"
+          [disabled]="anyProcessing()"
+          (click)="processErp()"
+        ></button>
+      </div>
+    </p-card>
   </div>
 
-  <div class="grid">
-    <div class="col-12 lg:col-4">
-      <p-card>
-        <ng-template pTemplate="title">ERP</ng-template>
-        <div class="flex flex-column gap-3">
-          <div class="flex align-items-center justify-content-between">
-            <span>Executando agora</span>
-            <cs-tag
-              [value]="schedule()?.erp?.running ? 'Sim' : 'Não'"
-              [tone]="boolSeverity(schedule()?.erp?.running)"
-            ></cs-tag>
-          </div>
+  <!-- Rede -->
+  <div class="col-12 lg:col-4">
+    <p-card>
+      <ng-template pTemplate="title">{{ 'scheduler.rede.title' | translate }}</ng-template>
+      <div class="flex flex-column gap-3">
 
-          <div>
-            <strong>Último início:</strong> {{ schedule()?.erp?.lastStartedAt | date: 'short' }}
-          </div>
-          <div>
-            <strong>Último fim:</strong> {{ schedule()?.erp?.lastFinishedAt | date: 'short' }}
-          </div>
-          <div><strong>Trigger:</strong> {{ schedule()?.erp?.lastTrigger || '-' }}</div>
-          <div><strong>Mensagem:</strong> {{ schedule()?.erp?.lastMessage || '-' }}</div>
-
-          <button
-            pButton
-            type="button"
-            icon="pi pi-play"
-            label="Processar ERP agora"
-            [loading]="processingErp()"
-            [disabled]="anyProcessing()"
-            (click)="processErp()"
-          ></button>
+        <div class="flex align-items-center justify-content-between">
+          <span class="text-sm text-color-secondary">{{ 'scheduler.status.lastResult' | translate }}</span>
+          @if (processingRede() || schedule()?.rede?.running) {
+            <cs-tag [value]="'scheduler.status.running' | translate" tone="info"></cs-tag>
+          } @else if (schedule()?.rede?.lastSuccess === true) {
+            <cs-tag [value]="'scheduler.status.success' | translate" tone="success"></cs-tag>
+          } @else if (schedule()?.rede?.lastSuccess === false) {
+            <cs-tag [value]="'scheduler.status.failed' | translate" tone="danger"></cs-tag>
+          } @else {
+            <span class="text-sm text-color-secondary">{{ 'scheduler.status.noRun' | translate }}</span>
+          }
         </div>
-      </p-card>
-    </div>
 
-    <div class="col-12 lg:col-4">
-      <p-card>
-        <ng-template pTemplate="title">Rede</ng-template>
-        <div class="flex flex-column gap-3">
-          <div class="flex align-items-center justify-content-between">
-            <span>Executando agora</span>
-            <cs-tag
-              [value]="schedule()?.rede?.running ? 'Sim' : 'Não'"
-              [tone]="boolSeverity(schedule()?.rede?.running)"
-            ></cs-tag>
-          </div>
+        <p-divider styleClass="my-0"></p-divider>
 
-          <div>
-            <strong>Último início:</strong> {{ schedule()?.rede?.lastStartedAt | date: 'short' }}
+        <div class="flex flex-column gap-2 text-sm">
+          <div class="flex justify-content-between gap-2">
+            <span class="text-color-secondary">{{ 'scheduler.status.lastStart' | translate }}</span>
+            <span>{{ schedule()?.rede?.lastStartedAt | csDate: 'short' }}</span>
           </div>
-          <div>
-            <strong>Último fim:</strong> {{ schedule()?.rede?.lastFinishedAt | date: 'short' }}
+          <div class="flex justify-content-between gap-2">
+            <span class="text-color-secondary">{{ 'scheduler.status.lastEnd' | translate }}</span>
+            <span>{{ schedule()?.rede?.lastFinishedAt | csDate: 'short' }}</span>
           </div>
-          <div><strong>Trigger:</strong> {{ schedule()?.rede?.lastTrigger || '-' }}</div>
-          <div><strong>Mensagem:</strong> {{ schedule()?.rede?.lastMessage || '-' }}</div>
-
-          <button
-            pButton
-            type="button"
-            icon="pi pi-play"
-            label="Processar Rede agora"
-            [loading]="processingRede()"
-            [disabled]="anyProcessing()"
-            (click)="processRede()"
-          ></button>
+          <div class="flex justify-content-between gap-2">
+            <span class="text-color-secondary">{{ 'scheduler.status.trigger' | translate }}</span>
+            <span>{{ schedule()?.rede?.lastTrigger || '-' }}</span>
+          </div>
         </div>
-      </p-card>
-    </div>
 
-    <div class="col-12 lg:col-4">
-      <p-card>
-        <ng-template pTemplate="title">Banco / CNAB</ng-template>
-        <div class="flex flex-column gap-3">
-          <div class="flex align-items-center justify-content-between">
-            <span>Executando agora</span>
-            <cs-tag
-              [value]="schedule()?.bank?.running ? 'Sim' : 'Não'"
-              [tone]="boolSeverity(schedule()?.bank?.running)"
-            ></cs-tag>
-          </div>
-
-          <div>
-            <strong>Último início:</strong> {{ schedule()?.bank?.lastStartedAt | date: 'short' }}
-          </div>
-          <div>
-            <strong>Último fim:</strong> {{ schedule()?.bank?.lastFinishedAt | date: 'short' }}
-          </div>
-          <div><strong>Trigger:</strong> {{ schedule()?.bank?.lastTrigger || '-' }}</div>
-          <div><strong>Mensagem:</strong> {{ schedule()?.bank?.lastMessage || '-' }}</div>
-
-          <button
-            pButton
-            type="button"
-            icon="pi pi-building-columns"
-            label="Processar CNAB agora"
-            [loading]="processingBank()"
-            [disabled]="anyProcessing()"
-            (click)="processBank()"
-          ></button>
+        <div class="text-sm border-1 surface-border border-round surface-ground p-3">
+          <span class="font-semibold">{{ 'scheduler.status.message' | translate }}:</span>
+          <span class="ml-2 text-color-secondary">{{ formatMessage(schedule()?.rede?.lastMessage) }}</span>
         </div>
-      </p-card>
-    </div>
+
+        <button
+          pButton
+          type="button"
+          icon="pi pi-play"
+          [label]="'scheduler.status.processRede' | translate"
+          [loading]="processingRede()"
+          [disabled]="anyProcessing()"
+          (click)="processRede()"
+        ></button>
+      </div>
+    </p-card>
+  </div>
+
+  <!-- Banco / CNAB -->
+  <div class="col-12 lg:col-4">
+    <p-card>
+      <ng-template pTemplate="title">{{ 'scheduler.bank.title' | translate }}</ng-template>
+      <div class="flex flex-column gap-3">
+
+        <div class="flex align-items-center justify-content-between">
+          <span class="text-sm text-color-secondary">{{ 'scheduler.status.lastResult' | translate }}</span>
+          @if (processingBank() || schedule()?.bank?.running) {
+            <cs-tag [value]="'scheduler.status.running' | translate" tone="info"></cs-tag>
+          } @else if (schedule()?.bank?.lastSuccess === true) {
+            <cs-tag [value]="'scheduler.status.success' | translate" tone="success"></cs-tag>
+          } @else if (schedule()?.bank?.lastSuccess === false) {
+            <cs-tag [value]="'scheduler.status.failed' | translate" tone="danger"></cs-tag>
+          } @else {
+            <span class="text-sm text-color-secondary">{{ 'scheduler.status.noRun' | translate }}</span>
+          }
+        </div>
+
+        <p-divider styleClass="my-0"></p-divider>
+
+        <div class="flex flex-column gap-2 text-sm">
+          <div class="flex justify-content-between gap-2">
+            <span class="text-color-secondary">{{ 'scheduler.status.lastStart' | translate }}</span>
+            <span>{{ schedule()?.bank?.lastStartedAt | csDate: 'short' }}</span>
+          </div>
+          <div class="flex justify-content-between gap-2">
+            <span class="text-color-secondary">{{ 'scheduler.status.lastEnd' | translate }}</span>
+            <span>{{ schedule()?.bank?.lastFinishedAt | csDate: 'short' }}</span>
+          </div>
+          <div class="flex justify-content-between gap-2">
+            <span class="text-color-secondary">{{ 'scheduler.status.trigger' | translate }}</span>
+            <span>{{ schedule()?.bank?.lastTrigger || '-' }}</span>
+          </div>
+        </div>
+
+        <div class="text-sm border-1 surface-border border-round surface-ground p-3">
+          <span class="font-semibold">{{ 'scheduler.status.message' | translate }}:</span>
+          <span class="ml-2 text-color-secondary">{{ formatMessage(schedule()?.bank?.lastMessage) }}</span>
+        </div>
+
+        <button
+          pButton
+          type="button"
+          icon="pi pi-building-columns"
+          [label]="'scheduler.status.processBank' | translate"
+          [loading]="processingBank()"
+          [disabled]="anyProcessing()"
+          (click)="processBank()"
+        ></button>
+      </div>
+    </p-card>
   </div>
 
 </div>

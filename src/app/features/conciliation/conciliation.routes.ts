@@ -23,6 +23,16 @@ export const CONCILIATION_ROUTES: Routes = [
   },
 
   {
+    path: 'execution-history',
+    title: 'routes.conciliation.executionHistory.title',
+    canActivate: [permissionGuard],
+    data: { requireAll: false, redirectTo: '/forbidden', permissions: defaultPermissions },
+    loadComponent: () =>
+      import('./conciliation-execution-history/conciliation-execution-history.component').then(
+        (m) => m.ConciliationExecutionHistoryComponent,
+      ),
+  },
+  {
     path: 'reconciliation-actions',
     title: 'routes.conciliation.reconciliationActions.title',
     canActivate: [permissionGuard],

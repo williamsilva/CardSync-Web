@@ -102,6 +102,9 @@
       },
       "reconciliationActions": {
         "title": "Ações de Conciliação"
+      },
+      "executionHistory": {
+        "title": "Histórico de Execuções"
       }
     },
     "settings": {
@@ -257,7 +260,8 @@
       "erpVsAcquirerDivergences": "Outras não conciliadas",
       "manualSalesSummary": "Resumo de Vendas Manual",
       "manualCreditOrder": "Ordem de Pagamento Manual",
-      "reconciliationActions": "Ações de Conciliação"
+      "reconciliationActions": "Ações de Conciliação",
+      "executionHistory": "Histórico de Execuções"
     },
     "security": {
       "title": "Segurança",
@@ -2693,7 +2697,50 @@
         "divergent": "Divergentes",
         "withoutMatch": "Sem correspondência",
         "generated": "Gerados",
+        "blocked": "Bloqueados",
         "runButton": "Executar esteira completa"
+      },
+      "history": {
+        "title": "Histórico de Execuções",
+        "empty": "Nenhuma execução registrada ainda.",
+        "totalAnalyzed": "Analisados",
+        "totalReconciled": "Conciliados",
+        "totalPending": "Pendentes",
+        "trigger": {
+          "MANUAL": "Manual",
+          "SCHEDULED": "Agendado"
+        },
+        "status": {
+          "SUCCESS": "Sucesso",
+          "PARTIAL": "Parcial",
+          "FAILED": "Falha"
+        },
+        "step": {
+          "ERP_ACQUIRER": "ERP x Adquirente",
+          "SALES_SUMMARY_TRANSACTION": "Resumo x TransactionADQ",
+          "ACQUIRER_SALE_CANCELLATION": "Cancelamentos ADQ",
+          "ACQUIRER_SALE_ADJUSTMENTS": "Ajustes de Taxas ADQ",
+          "ACQUIRER_SALE_SUMMARY": "Venda ADQ x Resumo",
+          "SALES_SUMMARY_CREDIT_ORDER": "Resumo x Ordem de Crédito",
+          "CREDIT_ORDER_BANK_RELEASE": "Ordem de Crédito x Banco"
+        },
+        "stepStatus": {
+          "NOT_STARTED": "Não iniciada",
+          "RUNNING": "Em execução",
+          "COMPLETED": "Concluída",
+          "SKIPPED": "Ignorada",
+          "BLOCKED": "Bloqueada",
+          "FAILED": "Falha"
+        },
+        "stepMessage": {
+          "ERP_ACQUIRER": "Conciliação ERP x ADQ concluída. Inclui reprocesso de manuais com NSU/autorização invertidos. Somente vendas conciliadas aqui são elegíveis para ajustes e taxas.",
+          "SALES_SUMMARY_TRANSACTION": "Resumos marcados conforme estado das transações ADQ. Resumos sem transações marcados como conciliados.",
+          "ACQUIRER_SALE_CANCELLATION": "Cancelamentos totais informados pela adquirente propagados para ADQ e ERP antes das taxas e resumos.",
+          "ACQUIRER_SALE_ADJUSTMENTS": "Taxas OK ou contrato ausente normalizado avançam. Divergência de taxa bloqueia as próximas etapas.",
+          "ACQUIRER_SALE_SUMMARY": "Resumo só concilia quando as vendas ADQ vinculadas estão elegíveis das etapas anteriores.",
+          "SALES_SUMMARY_CREDIT_ORDER": "Débito/antecipação sem ordem pode gerar ordem sintética para análise.",
+          "CREDIT_ORDER_BANK_RELEASE": "Ordem só fica elegível quando o resumo já está conciliado com a ordem."
+        }
       },
       "kpi": {
         "erpSales": "Vendas ERP",
@@ -2987,6 +3034,28 @@
       "saved": "Configurações de e-mail salvas com sucesso.",
       "saveError": "Não foi possível salvar as configurações de e-mail."
     }
+  },
+  "scheduler": {
+    "status": {
+      "title": "Status do Scheduler",
+      "subtitle": "Acompanhe a última execução automática/manual do processamento ERP, Rede e Banco.",
+      "running": "Em execução",
+      "lastResult": "Último resultado",
+      "success": "Sucesso",
+      "failed": "Falha",
+      "noRun": "Sem execução registrada",
+      "lastStart": "Último início",
+      "lastEnd": "Último fim",
+      "trigger": "Trigger",
+      "message": "Mensagem",
+      "files": "Arquivos",
+      "processErp": "Processar ERP agora",
+      "processRede": "Processar Rede agora",
+      "processBank": "Processar CNAB agora"
+    },
+    "erp": { "title": "ERP" },
+    "rede": { "title": "Rede" },
+    "bank": { "title": "Banco / CNAB" }
   },
   "notFound": {
     "attemptedUrl": "URL acessada",

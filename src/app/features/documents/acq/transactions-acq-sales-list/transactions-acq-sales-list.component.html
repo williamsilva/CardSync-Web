@@ -197,6 +197,26 @@
   <div class="grid formgrid gap-0 align-items-end">
     <cs-advanced-multiselect-filter
       optionValue="id"
+      inputId="companies"
+      [value]="companies()"
+      optionLabel="fantasyName"
+      [options]="companiesOptions()"
+      class="col-12 md:col-3 xl:col-3 p-1"
+      (valueChange)="companies.set($event)"
+      [label]="'transactions.fields.company' | translate"
+    >
+      <ng-template csAdvancedFilterItem let-option>
+        <div class="cs-option-item">
+          <div class="cs-option-item__label">{{ option.fantasyName }}</div>
+          <div class="cs-option-item__subtext">
+            {{ 'common.registrationNumber' | translate }}: {{ option.cnpj | csDocument }}
+          </div>
+        </div>
+      </ng-template>
+    </cs-advanced-multiselect-filter>
+
+    <cs-advanced-multiselect-filter
+      optionValue="id"
       inputId="acquirer"
       [value]="acquirers()"
       optionLabel="fantasyName"
@@ -214,17 +234,6 @@
         </div>
       </ng-template>
     </cs-advanced-multiselect-filter>
-
-    <cs-advanced-multiselect-filter
-      inputId="flags"
-      optionValue="id"
-      [value]="flags()"
-      optionLabel="name"
-      [options]="flagsOptions()"
-      (valueChange)="flags.set($event)"
-      class="col-12 md:col-3 xl:col-3 p-1"
-      [label]="'transactions.fields.flag' | translate"
-    ></cs-advanced-multiselect-filter>
 
     <cs-advanced-multiselect-filter
       optionValue="id"
@@ -250,24 +259,15 @@
     </cs-advanced-multiselect-filter>
 
     <cs-advanced-multiselect-filter
+      inputId="flags"
       optionValue="id"
-      inputId="companies"
-      [value]="companies()"
-      optionLabel="fantasyName"
-      [options]="companiesOptions()"
+      [value]="flags()"
+      optionLabel="name"
+      [options]="flagsOptions()"
+      (valueChange)="flags.set($event)"
       class="col-12 md:col-3 xl:col-3 p-1"
-      (valueChange)="companies.set($event)"
-      [label]="'transactions.fields.company' | translate"
-    >
-      <ng-template csAdvancedFilterItem let-option>
-        <div class="cs-option-item">
-          <div class="cs-option-item__label">{{ option.fantasyName }}</div>
-          <div class="cs-option-item__subtext">
-            {{ 'common.registrationNumber' | translate }}: {{ option.cnpj | csDocument }}
-          </div>
-        </div>
-      </ng-template>
-    </cs-advanced-multiselect-filter>
+      [label]="'transactions.fields.flag' | translate"
+    ></cs-advanced-multiselect-filter>
   </div>
 
   <div class="grid formgrid gap-0 align-items-end">

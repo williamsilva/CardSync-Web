@@ -341,3 +341,15 @@ export interface FinancialReconciliationPipelineResultModel {
   finishedAt?: string | null;
   steps?: FinancialReconciliationStepResultModel[] | null;
 }
+
+export interface ReconciliationExecutionLogModel {
+  id: string;
+  trigger: string;
+  startedAt: string;
+  finishedAt?: string | null;
+  overallStatus: string;
+  totalAnalyzed?: number | null;
+  totalReconciled?: number | null;
+  totalPending?: number | null;
+  steps?: FinancialReconciliationStepResultModel[] | null;
+}

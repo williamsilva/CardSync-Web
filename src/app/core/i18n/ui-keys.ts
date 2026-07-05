@@ -87,6 +87,7 @@ export const UI_KEYS = {
       manualSalesSummary: 'menu.conciliation.manualSalesSummary',
       reconciliationActions: 'menu.conciliation.reconciliationActions',
       erpVsAcquirerDivergences: 'menu.conciliation.erpVsAcquirerDivergences',
+      executionHistory: 'menu.conciliation.executionHistory',
     },
     security: {
       title: 'menu.security.title',

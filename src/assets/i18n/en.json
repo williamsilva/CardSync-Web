@@ -115,6 +115,9 @@
       "reconciliationActions": {
         "title": "Reconciliation Actions"
       },
+      "executionHistory": {
+        "title": "Execution History"
+      },
       "divergences": {
         "title": "Operational divergences"
       }
@@ -257,7 +260,8 @@
       "erpVsAcquirerDivergences": "Other unreconciled",
       "manualSalesSummary": "Manual Sales Summary",
       "manualCreditOrder": "Manual Credit Order",
-      "reconciliationActions": "Reconciliation Actions"
+      "reconciliationActions": "Reconciliation Actions",
+      "executionHistory": "Execution History"
     },
     "adjustment": {
       "title": "Adjustments",
@@ -2309,7 +2313,50 @@
         "divergent": "Divergent",
         "withoutMatch": "Without match",
         "generated": "Generated",
+        "blocked": "Blocked",
         "runButton": "Run full pipeline"
+      },
+      "history": {
+        "title": "Execution History",
+        "empty": "No executions recorded yet.",
+        "totalAnalyzed": "Analyzed",
+        "totalReconciled": "Reconciled",
+        "totalPending": "Pending",
+        "trigger": {
+          "MANUAL": "Manual",
+          "SCHEDULED": "Scheduled"
+        },
+        "status": {
+          "SUCCESS": "Success",
+          "PARTIAL": "Partial",
+          "FAILED": "Failed"
+        },
+        "step": {
+          "ERP_ACQUIRER": "ERP vs Acquirer",
+          "SALES_SUMMARY_TRANSACTION": "Summary vs Transaction ADQ",
+          "ACQUIRER_SALE_CANCELLATION": "Acquirer Sale Cancellations",
+          "ACQUIRER_SALE_ADJUSTMENTS": "Acquirer Fee Adjustments",
+          "ACQUIRER_SALE_SUMMARY": "Acquirer Sale vs Summary",
+          "SALES_SUMMARY_CREDIT_ORDER": "Summary vs Credit Order",
+          "CREDIT_ORDER_BANK_RELEASE": "Credit Order vs Bank Release"
+        },
+        "stepStatus": {
+          "NOT_STARTED": "Not started",
+          "RUNNING": "Running",
+          "COMPLETED": "Completed",
+          "SKIPPED": "Skipped",
+          "BLOCKED": "Blocked",
+          "FAILED": "Failed"
+        },
+        "stepMessage": {
+          "ERP_ACQUIRER": "ERP vs Acquirer reconciliation complete. Includes reprocessing of manual entries with swapped NSU/authorization. Only reconciled sales here are eligible for fee adjustments.",
+          "SALES_SUMMARY_TRANSACTION": "Summaries updated based on ADQ transaction status. Summaries without transactions are marked as reconciled.",
+          "ACQUIRER_SALE_CANCELLATION": "Full cancellations reported by the acquirer were propagated to ADQ and ERP before fees and summaries.",
+          "ACQUIRER_SALE_ADJUSTMENTS": "Sales with matching or absent (normalized) contract rates advance. Fee divergences block subsequent steps.",
+          "ACQUIRER_SALE_SUMMARY": "A summary only reconciles when its linked ADQ sales are eligible from previous steps.",
+          "SALES_SUMMARY_CREDIT_ORDER": "Debit/anticipation without an order may generate a synthetic order for analysis.",
+          "CREDIT_ORDER_BANK_RELEASE": "A credit order is only eligible when its linked summary is already reconciled."
+        }
       },
       "kpi": {
         "erpSales": "ERP Sales",
@@ -3058,6 +3105,28 @@
       "saved": "Email settings saved successfully.",
       "saveError": "Could not save email settings."
     }
+  },
+  "scheduler": {
+    "status": {
+      "title": "Scheduler Status",
+      "subtitle": "Track the last automatic/manual execution of ERP, Rede and Bank processing.",
+      "running": "Running",
+      "lastResult": "Last result",
+      "success": "Success",
+      "failed": "Failed",
+      "noRun": "No execution recorded",
+      "lastStart": "Last start",
+      "lastEnd": "Last end",
+      "trigger": "Trigger",
+      "message": "Message",
+      "files": "Files",
+      "processErp": "Process ERP now",
+      "processRede": "Process Rede now",
+      "processBank": "Process CNAB now"
+    },
+    "erp": { "title": "ERP" },
+    "rede": { "title": "Rede" },
+    "bank": { "title": "Bank / CNAB" }
   },
   "notFound": {
     "attemptedUrl": "Accessed URL",

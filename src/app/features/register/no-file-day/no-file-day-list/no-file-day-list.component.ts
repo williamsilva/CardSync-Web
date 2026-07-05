@@ -21,17 +21,17 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { CsTagComponent } from '@shared/ui';
 import { I18nService } from '@core/i18n/i18n.service';
 import { CsDatePipe } from '@shared/pipes/cs-date.pipe';
-import { NoFileDayFacade } from '@features/facade/no-file-day.facade';
-import { NoFileDayAdvancedFilters } from '@features/filter/no-file-day.filters';
 import { STATE_KEY } from '@features/state-key.constants';
+import { NoFileDayFacade } from '@features/facade/no-file-day.facade';
 import { StatefulListPage } from '@features/list-base/stateful-list-page';
-import { NoFileDayModel, NoFileDayFiltersState } from '@models/no-file-day.models';
 import { BulkActionListPage } from '@features/list-base/bulk-action-list-page';
+import { NoFileDayAdvancedFilters } from '@features/filter/no-file-day.filters';
 import { buildListQuery } from '@shared/features/list-query/list-query.builder';
+import { NoFileDayModel, NoFileDayFiltersState } from '@models/no-file-day.models';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
 import { NoFileDayPermissionPolicy } from '@features/security/policy/no-file-day-permission.policy';
-import { NoFileDayCreateDialogComponent } from '../no-file-day-create/no-file-day-create-dialog.component';
 import { DATA_TABLE_SHELL_IMPORTS } from '@shared/features/data-table-shell/data-table-shell.component';
+import { NoFileDayCreateDialogComponent } from '../no-file-day-create/no-file-day-create-dialog.component';
 import {
   ActiveFilterItem,
   FiltersPanelComponent,
@@ -94,11 +94,12 @@ export class NoFileDayListComponent extends StatefulListPage<
 > {
   @ViewChild('dt') private dt?: Table;
 
-  protected override readonly i18n = inject(I18nService);
   readonly facade = inject(NoFileDayFacade);
-  protected readonly secPolicy = inject(NoFileDayPermissionPolicy);
+
   protected readonly toast = inject(MessageService);
+  protected override readonly i18n = inject(I18nService);
   protected readonly confirm = inject(ConfirmationService);
+  protected readonly secPolicy = inject(NoFileDayPermissionPolicy);
 
   override rows =
     Number(localStorage.getItem(this.tableRowsKey())) || StatefulListPage.DEFAULT_ROWS;
@@ -122,8 +123,8 @@ export class NoFileDayListComponent extends StatefulListPage<
   description = signal('');
   noFileDateRange = signal<Date[] | null>(null);
   statusEnum = signal<StatusEnum[] | null>(null);
-  dayType = signal<NoFileDayTypeEnum[] | null>(null);
   fileGroup = signal<FileGroupEnum[] | null>(null);
+  dayType = signal<NoFileDayTypeEnum[] | null>(null);
 
   upsertVisible = signal(false);
   selectedRows = signal<NoFileDayModel[]>([]);
@@ -209,7 +210,9 @@ export class NoFileDayListComponent extends StatefulListPage<
   headerEligibleRows = computed(() => {
     const selectedStatus = this.selectionStatus();
     if (!selectedStatus) return [];
-    return this.noFileDays().filter((row) => this.secPolicy.canSelectForStatus(row, selectedStatus));
+    return this.noFileDays().filter((row) =>
+      this.secPolicy.canSelectForStatus(row, selectedStatus),
+    );
   });
 
   headerChecked = computed(() => {
@@ -277,7 +280,10 @@ export class NoFileDayListComponent extends StatefulListPage<
     }
     const rowStatus = this.secPolicy.selectableStatus(row);
     if (!rowStatus) return;
-    if (!current.length) { this.selectedRows.set([row]); return; }
+    if (!current.length) {
+      this.selectedRows.set([row]);
+      return;
+    }
     if (rowStatus !== this.selectionStatus()) return;
     if (this.isRowSelected(row)) return;
     this.selectedRows.set([...current, row]);
@@ -286,7 +292,10 @@ export class NoFileDayListComponent extends StatefulListPage<
   toggleHeaderSelection(checked: boolean): void {
     const eligible = this.headerEligibleRows();
     if (!eligible.length) return;
-    if (!checked) { this.clearSelection(); return; }
+    if (!checked) {
+      this.clearSelection();
+      return;
+    }
     this.selectedRows.set([...eligible]);
   }
 
@@ -525,7 +534,8 @@ export class NoFileDayListComponent extends StatefulListPage<
     const items: ActiveFilterItem[] = [];
 
     const description = readSingleFilterValue(filters, 'description');
-    if (description) items.push({ label: this.i18n.tUi('noFileDay.fields.description'), value: description });
+    if (description)
+      items.push({ label: this.i18n.tUi('noFileDay.fields.description'), value: description });
 
     const statuses = readArrayFilterValues(filters, 'statusEnum');
     if (statuses.length) {
@@ -536,13 +546,16 @@ export class NoFileDayListComponent extends StatefulListPage<
     }
 
     const dateRange = readDateRangeFilterValue(filters, 'noFileDate', this.formatDate.bind(this));
-    if (dateRange) items.push({ label: this.i18n.tUi('noFileDay.fields.noFileDate'), value: dateRange });
+    if (dateRange)
+      items.push({ label: this.i18n.tUi('noFileDay.fields.noFileDate'), value: dateRange });
 
     const dayTypes = readArrayFilterValues(filters, 'dayType');
     if (dayTypes.length) {
       items.push({
         label: this.i18n.tUi('noFileDay.fields.dayType'),
-        value: dayTypes.map((v) => noFileDayTypeEnumLabel(v as NoFileDayTypeEnum, this.i18n)).join(', '),
+        value: dayTypes
+          .map((v) => noFileDayTypeEnumLabel(v as NoFileDayTypeEnum, this.i18n))
+          .join(', '),
       });
     }
 

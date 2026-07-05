@@ -1,0 +1,151 @@
+<cs-page-header
+  [compact]="false"
+  [subtitle]="'conciliation.dashboard.history.title' | translate"
+  [breadcrumb]="[
+    { label: ('breadcrumb.dashboard.title' | translate), url: '/' },
+    { label: ('menu.conciliation.title' | translate), url: '/conciliation' },
+    { label: ('routes.conciliation.executionHistory.title' | translate) },
+  ]"
+>
+  <button
+    pButton
+    type="button"
+    icon="pi pi-refresh"
+    [loading]="loading()"
+    (click)="loadHistory()"
+    class="p-button-text p-button-sm"
+    [label]="'common.update' | translate"
+  ></button>
+</cs-page-header>
+
+<p-card>
+  @if (loading()) {
+    <div class="flex align-items-center gap-2 text-color-secondary py-3">
+      <i class="pi pi-spin pi-spinner"></i>
+      <span class="text-sm">{{ 'common.loading' | translate }}</span>
+    </div>
+  } @else if (history().length === 0) {
+    <div class="flex align-items-center gap-2 text-color-secondary py-3">
+      <i class="pi pi-inbox"></i>
+      <span class="text-sm">{{ 'conciliation.dashboard.history.empty' | translate }}</span>
+    </div>
+  } @else {
+    <div class="flex flex-column gap-2">
+      @for (exec of history(); track exec.id) {
+        <div class="border-1 surface-border border-round overflow-hidden">
+          <div
+            class="flex align-items-center justify-content-between px-3 py-2 cs-exec-row"
+            (click)="toggleExec(exec.id)"
+          >
+            <div class="flex align-items-center gap-3 flex-wrap">
+              <cs-tag
+                [value]="'conciliation.dashboard.history.trigger.' + exec.trigger | translate"
+                [tone]="triggerTone(exec.trigger)"
+              ></cs-tag>
+              <span class="text-sm font-medium">{{ exec.startedAt | csDate: 'short' }}</span>
+              <span class="text-sm text-color-secondary">
+                <i class="pi pi-clock mr-1"></i>{{ formatDuration(exec.startedAt, exec.finishedAt) }}
+              </span>
+            </div>
+
+            <div class="flex align-items-center gap-3 flex-wrap">
+              <div class="hidden md:flex align-items-center gap-3 text-sm">
+                <span class="text-color-secondary">
+                  {{ 'conciliation.dashboard.history.totalAnalyzed' | translate }}:
+                  <strong>{{ exec.totalAnalyzed ?? 0 }}</strong>
+                </span>
+                <span class="text-color-secondary">
+                  {{ 'conciliation.dashboard.history.totalReconciled' | translate }}:
+                  <strong class="text-green-500">{{ exec.totalReconciled ?? 0 }}</strong>
+                </span>
+                <span class="text-color-secondary">
+                  {{ 'conciliation.dashboard.history.totalPending' | translate }}:
+                  <strong class="text-orange-500">{{ exec.totalPending ?? 0 }}</strong>
+                </span>
+              </div>
+              <cs-tag
+                [value]="'conciliation.dashboard.history.status.' + exec.overallStatus | translate"
+                [tone]="overallStatusTone(exec.overallStatus)"
+              ></cs-tag>
+              <i
+                class="pi text-color-secondary"
+                [class.pi-chevron-down]="!isExpanded(exec.id)"
+                [class.pi-chevron-up]="isExpanded(exec.id)"
+              ></i>
+            </div>
+          </div>
+
+          @if (isExpanded(exec.id) && exec.steps?.length) {
+            <div class="px-3 py-2">
+              <div class="flex md:hidden gap-3 text-sm mb-3 flex-wrap">
+                <span class="text-color-secondary">
+                  {{ 'conciliation.dashboard.history.totalAnalyzed' | translate }}:
+                  <strong>{{ exec.totalAnalyzed ?? 0 }}</strong>
+                </span>
+                <span class="text-color-secondary">
+                  {{ 'conciliation.dashboard.history.totalReconciled' | translate }}:
+                  <strong class="text-green-500">{{ exec.totalReconciled ?? 0 }}</strong>
+                </span>
+                <span class="text-color-secondary">
+                  {{ 'conciliation.dashboard.history.totalPending' | translate }}:
+                  <strong class="text-orange-500">{{ exec.totalPending ?? 0 }}</strong>
+                </span>
+              </div>
+
+              <div class="flex flex-column gap-2">
+                @for (step of exec.steps; track step.step) {
+                  <div class="border-1 surface-border border-round p-3">
+                    <div class="flex align-items-center justify-content-between mb-2">
+                      <div class="flex align-items-center gap-2">
+                        <span class="text-sm font-semibold">{{ 'conciliation.dashboard.history.step.' + step.step | translate }}</span>
+                        @if (step.message) {
+                          <span class="text-xs text-color-secondary">— {{ step.message | translate }}</span>
+                        }
+                      </div>
+                      <div class="flex align-items-center gap-2">
+                        <span class="text-xs text-color-secondary">
+                          {{ formatDuration(step.startedAt, step.finishedAt) }}
+                        </span>
+                        <cs-tag [value]="'conciliation.dashboard.history.stepStatus.' + step.status | translate" [tone]="stepStatusTone(step.status)"></cs-tag>
+                      </div>
+                    </div>
+
+                    <div class="flex flex-wrap gap-3 text-xs text-color-secondary">
+                      @if ((step.analyzed ?? 0) > 0) {
+                        <span>{{ 'conciliation.dashboard.result.analyzed' | translate }}: <strong class="text-color">{{ step.analyzed }}</strong></span>
+                      }
+                      @if ((step.reconciled ?? 0) > 0) {
+                        <span>{{ 'conciliation.dashboard.result.matched' | translate }}: <strong class="text-green-500">{{ step.reconciled }}</strong></span>
+                      }
+                      @if ((step.partiallyReconciled ?? 0) > 0) {
+                        <span>{{ 'conciliation.dashboard.pipeline.partiallyReconciled' | translate }}: <strong class="text-yellow-500">{{ step.partiallyReconciled }}</strong></span>
+                      }
+                      @if ((step.pending ?? 0) > 0) {
+                        <span>{{ 'conciliation.dashboard.pipeline.pending' | translate }}: <strong class="text-orange-500">{{ step.pending }}</strong></span>
+                      }
+                      @if ((step.divergent ?? 0) > 0) {
+                        <span>{{ 'conciliation.dashboard.pipeline.divergent' | translate }}: <strong class="text-red-400">{{ step.divergent }}</strong></span>
+                      }
+                      @if ((step.withoutMatch ?? 0) > 0) {
+                        <span>{{ 'conciliation.dashboard.pipeline.withoutMatch' | translate }}: <strong class="text-red-400">{{ step.withoutMatch }}</strong></span>
+                      }
+                      @if ((step.updated ?? 0) > 0) {
+                        <span>{{ 'conciliation.dashboard.result.updated' | translate }}: <strong class="text-color">{{ step.updated }}</strong></span>
+                      }
+                      @if ((step.generated ?? 0) > 0) {
+                        <span>{{ 'conciliation.dashboard.pipeline.generated' | translate }}: <strong class="text-color">{{ step.generated }}</strong></span>
+                      }
+                      @if ((step.blocked ?? 0) > 0) {
+                        <span>{{ 'conciliation.dashboard.pipeline.blocked' | translate }}: <strong class="text-orange-400">{{ step.blocked }}</strong></span>
+                      }
+                    </div>
+                  </div>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      }
+    </div>
+  }
+</p-card>

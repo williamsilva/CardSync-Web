@@ -3,6 +3,7 @@ import { Component, computed, inject, signal } from '@angular/core';
 
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
+import { SkeletonModule } from 'primeng/skeleton';
 import { TranslateModule } from '@ngx-translate/core';
 import { ProgressBarModule } from 'primeng/progressbar';
 
@@ -10,6 +11,7 @@ import { CsTagComponent } from '@shared/ui';
 import { CsCurrencyPipe } from '@shared/pipes/cs-currency.pipe';
 import { ConciliationDashboardModel } from '@models/conciliation.models';
 import { ConciliationService } from '@features/service/conciliation.service';
+import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
 
 @Component({
   standalone: true,
@@ -22,8 +24,10 @@ import { ConciliationService } from '@features/service/conciliation.service';
     ButtonModule,
     CsCurrencyPipe,
     CsTagComponent,
+    SkeletonModule,
     TranslateModule,
     ProgressBarModule,
+    PageHeaderComponent,
   ],
 })
 export class ConciliationDashboardComponent {

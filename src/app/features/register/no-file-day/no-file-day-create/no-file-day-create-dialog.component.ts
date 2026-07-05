@@ -25,8 +25,8 @@ import { DatePickerModule } from 'primeng/datepicker';
 import { I18nService } from '@core/i18n/i18n.service';
 import { AcquirerFacade } from '@features/facade/acquirer.facade';
 import { NoFileDayFacade } from '@features/facade/no-file-day.facade';
-import { BankingDomicileFacade } from '@features/facade/banking-domicile.facade';
 import { ErrorMsgComponent } from '@shared/error-msg/error-msg.component';
+import { BankingDomicileFacade } from '@features/facade/banking-domicile.facade';
 import { FileGroupEnum, allFileGroupEnum, fileGroupEnumLabel } from '@models/enums/file-group.enum';
 import {
   AcquirerFileTypeEnum,
@@ -132,7 +132,7 @@ export class NoFileDayCreateDialogComponent {
   );
 
   readonly acquirerOptions = computed(() =>
-    this.acquirerFacade.options().map((a) => ({
+    this.acquirerFacade.activeOptions().map((a) => ({
       label: a.fantasyName ?? a.socialReason ?? a.cnpj,
       value: a.id,
     })),

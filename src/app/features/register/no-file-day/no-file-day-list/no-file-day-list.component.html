@@ -68,9 +68,9 @@
   [collapsed]="true"
   (search)="search()"
   [actionsAlign]="'start'"
-  [activeFilterGroups]="activeFilterGroups()"
   [activeCount]="activeFiltersCount()"
   [title]="'common.filter' | translate"
+  [activeFilterGroups]="activeFilterGroups()"
 >
   <div class="grid formgrid gap-0 align-items-end">
     <div class="col-12 md:col-4 p-1">
@@ -89,14 +89,14 @@
     <div class="col-12 md:col-4 p-1">
       <p-floatLabel variant="on" class="w-full">
         <p-datepicker
-          inputId="noFileDateRange"
-          class="w-full"
           size="small"
+          class="w-full"
           appendTo="body"
           [showIcon]="true"
-          [readonlyInput]="true"
           selectionMode="range"
           dateFormat="dd/mm/yy"
+          [readonlyInput]="true"
+          inputId="noFileDateRange"
           [ngModel]="noFileDateRange()"
           (ngModelChange)="noFileDateRange.set($event ?? null)"
         ></p-datepicker>
@@ -130,15 +130,15 @@
         <p-multiSelect
           size="small"
           class="w-full"
-          appendTo="body"
           display="chip"
+          appendTo="body"
           [filter]="false"
+          inputId="dayType"
           [showClear]="true"
           optionLabel="label"
           optionValue="value"
-          inputId="dayType"
-          [showToggleAll]="false"
           [ngModel]="dayType()"
+          [showToggleAll]="false"
           [options]="dayTypeOptions()"
           (ngModelChange)="dayType.set($event?.length ? $event : null)"
         />
@@ -151,8 +151,8 @@
         <p-multiSelect
           size="small"
           class="w-full"
-          appendTo="body"
           display="chip"
+          appendTo="body"
           [filter]="false"
           [showClear]="true"
           optionLabel="label"
@@ -238,13 +238,12 @@
           ></p-checkbox>
         } @else {
           <i
+            tooltipPosition="top"
             class="pi pi-info-circle opacity-70"
             [pTooltip]="'noFileDay.selection.pickOneFirst' | translate"
-            tooltipPosition="top"
           ></i>
         }
       </th>
-
       <th pSortableColumn="description">
         <div class="th-flex">
           <span class="th-label">{{ 'noFileDay.columns.description' | translate }}</span>
@@ -263,7 +262,6 @@
           </span>
         </div>
       </th>
-
       <th pSortableColumn="company">
         <div class="th-flex">
           <span class="th-label">{{ 'noFileDay.columns.company' | translate }}</span>
@@ -272,7 +270,6 @@
           </span>
         </div>
       </th>
-
       <th class="text-center justify-content-center">
         <div class="th-flex">
           <span class="th-label">{{ 'noFileDay.columns.origen' | translate }}</span>
@@ -283,7 +280,6 @@
           <span class="th-label">{{ 'noFileDay.columns.acquirerFileType' | translate }}</span>
         </div>
       </th>
-
       <th pSortableColumn="noFileDate">
         <div class="th-flex">
           <span class="th-label">{{ 'noFileDay.columns.noFileDate' | translate }}</span>
@@ -292,7 +288,6 @@
           </span>
         </div>
       </th>
-
       <th pSortableColumn="fileGroup">
         <div class="th-flex">
           <span class="th-label">{{ 'noFileDay.columns.fileGroup' | translate }}</span>
@@ -324,7 +319,6 @@
           </span>
         </div>
       </th>
-
       <th pSortableColumn="dayType">
         <div class="th-flex">
           <span class="th-label">{{ 'noFileDay.columns.dayType' | translate }}</span>
@@ -356,16 +350,15 @@
           </span>
         </div>
       </th>
-
       <th pSortableColumn="statusEnum">
         <div class="th-flex">
           <span class="th-label">{{ 'noFileDay.columns.statusEnum' | translate }}</span>
           <span class="th-icons">
             <p-sortIcon field="statusEnum"></p-sortIcon>
             <p-columnFilter
-              field="statusEnum"
               display="menu"
               matchMode="in"
+              field="statusEnum"
               [showOperator]="false"
               [showAddButton]="false"
               [showMatchModes]="false"
@@ -388,7 +381,6 @@
           </span>
         </div>
       </th>
-
       <th pSortableColumn="statusDate">
         <div class="th-flex">
           <span class="th-label">{{ 'noFileDay.columns.statusDate' | translate }}</span>
@@ -397,7 +389,6 @@
           </span>
         </div>
       </th>
-
       <th pSortableColumn="createdAt">
         <div class="th-flex">
           <span class="th-label">{{ 'noFileDay.columns.createdAt' | translate }}</span>
@@ -433,7 +424,6 @@
           </div>
         }
       </td>
-
       <td>
         @if (row.bankingDomicile) {
           <div tooltipPosition="top" [pTooltip]="row.bankingDomicile.bank?.name || null">
@@ -447,7 +437,6 @@
           </div>
         }
       </td>
-
       <td>
         @if (row.bankingDomicile) {
           <div tooltipPosition="top" [pTooltip]="formatBankingDomicile(row.bankingDomicile)">
@@ -461,31 +450,24 @@
           </div>
         }
       </td>
-
       <td class="cell-muted text-center">
         {{ row.noFileDate ? (row.noFileDate | csDate: 'date') : '-' }}
       </td>
-
       <td class="cell-muted text-center">
         <cs-tag [value]="fileGroupLabel(row.fileGroup)" [tone]="fileGroupSeverity(row.fileGroup)" />
       </td>
-
       <td class="cell-muted text-center">
         <cs-tag [value]="dayTypeLabel(row.dayType)" [tone]="dayTypeSeverity(row.dayType)" />
       </td>
-
       <td class="cell-muted text-center">
         <cs-tag [value]="statusEnumLabel(row.status)" [tone]="severityEnum(row.status)" />
       </td>
-
       <td class="cell-muted text-center">
         {{ row.statusDate ? (row.statusDate | csDate: 'short') : '-' }}
       </td>
-
       <td class="cell-muted text-center">
         {{ row.createdAt ? (row.createdAt | csDate: 'short') : '-' }}
       </td>
-
       <td class="text-center">
         <div class="table-actions">
           <button
@@ -542,16 +524,8 @@
 
   <ng-template pTemplate="emptymessage">
     <tr>
-      <td [attr.colspan]="9" class="empty-td">
-        <div class="empty empty-center">
-          <div class="empty-title">
-            {{
-              facade.loadedOnce()
-                ? ('common.noRecordsFound' | translate)
-                : ('common.loading' | translate)
-            }}
-          </div>
-        </div>
+      <td colspan="12" class="text-center py-4 text-500">
+        {{ 'common.noRecordsFound' | translate }}
       </td>
     </tr>
   </ng-template>

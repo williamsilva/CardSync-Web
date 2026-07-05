@@ -22,6 +22,7 @@ import {
   FileProcessingDashboardModel,
   BankReconciliationResultModel,
   ReprocessPendingErpResultModel,
+  ReconciliationExecutionLogModel,
   FileProcessingDivergenceContextModel,
   FinancialReconciliationPipelineResultModel,
 } from '../models/file-processing.models';
@@ -111,6 +112,13 @@ export class FileProcessingService {
       `${environment.bffBaseUrl}/bff/v1/conciliation/financial-pipeline/run`,
       {},
       { withCredentials: true },
+    );
+  }
+
+  getReconciliationHistory(limit = 20): Observable<ReconciliationExecutionLogModel[]> {
+    return this.http.get<ReconciliationExecutionLogModel[]>(
+      `${environment.bffBaseUrl}/bff/v1/conciliation/financial-pipeline/history`,
+      { params: { limit }, withCredentials: true },
     );
   }
 

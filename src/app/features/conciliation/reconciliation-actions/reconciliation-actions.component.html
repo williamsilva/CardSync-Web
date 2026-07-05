@@ -46,7 +46,9 @@
                 <cs-tag [value]="(c.differenceAmount | csCurrency) ?? ''" severity="warn"></cs-tag>
               </div>
             }
-            @if (reconcileErpAcqResult(); as r) {
+            @if (reconcilingErpVsAcquirer()) {
+              <cs-tag [value]="'scheduler.status.running' | translate" tone="info"></cs-tag>
+            } @else if (reconcileErpAcqResult(); as r) {
               <cs-tag
                 [value]="'conciliation.dashboard.completed' | translate"
                 tone="success"
@@ -140,7 +142,9 @@
                 }}</small>
               </div>
             }
-            @if (reconcileManualSwappedResult(); as r) {
+            @if (reconcileManualSwapped()) {
+              <cs-tag [value]="'scheduler.status.running' | translate" tone="info"></cs-tag>
+            } @else if (reconcileManualSwappedResult(); as r) {
               <cs-tag
                 [value]="'conciliation.dashboard.completed' | translate"
                 tone="success"
@@ -184,7 +188,9 @@
             'conciliation.dashboard.salesSummaryTransactions.cardTitle' | translate
           }}</ng-template>
           <div class="flex flex-column gap-3">
-            @if (reconcileSalesSummaryTransactionsResult(); as r) {
+            @if (reconcilingSalesSummaryTransactions()) {
+              <cs-tag [value]="'scheduler.status.running' | translate" tone="info"></cs-tag>
+            } @else if (reconcileSalesSummaryTransactionsResult(); as r) {
               <cs-tag
                 [value]="'conciliation.dashboard.completed' | translate"
                 tone="success"
@@ -256,7 +262,9 @@
                 <strong>{{ s.chargebackOpenAmount | csCurrency }}</strong>
               </div>
             }
-            @if (cancellationReprocessResult(); as r) {
+            @if (reprocessingCancellations()) {
+              <cs-tag [value]="'scheduler.status.running' | translate" tone="info"></cs-tag>
+            } @else if (cancellationReprocessResult(); as r) {
               <cs-tag
                 [value]="'conciliation.dashboard.completed' | translate"
                 tone="success"
@@ -332,7 +340,9 @@
                 ></cs-tag>
               </div>
             }
-            @if (reconcileFeesResult(); as r) {
+            @if (reconcilingFees()) {
+              <cs-tag [value]="'scheduler.status.running' | translate" tone="info"></cs-tag>
+            } @else if (reconcileFeesResult(); as r) {
               <cs-tag
                 [value]="'conciliation.dashboard.completed' | translate"
                 tone="success"
@@ -384,7 +394,9 @@
             'conciliation.dashboard.acquirerSaleSummary.cardTitle' | translate
           }}</ng-template>
           <div class="flex flex-column gap-3">
-            @if (reconcileAcquirerSaleSummaryResult(); as r) {
+            @if (reconcilingAcquirerSaleSummary()) {
+              <cs-tag [value]="'scheduler.status.running' | translate" tone="info"></cs-tag>
+            } @else if (reconcileAcquirerSaleSummaryResult(); as r) {
               <cs-tag
                 [value]="'conciliation.dashboard.completed' | translate"
                 tone="success"
@@ -448,7 +460,9 @@
             'conciliation.dashboard.salesSummaryCreditOrder.cardTitle' | translate
           }}</ng-template>
           <div class="flex flex-column gap-3">
-            @if (reconcileSalesSummaryCreditOrderResult(); as r) {
+            @if (reconcilingCreditOrder()) {
+              <cs-tag [value]="'scheduler.status.running' | translate" tone="info"></cs-tag>
+            } @else if (reconcileSalesSummaryCreditOrderResult(); as r) {
               <cs-tag
                 [value]="'conciliation.dashboard.completed' | translate"
                 tone="success"
@@ -538,7 +552,9 @@
                 <strong>{{ s.bankPendingAmount | csCurrency }}</strong>
               </div>
             }
-            @if (reconcileBankResult(); as r) {
+            @if (reconcilingBank()) {
+              <cs-tag [value]="'scheduler.status.running' | translate" tone="info"></cs-tag>
+            } @else if (reconcileBankResult(); as r) {
               <cs-tag
                 [value]="'conciliation.dashboard.bank.completed' | translate"
                 tone="success"
@@ -595,7 +611,9 @@
               {{ 'conciliation.dashboard.pipeline.description' | translate }}
             </span>
 
-            @if (pipelineResult(); as result) {
+            @if (runningPipeline()) {
+              <cs-tag [value]="'scheduler.status.running' | translate" tone="info"></cs-tag>
+            } @else if (pipelineResult(); as result) {
               <div class="flex flex-column gap-2">
                 <cs-tag
                   [value]="'conciliation.dashboard.pipeline.completed' | translate"

@@ -1,213 +1,219 @@
-<div class="cs-page">
-  <div class="cs-page__header">
-    <div>
-      <h1>{{ 'routes.conciliation.dashboard.title' | translate }}</h1>
-      <span>{{ 'conciliation.dashboard.subtitle' | translate }}</span>
+<cs-page-header
+  [compact]="false"
+  [subtitle]="'conciliation.dashboard.subtitle' | translate"
+  [breadcrumb]="[
+    { label: ('breadcrumb.dashboard.title' | translate), url: '/' },
+    { label: ('routes.conciliation.dashboard.title' | translate) },
+  ]"
+>
+  <button
+    pButton
+    type="button"
+    (click)="reload()"
+    icon="pi pi-refresh"
+    [disabled]="loading()"
+    class="p-button-text p-button-sm"
+    [label]="'common.update' | translate"
+  ></button>
+</cs-page-header>
+
+<!-- KPI summary -->
+@if (summary(); as s) {
+  <section class="cs-kpi-grid">
+    <div class="cs-kpi-card">
+      <small>{{ 'conciliation.dashboard.kpi.erpSales' | translate }}</small>
+      <strong>{{ s.erpGrossAmount | csCurrency }}</strong>
+      <span>{{
+        'conciliation.dashboard.kpi.salesCount' | translate: { count: s.erpSalesQuantity || 0 }
+      }}</span>
     </div>
-
-    <div class="cs-actions">
-      <button
-        pButton
-        type="button"
-        (click)="reload()"
-        icon="pi pi-refresh"
-        [disabled]="loading()"
-        class="p-button-text p-button-sm"
-        [label]="'common.update' | translate"
-      ></button>
+    <div class="cs-kpi-card">
+      <small>{{ 'conciliation.dashboard.kpi.acquirerSales' | translate }}</small>
+      <strong>{{ s.acquirerGrossAmount | csCurrency }}</strong>
+      <span>{{
+        'conciliation.dashboard.kpi.salesCount' | translate: { count: s.acquirerSalesQuantity || 0 }
+      }}</span>
     </div>
-  </div>
+    <div class="cs-kpi-card">
+      <small>{{ 'conciliation.dashboard.kpi.chargedFees' | translate }}</small>
+      <strong>{{ s.feeAmount | csCurrency }}</strong>
+      <span
+        >{{ 'conciliation.dashboard.kpi.feeDifference' | translate }}
+        {{ s.feeDifferenceAmount | csCurrency }}</span
+      >
+    </div>
+    <div class="cs-kpi-card">
+      <small>{{ 'conciliation.dashboard.kpi.bankSettled' | translate }}</small>
+      <strong>{{ s.bankSettledAmount | csCurrency }}</strong>
+      <span
+        >{{ 'conciliation.dashboard.bank.pending' | translate }}
+        {{ s.bankPendingAmount | csCurrency }}</span
+      >
+    </div>
+    <div class="cs-kpi-card">
+      <small>{{ 'conciliation.dashboard.kpi.pendencies' | translate }}</small>
+      <strong>{{ s.pendingAmount | csCurrency }}</strong>
+      <span>{{
+        'conciliation.dashboard.kpi.salesCount' | translate: { count: s.pendingSalesQuantity || 0 }
+      }}</span>
+    </div>
+    <div class="cs-kpi-card">
+      <small>{{ 'conciliation.dashboard.cancellation.debitPending' | translate }}</small>
+      <strong>{{ s.debitPendingAmount | csCurrency }}</strong>
+      <span>{{ 'conciliation.dashboard.kpi.debitsPendingSubtitle' | translate }}</span>
+    </div>
+    <div class="cs-kpi-card">
+      <small>{{ 'conciliation.dashboard.cancellation.chargebackOpen' | translate }}</small>
+      <strong>{{ s.chargebackOpenAmount | csCurrency }}</strong>
+      <span>{{ 'conciliation.dashboard.kpi.chargebackSubtitle' | translate }}</span>
+    </div>
+    <div class="cs-kpi-card">
+      <small>{{ 'conciliation.dashboard.kpi.divergences' | translate }}</small>
+      <strong>{{ s.divergenceAmount | csCurrency }}</strong>
+      <span>{{
+        'conciliation.dashboard.kpi.occurrencesCount'
+          | translate: { count: s.divergenceQuantity || 0 }
+      }}</span>
+    </div>
+  </section>
+} @else if (loading()) {
+  <section class="cs-kpi-grid">
+    @for (i of [1, 2, 3, 4, 5, 6, 7, 8]; track i) {
+      <div class="cs-kpi-card">
+        <p-skeleton height="0.75rem" width="55%"></p-skeleton>
+        <div class="mt-2"><p-skeleton height="1.75rem" width="70%"></p-skeleton></div>
+        <div class="mt-2"><p-skeleton height="0.65rem" width="45%"></p-skeleton></div>
+      </div>
+    }
+  </section>
+} @else {
+  <p-card>
+    <span>{{ 'conciliation.dashboard.loadError' | translate }}</span>
+  </p-card>
+}
 
-  <!-- KPI summary -->
-  @if (summary(); as s) {
-    <section class="cs-kpi-grid">
-      <div class="cs-kpi-card">
-        <small>{{ 'conciliation.dashboard.kpi.erpSales' | translate }}</small>
-        <strong>{{ s.erpGrossAmount | csCurrency }}</strong>
-        <span>{{
-          'conciliation.dashboard.kpi.salesCount' | translate: { count: s.erpSalesQuantity || 0 }
-        }}</span>
-      </div>
-      <div class="cs-kpi-card">
-        <small>{{ 'conciliation.dashboard.kpi.acquirerSales' | translate }}</small>
-        <strong>{{ s.acquirerGrossAmount | csCurrency }}</strong>
-        <span>{{
-          'conciliation.dashboard.kpi.salesCount'
-            | translate: { count: s.acquirerSalesQuantity || 0 }
-        }}</span>
-      </div>
-      <div class="cs-kpi-card">
-        <small>{{ 'conciliation.dashboard.kpi.chargedFees' | translate }}</small>
-        <strong>{{ s.feeAmount | csCurrency }}</strong>
-        <span
-          >{{ 'conciliation.dashboard.kpi.feeDifference' | translate }}
-          {{ s.feeDifferenceAmount | csCurrency }}</span
-        >
-      </div>
-      <div class="cs-kpi-card">
-        <small>{{ 'conciliation.dashboard.kpi.bankSettled' | translate }}</small>
-        <strong>{{ s.bankSettledAmount | csCurrency }}</strong>
-        <span
-          >{{ 'conciliation.dashboard.bank.pending' | translate }}
-          {{ s.bankPendingAmount | csCurrency }}</span
-        >
-      </div>
-      <div class="cs-kpi-card">
-        <small>{{ 'conciliation.dashboard.kpi.pendencies' | translate }}</small>
-        <strong>{{ s.pendingAmount | csCurrency }}</strong>
-        <span>{{
-          'conciliation.dashboard.kpi.salesCount'
-            | translate: { count: s.pendingSalesQuantity || 0 }
-        }}</span>
-      </div>
-      <div class="cs-kpi-card">
-        <small>{{ 'conciliation.dashboard.cancellation.debitPending' | translate }}</small>
-        <strong>{{ s.debitPendingAmount | csCurrency }}</strong>
-        <span>{{ 'conciliation.dashboard.kpi.debitsPendingSubtitle' | translate }}</span>
-      </div>
-      <div class="cs-kpi-card">
-        <small>{{ 'conciliation.dashboard.cancellation.chargebackOpen' | translate }}</small>
-        <strong>{{ s.chargebackOpenAmount | csCurrency }}</strong>
-        <span>{{ 'conciliation.dashboard.kpi.chargebackSubtitle' | translate }}</span>
-      </div>
-      <div class="cs-kpi-card">
-        <small>{{ 'conciliation.dashboard.kpi.divergences' | translate }}</small>
-        <strong>{{ s.divergenceAmount | csCurrency }}</strong>
-        <span>{{
-          'conciliation.dashboard.kpi.occurrencesCount'
-            | translate: { count: s.divergenceQuantity || 0 }
-        }}</span>
-      </div>
-    </section>
-  } @else {
-    <p-card>
-      <span>{{ 'conciliation.dashboard.loadError' | translate }}</span>
-    </p-card>
-  }
-
-  @if (dashboard(); as d) {
-    <section class="cs-grid-two">
-      <p-card [header]="'conciliation.dashboard.chart.erpVsAcquirer' | translate">
-        @if (comparison(); as c) {
-          <div class="cs-chart-list">
-            <div>
-              <div class="flex justify-content-between mb-2">
-                <strong>{{ 'conciliation.dashboard.chart.matchedValue' | translate }}</strong>
-                <span>{{ c.matchedAmount | csCurrency }}</span>
-              </div>
-              <p-progressBar [value]="progress(c.matchedAmount, c.erpAmount)"></p-progressBar>
+@if (dashboard(); as d) {
+  <section class="cs-grid-two">
+    <p-card [header]="'conciliation.dashboard.chart.erpVsAcquirer' | translate">
+      @if (comparison(); as c) {
+        <div class="cs-chart-list">
+          <div>
+            <div class="flex justify-content-between mb-2">
+              <strong>{{ 'conciliation.dashboard.chart.matchedValue' | translate }}</strong>
+              <span>{{ c.matchedAmount | csCurrency }}</span>
             </div>
-            <div class="cs-chart-row">
-              <div>
-                <strong>{{ 'conciliation.dashboard.chart.erpLabel' | translate }}</strong>
-                <small>{{ 'conciliation.dashboard.chart.erpSubtitle' | translate }}</small>
-              </div>
-              <span>{{ c.erpAmount | csCurrency }}</span>
-            </div>
-            <div class="cs-chart-row">
-              <div>
-                <strong>{{ 'conciliation.dashboard.chart.acquirerLabel' | translate }}</strong>
-                <small>{{ 'conciliation.dashboard.chart.acquirerSubtitle' | translate }}</small>
-              </div>
-              <span>{{ c.acquirerAmount | csCurrency }}</span>
-            </div>
-            <div class="cs-chart-row">
-              <div>
-                <strong>{{ 'conciliation.dashboard.difference' | translate }}</strong>
-                <small>{{ 'conciliation.dashboard.chart.differenceSubtitle' | translate }}</small>
-              </div>
-              <cs-tag [value]="(c.differenceAmount | csCurrency) ?? ''" severity="warn"></cs-tag>
-            </div>
+            <p-progressBar [value]="progress(c.matchedAmount, c.erpAmount)"></p-progressBar>
           </div>
+          <div class="cs-chart-row">
+            <div>
+              <strong>{{ 'conciliation.dashboard.chart.erpLabel' | translate }}</strong>
+              <small>{{ 'conciliation.dashboard.chart.erpSubtitle' | translate }}</small>
+            </div>
+            <span>{{ c.erpAmount | csCurrency }}</span>
+          </div>
+          <div class="cs-chart-row">
+            <div>
+              <strong>{{ 'conciliation.dashboard.chart.acquirerLabel' | translate }}</strong>
+              <small>{{ 'conciliation.dashboard.chart.acquirerSubtitle' | translate }}</small>
+            </div>
+            <span>{{ c.acquirerAmount | csCurrency }}</span>
+          </div>
+          <div class="cs-chart-row">
+            <div>
+              <strong>{{ 'conciliation.dashboard.difference' | translate }}</strong>
+              <small>{{ 'conciliation.dashboard.chart.differenceSubtitle' | translate }}</small>
+            </div>
+            <cs-tag [value]="(c.differenceAmount | csCurrency) ?? ''" [tone]="'warn'"></cs-tag>
+          </div>
+        </div>
+      }
+    </p-card>
+
+    <p-card [header]="'conciliation.dashboard.chart.shortcuts' | translate">
+      <div class="cs-shortcuts">
+        <a
+          pButton
+          severity="secondary"
+          routerLink="../sales"
+          icon="pi pi-credit-card"
+          [label]="'conciliation.dashboard.chart.shortcutAcquirerSales' | translate"
+        ></a>
+        <a
+          pButton
+          severity="secondary"
+          icon="pi pi-shopping-bag"
+          routerLink="../../erp/sales"
+          [label]="'conciliation.dashboard.chart.shortcutErpSales' | translate"
+        ></a>
+        <a
+          pButton
+          routerLink="../fees"
+          severity="secondary"
+          icon="pi pi-percentage"
+          [label]="'conciliation.dashboard.chart.shortcutFees' | translate"
+        ></a>
+        <a
+          pButton
+          severity="secondary"
+          routerLink="../debits"
+          icon="pi pi-minus-circle"
+          [label]="'conciliation.dashboard.chart.shortcutDebits' | translate"
+        ></a>
+        <a
+          pButton
+          icon="pi pi-shield"
+          severity="secondary"
+          routerLink="../chargebacks"
+          [label]="'conciliation.dashboard.chart.shortcutChargebacks' | translate"
+        ></a>
+        <a
+          pButton
+          icon="pi pi-wallet"
+          severity="secondary"
+          routerLink="../bank-settlement"
+          [label]="'conciliation.dashboard.chart.shortcutBankSettlement' | translate"
+        ></a>
+      </div>
+    </p-card>
+  </section>
+
+  <section class="cs-grid-two">
+    <p-card [header]="'conciliation.dashboard.chart.divergencesByType' | translate">
+      <div class="cs-chart-list">
+        @for (item of d.divergencesByType; track item.label) {
+          <div class="cs-chart-row">
+            <div>
+              <strong>{{ item.label }}</strong>
+              <small>{{
+                'conciliation.dashboard.chart.occurrencesCount'
+                  | translate: { count: item.quantity || 0 }
+              }}</small>
+            </div>
+            <span>{{ item.value | csCurrency }}</span>
+          </div>
+        } @empty {
+          <span>{{ 'conciliation.dashboard.chart.noDivergences' | translate }}</span>
         }
-      </p-card>
+      </div>
+    </p-card>
 
-      <p-card [header]="'conciliation.dashboard.chart.shortcuts' | translate">
-        <div class="cs-shortcuts">
-          <a
-            pButton
-            severity="secondary"
-            routerLink="../sales"
-            [label]="'conciliation.dashboard.chart.shortcutAcquirerSales' | translate"
-            icon="pi pi-credit-card"
-          ></a>
-          <a
-            pButton
-            severity="secondary"
-            icon="pi pi-shopping-bag"
-            routerLink="../../erp/sales"
-            [label]="'conciliation.dashboard.chart.shortcutErpSales' | translate"
-          ></a>
-          <a
-            pButton
-            routerLink="../fees"
-            severity="secondary"
-            icon="pi pi-percentage"
-            [label]="'conciliation.dashboard.chart.shortcutFees' | translate"
-          ></a>
-          <a
-            pButton
-            severity="secondary"
-            routerLink="../debits"
-            icon="pi pi-minus-circle"
-            [label]="'conciliation.dashboard.chart.shortcutDebits' | translate"
-          ></a>
-          <a
-            pButton
-            icon="pi pi-shield"
-            severity="secondary"
-            routerLink="../chargebacks"
-            [label]="'conciliation.dashboard.chart.shortcutChargebacks' | translate"
-          ></a>
-          <a
-            pButton
-            icon="pi pi-wallet"
-            severity="secondary"
-            routerLink="../bank-settlement"
-            [label]="'conciliation.dashboard.chart.shortcutBankSettlement' | translate"
-          ></a>
-        </div>
-      </p-card>
-    </section>
-
-    <section class="cs-grid-two">
-      <p-card [header]="'conciliation.dashboard.chart.divergencesByType' | translate">
-        <div class="cs-chart-list">
-          @for (item of d.divergencesByType; track item.label) {
-            <div class="cs-chart-row">
-              <div>
-                <strong>{{ item.label }}</strong>
-                <small>{{
-                  'conciliation.dashboard.chart.occurrencesCount'
-                    | translate: { count: item.quantity || 0 }
-                }}</small>
-              </div>
-              <span>{{ item.value | csCurrency }}</span>
+    <p-card [header]="'conciliation.dashboard.chart.pendingAging' | translate">
+      <div class="cs-chart-list">
+        @for (item of d.pendingAging; track item.bucket) {
+          <div class="cs-chart-row">
+            <div>
+              <strong>{{ item.bucket }}</strong>
+              <small>{{
+                'conciliation.dashboard.chart.pendenciesCount'
+                  | translate: { count: item.quantity || 0 }
+              }}</small>
             </div>
-          } @empty {
-            <span>{{ 'conciliation.dashboard.chart.noDivergences' | translate }}</span>
-          }
-        </div>
-      </p-card>
-
-      <p-card [header]="'conciliation.dashboard.chart.pendingAging' | translate">
-        <div class="cs-chart-list">
-          @for (item of d.pendingAging; track item.bucket) {
-            <div class="cs-chart-row">
-              <div>
-                <strong>{{ item.bucket }}</strong>
-                <small>{{
-                  'conciliation.dashboard.chart.pendenciesCount'
-                    | translate: { count: item.quantity || 0 }
-                }}</small>
-              </div>
-              <span>{{ item.amount | csCurrency }}</span>
-            </div>
-          } @empty {
-            <span>{{ 'conciliation.dashboard.chart.noPendencies' | translate }}</span>
-          }
-        </div>
-      </p-card>
-    </section>
-  }
-</div>
+            <span>{{ item.amount | csCurrency }}</span>
+          </div>
+        } @empty {
+          <span>{{ 'conciliation.dashboard.chart.noPendencies' | translate }}</span>
+        }
+      </div>
+    </p-card>
+  </section>
+}

@@ -107,6 +107,9 @@
       "reconciliationActions": {
         "title": "Acciones de Conciliación"
       },
+      "executionHistory": {
+        "title": "Historial de Ejecuciones"
+      },
       "divergences": {
         "title": "Divergencias operativas"
       }
@@ -230,7 +233,8 @@
       "erpVsAcquirerDivergences": "Otras no conciliadas",
       "manualSalesSummary": "Resumen de Ventas Manual",
       "manualCreditOrder": "Orden de Pago Manual",
-      "reconciliationActions": "Acciones de Conciliación"
+      "reconciliationActions": "Acciones de Conciliación",
+      "executionHistory": "Historial de Ejecuciones"
     },
     "adjustment": {
       "title": "Ajustes",
@@ -2283,7 +2287,50 @@
         "divergent": "Divergentes",
         "withoutMatch": "Sin correspondencia",
         "generated": "Generados",
+        "blocked": "Bloqueados",
         "runButton": "Ejecutar línea completa"
+      },
+      "history": {
+        "title": "Historial de Ejecuciones",
+        "empty": "Aún no hay ejecuciones registradas.",
+        "totalAnalyzed": "Analizados",
+        "totalReconciled": "Conciliados",
+        "totalPending": "Pendientes",
+        "trigger": {
+          "MANUAL": "Manual",
+          "SCHEDULED": "Programado"
+        },
+        "status": {
+          "SUCCESS": "Éxito",
+          "PARTIAL": "Parcial",
+          "FAILED": "Error"
+        },
+        "step": {
+          "ERP_ACQUIRER": "ERP vs Adquirente",
+          "SALES_SUMMARY_TRANSACTION": "Resumen vs TransacciónADQ",
+          "ACQUIRER_SALE_CANCELLATION": "Cancelaciones ADQ",
+          "ACQUIRER_SALE_ADJUSTMENTS": "Ajustes de Tasas ADQ",
+          "ACQUIRER_SALE_SUMMARY": "Venta ADQ vs Resumen",
+          "SALES_SUMMARY_CREDIT_ORDER": "Resumen vs Orden de Crédito",
+          "CREDIT_ORDER_BANK_RELEASE": "Orden de Crédito vs Banco"
+        },
+        "stepStatus": {
+          "NOT_STARTED": "No iniciada",
+          "RUNNING": "En ejecución",
+          "COMPLETED": "Completada",
+          "SKIPPED": "Omitida",
+          "BLOCKED": "Bloqueada",
+          "FAILED": "Error"
+        },
+        "stepMessage": {
+          "ERP_ACQUIRER": "Conciliación ERP vs ADQ completada. Incluye reprocesamiento de entradas manuales con NSU/autorización invertidos. Solo las ventas conciliadas aquí son elegibles para ajustes de tasas.",
+          "SALES_SUMMARY_TRANSACTION": "Resúmenes actualizados según el estado de las transacciones ADQ. Resúmenes sin transacciones marcados como conciliados.",
+          "ACQUIRER_SALE_CANCELLATION": "Las cancelaciones totales informadas por el adquirente fueron propagadas a ADQ y ERP antes de las tasas y resúmenes.",
+          "ACQUIRER_SALE_ADJUSTMENTS": "Las ventas con tasas correctas o contrato ausente normalizado avanzan. Las divergencias de tasa bloquean los pasos siguientes.",
+          "ACQUIRER_SALE_SUMMARY": "Un resumen solo se concilia cuando sus ventas ADQ vinculadas son elegibles de los pasos anteriores.",
+          "SALES_SUMMARY_CREDIT_ORDER": "Débito/anticipación sin orden puede generar una orden sintética para análisis.",
+          "CREDIT_ORDER_BANK_RELEASE": "Una orden de crédito solo es elegible cuando su resumen vinculado ya está conciliado."
+        }
       },
       "kpi": {
         "erpSales": "Ventas ERP",
@@ -3009,6 +3056,28 @@
       "saved": "Configuración de correo guardada con éxito.",
       "saveError": "No fue posible guardar la configuración de correo."
     }
+  },
+  "scheduler": {
+    "status": {
+      "title": "Estado del Scheduler",
+      "subtitle": "Siga la última ejecución automática/manual del procesamiento ERP, Rede y Banco.",
+      "running": "En ejecución",
+      "lastResult": "Último resultado",
+      "success": "Éxito",
+      "failed": "Fallo",
+      "noRun": "Sin ejecución registrada",
+      "lastStart": "Último inicio",
+      "lastEnd": "Último fin",
+      "trigger": "Trigger",
+      "message": "Mensaje",
+      "files": "Archivos",
+      "processErp": "Procesar ERP ahora",
+      "processRede": "Procesar Rede ahora",
+      "processBank": "Procesar CNAB ahora"
+    },
+    "erp": { "title": "ERP" },
+    "rede": { "title": "Rede" },
+    "bank": { "title": "Banco / CNAB" }
   },
   "notFound": {
     "attemptedUrl": "URL accedida",
