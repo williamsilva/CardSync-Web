@@ -156,7 +156,7 @@
       inputId="establishments"
       [value]="establishments()"
       [options]="establishmentsOptions()"
-      class="col-12 md:col-2 xl:col-3 p-1"
+      class="col-12 md:col-2 xl:col-2 p-1"
       (valueChange)="establishments.set($event)"
       [label]="'transactions.fields.establishment' | translate"
     >
@@ -179,7 +179,7 @@
       [value]="companies()"
       optionLabel="fantasyName"
       [options]="companiesOptions()"
-      class="col-12 md:col-3 xl:col-3 p-1"
+      class="col-12 md:col-2 xl:col-2 p-1"
       (valueChange)="companies.set($event)"
       [label]="'transactions.fields.company' | translate"
     >
@@ -192,6 +192,17 @@
         </div>
       </ng-template>
     </cs-advanced-multiselect-filter>
+
+    <cs-advanced-multiselect-filter
+      optionLabel="label"
+      optionValue="value"
+      inputId="statusTransaction"
+      [value]="statusTransactionReason()"
+      class="col-12 md:col-3 xl:col-2 p-1"
+      [options]="statusTransactionReasonEnumOptions()"
+      (valueChange)="statusTransactionReason.set($event)"
+      [label]="'transactions.columns.statusTransactionReason' | translate"
+    ></cs-advanced-multiselect-filter>
   </div>
 
   <div class="grid formgrid gap-0 align-items-end">
@@ -216,6 +227,17 @@
     ></cs-currency-range-filter>
   </div>
 </cs-filters-panel>
+
+<div class="flex align-items-center justify-content-between mb-2 px-1">
+  <small class="opacity-80"> </small>
+
+  @if (selectedRows().length) {
+    <small class="opacity-80">
+      {{ 'conciliation.selection.count' | translate: { count: selectedRows().length } }}
+      · {{ 'conciliation.selection.deleteErp' | translate }}
+    </small>
+  }
+</div>
 
 <div class="surface-card border-round px-3 pt-2 pb-3 mt-2">
   <div class="flex flex-column gap-2 mb-3">
@@ -245,7 +267,20 @@
           >
         </div>
       }
-      <div class="flex flex-wrap justify-content-end gap-2 w-full md:w-auto md:ml-auto"></div>
+      <div class="flex flex-wrap justify-content-end gap-2 w-full md:w-auto md:ml-auto">
+        <button
+          pButton
+          type="button"
+          icon="pi pi-trash"
+          tooltipPosition="top"
+          [loading]="resolving()"
+          (click)="openBatchDialog()"
+          class="p-button-danger p-button-sm"
+          [label]="'conciliation.selection.deleteErpSelected' | translate"
+          [disabled]="!selectedDeleteRows().length || loading() || resolving()"
+          [pTooltip]="'conciliation.selection.deleteErpSelectedTooltip' | translate"
+        ></button>
+      </div>
     </div>
   </div>
 
@@ -277,6 +312,7 @@
   >
     <ng-template pTemplate="colgroup">
       <colgroup>
+        <col style="width: 44px" />
         <col style="width: auto" />
         <col style="width: 140px" />
         <col style="width: 105px" />
@@ -296,6 +332,16 @@
 
     <ng-template pTemplate="header">
       <tr>
+        <th class="text-center">
+          <p-checkbox
+            [binary]="true"
+            [ngModel]="headerChecked()"
+            [indeterminate]="headerIndeterminate()"
+            [disabled]="!headerEligibleRows().length"
+            (onChange)="toggleHeaderSelection(!!$event.checked)"
+          ></p-checkbox>
+        </th>
+
         <th pSortableColumn="company">
           <div class="th-flex text-center">
             <span
@@ -1158,6 +1204,14 @@
 
     <ng-template pTemplate="body" let-row>
       <tr>
+        <td class="text-center">
+          <p-checkbox
+            [binary]="true"
+            [ngModel]="isRowSelected(row)"
+            [disabled]="isRowCheckboxDisabled(row)"
+            (onChange)="toggleRowSelection(row, !!$event.checked)"
+          ></p-checkbox>
+        </td>
         <td>
           <span
             tooltipPosition="top"
@@ -1245,6 +1299,17 @@
               class="p-button-text p-button-sm"
               (click)="openComparison(row, $event)"
             ></button>
+
+            <button
+              pButton
+              type="button"
+              icon="pi pi-trash"
+              tooltipPosition="top"
+              [disabled]="resolving()"
+              (click)="confirmDeleteErp(row)"
+              class="p-button-text p-button-sm p-button-danger"
+              [pTooltip]="'conciliation.selection.deleteErp' | translate"
+            ></button>
           </div>
         </td>
       </tr>
@@ -1252,11 +1317,25 @@
 
     <ng-template pTemplate="emptymessage">
       <tr>
-        <td colspan="15" class="text-center py-4">{{ 'pagination.emptymessage' | translate }}</td>
+        <td colspan="16" class="text-center py-4">{{ 'pagination.emptymessage' | translate }}</td>
       </tr>
     </ng-template>
   </p-table>
 </div>
+
+<cs-batch-dialog
+  [rows]="batchRows()"
+  [resolving]="resolving()"
+  [action]="pendingBatchAction()"
+  [visible]="batchDialogVisible()"
+  [description]="batchDescription()"
+  (closeDialog)="closeBatchDialog()"
+  [actionSuffix]="batchActionSuffix()"
+  [confirmLabel]="batchConfirmLabel()"
+  (confirmDialog)="confirmBatchAction()"
+  (confirmDelete)="confirmBatchDeleteAction($event)"
+  (visibleChange)="batchDialogVisible.set($event)"
+></cs-batch-dialog>
 
 <cs-comparison-dialog
   [row]="selectedRow()"
@@ -1268,3 +1347,19 @@
   (reconcile)="confirmManualReconciliation($event)"
   (visibleChange)="comparisonDialogVisible.set($event)"
 ></cs-comparison-dialog>
+
+<cs-action-dialog
+  [resolving]="resolving()"
+  [visible]="actionDialogVisible()"
+  [action]="pendingConfirmAction()"
+  (confirmDialog)="confirmAction()"
+  (confirmDelete)="confirmSingleDeleteAction($event)"
+  (closeDialog)="closeActionDialog()"
+  [confirmLabel]="confirmActionLabel()"
+  [actionSuffix]="confirmActionSuffix()"
+  [grossTotal]="confirmActionGrossTotal()"
+  [liquidTotal]="confirmActionLiquidTotal()"
+  [description]="confirmActionDescription()"
+  [confirmButtonClass]="confirmActionButtonClass()"
+  (visibleChange)="actionDialogVisible.set($event)"
+></cs-action-dialog>

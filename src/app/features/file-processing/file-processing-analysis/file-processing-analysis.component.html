@@ -1,0 +1,138 @@
+<cs-page-header
+  [compact]="false"
+  [subtitle]="'fileProcessingAnalysis.subtitle' | translate"
+  [breadcrumb]="[
+    { label: ('breadcrumb.dashboard.title' | translate), url: '/' },
+    { label: ('menu.file.processing.title' | translate), url: '/file-processing' },
+    { label: ('menu.file.processing.analysis' | translate) },
+  ]"
+>
+  <button
+    pButton
+    type="button"
+    icon="pi pi-refresh"
+    [loading]="loading()"
+    (click)="reload()"
+    class="p-button-text p-button-sm"
+    [label]="'common.update' | translate"
+  ></button>
+</cs-page-header>
+
+<p-card>
+  @if (loading()) {
+    <div class="flex align-items-center gap-2 text-color-secondary py-3">
+      <i class="pi pi-spin pi-spinner"></i>
+      <span class="text-sm">{{ 'common.loading' | translate }}</span>
+    </div>
+  } @else if (files().length === 0) {
+    <div class="flex align-items-center gap-2 text-color-secondary py-3">
+      <i class="pi pi-inbox"></i>
+      <span class="text-sm">{{ 'fileProcessingAnalysis.empty' | translate }}</span>
+    </div>
+  } @else {
+    <div class="flex flex-column gap-2">
+      @for (file of files(); track file.id) {
+        <div class="border-1 surface-border border-round overflow-hidden">
+          <div
+            class="flex align-items-center justify-content-between px-3 py-2 cs-exec-row"
+            (click)="toggleFile(file.id)"
+          >
+            <div class="flex align-items-center gap-3 flex-wrap">
+              <cs-tag
+                [value]="file.group ?? '—'"
+                [tone]="groupTone(file.group)"
+              ></cs-tag>
+              <span class="text-sm font-medium cs-filename">{{ file.file }}</span>
+              @if (file.dateImport) {
+                <span class="text-sm text-color-secondary">{{ file.dateImport | csDate: 'short' }}</span>
+              }
+              <span class="text-sm text-color-secondary">
+                <i class="pi pi-clock mr-1"></i>{{ formatDuration(file.startedAt, file.finishedAt) }}
+              </span>
+            </div>
+
+            <div class="flex align-items-center gap-3 flex-wrap">
+              <div class="hidden md:flex align-items-center gap-3 text-sm">
+                <span class="text-color-secondary">
+                  {{ 'fileProcessingAnalysis.row.lines' | translate }}:
+                  <strong>{{ file.totalLines ?? 0 }}</strong>
+                </span>
+                <span class="text-color-secondary">
+                  {{ 'fileProcessingAnalysis.row.processed' | translate }}:
+                  <strong class="text-green-500">{{ file.processedLines ?? 0 }}</strong>
+                </span>
+                @if ((file.warningLines ?? 0) > 0) {
+                  <span class="text-color-secondary">
+                    {{ 'fileProcessingAnalysis.row.warnings' | translate }}:
+                    <strong class="text-yellow-500">{{ file.warningLines }}</strong>
+                  </span>
+                }
+                @if ((file.errorLines ?? 0) > 0) {
+                  <span class="text-color-secondary">
+                    {{ 'fileProcessingAnalysis.row.errors' | translate }}:
+                    <strong class="text-red-400">{{ file.errorLines }}</strong>
+                  </span>
+                }
+              </div>
+              <cs-tag
+                [value]="'importedFilesCalendar.status.' + file.status | translate"
+                [tone]="fileStatusSeverity(file.status)"
+              ></cs-tag>
+              <i
+                class="pi text-color-secondary"
+                [class.pi-chevron-down]="!isExpanded(file.id)"
+                [class.pi-chevron-up]="isExpanded(file.id)"
+              ></i>
+            </div>
+          </div>
+
+          @if (isExpanded(file.id)) {
+            <div class="px-3 py-2">
+              <div class="flex md:hidden gap-3 text-sm mb-3 flex-wrap">
+                <span class="text-color-secondary">
+                  {{ 'fileProcessingAnalysis.row.lines' | translate }}:
+                  <strong>{{ file.totalLines ?? 0 }}</strong>
+                </span>
+                <span class="text-color-secondary">
+                  {{ 'fileProcessingAnalysis.row.processed' | translate }}:
+                  <strong class="text-green-500">{{ file.processedLines ?? 0 }}</strong>
+                </span>
+              </div>
+
+              <div class="border-1 surface-border border-round p-3">
+                <div class="flex flex-wrap gap-3 text-xs text-color-secondary">
+                  @if ((file.totalLines ?? 0) > 0) {
+                    <span>{{ 'fileProcessingAnalysis.detail.totalLines' | translate }}: <strong class="text-color">{{ file.totalLines }}</strong></span>
+                  }
+                  @if ((file.processedLines ?? 0) > 0) {
+                    <span>{{ 'fileProcessingAnalysis.detail.processedLines' | translate }}: <strong class="text-green-500">{{ file.processedLines }}</strong></span>
+                  }
+                  @if ((file.ignoredLines ?? 0) > 0) {
+                    <span>{{ 'fileProcessingAnalysis.detail.ignoredLines' | translate }}: <strong class="text-color">{{ file.ignoredLines }}</strong></span>
+                  }
+                  @if ((file.warningLines ?? 0) > 0) {
+                    <span>{{ 'fileProcessingAnalysis.detail.warningLines' | translate }}: <strong class="text-yellow-500">{{ file.warningLines }}</strong></span>
+                  }
+                  @if ((file.errorLines ?? 0) > 0) {
+                    <span>{{ 'fileProcessingAnalysis.detail.errorLines' | translate }}: <strong class="text-red-400">{{ file.errorLines }}</strong></span>
+                  }
+                  @if ((file.pendingContractLines ?? 0) > 0) {
+                    <span>{{ 'fileProcessingAnalysis.detail.pendingContract' | translate }}: <strong class="text-orange-400">{{ file.pendingContractLines }}</strong></span>
+                  }
+                  @if ((file.pendingBusinessContextLines ?? 0) > 0) {
+                    <span>{{ 'fileProcessingAnalysis.detail.pendingContext' | translate }}: <strong class="text-orange-400">{{ file.pendingBusinessContextLines }}</strong></span>
+                  }
+                </div>
+                @if (file.statusMessage || file.errorMessage) {
+                  <p class="text-xs text-color-secondary mt-2 mb-0">
+                    {{ file.statusMessage ?? file.errorMessage }}
+                  </p>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      }
+    </div>
+  }
+</p-card>

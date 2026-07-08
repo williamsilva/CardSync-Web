@@ -9,6 +9,14 @@ export interface ReconciliationSettingsModel {
   erpAcquirerFutureDaysLookback: number;
   reconciliationLookbackMonths: number;
   creditOrderPendingDays: number;
+  // Flags de habilitação de etapas — ordem = esteira de conciliação
+  enabledErpAcquirer: boolean;
+  enabledSalesSummaryTransactions: boolean;
+  enabledAcquirerSaleCancellations: boolean;
+  enabledErpAcquirerFees: boolean;
+  enabledAcquirerSaleSummary: boolean;
+  enabledSalesSummaryCreditOrder: boolean;
+  enabledBankAcquirer: boolean;
   // Flags de reprocessamento — ordem = esteira de conciliação
   reprocessErpAcquirerSales: boolean;
   reprocessSalesSummaryTransactions: boolean;
@@ -18,7 +26,8 @@ export interface ReconciliationSettingsModel {
   reprocessSalesSummaryCreditOrder: boolean;
   reprocessBankAcquirer: boolean;
   // Parâmetros de tolerância
-  dateToleranceDays: number;
+  dateToleranceDaysBefore: number;
+  dateToleranceDaysAfter: number;
   valueTolerance: number;
   bankMarkNotReconciledAfterDays: number;
 }
@@ -28,6 +37,14 @@ export interface ReconciliationSettingsRequest {
   erpAcquirerFutureDaysLookback: number;
   reconciliationLookbackMonths: number;
   creditOrderPendingDays: number;
+  // Flags de habilitação de etapas — ordem = esteira de conciliação
+  enabledErpAcquirer: boolean;
+  enabledSalesSummaryTransactions: boolean;
+  enabledAcquirerSaleCancellations: boolean;
+  enabledErpAcquirerFees: boolean;
+  enabledAcquirerSaleSummary: boolean;
+  enabledSalesSummaryCreditOrder: boolean;
+  enabledBankAcquirer: boolean;
   // Flags de reprocessamento — ordem = esteira de conciliação
   reprocessErpAcquirerSales: boolean;
   reprocessSalesSummaryTransactions: boolean;
@@ -37,7 +54,8 @@ export interface ReconciliationSettingsRequest {
   reprocessSalesSummaryCreditOrder: boolean;
   reprocessBankAcquirer: boolean;
   // Parâmetros de tolerância
-  dateToleranceDays: number;
+  dateToleranceDaysBefore: number;
+  dateToleranceDaysAfter: number;
   valueTolerance: number;
   bankMarkNotReconciledAfterDays: number;
 }

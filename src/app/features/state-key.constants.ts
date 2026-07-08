@@ -274,6 +274,9 @@ export const STATE_KEY = {
         },
         FILTERS: { V1: 'cardsync.conciliation.manual-credit-order.filters.v1' },
       },
+      MANUAL_BANK_STATEMENT: {
+        FORM: { V1: 'cardsync.conciliation.manual-bank-statement.form.v1' },
+      },
       FEES: {
         TABLE: {
           ROWS: {

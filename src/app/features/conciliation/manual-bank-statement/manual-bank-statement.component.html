@@ -1,0 +1,289 @@
+<cs-page-header
+  [compact]="false"
+  [subtitle]="'conciliation.manualBankStatement.subtitle' | translate"
+  [breadcrumb]="[
+    { label: ('breadcrumb.dashboard.title' | translate), url: '/' },
+    { label: ('breadcrumb.conciliation.title' | translate), url: '/conciliation' },
+    { label: ('conciliation.manualBankStatement.title' | translate) },
+  ]"
+></cs-page-header>
+
+<p-card>
+  <!-- Dados obrigatorios -->
+  <div class="flex align-items-center gap-2 mb-2">
+    <span class="text-base font-semibold">
+      {{ 'conciliation.manualBankStatement.sectionRequired' | translate }}
+    </span>
+  </div>
+
+  <div class="grid formgrid gap-0">
+    <div class="col-12 md:col-3 p-2">
+      <p-floatLabel variant="on" class="w-full">
+        <p-select
+          size="small"
+          class="w-full"
+          appendTo="body"
+          [filter]="true"
+          optionValue="id"
+          [showClear]="true"
+          inputId="companyId"
+          filterBy="fantasyName"
+          optionLabel="fantasyName"
+          [formControl]="companyIdCtrl"
+          [options]="companyFacade.activeOptions()"
+        ></p-select>
+        <app-error-msg
+          forId="companyId"
+          [control]="companyIdCtrl"
+          [label]="'conciliation.manualBankStatement.company' | translate"
+        />
+      </p-floatLabel>
+    </div>
+
+    <div class="col-12 md:col-3 p-2">
+      <p-floatLabel variant="on" class="w-full">
+        <p-select
+          size="small"
+          class="w-full"
+          appendTo="body"
+          [filter]="true"
+          filterBy="label"
+          optionValue="id"
+          [showClear]="true"
+          optionLabel="label"
+          inputId="bankingDomicileId"
+          [formControl]="bankingDomicileIdCtrl"
+          [options]="bankingDomicileOptions()"
+        ></p-select>
+        <app-error-msg
+          forId="bankingDomicileId"
+          [control]="bankingDomicileIdCtrl"
+          [label]="'conciliation.manualBankStatement.bankingDomicile' | translate"
+        />
+      </p-floatLabel>
+    </div>
+
+    <div class="col-12 md:col-2 p-2">
+      <p-floatLabel variant="on" class="w-full">
+        <p-datepicker
+          class="w-full"
+          appendTo="body"
+          [showIcon]="true"
+          inputId="releaseDate"
+          dateFormat="dd/mm/yy"
+          [readonlyInput]="true"
+          [formControl]="releaseDateCtrl"
+          inputStyleClass="p-inputtext-sm"
+        ></p-datepicker>
+        <app-error-msg
+          forId="releaseDate"
+          [control]="releaseDateCtrl"
+          [label]="'conciliation.manualBankStatement.releaseDate' | translate"
+        />
+      </p-floatLabel>
+    </div>
+
+    <div class="col-12 md:col-2 p-2">
+      <p-floatLabel variant="on" class="w-full">
+        <p-inputnumber
+          class="w-full"
+          currency="BRL"
+          locale="pt-BR"
+          mode="currency"
+          inputId="releaseValue"
+          [minFractionDigits]="2"
+          [formControl]="releaseValueCtrl"
+          inputStyleClass="w-full p-inputtext-sm"
+        ></p-inputnumber>
+        <app-error-msg
+          forId="releaseValue"
+          [control]="releaseValueCtrl"
+          [label]="'conciliation.manualBankStatement.releaseValue' | translate"
+        />
+      </p-floatLabel>
+    </div>
+
+    <div class="col-12 md:col-2 p-2">
+      <p-floatLabel variant="on" class="w-full">
+        <p-select
+          size="small"
+          class="w-full"
+          appendTo="body"
+          [showClear]="true"
+          optionLabel="label"
+          optionValue="value"
+          inputId="releaseCategory"
+          [formControl]="releaseCategoryCtrl"
+          [options]="releaseCategoryOptions()"
+        ></p-select>
+        <app-error-msg
+          forId="releaseCategory"
+          [control]="releaseCategoryCtrl"
+          [label]="'conciliation.manualBankStatement.releaseCategory' | translate"
+        />
+      </p-floatLabel>
+    </div>
+  </div>
+
+  <div class="grid formgrid gap-0">
+    <div class="col-12 md:col-2 p-2">
+      <p-floatLabel variant="on" class="w-full">
+        <p-select
+          size="small"
+          class="w-full"
+          appendTo="body"
+          [showClear]="true"
+          optionLabel="label"
+          optionValue="value"
+          inputId="modalityPaymentBank"
+          [options]="modalityOptions()"
+          [formControl]="modalityPaymentBankCtrl"
+        ></p-select>
+        <app-error-msg
+          forId="modalityPaymentBank"
+          [control]="modalityPaymentBankCtrl"
+          [label]="'conciliation.manualBankStatement.modalityPaymentBank' | translate"
+        />
+      </p-floatLabel>
+    </div>
+
+    <div class="col-12 md:col-2 p-2">
+      <p-floatLabel variant="on" class="w-full">
+        <p-select
+          size="small"
+          class="w-full"
+          appendTo="body"
+          [filter]="true"
+          optionValue="id"
+          [showClear]="true"
+          inputId="acquirerId"
+          filterBy="fantasyName"
+          optionLabel="fantasyName"
+          [formControl]="acquirerIdCtrl"
+          [options]="acquirerFacade.activeOptions()"
+        ></p-select>
+        <app-error-msg
+          forId="acquirerId"
+          [control]="acquirerIdCtrl"
+          [label]="'conciliation.manualBankStatement.acquirer' | translate"
+        />
+      </p-floatLabel>
+    </div>
+  </div>
+
+  <p-divider></p-divider>
+
+  <!-- Dados opcionais -->
+  <div class="flex align-items-center gap-2 mb-2">
+    <span class="text-base font-semibold">
+      {{ 'conciliation.manualBankStatement.sectionOptional' | translate }}
+    </span>
+  </div>
+
+  <div class="grid formgrid gap-0">
+    <div class="col-12 md:col-2 p-2">
+      <p-floatLabel variant="on" class="w-full">
+        <p-select
+          size="small"
+          class="w-full"
+          appendTo="body"
+          [filter]="true"
+          optionValue="id"
+          [showClear]="true"
+          filterBy="pvNumber"
+          optionLabel="pvNumber"
+          inputId="establishmentId"
+          [disabled]="!companyId()"
+          [ngModel]="establishmentId()"
+          [options]="filteredEstablishments()"
+          (ngModelChange)="establishmentId.set($event)"
+        ></p-select>
+        <label for="establishmentId">
+          {{ 'conciliation.manualBankStatement.establishment' | translate }}
+        </label>
+      </p-floatLabel>
+    </div>
+
+    <div class="col-12 md:col-2 p-2">
+      <p-floatLabel variant="on" class="w-full">
+        <p-select
+          size="small"
+          class="w-full"
+          appendTo="body"
+          [filter]="true"
+          filterBy="name"
+          inputId="flagId"
+          optionValue="id"
+          [showClear]="true"
+          optionLabel="name"
+          [ngModel]="flagId()"
+          [options]="flagFacade.options()"
+          (ngModelChange)="flagId.set($event)"
+        ></p-select>
+        <label for="flagId">
+          {{ 'conciliation.manualBankStatement.flag' | translate }}
+        </label>
+      </p-floatLabel>
+    </div>
+
+    <div class="col-12 md:col-3 p-2">
+      <p-floatLabel variant="on" class="w-full">
+        <input
+          pInputText
+          type="text"
+          id="description"
+          [ngModel]="description()"
+          class="w-full p-inputtext-sm"
+          (ngModelChange)="description.set($event)"
+        />
+        <label for="description">
+          {{ 'conciliation.manualBankStatement.description' | translate }}
+        </label>
+      </p-floatLabel>
+    </div>
+
+    <div class="col-12 md:col-3 p-2">
+      <p-floatLabel variant="on" class="w-full">
+        <input
+          pInputText
+          type="text"
+          id="document"
+          [ngModel]="document()"
+          class="w-full p-inputtext-sm"
+          (ngModelChange)="document.set($event)"
+        />
+        <label for="document">
+          {{ 'conciliation.manualBankStatement.document' | translate }}
+        </label>
+      </p-floatLabel>
+    </div>
+
+    <div class="col-12 md:col-2 p-2">
+      <p-floatLabel variant="on" class="w-full">
+        <p-inputnumber
+          class="w-full"
+          [useGrouping]="false"
+          [allowEmpty]="true"
+          inputId="historicalCodeBank"
+          [ngModel]="historicalCodeBank()"
+          inputStyleClass="w-full p-inputtext-sm"
+          (ngModelChange)="historicalCodeBank.set($event)"
+        ></p-inputnumber>
+        <label for="historicalCodeBank">
+          {{ 'conciliation.manualBankStatement.historicalCodeBank' | translate }}
+        </label>
+      </p-floatLabel>
+    </div>
+  </div>
+
+  <div class="flex justify-content-end mt-4">
+    <p-button
+      type="button"
+      icon="pi pi-save"
+      [loading]="saving()"
+      [disabled]="!isFormValid()"
+      (onClick)="submit()"
+      [label]="'conciliation.manualBankStatement.submit' | translate"
+    ></p-button>
+  </div>
+</p-card>

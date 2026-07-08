@@ -112,6 +112,12 @@
       "manualCreditOrder": {
         "title": "Manual Credit Order"
       },
+      "manualBankStatement": {
+        "title": "Manual Bank Statement"
+      },
+      "manualBankReconciliation": {
+        "title": "Manual Bank Reconciliation"
+      },
       "reconciliationActions": {
         "title": "Reconciliation Actions"
       },
@@ -260,6 +266,8 @@
       "erpVsAcquirerDivergences": "Other unreconciled",
       "manualSalesSummary": "Manual Sales Summary",
       "manualCreditOrder": "Manual Credit Order",
+      "manualBankStatement": "Manual Bank Statement",
+      "manualBankReconciliation": "Manual Bank Reconciliation",
       "reconciliationActions": "Reconciliation Actions",
       "executionHistory": "Execution History"
     },
@@ -291,6 +299,7 @@
         "erpPendent": "Pending ERP",
         "movementRede": "Rede movements",
         "scheduler": "Scheduler",
+        "analysis": "Processing Analysis",
         "calendar": "File Calendar",
         "creditOrders": "Credit orders",
         "adjustments": "Rede adjustments",
@@ -2036,6 +2045,15 @@
       "reconciliationLookbackMonthsHint": "Defines how many months prior to the current date should be searched for transactions during reconciliation. Default: 120 months.",
       "creditOrderPendingDays": "Days threshold for pending orders",
       "creditOrderPendingDaysHint": "Summaries with an RV date older than this number of days and without payment orders are listed as pending for batch creation.",
+      "enabledTitle": "Pipeline Step Toggle",
+      "enabledSubtitle": "When disabled, the step is skipped (SKIPPED) and the remaining steps continue normally.",
+      "enabledErpAcquirer": "Step 1 — ACQ x ERP",
+      "enabledSalesSummaryTransactions": "Step 2 — Summary x TransactionAcq",
+      "enabledAcquirerSaleCancellations": "Step 3 — ACQ Cancellations",
+      "enabledErpAcquirerFees": "Step 4 — Fees ERP x ACQ",
+      "enabledAcquirerSaleSummary": "Step 5 — ACQ Sale x Summary",
+      "enabledSalesSummaryCreditOrder": "Step 6 — Summary x Payment Order",
+      "enabledBankAcquirer": "Step 7 — Payment Order x Bank",
       "reprocessTitle": "Reprocessing by Pipeline Step",
       "reprocessSubtitle": "Allows each pipeline step to process already-reconciled records. Use only for audits or targeted corrections — disable after use.",
       "reprocessErpAcquirerSales": "Step 1 — ERP x Acquirer (Sales)",
@@ -2052,8 +2070,10 @@
       "reprocessSalesSummaryCreditOrderHint": "Reprocesses summaries whose creditOrderStatus is already reconciled.",
       "reprocessBankAcquirer": "Step 7 — Payment Order x Bank Statement",
       "reprocessBankAcquirerHint": "Reprocesses already-paid credit orders and already-reconciled bank releases.",
-      "dateToleranceDays": "Date tolerance (bank)",
-      "dateToleranceDaysHint": "Day window for accepting date divergence in bank reconciliation. E.g. 7 accepts releases up to 7 days before/after the order date.",
+      "dateToleranceDaysBefore": "Days before allowed (bank)",
+      "dateToleranceDaysBeforeHint": "Days a bank release can be BEFORE the credit order date. Recommended: 0 (avoids false positives).",
+      "dateToleranceDaysAfter": "Days after allowed (bank)",
+      "dateToleranceDaysAfterHint": "Days a bank release can be AFTER the credit order date. Recommended: 5.",
       "valueTolerance": "Value tolerance (R$)",
       "valueToleranceHint": "Maximum monetary difference tolerated in a reconciliation. E.g. 0.05 accepts up to 5 cents of divergence.",
       "bankMarkNotReconciledAfterDays": "Days to mark as unreconciled",
@@ -2166,6 +2186,58 @@
       "createSelected": "Create selected ({{count}})",
       "clearTable": "Clear table",
       "emptyTable": "No summaries loaded. Use the search or load pending ones."
+    },
+    "manualBankStatement": {
+      "eyebrow": "Reconciliation",
+      "title": "Manual Bank Statement",
+      "subtitle": "Create a bank statement entry manually for banking domiciles without an imported file.",
+      "company": "Company",
+      "bankingDomicile": "Banking domicile",
+      "releaseDate": "Release date",
+      "releaseValue": "Release value",
+      "releaseCategory": "Category",
+      "modalityPaymentBank": "Modality",
+      "description": "Historical description",
+      "document": "Document complement",
+      "historicalCodeBank": "Bank historical code",
+      "acquirer": "Acquirer ",
+      "establishment": "Establishment (optional)",
+      "flag": "Card brand (optional)",
+      "sectionRequired": "Required fields",
+      "sectionOptional": "Optional fields",
+      "submit": "Create statement",
+      "saved": "Bank statement created successfully.",
+      "saveError": "Could not create bank statement."
+    },
+    "manualBankReconciliation": {
+      "title": "Manual Bank Reconciliation",
+      "subtitle": "Manually link bank releases to credit orders.",
+      "releasesTitle": "Bank Releases",
+      "ordersTitle": "Credit Orders",
+      "link": "Link",
+      "linkSuccess": "{reconciled, plural, one {# order linked successfully.} other {# orders linked successfully.}}",
+      "confirmTitle": "Confirm linking",
+      "confirmMessage": "{count, plural, one {Link # credit order to this bank release?} other {Link # credit orders to this bank release?}}",
+      "selectReleaseFirst": "Select a release to enable",
+      "ordersSelected": "{count, plural, =0 {None selected} one {# selected} other {# selected}}",
+      "selectedOrdersTotal": "Total of selected orders",
+      "clearOrders": "Clear selected orders",
+      "valueDifference": "Difference between values",
+      "filters": {
+        "releaseDate": "Release date",
+        "rvDate": "RV date"
+      },
+      "columns": {
+        "date": "Date",
+        "bank": "Bank",
+        "company": "Company",
+        "description": "Description",
+        "value": "Amount",
+        "status": "Status",
+        "rvNumber": "RV No.",
+        "flag": "Flag",
+        "acquirer": "Acquirer"
+      }
     },
     "contractAudit": {
       "title": "Applied Fees",
@@ -2324,7 +2396,12 @@
         "totalPending": "Pending",
         "trigger": {
           "MANUAL": "Manual",
-          "SCHEDULED": "Scheduled"
+          "SCHEDULED": "Scheduled",
+          "SCHEDULER_SEQUENTIAL_JOB": "Sequential scheduler",
+          "SCHEDULER_FINANCIAL_PIPELINE": "Financial pipeline scheduler",
+          "SCHEDULER_ACQUIRER_SALE_SUMMARY": "Acquirer sale summary scheduler",
+          "SCHEDULER_SALES_SUMMARY_CREDIT_ORDER": "Summary vs credit order scheduler",
+          "SCHEDULER_CREDIT_ORDER_BANK_RELEASE": "Credit order vs bank scheduler"
         },
         "status": {
           "SUCCESS": "Success",
@@ -2787,6 +2864,25 @@
       "bank": "Bank"
     }
   },
+  "fileProcessingAnalysis": {
+    "subtitle": "Track imported files, status and pending items",
+    "empty": "No files found",
+    "row": {
+      "lines": "Lines",
+      "processed": "Processed",
+      "warnings": "Warnings",
+      "errors": "Errors"
+    },
+    "detail": {
+      "totalLines": "Total lines",
+      "processedLines": "Processed lines",
+      "ignoredLines": "Ignored lines",
+      "warningLines": "Warning lines",
+      "errorLines": "Error lines",
+      "pendingContract": "Pend. contract",
+      "pendingContext": "Pend. context"
+    }
+  },
   "fileProcessingDashboard": {
     "subtitle": "Monitor ERP, Rede and CNAB imports, pending items and bank reconciliation.",
     "metrics": {
@@ -2854,6 +2950,12 @@
       "periodLaunchDate": "Launch date period",
       "periodReleaseDate": "Release date period",
       "modalityPaymentBank": "Bank payment modality"
+    },
+    "deleteManual": {
+      "header": "Confirm deletion",
+      "message": "Do you want to delete this manual statement?",
+      "success": "Manual statement deleted successfully.",
+      "error": "Could not delete the manual statement."
     }
   },
   "anticipation": {

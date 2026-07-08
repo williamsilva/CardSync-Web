@@ -54,9 +54,9 @@ export class DivergenceAnalysisComponent {
   protected reload(): void {
     this.loading.set(true);
 
-    this.service.listFiles({ page: 0, size: 20, sort: 'dateImport,desc' }).subscribe({
-      next: (page) => this.files.set(page.content ?? []),
-    });
+    this.service
+      .searchFilesPaged({ page: 0, size: 20, sort: [{ field: 'dateImport', order: -1 }] })
+      .subscribe({ next: (res) => this.files.set((res?._embedded?.content ?? []) as ProcessedFileModel[]) });
 
     this.service.listPendingErpSales({ page: 0, size: 20, sort: 'saleDate,desc' }).subscribe({
       next: (page) => this.erpPendings.set(page.content ?? []),

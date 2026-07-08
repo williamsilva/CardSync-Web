@@ -1,9 +1,10 @@
 import { Injectable, inject, signal } from '@angular/core';
 
-import { finalize } from 'rxjs';
+import { Observable, finalize } from 'rxjs';
 
 import { ValueTotalsModel } from '@models/value-totals-model';
 import { BankStatementApiModel } from '@models/bank-statement.model';
+import { ReleaseBankManualInput, ReleaseBankManualResult } from '@models/release-bank-manual.models';
 import { ListQueryDto } from '@shared/features/list-query/list-query.types';
 import { BankStatementAdvancedFilters } from '@features/filter/bank-statement.filters';
 import { BankStatementApiService } from '@features/service/bank-statement.api.service';
@@ -69,5 +70,13 @@ export class BankStatementFacade {
 
   clearTotals(): void {
     this._totals.set(null);
+  }
+
+  createManual(input: ReleaseBankManualInput): Observable<ReleaseBankManualResult> {
+    return this.api.createManual(input);
+  }
+
+  deleteManual(id: string): Observable<void> {
+    return this.api.deleteManual(id);
   }
 }

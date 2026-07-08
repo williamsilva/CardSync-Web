@@ -3,11 +3,13 @@ import { WritableSignal } from '@angular/core';
 import { PeriodEnum } from '@models/enums/period.enum';
 import { CaptureEnum } from '@models/enums/capture.enum';
 import { ModalityEnum } from '@models/enums/modality.enum';
+import { StatusTransactionReasonEnum } from '@models/enums/status-transaction-reason.enum';
 
 export type ConciliationWaitingFiltersState = {
   tid: string;
   cvNsu: string;
   authorization: string;
+  statusTransactionReason: StatusTransactionReasonEnum[] | null;
 
   grossValueEnd: number | null;
   liquidValueEnd: number | null;
@@ -40,11 +42,11 @@ export function createEmptyConciliationWaitingFiltersState(): ConciliationWaitin
 
     capture: null,
     modality: null,
-
     grossValueEnd: null,
     liquidValueEnd: null,
     grossValueStart: null,
     liquidValueStart: null,
+    statusTransactionReason: null,
 
     flags: null,
     companies: null,

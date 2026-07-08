@@ -4,21 +4,22 @@ import { CsTagTone } from '@shared/ui';
 
 export enum StatusTransactionReasonEnum {
   NULL = 'NULL',
-  CV_NOT_FOUND_ERP = 'CV_NOT_FOUND_ERP',
-  CANCEL_VENDAS = 'CANCEL_VENDAS',
-  DIFFERENT_PLANS = 'DIFFERENT_PLANS',
-  CV_NOT_FOUND_ADQ = 'CV_NOT_FOUND_ADQ',
-  CHARGEBACK = 'CHARGEBACK',
   SCHEDULED = 'SCHEDULED',
+  CHARGEBACK = 'CHARGEBACK',
+  CANCEL_VENDAS = 'CANCEL_VENDAS',
   FLAG_MISMATCH = 'FLAG_MISMATCH',
   VALUE_MISMATCH = 'VALUE_MISMATCH',
-  ACQUIRER_MISMATCH = 'ACQUIRER_MISMATCH',
+  DIFFERENT_PLANS = 'DIFFERENT_PLANS',
   AMBIGUOUS_MATCH = 'AMBIGUOUS_MATCH',
-  CANCELLATION_ACQUIRER = 'CANCELLATION_ACQUIRER',
+  CV_NOT_FOUND_ERP = 'CV_NOT_FOUND_ERP',
+  CV_NOT_FOUND_ADQ = 'CV_NOT_FOUND_ADQ',
+  ACQUIRER_MISMATCH = 'ACQUIRER_MISMATCH',
+  CANCELLATION_FRAUD = 'CANCELLATION_FRAUD',
   CANCELLATION_RETURN = 'CANCELLATION_RETURN',
   CANCELLATION_REFUND = 'CANCELLATION_REFUND',
+  CANCELLATION_ACQUIRER = 'CANCELLATION_ACQUIRER',
+  MANUAL_SWAP_NOT_FOUND = 'MANUAL_SWAP_NOT_FOUND',
   CANCELLATION_DUPLICATE = 'CANCELLATION_DUPLICATE',
-  CANCELLATION_FRAUD = 'CANCELLATION_FRAUD',
   CANCELLATION_OPERATIONAL_ERROR = 'CANCELLATION_OPERATIONAL_ERROR',
 }
 
@@ -47,6 +48,7 @@ export const STATUS_CODE_MAP: Record<number, StatusTransactionReasonEnum> = {
   14: StatusTransactionReasonEnum.CANCELLATION_DUPLICATE,
   15: StatusTransactionReasonEnum.CANCELLATION_FRAUD,
   16: StatusTransactionReasonEnum.CANCELLATION_OPERATIONAL_ERROR,
+  17: StatusTransactionReasonEnum.MANUAL_SWAP_NOT_FOUND,
 };
 
 export function normalizeStatusTransactionReasonEnum(
@@ -112,6 +114,9 @@ export function normalizeStatusTransactionReasonEnum(
     case StatusTransactionReasonEnum.CANCELLATION_OPERATIONAL_ERROR:
       return StatusTransactionReasonEnum.CANCELLATION_OPERATIONAL_ERROR;
 
+    case StatusTransactionReasonEnum.MANUAL_SWAP_NOT_FOUND:
+      return StatusTransactionReasonEnum.MANUAL_SWAP_NOT_FOUND;
+
     default:
       return null;
   }
@@ -150,6 +155,9 @@ export function statusTransactionReasonEnumSeverity(
 
     case StatusTransactionReasonEnum.AMBIGUOUS_MATCH:
       return 'slate';
+
+    case StatusTransactionReasonEnum.MANUAL_SWAP_NOT_FOUND:
+      return 'error';
 
     default:
       return 'contrast';
@@ -209,6 +217,9 @@ export function statusTransactionReasonEnumLabel(
     case StatusTransactionReasonEnum.CANCELLATION_OPERATIONAL_ERROR:
       return i18n.tUi('enum.transactionReasonEnum.cancellationOperationalError');
 
+    case StatusTransactionReasonEnum.MANUAL_SWAP_NOT_FOUND:
+      return i18n.tUi('enum.transactionReasonEnum.manualSwapNotFound');
+
     case StatusTransactionReasonEnum.NULL:
       return i18n.tUi('enum.transactionReasonEnum.null', 'N/A');
 
@@ -234,6 +245,7 @@ export function allStatusTransactionReasonEnum(): StatusTransactionReasonEnum[] 
     StatusTransactionReasonEnum.CANCELLATION_RETURN,
     StatusTransactionReasonEnum.CANCELLATION_DUPLICATE,
     StatusTransactionReasonEnum.CANCELLATION_FRAUD,
+    StatusTransactionReasonEnum.MANUAL_SWAP_NOT_FOUND,
     StatusTransactionReasonEnum.CANCELLATION_OPERATIONAL_ERROR,
   ];
 }

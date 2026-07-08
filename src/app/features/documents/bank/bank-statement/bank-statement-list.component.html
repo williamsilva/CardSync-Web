@@ -37,8 +37,8 @@
       (valueChange)="releaseDate.set($event)"
       [view]="setViewFormat(periodReleaseDate())"
       [dateFormat]="setDateFormat(periodReleaseDate())"
-      [selectionMode]="setSelectionMode(periodReleaseDate())"
       [dateLabel]="'bankStatement.fields.releaseDate' | translate"
+      [selectionMode]="setSelectionMode(periodReleaseDate())"
       [periodLabel]="'bankStatement.fields.periodReleaseDate' | translate"
       (periodChange)="onPeriodColumnChange(periodReleaseDate, releaseDate, $event)"
     ></cs-advanced-period-date-filter>
@@ -171,6 +171,18 @@
       (valueChange)="statusPaymentBank.set($event)"
       [label]="'bankStatement.fields.statusPaymentBank' | translate"
     ></cs-advanced-multiselect-filter>
+  </div>
+
+  <div class="grid formgrid gap-0 align-items-end">
+    <cs-currency-range-filter
+      inputId="releaseValue"
+      [value]="releaseValueRange()"
+      class="col-12 md:col-6 xl:col-3 p-2"
+      [endLabel]="'common.filters.final' | translate"
+      (valueChange)="onReleaseValueRangeChange($event)"
+      [startLabel]="'common.filters.initial' | translate"
+      [label]="'transactions.fields.releaseValue' | translate"
+    ></cs-currency-range-filter>
   </div>
 </cs-filters-panel>
 
@@ -941,6 +953,18 @@
               (click)="menu.toggle($event)"
               class="p-button-text p-button-sm p-button-rounded"
             ></button>
+
+            @if (row.processedFile === null) {
+              <button
+                pButton
+                type="button"
+                icon="pi pi-trash"
+                tooltipPosition="top"
+                (click)="confirmDeleteManual(row)"
+                [pTooltip]="'common.delete' | translate"
+                class="p-button-text p-button-sm p-button-rounded p-button-danger"
+              ></button>
+            }
           </div>
         </td>
       </tr>

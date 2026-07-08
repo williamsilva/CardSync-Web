@@ -71,5 +71,16 @@ export function createEmptyAnticipationAdvancedFilters(): AnticipationAdvancedFi
     companies: null,
     acquirers: null,
     establishments: null,
+
+    grossValueStart: null,
+    grossValueEnd: null,
+    discountRateValueStart: null,
+    discountRateValueEnd: null,
+    releaseValueStart: null,
+    releaseValueEnd: null,
+    originalCreditValueStart: null,
+    originalCreditValueEnd: null,
+    advanceDiscountValueStart: null,
+    advanceDiscountValueEnd: null,
   };
 }

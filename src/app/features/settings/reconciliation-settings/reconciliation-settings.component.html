@@ -8,7 +8,6 @@
 
 <p-card class="mt-2 block">
   <form [formGroup]="form" (ngSubmit)="save()">
-
     <!-- Processamento -->
     <div class="flex align-items-center gap-2 mb-2">
       <span class="text-base font-semibold">{{
@@ -36,10 +35,10 @@
           <label for="erpAcquirerPreviousDaysLookback">
             {{ 'conciliation.settings.erpAcquirerPreviousDaysLookback' | translate }}
             <i
-              class="pi pi-info-circle text-xs ml-1 text-color-secondary cursor-pointer"
-              style="pointer-events: auto"
-              [pTooltip]="'conciliation.settings.erpAcquirerPreviousDaysLookbackHint' | translate"
               tooltipPosition="top"
+              style="pointer-events: auto"
+              class="pi pi-info-circle text-xs ml-1 text-color-secondary cursor-pointer"
+              [pTooltip]="'conciliation.settings.erpAcquirerPreviousDaysLookbackHint' | translate"
             ></i>
           </label>
         </p-floatLabel>
@@ -59,10 +58,10 @@
           <label for="erpAcquirerFutureDaysLookback">
             {{ 'conciliation.settings.erpAcquirerFutureDaysLookback' | translate }}
             <i
-              class="pi pi-info-circle text-xs ml-1 text-color-secondary cursor-pointer"
-              style="pointer-events: auto"
-              [pTooltip]="'conciliation.settings.erpAcquirerFutureDaysLookbackHint' | translate"
               tooltipPosition="top"
+              style="pointer-events: auto"
+              class="pi pi-info-circle text-xs ml-1 text-color-secondary cursor-pointer"
+              [pTooltip]="'conciliation.settings.erpAcquirerFutureDaysLookbackHint' | translate"
             ></i>
           </label>
         </p-floatLabel>
@@ -82,10 +81,10 @@
           <label for="reconciliationLookbackMonths">
             {{ 'conciliation.settings.reconciliationLookbackMonths' | translate }}
             <i
-              class="pi pi-info-circle text-xs ml-1 text-color-secondary cursor-pointer"
-              style="pointer-events: auto"
-              [pTooltip]="'conciliation.settings.reconciliationLookbackMonthsHint' | translate"
               tooltipPosition="top"
+              style="pointer-events: auto"
+              class="pi pi-info-circle text-xs ml-1 text-color-secondary cursor-pointer"
+              [pTooltip]="'conciliation.settings.reconciliationLookbackMonthsHint' | translate"
             ></i>
           </label>
         </p-floatLabel>
@@ -105,10 +104,10 @@
           <label for="creditOrderPendingDays">
             {{ 'conciliation.settings.creditOrderPendingDays' | translate }}
             <i
-              class="pi pi-info-circle text-xs ml-1 text-color-secondary cursor-pointer"
-              style="pointer-events: auto"
-              [pTooltip]="'conciliation.settings.creditOrderPendingDaysHint' | translate"
               tooltipPosition="top"
+              style="pointer-events: auto"
+              class="pi pi-info-circle text-xs ml-1 text-color-secondary cursor-pointer"
+              [pTooltip]="'conciliation.settings.creditOrderPendingDaysHint' | translate"
             ></i>
           </label>
         </p-floatLabel>
@@ -123,14 +122,14 @@
         'conciliation.settings.reconciliationTitle' | translate
       }}</span>
       <i
+        tooltipPosition="right"
         class="pi pi-info-circle text-color-secondary text-sm cursor-pointer"
         [pTooltip]="'conciliation.settings.reconciliationSubtitle' | translate"
-        tooltipPosition="right"
       ></i>
     </div>
 
     <div class="grid formgrid gap-0">
-      <div class="col-12 md:col-4 p-2">
+      <div class="col-12 md:col-2 p-2">
         <p-floatLabel variant="on" class="w-full">
           <p-inputnumber
             class="w-full"
@@ -138,22 +137,45 @@
             [allowEmpty]="false"
             [min]="MIN_DATE_TOLERANCE"
             [max]="MAX_DATE_TOLERANCE"
-            inputId="dateToleranceDays"
-            formControlName="dateToleranceDays"
+            inputId="dateToleranceDaysBefore"
+            formControlName="dateToleranceDaysBefore"
           ></p-inputnumber>
-          <label for="dateToleranceDays">
-            {{ 'conciliation.settings.dateToleranceDays' | translate }}
+          <label for="dateToleranceDaysBefore">
+            {{ 'conciliation.settings.dateToleranceDaysBefore' | translate }}
             <i
-              class="pi pi-info-circle text-xs ml-1 text-color-secondary cursor-pointer"
-              style="pointer-events: auto"
-              [pTooltip]="'conciliation.settings.dateToleranceDaysHint' | translate"
               tooltipPosition="top"
+              style="pointer-events: auto"
+              class="pi pi-info-circle text-xs ml-1 text-color-secondary cursor-pointer"
+              [pTooltip]="'conciliation.settings.dateToleranceDaysBeforeHint' | translate"
             ></i>
           </label>
         </p-floatLabel>
       </div>
 
-      <div class="col-12 md:col-4 p-2">
+      <div class="col-12 md:col-2 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-inputnumber
+            class="w-full"
+            [showButtons]="true"
+            [allowEmpty]="false"
+            [min]="MIN_DATE_TOLERANCE"
+            [max]="MAX_DATE_TOLERANCE"
+            inputId="dateToleranceDaysAfter"
+            formControlName="dateToleranceDaysAfter"
+          ></p-inputnumber>
+          <label for="dateToleranceDaysAfter">
+            {{ 'conciliation.settings.dateToleranceDaysAfter' | translate }}
+            <i
+              tooltipPosition="top"
+              style="pointer-events: auto"
+              class="pi pi-info-circle text-xs ml-1 text-color-secondary cursor-pointer"
+              [pTooltip]="'conciliation.settings.dateToleranceDaysAfterHint' | translate"
+            ></i>
+          </label>
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 md:col-2 p-2">
         <p-floatLabel variant="on" class="w-full">
           <p-inputnumber
             class="w-full"
@@ -169,16 +191,16 @@
           <label for="valueTolerance">
             {{ 'conciliation.settings.valueTolerance' | translate }}
             <i
-              class="pi pi-info-circle text-xs ml-1 text-color-secondary cursor-pointer"
-              style="pointer-events: auto"
-              [pTooltip]="'conciliation.settings.valueToleranceHint' | translate"
               tooltipPosition="top"
+              style="pointer-events: auto"
+              class="pi pi-info-circle text-xs ml-1 text-color-secondary cursor-pointer"
+              [pTooltip]="'conciliation.settings.valueToleranceHint' | translate"
             ></i>
           </label>
         </p-floatLabel>
       </div>
 
-      <div class="col-12 md:col-4 p-2">
+      <div class="col-12 md:col-2 p-2">
         <p-floatLabel variant="on" class="w-full">
           <p-inputnumber
             class="w-full"
@@ -192,13 +214,92 @@
           <label for="bankMarkNotReconciledAfterDays">
             {{ 'conciliation.settings.bankMarkNotReconciledAfterDays' | translate }}
             <i
-              class="pi pi-info-circle text-xs ml-1 text-color-secondary cursor-pointer"
-              style="pointer-events: auto"
-              [pTooltip]="'conciliation.settings.bankMarkNotReconciledAfterDaysHint' | translate"
               tooltipPosition="top"
+              style="pointer-events: auto"
+              class="pi pi-info-circle text-xs ml-1 text-color-secondary cursor-pointer"
+              [pTooltip]="'conciliation.settings.bankMarkNotReconciledAfterDaysHint' | translate"
             ></i>
           </label>
         </p-floatLabel>
+      </div>
+    </div>
+
+    <p-divider></p-divider>
+
+    <!-- Habilitação de Etapas -->
+    <div class="flex align-items-center gap-2 mb-2">
+      <span class="text-sm font-semibold">{{
+        'conciliation.settings.enabledTitle' | translate
+      }}</span>
+      <i
+        tooltipPosition="right"
+        [pTooltip]="'conciliation.settings.enabledSubtitle' | translate"
+        class="pi pi-info-circle text-color-secondary text-sm cursor-pointer"
+      ></i>
+    </div>
+
+    <div class="grid formgrid gap-0">
+      <div class="col-12 md:col-3 p-2">
+        <div class="flex align-items-center justify-content-between border-1 surface-border border-round p-3 h-full gap-3">
+          <label for="enabledErpAcquirer" class="text-sm flex-1">
+            {{ 'conciliation.settings.enabledErpAcquirer' | translate }}
+          </label>
+          <p-toggleswitch formControlName="enabledErpAcquirer" inputId="enabledErpAcquirer"></p-toggleswitch>
+        </div>
+      </div>
+
+      <div class="col-12 md:col-3 p-2">
+        <div class="flex align-items-center justify-content-between border-1 surface-border border-round p-3 h-full gap-3">
+          <label for="enabledSalesSummaryTransactions" class="text-sm flex-1">
+            {{ 'conciliation.settings.enabledSalesSummaryTransactions' | translate }}
+          </label>
+          <p-toggleswitch formControlName="enabledSalesSummaryTransactions" inputId="enabledSalesSummaryTransactions"></p-toggleswitch>
+        </div>
+      </div>
+
+      <div class="col-12 md:col-3 p-2">
+        <div class="flex align-items-center justify-content-between border-1 surface-border border-round p-3 h-full gap-3">
+          <label for="enabledAcquirerSaleCancellations" class="text-sm flex-1">
+            {{ 'conciliation.settings.enabledAcquirerSaleCancellations' | translate }}
+          </label>
+          <p-toggleswitch formControlName="enabledAcquirerSaleCancellations" inputId="enabledAcquirerSaleCancellations"></p-toggleswitch>
+        </div>
+      </div>
+
+      <div class="col-12 md:col-3 p-2">
+        <div class="flex align-items-center justify-content-between border-1 surface-border border-round p-3 h-full gap-3">
+          <label for="enabledErpAcquirerFees" class="text-sm flex-1">
+            {{ 'conciliation.settings.enabledErpAcquirerFees' | translate }}
+          </label>
+          <p-toggleswitch formControlName="enabledErpAcquirerFees" inputId="enabledErpAcquirerFees"></p-toggleswitch>
+        </div>
+      </div>
+
+      <div class="col-12 md:col-3 p-2">
+        <div class="flex align-items-center justify-content-between border-1 surface-border border-round p-3 h-full gap-3">
+          <label for="enabledAcquirerSaleSummary" class="text-sm flex-1">
+            {{ 'conciliation.settings.enabledAcquirerSaleSummary' | translate }}
+          </label>
+          <p-toggleswitch formControlName="enabledAcquirerSaleSummary" inputId="enabledAcquirerSaleSummary"></p-toggleswitch>
+        </div>
+      </div>
+
+      <div class="col-12 md:col-3 p-2">
+        <div class="flex align-items-center justify-content-between border-1 surface-border border-round p-3 h-full gap-3">
+          <label for="enabledSalesSummaryCreditOrder" class="text-sm flex-1">
+            {{ 'conciliation.settings.enabledSalesSummaryCreditOrder' | translate }}
+          </label>
+          <p-toggleswitch formControlName="enabledSalesSummaryCreditOrder" inputId="enabledSalesSummaryCreditOrder"></p-toggleswitch>
+        </div>
+      </div>
+
+      <div class="col-12 md:col-3 p-2">
+        <div class="flex align-items-center justify-content-between border-1 surface-border border-round p-3 h-full gap-3">
+          <label for="enabledBankAcquirer" class="text-sm flex-1">
+            {{ 'conciliation.settings.enabledBankAcquirer' | translate }}
+          </label>
+          <p-toggleswitch formControlName="enabledBankAcquirer" inputId="enabledBankAcquirer"></p-toggleswitch>
+        </div>
       </div>
     </div>
 
@@ -210,90 +311,119 @@
         'conciliation.settings.reprocessTitle' | translate
       }}</span>
       <i
-        class="pi pi-info-circle text-color-secondary text-sm cursor-pointer"
-        [pTooltip]="'conciliation.settings.reprocessSubtitle' | translate"
         tooltipPosition="right"
+        [pTooltip]="'conciliation.settings.reprocessSubtitle' | translate"
+        class="pi pi-info-circle text-color-secondary text-sm cursor-pointer"
       ></i>
     </div>
 
     <div class="grid formgrid gap-0">
       <div class="col-12 md:col-3 p-2">
-        <div class="flex align-items-center justify-content-between border-1 surface-border border-round p-3 h-full gap-3">
+        <div
+          class="flex align-items-center justify-content-between border-1 surface-border border-round p-3 h-full gap-3"
+        >
           <label for="reprocessErpAcquirerSales" class="text-sm flex-1">
             {{ 'conciliation.settings.reprocessErpAcquirerSales' | translate }}
             <i
-              class="pi pi-info-circle text-xs ml-1 text-color-secondary cursor-pointer"
-              style="pointer-events: auto"
-              [pTooltip]="'conciliation.settings.reprocessErpAcquirerSalesHint' | translate"
               tooltipPosition="top"
+              style="pointer-events: auto"
+              class="pi pi-info-circle text-xs ml-1 text-color-secondary cursor-pointer"
+              [pTooltip]="'conciliation.settings.reprocessErpAcquirerSalesHint' | translate"
             ></i>
           </label>
-          <p-toggleswitch formControlName="reprocessErpAcquirerSales" inputId="reprocessErpAcquirerSales"></p-toggleswitch>
+          <p-toggleswitch
+            formControlName="reprocessErpAcquirerSales"
+            inputId="reprocessErpAcquirerSales"
+          ></p-toggleswitch>
         </div>
       </div>
 
       <div class="col-12 md:col-3 p-2">
-        <div class="flex align-items-center justify-content-between border-1 surface-border border-round p-3 h-full gap-3">
+        <div
+          class="flex align-items-center justify-content-between border-1 surface-border border-round p-3 h-full gap-3"
+        >
           <label for="reprocessSalesSummaryTransactions" class="text-sm flex-1">
             {{ 'conciliation.settings.reprocessSalesSummaryTransactions' | translate }}
             <i
-              class="pi pi-info-circle text-xs ml-1 text-color-secondary cursor-pointer"
-              style="pointer-events: auto"
-              [pTooltip]="'conciliation.settings.reprocessSalesSummaryTransactionsHint' | translate"
               tooltipPosition="top"
+              style="pointer-events: auto"
+              class="pi pi-info-circle text-xs ml-1 text-color-secondary cursor-pointer"
+              [pTooltip]="'conciliation.settings.reprocessSalesSummaryTransactionsHint' | translate"
             ></i>
           </label>
-          <p-toggleswitch formControlName="reprocessSalesSummaryTransactions" inputId="reprocessSalesSummaryTransactions"></p-toggleswitch>
+          <p-toggleswitch
+            formControlName="reprocessSalesSummaryTransactions"
+            inputId="reprocessSalesSummaryTransactions"
+          ></p-toggleswitch>
         </div>
       </div>
 
       <div class="col-12 md:col-3 p-2">
-        <div class="flex align-items-center justify-content-between border-1 surface-border border-round p-3 h-full gap-3">
+        <div
+          class="flex align-items-center justify-content-between border-1 surface-border border-round p-3 h-full gap-3"
+        >
           <label for="reprocessAcquirerSaleCancellations" class="text-sm flex-1">
             {{ 'conciliation.settings.reprocessAcquirerSaleCancellations' | translate }}
             <i
-              class="pi pi-info-circle text-xs ml-1 text-color-secondary cursor-pointer"
-              style="pointer-events: auto"
-              [pTooltip]="'conciliation.settings.reprocessAcquirerSaleCancellationsHint' | translate"
               tooltipPosition="top"
+              style="pointer-events: auto"
+              class="pi pi-info-circle text-xs ml-1 text-color-secondary cursor-pointer"
+              [pTooltip]="
+                'conciliation.settings.reprocessAcquirerSaleCancellationsHint' | translate
+              "
             ></i>
           </label>
-          <p-toggleswitch formControlName="reprocessAcquirerSaleCancellations" inputId="reprocessAcquirerSaleCancellations"></p-toggleswitch>
+          <p-toggleswitch
+            formControlName="reprocessAcquirerSaleCancellations"
+            inputId="reprocessAcquirerSaleCancellations"
+          ></p-toggleswitch>
         </div>
       </div>
 
       <div class="col-12 md:col-3 p-2">
-        <div class="flex align-items-center justify-content-between border-1 surface-border border-round p-3 h-full gap-3">
+        <div
+          class="flex align-items-center justify-content-between border-1 surface-border border-round p-3 h-full gap-3"
+        >
           <label for="reprocessErpAcquirerFees" class="text-sm flex-1">
             {{ 'conciliation.settings.reprocessErpAcquirerFees' | translate }}
             <i
-              class="pi pi-info-circle text-xs ml-1 text-color-secondary cursor-pointer"
-              style="pointer-events: auto"
-              [pTooltip]="'conciliation.settings.reprocessErpAcquirerFeesHint' | translate"
               tooltipPosition="top"
+              style="pointer-events: auto"
+              class="pi pi-info-circle text-xs ml-1 text-color-secondary cursor-pointer"
+              [pTooltip]="'conciliation.settings.reprocessErpAcquirerFeesHint' | translate"
             ></i>
           </label>
-          <p-toggleswitch formControlName="reprocessErpAcquirerFees" inputId="reprocessErpAcquirerFees"></p-toggleswitch>
+          <p-toggleswitch
+            formControlName="reprocessErpAcquirerFees"
+            inputId="reprocessErpAcquirerFees"
+          ></p-toggleswitch>
         </div>
       </div>
 
       <div class="col-12 md:col-3 p-2">
-        <div class="flex align-items-center justify-content-between border-1 surface-border border-round p-3 h-full gap-3">
+        <div
+          class="flex align-items-center justify-content-between border-1 surface-border border-round p-3 h-full gap-3"
+        >
           <label for="reprocessAcquirerSaleSummary" class="text-sm flex-1">
             {{ 'conciliation.settings.reprocessAcquirerSaleSummary' | translate }}
             <i
-              class="pi pi-info-circle text-xs ml-1 text-color-secondary cursor-pointer"
-              style="pointer-events: auto"
-              [pTooltip]="'conciliation.settings.reprocessAcquirerSaleSummaryHint' | translate"
               tooltipPosition="top"
+              style="pointer-events: auto"
+              class="pi pi-info-circle text-xs ml-1 text-color-secondary cursor-pointer"
+              [pTooltip]="'conciliation.settings.reprocessAcquirerSaleSummaryHint' | translate"
             ></i>
           </label>
-          <p-toggleswitch formControlName="reprocessAcquirerSaleSummary" inputId="reprocessAcquirerSaleSummary"></p-toggleswitch>
+          <p-toggleswitch
+            formControlName="reprocessAcquirerSaleSummary"
+            inputId="reprocessAcquirerSaleSummary"
+          ></p-toggleswitch>
         </div>
       </div>
 
       <div class="col-12 md:col-3 p-2">
-        <div class="flex align-items-center justify-content-between border-1 surface-border border-round p-3 h-full gap-3">
+        <div
+          class="flex align-items-center justify-content-between border-1 surface-border border-round p-3 h-full gap-3"
+        >
           <label for="reprocessSalesSummaryCreditOrder" class="text-sm flex-1">
             {{ 'conciliation.settings.reprocessSalesSummaryCreditOrder' | translate }}
             <i
@@ -303,12 +433,17 @@
               tooltipPosition="top"
             ></i>
           </label>
-          <p-toggleswitch formControlName="reprocessSalesSummaryCreditOrder" inputId="reprocessSalesSummaryCreditOrder"></p-toggleswitch>
+          <p-toggleswitch
+            formControlName="reprocessSalesSummaryCreditOrder"
+            inputId="reprocessSalesSummaryCreditOrder"
+          ></p-toggleswitch>
         </div>
       </div>
 
       <div class="col-12 md:col-3 p-2">
-        <div class="flex align-items-center justify-content-between border-1 surface-border border-round p-3 h-full gap-3">
+        <div
+          class="flex align-items-center justify-content-between border-1 surface-border border-round p-3 h-full gap-3"
+        >
           <label for="reprocessBankAcquirer" class="text-sm flex-1">
             {{ 'conciliation.settings.reprocessBankAcquirer' | translate }}
             <i
@@ -318,7 +453,10 @@
               tooltipPosition="top"
             ></i>
           </label>
-          <p-toggleswitch formControlName="reprocessBankAcquirer" inputId="reprocessBankAcquirer"></p-toggleswitch>
+          <p-toggleswitch
+            formControlName="reprocessBankAcquirer"
+            inputId="reprocessBankAcquirer"
+          ></p-toggleswitch>
         </div>
       </div>
     </div>

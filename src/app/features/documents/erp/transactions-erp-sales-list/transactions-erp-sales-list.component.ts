@@ -131,8 +131,8 @@ export class TransactionsErpSalesListComponent
   implements AfterViewInit
 {
   @ViewChild('dt') private dt?: Table;
-
   protected override readonly i18n = inject(I18nService);
+
   readonly router = inject(Router);
   readonly csDatePipe = inject(CsDatePipe);
   readonly flagFacade = inject(FlagFacade);
@@ -655,9 +655,7 @@ export class TransactionsErpSalesListComponent
     const authorization = this.authorization();
     const discountValueEnd = this.discountValueEnd();
 
-    const grossValueEnd = this.grossValueEnd();
     const liquidValueEnd = this.liquidValueEnd();
-    const grossValueStart = this.grossValueStart();
     const liquidValueStart = this.liquidValueStart();
     const discountValueStart = this.discountValueStart();
     const adjustmentValueEnd = this.adjustmentValueEnd();
@@ -739,6 +737,9 @@ export class TransactionsErpSalesListComponent
         value: liquidValueLabel,
       });
     }
+
+    const grossValueEnd = this.grossValueEnd();
+    const grossValueStart = this.grossValueStart();
     const grossValueLabel = currencyRangeLabel(this.i18n, grossValueStart, grossValueEnd);
     if (grossValueLabel) {
       items.push({
@@ -941,11 +942,14 @@ export class TransactionsErpSalesListComponent
 
   protected override buildAdvancedFilters(): Partial<TransactionsErpAdvancedFilters> {
     const discountValueEnd = this.discountValueEnd();
-    const liquidValueEnd = this.liquidValueEnd();
-    const grossValueEnd = this.grossValueEnd();
     const discountValueStart = this.discountValueStart();
+
+    const liquidValueEnd = this.liquidValueEnd();
     const liquidValueStart = this.liquidValueStart();
+
+    const grossValueEnd = this.grossValueEnd();
     const grossValueStart = this.grossValueStart();
+
     const adjustmentValueEnd = this.adjustmentValueEnd();
     const adjustmentValueStart = this.adjustmentValueStart();
 

@@ -41,16 +41,16 @@ export class ReconciliationSettingsComponent {
   private readonly perms = inject(PermissionService);
   private readonly service = inject(ReconciliationSettingsApiService);
 
-  protected readonly MIN_DAYS_LOOKBACK = 0;
-  protected readonly MAX_DAYS_LOOKBACK = 365;
-  protected readonly MIN_LOOKBACK_MONTHS = 1;
-  protected readonly MAX_LOOKBACK_MONTHS = 120;
   protected readonly MIN_PENDING_DAYS = 1;
+  protected readonly MIN_DAYS_LOOKBACK = 0;
   protected readonly MAX_PENDING_DAYS = 365;
   protected readonly MIN_DATE_TOLERANCE = 0;
+  protected readonly MAX_DAYS_LOOKBACK = 365;
+  protected readonly MIN_LOOKBACK_MONTHS = 1;
   protected readonly MAX_DATE_TOLERANCE = 60;
   protected readonly MIN_VALUE_TOLERANCE = 0;
   protected readonly MAX_VALUE_TOLERANCE = 10;
+  protected readonly MAX_LOOKBACK_MONTHS = 120;
   protected readonly MIN_BANK_NOT_RECONCILED_DAYS = 0;
   protected readonly MAX_BANK_NOT_RECONCILED_DAYS = 60;
 
@@ -94,6 +94,13 @@ export class ReconciliationSettingsComponent {
         Validators.max(this.MAX_PENDING_DAYS),
       ],
     ],
+    enabledErpAcquirer: [true],
+    enabledSalesSummaryTransactions: [true],
+    enabledAcquirerSaleCancellations: [true],
+    enabledErpAcquirerFees: [true],
+    enabledAcquirerSaleSummary: [true],
+    enabledSalesSummaryCreditOrder: [true],
+    enabledBankAcquirer: [true],
     reprocessErpAcquirerSales: [false],
     reprocessSalesSummaryTransactions: [false],
     reprocessAcquirerSaleCancellations: [false],
@@ -101,7 +108,15 @@ export class ReconciliationSettingsComponent {
     reprocessAcquirerSaleSummary: [false],
     reprocessSalesSummaryCreditOrder: [false],
     reprocessBankAcquirer: [false],
-    dateToleranceDays: [
+    dateToleranceDaysBefore: [
+      5,
+      [
+        Validators.required,
+        Validators.min(this.MIN_DATE_TOLERANCE),
+        Validators.max(this.MAX_DATE_TOLERANCE),
+      ],
+    ],
+    dateToleranceDaysAfter: [
       10,
       [
         Validators.required,
@@ -140,6 +155,13 @@ export class ReconciliationSettingsComponent {
           erpAcquirerFutureDaysLookback: settings.erpAcquirerFutureDaysLookback,
           reconciliationLookbackMonths: settings.reconciliationLookbackMonths,
           creditOrderPendingDays: settings.creditOrderPendingDays,
+          enabledErpAcquirer: settings.enabledErpAcquirer,
+          enabledSalesSummaryTransactions: settings.enabledSalesSummaryTransactions,
+          enabledAcquirerSaleCancellations: settings.enabledAcquirerSaleCancellations,
+          enabledErpAcquirerFees: settings.enabledErpAcquirerFees,
+          enabledAcquirerSaleSummary: settings.enabledAcquirerSaleSummary,
+          enabledSalesSummaryCreditOrder: settings.enabledSalesSummaryCreditOrder,
+          enabledBankAcquirer: settings.enabledBankAcquirer,
           reprocessErpAcquirerSales: settings.reprocessErpAcquirerSales,
           reprocessSalesSummaryTransactions: settings.reprocessSalesSummaryTransactions,
           reprocessAcquirerSaleCancellations: settings.reprocessAcquirerSaleCancellations,
@@ -147,7 +169,8 @@ export class ReconciliationSettingsComponent {
           reprocessAcquirerSaleSummary: settings.reprocessAcquirerSaleSummary,
           reprocessSalesSummaryCreditOrder: settings.reprocessSalesSummaryCreditOrder,
           reprocessBankAcquirer: settings.reprocessBankAcquirer,
-          dateToleranceDays: settings.dateToleranceDays,
+          dateToleranceDaysBefore: settings.dateToleranceDaysBefore,
+          dateToleranceDaysAfter: settings.dateToleranceDaysAfter,
           valueTolerance: settings.valueTolerance,
           bankMarkNotReconciledAfterDays: settings.bankMarkNotReconciledAfterDays,
         });
@@ -172,6 +195,13 @@ export class ReconciliationSettingsComponent {
         erpAcquirerFutureDaysLookback: v.erpAcquirerFutureDaysLookback ?? 0,
         reconciliationLookbackMonths: v.reconciliationLookbackMonths ?? this.MAX_LOOKBACK_MONTHS,
         creditOrderPendingDays: v.creditOrderPendingDays ?? 30,
+        enabledErpAcquirer: v.enabledErpAcquirer ?? true,
+        enabledSalesSummaryTransactions: v.enabledSalesSummaryTransactions ?? true,
+        enabledAcquirerSaleCancellations: v.enabledAcquirerSaleCancellations ?? true,
+        enabledErpAcquirerFees: v.enabledErpAcquirerFees ?? true,
+        enabledAcquirerSaleSummary: v.enabledAcquirerSaleSummary ?? true,
+        enabledSalesSummaryCreditOrder: v.enabledSalesSummaryCreditOrder ?? true,
+        enabledBankAcquirer: v.enabledBankAcquirer ?? true,
         reprocessErpAcquirerSales: v.reprocessErpAcquirerSales ?? false,
         reprocessSalesSummaryTransactions: v.reprocessSalesSummaryTransactions ?? false,
         reprocessAcquirerSaleCancellations: v.reprocessAcquirerSaleCancellations ?? false,
@@ -179,7 +209,8 @@ export class ReconciliationSettingsComponent {
         reprocessAcquirerSaleSummary: v.reprocessAcquirerSaleSummary ?? false,
         reprocessSalesSummaryCreditOrder: v.reprocessSalesSummaryCreditOrder ?? false,
         reprocessBankAcquirer: v.reprocessBankAcquirer ?? false,
-        dateToleranceDays: v.dateToleranceDays ?? 10,
+        dateToleranceDaysBefore: v.dateToleranceDaysBefore ?? 5,
+        dateToleranceDaysAfter: v.dateToleranceDaysAfter ?? 10,
         valueTolerance: v.valueTolerance ?? 0.05,
         bankMarkNotReconciledAfterDays: v.bankMarkNotReconciledAfterDays ?? 3,
       })

@@ -623,14 +623,14 @@
                 @for (step of result.steps; track step.step) {
                   <div class="flex flex-column gap-1 border-1 surface-border border-round p-3">
                     <div class="flex align-items-center justify-content-between">
-                      <strong>{{ step.step }}</strong>
+                      <strong>{{ 'conciliation.dashboard.history.step.' + step.step | translate }}</strong>
                       <cs-tag
-                        [value]="step.status"
-                        [tone]="step.status === 'SUCCESS' ? 'success' : 'danger'"
+                        [value]="'conciliation.dashboard.history.stepStatus.' + step.status | translate"
+                        [tone]="step.status === 'COMPLETED' ? 'success' : 'danger'"
                       ></cs-tag>
                     </div>
                     @if (step.message) {
-                      <span class="text-sm text-color-secondary">{{ step.message }}</span>
+                      <span class="text-sm text-color-secondary">{{ step.message | translate }}</span>
                     }
                     <div class="grid text-sm mt-1">
                       @if (step.analyzed != null) {

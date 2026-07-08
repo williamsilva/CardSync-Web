@@ -3,7 +3,6 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { AfterViewInit, Component, computed, inject, signal, ViewChild } from '@angular/core';
 
-import { MenuItem } from 'primeng/api';
 import { MenuModule } from 'primeng/menu';
 import { SelectModule } from 'primeng/select';
 import { ButtonModule } from 'primeng/button';
@@ -13,6 +12,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { DatePickerModule } from 'primeng/datepicker';
 import { TranslateModule } from '@ngx-translate/core';
 import { MultiSelectModule } from 'primeng/multiselect';
+import { ConfirmationService, MenuItem, MessageService } from 'primeng/api';
 
 import { CsTagTone, CsTagComponent } from '@shared/ui';
 import { I18nService } from '@core/i18n/i18n.service';
@@ -68,6 +68,11 @@ import {
   allReleaseCategoryEnum,
   releaseCategorySeverity,
 } from '@models/enums/release-category.enum';
+import {
+  currencyRangeLabel,
+  CsCurrencyRangeValue,
+  CsCurrencyRangeFilterComponent,
+} from '@features/list-base/cs-currency-range-filter.component';
 
 @Component({
   standalone: true,
@@ -93,6 +98,7 @@ import {
     PageHeaderComponent,
     FiltersPanelComponent,
     CsColumnFilterShellComponent,
+    CsCurrencyRangeFilterComponent,
     CsAdvancedPeriodDateFilterComponent,
     CsAdvancedMultiselectFilterComponent,
     CsAdvancedFilterItemTemplateDirective,
@@ -104,9 +110,11 @@ export class BankStatementListComponent
 {
   @ViewChild('dt') private dt?: Table;
 
-  protected override readonly i18n = inject(I18nService);
-
   readonly router = inject(Router);
+  protected override readonly i18n = inject(I18nService);
+  private readonly confirm = inject(ConfirmationService);
+  private readonly messageService = inject(MessageService);
+
   readonly flagFacade = inject(FlagFacade);
   readonly bankFacade = inject(BankFacade);
   readonly facade = inject(BankStatementFacade);
@@ -148,12 +156,15 @@ export class BankStatementListComponent
   readonly statusPaymentBank = signal<StatusPaymentBankEnum[] | null>(null);
   readonly modalityPaymentBank = signal<ModalityPaymentBankEnum[] | null>(null);
 
+  readonly releaseValueEnd = signal<number | null>(null);
+  readonly releaseValueStart = signal<number | null>(null);
+
   readonly isReleaseDateDisabled = computed(() => !this.periodReleaseDate());
 
   /* Campos Tabela */
-  readonly releaseValueColumnDraft = signal('');
   readonly documentColumnDraft = signal('');
   readonly bankHistoryColumnDraft = signal('');
+  readonly releaseValueColumnDraft = signal('');
 
   readonly flagColumnDraft = signal<string[] | null>(null);
   readonly bankColumnDraft = signal<string[] | null>(null);
@@ -189,6 +200,11 @@ export class BankStatementListComponent
       value,
     }));
   });
+
+  readonly releaseValueRange = computed<CsCurrencyRangeValue>(() => ({
+    start: this.releaseValueStart(),
+    end: this.releaseValueEnd(),
+  }));
 
   ngOnInit(): void {
     this.bankFacade.loadBankOptionsFilter();
@@ -314,6 +330,16 @@ export class BankStatementListComponent
       });
     }
 
+    const releaseValueEnd = this.releaseValueEnd();
+    const releaseValueStart = this.releaseValueStart();
+    const releaseValueLabel = currencyRangeLabel(this.i18n, releaseValueStart, releaseValueEnd);
+    if (releaseValueLabel) {
+      items.push({
+        label: this.i18n.tUi('transactions.fields.releaseValue'),
+        value: releaseValueLabel,
+      });
+    }
+
     if (acquirer?.length) {
       const labels = this.acquirersOptions()
         .filter((opt) => acquirer.includes(opt.id))
@@ -379,9 +405,15 @@ export class BankStatementListComponent
   });
 
   protected override buildAdvancedFilters(): Partial<BankStatementAdvancedFilters> {
+    const releaseValueEnd = this.releaseValueEnd();
+    const releaseValueStart = this.releaseValueStart();
+
     return {
       releaseDate: this.releaseDate() ?? undefined,
       periodReleaseDate: this.periodReleaseDate() ?? undefined,
+
+      releaseValueEnd: releaseValueEnd ?? undefined,
+      releaseValueStart: releaseValueStart ?? undefined,
 
       releaseCategory: this.releaseCategory()?.length ? this.releaseCategory()! : undefined,
       statusPaymentBank: this.statusPaymentBank()?.length ? this.statusPaymentBank()! : undefined,
@@ -554,6 +586,9 @@ export class BankStatementListComponent
       releaseDate: this.releaseDate(),
       periodReleaseDate: this.periodReleaseDate(),
 
+      releaseValueEnd: this.releaseValueEnd(),
+      releaseValueStart: this.releaseValueStart(),
+
       releaseCategory: this.releaseCategory(),
       statusPaymentBank: this.statusPaymentBank(),
       modalityPaymentBank: this.modalityPaymentBank(),
@@ -573,12 +608,20 @@ export class BankStatementListComponent
     this.companies.set(s.companies ?? null);
     this.establishments.set(s.establishments ?? null);
 
+    this.releaseValueEnd.set(s.releaseValueEnd ?? null);
+    this.releaseValueStart.set(s.releaseValueStart ?? null);
+
     this.releaseDate.set(s.releaseDate ?? null);
     this.periodReleaseDate.set(s.periodReleaseDate ?? null);
 
     this.releaseCategory.set(s.releaseCategory ?? null);
     this.statusPaymentBank.set(s.statusPaymentBank ?? null);
     this.modalityPaymentBank.set(s.modalityPaymentBank ?? null);
+  }
+
+  protected onReleaseValueRangeChange(value: CsCurrencyRangeValue): void {
+    this.releaseValueStart.set(value.start ?? null);
+    this.releaseValueEnd.set(value.end ?? null);
   }
 
   protected bankingDomicileLabel(row: BankStatementModel): string {
@@ -602,6 +645,36 @@ export class BankStatementListComponent
         command: () => this.searchOnSalesSummary(row),
       },
     ];
+  }
+
+  protected confirmDeleteManual(row: BankStatementModel): void {
+    this.confirm.confirm({
+      header: this.i18n.tUi('bankStatement.deleteManual.header'),
+      message: this.i18n.tUi('bankStatement.deleteManual.message'),
+      icon: 'pi pi-exclamation-triangle',
+      acceptButtonStyleClass: 'p-button-danger',
+      acceptLabel: this.i18n.tUi('common.yes'),
+      rejectLabel: this.i18n.tUi('common.no'),
+      accept: () => {
+        this.facade.deleteManual(row.id).subscribe({
+          next: () => {
+            this.messageService.add({
+              severity: 'success',
+              summary: this.i18n.tUi('common.success'),
+              detail: this.i18n.tUi('bankStatement.deleteManual.success'),
+            });
+            this.facade.reloadLast();
+          },
+          error: () => {
+            this.messageService.add({
+              severity: 'error',
+              summary: this.i18n.tUi('common.error'),
+              detail: this.i18n.tUi('bankStatement.deleteManual.error'),
+            });
+          },
+        });
+      },
+    });
   }
 
   protected searchOnSalesSummary(row: BankStatementModel): void {

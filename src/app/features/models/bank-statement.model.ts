@@ -5,8 +5,8 @@ import { BankMinimalModel } from './bank-minimal.models';
 import { CompanyMinimalModel } from './company-minimal.models';
 import { AcquirerMinimalModel } from './acquirer-minimal.models';
 import { EstablishmentMinimalModel } from './establishment-minimal.models';
-import { BankingDomicileMinimalModel } from './bank-domicile-minimal.models';
 import { ProcessedFileMinimalModel } from './processed-file-minimal.models';
+import { BankingDomicileMinimalModel } from './bank-domicile-minimal.models';
 import { StatusPaymentBankEnum } from '@models/enums/status-payment-bank.enum';
 import {
   BankStatementAdvancedFilters,
@@ -15,14 +15,14 @@ import {
 
 export interface BankStatementModel {
   id: string;
-  launchDate: string;
+  releaseDate: string;
   category: string | null;
   type: string | null;
   document: string | null;
   historicalCodeBank: string | null;
   descriptionHistoricalBank: string | null;
   bankHistory: string | null;
-  value: number | null;
+  releaseValue: number | null;
   statusPaymentBank: StatusPaymentBankEnum | null;
 
   flag: FlagMinimalModel | null;
@@ -36,12 +36,12 @@ export interface BankStatementModel {
 
 export interface BankStatementApiModel {
   id: string;
-  launchDate: string;
+  releaseDate: string;
   category: string | null;
   type: string | null;
   document: string | null;
   bankHistory: string | null;
-  value: number | null;
+  releaseValue: number | null;
   historicalCodeBank: string | null;
   descriptionHistoricalBank: string | null;
   statusPaymentBank: StatusPaymentBankEnum | null;

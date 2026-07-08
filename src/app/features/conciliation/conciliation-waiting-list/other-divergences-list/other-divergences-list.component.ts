@@ -14,6 +14,7 @@ import {
 import { finalize } from 'rxjs';
 import { Select } from 'primeng/select';
 import { Tooltip } from 'primeng/tooltip';
+import { Checkbox } from 'primeng/checkbox';
 import { ButtonModule } from 'primeng/button';
 import { FloatLabel } from 'primeng/floatlabel';
 import { DatePicker } from 'primeng/datepicker';
@@ -32,6 +33,7 @@ import { CompanyFacade } from '@features/facade/company.facade';
 import { CsDocumentPipe } from '@shared/pipes/cs-document.pipe';
 import { CsCurrencyPipe } from '@shared/pipes/cs-currency.pipe';
 import { AcquirerFacade } from '@features/facade/acquirer.facade';
+import { BatchDialogComponent } from '../dialogs/batch-dialog.component';
 import { StatefulListPage } from '@features/list-base/stateful-list-page';
 import { EstablishmentFacade } from '@features/facade/establishment.facade';
 import { buildListQuery } from '@shared/features/list-query/list-query.builder';
@@ -47,7 +49,14 @@ import {
   ErpAcquirerTruthSource,
   ConciliationWaitingModel,
   ErpAcquirerComparisonModel,
+  ErpAcquirerResolutionResultModel,
+  ErpAcquirerBatchResolutionResultModel,
 } from '@models/conciliation-waiting.model';
+import {
+  DeleteErpConfirmPayload,
+  ErpVsAcquirerConfirmAction,
+  ErpVsAcquirerActionDialogComponent,
+} from '../dialogs/action-dialog.component';
 import {
   readArrayFilterValues,
   readPeriodFilterValue,
@@ -96,6 +105,7 @@ import {
     CommonModule,
     Select,
     Tooltip,
+    Checkbox,
     CsDatePipe,
     RouterLink,
     DatePicker,
@@ -110,10 +120,12 @@ import {
     InputTextModule,
     TranslateModule,
     PageHeaderComponent,
+    BatchDialogComponent,
     FiltersPanelComponent,
     CsColumnFilterShellComponent,
     CsAdvancedTextFilterComponent,
     CsCurrencyRangeFilterComponent,
+    ErpVsAcquirerActionDialogComponent,
     CsAdvancedPeriodDateFilterComponent,
     CsAdvancedMultiselectFilterComponent,
     ErpVsAcquirerComparisonDialogComponent,
@@ -129,12 +141,16 @@ export class ErpVsAcquirerOtherDivergencesListComponent
 
   protected readonly resolving = signal(false);
   protected readonly comparing = signal(false);
+  protected readonly batchDialogVisible = signal(false);
+  protected readonly actionDialogVisible = signal(false);
   protected readonly comparisonDialogVisible = signal(false);
 
   protected readonly pendingBatchAction = signal<any | null>(null);
-  protected readonly pendingConfirmAction = signal<any | null>(null);
+  protected readonly selectedRows = signal<ConciliationWaitingModel[]>([]);
   protected readonly selectedRow = signal<ConciliationWaitingModel | null>(null);
   protected readonly comparison = signal<ErpAcquirerComparisonModel | null>(null);
+  protected readonly pendingConfirmRow = signal<ConciliationWaitingModel | null>(null);
+  protected readonly pendingConfirmAction = signal<ErpVsAcquirerConfirmAction | null>(null);
 
   readonly toast = inject(ToastService);
   readonly flagFacade = inject(FlagFacade);
@@ -172,6 +188,7 @@ export class ErpVsAcquirerOtherDivergencesListComponent
   readonly establishments = signal<string[] | null>(null);
   readonly periodSaleDate = signal<PeriodEnum | null>(null);
   readonly saleDate = signal<string | string[] | null>(null);
+  readonly statusTransactionReason = signal<StatusTransactionReasonEnum[] | null>(null);
 
   /* Campos Tabela*/
   cvNsuColumnDraft = signal('');
@@ -192,6 +209,28 @@ export class ErpVsAcquirerOtherDivergencesListComponent
 
   readonly isSaleDateDisabled = computed(() => !this.periodSaleDate());
   readonly isSaleDateColumnDisabled = computed(() => !this.saleDateColumnPeriod());
+
+  readonly batchRows = computed(() => this.selectedDeleteRows());
+
+  protected readonly selectedDeleteRows = computed(() =>
+    this.selectedRows().filter((row) => this.canMarkErpAsDeleted(row)),
+  );
+
+  protected readonly headerEligibleRows = computed(() =>
+    this.sales().filter((row) => this.canMarkErpAsDeleted(row)),
+  );
+
+  protected readonly headerChecked = computed(() => {
+    const eligible = this.headerEligibleRows();
+    return eligible.length > 0 && eligible.every((row) => this.isRowSelected(row));
+  });
+
+  protected readonly headerIndeterminate = computed(() => {
+    const eligible = this.headerEligibleRows();
+    if (!eligible.length) return false;
+    const selectedCount = eligible.filter((row) => this.isRowSelected(row)).length;
+    return selectedCount > 0 && selectedCount < eligible.length;
+  });
 
   readonly grossValueRange = computed<CsCurrencyRangeValue>(() => ({
     start: this.grossValueStart(),
@@ -271,6 +310,134 @@ export class ErpVsAcquirerOtherDivergencesListComponent
     return statusTransactionReasonEnumSeverity(value);
   }
 
+  protected isRowSelected(row: ConciliationWaitingModel): boolean {
+    const id = row?.erp?.id;
+    return !!id && this.selectedRows().some((item) => item?.erp?.id === id);
+  }
+
+  protected isRowCheckboxDisabled(row: ConciliationWaitingModel): boolean {
+    return !this.canMarkErpAsDeleted(row);
+  }
+
+  protected toggleRowSelection(row: ConciliationWaitingModel, checked: boolean): void {
+    const id = row?.erp?.id;
+    if (!id) return;
+
+    const current = this.selectedRows();
+
+    if (!checked) {
+      this.selectedRows.set(current.filter((item) => item?.erp?.id !== id));
+      return;
+    }
+
+    if (this.isRowCheckboxDisabled(row) || this.isRowSelected(row)) return;
+
+    this.selectedRows.set([...current, row]);
+  }
+
+  protected toggleHeaderSelection(checked: boolean): void {
+    if (!checked) {
+      this.selectedRows.set([]);
+      return;
+    }
+    this.selectedRows.set([...this.headerEligibleRows()]);
+  }
+
+  protected openBatchDialog(): void {
+    const rows = this.selectedDeleteRows();
+
+    if (!rows.length) {
+      this.toast.warn(
+        this.i18n.tUi('conciliation.noEligibleSelectedTitle'),
+        this.i18n.tUi('conciliation.missingAcq.batch.noEligibleSelectedDetail'),
+      );
+      return;
+    }
+
+    this.pendingBatchAction.set('MARK_ERP_DELETED');
+    this.batchDialogVisible.set(true);
+  }
+
+  protected closeBatchDialog(): void {
+    if (this.resolving()) return;
+    this.batchDialogVisible.set(false);
+    this.pendingBatchAction.set(null);
+  }
+
+  protected confirmBatchAction(_payload?: any): void {
+    this.batchDialogVisible.set(false);
+  }
+
+  protected confirmBatchDeleteAction(payload: DeleteErpConfirmPayload): void {
+    if (this.resolving()) return;
+
+    const ids = this.selectedDeleteRows()
+      .map((row) => row?.erp?.id)
+      .filter((id): id is string => !!id);
+
+    if (!ids.length) {
+      this.closeBatchDialog();
+      return;
+    }
+
+    this.resolving.set(true);
+
+    this.facade
+      .markErpAsDeletedBatch(ids, payload.reason, payload.observations)
+      .pipe(finalize(() => this.resolving.set(false)))
+      .subscribe({
+        next: (result) => this.handleBatchSuccess(result),
+        error: () => {
+          this.toast.error(
+            this.i18n.tUi('conciliation.errorTitle'),
+            this.i18n.tUi('conciliation.missingAcq.batch.deleteErrorDetail'),
+          );
+        },
+      });
+  }
+
+  protected batchDescription(): string {
+    return this.i18n.tUi('conciliation.missingAcq.batch.description');
+  }
+
+  protected batchActionSuffix(): string {
+    return this.i18n.tUi('conciliation.missingAcq.batch.actionSuffix');
+  }
+
+  protected batchConfirmLabel(): string {
+    return this.i18n.tUi('conciliation.missingAcq.batch.confirmLabel');
+  }
+
+  private handleBatchSuccess(result: ErpAcquirerBatchResolutionResultModel): void {
+    this.batchDialogVisible.set(false);
+    this.pendingBatchAction.set(null);
+    this.selectedRows.set([]);
+    this.facade.clearTotals();
+    this.reloadWithCurrentState();
+
+    const title =
+      result.failed > 0
+        ? this.i18n.tUi('conciliation.finishedWithWarningsTitle')
+        : this.i18n.tUi('conciliation.finishedTitle');
+
+    const message = this.i18n.tUi('conciliation.finishedMessage', {
+      success: this.number(result.success),
+      failed: this.number(result.failed),
+      requested: this.number(result.requested),
+    });
+
+    if (result.failed > 0) {
+      this.toast.warn(title, message, 9000);
+      return;
+    }
+
+    this.toast.success(title, message, 7000);
+  }
+
+  private number(value: number | null | undefined): string {
+    return new Intl.NumberFormat(this.i18n.getAppliedLang() || 'pt-BR').format(value ?? 0);
+  }
+
   clear(): void {
     const key = this.tableStateKey();
 
@@ -278,6 +445,7 @@ export class ErpVsAcquirerOtherDivergencesListComponent
     sessionStorage.removeItem(key);
 
     this.facade.clearTotals();
+    this.selectedRows.set([]);
 
     this.resetFilters();
 
@@ -349,11 +517,10 @@ export class ErpVsAcquirerOtherDivergencesListComponent
     const authorization = this.authorization();
 
     const grossValueEnd = this.grossValueEnd();
+    const establishment = this.establishments();
     const liquidValueEnd = this.liquidValueEnd();
     const grossValueStart = this.grossValueStart();
     const liquidValueStart = this.liquidValueStart();
-
-    const establishment = this.establishments();
 
     const saleDate = this.saleDate();
     const periodSaleDate = this.periodSaleDate();
@@ -368,6 +535,16 @@ export class ErpVsAcquirerOtherDivergencesListComponent
       items.push({
         label: this.i18n.tUi('transactions.fields.saleDate'),
         value: saleDateValue,
+      });
+    }
+
+    const statusTransactionReason = this.statusTransactionReason();
+    if (statusTransactionReason?.length) {
+      items.push({
+        label: this.i18n.tUi('transactions.fields.statusTransactionReason'),
+        value: statusTransactionReason
+          .map((v) => statusTransactionReasonEnumLabel(v, this.i18n))
+          .join(', '),
       });
     }
 
@@ -477,6 +654,7 @@ export class ErpVsAcquirerOtherDivergencesListComponent
     this.tid.set(s.tid ?? '');
     this.cvNsu.set(s.cvNsu ?? '');
     this.authorization.set(s.authorization ?? '');
+    this.statusTransactionReason.set(s.statusTransactionReason ?? null);
 
     this.grossValueEnd.set(s.grossValueEnd ?? null);
     this.liquidValueEnd.set(s.liquidValueEnd ?? null);
@@ -516,6 +694,9 @@ export class ErpVsAcquirerOtherDivergencesListComponent
       acquirers: this.acquirers()?.length ? this.acquirers()! : undefined,
       companies: this.companies()?.length ? this.companies()! : undefined,
       establishments: this.establishments()?.length ? this.establishments()! : undefined,
+      statusTransactionReason: this.statusTransactionReason()?.length
+        ? this.statusTransactionReason()!
+        : undefined,
 
       saleDate: this.saleDate() ?? undefined,
       periodSaleDate: this.periodSaleDate() ?? undefined,
@@ -642,6 +823,7 @@ export class ErpVsAcquirerOtherDivergencesListComponent
       cvNsu: this.cvNsu(),
       capture: this.capture(),
       authorization: this.authorization(),
+      statusTransactionReason: this.statusTransactionReason(),
 
       grossValueEnd: this.grossValueEnd(),
       liquidValueEnd: this.liquidValueEnd(),
@@ -834,6 +1016,110 @@ export class ErpVsAcquirerOtherDivergencesListComponent
     this.comparing.set(false);
   }
 
+  protected canMarkErpAsDeleted(row: ConciliationWaitingModel | null | undefined): boolean {
+    return !!row?.erp?.id;
+  }
+
+  protected confirmDeleteErp(row: ConciliationWaitingModel): void {
+    if (!row?.erp?.id) {
+      this.toast.warn(
+        this.i18n.tUi('conciliation.missingAcq.single.erpNotFoundTitle'),
+        this.i18n.tUi('conciliation.missingAcq.single.erpNotFoundDetail'),
+      );
+      return;
+    }
+
+    this.pendingConfirmAction.set('MARK_ERP_DELETED_SINGLE');
+    this.pendingConfirmRow.set(row);
+    this.actionDialogVisible.set(true);
+  }
+
+  protected closeActionDialog(): void {
+    if (this.resolving()) return;
+
+    this.actionDialogVisible.set(false);
+    this.pendingConfirmAction.set(null);
+    this.pendingConfirmRow.set(null);
+  }
+
+  protected confirmAction(_payload?: any): void {
+    this.actionDialogVisible.set(false);
+  }
+
+  protected confirmSingleDeleteAction(payload: DeleteErpConfirmPayload): void {
+    const row = this.pendingConfirmRow();
+    const erpId = row?.erp?.id;
+
+    if (!row || !erpId || this.resolving()) {
+      return;
+    }
+
+    this.actionDialogVisible.set(false);
+    this.markErpAsDeleted(erpId, payload.reason, payload.observations);
+  }
+
+  protected confirmActionDescription(): string {
+    return this.i18n.tUi('conciliation.missingAcq.single.description');
+  }
+
+  protected confirmActionSuffix(): string {
+    return this.i18n.tUi('conciliation.missingAcq.single.actionSuffix');
+  }
+
+  protected confirmActionGrossTotal(): number {
+    return this.numericValue(this.pendingConfirmRow()?.grossValue);
+  }
+
+  protected confirmActionLiquidTotal(): number {
+    return this.numericValue(this.pendingConfirmRow()?.liquidValue);
+  }
+
+  protected confirmActionLabel(): string {
+    return this.i18n.tUi('conciliation.missingErp.single.confirmLabel');
+  }
+
+  protected confirmActionButtonClass(): string {
+    return 'p-button-danger';
+  }
+
+  private markErpAsDeleted(erpTransactionId: string, reason: string, observations: string): void {
+    if (this.resolving()) return;
+
+    this.resolving.set(true);
+
+    this.facade
+      .markErpAsDeleted(erpTransactionId, reason, observations)
+      .pipe(finalize(() => this.resolving.set(false)))
+      .subscribe({
+        next: (result) => this.handleResolutionSuccess(result),
+        error: () => {
+          this.toast.error(
+            this.i18n.tUi('conciliation.missingAcq.single.deleteErrorTitle'),
+            this.i18n.tUi('conciliation.missingAcq.single.deleteErrorDetail'),
+          );
+        },
+      });
+  }
+
+  private handleResolutionSuccess(result: ErpAcquirerResolutionResultModel): void {
+    this.pendingConfirmRow.set(null);
+    this.pendingConfirmAction.set(null);
+    this.selectedRows.set([]);
+    this.facade.clearTotals();
+    this.reloadWithCurrentState();
+
+    this.toast.success(
+      this.i18n.tUi('conciliation.missingAcq.single.deleteTitle'),
+      result?.message || this.i18n.tUi('conciliation.missingAcq.single.deleteDetail'),
+      7000,
+    );
+  }
+
+  private numericValue(value: unknown): number {
+    const parsed = Number(value ?? 0);
+    return Number.isFinite(parsed) ? parsed : 0;
+  }
+
   protected confirmManualReconciliation(truthSource: ErpAcquirerTruthSource): void {
     const row = this.selectedRow();
     const erpId = row?.erp?.id;
@@ -850,7 +1136,10 @@ export class ErpVsAcquirerOtherDivergencesListComponent
       .pipe(finalize(() => this.resolving.set(false)))
       .subscribe({
         next: (result) => {
-          this.closeComparison();
+          this.comparisonDialogVisible.set(false);
+          this.selectedRow.set(null);
+          this.comparison.set(null);
+          this.comparing.set(false);
           this.reloadWithCurrentState();
 
           this.toast.success(

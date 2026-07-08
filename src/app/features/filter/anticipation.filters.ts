@@ -20,6 +20,17 @@ export type AnticipationFiltersState = {
   acquirers: string[] | null;
   companies: string[] | null;
   establishments: string[] | null;
+
+  grossValueStart: number | null;
+  grossValueEnd: number | null;
+  discountRateValueStart: number | null;
+  discountRateValueEnd: number | null;
+  releaseValueStart: number | null;
+  releaseValueEnd: number | null;
+  originalCreditValueStart: number | null;
+  originalCreditValueEnd: number | null;
+  advanceDiscountValueStart: number | null;
+  advanceDiscountValueEnd: number | null;
 };
 
 export type AnticipationAdvancedFilters = Partial<AnticipationFiltersState>;
@@ -44,6 +55,17 @@ export function createEmptyAnticipationFiltersState(): AnticipationFiltersState 
     acquirers: null,
     companies: null,
     establishments: null,
+
+    grossValueStart: null,
+    grossValueEnd: null,
+    discountRateValueStart: null,
+    discountRateValueEnd: null,
+    releaseValueStart: null,
+    releaseValueEnd: null,
+    originalCreditValueStart: null,
+    originalCreditValueEnd: null,
+    advanceDiscountValueStart: null,
+    advanceDiscountValueEnd: null,
   };
 }
 
@@ -63,4 +85,15 @@ export function resetAnticipationAdvancedFilters(filters: AnticipationAdvancedFi
   filters.modality.set(empty.modality);
   filters.transactionsStatus.set(empty.transactionsStatus);
   filters.statusPaymentBank.set(empty.statusPaymentBank);
+
+  filters.grossValueStart.set(empty.grossValueStart);
+  filters.grossValueEnd.set(empty.grossValueEnd);
+  filters.discountRateValueStart.set(empty.discountRateValueStart);
+  filters.discountRateValueEnd.set(empty.discountRateValueEnd);
+  filters.releaseValueStart.set(empty.releaseValueStart);
+  filters.releaseValueEnd.set(empty.releaseValueEnd);
+  filters.originalCreditValueStart.set(empty.originalCreditValueStart);
+  filters.originalCreditValueEnd.set(empty.originalCreditValueEnd);
+  filters.advanceDiscountValueStart.set(empty.advanceDiscountValueStart);
+  filters.advanceDiscountValueEnd.set(empty.advanceDiscountValueEnd);
 }

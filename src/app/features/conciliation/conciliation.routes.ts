@@ -117,6 +117,30 @@ export const CONCILIATION_ROUTES: Routes = [
       ),
   },
   {
+    path: 'manual-bank-statement',
+    title: 'routes.conciliation.manualBankStatement.title',
+    canActivate: [permissionGuard],
+    data: { requireAll: false, redirectTo: '/forbidden', permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.FILE_PROCESSING.PROCESS] },
+    loadComponent: () =>
+      import('./manual-bank-statement/manual-bank-statement.component').then(
+        (m) => m.ManualBankStatementComponent,
+      ),
+  },
+  {
+    path: 'manual-bank-reconciliation',
+    title: 'routes.conciliation.manualBankReconciliation.title',
+    canActivate: [permissionGuard],
+    data: {
+      requireAll: false,
+      redirectTo: '/forbidden',
+      permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.FILE_PROCESSING.PROCESS],
+    },
+    loadComponent: () =>
+      import('./manual-bank-reconciliation/manual-bank-reconciliation.component').then(
+        (m) => m.ManualBankReconciliationComponent,
+      ),
+  },
+  {
     path: 'contract-audit',
     title: 'routes.conciliation.contractAudit.title',
     canActivate: [permissionGuard],

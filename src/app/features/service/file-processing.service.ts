@@ -19,11 +19,8 @@ import {
   ImportedFileCalendarModel,
   FileProcessingTotalsModel,
   mapProcessedFilesApiModels,
-  FileProcessingDashboardModel,
-  BankReconciliationResultModel,
   ReprocessPendingErpResultModel,
   ReconciliationExecutionLogModel,
-  FileProcessingDivergenceContextModel,
   FinancialReconciliationPipelineResultModel,
 } from '../models/file-processing.models';
 
@@ -31,13 +28,6 @@ import {
 export class FileProcessingService {
   private readonly http = inject(HttpClient);
   private readonly baseUrl = `${environment.bffBaseUrl}/bff/v1/file-processing`;
-
-  listFiles(query: PageQuery = {}): Observable<PageResponse<ProcessedFileModel>> {
-    return this.http.get<PageResponse<ProcessedFileModel>>(`${this.baseUrl}/files`, {
-      params: this.toParams(query),
-      withCredentials: true,
-    });
-  }
 
   getFile(id: string): Observable<ProcessedFileModel> {
     return this.http.get<ProcessedFileModel>(`${this.baseUrl}/files/${id}`, {
@@ -99,14 +89,6 @@ export class FileProcessingService {
     return this.http.post<void>(`${this.baseUrl}/bank/process`, {}, { withCredentials: true });
   }
 
-  reconcileBank(): Observable<BankReconciliationResultModel> {
-    return this.http.post<BankReconciliationResultModel>(
-      `${this.baseUrl}/bank/reconcile`,
-      {},
-      { withCredentials: true },
-    );
-  }
-
   runFinancialPipeline(): Observable<FinancialReconciliationPipelineResultModel> {
     return this.http.post<FinancialReconciliationPipelineResultModel>(
       `${environment.bffBaseUrl}/bff/v1/conciliation/financial-pipeline/run`,
@@ -130,28 +112,9 @@ export class FileProcessingService {
     });
   }
 
-  getDashboard(): Observable<FileProcessingDashboardModel> {
-    return this.http.get<FileProcessingDashboardModel>(`${this.baseUrl}/dashboard`, {
-      withCredentials: true,
-    });
-  }
-
-  listDashboardDivergences(): Observable<FileProcessingDivergenceContextModel[]> {
-    return this.http.get<FileProcessingDivergenceContextModel[]>(
-      `${this.baseUrl}/dashboard/divergences`,
-      { withCredentials: true },
-    );
-  }
-
   listPendingErpSales(query: PageQuery = {}): Observable<PageResponse<ErpPendingSaleModel>> {
     return this.http.get<PageResponse<ErpPendingSaleModel>>(`${this.baseUrl}/erp/pending-sales`, {
       params: this.toParams(query),
-      withCredentials: true,
-    });
-  }
-
-  getPendingErpSale(id: string): Observable<ErpPendingSaleModel> {
-    return this.http.get<ErpPendingSaleModel>(`${this.baseUrl}/erp/pending-sales/${id}`, {
       withCredentials: true,
     });
   }

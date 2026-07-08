@@ -48,6 +48,11 @@ import {
   readSingleFilterValue,
 } from '@features/list-base/table-filter-readers';
 import {
+  currencyRangeLabel,
+  CsCurrencyRangeValue,
+  CsCurrencyRangeFilterComponent,
+} from '@features/list-base/cs-currency-range-filter.component';
+import {
   ActiveFilterItem,
   FiltersPanelComponent,
 } from '@shared/features/filters-panel/filters-panel.component';
@@ -96,6 +101,7 @@ import {
     CsAdvancedPeriodDateFilterComponent,
     CsAdvancedMultiselectFilterComponent,
     CsAdvancedFilterItemTemplateDirective,
+    CsCurrencyRangeFilterComponent,
   ],
 })
 export class AnticipationListComponent
@@ -154,6 +160,39 @@ export class AnticipationListComponent
   readonly transactionsStatus = signal<StatusTransactionEnum[] | null>(null);
 
   readonly isReleaseDateDisabled = computed(() => !this.periodReleaseDate());
+
+  /* Filtros por valor (range) */
+  readonly grossValueStart = signal<number | null>(null);
+  readonly grossValueEnd = signal<number | null>(null);
+  readonly discountRateValueStart = signal<number | null>(null);
+  readonly discountRateValueEnd = signal<number | null>(null);
+  readonly releaseValueStart = signal<number | null>(null);
+  readonly releaseValueEnd = signal<number | null>(null);
+  readonly originalCreditValueStart = signal<number | null>(null);
+  readonly originalCreditValueEnd = signal<number | null>(null);
+  readonly advanceDiscountValueStart = signal<number | null>(null);
+  readonly advanceDiscountValueEnd = signal<number | null>(null);
+
+  readonly grossValueRange = computed<CsCurrencyRangeValue>(() => ({
+    start: this.grossValueStart(),
+    end: this.grossValueEnd(),
+  }));
+  readonly discountRateValueRange = computed<CsCurrencyRangeValue>(() => ({
+    start: this.discountRateValueStart(),
+    end: this.discountRateValueEnd(),
+  }));
+  readonly releaseValueRange = computed<CsCurrencyRangeValue>(() => ({
+    start: this.releaseValueStart(),
+    end: this.releaseValueEnd(),
+  }));
+  readonly originalCreditValueRange = computed<CsCurrencyRangeValue>(() => ({
+    start: this.originalCreditValueStart(),
+    end: this.originalCreditValueEnd(),
+  }));
+  readonly advanceDiscountValueRange = computed<CsCurrencyRangeValue>(() => ({
+    start: this.advanceDiscountValueStart(),
+    end: this.advanceDiscountValueEnd(),
+  }));
 
   /* Campos Tabela */
   readonly grossValueColumnDraft = signal('');
@@ -406,6 +445,21 @@ export class AnticipationListComponent
       });
     }
 
+    const grossRange = currencyRangeLabel(this.i18n, this.grossValueStart(), this.grossValueEnd());
+    if (grossRange) items.push({ label: this.i18n.tUi('anticipation.fields.grossValue'), value: grossRange });
+
+    const discountRange = currencyRangeLabel(this.i18n, this.discountRateValueStart(), this.discountRateValueEnd());
+    if (discountRange) items.push({ label: this.i18n.tUi('anticipation.fields.discountRateValue'), value: discountRange });
+
+    const releaseRange = currencyRangeLabel(this.i18n, this.releaseValueStart(), this.releaseValueEnd());
+    if (releaseRange) items.push({ label: this.i18n.tUi('anticipation.fields.releaseValue'), value: releaseRange });
+
+    const originalCreditRange = currencyRangeLabel(this.i18n, this.originalCreditValueStart(), this.originalCreditValueEnd());
+    if (originalCreditRange) items.push({ label: this.i18n.tUi('anticipation.fields.originalCreditValue'), value: originalCreditRange });
+
+    const advanceDiscountRange = currencyRangeLabel(this.i18n, this.advanceDiscountValueStart(), this.advanceDiscountValueEnd());
+    if (advanceDiscountRange) items.push({ label: this.i18n.tUi('anticipation.fields.advanceDiscountValue'), value: advanceDiscountRange });
+
     return items;
   });
 
@@ -427,6 +481,17 @@ export class AnticipationListComponent
       acquirers: this.acquirers()?.length ? this.acquirers()! : undefined,
       companies: this.companies()?.length ? this.companies()! : undefined,
       establishments: this.establishments()?.length ? this.establishments()! : undefined,
+
+      grossValueStart: this.grossValueStart() ?? undefined,
+      grossValueEnd: this.grossValueEnd() ?? undefined,
+      discountRateValueStart: this.discountRateValueStart() ?? undefined,
+      discountRateValueEnd: this.discountRateValueEnd() ?? undefined,
+      releaseValueStart: this.releaseValueStart() ?? undefined,
+      releaseValueEnd: this.releaseValueEnd() ?? undefined,
+      originalCreditValueStart: this.originalCreditValueStart() ?? undefined,
+      originalCreditValueEnd: this.originalCreditValueEnd() ?? undefined,
+      advanceDiscountValueStart: this.advanceDiscountValueStart() ?? undefined,
+      advanceDiscountValueEnd: this.advanceDiscountValueEnd() ?? undefined,
     };
   }
 
@@ -640,6 +705,17 @@ export class AnticipationListComponent
       acquirers: this.acquirers(),
       companies: this.companies(),
       establishments: this.establishments(),
+
+      grossValueStart: this.grossValueStart(),
+      grossValueEnd: this.grossValueEnd(),
+      discountRateValueStart: this.discountRateValueStart(),
+      discountRateValueEnd: this.discountRateValueEnd(),
+      releaseValueStart: this.releaseValueStart(),
+      releaseValueEnd: this.releaseValueEnd(),
+      originalCreditValueStart: this.originalCreditValueStart(),
+      originalCreditValueEnd: this.originalCreditValueEnd(),
+      advanceDiscountValueStart: this.advanceDiscountValueStart(),
+      advanceDiscountValueEnd: this.advanceDiscountValueEnd(),
     };
   }
 
@@ -656,6 +732,17 @@ export class AnticipationListComponent
     this.modality.set(s.modality ?? null);
     this.transactionsStatus.set(s.transactionsStatus ?? null);
     this.statusPaymentBank.set(s.statusPaymentBank ?? null);
+
+    this.grossValueStart.set(s.grossValueStart ?? null);
+    this.grossValueEnd.set(s.grossValueEnd ?? null);
+    this.discountRateValueStart.set(s.discountRateValueStart ?? null);
+    this.discountRateValueEnd.set(s.discountRateValueEnd ?? null);
+    this.releaseValueStart.set(s.releaseValueStart ?? null);
+    this.releaseValueEnd.set(s.releaseValueEnd ?? null);
+    this.originalCreditValueStart.set(s.originalCreditValueStart ?? null);
+    this.originalCreditValueEnd.set(s.originalCreditValueEnd ?? null);
+    this.advanceDiscountValueStart.set(s.advanceDiscountValueStart ?? null);
+    this.advanceDiscountValueEnd.set(s.advanceDiscountValueEnd ?? null);
   }
 
   protected bankingDomicileTooltip(row: any): string {

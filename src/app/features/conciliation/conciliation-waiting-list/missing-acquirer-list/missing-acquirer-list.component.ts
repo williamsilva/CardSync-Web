@@ -137,15 +137,26 @@ export class MissingAcquirerListComponent
 {
   @ViewChild('dt') private dt?: Table;
 
-  protected override readonly i18n = inject(I18nService);
+  override readonly i18n = inject(I18nService);
 
-  protected readonly resolving = signal(false);
-  protected readonly batchDialogVisible = signal(false);
-  protected readonly actionDialogVisible = signal(false);
-  protected readonly editIdentityDialogVisible = signal(false);
-  protected readonly pendingBatchAction = signal<any | null>(null);
-  protected readonly pendingConfirmAction = signal<ErpVsAcquirerConfirmAction | null>(null);
-  protected readonly pendingEditRow = signal<ConciliationWaitingModel | null>(null);
+  readonly toast = inject(ToastService);
+  readonly selectedRows = signal<ConciliationWaitingModel[]>([]);
+  readonly pendingConfirmRow = signal<ConciliationWaitingModel | null>(null);
+
+  readonly flagFacade = inject(FlagFacade);
+  readonly companyFacade = inject(CompanyFacade);
+  readonly acquirerFacade = inject(AcquirerFacade);
+  readonly facade = inject(ConciliationWaitingFacade);
+  readonly establishmentFacade = inject(EstablishmentFacade);
+
+  readonly resolving = signal(false);
+  readonly batchDialogVisible = signal(false);
+  readonly actionDialogVisible = signal(false);
+  readonly editIdentityDialogVisible = signal(false);
+  readonly pendingBatchAction = signal<any | null>(null);
+  readonly pendingEditRow = signal<ConciliationWaitingModel | null>(null);
+  readonly pendingConfirmAction = signal<ErpVsAcquirerConfirmAction | null>(null);
+  readonly statusTransactionReason = signal<StatusTransactionReasonEnum[] | null>(null);
 
   protected readonly pendingEditNsu = computed<number | null>(() => {
     const nsu = this.pendingEditRow()?.cvNsu;
@@ -157,16 +168,6 @@ export class MissingAcquirerListComponent
   protected readonly pendingEditAuthorization = computed<string | null>(() => {
     return this.pendingEditRow()?.authorization ?? null;
   });
-
-  protected readonly toast = inject(ToastService);
-  protected readonly facade = inject(ConciliationWaitingFacade);
-  protected readonly selectedRows = signal<ConciliationWaitingModel[]>([]);
-  protected readonly pendingConfirmRow = signal<ConciliationWaitingModel | null>(null);
-
-  readonly flagFacade = inject(FlagFacade);
-  readonly companyFacade = inject(CompanyFacade);
-  readonly acquirerFacade = inject(AcquirerFacade);
-  readonly establishmentFacade = inject(EstablishmentFacade);
 
   override rows =
     Number(localStorage.getItem(this.tableRowsKey())) || StatefulListPage.DEFAULT_ROWS;
@@ -690,6 +691,7 @@ export class MissingAcquirerListComponent
       cvNsu: this.cvNsu(),
       capture: this.capture(),
       authorization: this.authorization(),
+      statusTransactionReason: this.statusTransactionReason(),
 
       grossValueEnd: this.grossValueEnd(),
       liquidValueEnd: this.liquidValueEnd(),

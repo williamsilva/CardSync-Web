@@ -4,7 +4,21 @@ import { permissionGuard } from '@core/auth/permission.guard';
 import { PERMISSIONS } from '@core/auth/permissions.constants';
 
 export const FILE_PROCESSING_ROUTES: Routes = [
-  { path: '', pathMatch: 'full', redirectTo: 'analytics' },
+  { path: '', pathMatch: 'full', redirectTo: 'analysis' },
+  {
+    path: 'analysis',
+    title: 'Dashboard de Processamento',
+    canActivate: [permissionGuard],
+    data: {
+      requireAll: false,
+      redirectTo: '/forbidden',
+      permissions: [PERMISSIONS.COMPANIES.VIEW],
+    },
+    loadComponent: () =>
+      import('./file-processing-analysis/file-processing-analysis.component').then(
+        (m) => m.FileProcessingAnalysisComponent,
+      ),
+  },
   {
     path: 'analytics',
     title: 'Processamento de Arquivos',

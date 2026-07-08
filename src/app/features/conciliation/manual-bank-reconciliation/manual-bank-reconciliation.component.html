@@ -1,0 +1,633 @@
+﻿<p-toast></p-toast>
+<p-confirmDialog></p-confirmDialog>
+
+<cs-page-header
+  [compact]="false"
+  [title]="'conciliation.manualBankReconciliation.title' | translate"
+  [subtitle]="'conciliation.manualBankReconciliation.subtitle' | translate"
+></cs-page-header>
+
+<!-- Action bar: visible when a release is selected -->
+@if (facade.selectedRelease(); as release) {
+  <div class="surface-card border-round p-3 mb-2 flex flex-wrap align-items-center gap-3">
+    <div class="flex flex-wrap gap-4 flex-1 align-items-center">
+      <span class="flex align-items-center gap-2">
+        <i class="pi pi-building-columns text-color-secondary"></i>
+        <span class="font-semibold">{{ release.bank?.name ?? '-' }}</span>
+      </span>
+      <span class="flex align-items-center gap-2">
+        <i class="pi pi-calendar text-color-secondary"></i>
+        <span>{{ release.releaseDate | csDate: 'date' }}</span>
+      </span>
+      <span class="flex align-items-center gap-2">
+        <i class="pi pi-building text-color-secondary"></i>
+        <span>{{ release.company?.fantasyName ?? '-' }}</span>
+      </span>
+      <span class="flex align-items-center gap-2">
+        <i class="pi pi-dollar text-color-secondary"></i>
+        <span class="font-semibold text-green-600">{{ release.releaseValue | csCurrency }}</span>
+        @if (facade.selectedOrders().length > 0) {
+          <i class="pi pi-arrow-right text-color-secondary text-xs"></i>
+          <span
+            class="font-semibold"
+            tooltipPosition="top"
+            [class.text-green-600]="valuesMatch()"
+            [class.text-red-500]="!valuesMatch()"
+            [pTooltip]="'conciliation.manualBankReconciliation.selectedOrdersTotal' | translate"
+            >{{ selectedOrdersTotalValue() | csCurrency }}</span
+          >
+          @if (!valuesMatch()) {
+            <span
+              class="text-xs font-semibold border-round px-2 py-1 bg-red-100 text-red-700"
+              tooltipPosition="top"
+              [pTooltip]="'conciliation.manualBankReconciliation.valueDifference' | translate"
+            >Δ {{ valueDifference()! | csCurrency }}</span>
+          }
+        }
+      </span>
+    </div>
+    <div class="flex align-items-center gap-2">
+      @if (facade.selectedOrders().length > 0) {
+        <cs-tag
+          [value]="
+            'conciliation.manualBankReconciliation.ordersSelected'
+              | translate: { count: facade.selectedOrders().length }
+          "
+          [tone]="valuesMatch() ? 'success' : 'danger'"
+        ></cs-tag>
+        <p-button
+          [outlined]="true"
+          icon="pi pi-eraser"
+          severity="secondary"
+          (onClick)="facade.clearOrders()"
+          [pTooltip]="'conciliation.manualBankReconciliation.clearOrders' | translate"
+          tooltipPosition="top"
+        ></p-button>
+      }
+      <p-button
+        icon="pi pi-link"
+        severity="success"
+        (onClick)="confirmReconcile()"
+        [loading]="facade.reconciling()"
+        [disabled]="!canReconcile()"
+        [label]="'conciliation.manualBankReconciliation.link' | translate"
+      ></p-button>
+      <p-button
+        [outlined]="true"
+        icon="pi pi-times"
+        severity="secondary"
+        (onClick)="facade.clearSelection()"
+        [label]="'common.cancel' | translate"
+      ></p-button>
+    </div>
+  </div>
+}
+
+<!-- Two-column layout -->
+<div class="grid">
+  <!-- LEFT: Bank Releases -->
+  <div class="col-12 lg:col-6">
+    <div class="font-semibold text-lg mb-2 flex align-items-center gap-2">
+      <i class="pi pi-building-columns text-primary"></i>
+      {{ 'conciliation.manualBankReconciliation.releasesTitle' | translate }}
+    </div>
+
+    <cs-filters-panel
+      [collapsed]="true"
+      [actionsAlign]="'start'"
+      (search)="searchReleases()"
+      (clear)="clearReleaseFilters()"
+      [title]="'common.filter' | translate"
+      [activeCount]="releaseActiveFiltersCount()"
+      [activeFilterGroups]="releaseActiveFilterGroups()"
+    >
+      <div class="grid formgrid gap-0 align-items-end">
+        <cs-advanced-period-date-filter
+          [value]="releaseDate()"
+          [period]="releasePeriod()"
+          inputId="releaseDateFilter"
+          periodInputId="releasePeriod"
+          [colClass]="'col-12 md:col-3 p-1'"
+          [disabled]="isReleaseDateDisabled()"
+          [periodOptions]="periodEnumOptions()"
+          (valueChange)="releaseDate.set($event)"
+          [view]="setViewFormat(releasePeriod())"
+          [dateFormat]="setDateFormat(releasePeriod())"
+          [selectionMode]="setSelectionMode(releasePeriod())"
+          [dateLabel]="'bankStatement.fields.releaseDate' | translate"
+          [periodLabel]="'bankStatement.fields.periodReleaseDate' | translate"
+          (periodChange)="onPeriodColumnChange(releasePeriod, releaseDate, $event)"
+        ></cs-advanced-period-date-filter>
+
+        <cs-advanced-multiselect-filter
+          optionValue="id"
+          optionLabel="fantasyName"
+          inputId="releaseCompanies"
+          class="col-12 md:col-6 p-1"
+          [value]="releaseCompanies()"
+          [options]="companiesOptions()"
+          (valueChange)="releaseCompanies.set($event)"
+          [label]="'bankStatement.fields.company' | translate"
+        ></cs-advanced-multiselect-filter>
+
+        <cs-advanced-multiselect-filter
+          optionValue="id"
+          optionLabel="fantasyName"
+          inputId="releaseAcquirers"
+          class="col-12 md:col-4 p-1"
+          [value]="releaseAcquirers()"
+          [options]="acquirersOptions()"
+          (valueChange)="releaseAcquirers.set($event)"
+          [label]="'bankStatement.fields.acquirer' | translate"
+        ></cs-advanced-multiselect-filter>
+
+        <cs-advanced-multiselect-filter
+          optionValue="id"
+          optionLabel="name"
+          inputId="releaseBanks"
+          [value]="releaseBanks()"
+          [options]="banksOptions()"
+          class="col-12 md:col-4 p-1"
+          (valueChange)="releaseBanks.set($event)"
+          [label]="'bankStatement.fields.bank' | translate"
+        ></cs-advanced-multiselect-filter>
+
+        <cs-advanced-multiselect-filter
+          optionValue="id"
+          optionLabel="name"
+          inputId="releaseFlags"
+          [value]="releaseFlags()"
+          [options]="flagsOptions()"
+          class="col-12 md:col-4 p-1"
+          (valueChange)="releaseFlags.set($event)"
+          [label]="'bankStatement.fields.flag' | translate"
+        ></cs-advanced-multiselect-filter>
+      </div>
+
+      <div class="grid formgrid gap-0 align-items-end">
+        <cs-currency-range-filter
+          inputId="releaseValue"
+          class="col-12 md:col-6 p-1"
+          [value]="releaseValueRange()"
+          [endLabel]="'common.filters.final' | translate"
+          (valueChange)="onReleaseValueRangeChange($event)"
+          [startLabel]="'common.filters.initial' | translate"
+          [label]="'bankStatement.fields.releaseValue' | translate"
+        ></cs-currency-range-filter>
+      </div>
+    </cs-filters-panel>
+
+    <div class="surface-card border-round px-3 pt-2 pb-3 mt-2">
+      <p-table
+        stripedRows
+        dataKey="id"
+        size="small"
+        [rows]="rows"
+        [lazy]="true"
+        showGridlines
+        [rowHover]="true"
+        [paginator]="true"
+        sortMode="multiple"
+        class="cs-admin-table"
+        [value]="facade.releases()"
+        [showCurrentPageReport]="true"
+        [loading]="facade.releasesLoading()"
+        [paginatorDropdownAppendTo]="'body'"
+        [totalRecords]="facade.releasesTotal()"
+        [rowsPerPageOptions]="rowsPerPageOptions"
+        (onPage)="onReleasesPageChange($event)"
+        (onLazyLoad)="onReleasesLazyLoad($event)"
+        [currentPageReportTemplate]="'pagination.report' | translate"
+        [tableStyle]="{ width: '100%', 'min-width': '44rem', 'table-layout': 'fixed' }"
+      >
+        <ng-template pTemplate="colgroup">
+          <colgroup>
+            <col style="width: 40px" />
+            <col style="width: 80px" />
+            <col style="width: 120px" />
+            <col style="width: 80px" />
+            <col style="width: 130px" />
+            <col style="width: 80px" />
+            <col style="width: 80px" />
+            <col style="width: 90px" />
+            <col style="width: 100px" />
+          </colgroup>
+        </ng-template>
+
+        <ng-template pTemplate="header">
+          <tr>
+            <th class="text-center"></th>
+            <th pSortableColumn="releaseDate">
+              <div class="th-flex text-center">
+                <span
+                  class="th-label"
+                  tooltipPosition="top"
+                  [pTooltip]="'bankStatement.fields.releaseDate' | translate"
+                >
+                  {{ 'bankStatement.fields.releaseDateShort' | translate }}
+                </span>
+                <span class="th-icons"><p-sortIcon field="releaseDate"></p-sortIcon></span>
+              </div>
+            </th>
+            <th pSortableColumn="company">
+              <div class="th-flex text-center">
+                <span
+                  class="th-label"
+                  tooltipPosition="top"
+                  [pTooltip]="'bankStatement.fields.company' | translate"
+                >
+                  {{ 'bankStatement.fields.company' | translate }}
+                </span>
+                <span class="th-icons"><p-sortIcon field="company"></p-sortIcon></span>
+              </div>
+            </th>
+            <th pSortableColumn="bank">
+              <div class="th-flex text-center">
+                <span
+                  class="th-label"
+                  tooltipPosition="top"
+                  [pTooltip]="'bankStatement.fields.bank' | translate"
+                >
+                  {{ 'bankStatement.fields.bank' | translate }}
+                </span>
+                <span class="th-icons"><p-sortIcon field="bank"></p-sortIcon></span>
+              </div>
+            </th>
+            <th pSortableColumn="bankHistory">
+              <div class="th-flex text-center">
+                <span
+                  class="th-label"
+                  tooltipPosition="top"
+                  [pTooltip]="'bankStatement.fields.bankHistory' | translate"
+                >
+                  {{ 'bankStatement.fields.bankHistory' | translate }}
+                </span>
+                <span class="th-icons"><p-sortIcon field="bankHistory"></p-sortIcon></span>
+              </div>
+            </th>
+            <th pSortableColumn="acquirer">
+              <div class="th-flex text-center">
+                <span
+                  class="th-label"
+                  tooltipPosition="top"
+                  [pTooltip]="'bankStatement.fields.acquirer' | translate"
+                >
+                  {{ 'bankStatement.fields.acquirer' | translate }}
+                </span>
+                <span class="th-icons"><p-sortIcon field="acquirer"></p-sortIcon></span>
+              </div>
+            </th>
+            <th pSortableColumn="flag">
+              <div class="th-flex text-center">
+                <span
+                  class="th-label"
+                  tooltipPosition="top"
+                  [pTooltip]="'bankStatement.fields.flag' | translate"
+                >
+                  {{ 'bankStatement.fields.flag' | translate }}
+                </span>
+                <span class="th-icons"><p-sortIcon field="flag"></p-sortIcon></span>
+              </div>
+            </th>
+            <th pSortableColumn="releaseValue">
+              <div class="th-flex text-center">
+                <span
+                  class="th-label"
+                  tooltipPosition="top"
+                  [pTooltip]="'bankStatement.fields.releaseValue' | translate"
+                >
+                  {{ 'bankStatement.fields.releaseValueShort' | translate }}
+                </span>
+                <span class="th-icons"><p-sortIcon field="releaseValue"></p-sortIcon></span>
+              </div>
+            </th>
+            <th pSortableColumn="statusPaymentBank">
+              <div class="th-flex text-center">
+                <span
+                  class="th-label"
+                  tooltipPosition="top"
+                  [pTooltip]="'bankStatement.fields.statusPaymentBank' | translate"
+                >
+                  {{ 'bankStatement.fields.statusShort' | translate }}
+                </span>
+                <span class="th-icons"><p-sortIcon field="statusPaymentBank"></p-sortIcon></span>
+              </div>
+            </th>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-row>
+          <tr
+            class="cursor-pointer"
+            [class.cs-row-selected]="isReleaseSelected(row)"
+            (click)="selectRelease(row)"
+          >
+            <td class="text-center" (click)="$event.stopPropagation()">
+              <p-checkbox
+                [binary]="true"
+                [ngModel]="isReleaseSelected(row)"
+                (ngModelChange)="selectRelease(row)"
+              ></p-checkbox>
+            </td>
+            <td class="text-center">
+              <span [pTooltip]="row.releaseDate | csDate: 'date'" tooltipPosition="top">
+                {{ row.releaseDate | csDate: 'date' }}
+              </span>
+            </td>
+            <td>
+              <span [pTooltip]="row.company?.fantasyName" tooltipPosition="top">
+                {{ row.company?.fantasyName ?? '-' }}
+              </span>
+            </td>
+            <td class="text-center">
+              <span [pTooltip]="row.bank?.name" tooltipPosition="top">{{
+                row.bank?.name ?? '-'
+              }}</span>
+            </td>
+            <td>
+              <span [pTooltip]="row.bankHistory" tooltipPosition="top">
+                {{ row.bankHistory ?? row.descriptionHistoricalBank ?? '-' }}
+              </span>
+            </td>
+            <td class="text-center">
+              <span [pTooltip]="row.acquirer?.fantasyName" tooltipPosition="top">
+                {{ row.acquirer?.fantasyName ?? '-' }}
+              </span>
+            </td>
+            <td class="text-center">
+              <span [pTooltip]="row.flag?.name" tooltipPosition="top">
+                {{ row.flag?.name ?? '-' }}
+              </span>
+            </td>
+            <td class="text-right">{{ row.releaseValue | csCurrency }}</td>
+            <td class="text-center">
+              @if (row.statusPaymentBank) {
+                <cs-tag
+                  [value]="statusPaymentBankLabel(row.statusPaymentBank)"
+                  [tone]="statusPaymentBankSeverity(row.statusPaymentBank)"
+                ></cs-tag>
+              }
+            </td>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="9" class="text-center">{{ 'common.noRecordsFound' | translate }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+
+  <!-- RIGHT: Credit Orders -->
+  <div class="col-12 lg:col-6">
+    <div class="font-semibold text-lg mb-2 flex align-items-center gap-2">
+      <i class="pi pi-credit-card text-primary"></i>
+      {{ 'conciliation.manualBankReconciliation.ordersTitle' | translate }}
+      @if (!facade.selectedRelease()) {
+        <span class="text-color-secondary text-sm font-normal ml-2">
+          — {{ 'conciliation.manualBankReconciliation.selectReleaseFirst' | translate }}
+        </span>
+      }
+    </div>
+
+    <cs-filters-panel
+      [collapsed]="true"
+      [actionsAlign]="'start'"
+      (search)="searchOrders()"
+      (clear)="clearOrderFilters()"
+      [title]="'common.filter' | translate"
+      [activeCount]="orderActiveFiltersCount()"
+      [activeFilterGroups]="orderActiveFilterGroups()"
+    >
+      <div class="grid formgrid gap-0 align-items-end">
+        <cs-advanced-period-date-filter
+          [value]="orderReleaseDate()"
+          [period]="orderReleasePeriod()"
+          inputId="orderReleaseDateFilter"
+          periodInputId="orderReleasePeriod"
+          [colClass]="'col-12 md:col-3 p-1'"
+          [disabled]="isOrderReleaseDateDisabled()"
+          [periodOptions]="periodEnumOptions()"
+          (valueChange)="orderReleaseDate.set($event)"
+          [view]="setViewFormat(orderReleasePeriod())"
+          [dateFormat]="setDateFormat(orderReleasePeriod())"
+          [dateLabel]="'bankStatement.fields.releaseDate' | translate"
+          [selectionMode]="setSelectionMode(orderReleasePeriod())"
+          [periodLabel]="'bankStatement.fields.periodReleaseDate' | translate"
+          (periodChange)="onPeriodColumnChange(orderReleasePeriod, orderReleaseDate, $event)"
+        ></cs-advanced-period-date-filter>
+      </div>
+
+      <div class="grid formgrid gap-0 align-items-end">
+        <cs-currency-range-filter
+          inputId="orderReleaseValue"
+          class="col-12 md:col-6 p-1"
+          [value]="orderReleaseValueRange()"
+          [endLabel]="'common.filters.final' | translate"
+          [startLabel]="'common.filters.initial' | translate"
+          [label]="'creditOrders.fields.releaseValue' | translate"
+          (valueChange)="onOrderReleaseValueRangeChange($event)"
+        ></cs-currency-range-filter>
+      </div>
+    </cs-filters-panel>
+
+    <div class="surface-card border-round px-3 pt-2 pb-3 mt-2">
+      <p-table
+        stripedRows
+        dataKey="id"
+        size="small"
+        [rows]="rows"
+        [lazy]="true"
+        showGridlines
+        [rowHover]="true"
+        [paginator]="true"
+        sortMode="multiple"
+        class="cs-admin-table"
+        [value]="creditOrderRows()"
+        [showCurrentPageReport]="true"
+        [loading]="facade.ordersLoading()"
+        [paginatorDropdownAppendTo]="'body'"
+        [totalRecords]="facade.ordersTotal()"
+        [rowsPerPageOptions]="rowsPerPageOptions"
+        (onPage)="onOrdersPageChange($event)"
+        (onLazyLoad)="onOrdersLazyLoad($event)"
+        [currentPageReportTemplate]="'pagination.report' | translate"
+        [tableStyle]="{ width: '100%', 'min-width': '48rem', 'table-layout': 'fixed' }"
+      >
+        <ng-template pTemplate="colgroup">
+          <colgroup>
+            <col style="width: 40px" />
+            <col style="width: 80px" />
+            <col style="width: 80px" />
+            <col style="width: 120px" />
+            <col style="width: 80px" />
+            <col style="width: 80px" />
+            <col style="width: 80px" />
+            <col style="width: 90px" />
+            <col style="width: 100px" />
+          </colgroup>
+        </ng-template>
+
+        <ng-template pTemplate="header">
+          <tr>
+            <th class="text-center"></th>
+            <th pSortableColumn="rvNumber">
+              <div class="th-flex text-center">
+                <span
+                  class="th-label"
+                  tooltipPosition="top"
+                  [pTooltip]="'conciliation.manualBankReconciliation.columns.rvNumber' | translate"
+                >
+                  {{ 'conciliation.manualBankReconciliation.columns.rvNumber' | translate }}
+                </span>
+                <span class="th-icons"><p-sortIcon field="rvNumber"></p-sortIcon></span>
+              </div>
+            </th>
+            <th pSortableColumn="releaseDate">
+              <div class="th-flex text-center">
+                <span
+                  class="th-label"
+                  tooltipPosition="top"
+                  [pTooltip]="'conciliation.manualBankReconciliation.columns.date' | translate"
+                >
+                  {{ 'conciliation.manualBankReconciliation.columns.date' | translate }}
+                </span>
+                <span class="th-icons"><p-sortIcon field="releaseDate"></p-sortIcon></span>
+              </div>
+            </th>
+            <th pSortableColumn="company">
+              <div class="th-flex text-center">
+                <span
+                  class="th-label"
+                  tooltipPosition="top"
+                  [pTooltip]="'bankStatement.fields.company' | translate"
+                >
+                  {{ 'bankStatement.fields.company' | translate }}
+                </span>
+                <span class="th-icons"><p-sortIcon field="company"></p-sortIcon></span>
+              </div>
+            </th>
+            <th pSortableColumn="bankingDomicile">
+              <div class="th-flex text-center">
+                <span
+                  class="th-label"
+                  tooltipPosition="top"
+                  [pTooltip]="'bankStatement.fields.bank' | translate"
+                >
+                  {{ 'bankStatement.fields.bank' | translate }}
+                </span>
+                <span class="th-icons"><p-sortIcon field="bankingDomicile"></p-sortIcon></span>
+              </div>
+            </th>
+            <th pSortableColumn="acquirer">
+              <div class="th-flex text-center">
+                <span
+                  class="th-label"
+                  tooltipPosition="top"
+                  [pTooltip]="'bankStatement.fields.acquirer' | translate"
+                >
+                  {{ 'bankStatement.fields.acquirer' | translate }}
+                </span>
+                <span class="th-icons"><p-sortIcon field="acquirer"></p-sortIcon></span>
+              </div>
+            </th>
+            <th pSortableColumn="flag">
+              <div class="th-flex text-center">
+                <span
+                  class="th-label"
+                  tooltipPosition="top"
+                  [pTooltip]="'bankStatement.fields.flag' | translate"
+                >
+                  {{ 'bankStatement.fields.flag' | translate }}
+                </span>
+                <span class="th-icons"><p-sortIcon field="flag"></p-sortIcon></span>
+              </div>
+            </th>
+            <th pSortableColumn="releaseValue">
+              <div class="th-flex text-center">
+                <span
+                  class="th-label"
+                  tooltipPosition="top"
+                  [pTooltip]="'bankStatement.fields.releaseValue' | translate"
+                >
+                  {{ 'bankStatement.fields.releaseValueShort' | translate }}
+                </span>
+                <span class="th-icons"><p-sortIcon field="releaseValue"></p-sortIcon></span>
+              </div>
+            </th>
+            <th pSortableColumn="statusPaymentBank">
+              <div class="th-flex text-center">
+                <span
+                  class="th-label"
+                  tooltipPosition="top"
+                  [pTooltip]="'bankStatement.fields.statusPaymentBank' | translate"
+                >
+                  {{ 'bankStatement.fields.statusShort' | translate }}
+                </span>
+                <span class="th-icons"><p-sortIcon field="statusPaymentBank"></p-sortIcon></span>
+              </div>
+            </th>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-row>
+          <tr [class.cs-row-selected]="facade.isOrderSelected(row)">
+            <td class="text-center">
+              <p-checkbox
+                [binary]="true"
+                [disabled]="!facade.selectedRelease()"
+                [ngModel]="facade.isOrderSelected(row)"
+                (ngModelChange)="facade.toggleOrder(row)"
+              ></p-checkbox>
+            </td>
+            <td class="text-center font-mono text-sm">
+              <span [pTooltip]="row.rvNumber" tooltipPosition="top">{{ row.rvNumber }}</span>
+            </td>
+            <td class="text-center">
+              <span [pTooltip]="row.releaseDate | csDate: 'date'" tooltipPosition="top">
+                {{ row.releaseDate | csDate: 'date' }}
+              </span>
+            </td>
+            <td>
+              <span [pTooltip]="row.company?.fantasyName" tooltipPosition="top">
+                {{ row.company?.fantasyName ?? '-' }}
+              </span>
+            </td>
+            <td class="text-center">
+              <span [pTooltip]="row.bankingDomicile?.bank?.name" tooltipPosition="top">
+                {{ row.bankingDomicile?.bank?.name ?? '-' }}
+              </span>
+            </td>
+            <td class="text-center">
+              <span [pTooltip]="row.acquirer?.fantasyName" tooltipPosition="top">
+                {{ row.acquirer?.fantasyName ?? '-' }}
+              </span>
+            </td>
+            <td class="text-center">
+              <span [pTooltip]="row.flag?.name" tooltipPosition="top">{{
+                row.flag?.name ?? '-'
+              }}</span>
+            </td>
+            <td class="text-right">{{ row.releaseValue | csCurrency }}</td>
+            <td class="text-center">
+              @if (row.statusPaymentBank) {
+                <cs-tag
+                  [value]="statusPaymentBankLabel(row.statusPaymentBank)"
+                  [tone]="statusPaymentBankSeverity(row.statusPaymentBank)"
+                ></cs-tag>
+              }
+            </td>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="9" class="text-center">{{ 'common.noRecordsFound' | translate }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+</div>

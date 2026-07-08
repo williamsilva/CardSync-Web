@@ -1,0 +1,18 @@
+@use '../file-processing-page';
+
+.cs-exec-row {
+  background: var(--surface-ground);
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+
+  &:hover {
+    background-color: var(--surface-100);
+  }
+}
+
+.cs-filename {
+  max-width: 22rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

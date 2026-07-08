@@ -104,6 +104,12 @@
       "manualCreditOrder": {
         "title": "Orden de Pago Manual"
       },
+      "manualBankStatement": {
+        "title": "Lanzamiento Bancario Manual"
+      },
+      "manualBankReconciliation": {
+        "title": "Conciliación Bancaria Manual"
+      },
       "reconciliationActions": {
         "title": "Acciones de Conciliación"
       },
@@ -233,6 +239,8 @@
       "erpVsAcquirerDivergences": "Otras no conciliadas",
       "manualSalesSummary": "Resumen de Ventas Manual",
       "manualCreditOrder": "Orden de Pago Manual",
+      "manualBankStatement": "Lanzamiento Bancario Manual",
+      "manualBankReconciliation": "Conciliación Bancaria Manual",
       "reconciliationActions": "Acciones de Conciliación",
       "executionHistory": "Historial de Ejecuciones"
     },
@@ -265,6 +273,7 @@
         "erpPendent": "ERP pendientes",
         "movementRede": "Movimientos Rede",
         "scheduler": "Scheduler",
+        "analysis": "Análisis de Procesamiento",
         "creditOrders": "Órdenes de crédito",
         "adjustments": "Ajustes Rede",
         "anticipations": "Anticipaciones",
@@ -570,15 +579,6 @@
       "favoredClient": "Favorecido Cliente",
       "favoredCompany": "Favorecido Empresa",
       "notLocatedErpAcq": "No localizado"
-    },
-    "modalityPaymentBank": {
-      "unknown": "No informado",
-      "pixEnv": "Pix Enviado",
-      "pixRec": "Pix Recibido",
-      "pixDev": "Pix Devuelto",
-      "cashDebit": "Tarjeta Débito",
-      "cashCredit": "Tarjeta Crédito",
-      "antecipCred": "Anticipo Crédito"
     },
     "chargebackRequestReasonEnum": {
       "unknown": "No informado",
@@ -2010,6 +2010,15 @@
       "reconciliationLookbackMonthsHint": "Define cuántos meses anteriores a la fecha actual se deben considerar para buscar transacciones en la conciliación. Valor predeterminado: 120 meses.",
       "creditOrderPendingDays": "Días de atraso para órdenes pendientes",
       "creditOrderPendingDaysHint": "Los resúmenes con fecha de RV anterior a este número de días y sin órdenes de pago se listan como pendientes para creación en lote.",
+      "enabledTitle": "Habilitación de Etapas",
+      "enabledSubtitle": "Cuando está desactivada, la etapa se omite (SKIPPED) y las etapas siguientes continúan normalmente.",
+      "enabledErpAcquirer": "Etapa 1 — ADQ x ERP",
+      "enabledSalesSummaryTransactions": "Etapa 2 — Resumen x TransactionAcq",
+      "enabledAcquirerSaleCancellations": "Etapa 3 — Cancelaciones ADQ",
+      "enabledErpAcquirerFees": "Etapa 4 — Comisiones ERP x ADQ",
+      "enabledAcquirerSaleSummary": "Etapa 5 — Venta ADQ x Resumen",
+      "enabledSalesSummaryCreditOrder": "Etapa 6 — Resumen x Orden de Pago",
+      "enabledBankAcquirer": "Etapa 7 — Orden de Pago x Banco",
       "reprocessTitle": "Reprocesamiento por Etapa del Pipeline",
       "reprocessSubtitle": "Permite que cada etapa del pipeline procese registros ya conciliados. Use solo para auditorías o correcciones puntuales — desactive después del uso.",
       "reprocessErpAcquirerSales": "Etapa 1 — ERP x Adquirente (Ventas)",
@@ -2026,8 +2035,10 @@
       "reprocessSalesSummaryCreditOrderHint": "Reprocesa resúmenes cuyo creditOrderStatus ya está conciliado.",
       "reprocessBankAcquirer": "Etapa 7 — Orden de Pago x Extracto Bancario",
       "reprocessBankAcquirerHint": "Reprocesa órdenes de crédito ya pagadas y lanzamientos bancarios ya conciliados.",
-      "dateToleranceDays": "Tolerancia de días (banco)",
-      "dateToleranceDaysHint": "Ventana en días para aceptar divergencia de fechas en la conciliación bancaria. Ej: 7 acepta lanzamientos hasta 7 días antes/después de la fecha de la orden.",
+      "dateToleranceDaysBefore": "Días anteriores permitidos (banco)",
+      "dateToleranceDaysBeforeHint": "Días que el lanzamiento bancario puede ser ANTERIOR a la orden de crédito. Recomendado: 0 (evita falsos positivos).",
+      "dateToleranceDaysAfter": "Días posteriores permitidos (banco)",
+      "dateToleranceDaysAfterHint": "Días que el lanzamiento bancario puede ser POSTERIOR a la orden de crédito. Recomendado: 5.",
       "valueTolerance": "Tolerancia de valor (R$)",
       "valueToleranceHint": "Diferencia monetaria máxima tolerada en una conciliación. Ej: 0,05 acepta divergencias de hasta 5 centavos.",
       "bankMarkNotReconciledAfterDays": "Días para marcar no conciliado",
@@ -2140,6 +2151,58 @@
       "createSelected": "Crear seleccionados ({{count}})",
       "clearTable": "Limpiar tabla",
       "emptyTable": "No hay resúmenes cargados. Use la búsqueda o cargue los pendientes."
+    },
+    "manualBankStatement": {
+      "eyebrow": "Conciliación",
+      "title": "Lanzamiento Bancario Manual",
+      "subtitle": "Cree un lanzamiento bancario manualmente para domicilios bancarios sin archivo importado.",
+      "company": "Empresa",
+      "bankingDomicile": "Domicilio bancario",
+      "releaseDate": "Fecha del lanzamiento",
+      "releaseValue": "Valor del lanzamiento",
+      "releaseCategory": "Categoría",
+      "modalityPaymentBank": "Modalidad",
+      "description": "Descripción histórica",
+      "document": "Complemento del documento",
+      "historicalCodeBank": "Código histórico del banco",
+      "acquirer": "Adquirente",
+      "establishment": "Establecimiento (opcional)",
+      "flag": "Marca (opcional)",
+      "sectionRequired": "Datos obligatorios",
+      "sectionOptional": "Datos opcionales",
+      "submit": "Crear lanzamiento",
+      "saved": "Lanzamiento bancario creado con éxito.",
+      "saveError": "No se pudo crear el lanzamiento bancario."
+    },
+    "manualBankReconciliation": {
+      "title": "Conciliación Bancaria Manual",
+      "subtitle": "Vincule lanzamientos bancarios a órdenes de crédito manualmente.",
+      "releasesTitle": "Lanzamientos Bancarios",
+      "ordersTitle": "Órdenes de Crédito",
+      "link": "Vincular",
+      "linkSuccess": "{reconciled, plural, one {# orden vinculada con éxito.} other {# órdenes vinculadas con éxito.}}",
+      "confirmTitle": "Confirmar vinculación",
+      "confirmMessage": "{count, plural, one {¿Vincular # orden de crédito a este lanzamiento bancario?} other {¿Vincular # órdenes de crédito a este lanzamiento bancario?}}",
+      "selectReleaseFirst": "Seleccione un lanzamiento para habilitar",
+      "ordersSelected": "{count, plural, =0 {Ninguna seleccionada} one {# seleccionada} other {# seleccionadas}}",
+      "selectedOrdersTotal": "Total de órdenes seleccionadas",
+      "clearOrders": "Limpiar órdenes seleccionadas",
+      "valueDifference": "Diferencia entre los valores",
+      "filters": {
+        "releaseDate": "Fecha del lanzamiento",
+        "rvDate": "Fecha de RV"
+      },
+      "columns": {
+        "date": "Fecha",
+        "bank": "Banco",
+        "company": "Empresa",
+        "description": "Descripción",
+        "value": "Valor",
+        "status": "Estado",
+        "rvNumber": "N° RV",
+        "flag": "Marca",
+        "acquirer": "Adquirente"
+      }
     },
     "contractAudit": {
       "title": "Tasas Aplicadas",
@@ -2298,7 +2361,12 @@
         "totalPending": "Pendientes",
         "trigger": {
           "MANUAL": "Manual",
-          "SCHEDULED": "Programado"
+          "SCHEDULED": "Programado",
+          "SCHEDULER_SEQUENTIAL_JOB": "Programación secuencial",
+          "SCHEDULER_FINANCIAL_PIPELINE": "Programación esteira financiera",
+          "SCHEDULER_ACQUIRER_SALE_SUMMARY": "Programación venta ADQ x resumen",
+          "SCHEDULER_SALES_SUMMARY_CREDIT_ORDER": "Programación resumen x orden",
+          "SCHEDULER_CREDIT_ORDER_BANK_RELEASE": "Programación orden x banco"
         },
         "status": {
           "SUCCESS": "Éxito",
@@ -2761,6 +2829,25 @@
       "bank": "Banco"
     }
   },
+  "fileProcessingAnalysis": {
+    "subtitle": "Consulte los archivos importados, estado y pendientes",
+    "empty": "No se encontraron archivos",
+    "row": {
+      "lines": "Líneas",
+      "processed": "Procesadas",
+      "warnings": "Avisos",
+      "errors": "Errores"
+    },
+    "detail": {
+      "totalLines": "Total de líneas",
+      "processedLines": "Líneas procesadas",
+      "ignoredLines": "Líneas ignoradas",
+      "warningLines": "Líneas con aviso",
+      "errorLines": "Líneas con error",
+      "pendingContract": "Pend. contrato",
+      "pendingContext": "Pend. contexto"
+    }
+  },
   "fileProcessingDashboard": {
     "subtitle": "Supervise las importaciones ERP, Rede y CNAB, pendientes y conciliación bancaria.",
     "metrics": {
@@ -2828,6 +2915,12 @@
       "periodLaunchDate": "Período fecha lanzamiento",
       "periodReleaseDate": "Período fecha lanzamiento",
       "modalityPaymentBank": "Modalidad pago banco"
+    },
+    "deleteManual": {
+      "header": "Confirmar exclusión",
+      "message": "¿Desea eliminar este lanzamiento manual?",
+      "success": "Lanzamiento manual eliminado con éxito.",
+      "error": "No se pudo eliminar el lanzamiento manual."
     }
   },
   "anticipation": {

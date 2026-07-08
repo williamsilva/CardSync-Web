@@ -13,6 +13,9 @@ export type BankStatementFiltersState = {
   statusPaymentBank: StatusPaymentBankEnum[] | null;
   modalityPaymentBank: ModalityPaymentBankEnum[] | null;
 
+  releaseValueEnd: number | null;
+  releaseValueStart: number | null;
+
   flags: string[] | null;
   banks: string[] | null;
   acquirers: string[] | null;
@@ -30,6 +33,9 @@ export function createEmptyBankStatementFiltersState(): BankStatementFiltersStat
   return {
     releaseDate: null,
     periodReleaseDate: null,
+
+    releaseValueEnd: null,
+    releaseValueStart: null,
 
     releaseCategory: null,
     statusPaymentBank: null,
@@ -53,6 +59,9 @@ export function resetBankStatementAdvancedFilters(
   filters.acquirers.set(empty.acquirers);
   filters.companies.set(empty.companies);
   filters.establishments.set(empty.establishments);
+
+  filters.releaseValueEnd.set(empty.releaseValueEnd);
+  filters.releaseValueStart.set(empty.releaseValueStart);
 
   filters.releaseDate.set(empty.releaseDate);
   filters.periodReleaseDate.set(empty.periodReleaseDate);
