@@ -6,8 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 </head>
 <body style="font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif;background:#fafafa;padding:18px;">
-  <h1 style="margin:0 0 6px;">i18n validation report — OK</h1>
-  <div style="color:#555;margin-bottom:12px;">Generated at: <code>2026-05-22T14:11:58.878Z</code></div>
+  <h1 style="margin:0 0 6px;">i18n validation report — FAIL</h1>
+  <div style="color:#555;margin-bottom:12px;">Generated at: <code>2026-07-09T01:23:31.620Z</code></div>
   <section style="padding:12px;border:1px solid #ddd;border-radius:10px;margin:12px 0;">
         <h2 style="margin:16px 0 8px;">primeng <span style="padding:2px 8px;border-radius:999px;background:#0a7;color:#fff;font-weight:700;">OK</span></h2>
         <div style="font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; font-size:12px; color:#333;">
@@ -44,14 +44,14 @@
               </tbody>
             </table>
           </section><section style="padding:12px;border:1px solid #ddd;border-radius:10px;margin:12px 0;">
-        <h2 style="margin:16px 0 8px;">i18n <span style="padding:2px 8px;border-radius:999px;background:#0a7;color:#fff;font-weight:700;">OK</span></h2>
+        <h2 style="margin:16px 0 8px;">i18n <span style="padding:2px 8px;border-radius:999px;background:#c33;color:#fff;font-weight:700;">FAIL</span></h2>
         <div style="font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; font-size:12px; color:#333;">
           <div><b>Dir:</b> C:\WorkSpace\NimbusSystems\CardSync_web\src\assets\i18n</div>
           <div><b>Base:</b> pt-BR | <b>Langs:</b> en, es</div>
           <div style="margin-top:6px;">
             Missing files: <b>0</b> |
-            Missing keys: <b>0</b> |
-            Extra keys: <b>0</b> |
+            Missing keys: <b>43</b> |
+            Extra keys: <b>142</b> |
             Empty values: <b>0</b> |
             Array mismatches: <b>0</b> |
             ICU errors: <b>0</b>
@@ -65,17 +65,198 @@
               </tbody>
             </table>
           
-            <h3 style="margin:14px 0 6px;">en <span style="padding:2px 8px;border-radius:999px;background:#0a7;color:#fff;font-weight:700;">OK</span></h3>
+            <h3 style="margin:14px 0 6px;">en <span style="padding:2px 8px;border-radius:999px;background:#c33;color:#fff;font-weight:700;">FAIL</span></h3>
             <table style="width:100%;border-collapse:collapse;margin-bottom:8px;">
               <tbody>
-                <tr><td colspan="2">✅ No issues</td></tr>
+                <tr><td>Missing keys</td><td><pre>bankStatement.fields.releaseValue
+bankStatement.fields.releaseValueShort
+conciliation.manualCreditOrder.colCreditOrderStatus
+creditOrders.fields.releaseValueShort
+enum.transactionReasonEnum.manualSwapNotFound
+establishment.columns.closingDate
+establishment.columns.openingDate
+saleSummary.fields.rvNumberShort
+transactions.fields.releaseValue
+transactions.fields.statusTransactionReason</pre></td></tr><tr><td>Extra keys</td><td><pre>bankStatement.fields.launchDate
+bankStatement.fields.launchDateShort
+bankStatement.fields.periodLaunchDate
+bankStatement.fields.value
+bankingDomicile.columns.active
+bankingDomicile.columns.holderDocument
+bankingDomicile.columns.holderName
+bankingDomicile.fields.active
+bankingDomicile.fields.createdAt
+bankingDomicile.fields.establishment
+bankingDomicile.fields.holderDocument
+bankingDomicile.fields.holderName
+bankingDomicile.fields.updatedAt
+conciliation.fees.columns.analysis
+conciliation.fees.columns.authorizationShort
+conciliation.fees.columns.date
+conciliation.fees.columns.establishmentShort
+conciliation.fees.columns.fees
+conciliation.fees.columns.value
+conciliation.fees.fields.acquirer
+conciliation.fees.fields.analysis
+conciliation.fees.fields.appliedFeeValue
+conciliation.fees.fields.authorization
+conciliation.fees.fields.company
+conciliation.fees.fields.establishment
+conciliation.fees.fields.expectedFeeValue
+conciliation.fees.fields.feeDifference
+conciliation.fees.fields.fees
+conciliation.fees.fields.flag
+conciliation.fees.fields.grossValue
+conciliation.fees.fields.nsu
+conciliation.fees.fields.period
+conciliation.fees.fields.periodSaleDate
+conciliation.fees.fields.saleDate
+conciliation.fees.fields.status
+conciliation.fees.status.missingAcquirerSale
+conciliation.fees.status.missingContract
+conciliation.fees.status.ok
+conciliation.fees.status.rateDivergence
+conciliation.fees.status.valueDivergence
+conciliation.fees.subtitle
+conciliation.fees.table.appliedRate
+conciliation.fees.table.contractRate
+conciliation.fees.table.differenceShort
+conciliation.fees.table.expectedFee
+conciliation.fees.title
+conciliation.processReconciliation
+conciliation.processReconciliationError
+conciliation.textTooltip
+creditOrders.fields.liquidValue
+enum.statusReconciliationEnum.null
+enum.statusTransactionEnum.notReconciled
+importedFilesCalendar.detail.filesCount
+menu.conciliation.chargebacks
+menu.conciliation.fees
+menu.file.processing.adjustments
+menu.file.processing.anticipations
+menu.file.processing.bankReleases
+menu.file.processing.creditOrders
+menu.file.processing.movementRede
+menu.file.processing.pendingDebts
+menu.file.processing.settledDebts
+noFileDay.columns.bank
+noFileDay.fields.acquirer
+noFileDay.fields.bank
+noFileDay.fields.description
+routes.conciliation.bankSettlement.title
+routes.conciliation.chargebacks.title
+routes.conciliation.debits.title
+routes.conciliation.divergences.title
+routes.conciliation.fees.title</pre></td></tr>
               </tbody>
             </table>
           
-            <h3 style="margin:14px 0 6px;">es <span style="padding:2px 8px;border-radius:999px;background:#0a7;color:#fff;font-weight:700;">OK</span></h3>
+            <h3 style="margin:14px 0 6px;">es <span style="padding:2px 8px;border-radius:999px;background:#c33;color:#fff;font-weight:700;">FAIL</span></h3>
             <table style="width:100%;border-collapse:collapse;margin-bottom:8px;">
               <tbody>
-                <tr><td colspan="2">✅ No issues</td></tr>
+                <tr><td>Missing keys</td><td><pre>bankStatement.fields.releaseValue
+bankStatement.fields.releaseValueShort
+conciliation.manualCreditOrder.colCreditOrderStatus
+creditOrders.fields.releaseValueShort
+email.settings.brevoPort
+email.settings.brevoPortHint
+email.settings.brevoTitle
+email.settings.brevoUsername
+email.settings.brevoUsernameHint
+email.settings.chargebackRecipients
+email.settings.chargebackRecipientsHint
+email.settings.notificationsTitle
+email.settings.smtpAuth
+email.settings.smtpAuthHint
+email.settings.smtpHost
+email.settings.smtpHostHint
+email.settings.smtpPassword
+email.settings.smtpPasswordHint
+email.settings.smtpPort
+email.settings.smtpPortHint
+email.settings.smtpSsl
+email.settings.smtpSslHint
+email.settings.smtpStarttls
+email.settings.smtpStarttlsHint
+email.settings.smtpTitle
+email.settings.smtpUsername
+email.settings.smtpUsernameHint
+enum.transactionReasonEnum.manualSwapNotFound
+establishment.columns.closingDate
+establishment.columns.openingDate
+saleSummary.fields.rvNumberShort
+transactions.fields.releaseValue
+transactions.fields.statusTransactionReason</pre></td></tr><tr><td>Extra keys</td><td><pre>bankStatement.fields.launchDate
+bankStatement.fields.launchDateShort
+bankStatement.fields.periodLaunchDate
+bankStatement.fields.value
+bankingDomicile.columns.active
+bankingDomicile.columns.holderDocument
+bankingDomicile.columns.holderName
+bankingDomicile.fields.active
+bankingDomicile.fields.createdAt
+bankingDomicile.fields.establishment
+bankingDomicile.fields.holderDocument
+bankingDomicile.fields.holderName
+bankingDomicile.fields.updatedAt
+conciliation.fees.columns.analysis
+conciliation.fees.columns.authorizationShort
+conciliation.fees.columns.date
+conciliation.fees.columns.establishmentShort
+conciliation.fees.columns.fees
+conciliation.fees.columns.value
+conciliation.fees.fields.acquirer
+conciliation.fees.fields.analysis
+conciliation.fees.fields.appliedFeeValue
+conciliation.fees.fields.authorization
+conciliation.fees.fields.company
+conciliation.fees.fields.establishment
+conciliation.fees.fields.expectedFeeValue
+conciliation.fees.fields.feeDifference
+conciliation.fees.fields.fees
+conciliation.fees.fields.flag
+conciliation.fees.fields.grossValue
+conciliation.fees.fields.nsu
+conciliation.fees.fields.period
+conciliation.fees.fields.periodSaleDate
+conciliation.fees.fields.saleDate
+conciliation.fees.fields.status
+conciliation.fees.status.missingAcquirerSale
+conciliation.fees.status.missingContract
+conciliation.fees.status.ok
+conciliation.fees.status.rateDivergence
+conciliation.fees.status.valueDivergence
+conciliation.fees.subtitle
+conciliation.fees.table.appliedRate
+conciliation.fees.table.contractRate
+conciliation.fees.table.differenceShort
+conciliation.fees.table.expectedFee
+conciliation.fees.title
+conciliation.processReconciliation
+conciliation.processReconciliationError
+conciliation.textTooltip
+creditOrders.fields.liquidValue
+enum.statusReconciliationEnum.null
+enum.statusTransactionEnum.notReconciled
+importedFilesCalendar.detail.filesCount
+menu.conciliation.chargebacks
+menu.conciliation.fees
+menu.file.processing.adjustments
+menu.file.processing.anticipations
+menu.file.processing.bankReleases
+menu.file.processing.creditOrders
+menu.file.processing.movementRede
+menu.file.processing.pendingDebts
+menu.file.processing.settledDebts
+noFileDay.columns.bank
+noFileDay.fields.acquirer
+noFileDay.fields.bank
+noFileDay.fields.description
+routes.conciliation.bankSettlement.title
+routes.conciliation.chargebacks.title
+routes.conciliation.debits.title
+routes.conciliation.divergences.title
+routes.conciliation.fees.title</pre></td></tr>
               </tbody>
             </table>
           </section>
