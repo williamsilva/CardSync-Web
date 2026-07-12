@@ -1325,6 +1325,7 @@ export const UI_KEYS = {
       excludedSale: 'enum.statusPaymentBankEnum.divergent',
       notReconciled: 'enum.statusPaymentBankEnum.notReconciled',
       partiallyPaid: 'enum.statusPaymentBankEnum.partiallyPaid',
+      legacy: 'enum.statusPaymentBankEnum.legacy',
     },
     transactionReasonEnum: {
       null: 'enum.transactionReasonEnum.null',

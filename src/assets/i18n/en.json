@@ -571,7 +571,8 @@
       "divergent": "Divergent",
       "excludedSale": "Deleted sale",
       "canceledSale": "Canceled sale",
-      "partiallyPaid": "Partial Payment"
+      "partiallyPaid": "Partial Payment",
+      "legacy": "Pre–Go-Live"
     },
     "modalityPaymentBank": {
       "unknown": "Not Informed",
@@ -2078,6 +2079,12 @@
       "valueToleranceHint": "Maximum monetary difference tolerated in a reconciliation. E.g. 0.05 accepts up to 5 cents of divergence.",
       "bankMarkNotReconciledAfterDays": "Days to mark as unreconciled",
       "bankMarkNotReconciledAfterDaysHint": "Bank releases without a match in the last N days remain pending. After this period, they are marked as unreconciled.",
+      "legacyMarkingTitle": "Legacy Marking",
+      "legacyMarkingSubtitle": "Controls which bank releases can be manually marked as pre–go-live, based on the release date.",
+      "goLiveDate": "Go-Live Date",
+      "goLiveDateHint": "Date the system went live. Used by the reconciliation pipeline to ignore earlier dates and as the reference for the legacy marking window.",
+      "legacyMarkingMonths": "Legacy Marking Months",
+      "legacyMarkingMonthsHint": "Only releases dated up to go-live + N months can be marked as legacy. For later releases, the button is hidden in manual reconciliation.",
       "saved": "Settings saved successfully.",
       "saveError": "Could not save the settings."
     },
@@ -2215,7 +2222,7 @@
       "releasesTitle": "Bank Releases",
       "ordersTitle": "Credit Orders",
       "link": "Link",
-      "linkSuccess": "{reconciled, plural, one {# order linked successfully.} other {# orders linked successfully.}}",
+      "linkSuccess": "{reconciled, plural, one {# order linked successfully} other {# orders linked successfully}}{zeroValueReconciled, plural, =0 {.} other { + # zero-value orders auto-reconciled.}}",
       "confirmTitle": "Confirm linking",
       "confirmMessage": "{count, plural, one {Link # credit order to this bank release?} other {Link # credit orders to this bank release?}}",
       "selectReleaseFirst": "Select a release to enable",
@@ -2223,6 +2230,13 @@
       "selectedOrdersTotal": "Total of selected orders",
       "clearOrders": "Clear selected orders",
       "valueDifference": "Difference between values",
+      "markLegacy": "Mark as Legacy",
+      "markLegacyTooltip": "Marks the release as pre–go-live (no matching credit order in the system)",
+      "markLegacyConfirmTitle": "Mark as legacy",
+      "markLegacyConfirmMessage": "{count, plural, one {Mark this bank release as pre–go-live? It will leave the pending reconciliation queue and remain available in the bank statement.} other {Mark these # bank releases as pre–go-live? They will leave the pending reconciliation queue and remain available in the bank statement.}}",
+      "releasesSelectedForLegacy": "{count, plural, one {# release selected for legacy} other {# releases selected for legacy}}",
+      "ordersBlockedMultiSelect": "Blocked — multiple releases selected for legacy",
+      "markLegacySuccess": "{updated, plural, one {# release marked as legacy.} other {# releases marked as legacy.}}",
       "filters": {
         "releaseDate": "Release date",
         "rvDate": "RV date"
@@ -2432,7 +2446,8 @@
           "ACQUIRER_SALE_ADJUSTMENTS": "Sales with matching or absent (normalized) contract rates advance. Fee divergences block subsequent steps.",
           "ACQUIRER_SALE_SUMMARY": "A summary only reconciles when its linked ADQ sales are eligible from previous steps.",
           "SALES_SUMMARY_CREDIT_ORDER": "Debit/anticipation without an order may generate a synthetic order for analysis.",
-          "CREDIT_ORDER_BANK_RELEASE": "A credit order is only eligible when its linked summary is already reconciled."
+          "CREDIT_ORDER_BANK_RELEASE": "A credit order is only eligible when its linked summary is already reconciled.",
+          "SKIPPED": "Step skipped — no data to process or a previous step was blocked."
         }
       },
       "kpi": {

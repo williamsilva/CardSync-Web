@@ -27,6 +27,7 @@ import { allPeriodEnum, PeriodEnum, periodEnumLabel } from '@models/enums/period
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
 import { mapPrimeLazyToTableQuery } from '@shared/features/list-query/primeng-lazy.mapper';
 import { ManualBankReconciliationFacade } from '@features/facade/manual-bank-reconciliation.facade';
+import { ReconciliationSettingsApiService } from '@features/service/reconciliation-settings.api.service';
 import { CsAdvancedPeriodDateFilterComponent } from '@features/list-base/cs-advanced-period-date-filter.component';
 import { CsAdvancedMultiselectFilterComponent } from '@features/list-base/cs-advanced-multiselect-filter.component';
 import {
@@ -38,6 +39,11 @@ import {
   statusPaymentBankEnumLabel,
   statusPaymentBankEnumSeverity,
 } from '@models/enums/status-payment-bank.enum';
+import {
+  ModalityPaymentBankEnum,
+  modalityPaymentBankLabel,
+  modalityPaymentBankSeverity,
+} from '@models/enums/modality-payment-bank.enum';
 import {
   ActiveFilterItem,
   ActiveFilterGroup,
@@ -93,6 +99,21 @@ export class ManualBankReconciliationComponent implements OnInit {
   private readonly companyFacade = inject(CompanyFacade);
   readonly facade = inject(ManualBankReconciliationFacade);
   private readonly acquirerFacade = inject(AcquirerFacade);
+  private readonly settingsApi = inject(ReconciliationSettingsApiService);
+
+  /** Data-limite (go-live + N meses): lançamentos com data até ela podem ser marcados como legado. */
+  private readonly legacyMarkingCutoffDate = signal<string | null>(null);
+
+  /** Botão de legado visível somente para lançamento selecionado dentro da janela. */
+  readonly canMarkLegacySelected = computed(() => {
+    const release = this.facade.selectedRelease();
+    return !!release && this.isEligibleForLegacy(release);
+  });
+
+  /** Valor total dos lançamentos selecionados em lote para marcação de legado. */
+  readonly selectedReleasesTotalValue = computed(() =>
+    this.facade.selectedReleases().reduce((sum, r) => sum + (r.releaseValue ?? 0), 0),
+  );
 
   rows = 15;
   readonly rowsPerPageOptions = [13, 15, 30, 50, 100];
@@ -129,7 +150,9 @@ export class ManualBankReconciliationComponent implements OnInit {
   readonly creditOrderRows = computed(() => this.facade.orders() as CreditOrderRow[]);
 
   readonly selectedOrdersTotalValue = computed(() =>
-    this.facade.selectedOrders().reduce((sum, o) => sum + ((o as CreditOrderRow).releaseValue ?? 0), 0),
+    this.facade
+      .selectedOrders()
+      .reduce((sum, o) => sum + ((o as CreditOrderRow).releaseValue ?? 0), 0),
   );
 
   readonly valuesMatch = computed(() => {
@@ -247,7 +270,10 @@ export class ManualBankReconciliationComponent implements OnInit {
   readonly orderActiveFilterGroups = computed<ActiveFilterGroup[]>(() => {
     const items: ActiveFilterItem[] = [];
 
-    const dateValue = this.formatPeriodDateLabel(this.orderReleasePeriod(), this.orderReleaseDate());
+    const dateValue = this.formatPeriodDateLabel(
+      this.orderReleasePeriod(),
+      this.orderReleaseDate(),
+    );
     if (dateValue) {
       items.push({ label: this.i18n.tUi('bankStatement.fields.releaseDate'), value: dateValue });
     }
@@ -274,6 +300,9 @@ export class ManualBankReconciliationComponent implements OnInit {
   );
 
   ngOnInit(): void {
+    this.settingsApi.getSettings().subscribe({
+      next: (settings) => this.legacyMarkingCutoffDate.set(settings.legacyMarkingCutoffDate),
+    });
     this.companyFacade.loadCompanyOptionsFilter();
     this.bankFacade.loadBankOptionsFilter();
     this.acquirerFacade.loadAcquirerOptionsFilter();
@@ -343,15 +372,49 @@ export class ManualBankReconciliationComponent implements OnInit {
     this.rows = event.rows;
   }
 
+  /**
+   * Seleção de lançamentos: normalmente única (1 lançamento por vez, para
+   * conciliação com ordens de crédito). Quando todos os lançamentos já
+   * selecionados são elegíveis para marcação de legado e o novo clique também é
+   * elegível, acumula na seleção em vez de substituir — permitindo marcar vários
+   * de uma vez. Clicar em um lançamento não elegível sempre volta ao modo único.
+   */
   selectRelease(release: BankStatementApiModel): void {
-    const current = this.facade.selectedRelease();
-    this.facade.selectRelease(current?.id === release.id ? null : release);
+    const eligible = this.isEligibleForLegacy(release);
+    const current = this.facade.selectedReleases();
+    const currentAllEligible = current.length > 0 && current.every((r) => this.isEligibleForLegacy(r));
+
+    if (eligible && (current.length === 0 || currentAllEligible)) {
+      this.facade.toggleReleaseInSelection(release);
+    } else {
+      const isOnlySelected = current.length === 1 && current[0].id === release.id;
+      this.facade.selectSingleRelease(isOnlySelected ? null : release);
+    }
+
     this.lastOrdersEvent.set(null);
     this.reloadOrders();
   }
 
   isReleaseSelected(release: BankStatementApiModel): boolean {
-    return this.facade.selectedRelease()?.id === release.id;
+    return this.facade.selectedReleases().some((r) => r.id === release.id);
+  }
+
+  /**
+   * Um lançamento fica indisponível para seleção quando já há uma seleção em
+   * lote (2+ elegíveis) e ele não é elegível — evita que um clique acidental
+   * substitua o lote acumulado por um único lançamento não elegível.
+   */
+  isReleaseSelectable(release: BankStatementApiModel): boolean {
+    const current = this.facade.selectedReleases();
+    if (current.length <= 1) return true;
+    return this.isEligibleForLegacy(release);
+  }
+
+  private isEligibleForLegacy(release: BankStatementApiModel): boolean {
+    const cutoff = this.legacyMarkingCutoffDate();
+    if (!cutoff) return true;
+    const releaseDate = String(release.releaseDate ?? '').slice(0, 10);
+    return !!releaseDate && releaseDate <= cutoff;
   }
 
   confirmReconcile(): void {
@@ -369,12 +432,61 @@ export class ManualBankReconciliationComponent implements OnInit {
     });
   }
 
+  confirmMarkLegacy(): void {
+    const count = this.facade.selectedReleases().length;
+    this.confirmationService.confirm({
+      message: this.translateSvc.instant(
+        'conciliation.manualBankReconciliation.markLegacyConfirmMessage',
+        { count },
+      ),
+      header: this.translateSvc.instant(
+        'conciliation.manualBankReconciliation.markLegacyConfirmTitle',
+      ),
+      icon: 'pi pi-history',
+      acceptLabel: this.translateSvc.instant('conciliation.manualBankReconciliation.markLegacy'),
+      rejectLabel: this.translateSvc.instant('common.cancel'),
+      acceptButtonStyleClass: 'p-button-warn',
+      accept: () => this.doMarkLegacy(),
+    });
+  }
+
+  private doMarkLegacy(): void {
+    this.facade.markLegacy().subscribe({
+      next: (result) => {
+        this.messageService.add({
+          severity: 'success',
+          summary: this.i18n.tUi('common.success'),
+          detail: this.translateSvc.instant(
+            'conciliation.manualBankReconciliation.markLegacySuccess',
+            { updated: result.updated },
+          ),
+        });
+        this.reloadReleases();
+      },
+      error: () => {
+        this.messageService.add({
+          severity: 'error',
+          summary: this.i18n.tUi('common.error'),
+          detail: this.i18n.tUi('common.errorMessage'),
+        });
+      },
+    });
+  }
+
   statusPaymentBankLabel(value: StatusPaymentBankEnum | null | undefined): string {
     return statusPaymentBankEnumLabel(value ?? null, this.i18n);
   }
 
   statusPaymentBankSeverity(value: StatusPaymentBankEnum | null | undefined): CsTagTone {
     return statusPaymentBankEnumSeverity(value ?? null);
+  }
+
+  modalityPaymentBankLabel(value: ModalityPaymentBankEnum | null | undefined): string {
+    return modalityPaymentBankLabel(value ?? null, this.i18n);
+  }
+
+  modalityPaymentBankSeverity(value: ModalityPaymentBankEnum | null | undefined): CsTagTone {
+    return modalityPaymentBankSeverity(value ?? null);
   }
 
   onPeriodColumnChange(
@@ -400,6 +512,11 @@ export class ManualBankReconciliationComponent implements OnInit {
     return period === PeriodEnum.INTERVAL ? 'range' : 'single';
   }
 
+  protected refresh(): void {
+    this.reloadReleases();
+    this.reloadOrders();
+  }
+
   private doReconcile(): void {
     this.facade.reconcile().subscribe({
       next: (result) => {
@@ -408,6 +525,7 @@ export class ManualBankReconciliationComponent implements OnInit {
           summary: this.i18n.tUi('common.success'),
           detail: this.translateSvc.instant('conciliation.manualBankReconciliation.linkSuccess', {
             reconciled: result.reconciled,
+            zeroValueReconciled: result.zeroValueReconciled,
           }),
         });
         this.reloadReleases();

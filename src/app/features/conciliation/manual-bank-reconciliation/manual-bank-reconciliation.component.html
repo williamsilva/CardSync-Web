@@ -5,9 +5,18 @@
   [compact]="false"
   [title]="'conciliation.manualBankReconciliation.title' | translate"
   [subtitle]="'conciliation.manualBankReconciliation.subtitle' | translate"
-></cs-page-header>
+>
+  <button
+    pButton
+    type="button"
+    (click)="refresh()"
+    icon="pi pi-refresh"
+    class="p-button-text p-button-sm"
+    [label]="'common.update' | translate"
+  ></button>
+</cs-page-header>
 
-<!-- Action bar: visible when a release is selected -->
+<!-- Action bar: single release selected -->
 @if (facade.selectedRelease(); as release) {
   <div class="surface-card border-round p-3 mb-2 flex flex-wrap align-items-center gap-3">
     <div class="flex flex-wrap gap-4 flex-1 align-items-center">
@@ -41,7 +50,8 @@
               class="text-xs font-semibold border-round px-2 py-1 bg-red-100 text-red-700"
               tooltipPosition="top"
               [pTooltip]="'conciliation.manualBankReconciliation.valueDifference' | translate"
-            >Δ {{ valueDifference()! | csCurrency }}</span>
+              >Δ {{ valueDifference()! | csCurrency }}</span
+            >
           }
         }
       </span>
@@ -64,6 +74,19 @@
           tooltipPosition="top"
         ></p-button>
       }
+      @if (canMarkLegacySelected()) {
+        <p-button
+          [outlined]="true"
+          icon="pi pi-history"
+          severity="warn"
+          (onClick)="confirmMarkLegacy()"
+          [loading]="facade.reconciling()"
+          [disabled]="facade.selectedOrders().length > 0"
+          [pTooltip]="'conciliation.manualBankReconciliation.markLegacyTooltip' | translate"
+          tooltipPosition="top"
+          [label]="'conciliation.manualBankReconciliation.markLegacy' | translate"
+        ></p-button>
+      }
       <p-button
         icon="pi pi-link"
         severity="success"
@@ -71,6 +94,47 @@
         [loading]="facade.reconciling()"
         [disabled]="!canReconcile()"
         [label]="'conciliation.manualBankReconciliation.link' | translate"
+      ></p-button>
+      <p-button
+        [outlined]="true"
+        icon="pi pi-times"
+        severity="secondary"
+        (onClick)="facade.clearSelection()"
+        [label]="'common.cancel' | translate"
+      ></p-button>
+    </div>
+  </div>
+} @else if (facade.selectedReleases().length > 1) {
+  <!-- Action bar: multiple releases selected (only reachable when all are eligible for legacy) -->
+  <div class="surface-card border-round p-3 mb-2 flex flex-wrap align-items-center gap-3">
+    <div class="flex flex-wrap gap-4 flex-1 align-items-center">
+      <span class="flex align-items-center gap-2">
+        <i class="pi pi-history text-color-secondary"></i>
+        <cs-tag
+          [value]="
+            'conciliation.manualBankReconciliation.releasesSelectedForLegacy'
+              | translate: { count: facade.selectedReleases().length }
+          "
+          tone="warn"
+        ></cs-tag>
+      </span>
+      <span class="flex align-items-center gap-2">
+        <i class="pi pi-dollar text-color-secondary"></i>
+        <span class="font-semibold text-green-600">{{
+          selectedReleasesTotalValue() | csCurrency
+        }}</span>
+      </span>
+    </div>
+    <div class="flex align-items-center gap-2">
+      <p-button
+        [outlined]="true"
+        icon="pi pi-history"
+        severity="warn"
+        (onClick)="confirmMarkLegacy()"
+        [loading]="facade.reconciling()"
+        [pTooltip]="'conciliation.manualBankReconciliation.markLegacyTooltip' | translate"
+        tooltipPosition="top"
+        [label]="'conciliation.manualBankReconciliation.markLegacy' | translate"
       ></p-button>
       <p-button
         [outlined]="true"
@@ -253,16 +317,16 @@
                 <span class="th-icons"><p-sortIcon field="bank"></p-sortIcon></span>
               </div>
             </th>
-            <th pSortableColumn="bankHistory">
+            <th pSortableColumn="modalityPaymentBank">
               <div class="th-flex text-center">
                 <span
                   class="th-label"
                   tooltipPosition="top"
-                  [pTooltip]="'bankStatement.fields.bankHistory' | translate"
+                  [pTooltip]="'bankStatement.fields.modalityPaymentBank' | translate"
                 >
-                  {{ 'bankStatement.fields.bankHistory' | translate }}
+                  {{ 'bankStatement.fields.modalityPaymentBank' | translate }}
                 </span>
-                <span class="th-icons"><p-sortIcon field="bankHistory"></p-sortIcon></span>
+                <span class="th-icons"><p-sortIcon field="modalityPaymentBank"></p-sortIcon></span>
               </div>
             </th>
             <th pSortableColumn="acquirer">
@@ -318,13 +382,16 @@
 
         <ng-template pTemplate="body" let-row>
           <tr
-            class="cursor-pointer"
             [class.cs-row-selected]="isReleaseSelected(row)"
-            (click)="selectRelease(row)"
+            [class.cursor-pointer]="isReleaseSelectable(row)"
+            [class.cursor-not-allowed]="!isReleaseSelectable(row)"
+            [class.opacity-60]="!isReleaseSelectable(row)"
+            (click)="isReleaseSelectable(row) && selectRelease(row)"
           >
             <td class="text-center" (click)="$event.stopPropagation()">
               <p-checkbox
                 [binary]="true"
+                [disabled]="!isReleaseSelectable(row)"
                 [ngModel]="isReleaseSelected(row)"
                 (ngModelChange)="selectRelease(row)"
               ></p-checkbox>
@@ -344,10 +411,15 @@
                 row.bank?.name ?? '-'
               }}</span>
             </td>
-            <td>
-              <span [pTooltip]="row.bankHistory" tooltipPosition="top">
-                {{ row.bankHistory ?? row.descriptionHistoricalBank ?? '-' }}
-              </span>
+            <td class="text-center">
+              @if (row.modalityPaymentBank) {
+                <cs-tag
+                  [value]="modalityPaymentBankLabel(row.modalityPaymentBank)"
+                  [tone]="modalityPaymentBankSeverity(row.modalityPaymentBank)"
+                ></cs-tag>
+              } @else {
+                <span>-</span>
+              }
             </td>
             <td class="text-center">
               <span [pTooltip]="row.acquirer?.fantasyName" tooltipPosition="top">
@@ -385,7 +457,11 @@
     <div class="font-semibold text-lg mb-2 flex align-items-center gap-2">
       <i class="pi pi-credit-card text-primary"></i>
       {{ 'conciliation.manualBankReconciliation.ordersTitle' | translate }}
-      @if (!facade.selectedRelease()) {
+      @if (facade.selectedReleases().length > 1) {
+        <span class="text-color-secondary text-sm font-normal ml-2">
+          — {{ 'conciliation.manualBankReconciliation.ordersBlockedMultiSelect' | translate }}
+        </span>
+      } @else if (!facade.selectedRelease()) {
         <span class="text-color-secondary text-sm font-normal ml-2">
           — {{ 'conciliation.manualBankReconciliation.selectReleaseFirst' | translate }}
         </span>

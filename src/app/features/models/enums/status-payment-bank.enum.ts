@@ -10,6 +10,7 @@ export enum StatusPaymentBankEnum {
   NOT_PAID = 'NOT_PAID',
   DIVERGENT = 'DIVERGENT',
   PARTIALLY_PAID = 'PARTIALLY_PAID',
+  LEGACY = 'LEGACY',
 }
 
 export type StatusPaymentBankInput = StatusPaymentBankEnum | string | number | null | undefined;
@@ -23,6 +24,7 @@ export const STATUS_CODE_MAP: Record<number, StatusPaymentBankEnum> = {
   5: StatusPaymentBankEnum.CANCELED,
   6: StatusPaymentBankEnum.DELETED,
   7: StatusPaymentBankEnum.PARTIALLY_PAID,
+  8: StatusPaymentBankEnum.LEGACY,
 };
 
 export function normalizeStatusPaymentBankEnum(
@@ -61,6 +63,9 @@ export function normalizeStatusPaymentBankEnum(
     case StatusPaymentBankEnum.PARTIALLY_PAID:
       return StatusPaymentBankEnum.PARTIALLY_PAID;
 
+    case StatusPaymentBankEnum.LEGACY:
+      return StatusPaymentBankEnum.LEGACY;
+
     default:
       return null;
   }
@@ -90,6 +95,9 @@ export function statusPaymentBankEnumSeverity(
 
     case StatusPaymentBankEnum.PARTIALLY_PAID:
       return 'bank';
+
+    case StatusPaymentBankEnum.LEGACY:
+      return 'contrast';
 
     default:
       return 'contrast';
@@ -121,6 +129,9 @@ export function statusPaymentBankEnumLabel(
 
     case StatusPaymentBankEnum.PARTIALLY_PAID:
       return i18n.tUi('enum.statusPaymentBankEnum.partiallyPaid');
+
+    case StatusPaymentBankEnum.LEGACY:
+      return i18n.tUi('enum.statusPaymentBankEnum.legacy');
 
     case StatusPaymentBankEnum.NULL:
       return i18n.tUi('enum.statusPaymentBankEnum.null', 'N/A');
@@ -182,6 +193,7 @@ export function allStatusPaymentBankEnum(): StatusPaymentBankEnum[] {
     StatusPaymentBankEnum.DIVERGENT,
     StatusPaymentBankEnum.DELETED,
     StatusPaymentBankEnum.CANCELED,
+    StatusPaymentBankEnum.LEGACY,
   ];
 }
 
@@ -191,6 +203,7 @@ export function allStatusPaymentBankStatementEnum(): StatusPaymentBankEnum[] {
     StatusPaymentBankEnum.PARTIALLY_PAID,
     StatusPaymentBankEnum.PENDING,
     StatusPaymentBankEnum.DIVERGENT,
+    StatusPaymentBankEnum.LEGACY,
   ];
 }
 

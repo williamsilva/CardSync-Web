@@ -1,4 +1,4 @@
-import { Injectable, inject, signal } from '@angular/core';
+import { Injectable, computed, inject, signal } from '@angular/core';
 
 import { EMPTY, Observable, finalize, tap } from 'rxjs';
 
@@ -10,6 +10,7 @@ import { CreditOrderAdvancedFilters } from '@features/filter/credit-order.filter
 import { BankStatementApiService } from '@features/service/bank-statement.api.service';
 import { BankStatementAdvancedFilters } from '@features/filter/bank-statement.filters';
 import {
+  MarkLegacyResult,
   ManualBankReconciliationResult,
   ManualBankReconciliationApiService,
 } from '@features/service/manual-bank-reconciliation.api.service';
@@ -33,7 +34,13 @@ export class ManualBankReconciliationFacade {
   private readonly _ordersLastQuery = signal<ListQueryDto<CreditOrderAdvancedFilters> | null>(null);
 
   private readonly _selectedOrders = signal<CreditOrderApiModel[]>([]);
-  private readonly _selectedRelease = signal<BankStatementApiModel | null>(null);
+  /**
+   * Lançamentos bancários selecionados. Normalmente contém no máximo 1 item — a
+   * conciliação manual (vínculo com ordens de crédito) exige exatamente 1. Quando
+   * todos os lançamentos selecionados são elegíveis para marcação de legado, o
+   * componente permite acumular mais de um aqui para marcação em lote.
+   */
+  private readonly _selectedReleases = signal<BankStatementApiModel[]>([]);
 
   private readonly _reconciling = signal(false);
   private readonly _lastResult = signal<ManualBankReconciliationResult | null>(null);
@@ -46,8 +53,14 @@ export class ManualBankReconciliationFacade {
   readonly ordersTotal = this._ordersTotal.asReadonly();
   readonly ordersLoading = this._ordersLoading.asReadonly();
 
-  readonly selectedRelease = this._selectedRelease.asReadonly();
+  readonly selectedReleases = this._selectedReleases.asReadonly();
   readonly selectedOrders = this._selectedOrders.asReadonly();
+
+  /** Conveniência: o único lançamento selecionado, quando a seleção tem exatamente 1 item. */
+  readonly selectedRelease = computed<BankStatementApiModel | null>(() => {
+    const releases = this._selectedReleases();
+    return releases.length === 1 ? releases[0] : null;
+  });
 
   readonly reconciling = this._reconciling.asReadonly();
   readonly lastResult = this._lastResult.asReadonly();
@@ -100,13 +113,24 @@ export class ManualBankReconciliationFacade {
     if (q) this.loadOrders(q);
   }
 
-  selectRelease(release: BankStatementApiModel | null): void {
-    this._selectedRelease.set(release);
+  /** Substitui a seleção por um único lançamento (ou limpa, se null). Uso: releases não elegíveis para legado. */
+  selectSingleRelease(release: BankStatementApiModel | null): void {
+    this._selectedReleases.set(release ? [release] : []);
+    this._selectedOrders.set([]);
+  }
+
+  /** Adiciona/remove um lançamento da seleção, preservando os demais. Uso: acumular releases elegíveis para legado. */
+  toggleReleaseInSelection(release: BankStatementApiModel): void {
+    const current = this._selectedReleases();
+    const exists = current.some((r) => r.id === release.id);
+    this._selectedReleases.set(
+      exists ? current.filter((r) => r.id !== release.id) : [...current, release],
+    );
     this._selectedOrders.set([]);
   }
 
   clearSelection(): void {
-    this._selectedRelease.set(null);
+    this._selectedReleases.set([]);
     this._selectedOrders.set([]);
   }
 
@@ -126,18 +150,33 @@ export class ManualBankReconciliationFacade {
     return this._selectedOrders().some((o) => o.id === order.id);
   }
 
-  reconcile(): Observable<ManualBankReconciliationResult> {
-    const release = this._selectedRelease();
-    const orders = this._selectedOrders();
-    if (!release || !orders.length || this._reconciling()) return EMPTY;
+  markLegacy(): Observable<MarkLegacyResult> {
+    const releases = this._selectedReleases();
+    if (!releases.length || this._reconciling()) return EMPTY;
 
+    this._reconciling.set(true);
+    return this.reconcileApi.markLegacy(releases.map((r) => r.id)).pipe(
+      tap(() => {
+        this._selectedReleases.set([]);
+        this._selectedOrders.set([]);
+      }),
+      finalize(() => this._reconciling.set(false)),
+    );
+  }
+
+  reconcile(): Observable<ManualBankReconciliationResult> {
+    const releases = this._selectedReleases();
+    const orders = this._selectedOrders();
+    if (releases.length !== 1 || !orders.length || this._reconciling()) return EMPTY;
+
+    const release = releases[0];
     this._reconciling.set(true);
     return this.reconcileApi
       .reconcile({ releaseBankId: release.id, creditOrderIds: orders.map((o) => o.id) })
       .pipe(
         tap((result) => {
           this._lastResult.set(result);
-          this._selectedRelease.set(null);
+          this._selectedReleases.set([]);
           this._selectedOrders.set([]);
         }),
         finalize(() => this._reconciling.set(false)),

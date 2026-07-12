@@ -30,6 +30,11 @@ export interface ReconciliationSettingsModel {
   dateToleranceDaysAfter: number;
   valueTolerance: number;
   bankMarkNotReconciledAfterDays: number;
+  // Implantação e marcação de lançamentos como legado
+  goLiveDate: string | null;
+  legacyMarkingMonths: number;
+  /** Go-live + meses: lançamentos com data de lançamento até esta data podem ser marcados como legado. */
+  legacyMarkingCutoffDate: string | null;
 }
 
 export interface ReconciliationSettingsRequest {
@@ -58,6 +63,9 @@ export interface ReconciliationSettingsRequest {
   dateToleranceDaysAfter: number;
   valueTolerance: number;
   bankMarkNotReconciledAfterDays: number;
+  // Implantação e marcação de lançamentos como legado
+  goLiveDate: string;
+  legacyMarkingMonths: number;
 }
 
 @Injectable({ providedIn: 'root' })

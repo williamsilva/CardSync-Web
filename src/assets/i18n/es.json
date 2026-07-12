@@ -536,7 +536,8 @@
       "divergent": "Divergente",
       "excludedSale": "Venta eliminada",
       "canceledSale": "Venta cancelada",
-      "partiallyPaid": "Pago parcial"
+      "partiallyPaid": "Pago parcial",
+      "legacy": "Anterior a la implantación"
     },
     "modalityEnum": {
       "outros": "Otros",
@@ -2043,6 +2044,12 @@
       "valueToleranceHint": "Diferencia monetaria máxima tolerada en una conciliación. Ej: 0,05 acepta divergencias de hasta 5 centavos.",
       "bankMarkNotReconciledAfterDays": "Días para marcar no conciliado",
       "bankMarkNotReconciledAfterDaysHint": "Lanzamientos bancarios sin coincidencia en los últimos N días permanecen pendientes. Después de ese plazo, pasan a no conciliados.",
+      "legacyMarkingTitle": "Marcación de Legado",
+      "legacyMarkingSubtitle": "Controla qué lanzamientos bancarios pueden marcarse manualmente como anteriores a la implantación, según la fecha del lanzamiento.",
+      "goLiveDate": "Fecha de Go-Live",
+      "goLiveDateHint": "Fecha en que el sistema entró en operación. Usada por la conciliación para ignorar fechas anteriores y como referencia de la ventana de marcación de legado.",
+      "legacyMarkingMonths": "Meses para Marcación de Legado",
+      "legacyMarkingMonthsHint": "Solo los lanzamientos con fecha hasta go-live + N meses pueden marcarse como legado. Para lanzamientos posteriores, el botón se oculta en la conciliación manual.",
       "saved": "Configuración guardada exitosamente.",
       "saveError": "No fue posible guardar la configuración."
     },
@@ -2180,7 +2187,7 @@
       "releasesTitle": "Lanzamientos Bancarios",
       "ordersTitle": "Órdenes de Crédito",
       "link": "Vincular",
-      "linkSuccess": "{reconciled, plural, one {# orden vinculada con éxito.} other {# órdenes vinculadas con éxito.}}",
+      "linkSuccess": "{reconciled, plural, one {# orden vinculada con éxito} other {# órdenes vinculadas con éxito}}{zeroValueReconciled, plural, =0 {.} other { + # órdenes con valor cero conciliadas automáticamente.}}",
       "confirmTitle": "Confirmar vinculación",
       "confirmMessage": "{count, plural, one {¿Vincular # orden de crédito a este lanzamiento bancario?} other {¿Vincular # órdenes de crédito a este lanzamiento bancario?}}",
       "selectReleaseFirst": "Seleccione un lanzamiento para habilitar",
@@ -2188,6 +2195,13 @@
       "selectedOrdersTotal": "Total de órdenes seleccionadas",
       "clearOrders": "Limpiar órdenes seleccionadas",
       "valueDifference": "Diferencia entre los valores",
+      "markLegacy": "Marcar como Legado",
+      "markLegacyTooltip": "Marca el lanzamiento como anterior a la implantación (sin orden de crédito correspondiente en el sistema)",
+      "markLegacyConfirmTitle": "Marcar como legado",
+      "markLegacyConfirmMessage": "{count, plural, one {¿Marcar este lanzamiento bancario como anterior a la implantación? Saldrá de la cola de conciliación pendiente y seguirá disponible en el extracto bancario.} other {¿Marcar estos # lanzamientos bancarios como anteriores a la implantación? Saldrán de la cola de conciliación pendiente y seguirán disponibles en el extracto bancario.}}",
+      "releasesSelectedForLegacy": "{count, plural, one {# lanzamiento seleccionado para legado} other {# lanzamientos seleccionados para legado}}",
+      "ordersBlockedMultiSelect": "Bloqueado — múltiples lanzamientos seleccionados para legado",
+      "markLegacySuccess": "{updated, plural, one {# lanzamiento marcado como legado.} other {# lanzamientos marcados como legado.}}",
       "filters": {
         "releaseDate": "Fecha del lanzamiento",
         "rvDate": "Fecha de RV"
@@ -2397,7 +2411,8 @@
           "ACQUIRER_SALE_ADJUSTMENTS": "Las ventas con tasas correctas o contrato ausente normalizado avanzan. Las divergencias de tasa bloquean los pasos siguientes.",
           "ACQUIRER_SALE_SUMMARY": "Un resumen solo se concilia cuando sus ventas ADQ vinculadas son elegibles de los pasos anteriores.",
           "SALES_SUMMARY_CREDIT_ORDER": "Débito/anticipación sin orden puede generar una orden sintética para análisis.",
-          "CREDIT_ORDER_BANK_RELEASE": "Una orden de crédito solo es elegible cuando su resumen vinculado ya está conciliado."
+          "CREDIT_ORDER_BANK_RELEASE": "Una orden de crédito solo es elegible cuando su resumen vinculado ya está conciliado.",
+          "SKIPPED": "Etapa omitida — sin datos para procesar o una etapa anterior fue bloqueada."
         }
       },
       "kpi": {

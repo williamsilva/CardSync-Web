@@ -226,6 +226,68 @@
 
     <p-divider></p-divider>
 
+    <!-- Marcação de lançamentos como legado -->
+    <div class="flex align-items-center gap-2 mb-2">
+      <span class="text-sm font-semibold">{{
+        'conciliation.settings.legacyMarkingTitle' | translate
+      }}</span>
+      <i
+        tooltipPosition="right"
+        [pTooltip]="'conciliation.settings.legacyMarkingSubtitle' | translate"
+        class="pi pi-info-circle text-color-secondary text-sm cursor-pointer"
+      ></i>
+    </div>
+
+    <div class="grid formgrid gap-0">
+      <div class="col-12 md:col-2 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-datepicker
+            class="w-full"
+            appendTo="body"
+            [showIcon]="true"
+            dateFormat="dd/mm/yy"
+            [readonlyInput]="true"
+            inputId="goLiveDate"
+            formControlName="goLiveDate"
+          ></p-datepicker>
+          <label for="goLiveDate">
+            {{ 'conciliation.settings.goLiveDate' | translate }}
+            <i
+              tooltipPosition="top"
+              style="pointer-events: auto"
+              class="pi pi-info-circle text-xs ml-1 text-color-secondary cursor-pointer"
+              [pTooltip]="'conciliation.settings.goLiveDateHint' | translate"
+            ></i>
+          </label>
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 md:col-2 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-inputnumber
+            class="w-full"
+            [showButtons]="true"
+            [allowEmpty]="false"
+            [min]="MIN_LEGACY_MARKING_MONTHS"
+            [max]="MAX_LEGACY_MARKING_MONTHS"
+            inputId="legacyMarkingMonths"
+            formControlName="legacyMarkingMonths"
+          ></p-inputnumber>
+          <label for="legacyMarkingMonths">
+            {{ 'conciliation.settings.legacyMarkingMonths' | translate }}
+            <i
+              tooltipPosition="top"
+              style="pointer-events: auto"
+              class="pi pi-info-circle text-xs ml-1 text-color-secondary cursor-pointer"
+              [pTooltip]="'conciliation.settings.legacyMarkingMonthsHint' | translate"
+            ></i>
+          </label>
+        </p-floatLabel>
+      </div>
+    </div>
+
+    <p-divider></p-divider>
+
     <!-- Habilitação de Etapas -->
     <div class="flex align-items-center gap-2 mb-2">
       <span class="text-sm font-semibold">{{

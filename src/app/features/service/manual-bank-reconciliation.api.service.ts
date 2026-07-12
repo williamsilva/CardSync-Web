@@ -12,6 +12,12 @@ export interface ManualBankReconciliationRequest {
 export interface ManualBankReconciliationResult {
   reconciled: number;
   alreadyReconciled: number;
+  zeroValueReconciled: number;
+}
+
+export interface MarkLegacyResult {
+  updated: number;
+  skipped: number;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -21,5 +27,9 @@ export class ManualBankReconciliationApiService {
 
   reconcile(request: ManualBankReconciliationRequest): Observable<ManualBankReconciliationResult> {
     return this.http.post<ManualBankReconciliationResult>(`${this.baseUrl}/manual`, request);
+  }
+
+  markLegacy(releaseBankIds: string[]): Observable<MarkLegacyResult> {
+    return this.http.post<MarkLegacyResult>(`${this.baseUrl}/legacy`, { releaseBankIds });
   }
 }

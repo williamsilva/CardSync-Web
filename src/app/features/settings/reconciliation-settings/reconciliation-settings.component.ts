@@ -9,6 +9,7 @@ import { TooltipModule } from 'primeng/tooltip';
 import { TranslateModule } from '@ngx-translate/core';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { FloatLabelModule } from 'primeng/floatlabel';
+import { DatePickerModule } from 'primeng/datepicker';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
 
 import { I18nService } from '@core/i18n/i18n.service';
@@ -29,6 +30,7 @@ import { ReconciliationSettingsApiService } from '@features/service/reconciliati
     TranslateModule,
     InputNumberModule,
     FloatLabelModule,
+    DatePickerModule,
     ToggleSwitchModule,
     ReactiveFormsModule,
     PageHeaderComponent,
@@ -53,6 +55,8 @@ export class ReconciliationSettingsComponent {
   protected readonly MAX_LOOKBACK_MONTHS = 120;
   protected readonly MIN_BANK_NOT_RECONCILED_DAYS = 0;
   protected readonly MAX_BANK_NOT_RECONCILED_DAYS = 60;
+  protected readonly MIN_LEGACY_MARKING_MONTHS = 0;
+  protected readonly MAX_LEGACY_MARKING_MONTHS = 120;
 
   protected readonly loading = signal(false);
   protected readonly saving = signal(false);
@@ -140,6 +144,15 @@ export class ReconciliationSettingsComponent {
         Validators.max(this.MAX_BANK_NOT_RECONCILED_DAYS),
       ],
     ],
+    goLiveDate: [null as Date | null, [Validators.required]],
+    legacyMarkingMonths: [
+      12,
+      [
+        Validators.required,
+        Validators.min(this.MIN_LEGACY_MARKING_MONTHS),
+        Validators.max(this.MAX_LEGACY_MARKING_MONTHS),
+      ],
+    ],
   });
 
   constructor() {
@@ -173,6 +186,8 @@ export class ReconciliationSettingsComponent {
           dateToleranceDaysAfter: settings.dateToleranceDaysAfter,
           valueTolerance: settings.valueTolerance,
           bankMarkNotReconciledAfterDays: settings.bankMarkNotReconciledAfterDays,
+          goLiveDate: this.parseIsoDate(settings.goLiveDate),
+          legacyMarkingMonths: settings.legacyMarkingMonths,
         });
         if (!this.canEdit()) {
           this.form.disable();
@@ -213,6 +228,8 @@ export class ReconciliationSettingsComponent {
         dateToleranceDaysAfter: v.dateToleranceDaysAfter ?? 10,
         valueTolerance: v.valueTolerance ?? 0.05,
         bankMarkNotReconciledAfterDays: v.bankMarkNotReconciledAfterDays ?? 3,
+        goLiveDate: this.formatIsoDate(v.goLiveDate) ?? '2024-07-01',
+        legacyMarkingMonths: v.legacyMarkingMonths ?? 12,
       })
       .subscribe({
         next: () => {
@@ -232,5 +249,19 @@ export class ReconciliationSettingsComponent {
           });
         },
       });
+  }
+
+  private parseIsoDate(value: string | null): Date | null {
+    if (!value) return null;
+    const [year, month, day] = value.split('-').map(Number);
+    if (!year || !month || !day) return null;
+    return new Date(year, month - 1, day);
+  }
+
+  private formatIsoDate(value: Date | null | undefined): string | null {
+    if (!value) return null;
+    const month = String(value.getMonth() + 1).padStart(2, '0');
+    const day = String(value.getDate()).padStart(2, '0');
+    return `${value.getFullYear()}-${month}-${day}`;
   }
 }

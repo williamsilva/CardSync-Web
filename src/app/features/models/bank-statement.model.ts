@@ -8,6 +8,7 @@ import { EstablishmentMinimalModel } from './establishment-minimal.models';
 import { ProcessedFileMinimalModel } from './processed-file-minimal.models';
 import { BankingDomicileMinimalModel } from './bank-domicile-minimal.models';
 import { StatusPaymentBankEnum } from '@models/enums/status-payment-bank.enum';
+import { ModalityPaymentBankEnum } from '@models/enums/modality-payment-bank.enum';
 import {
   BankStatementAdvancedFilters,
   createEmptyBankStatementFiltersState,
@@ -24,6 +25,7 @@ export interface BankStatementModel {
   bankHistory: string | null;
   releaseValue: number | null;
   statusPaymentBank: StatusPaymentBankEnum | null;
+  modalityPaymentBank: ModalityPaymentBankEnum | null;
 
   flag: FlagMinimalModel | null;
   bank: BankMinimalModel | null;
@@ -45,6 +47,7 @@ export interface BankStatementApiModel {
   historicalCodeBank: string | null;
   descriptionHistoricalBank: string | null;
   statusPaymentBank: StatusPaymentBankEnum | null;
+  modalityPaymentBank: ModalityPaymentBankEnum | null;
 
   flag: FlagMinimalModel | null;
   bank: BankMinimalModel | null;
