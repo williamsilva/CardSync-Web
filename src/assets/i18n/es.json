@@ -53,10 +53,18 @@
       }
     },
     "adjustment": {
-      "chargebacks": { "title": "Chargebacks" },
-      "tariffs": { "title": "Tarifas" },
-      "cancellation": { "title": "Cancelaciones" },
-      "chargebackRequests": { "title": "Solicitudes de Contracargo" }
+      "chargebacks": {
+        "title": "Chargebacks"
+      },
+      "tariffs": {
+        "title": "Tarifas"
+      },
+      "cancellation": {
+        "title": "Cancelaciones"
+      },
+      "chargebackRequests": {
+        "title": "Solicitudes de Contracargo"
+      }
     },
     "conciliation": {
       "fees": {
@@ -148,11 +156,21 @@
           "title": "Ventas ADQ"
         }
       },
-      "anticipation": { "title": "Anticipaciones" },
-      "saleSummary": { "title": "Resumen de Ventas" },
-      "creditOrder": { "title": "Órdenes de Pago" },
-      "bankStatement": { "title": "Extracto Bancario" },
-      "files": { "title": "Archivos" }
+      "anticipation": {
+        "title": "Anticipaciones"
+      },
+      "saleSummary": {
+        "title": "Resumen de Ventas"
+      },
+      "creditOrder": {
+        "title": "Órdenes de Pago"
+      },
+      "bankStatement": {
+        "title": "Extracto Bancario"
+      },
+      "files": {
+        "title": "Archivos"
+      }
     },
     "audit": {
       "title": "Registros de e-mail"
@@ -195,10 +213,19 @@
         "sales": "Ventas",
         "installments": "Cuotas"
       },
-      "anticipation": { "title": "Anticipaciones" },
-      "saleSummary": { "title": "Resumen de Ventas" },
-      "creditOrder": { "title": "Órdenes de Pago" },
-      "banks": { "title": "Bancos", "bankStatement": "Extracto Bancario" }
+      "anticipation": {
+        "title": "Anticipaciones"
+      },
+      "saleSummary": {
+        "title": "Resumen de Ventas"
+      },
+      "creditOrder": {
+        "title": "Órdenes de Pago"
+      },
+      "banks": {
+        "title": "Bancos",
+        "bankStatement": "Extracto Bancario"
+      }
     },
     "me": "Mi cuenta",
     "dashboard": "Dashboard",
@@ -246,10 +273,18 @@
     },
     "adjustment": {
       "title": "Ajustes",
-      "tariffs": { "title": "Tarifas" },
-      "cancellation": { "title": "Cancelaciones" },
-      "chargebackRequests": { "title": "Solicitudes de Contracargo" },
-      "chargebacks": { "title": "Chargebacks" }
+      "tariffs": {
+        "title": "Tarifas"
+      },
+      "cancellation": {
+        "title": "Cancelaciones"
+      },
+      "chargebackRequests": {
+        "title": "Solicitudes de Contracargo"
+      },
+      "chargebacks": {
+        "title": "Chargebacks"
+      }
     },
     "security": {
       "title": "Seguridad",
@@ -326,10 +361,18 @@
     "conciliation": {
       "title": "Conciliación"
     },
-    "anticipation": { "title": "Anticipaciones" },
-    "bankStatement": { "title": "Extracto Bancario" },
-    "saleSummary": { "title": "Resumen de Ventas" },
-    "creditOrders": { "title": "Órdenes de Pago" }
+    "anticipation": {
+      "title": "Anticipaciones"
+    },
+    "bankStatement": {
+      "title": "Extracto Bancario"
+    },
+    "saleSummary": {
+      "title": "Resumen de Ventas"
+    },
+    "creditOrders": {
+      "title": "Órdenes de Pago"
+    }
   },
   "footer": {
     "copyright": "CardSync Tech",
@@ -511,7 +554,8 @@
       "cancellationRefound": "Cancelación reembolso",
       "cancellationAcquirer": "Cancelación adquirente",
       "cancellationDuplicate": "Cancelación duplicada",
-      "cancellationOperationalError": "Cancelación error operacional"
+      "cancellationOperationalError": "Cancelación error operacional",
+      "manualSwapNotFound": "Sin coincidencia"
     },
     "statusTransactionEnum": {
       "pending": "Pendiente",
@@ -756,8 +800,12 @@
   },
   "holiday": {
     "subtitle": "Consulte los festivos registrados",
-    "new": { "title": "Nuevo Festivo" },
-    "edit": { "title": "Editar Festivo" },
+    "new": {
+      "title": "Nuevo Festivo"
+    },
+    "edit": {
+      "title": "Editar Festivo"
+    },
     "form": {
       "created": "Festivo creado exitosamente.",
       "updated": "Festivo actualizado exitosamente."
@@ -779,7 +827,9 @@
       "updatedAt": "Actualizado el"
     },
     "selection": {
-      "mode": { "none": "Ninguno" },
+      "mode": {
+        "none": "Ninguno"
+      },
       "currentMode": "Modo de selección",
       "count": "{{count}} seleccionados",
       "pickOneFirst": "Seleccione un elemento primero"
@@ -811,8 +861,12 @@
   },
   "bank": {
     "subtitle": "Consulte los bancos registrados",
-    "new": { "title": "Nuevo Banco" },
-    "edit": { "title": "Editar Banco" },
+    "new": {
+      "title": "Nuevo Banco"
+    },
+    "edit": {
+      "title": "Editar Banco"
+    },
     "form": {
       "created": "Banco creado exitosamente.",
       "updated": "Banco actualizado exitosamente."
@@ -836,7 +890,9 @@
       "updatedAt": "Actualizado el"
     },
     "selection": {
-      "mode": { "none": "Ninguno" },
+      "mode": {
+        "none": "Ninguno"
+      },
       "currentMode": "Modo de selección",
       "count": "{{count}} seleccionados",
       "pickOneFirst": "Seleccione un elemento primero"
@@ -868,8 +924,12 @@
   },
   "bankingDomicile": {
     "subtitle": "Consulte los domicilios bancarios registrados",
-    "new": { "title": "Nuevo Domicilio Bancario" },
-    "edit": { "title": "Editar Domicilio Bancario" },
+    "new": {
+      "title": "Nuevo Domicilio Bancario"
+    },
+    "edit": {
+      "title": "Editar Domicilio Bancario"
+    },
     "form": {
       "created": "Domicilio bancario creado exitosamente.",
       "updated": "Domicilio bancario actualizado exitosamente."
@@ -915,7 +975,9 @@
       "expectsFile": "Recibe Archivo"
     },
     "selection": {
-      "mode": { "none": "Ninguno" },
+      "mode": {
+        "none": "Ninguno"
+      },
       "currentMode": "Modo de selección",
       "count": "{{count}} seleccionados",
       "pickOneFirst": "Seleccione un elemento primero"
@@ -939,8 +1001,12 @@
   },
   "noFileDay": {
     "subtitle": "Consulte los días sin archivos registrados",
-    "new": { "title": "Nuevo Día sin Archivo" },
-    "edit": { "title": "Editar Día sin Archivo" },
+    "new": {
+      "title": "Nuevo Día sin Archivo"
+    },
+    "edit": {
+      "title": "Editar Día sin Archivo"
+    },
     "form": {
       "created": "Día sin archivo creado exitosamente.",
       "updated": "Día sin archivo actualizado exitosamente."
@@ -974,7 +1040,9 @@
       "updatedAt": "Actualizado el"
     },
     "selection": {
-      "mode": { "none": "Ninguno" },
+      "mode": {
+        "none": "Ninguno"
+      },
       "currentMode": "Modo de selección",
       "count": "{{count}} seleccionados",
       "pickOneFirst": "Seleccione un elemento primero"
@@ -1141,7 +1209,9 @@
       "acquirer": "Adquirente",
       "createdAt": "Registrado el",
       "createdBy": "Registrado por",
-      "establishment": "Establecimiento"
+      "establishment": "Establecimiento",
+      "closingDate": "Fecha de Cierre",
+      "openingDate": "Fecha de Apertura"
     },
     "fields": {
       "typeEnum": "Tipo",
@@ -1447,7 +1517,9 @@
       "periodExpectedPaymentDate": "Periodo prev. pago",
       "totalValue": "Valor total",
       "rvNumber": "Resumen de ventas",
-      "rateContract": "Tasa esperada"
+      "rateContract": "Tasa esperada",
+      "releaseValue": "Valor lanzamiento",
+      "statusTransactionReason": "Motivo"
     },
     "columns": {
       "sale": "Venta",
@@ -2157,7 +2229,8 @@
       "createSingle": "Crear orden de pago",
       "createSelected": "Crear seleccionados ({{count}})",
       "clearTable": "Limpiar tabla",
-      "emptyTable": "No hay resúmenes cargados. Use la búsqueda o cargue los pendientes."
+      "emptyTable": "No hay resúmenes cargados. Use la búsqueda o cargue los pendientes.",
+      "colCreditOrderStatus": "Estado orden crédito"
     },
     "manualBankStatement": {
       "eyebrow": "Conciliación",
@@ -2473,7 +2546,7 @@
         "expectedFeeValue": "Tasa esperada",
         "appliedFeeValue": "Tasa aplicada",
         "feeDifference": "Diferencia",
-        "analysis":"Análisis"
+        "analysis": "Análisis"
       },
       "columns": {
         "date": "Fecha",
@@ -2481,7 +2554,7 @@
         "authorizationShort": "Aut.",
         "value": "Valor",
         "fees": "Tasas",
-        "analysis":"Análisis"
+        "analysis": "Análisis"
       },
       "table": {
         "appliedRate": "Aplicada",
@@ -2929,7 +3002,9 @@
       "statusPaymentBank": "Estado pago banco",
       "periodLaunchDate": "Período fecha lanzamiento",
       "periodReleaseDate": "Período fecha lanzamiento",
-      "modalityPaymentBank": "Modalidad pago banco"
+      "modalityPaymentBank": "Modalidad pago banco",
+      "releaseValue": "Valor lanzamiento",
+      "releaseValueShort": "Valor"
     },
     "deleteManual": {
       "header": "Confirmar exclusión",
@@ -3005,7 +3080,8 @@
       "bankingDomicile": "Domicilio bancario",
       "transactionsStatusEnum": "Estado venta",
       "creditOrderStatusEnum": "Estado orden crédito",
-      "statusPaymentBankEnum": "Estado pago banco"
+      "statusPaymentBankEnum": "Estado pago banco",
+      "rvNumberShort": "Resumen"
     }
   },
   "creditOrders": {
@@ -3044,7 +3120,8 @@
       "periodRvDate": "Período resumen ventas",
       "salesSummaryStatus": "Estado resumen ventas",
       "statusPaymentBank": "Estado pago banco",
-      "periodCreditOrderDate": "Período orden crédito"
+      "periodCreditOrderDate": "Período orden crédito",
+      "releaseValueShort": "Lanzamiento"
     }
   },
   "adjustments": {
@@ -3162,7 +3239,30 @@
       "brevoBaseUrl": "URL base (Brevo)",
       "brevoBaseUrlHint": "URL base de la API de Brevo. Los cambios se aplican tras reiniciar el servidor.",
       "saved": "Configuración de correo guardada con éxito.",
-      "saveError": "No fue posible guardar la configuración de correo."
+      "saveError": "No fue posible guardar la configuración de correo.",
+      "brevoPort": "Puerto",
+      "brevoPortHint": "Puerto del relay SMTP de Brevo. Predeterminado: 587.",
+      "brevoUsername": "Usuario",
+      "brevoUsernameHint": "Usuario para autenticación en el relay SMTP de Brevo, generalmente el correo de la cuenta Brevo.",
+      "brevoTitle": "Configuración de Brevo",
+      "smtpTitle": "Configuración SMTP",
+      "notificationsTitle": "Notificaciones",
+      "chargebackRecipients": "Destinatarios de chargeback",
+      "chargebackRecipientsHint": "Correos que recibirán una notificación cuando se detecten chargebacks durante el procesamiento de archivos. Separe varias direcciones con una coma.",
+      "smtpHost": "Host SMTP",
+      "smtpHostHint": "Dirección del servidor de correo (ej: smtp.gmail.com).",
+      "smtpPort": "Puerto",
+      "smtpPortHint": "Puerto del servidor SMTP. Predeterminado: 587 (STARTTLS) o 465 (SSL).",
+      "smtpUsername": "Usuario",
+      "smtpUsernameHint": "Usuario para autenticación SMTP, generalmente el propio correo electrónico.",
+      "smtpPassword": "Contraseña",
+      "smtpPasswordHint": "Contraseña para autenticación en el servidor SMTP.",
+      "smtpAuth": "Autenticación",
+      "smtpAuthHint": "Habilita la autenticación SMTP con usuario y contraseña.",
+      "smtpStarttls": "STARTTLS",
+      "smtpStarttlsHint": "Habilita la actualización de la conexión a TLS mediante STARTTLS. Recomendado para el puerto 587.",
+      "smtpSsl": "SSL/TLS",
+      "smtpSslHint": "Habilita conexión SSL/TLS directa. Recomendado para el puerto 465."
     }
   },
   "scheduler": {
@@ -3183,9 +3283,15 @@
       "processRede": "Procesar Rede ahora",
       "processBank": "Procesar CNAB ahora"
     },
-    "erp": { "title": "ERP" },
-    "rede": { "title": "Rede" },
-    "bank": { "title": "Banco / CNAB" }
+    "erp": {
+      "title": "ERP"
+    },
+    "rede": {
+      "title": "Rede"
+    },
+    "bank": {
+      "title": "Banco / CNAB"
+    }
   },
   "notFound": {
     "attemptedUrl": "URL accedida",

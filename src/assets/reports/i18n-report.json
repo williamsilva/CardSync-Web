@@ -1,6 +1,6 @@
 {
-  "ok": false,
-  "generatedAt": "2026-07-09T01:23:31.577Z",
+  "ok": true,
+  "generatedAt": "2026-07-12T18:41:11.929Z",
   "targets": [
     {
       "target": "primeng",
@@ -69,19 +69,8 @@
         },
         "en": {
           "file": "C:\\WorkSpace\\NimbusSystems\\CardSync_web\\src\\assets\\i18n\\en.json",
-          "ok": false,
-          "missingKeys": [
-            "bankStatement.fields.releaseValue",
-            "bankStatement.fields.releaseValueShort",
-            "conciliation.manualCreditOrder.colCreditOrderStatus",
-            "creditOrders.fields.releaseValueShort",
-            "enum.transactionReasonEnum.manualSwapNotFound",
-            "establishment.columns.closingDate",
-            "establishment.columns.openingDate",
-            "saleSummary.fields.rvNumberShort",
-            "transactions.fields.releaseValue",
-            "transactions.fields.statusTransactionReason"
-          ],
+          "ok": true,
+          "missingKeys": [],
           "extraKeys": [
             "bankStatement.fields.launchDate",
             "bankStatement.fields.launchDateShort",
@@ -161,42 +150,8 @@
         },
         "es": {
           "file": "C:\\WorkSpace\\NimbusSystems\\CardSync_web\\src\\assets\\i18n\\es.json",
-          "ok": false,
-          "missingKeys": [
-            "bankStatement.fields.releaseValue",
-            "bankStatement.fields.releaseValueShort",
-            "conciliation.manualCreditOrder.colCreditOrderStatus",
-            "creditOrders.fields.releaseValueShort",
-            "email.settings.brevoPort",
-            "email.settings.brevoPortHint",
-            "email.settings.brevoTitle",
-            "email.settings.brevoUsername",
-            "email.settings.brevoUsernameHint",
-            "email.settings.chargebackRecipients",
-            "email.settings.chargebackRecipientsHint",
-            "email.settings.notificationsTitle",
-            "email.settings.smtpAuth",
-            "email.settings.smtpAuthHint",
-            "email.settings.smtpHost",
-            "email.settings.smtpHostHint",
-            "email.settings.smtpPassword",
-            "email.settings.smtpPasswordHint",
-            "email.settings.smtpPort",
-            "email.settings.smtpPortHint",
-            "email.settings.smtpSsl",
-            "email.settings.smtpSslHint",
-            "email.settings.smtpStarttls",
-            "email.settings.smtpStarttlsHint",
-            "email.settings.smtpTitle",
-            "email.settings.smtpUsername",
-            "email.settings.smtpUsernameHint",
-            "enum.transactionReasonEnum.manualSwapNotFound",
-            "establishment.columns.closingDate",
-            "establishment.columns.openingDate",
-            "saleSummary.fields.rvNumberShort",
-            "transactions.fields.releaseValue",
-            "transactions.fields.statusTransactionReason"
-          ],
+          "ok": true,
+          "missingKeys": [],
           "extraKeys": [
             "bankStatement.fields.launchDate",
             "bankStatement.fields.launchDateShort",
@@ -276,9 +231,9 @@
         }
       },
       "summary": {
-        "ok": false,
+        "ok": true,
         "missingFiles": 0,
-        "missingKeys": 43,
+        "missingKeys": 0,
         "extraKeys": 142,
         "emptyValues": 0,
         "arrayLengthMismatch": 0,

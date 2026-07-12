@@ -273,10 +273,18 @@
     },
     "adjustment": {
       "title": "Adjustments",
-      "tariffs": { "title": "Fees" },
-      "cancellation": { "title": "Cancellations" },
-      "chargebackRequests": { "title": "Chargeback Requests" },
-      "chargebacks": { "title": "Chargebacks" }
+      "tariffs": {
+        "title": "Fees"
+      },
+      "cancellation": {
+        "title": "Cancellations"
+      },
+      "chargebackRequests": {
+        "title": "Chargeback Requests"
+      },
+      "chargebacks": {
+        "title": "Chargebacks"
+      }
     },
     "security": {
       "title": "Security",
@@ -546,7 +554,8 @@
       "cancellationRefound": "Refund cancellation",
       "cancellationAcquirer": "Acquirer cancellation",
       "cancellationDuplicate": "Duplicate cancellation",
-      "cancellationOperationalError": "Operational error cancellation"
+      "cancellationOperationalError": "Operational error cancellation",
+      "manualSwapNotFound": "No match found"
     },
     "statusTransactionEnum": {
       "pending": "Pending",
@@ -791,8 +800,12 @@
   },
   "holiday": {
     "subtitle": "Consult registered holidays",
-    "new": { "title": "New Holiday" },
-    "edit": { "title": "Edit Holiday" },
+    "new": {
+      "title": "New Holiday"
+    },
+    "edit": {
+      "title": "Edit Holiday"
+    },
     "form": {
       "created": "Holiday created successfully.",
       "updated": "Holiday updated successfully."
@@ -814,7 +827,9 @@
       "updatedAt": "Updated on"
     },
     "selection": {
-      "mode": { "none": "None" },
+      "mode": {
+        "none": "None"
+      },
       "currentMode": "Selection mode",
       "count": "{{count}} selected",
       "pickOneFirst": "Select one item first"
@@ -846,8 +861,12 @@
   },
   "noFileDay": {
     "subtitle": "Consult registered no file days",
-    "new": { "title": "New No File Day" },
-    "edit": { "title": "Edit No File Day" },
+    "new": {
+      "title": "New No File Day"
+    },
+    "edit": {
+      "title": "Edit No File Day"
+    },
     "form": {
       "created": "No file day created successfully.",
       "updated": "No file day updated successfully."
@@ -881,7 +900,9 @@
       "updatedAt": "Updated on"
     },
     "selection": {
-      "mode": { "none": "None" },
+      "mode": {
+        "none": "None"
+      },
       "currentMode": "Selection mode",
       "count": "{{count}} selected",
       "pickOneFirst": "Select one item first"
@@ -913,8 +934,12 @@
   },
   "bank": {
     "subtitle": "Consult registered banks",
-    "new": { "title": "New Bank" },
-    "edit": { "title": "Edit Bank" },
+    "new": {
+      "title": "New Bank"
+    },
+    "edit": {
+      "title": "Edit Bank"
+    },
     "form": {
       "created": "Bank created successfully.",
       "updated": "Bank updated successfully."
@@ -938,7 +963,9 @@
       "updatedAt": "Updated on"
     },
     "selection": {
-      "mode": { "none": "None" },
+      "mode": {
+        "none": "None"
+      },
       "currentMode": "Selection mode",
       "count": "{{count}} selected",
       "pickOneFirst": "Select one item first"
@@ -970,8 +997,12 @@
   },
   "bankingDomicile": {
     "subtitle": "Consult registered banking domiciles",
-    "new": { "title": "New Banking Domicile" },
-    "edit": { "title": "Edit Banking Domicile" },
+    "new": {
+      "title": "New Banking Domicile"
+    },
+    "edit": {
+      "title": "Edit Banking Domicile"
+    },
     "form": {
       "created": "Banking domicile created successfully.",
       "updated": "Banking domicile updated successfully."
@@ -1017,7 +1048,9 @@
       "expectsFile": "Expects File"
     },
     "selection": {
-      "mode": { "none": "None" },
+      "mode": {
+        "none": "None"
+      },
       "currentMode": "Selection mode",
       "count": "{{count}} selected",
       "pickOneFirst": "Select one item first"
@@ -1176,7 +1209,9 @@
       "acquirer": "Acquirer",
       "createdAt": "Registered on",
       "createdBy": "Registered by",
-      "establishment": "Establishment"
+      "establishment": "Establishment",
+      "closingDate": "Closing Date",
+      "openingDate": "Opening Date"
     },
     "fields": {
       "typeEnum": "Type",
@@ -1482,7 +1517,9 @@
       "periodExpectedPaymentDate": "Expected Payment Period",
       "totalValue": "Total Amount",
       "rvNumber": "Sales Summary",
-      "rateContract": "Expected rate"
+      "rateContract": "Expected rate",
+      "releaseValue": "Release value",
+      "statusTransactionReason": "Reason"
     },
     "columns": {
       "sale": "Sale",
@@ -2192,7 +2229,8 @@
       "createSingle": "Create payment order",
       "createSelected": "Create selected ({{count}})",
       "clearTable": "Clear table",
-      "emptyTable": "No summaries loaded. Use the search or load pending ones."
+      "emptyTable": "No summaries loaded. Use the search or load pending ones.",
+      "colCreditOrderStatus": "Credit order status"
     },
     "manualBankStatement": {
       "eyebrow": "Reconciliation",
@@ -2508,7 +2546,7 @@
         "expectedFeeValue": "Expected fee",
         "appliedFeeValue": "Applied fee",
         "feeDifference": "Difference",
-        "analysis":"Analysis"
+        "analysis": "Analysis"
       },
       "columns": {
         "date": "Date",
@@ -2516,7 +2554,7 @@
         "authorizationShort": "Auth.",
         "value": "Value",
         "fees": "Fees",
-        "analysis":"Analysis"
+        "analysis": "Analysis"
       },
       "table": {
         "appliedRate": "Applied",
@@ -2964,7 +3002,9 @@
       "statusPaymentBank": "Bank payment status",
       "periodLaunchDate": "Launch date period",
       "periodReleaseDate": "Release date period",
-      "modalityPaymentBank": "Bank payment modality"
+      "modalityPaymentBank": "Bank payment modality",
+      "releaseValue": "Release value",
+      "releaseValueShort": "Value"
     },
     "deleteManual": {
       "header": "Confirm deletion",
@@ -3040,7 +3080,8 @@
       "bankingDomicile": "Banking domicile",
       "transactionsStatusEnum": "Sale status",
       "creditOrderStatusEnum": "Credit order status",
-      "statusPaymentBankEnum": "Bank payment status"
+      "statusPaymentBankEnum": "Bank payment status",
+      "rvNumberShort": "Summary"
     }
   },
   "creditOrders": {
@@ -3079,7 +3120,8 @@
       "periodRvDate": "Sales summary period",
       "salesSummaryStatus": "Sales summary status",
       "statusPaymentBank": "Bank payment status",
-      "periodCreditOrderDate": "Credit order date period"
+      "periodCreditOrderDate": "Credit order date period",
+      "releaseValueShort": "Release"
     }
   },
   "adjustments": {
@@ -3241,9 +3283,15 @@
       "processRede": "Process Rede now",
       "processBank": "Process CNAB now"
     },
-    "erp": { "title": "ERP" },
-    "rede": { "title": "Rede" },
-    "bank": { "title": "Bank / CNAB" }
+    "erp": {
+      "title": "ERP"
+    },
+    "rede": {
+      "title": "Rede"
+    },
+    "bank": {
+      "title": "Bank / CNAB"
+    }
   },
   "notFound": {
     "attemptedUrl": "Accessed URL",
