@@ -155,6 +155,8 @@ export class BankStatementListComponent
   readonly companies = signal<string[] | null>(null);
   readonly acquirers = signal<string[] | null>(null);
   readonly establishments = signal<string[] | null>(null);
+  /** Sem controle de UI — preenchido apenas ao chegar via link da ordem de crédito. */
+  readonly id = signal<string | null>(null);
   readonly periodReleaseDate = signal<PeriodEnum | null>(null);
   readonly releaseDate = signal<string | string[] | null>(null);
   readonly releaseCategory = signal<ReleaseCategoryEnum[] | null>(null);
@@ -431,6 +433,7 @@ export class BankStatementListComponent
       acquirers: this.acquirers()?.length ? this.acquirers()! : undefined,
       companies: this.companies()?.length ? this.companies()! : undefined,
       establishments: this.establishments()?.length ? this.establishments()! : undefined,
+      id: this.id() ?? undefined,
     };
   }
 
@@ -603,6 +606,7 @@ export class BankStatementListComponent
       acquirers: this.acquirers(),
       companies: this.companies(),
       establishments: this.establishments(),
+      id: this.id(),
     };
   }
 
@@ -612,6 +616,7 @@ export class BankStatementListComponent
     this.acquirers.set(s.acquirers ?? null);
     this.companies.set(s.companies ?? null);
     this.establishments.set(s.establishments ?? null);
+    this.id.set(s.id ?? null);
 
     this.releaseValueEnd.set(s.releaseValueEnd ?? null);
     this.releaseValueStart.set(s.releaseValueStart ?? null);
@@ -720,21 +725,15 @@ export class BankStatementListComponent
   }
 
   /**
-   * Abre as ordens de crédito vinculadas a este lançamento bancário. Só é
-   * chamado quando o lançamento já está conciliado (statusPaymentBank = PAID);
-   * o item de menu correspondente fica desabilitado nos demais casos.
+   * Abre as ordens de crédito de fato vinculadas a este lançamento bancário
+   * (releaseBank = este lançamento) — não uma aproximação por empresa/data/valor,
+   * que pode trazer ordens de outro lançamento com os mesmos atributos ou
+   * deixar de fora a ordem certa em caso de divergência.
    */
   protected searchOnCreditOrder(row: BankStatementModel): void {
     const targetFilters = {
       ...createEmptyCreditOrderFiltersState(),
-      flags: row.flag?.id ? [row.flag.id] : null,
-      companies: row.company?.id ? [row.company.id] : null,
-      acquirers: row.acquirer?.id ? [row.acquirer.id] : null,
-      establishments: row.establishment?.id ? [row.establishment.id] : null,
-
-      releaseValueStart: row.releaseValue ?? null,
-      releaseValueEnd: row.releaseValue ?? null,
-      statusPaymentBank: [StatusPaymentBankEnum.PAID],
+      releaseBankIds: [row.id],
     };
 
     localStorage.setItem(STATE_KEY.CARDSYNC.CREDIT_ORDER.FILTERS.V1, JSON.stringify(targetFilters));

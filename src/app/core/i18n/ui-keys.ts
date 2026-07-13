@@ -1607,6 +1607,7 @@ export const UI_KEYS = {
     transactions: 'common.search.transactions',
     salesSummary: 'common.search.salesSummary',
     creditOrder: 'common.search.creditOrder',
+    bankStatement: 'common.search.bankStatement',
   },
   confirm: {
     logoutTitle: 'confirm.logoutTitle',

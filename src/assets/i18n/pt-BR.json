@@ -2933,7 +2933,8 @@
       "process": "Processo",
       "transactions": "Transações",
       "salesSummary": "Resumo Venda",
-      "creditOrder": "Ordem de Crédito"
+      "creditOrder": "Ordem de Crédito",
+      "bankStatement": "Lançamento Bancário"
     },
     "no": "Não",
     "to": "até",

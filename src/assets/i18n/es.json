@@ -2609,7 +2609,8 @@
       "process": "Proceso",
       "transactions": "Transacciones",
       "salesSummary": "Resumen de Venta",
-      "creditOrder": "Orden de Crédito"
+      "creditOrder": "Orden de Crédito",
+      "bankStatement": "Extracto Bancario"
     },
     "code": "Código",
     "sales": "Ventas",

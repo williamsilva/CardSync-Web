@@ -81,6 +81,7 @@ import {
   SaleSummaryAdvancedFilters,
   createEmptySaleSummaryFiltersState,
 } from '@features/filter/sale-summary.filters';
+import { createEmptyBankStatementFiltersState } from '@features/filter/bank-statement.filters';
 
 @Component({
   standalone: true,
@@ -158,6 +159,8 @@ export class CreditOrderListComponent
   readonly companies = signal<string[] | null>(null);
   readonly acquirers = signal<string[] | null>(null);
   readonly establishments = signal<string[] | null>(null);
+  /** Sem controle de UI — preenchido apenas ao chegar via link do extrato bancário. */
+  readonly releaseBankIds = signal<string[] | null>(null);
 
   readonly periodRvDate = signal<PeriodEnum | null>(null);
   readonly rvDate = signal<string | string[] | null>(null);
@@ -548,6 +551,7 @@ export class CreditOrderListComponent
       acquirers: this.acquirers()?.length ? this.acquirers()! : undefined,
       companies: this.companies()?.length ? this.companies()! : undefined,
       establishments: this.establishments()?.length ? this.establishments()! : undefined,
+      releaseBankIds: this.releaseBankIds()?.length ? this.releaseBankIds()! : undefined,
 
       rvDate: this.rvDate() ?? undefined,
       periodRvDate: this.periodRvDate() ?? undefined,
@@ -777,6 +781,7 @@ export class CreditOrderListComponent
       acquirers: this.acquirers(),
       companies: this.companies(),
       establishments: this.establishments(),
+      releaseBankIds: this.releaseBankIds(),
 
       rvDate: this.rvDate(),
       periodRvDate: this.periodRvDate(),
@@ -808,6 +813,7 @@ export class CreditOrderListComponent
     this.acquirers.set(s.acquirers ?? null);
     this.companies.set(s.companies ?? null);
     this.establishments.set(s.establishments ?? null);
+    this.releaseBankIds.set(s.releaseBankIds ?? null);
 
     this.rvDate.set(s.rvDate ?? null);
     this.periodRvDate.set(s.periodRvDate ?? null);
@@ -861,6 +867,12 @@ export class CreditOrderListComponent
         icon: 'pi pi-search',
         command: () => this.searchOnSalesSummary(row),
       },
+      {
+        label: this.i18n.tUi('common.search.bankStatement'),
+        icon: 'pi pi-search',
+        disabled: !row.releaseBankId,
+        command: () => this.searchOnBankStatement(row),
+      },
     ];
   }
 
@@ -906,6 +918,27 @@ export class CreditOrderListComponent
       acquirers: row.acquirer?.id ? [row.acquirer.id] : null,
       establishments: row.establishment?.id ? [row.establishment.id] : null,
     };
+  }
+
+  /**
+   * Abre o lançamento bancário de fato vinculado a esta ordem de crédito
+   * (releaseBank = row.releaseBankId) — só é chamado quando a ordem já está
+   * conciliada; o item de menu correspondente fica desabilitado nos demais casos.
+   */
+  protected searchOnBankStatement(row: CreditOrderModel): void {
+    if (!row.releaseBankId) {
+      return;
+    }
+
+    const targetFilters = {
+      ...createEmptyBankStatementFiltersState(),
+      id: row.releaseBankId,
+    };
+
+    localStorage.setItem(STATE_KEY.CARDSYNC.BANK_STATEMENT.FILTERS.V1, JSON.stringify(targetFilters));
+    localStorage.removeItem(STATE_KEY.CARDSYNC.BANK_STATEMENT.TABLE.STATE.V1);
+
+    this.openRouteInNewTab(['/documents/bank/bank_statement']);
   }
 
   protected openRouteInNewTab(

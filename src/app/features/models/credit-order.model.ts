@@ -15,6 +15,7 @@ import {
 export interface CreditOrderModel {
   id: string;
   rvNumber: string;
+  releaseBankId: string | null;
 
   flag: FlagMinimalModel;
   company: CompanyMinimalModel;
@@ -54,6 +55,7 @@ export interface CreditOrderManualResult {
 export interface CreditOrderApiModel {
   id: string;
   rvNumber: string;
+  releaseBankId: string | null;
 
   flag: FlagMinimalModel;
   company: CompanyMinimalModel;

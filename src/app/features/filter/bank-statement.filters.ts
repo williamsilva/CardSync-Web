@@ -21,6 +21,9 @@ export type BankStatementFiltersState = {
   acquirers: string[] | null;
   companies: string[] | null;
   establishments: string[] | null;
+
+  /** Filtro exato: lançamento bancário específico (id). Sem controle de UI — usado por navegação a partir da ordem de crédito. */
+  id: string | null;
 };
 
 export type BankStatementAdvancedFilters = Partial<BankStatementFiltersState>;
@@ -46,6 +49,7 @@ export function createEmptyBankStatementFiltersState(): BankStatementFiltersStat
     acquirers: null,
     companies: null,
     establishments: null,
+    id: null,
   };
 }
 
@@ -59,6 +63,7 @@ export function resetBankStatementAdvancedFilters(
   filters.acquirers.set(empty.acquirers);
   filters.companies.set(empty.companies);
   filters.establishments.set(empty.establishments);
+  filters.id.set(empty.id);
 
   filters.releaseValueEnd.set(empty.releaseValueEnd);
   filters.releaseValueStart.set(empty.releaseValueStart);

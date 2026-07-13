@@ -36,6 +36,9 @@ export type CreditOrderFiltersState = {
   acquirers: string[] | null;
   companies: string[] | null;
   establishments: string[] | null;
+
+  /** Filtro exato: ordens vinculadas a lançamento(s) bancário(s) específico(s). Sem controle de UI — usado por navegação a partir do extrato bancário. */
+  releaseBankIds: string[] | null;
 };
 
 export type CreditOrderAdvancedFilters = Partial<CreditOrderFiltersState>;
@@ -74,6 +77,7 @@ export function createEmptyCreditOrderFiltersState(): CreditOrderFiltersState {
     acquirers: null,
     companies: null,
     establishments: null,
+    releaseBankIds: null,
   };
 }
 
@@ -85,6 +89,7 @@ export function resetCreditOrderAdvancedFilters(filters: CreditOrderAdvancedFilt
   filters.acquirers.set(empty.acquirers);
   filters.companies.set(empty.companies);
   filters.establishments.set(empty.establishments);
+  filters.releaseBankIds.set(empty.releaseBankIds);
 
   filters.rvDate.set(empty.rvDate);
   filters.periodRvDate.set(empty.periodRvDate);
