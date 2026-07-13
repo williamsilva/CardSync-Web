@@ -1681,6 +1681,7 @@
       "bankHistory": "Histórico banco",
       "releaseValue": "Valor Lançamento",
       "establishment": "Estabelecimento",
+      "modalityPaymentBankShort": "Modalidade",
       "releaseCategory": "Categoria lançamento",
       "statusPaymentBank": "Status pagamento banco",
       "periodReleaseDate": "Período data lançamento",
@@ -1691,6 +1692,13 @@
       "message": "Deseja excluir este lançamento manual?",
       "success": "Lançamento manual excluído com sucesso.",
       "error": "Não foi possível excluir o lançamento manual."
+    },
+    "undoReconciliation": {
+      "action": "Desfazer conciliação",
+      "header": "Desfazer conciliação",
+      "message": "Desfazer a conciliação deste lançamento bancário? A(s) ordem(ns) de crédito e parcelas vinculadas voltam ao estado pendente.",
+      "success": "{creditOrdersUnlinked, plural, one {Conciliação desfeita: # ordem de crédito desvinculada.} other {Conciliação desfeita: # ordens de crédito desvinculadas.}}",
+      "error": "Não foi possível desfazer a conciliação."
     }
   },
   "chargebackRequest": {
@@ -2924,8 +2932,8 @@
       "title": "Buscar",
       "process": "Processo",
       "transactions": "Transações",
-      "salesSummary": "Resumo Venda"
-
+      "salesSummary": "Resumo Venda",
+      "creditOrder": "Ordem de Crédito"
     },
     "no": "Não",
     "to": "até",

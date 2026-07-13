@@ -31,7 +31,9 @@ import { BankStatementFacade } from '@features/facade/bank-statement.facade';
 import { buildListQuery } from '@shared/features/list-query/list-query.builder';
 import { allPeriodEnum, PeriodEnum, periodEnumLabel } from '@models/enums/period.enum';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
+import { createEmptyCreditOrderFiltersState } from '@features/filter/credit-order.filters';
 import { CsColumnFilterShellComponent } from '@features/list-base/cs-column-filter-shell.component';
+import { ManualBankReconciliationApiService } from '@features/service/manual-bank-reconciliation.api.service';
 import { CsAdvancedPeriodDateFilterComponent } from '@features/list-base/cs-advanced-period-date-filter.component';
 import { CsAdvancedMultiselectFilterComponent } from '@features/list-base/cs-advanced-multiselect-filter.component';
 import { CsAdvancedFilterItemTemplateDirective } from '@features/list-base/cs-advanced-filter-item-template.directive';
@@ -39,7 +41,6 @@ import {
   BankStatementFiltersState,
   BankStatementAdvancedFilters,
   resetBankStatementAdvancedFilters,
-  createEmptyBankStatementFiltersState,
 } from '@features/filter/bank-statement.filters';
 import {
   readArrayFilterValues,
@@ -114,6 +115,10 @@ export class BankStatementListComponent
   protected override readonly i18n = inject(I18nService);
   private readonly confirm = inject(ConfirmationService);
   private readonly messageService = inject(MessageService);
+  private readonly manualBankReconciliationApi = inject(ManualBankReconciliationApiService);
+
+  /** Exposto para o template (habilitar/mostrar ações condicionadas ao status). */
+  protected readonly StatusPaymentBankEnum = StatusPaymentBankEnum;
 
   readonly flagFacade = inject(FlagFacade);
   readonly bankFacade = inject(BankFacade);
@@ -638,13 +643,50 @@ export class BankStatementListComponent
   }
 
   protected searchActions(row: BankStatementModel): MenuItem[] {
+    const reconciled = row.statusPaymentBank === StatusPaymentBankEnum.PAID;
+
     return [
       {
-        label: this.i18n.tUi('common.search.salesSummary'),
+        label: this.i18n.tUi('common.search.creditOrder'),
         icon: 'pi pi-search',
-        command: () => this.searchOnSalesSummary(row),
+        disabled: !reconciled,
+        command: () => this.searchOnCreditOrder(row),
       },
     ];
+  }
+
+  protected confirmUndoReconciliation(row: BankStatementModel): void {
+    this.confirm.confirm({
+      header: this.i18n.tUi('bankStatement.undoReconciliation.header'),
+      message: this.i18n.tUi('bankStatement.undoReconciliation.message'),
+      icon: 'pi pi-exclamation-triangle',
+      acceptButtonStyleClass: 'p-button-warn',
+      acceptLabel: this.i18n.tUi('common.yes'),
+      rejectLabel: this.i18n.tUi('common.no'),
+      accept: () => this.undoReconciliation(row),
+    });
+  }
+
+  private undoReconciliation(row: BankStatementModel): void {
+    this.manualBankReconciliationApi.undoReconciliation(row.id).subscribe({
+      next: (result) => {
+        this.messageService.add({
+          severity: 'success',
+          summary: this.i18n.tUi('common.success'),
+          detail: this.i18n.tUi('bankStatement.undoReconciliation.success', {
+            creditOrdersUnlinked: result.creditOrdersUnlinked,
+          }),
+        });
+        this.facade.reloadLast();
+      },
+      error: () => {
+        this.messageService.add({
+          severity: 'error',
+          summary: this.i18n.tUi('common.error'),
+          detail: this.i18n.tUi('bankStatement.undoReconciliation.error'),
+        });
+      },
+    });
   }
 
   protected confirmDeleteManual(row: BankStatementModel): void {
@@ -677,22 +719,28 @@ export class BankStatementListComponent
     });
   }
 
-  protected searchOnSalesSummary(row: BankStatementModel): void {
+  /**
+   * Abre as ordens de crédito vinculadas a este lançamento bancário. Só é
+   * chamado quando o lançamento já está conciliado (statusPaymentBank = PAID);
+   * o item de menu correspondente fica desabilitado nos demais casos.
+   */
+  protected searchOnCreditOrder(row: BankStatementModel): void {
     const targetFilters = {
-      ...createEmptyBankStatementFiltersState(),
+      ...createEmptyCreditOrderFiltersState(),
       flags: row.flag?.id ? [row.flag.id] : null,
       companies: row.company?.id ? [row.company.id] : null,
       acquirers: row.acquirer?.id ? [row.acquirer.id] : null,
       establishments: row.establishment?.id ? [row.establishment.id] : null,
+
+      releaseValueStart: row.releaseValue ?? null,
+      releaseValueEnd: row.releaseValue ?? null,
+      statusPaymentBank: [StatusPaymentBankEnum.PAID],
     };
 
-    localStorage.setItem(
-      STATE_KEY.CARDSYNC.SALES_SUMMARY.FILTERS.V1,
-      JSON.stringify(targetFilters),
-    );
-    localStorage.removeItem(STATE_KEY.CARDSYNC.SALES_SUMMARY.TABLE.STATE.V1);
+    localStorage.setItem(STATE_KEY.CARDSYNC.CREDIT_ORDER.FILTERS.V1, JSON.stringify(targetFilters));
+    localStorage.removeItem(STATE_KEY.CARDSYNC.CREDIT_ORDER.TABLE.STATE.V1);
 
-    this.openRouteInNewTab(['/documents/acq/sales-summary']);
+    this.openRouteInNewTab(['/documents/acq/credit-order']);
   }
 
   protected openRouteInNewTab(

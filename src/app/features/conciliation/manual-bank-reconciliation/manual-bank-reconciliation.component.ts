@@ -13,7 +13,9 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { I18nService } from '@core/i18n/i18n.service';
 import { CsTagComponent, CsTagTone } from '@shared/ui';
 import { CsDatePipe } from '@shared/pipes/cs-date.pipe';
+import { STATE_KEY } from '@features/state-key.constants';
 import { BankFacade } from '@features/facade/bank.facade';
+import { PersistedFilters } from '@shared/utils/persisted-filters';
 import { FlagFacade } from '@features/facade/flag.facade';
 import { CsCurrencyPipe } from '@shared/pipes/cs-currency.pipe';
 import { CompanyFacade } from '@features/facade/company.facade';
@@ -55,6 +57,24 @@ type CreditOrderRow = CreditOrderApiModel & {
   releaseValue?: number | null;
   statusPaymentBank?: StatusPaymentBankEnum | null;
 };
+
+interface ReleaseFiltersState {
+  releaseBanks: string[] | null;
+  releaseFlags: string[] | null;
+  releasePeriod: PeriodEnum | null;
+  releaseCompanies: string[] | null;
+  releaseAcquirers: string[] | null;
+  releaseDate: string | string[] | null;
+  releaseValueStart: number | null;
+  releaseValueEnd: number | null;
+}
+
+interface OrderFiltersState {
+  orderReleasePeriod: PeriodEnum | null;
+  orderReleaseDate: string | string[] | null;
+  orderReleaseValueStart: number | null;
+  orderReleaseValueEnd: number | null;
+}
 
 @Component({
   standalone: true,
@@ -101,8 +121,20 @@ export class ManualBankReconciliationComponent implements OnInit {
   private readonly acquirerFacade = inject(AcquirerFacade);
   private readonly settingsApi = inject(ReconciliationSettingsApiService);
 
+  /** Persistência dos filtros avançados (localStorage) para sobreviver a atualização de página, igual ao BankStatementListComponent. */
+  private readonly persistedReleaseFilters = new PersistedFilters<ReleaseFiltersState>(
+    STATE_KEY.CARDSYNC.CONCILIATION.MANUAL_BANK_RECONCILIATION.RELEASE_FILTERS.V1,
+  );
+  private readonly persistedOrderFilters = new PersistedFilters<OrderFiltersState>(
+    STATE_KEY.CARDSYNC.CONCILIATION.MANUAL_BANK_RECONCILIATION.ORDER_FILTERS.V1,
+  );
+
   /** Data-limite (go-live + N meses): lançamentos com data até ela podem ser marcados como legado. */
   private readonly legacyMarkingCutoffDate = signal<string | null>(null);
+
+  /** Dias permitidos antes/depois da data do lançamento bancário para busca de ordens de crédito (configuração de conciliação). */
+  private readonly bankDateToleranceDaysBefore = signal(0);
+  private readonly bankDateToleranceDaysAfter = signal(0);
 
   /** Botão de legado visível somente para lançamento selecionado dentro da janela. */
   readonly canMarkLegacySelected = computed(() => {
@@ -115,7 +147,15 @@ export class ManualBankReconciliationComponent implements OnInit {
     this.facade.selectedReleases().reduce((sum, r) => sum + (r.releaseValue ?? 0), 0),
   );
 
-  rows = 15;
+  /** Chave de estado (PrimeNG stateStorage="local") para ordenação/paginação/filtros de coluna persistirem entre recargas de página. */
+  protected readonly releasesTableStateKey =
+    STATE_KEY.CARDSYNC.CONCILIATION.MANUAL_BANK_RECONCILIATION.RELEASES_TABLE.STATE.V1;
+  protected readonly ordersTableStateKey =
+    STATE_KEY.CARDSYNC.CONCILIATION.MANUAL_BANK_RECONCILIATION.ORDERS_TABLE.STATE.V1;
+  private readonly tableRowsKey =
+    STATE_KEY.CARDSYNC.CONCILIATION.MANUAL_BANK_RECONCILIATION.TABLE.ROWS.V1;
+
+  rows = Number(localStorage.getItem(this.tableRowsKey)) || 15;
   readonly rowsPerPageOptions = [13, 15, 30, 50, 100];
 
   private readonly lastOrdersEvent = signal<any>(null);
@@ -299,19 +339,128 @@ export class ManualBankReconciliationComponent implements OnInit {
     this.orderActiveFilterGroups().reduce((n, g) => n + g.filters.length, 0),
   );
 
+  /**
+   * PrimeNG restaura o estado da tabela (ordenação/página/filtros de coluna) de
+   * forma assíncrona, como parte do próprio ciclo de vida do p-table — tarde
+   * demais para a PRIMEIRA consulta ao backend, que já dispararíamos aqui sem
+   * ordenação. Por isso lemos a mesma chave do localStorage manualmente antes
+   * do primeiro reload, e ignoramos o (onLazyLoad) "eco" que o PrimeNG dispara
+   * logo depois com os mesmos dados (senão a consulta correta, feita por nós,
+   * corre o risco de ser descartada pelo guard de "loading" da segunda chamada).
+   */
+  private skipNextReleasesLazy = false;
+  private skipNextOrdersLazy = false;
+
   ngOnInit(): void {
     this.settingsApi.getSettings().subscribe({
-      next: (settings) => this.legacyMarkingCutoffDate.set(settings.legacyMarkingCutoffDate),
+      next: (settings) => {
+        this.legacyMarkingCutoffDate.set(settings.legacyMarkingCutoffDate);
+        this.bankDateToleranceDaysBefore.set(settings.dateToleranceDaysBefore);
+        this.bankDateToleranceDaysAfter.set(settings.dateToleranceDaysAfter);
+      },
     });
     this.companyFacade.loadCompanyOptionsFilter();
     this.bankFacade.loadBankOptionsFilter();
     this.acquirerFacade.loadAcquirerOptionsFilter();
     this.flagFacade.loadFlagOptionsFilter();
+    this.applyPersistedFilters();
+    this.restoreReleasesTableState();
+    this.restoreOrdersTableState();
     this.reloadReleases();
     this.reloadOrders();
   }
 
+  private restoreReleasesTableState(): void {
+    const restored = this.readTableState(this.releasesTableStateKey);
+    if (!restored) return;
+    this.lastReleasesEvent.set({
+      first: restored.first ?? 0,
+      rows: this.rows,
+      sortField: restored.sortField,
+      sortOrder: restored.sortOrder,
+      multiSortMeta: restored.multiSortMeta,
+      filters: restored.filters,
+    });
+    this.skipNextReleasesLazy = true;
+  }
+
+  private restoreOrdersTableState(): void {
+    const restored = this.readTableState(this.ordersTableStateKey);
+    if (!restored) return;
+    this.lastOrdersEvent.set({
+      first: restored.first ?? 0,
+      rows: this.rows,
+      sortField: restored.sortField,
+      sortOrder: restored.sortOrder,
+      multiSortMeta: restored.multiSortMeta,
+      filters: restored.filters,
+    });
+    this.skipNextOrdersLazy = true;
+  }
+
+  private readTableState(key: string): any | null {
+    const raw = localStorage.getItem(key);
+    if (!raw) return null;
+    try {
+      return JSON.parse(raw);
+    } catch {
+      return null;
+    }
+  }
+
+  /** Restaura os filtros avançados salvos (localStorage) de uma sessão anterior, se houver. */
+  private applyPersistedFilters(): void {
+    const releaseFilters = this.persistedReleaseFilters.load();
+    if (releaseFilters) this.applyReleaseFiltersState(releaseFilters);
+
+    const orderFilters = this.persistedOrderFilters.load();
+    if (orderFilters) this.applyOrderFiltersState(orderFilters);
+  }
+
+  private toReleaseFiltersState(): ReleaseFiltersState {
+    return {
+      releaseBanks: this.releaseBanks(),
+      releaseFlags: this.releaseFlags(),
+      releasePeriod: this.releasePeriod(),
+      releaseCompanies: this.releaseCompanies(),
+      releaseAcquirers: this.releaseAcquirers(),
+      releaseDate: this.releaseDate(),
+      releaseValueStart: this.releaseValueStart(),
+      releaseValueEnd: this.releaseValueEnd(),
+    };
+  }
+
+  private applyReleaseFiltersState(state: ReleaseFiltersState): void {
+    this.releaseBanks.set(state.releaseBanks ?? null);
+    this.releaseFlags.set(state.releaseFlags ?? null);
+    this.releasePeriod.set(state.releasePeriod ?? null);
+    this.releaseCompanies.set(state.releaseCompanies ?? null);
+    this.releaseAcquirers.set(state.releaseAcquirers ?? null);
+    this.releaseDate.set(state.releaseDate ?? null);
+    this.releaseValueStart.set(state.releaseValueStart ?? null);
+    this.releaseValueEnd.set(state.releaseValueEnd ?? null);
+  }
+
+  private toOrderFiltersState(): OrderFiltersState {
+    return {
+      orderReleasePeriod: this.orderReleasePeriod(),
+      orderReleaseDate: this.orderReleaseDate(),
+      orderReleaseValueStart: this.orderReleaseValueStart(),
+      orderReleaseValueEnd: this.orderReleaseValueEnd(),
+    };
+  }
+
+  private applyOrderFiltersState(state: OrderFiltersState): void {
+    this.orderReleasePeriod.set(state.orderReleasePeriod ?? null);
+    this.orderReleaseDate.set(state.orderReleaseDate ?? null);
+    this.orderReleaseValueStart.set(state.orderReleaseValueStart ?? null);
+    this.orderReleaseValueEnd.set(state.orderReleaseValueEnd ?? null);
+  }
+
   search(): void {
+    this.persistedReleaseFilters.save(this.toReleaseFiltersState());
+    this.persistedOrderFilters.save(this.toOrderFiltersState());
+
     if (this.lastReleasesEvent()) {
       this.lastReleasesEvent.update((e) => ({ ...e, first: 0 }));
     }
@@ -323,11 +472,13 @@ export class ManualBankReconciliationComponent implements OnInit {
   }
 
   searchReleases(): void {
+    this.persistedReleaseFilters.save(this.toReleaseFiltersState());
     this.lastReleasesEvent.update((e) => (e ? { ...e, first: 0 } : null));
     this.reloadReleases();
   }
 
   searchOrders(): void {
+    this.persistedOrderFilters.save(this.toOrderFiltersState());
     this.lastOrdersEvent.update((e) => (e ? { ...e, first: 0 } : null));
     this.reloadOrders();
   }
@@ -342,6 +493,7 @@ export class ManualBankReconciliationComponent implements OnInit {
     this.releaseAcquirers.set(null);
     this.lastReleasesEvent.set(null);
     this.releaseValueStart.set(null);
+    this.persistedReleaseFilters.clear();
     this.reloadReleases();
   }
 
@@ -351,25 +503,45 @@ export class ManualBankReconciliationComponent implements OnInit {
     this.lastOrdersEvent.set(null);
     this.orderReleaseValueEnd.set(null);
     this.orderReleaseValueStart.set(null);
+    this.persistedOrderFilters.clear();
+    this.reloadOrders();
+  }
+
+  /** Cancela a seleção de lançamento(s) e limpa o filtro de período de ordens aplicado automaticamente. */
+  cancelSelection(): void {
+    this.facade.clearSelection();
+    this.orderReleasePeriod.set(null);
+    this.orderReleaseDate.set(null);
+    this.lastOrdersEvent.set(null);
     this.reloadOrders();
   }
 
   onReleasesLazyLoad(event: any): void {
     this.lastReleasesEvent.set(event);
+    if (this.skipNextReleasesLazy) {
+      this.skipNextReleasesLazy = false;
+      return;
+    }
     this.reloadReleases();
   }
 
   onOrdersLazyLoad(event: any): void {
     this.lastOrdersEvent.set(event);
+    if (this.skipNextOrdersLazy) {
+      this.skipNextOrdersLazy = false;
+      return;
+    }
     this.reloadOrders();
   }
 
   onReleasesPageChange(event: any): void {
     this.rows = event.rows;
+    localStorage.setItem(this.tableRowsKey, String(this.rows));
   }
 
   onOrdersPageChange(event: any): void {
     this.rows = event.rows;
+    localStorage.setItem(this.tableRowsKey, String(this.rows));
   }
 
   /**
@@ -391,8 +563,53 @@ export class ManualBankReconciliationComponent implements OnInit {
       this.facade.selectSingleRelease(isOnlySelected ? null : release);
     }
 
+    this.applyOrderDateRangeForSelection();
     this.lastOrdersEvent.set(null);
     this.reloadOrders();
+  }
+
+  /**
+   * Ao selecionar um único lançamento bancário, filtra as ordens de crédito por
+   * período (intervalo), usando a data do lançamento ± os dias de tolerância
+   * configurados em conciliação (Dias anteriores/posteriores permitidos - banco).
+   * Sem exatamente 1 lançamento selecionado, o filtro de período é limpo.
+   */
+  private applyOrderDateRangeForSelection(): void {
+    const releases = this.facade.selectedReleases();
+
+    if (releases.length !== 1 || !releases[0].releaseDate) {
+      this.orderReleasePeriod.set(null);
+      this.orderReleaseDate.set(null);
+      return;
+    }
+
+    const base = this.parseIsoDate(releases[0].releaseDate);
+    if (!base) {
+      this.orderReleasePeriod.set(null);
+      this.orderReleaseDate.set(null);
+      return;
+    }
+
+    const start = new Date(base);
+    start.setDate(start.getDate() - this.bankDateToleranceDaysBefore());
+    const end = new Date(base);
+    end.setDate(end.getDate() + this.bankDateToleranceDaysAfter());
+
+    this.orderReleasePeriod.set(PeriodEnum.INTERVAL);
+    this.orderReleaseDate.set([this.formatBrDate(start), this.formatBrDate(end)]);
+  }
+
+  private parseIsoDate(value: string): Date | null {
+    const [year, month, day] = value.slice(0, 10).split('-').map(Number);
+    if (!year || !month || !day) return null;
+    return new Date(year, month - 1, day);
+  }
+
+  /** dd/MM/yyyy — formato esperado pelo p-datepicker (dataType="string", dateFormat="dd/mm/yy"). */
+  private formatBrDate(value: Date): string {
+    const month = String(value.getMonth() + 1).padStart(2, '0');
+    const day = String(value.getDate()).padStart(2, '0');
+    return `${day}/${month}/${value.getFullYear()}`;
   }
 
   isReleaseSelected(release: BankStatementApiModel): boolean {

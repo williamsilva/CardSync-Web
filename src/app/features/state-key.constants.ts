@@ -277,6 +277,19 @@ export const STATE_KEY = {
       MANUAL_BANK_STATEMENT: {
         FORM: { V1: 'cardsync.conciliation.manual-bank-statement.form.v1' },
       },
+      MANUAL_BANK_RECONCILIATION: {
+        RELEASE_FILTERS: { V1: 'cardsync.conciliation.manual-bank-reconciliation.release-filters.v1' },
+        ORDER_FILTERS: { V1: 'cardsync.conciliation.manual-bank-reconciliation.order-filters.v1' },
+        TABLE: {
+          ROWS: { V1: 'cardsync.conciliation.manual-bank-reconciliation.table.rows' },
+        },
+        RELEASES_TABLE: {
+          STATE: { V1: 'cardsync.conciliation.manual-bank-reconciliation.releases-table.state.v1' },
+        },
+        ORDERS_TABLE: {
+          STATE: { V1: 'cardsync.conciliation.manual-bank-reconciliation.orders-table.state.v1' },
+        },
+      },
       FEES: {
         TABLE: {
           ROWS: {

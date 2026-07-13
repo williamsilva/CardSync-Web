@@ -2608,7 +2608,8 @@
       "title": "Buscar",
       "process": "Proceso",
       "transactions": "Transacciones",
-      "salesSummary": "Resumen de Venta"
+      "salesSummary": "Resumen de Venta",
+      "creditOrder": "Orden de Crédito"
     },
     "code": "Código",
     "sales": "Ventas",
@@ -3011,6 +3012,13 @@
       "message": "¿Desea eliminar este lanzamiento manual?",
       "success": "Lanzamiento manual eliminado con éxito.",
       "error": "No se pudo eliminar el lanzamiento manual."
+    },
+    "undoReconciliation": {
+      "action": "Deshacer conciliación",
+      "header": "Deshacer conciliación",
+      "message": "¿Deshacer la conciliación de este lanzamiento bancario? La(s) orden(es) de crédito y cuotas vinculadas vuelven a pendiente.",
+      "success": "{creditOrdersUnlinked, plural, one {Conciliación deshecha: # orden de crédito desvinculada.} other {Conciliación deshecha: # órdenes de crédito desvinculadas.}}",
+      "error": "No se pudo deshacer la conciliación."
     }
   },
   "anticipation": {

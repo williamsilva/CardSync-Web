@@ -230,10 +230,10 @@
     [loading]="facade.loading()"
     [stateKey]="tableStateKey()"
     [showCurrentPageReport]="true"
-    (onPage)="onPageChange($event)"
     [totalRecords]="totalRecords()"
     (onLazyLoad)="onLazyLoad($event)"
     [paginatorDropdownAppendTo]="'body'"
+    (onPage)="onPageChange($event)"
     [rowsPerPageOptions]="rowsPerPageOptions"
     [currentPageReportTemplate]="'pagination.report' | translate"
     [tableStyle]="{ width: '100%', 'min-width': '110rem', 'table-layout': 'fixed' }"
@@ -952,6 +952,17 @@
               icon="pi pi-search"
               (click)="menu.toggle($event)"
               class="p-button-text p-button-sm p-button-rounded"
+            ></button>
+
+            <button
+              pButton
+              type="button"
+              icon="pi pi-undo"
+              tooltipPosition="top"
+              (click)="confirmUndoReconciliation(row)"
+              [disabled]="row.statusPaymentBank !== StatusPaymentBankEnum.PAID"
+              [pTooltip]="'bankStatement.undoReconciliation.action' | translate"
+              class="p-button-text p-button-sm p-button-rounded p-button-warn"
             ></button>
 
             @if (row.processedFile === null) {

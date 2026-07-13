@@ -1044,6 +1044,13 @@ export const UI_KEYS = {
       success: 'bankStatement.deleteManual.success',
       error: 'bankStatement.deleteManual.error',
     },
+    undoReconciliation: {
+      action: 'bankStatement.undoReconciliation.action',
+      header: 'bankStatement.undoReconciliation.header',
+      message: 'bankStatement.undoReconciliation.message',
+      success: 'bankStatement.undoReconciliation.success',
+      error: 'bankStatement.undoReconciliation.error',
+    },
   },
   chargebackRequest: {
     subtitle: 'chargebackRequest.subtitle',
@@ -1599,6 +1606,7 @@ export const UI_KEYS = {
     process: 'common.search.process',
     transactions: 'common.search.transactions',
     salesSummary: 'common.search.salesSummary',
+    creditOrder: 'common.search.creditOrder',
   },
   confirm: {
     logoutTitle: 'confirm.logoutTitle',

@@ -20,6 +20,11 @@ export interface MarkLegacyResult {
   skipped: number;
 }
 
+export interface UndoBankReconciliationResult {
+  creditOrdersUnlinked: number;
+  installmentsUnlinked: number;
+}
+
 @Injectable({ providedIn: 'root' })
 export class ManualBankReconciliationApiService {
   private readonly http = inject(HttpClient);
@@ -31,5 +36,9 @@ export class ManualBankReconciliationApiService {
 
   markLegacy(releaseBankIds: string[]): Observable<MarkLegacyResult> {
     return this.http.post<MarkLegacyResult>(`${this.baseUrl}/legacy`, { releaseBankIds });
+  }
+
+  undoReconciliation(releaseBankId: string): Observable<UndoBankReconciliationResult> {
+    return this.http.post<UndoBankReconciliationResult>(`${this.baseUrl}/undo/${releaseBankId}`, {});
   }
 }
