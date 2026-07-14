@@ -93,8 +93,18 @@ export class AuthService {
   async logout(): Promise<void> {
     await this.csrf.ensureCsrfCookie();
 
+    // Fallback caso a chamada falhe: reinicia o fluxo OAuth2 (mesmo destino do startLogin).
+    let logoutUrl = `${environment.bffBaseUrl}/bff/login`;
+
     try {
-      await firstValueFrom(this.http.post(`${API.bff}/logout`, {}, { withCredentials: true }));
+      const res = await firstValueFrom(
+        this.http.post<{ logoutUrl: string }>(`${API.bff}/logout`, {}, { withCredentials: true }),
+      );
+      if (res?.logoutUrl) {
+        logoutUrl = res.logoutUrl;
+      }
+    } catch {
+      // mantém o fallback acima
     } finally {
       this.meStore.setMe(null);
       this.session.stop();
@@ -104,7 +114,10 @@ export class AuthService {
       sessionStorage.removeItem(AuthService.RETURN_URL_KEY);
     }
 
-    window.location.href = `${API.bffBaseUrl}/login`;
+    // logoutUrl aponta pro RP-Initiated Logout do NimbusAuth (/connect/logout), que encerra
+    // a sessão de login de lá também - sem isso, o NimbusAuth ficava logado e o próximo
+    // /oauth2/authorize reautenticava via SSO silenciosamente (logout "não funcionava").
+    window.location.href = logoutUrl;
   }
 
   private toRelativeSpaPath(url: string): string {
