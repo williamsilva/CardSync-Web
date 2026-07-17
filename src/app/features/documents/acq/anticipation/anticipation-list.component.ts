@@ -30,6 +30,7 @@ import { AnticipationFacade } from '@features/facade/anticipation.facade';
 import { EstablishmentFacade } from '@features/facade/establishment.facade';
 import { buildListQuery } from '@shared/features/list-query/list-query.builder';
 import { allPeriodEnum, PeriodEnum, periodEnumLabel } from '@models/enums/period.enum';
+import { StatusEnum, statusEnumLabel, statusEnumSeverity } from '@models/enums/status.enum';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
 import { ModalityEnum, allModalityEnum, modalityEnumLabel } from '@models/enums/modality.enum';
 import { CsColumnFilterShellComponent } from '@features/list-base/cs-column-filter-shell.component';
@@ -289,6 +290,14 @@ export class AnticipationListComponent
 
     this.dt?.clear();
     this.clearTableAndReload(this.dt);
+  }
+
+  statusEnumLabel(value: StatusEnum | null): string {
+    return statusEnumLabel(value, this.i18n);
+  }
+
+  statusEnumSeverity(value: StatusEnum | null): CsTagTone {
+    return statusEnumSeverity(value);
   }
 
   statusReconciliationLabel(value: StatusReconciliationEnum | null): string {
