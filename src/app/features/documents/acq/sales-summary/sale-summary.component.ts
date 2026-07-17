@@ -53,12 +53,6 @@ import {
   FiltersPanelComponent,
 } from '@shared/features/filters-panel/filters-panel.component';
 import {
-  StatusTransactionEnum,
-  allStatusTransactionEnum,
-  statusTransactionEnumLabel,
-  statusTransactionEnumSeverity,
-} from '@models/enums/status-transaction.enum';
-import {
   StatusPaymentBankEnum,
   statusPaymentBankEnumLabel,
   statusPaymentBankEnumSeverity,
@@ -162,7 +156,7 @@ export class SaleSummaryListComponent
 
   readonly modality = signal<ModalityEnum[] | null>(null);
   readonly statusPaymentBank = signal<StatusPaymentBankEnum[] | null>(null);
-  readonly transactionsStatus = signal<StatusTransactionEnum[] | null>(null);
+  readonly transactionsStatus = signal<StatusReconciliationEnum[] | null>(null);
   readonly creditOrderStatus = signal<StatusReconciliationEnum[] | null>(null);
 
   readonly isRvDateDisabled = computed(() => !this.periodRvDate());
@@ -182,7 +176,7 @@ export class SaleSummaryListComponent
   readonly modalityColumnDraft = signal<ModalityEnum[] | null>(null);
   readonly rvDateColumnDraft = signal<string | string[] | null>(null);
   readonly statusPaymentBankColumnDraft = signal<StatusPaymentBankEnum[] | null>(null);
-  readonly transactionsStatusColumnDraft = signal<StatusTransactionEnum[] | null>(null);
+  readonly transactionsStatusColumnDraft = signal<StatusReconciliationEnum[] | null>(null);
   readonly creditOrderStatusColumnDraft = signal<StatusReconciliationEnum[] | null>(null);
 
   readonly periodEnumOptions = computed(() => {
@@ -203,8 +197,8 @@ export class SaleSummaryListComponent
 
   readonly transactionsStatusOptions = computed(() => {
     this.i18n.getAppliedLang();
-    return allStatusTransactionEnum().map((value) => ({
-      label: statusTransactionEnumLabel(value, this.i18n),
+    return allStatusReconciliationEnum().map((value) => ({
+      label: statusReconciliationEnumLabel(value, this.i18n),
       value,
     }));
   });
@@ -267,14 +261,6 @@ export class SaleSummaryListComponent
 
     this.dt?.clear();
     this.clearTableAndReload(this.dt);
-  }
-
-  statusTransactionLabel(value: StatusTransactionEnum | null): string {
-    return statusTransactionEnumLabel(value, this.i18n);
-  }
-
-  statusTransactionSeverity(value: StatusTransactionEnum | null): CsTagTone {
-    return statusTransactionEnumSeverity(value);
   }
 
   statusReconciliationLabel(value: StatusReconciliationEnum | null): string {
@@ -466,7 +452,7 @@ export class SaleSummaryListComponent
     if (transactionsStatus?.length) {
       items.push({
         label: this.i18n.tUi('saleSummary.fields.transactionsStatusEnum'),
-        value: transactionsStatus.map((v) => statusTransactionEnumLabel(v, this.i18n)).join(', '),
+        value: transactionsStatus.map((v) => statusReconciliationEnumLabel(v, this.i18n)).join(', '),
       });
     }
 
@@ -681,7 +667,7 @@ export class SaleSummaryListComponent
       items.push({
         label: this.i18n.tUi('saleSummary.fields.transactionsStatusEnum'),
         value: transactionsStatuses
-          .map((v) => statusTransactionEnumLabel(v as StatusTransactionEnum, this.i18n))
+          .map((v) => statusReconciliationEnumLabel(v as StatusReconciliationEnum, this.i18n))
           .join(', '),
       });
     }

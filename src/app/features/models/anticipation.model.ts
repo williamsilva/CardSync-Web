@@ -10,6 +10,7 @@ import { AnticipationAdvancedFilters } from '@features/filter/anticipation.filte
 export interface AnticipationModel {
   id: string;
   rvNumber: number;
+  numberRvCorresponding: number;
 
   flag: FlagMinimalModel;
   company: CompanyMinimalModel;
@@ -30,6 +31,7 @@ export interface AnticipationUpdateInput {}
 export interface AnticipationApiModel {
   id: string;
   rvNumber: number;
+  numberRvCorresponding: number;
 
   flag: FlagMinimalModel;
   company: CompanyMinimalModel;

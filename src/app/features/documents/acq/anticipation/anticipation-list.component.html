@@ -1597,8 +1597,8 @@
         <td class="text-right">{{ row.advanceDiscountValue | csCurrency }}</td>
         <td class="cell-muted text-center">
           <cs-tag
-            [value]="statusTransactionLabel(row.salesSummary?.transactionsStatus)"
-            [tone]="statusTransactionSeverity(row.salesSummary?.transactionsStatus)"
+            [value]="statusReconciliationLabel(row.salesSummary?.transactionsStatus)"
+            [tone]="statusReconciliationSeverity(row.salesSummary?.transactionsStatus)"
           />
         </td>
         <td class="cell-muted text-center">

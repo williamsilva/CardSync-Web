@@ -2,7 +2,6 @@ import { WritableSignal } from '@angular/core';
 
 import { PeriodEnum } from '@models/enums/period.enum';
 import { ModalityEnum } from '@models/enums/modality.enum';
-import { StatusTransactionEnum } from '@models/enums/status-transaction.enum';
 import { StatusPaymentBankEnum } from '@models/enums/status-payment-bank.enum';
 import { StatusReconciliationEnum } from '@models/enums/status-reconciliation.enum';
 
@@ -20,7 +19,7 @@ export type SaleSummaryFiltersState = {
 
   modality: ModalityEnum[] | null;
   statusPaymentBank: StatusPaymentBankEnum[] | null;
-  transactionsStatus: StatusTransactionEnum[] | null;
+  transactionsStatus: StatusReconciliationEnum[] | null;
   creditOrderStatus: StatusReconciliationEnum[] | null;
 };
 

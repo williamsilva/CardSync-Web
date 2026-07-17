@@ -1305,8 +1305,8 @@
         <td class="text-right">{{ row.liquidValue | csCurrency }}</td>
         <td class="cell-muted text-center">
           <cs-tag
-            [value]="statusTransactionLabel(row.transactionsStatus)"
-            [tone]="statusTransactionSeverity(row.transactionsStatus)"
+            [value]="statusReconciliationLabel(row.transactionsStatus)"
+            [tone]="statusReconciliationSeverity(row.transactionsStatus)"
           />
         </td>
         <td class="text-center">{{ row.numberCvNsu }}</td>

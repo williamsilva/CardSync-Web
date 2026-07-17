@@ -40,8 +40,11 @@ import {
   AnticipationFiltersState,
   AnticipationAdvancedFilters,
   resetAnticipationAdvancedFilters,
-  createEmptyAnticipationFiltersState,
 } from '@features/filter/anticipation.filters';
+import {
+  SaleSummaryAdvancedFilters,
+  createEmptySaleSummaryFiltersState,
+} from '@features/filter/sale-summary.filters';
 import {
   readArrayFilterValues,
   readPeriodFilterValue,
@@ -61,11 +64,11 @@ import {
   createEmptyAnticipationAdvancedFilters,
 } from '@models/anticipation.model';
 import {
-  StatusTransactionEnum,
-  allStatusTransactionEnum,
-  statusTransactionEnumLabel,
-  statusTransactionEnumSeverity,
-} from '@models/enums/status-transaction.enum';
+  StatusReconciliationEnum,
+  allStatusReconciliationEnum,
+  statusReconciliationEnumLabel,
+  statusReconciliationEnumSeverity,
+} from '@models/enums/status-reconciliation.enum';
 import {
   StatusPaymentBankEnum,
   allStatusPaymentBankEnum,
@@ -98,10 +101,10 @@ import {
     PageHeaderComponent,
     FiltersPanelComponent,
     CsColumnFilterShellComponent,
+    CsCurrencyRangeFilterComponent,
     CsAdvancedPeriodDateFilterComponent,
     CsAdvancedMultiselectFilterComponent,
     CsAdvancedFilterItemTemplateDirective,
-    CsCurrencyRangeFilterComponent,
   ],
 })
 export class AnticipationListComponent
@@ -157,7 +160,7 @@ export class AnticipationListComponent
   readonly modality = signal<ModalityEnum[] | null>(null);
   readonly periodReleaseDate = signal<PeriodEnum | null>(null);
   readonly statusPaymentBank = signal<StatusPaymentBankEnum[] | null>(null);
-  readonly transactionsStatus = signal<StatusTransactionEnum[] | null>(null);
+  readonly transactionsStatus = signal<StatusReconciliationEnum[] | null>(null);
 
   readonly isReleaseDateDisabled = computed(() => !this.periodReleaseDate());
 
@@ -214,7 +217,7 @@ export class AnticipationListComponent
   readonly releaseDateColumnDraft = signal<string | string[] | null>(null);
   readonly originalDueDateColumnDraft = signal<string | string[] | null>(null);
   readonly statusPaymentBankColumnDraft = signal<StatusPaymentBankEnum[] | null>(null);
-  readonly transactionsStatusColumnDraft = signal<StatusTransactionEnum[] | null>(null);
+  readonly transactionsStatusColumnDraft = signal<StatusReconciliationEnum[] | null>(null);
 
   readonly modalityOptions = computed(() => {
     this.i18n.getAppliedLang();
@@ -226,8 +229,8 @@ export class AnticipationListComponent
 
   readonly transactionsStatusOptions = computed(() => {
     this.i18n.getAppliedLang();
-    return allStatusTransactionEnum().map((value) => ({
-      label: statusTransactionEnumLabel(value, this.i18n),
+    return allStatusReconciliationEnum().map((value) => ({
+      label: statusReconciliationEnumLabel(value, this.i18n),
       value,
     }));
   });
@@ -288,12 +291,12 @@ export class AnticipationListComponent
     this.clearTableAndReload(this.dt);
   }
 
-  statusTransactionLabel(value: StatusTransactionEnum | null): string {
-    return statusTransactionEnumLabel(value, this.i18n);
+  statusReconciliationLabel(value: StatusReconciliationEnum | null): string {
+    return statusReconciliationEnumLabel(value, this.i18n);
   }
 
-  statusTransactionSeverity(value: StatusTransactionEnum | null): CsTagTone {
-    return statusTransactionEnumSeverity(value);
+  statusReconciliationSeverity(value: StatusReconciliationEnum | null): CsTagTone {
+    return statusReconciliationEnumSeverity(value);
   }
 
   statusPaymentBankEnumLabel(value: StatusPaymentBankEnum | null): string {
@@ -434,7 +437,7 @@ export class AnticipationListComponent
     if (transactionsStatus?.length) {
       items.push({
         label: this.i18n.tUi('anticipation.fields.transactionsStatusEnum'),
-        value: transactionsStatus.map((v) => statusTransactionEnumLabel(v, this.i18n)).join(', '),
+        value: transactionsStatus.map((v) => statusReconciliationEnumLabel(v, this.i18n)).join(', '),
       });
     }
 
@@ -446,19 +449,49 @@ export class AnticipationListComponent
     }
 
     const grossRange = currencyRangeLabel(this.i18n, this.grossValueStart(), this.grossValueEnd());
-    if (grossRange) items.push({ label: this.i18n.tUi('anticipation.fields.grossValue'), value: grossRange });
+    if (grossRange)
+      items.push({ label: this.i18n.tUi('anticipation.fields.grossValue'), value: grossRange });
 
-    const discountRange = currencyRangeLabel(this.i18n, this.discountRateValueStart(), this.discountRateValueEnd());
-    if (discountRange) items.push({ label: this.i18n.tUi('anticipation.fields.discountRateValue'), value: discountRange });
+    const discountRange = currencyRangeLabel(
+      this.i18n,
+      this.discountRateValueStart(),
+      this.discountRateValueEnd(),
+    );
+    if (discountRange)
+      items.push({
+        label: this.i18n.tUi('anticipation.fields.discountRateValue'),
+        value: discountRange,
+      });
 
-    const releaseRange = currencyRangeLabel(this.i18n, this.releaseValueStart(), this.releaseValueEnd());
-    if (releaseRange) items.push({ label: this.i18n.tUi('anticipation.fields.releaseValue'), value: releaseRange });
+    const releaseRange = currencyRangeLabel(
+      this.i18n,
+      this.releaseValueStart(),
+      this.releaseValueEnd(),
+    );
+    if (releaseRange)
+      items.push({ label: this.i18n.tUi('anticipation.fields.releaseValue'), value: releaseRange });
 
-    const originalCreditRange = currencyRangeLabel(this.i18n, this.originalCreditValueStart(), this.originalCreditValueEnd());
-    if (originalCreditRange) items.push({ label: this.i18n.tUi('anticipation.fields.originalCreditValue'), value: originalCreditRange });
+    const originalCreditRange = currencyRangeLabel(
+      this.i18n,
+      this.originalCreditValueStart(),
+      this.originalCreditValueEnd(),
+    );
+    if (originalCreditRange)
+      items.push({
+        label: this.i18n.tUi('anticipation.fields.originalCreditValue'),
+        value: originalCreditRange,
+      });
 
-    const advanceDiscountRange = currencyRangeLabel(this.i18n, this.advanceDiscountValueStart(), this.advanceDiscountValueEnd());
-    if (advanceDiscountRange) items.push({ label: this.i18n.tUi('anticipation.fields.advanceDiscountValue'), value: advanceDiscountRange });
+    const advanceDiscountRange = currencyRangeLabel(
+      this.i18n,
+      this.advanceDiscountValueStart(),
+      this.advanceDiscountValueEnd(),
+    );
+    if (advanceDiscountRange)
+      items.push({
+        label: this.i18n.tUi('anticipation.fields.advanceDiscountValue'),
+        value: advanceDiscountRange,
+      });
 
     return items;
   });
@@ -730,19 +763,19 @@ export class AnticipationListComponent
     this.periodReleaseDate.set(s.periodReleaseDate ?? null);
 
     this.modality.set(s.modality ?? null);
-    this.transactionsStatus.set(s.transactionsStatus ?? null);
     this.statusPaymentBank.set(s.statusPaymentBank ?? null);
+    this.transactionsStatus.set(s.transactionsStatus ?? null);
 
-    this.grossValueStart.set(s.grossValueStart ?? null);
     this.grossValueEnd.set(s.grossValueEnd ?? null);
-    this.discountRateValueStart.set(s.discountRateValueStart ?? null);
-    this.discountRateValueEnd.set(s.discountRateValueEnd ?? null);
-    this.releaseValueStart.set(s.releaseValueStart ?? null);
     this.releaseValueEnd.set(s.releaseValueEnd ?? null);
-    this.originalCreditValueStart.set(s.originalCreditValueStart ?? null);
+    this.grossValueStart.set(s.grossValueStart ?? null);
+    this.releaseValueStart.set(s.releaseValueStart ?? null);
+    this.discountRateValueEnd.set(s.discountRateValueEnd ?? null);
+    this.discountRateValueStart.set(s.discountRateValueStart ?? null);
     this.originalCreditValueEnd.set(s.originalCreditValueEnd ?? null);
-    this.advanceDiscountValueStart.set(s.advanceDiscountValueStart ?? null);
     this.advanceDiscountValueEnd.set(s.advanceDiscountValueEnd ?? null);
+    this.originalCreditValueStart.set(s.originalCreditValueStart ?? null);
+    this.advanceDiscountValueStart.set(s.advanceDiscountValueStart ?? null);
   }
 
   protected bankingDomicileTooltip(row: any): string {
@@ -799,14 +832,21 @@ export class AnticipationListComponent
     this.openRouteInNewTab(['/documents/acq/sales-summary']);
   }
 
-  protected buildTargetSalesSummary(row: AnticipationModel): AnticipationAdvancedFilters {
+  protected buildTargetSalesSummary(row: AnticipationModel): SaleSummaryAdvancedFilters {
     return {
-      ...createEmptyAnticipationFiltersState(),
+      ...createEmptySaleSummaryFiltersState(),
+
+      // AnticipationModel não recebe rvNumber do back (o campo nunca é populado pelo
+      // assembler) — o RV correspondente vem em numberRvCorresponding.
+      rvNumber: row.numberRvCorresponding != null ? String(row.numberRvCorresponding) : '',
 
       flags: row.flag?.id ? [row.flag.id] : null,
       companies: row.company?.id ? [row.company.id] : null,
       acquirers: row.acquirer?.id ? [row.acquirer.id] : null,
-      establishments: row.establishment?.id ? [row.establishment.id] : null,
+      // A tela de sales-summary filtra estabelecimento por pvNumber (SalesSummaryEntity não
+      // tem relação com Establishment, só guarda o pvNumber cru do arquivo da adquirente),
+      // diferente das outras telas que filtram por establishment.id (UUID).
+      establishments: row.establishment?.pvNumber ? [row.establishment.pvNumber] : null,
     };
   }
 

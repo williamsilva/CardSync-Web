@@ -2,8 +2,8 @@ import { WritableSignal } from '@angular/core';
 
 import { PeriodEnum } from '@models/enums/period.enum';
 import { ModalityEnum } from '@models/enums/modality.enum';
-import { StatusTransactionEnum } from '@models/enums/status-transaction.enum';
 import { StatusPaymentBankEnum } from '@models/enums/status-payment-bank.enum';
+import { StatusReconciliationEnum } from '@models/enums/status-reconciliation.enum';
 
 export type AnticipationFiltersState = {
   rvNumber: number | null;
@@ -12,7 +12,7 @@ export type AnticipationFiltersState = {
   releaseDate: string | string[] | null;
 
   modality: ModalityEnum[] | null;
-  transactionsStatus: StatusTransactionEnum[] | null;
+  transactionsStatus: StatusReconciliationEnum[] | null;
   statusPaymentBank: StatusPaymentBankEnum[] | null;
 
   flags: string[] | null;
