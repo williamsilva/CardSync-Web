@@ -55,29 +55,8 @@ export class EstablishmentFacade {
       )
       .subscribe({
         next: (res) => {
-          const options = res?._embedded?.content ?? [];
-
-          const sorted = [...options].sort((a, b) => {
-            const companyCompare = (a.company?.fantasyName ?? '').localeCompare(
-              b.company?.fantasyName ?? '',
-              'pt-BR',
-              {
-                sensitivity: 'base',
-                numeric: true,
-              },
-            );
-
-            if (companyCompare !== 0) {
-              return companyCompare;
-            }
-
-            return String(a.pvNumber ?? '').localeCompare(String(b.pvNumber ?? ''), 'pt-BR', {
-              sensitivity: 'base',
-              numeric: true,
-            });
-          });
-
-          this._options.set(sorted);
+          // Ordenação (ativos primeiro, depois alfabética) já vem do backend — não reordenar aqui.
+          this._options.set(res?._embedded?.content ?? []);
         },
         error: () => {
           this._options.set([]);

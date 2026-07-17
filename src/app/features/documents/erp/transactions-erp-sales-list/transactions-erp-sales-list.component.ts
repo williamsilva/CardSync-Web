@@ -31,6 +31,7 @@ import { EstablishmentFacade } from '@features/facade/establishment.facade';
 import { TransactionsErpFacade } from '@features/facade/transaction-erp.facade';
 import { buildListQuery } from '@shared/features/list-query/list-query.builder';
 import { allPeriodEnum, PeriodEnum, periodEnumLabel } from '@models/enums/period.enum';
+import { StatusEnum, statusEnumLabel, statusEnumSeverity } from '@models/enums/status.enum';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
 import { statusTransactionReasonEnumLabel } from '@models/enums/status-transaction-reason.enum';
 import { CsColumnFilterShellComponent } from '@features/list-base/cs-column-filter-shell.component';
@@ -318,6 +319,14 @@ export class TransactionsErpSalesListComponent
 
     this.dt?.clear();
     this.clearTableAndReload(this.dt);
+  }
+
+  statusEnumLabel(value: StatusEnum | null): string {
+    return statusEnumLabel(value, this.i18n);
+  }
+
+  statusEnumSeverity(value: StatusEnum | null): CsTagTone {
+    return statusEnumSeverity(value);
   }
 
   calculateTotals(): void {

@@ -29,6 +29,7 @@ import { EstablishmentFacade } from '@features/facade/establishment.facade';
 import { ContractAuditFacade } from '@features/facade/contract-audit.facade';
 import { buildListQuery } from '@shared/features/list-query/list-query.builder';
 import { allPeriodEnum, PeriodEnum, periodEnumLabel } from '@models/enums/period.enum';
+import { StatusEnum, statusEnumLabel, statusEnumSeverity } from '@models/enums/status.enum';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
 import { CsColumnFilterShellComponent } from '@features/list-base/cs-column-filter-shell.component';
 import { CsAdvancedTextFilterComponent } from '@features/list-base/cs-advanced-text-filter.component';
@@ -262,6 +263,14 @@ export class ContractAuditListComponent
 
     this.dt?.clear();
     this.clearTableAndReload(this.dt);
+  }
+
+  statusEnumLabel(value: StatusEnum | null): string {
+    return statusEnumLabel(value, this.i18n);
+  }
+
+  statusEnumSeverity(value: StatusEnum | null): CsTagTone {
+    return statusEnumSeverity(value);
   }
 
   captureEnumLabel(value: CaptureEnum | null): string {

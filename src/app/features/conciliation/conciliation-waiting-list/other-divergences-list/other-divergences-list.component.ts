@@ -38,6 +38,7 @@ import { StatefulListPage } from '@features/list-base/stateful-list-page';
 import { EstablishmentFacade } from '@features/facade/establishment.facade';
 import { buildListQuery } from '@shared/features/list-query/list-query.builder';
 import { allPeriodEnum, PeriodEnum, periodEnumLabel } from '@models/enums/period.enum';
+import { StatusEnum, statusEnumLabel, statusEnumSeverity } from '@models/enums/status.enum';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
 import { ConciliationWaitingFacade } from '@features/facade/conciliation-waiting.facade';
 import { ErpVsAcquirerComparisonDialogComponent } from '../dialogs/comparison-dialog.component';
@@ -467,6 +468,14 @@ export class ErpVsAcquirerOtherDivergencesListComponent
 
     this.dt?.clear();
     this.clearTableAndReload(this.dt);
+  }
+
+  statusEnumLabel(value: StatusEnum | null): string {
+    return statusEnumLabel(value, this.i18n);
+  }
+
+  statusEnumSeverity(value: StatusEnum | null): CsTagTone {
+    return statusEnumSeverity(value);
   }
 
   protected override tableRowsKey(): string {

@@ -76,6 +76,12 @@
           <div class="cs-option-item__subtext">
             {{ 'common.registrationNumber' | translate }}: {{ option.cnpj | csDocument }}
           </div>
+          <div class="cs-option-item__subtext">
+            <cs-tag
+              [tone]="statusEnumSeverity(option.status)"
+              [value]="('common.status' | translate) + ': ' + statusEnumLabel(option.status)"
+            />
+          </div>
         </div>
       </ng-template>
     </cs-advanced-multiselect-filter>
@@ -109,6 +115,12 @@
           <div class="cs-option-item__subtext">
             {{ 'common.registrationNumber' | translate }}: {{ option.cnpj | csDocument }}
           </div>
+          <div class="cs-option-item__subtext">
+            <cs-tag
+              [tone]="statusEnumSeverity(option.status)"
+              [value]="('common.status' | translate) + ': ' + statusEnumLabel(option.status)"
+            />
+          </div>
         </div>
       </ng-template>
     </cs-advanced-multiselect-filter>
@@ -126,7 +138,21 @@
       <ng-template csAdvancedFilterItem let-option>
         <div class="cs-option-item">
           <div class="cs-option-item__label">{{ option.pvNumber }}</div>
-          <div class="cs-option-item__subtext">{{ option.company?.fantasyName }}</div>
+          <div class="cs-option-item__subtext">
+            {{ 'common.company' | translate }}: {{ option.company.fantasyName }}
+          </div>
+          <div class="cs-option-item__subtext">
+            {{ 'common.registrationNumber' | translate }}: {{ option.company.cnpj | csDocument }}
+          </div>
+          <div class="cs-option-item__subtext">
+            {{ 'common.acquirer' | translate }}: {{ option.acquirer.fantasyName }}
+          </div>
+          <div class="cs-option-item__subtext">
+            <cs-tag
+              [tone]="statusEnumSeverity(option.status)"
+              [value]="('common.status' | translate) + ': ' + statusEnumLabel(option.status)"
+            />
+          </div>
         </div>
       </ng-template>
     </cs-advanced-multiselect-filter>

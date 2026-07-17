@@ -28,6 +28,7 @@ import { StatefulListPage } from '@features/list-base/stateful-list-page';
 import { EstablishmentFacade } from '@features/facade/establishment.facade';
 import { buildListQuery } from '@shared/features/list-query/list-query.builder';
 import { allPeriodEnum, PeriodEnum, periodEnumLabel } from '@models/enums/period.enum';
+import { StatusEnum, statusEnumLabel, statusEnumSeverity } from '@models/enums/status.enum';
 import { allModalityEnum, modalityEnumLabel } from '../../../models/enums/modality.enum';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
 import { TransactionsAcqInstallmentModel } from '@models/transactions-acq-installment.models';
@@ -311,6 +312,14 @@ export class AcqInstallmentsListComponent
 
     this.dt?.clear();
     this.clearTableAndReload(this.dt);
+  }
+
+  statusEnumLabel(value: StatusEnum | null): string {
+    return statusEnumLabel(value, this.i18n);
+  }
+
+  statusEnumSeverity(value: StatusEnum | null): CsTagTone {
+    return statusEnumSeverity(value);
   }
 
   calculateTotals(): void {

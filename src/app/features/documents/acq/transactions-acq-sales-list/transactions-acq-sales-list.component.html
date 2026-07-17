@@ -211,6 +211,12 @@
           <div class="cs-option-item__subtext">
             {{ 'common.registrationNumber' | translate }}: {{ option.cnpj | csDocument }}
           </div>
+          <div class="cs-option-item__subtext">
+            <cs-tag
+              [tone]="statusEnumSeverity(option.status)"
+              [value]="('common.status' | translate) + ': ' + statusEnumLabel(option.status)"
+            />
+          </div>
         </div>
       </ng-template>
     </cs-advanced-multiselect-filter>
@@ -230,6 +236,12 @@
           <div class="cs-option-item__label">{{ option.fantasyName }}</div>
           <div class="cs-option-item__subtext">
             {{ 'common.registrationNumber' | translate }}: {{ option.cnpj | csDocument }}
+          </div>
+          <div class="cs-option-item__subtext">
+            <cs-tag
+              [tone]="statusEnumSeverity(option.status)"
+              [value]="('common.status' | translate) + ': ' + statusEnumLabel(option.status)"
+            />
           </div>
         </div>
       </ng-template>
@@ -253,6 +265,15 @@
           </div>
           <div class="cs-option-item__subtext">
             {{ 'common.registrationNumber' | translate }}: {{ option.company.cnpj | csDocument }}
+          </div>
+          <div class="cs-option-item__subtext">
+            {{ 'common.acquirer' | translate }}: {{ option.acquirer.fantasyName }}
+          </div>
+          <div class="cs-option-item__subtext">
+            <cs-tag
+              [tone]="statusEnumSeverity(option.status)"
+              [value]="('common.status' | translate) + ': ' + statusEnumLabel(option.status)"
+            />
           </div>
         </div>
       </ng-template>
