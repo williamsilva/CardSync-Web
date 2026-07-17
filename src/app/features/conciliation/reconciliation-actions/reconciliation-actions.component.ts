@@ -145,12 +145,12 @@ export class ReconciliationActionsComponent {
       .subscribe({ next: (r) => this.reconcileManualSwappedResult.set(r) });
   }
 
-  protected processReconcileSalesSummaryTransactions(): void {
+  protected processReconcileSalesSummaryTransactions(ignoreLookback = false): void {
     if (this.reconcilingSalesSummaryTransactions()) return;
     this.reconcilingSalesSummaryTransactions.set(true);
     this.reconcileSalesSummaryTransactionsResult.set(null);
     this.facade
-      .reconcileSalesSummaryTransactions()
+      .reconcileSalesSummaryTransactions(ignoreLookback)
       .pipe(finalize(() => this.reconcilingSalesSummaryTransactions.set(false)))
       .subscribe({ next: (r) => this.reconcileSalesSummaryTransactionsResult.set(r) });
   }

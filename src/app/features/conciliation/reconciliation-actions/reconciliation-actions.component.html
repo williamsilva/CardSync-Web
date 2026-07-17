@@ -241,6 +241,20 @@
               (click)="processReconcileSalesSummaryTransactions()"
               [label]="'conciliation.dashboard.salesSummaryTransactions.button' | translate"
             ></button>
+
+            <!-- TEMPORÁRIO: backfill único dos resumos antigos travados fora da janela de
+                 lookback. Remover este botão (e o parâmetro ignoreLookback no service/facade/api)
+                 depois de rodar uma vez. -->
+            <button
+              pButton
+              type="button"
+              severity="warn"
+              icon="pi pi-history"
+              [loading]="reconcilingSalesSummaryTransactions()"
+              [disabled]="!canProcess() || anyProcessing()"
+              (click)="processReconcileSalesSummaryTransactions(true)"
+              label="[TEMP] Backfill (ignorar lookback)"
+            ></button>
           </div>
         </p-card>
       </div>

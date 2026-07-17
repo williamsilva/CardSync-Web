@@ -220,8 +220,11 @@ export class ConciliationWaitingFacade {
     );
   }
 
-  reconcileSalesSummaryTransactions(): Observable<ReconcileSalesSummaryTransactionsResultModel> {
-    return this.api.reconcileSalesSummaryTransactions();
+  // TODO: remover ignoreLookback junto com o botão de backfill temporário.
+  reconcileSalesSummaryTransactions(
+    ignoreLookback = false,
+  ): Observable<ReconcileSalesSummaryTransactionsResultModel> {
+    return this.api.reconcileSalesSummaryTransactions(ignoreLookback);
   }
 
   reconcileAcquirerSaleSummary(): Observable<ReconcileAcquirerSaleSummaryResultModel> {
