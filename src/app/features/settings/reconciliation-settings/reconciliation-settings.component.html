@@ -20,8 +20,31 @@
       ></i>
     </div>
 
-    <div class="grid formgrid gap-0">
-      <div class="col-12 md:col-3 p-2">
+    <div class="grid formgrid gap-3">
+      <div class="col-12 md:col-3 xl:col-2 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-datepicker
+            class="w-full"
+            appendTo="body"
+            [showIcon]="true"
+            dateFormat="dd/mm/yy"
+            [readonlyInput]="true"
+            inputId="goLiveDate"
+            formControlName="goLiveDate"
+          ></p-datepicker>
+          <label for="goLiveDate">
+            {{ 'conciliation.settings.goLiveDate' | translate }}
+            <i
+              tooltipPosition="top"
+              style="pointer-events: auto"
+              class="pi pi-info-circle text-xs ml-1 text-color-secondary cursor-pointer"
+              [pTooltip]="'conciliation.settings.goLiveDateHint' | translate"
+            ></i>
+          </label>
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 md:col-3 xl:col-2 p-2">
         <p-floatLabel variant="on" class="w-full">
           <p-inputnumber
             class="w-full"
@@ -44,7 +67,7 @@
         </p-floatLabel>
       </div>
 
-      <div class="col-12 md:col-3 p-2">
+      <div class="col-12 md:col-3 xl:col-2 p-2">
         <p-floatLabel variant="on" class="w-full">
           <p-inputnumber
             class="w-full"
@@ -67,7 +90,7 @@
         </p-floatLabel>
       </div>
 
-      <div class="col-12 md:col-3 p-2">
+      <div class="col-12 md:col-3 xl:col-2 p-2">
         <p-floatLabel variant="on" class="w-full">
           <p-inputnumber
             class="w-full"
@@ -90,7 +113,7 @@
         </p-floatLabel>
       </div>
 
-      <div class="col-12 md:col-3 p-2">
+      <div class="col-12 md:col-3 xl:col-2 p-2">
         <p-floatLabel variant="on" class="w-full">
           <p-inputnumber
             class="w-full"
@@ -128,8 +151,54 @@
       ></i>
     </div>
 
-    <div class="grid formgrid gap-0">
-      <div class="col-12 md:col-2 p-2">
+    <div class="grid formgrid gap-3">
+      <div class="col-12 md:col-3 xl:col-2 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-inputnumber
+            class="w-full"
+            [showButtons]="true"
+            [allowEmpty]="false"
+            [min]="MIN_LEGACY_MARKING_MONTHS"
+            [max]="MAX_LEGACY_MARKING_MONTHS"
+            inputId="legacyMarkingMonths"
+            formControlName="legacyMarkingMonths"
+          ></p-inputnumber>
+          <label for="legacyMarkingMonths">
+            {{ 'conciliation.settings.legacyMarkingMonths' | translate }}
+            <i
+              tooltipPosition="top"
+              style="pointer-events: auto"
+              class="pi pi-info-circle text-xs ml-1 text-color-secondary cursor-pointer"
+              [pTooltip]="'conciliation.settings.legacyMarkingMonthsHint' | translate"
+            ></i>
+          </label>
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 md:col-3 xl:col-2 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-inputnumber
+            class="w-full"
+            [showButtons]="true"
+            [allowEmpty]="false"
+            [min]="MIN_BANK_NOT_RECONCILED_DAYS"
+            [max]="MAX_BANK_NOT_RECONCILED_DAYS"
+            inputId="bankMarkNotReconciledAfterDays"
+            formControlName="bankMarkNotReconciledAfterDays"
+          ></p-inputnumber>
+          <label for="bankMarkNotReconciledAfterDays">
+            {{ 'conciliation.settings.bankMarkNotReconciledAfterDays' | translate }}
+            <i
+              tooltipPosition="top"
+              style="pointer-events: auto"
+              class="pi pi-info-circle text-xs ml-1 text-color-secondary cursor-pointer"
+              [pTooltip]="'conciliation.settings.bankMarkNotReconciledAfterDaysHint' | translate"
+            ></i>
+          </label>
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 md:col-3 xl:col-2 p-2">
         <p-floatLabel variant="on" class="w-full">
           <p-inputnumber
             class="w-full"
@@ -152,7 +221,7 @@
         </p-floatLabel>
       </div>
 
-      <div class="col-12 md:col-2 p-2">
+      <div class="col-12 md:col-3 xl:col-2 p-2">
         <p-floatLabel variant="on" class="w-full">
           <p-inputnumber
             class="w-full"
@@ -175,7 +244,7 @@
         </p-floatLabel>
       </div>
 
-      <div class="col-12 md:col-2 p-2">
+      <div class="col-12 md:col-3 xl:col-2 p-2">
         <p-floatLabel variant="on" class="w-full">
           <p-inputnumber
             class="w-full"
@@ -199,91 +268,6 @@
           </label>
         </p-floatLabel>
       </div>
-
-      <div class="col-12 md:col-2 p-2">
-        <p-floatLabel variant="on" class="w-full">
-          <p-inputnumber
-            class="w-full"
-            [showButtons]="true"
-            [allowEmpty]="false"
-            [min]="MIN_BANK_NOT_RECONCILED_DAYS"
-            [max]="MAX_BANK_NOT_RECONCILED_DAYS"
-            inputId="bankMarkNotReconciledAfterDays"
-            formControlName="bankMarkNotReconciledAfterDays"
-          ></p-inputnumber>
-          <label for="bankMarkNotReconciledAfterDays">
-            {{ 'conciliation.settings.bankMarkNotReconciledAfterDays' | translate }}
-            <i
-              tooltipPosition="top"
-              style="pointer-events: auto"
-              class="pi pi-info-circle text-xs ml-1 text-color-secondary cursor-pointer"
-              [pTooltip]="'conciliation.settings.bankMarkNotReconciledAfterDaysHint' | translate"
-            ></i>
-          </label>
-        </p-floatLabel>
-      </div>
-    </div>
-
-    <p-divider></p-divider>
-
-    <!-- Marcação de lançamentos como legado -->
-    <div class="flex align-items-center gap-2 mb-2">
-      <span class="text-sm font-semibold">{{
-        'conciliation.settings.legacyMarkingTitle' | translate
-      }}</span>
-      <i
-        tooltipPosition="right"
-        [pTooltip]="'conciliation.settings.legacyMarkingSubtitle' | translate"
-        class="pi pi-info-circle text-color-secondary text-sm cursor-pointer"
-      ></i>
-    </div>
-
-    <div class="grid formgrid gap-0">
-      <div class="col-12 md:col-2 p-2">
-        <p-floatLabel variant="on" class="w-full">
-          <p-datepicker
-            class="w-full"
-            appendTo="body"
-            [showIcon]="true"
-            dateFormat="dd/mm/yy"
-            [readonlyInput]="true"
-            inputId="goLiveDate"
-            formControlName="goLiveDate"
-          ></p-datepicker>
-          <label for="goLiveDate">
-            {{ 'conciliation.settings.goLiveDate' | translate }}
-            <i
-              tooltipPosition="top"
-              style="pointer-events: auto"
-              class="pi pi-info-circle text-xs ml-1 text-color-secondary cursor-pointer"
-              [pTooltip]="'conciliation.settings.goLiveDateHint' | translate"
-            ></i>
-          </label>
-        </p-floatLabel>
-      </div>
-
-      <div class="col-12 md:col-2 p-2">
-        <p-floatLabel variant="on" class="w-full">
-          <p-inputnumber
-            class="w-full"
-            [showButtons]="true"
-            [allowEmpty]="false"
-            [min]="MIN_LEGACY_MARKING_MONTHS"
-            [max]="MAX_LEGACY_MARKING_MONTHS"
-            inputId="legacyMarkingMonths"
-            formControlName="legacyMarkingMonths"
-          ></p-inputnumber>
-          <label for="legacyMarkingMonths">
-            {{ 'conciliation.settings.legacyMarkingMonths' | translate }}
-            <i
-              tooltipPosition="top"
-              style="pointer-events: auto"
-              class="pi pi-info-circle text-xs ml-1 text-color-secondary cursor-pointer"
-              [pTooltip]="'conciliation.settings.legacyMarkingMonthsHint' | translate"
-            ></i>
-          </label>
-        </p-floatLabel>
-      </div>
     </div>
 
     <p-divider></p-divider>
@@ -302,65 +286,100 @@
 
     <div class="grid formgrid gap-0">
       <div class="col-12 md:col-3 p-2">
-        <div class="flex align-items-center justify-content-between border-1 surface-border border-round p-3 h-full gap-3">
+        <div
+          class="flex align-items-center justify-content-between border-1 surface-border border-round p-3 h-full gap-3"
+        >
           <label for="enabledErpAcquirer" class="text-sm flex-1">
             {{ 'conciliation.settings.enabledErpAcquirer' | translate }}
           </label>
-          <p-toggleswitch formControlName="enabledErpAcquirer" inputId="enabledErpAcquirer"></p-toggleswitch>
+          <p-toggleswitch
+            formControlName="enabledErpAcquirer"
+            inputId="enabledErpAcquirer"
+          ></p-toggleswitch>
         </div>
       </div>
 
       <div class="col-12 md:col-3 p-2">
-        <div class="flex align-items-center justify-content-between border-1 surface-border border-round p-3 h-full gap-3">
+        <div
+          class="flex align-items-center justify-content-between border-1 surface-border border-round p-3 h-full gap-3"
+        >
           <label for="enabledSalesSummaryTransactions" class="text-sm flex-1">
             {{ 'conciliation.settings.enabledSalesSummaryTransactions' | translate }}
           </label>
-          <p-toggleswitch formControlName="enabledSalesSummaryTransactions" inputId="enabledSalesSummaryTransactions"></p-toggleswitch>
+          <p-toggleswitch
+            formControlName="enabledSalesSummaryTransactions"
+            inputId="enabledSalesSummaryTransactions"
+          ></p-toggleswitch>
         </div>
       </div>
 
       <div class="col-12 md:col-3 p-2">
-        <div class="flex align-items-center justify-content-between border-1 surface-border border-round p-3 h-full gap-3">
+        <div
+          class="flex align-items-center justify-content-between border-1 surface-border border-round p-3 h-full gap-3"
+        >
           <label for="enabledAcquirerSaleCancellations" class="text-sm flex-1">
             {{ 'conciliation.settings.enabledAcquirerSaleCancellations' | translate }}
           </label>
-          <p-toggleswitch formControlName="enabledAcquirerSaleCancellations" inputId="enabledAcquirerSaleCancellations"></p-toggleswitch>
+          <p-toggleswitch
+            formControlName="enabledAcquirerSaleCancellations"
+            inputId="enabledAcquirerSaleCancellations"
+          ></p-toggleswitch>
         </div>
       </div>
 
       <div class="col-12 md:col-3 p-2">
-        <div class="flex align-items-center justify-content-between border-1 surface-border border-round p-3 h-full gap-3">
+        <div
+          class="flex align-items-center justify-content-between border-1 surface-border border-round p-3 h-full gap-3"
+        >
           <label for="enabledErpAcquirerFees" class="text-sm flex-1">
             {{ 'conciliation.settings.enabledErpAcquirerFees' | translate }}
           </label>
-          <p-toggleswitch formControlName="enabledErpAcquirerFees" inputId="enabledErpAcquirerFees"></p-toggleswitch>
+          <p-toggleswitch
+            formControlName="enabledErpAcquirerFees"
+            inputId="enabledErpAcquirerFees"
+          ></p-toggleswitch>
         </div>
       </div>
 
       <div class="col-12 md:col-3 p-2">
-        <div class="flex align-items-center justify-content-between border-1 surface-border border-round p-3 h-full gap-3">
+        <div
+          class="flex align-items-center justify-content-between border-1 surface-border border-round p-3 h-full gap-3"
+        >
           <label for="enabledAcquirerSaleSummary" class="text-sm flex-1">
             {{ 'conciliation.settings.enabledAcquirerSaleSummary' | translate }}
           </label>
-          <p-toggleswitch formControlName="enabledAcquirerSaleSummary" inputId="enabledAcquirerSaleSummary"></p-toggleswitch>
+          <p-toggleswitch
+            formControlName="enabledAcquirerSaleSummary"
+            inputId="enabledAcquirerSaleSummary"
+          ></p-toggleswitch>
         </div>
       </div>
 
       <div class="col-12 md:col-3 p-2">
-        <div class="flex align-items-center justify-content-between border-1 surface-border border-round p-3 h-full gap-3">
+        <div
+          class="flex align-items-center justify-content-between border-1 surface-border border-round p-3 h-full gap-3"
+        >
           <label for="enabledSalesSummaryCreditOrder" class="text-sm flex-1">
             {{ 'conciliation.settings.enabledSalesSummaryCreditOrder' | translate }}
           </label>
-          <p-toggleswitch formControlName="enabledSalesSummaryCreditOrder" inputId="enabledSalesSummaryCreditOrder"></p-toggleswitch>
+          <p-toggleswitch
+            formControlName="enabledSalesSummaryCreditOrder"
+            inputId="enabledSalesSummaryCreditOrder"
+          ></p-toggleswitch>
         </div>
       </div>
 
       <div class="col-12 md:col-3 p-2">
-        <div class="flex align-items-center justify-content-between border-1 surface-border border-round p-3 h-full gap-3">
+        <div
+          class="flex align-items-center justify-content-between border-1 surface-border border-round p-3 h-full gap-3"
+        >
           <label for="enabledBankAcquirer" class="text-sm flex-1">
             {{ 'conciliation.settings.enabledBankAcquirer' | translate }}
           </label>
-          <p-toggleswitch formControlName="enabledBankAcquirer" inputId="enabledBankAcquirer"></p-toggleswitch>
+          <p-toggleswitch
+            formControlName="enabledBankAcquirer"
+            inputId="enabledBankAcquirer"
+          ></p-toggleswitch>
         </div>
       </div>
     </div>

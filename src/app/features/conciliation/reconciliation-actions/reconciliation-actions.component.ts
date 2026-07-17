@@ -5,9 +5,7 @@ import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { TranslateModule } from '@ngx-translate/core';
 
-import { CsTagComponent } from '@shared/ui';
 import { PERMISSIONS } from '@core/auth/permissions.constants';
-import { CsCurrencyPipe } from '@shared/pipes/cs-currency.pipe';
 import { PermissionService } from '@core/auth/permission.service';
 import { ConciliationDashboardModel } from '@models/conciliation.models';
 import { ConciliationService } from '@features/service/conciliation.service';
@@ -37,8 +35,6 @@ import {
   imports: [
     CardModule,
     ButtonModule,
-    CsCurrencyPipe,
-    CsTagComponent,
     TranslateModule,
     PageHeaderComponent,
     CancellationReprocessDialogComponent,
@@ -145,12 +141,12 @@ export class ReconciliationActionsComponent {
       .subscribe({ next: (r) => this.reconcileManualSwappedResult.set(r) });
   }
 
-  protected processReconcileSalesSummaryTransactions(ignoreLookback = false): void {
+  protected processReconcileSalesSummaryTransactions(): void {
     if (this.reconcilingSalesSummaryTransactions()) return;
     this.reconcilingSalesSummaryTransactions.set(true);
     this.reconcileSalesSummaryTransactionsResult.set(null);
     this.facade
-      .reconcileSalesSummaryTransactions(ignoreLookback)
+      .reconcileSalesSummaryTransactions()
       .pipe(finalize(() => this.reconcilingSalesSummaryTransactions.set(false)))
       .subscribe({ next: (r) => this.reconcileSalesSummaryTransactionsResult.set(r) });
   }
