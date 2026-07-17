@@ -22,6 +22,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { DatePickerModule } from 'primeng/datepicker';
 
+import { CsTagComponent, CsTagTone } from '@shared/ui';
 import { I18nService } from '@core/i18n/i18n.service';
 import { AcquirerFacade } from '@features/facade/acquirer.facade';
 import { NoFileDayFacade } from '@features/facade/no-file-day.facade';
@@ -37,6 +38,7 @@ import {
   StatusEnum,
   allStatusEnum,
   statusEnumLabel,
+  statusEnumSeverity,
   normalizeStatusEnum,
 } from '@models/enums/status.enum';
 import {
@@ -59,6 +61,7 @@ import {
     DialogModule,
     ButtonModule,
     SelectModule,
+    CsTagComponent,
     InputTextModule,
     TranslateModule,
     FloatLabelModule,
@@ -127,6 +130,10 @@ export class NoFileDayCreateDialogComponent {
       return {
         label: `Ag. ${agency} / Cc. ${account}${company ? ' - ' + company : ''}`,
         value: d.id,
+        bankName: d.bank?.name ?? '—',
+        agencyAccount: `Ag. ${agency} / Cc. ${account}`,
+        companyName: company || null,
+        status: d.status,
       };
     }),
   );
@@ -235,6 +242,14 @@ export class NoFileDayCreateDialogComponent {
     bankingDomicileId.updateValueAndValidity({ emitEvent: false });
     acquirerId.updateValueAndValidity({ emitEvent: false });
     acquirerFileType.updateValueAndValidity({ emitEvent: false });
+  }
+
+  protected statusEnumLabel(value: StatusEnum | null | undefined): string {
+    return statusEnumLabel(value ?? null, this.i18n);
+  }
+
+  protected statusEnumSeverity(value: StatusEnum | null | undefined): CsTagTone {
+    return statusEnumSeverity(value ?? null);
   }
 
   onHide() {

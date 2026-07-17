@@ -13,6 +13,8 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { I18nService } from '@core/i18n/i18n.service';
 import { CsTagComponent, CsTagTone } from '@shared/ui';
 import { CsDatePipe } from '@shared/pipes/cs-date.pipe';
+import { CsDocumentPipe } from '@shared/pipes/cs-document.pipe';
+import { StatusEnum, statusEnumLabel, statusEnumSeverity } from '@models/enums/status.enum';
 import { STATE_KEY } from '@features/state-key.constants';
 import { BankFacade } from '@features/facade/bank.facade';
 import { PersistedFilters } from '@shared/utils/persisted-filters';
@@ -32,6 +34,7 @@ import { ManualBankReconciliationFacade } from '@features/facade/manual-bank-rec
 import { ReconciliationSettingsApiService } from '@features/service/reconciliation-settings.api.service';
 import { CsAdvancedPeriodDateFilterComponent } from '@features/list-base/cs-advanced-period-date-filter.component';
 import { CsAdvancedMultiselectFilterComponent } from '@features/list-base/cs-advanced-multiselect-filter.component';
+import { CsAdvancedFilterItemTemplateDirective } from '@features/list-base/cs-advanced-filter-item-template.directive';
 import {
   CsCurrencyRangeValue,
   CsCurrencyRangeFilterComponent,
@@ -99,6 +102,7 @@ interface OrderFiltersState {
     CsCurrencyPipe,
     CheckboxModule,
     CsTagComponent,
+    CsDocumentPipe,
     TranslateModule,
     ConfirmDialogModule,
     PageHeaderComponent,
@@ -106,6 +110,7 @@ interface OrderFiltersState {
     CsCurrencyRangeFilterComponent,
     CsAdvancedPeriodDateFilterComponent,
     CsAdvancedMultiselectFilterComponent,
+    CsAdvancedFilterItemTemplateDirective,
   ],
 })
 export class ManualBankReconciliationComponent implements OnInit {
@@ -688,6 +693,14 @@ export class ManualBankReconciliationComponent implements OnInit {
         });
       },
     });
+  }
+
+  statusEnumLabel(value: StatusEnum | null): string {
+    return statusEnumLabel(value, this.i18n);
+  }
+
+  statusEnumSeverity(value: StatusEnum | null): CsTagTone {
+    return statusEnumSeverity(value);
   }
 
   statusPaymentBankLabel(value: StatusPaymentBankEnum | null | undefined): string {

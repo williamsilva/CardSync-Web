@@ -22,9 +22,11 @@ import { DatePickerModule } from 'primeng/datepicker';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { concatMap, toArray, catchError, switchMap } from 'rxjs/operators';
 
+import { CsTagComponent, CsTagTone } from '@shared/ui';
 import { I18nService } from '@core/i18n/i18n.service';
 import { FlagFacade } from '@features/facade/flag.facade';
 import { CompanyFacade } from '@features/facade/company.facade';
+import { CsDocumentPipe } from '@shared/pipes/cs-document.pipe';
 import { AcquirerFacade } from '@features/facade/acquirer.facade';
 import { CreditOrderFacade } from '@features/facade/credit-order.facade';
 import { SaleSummaryFacade } from '@features/facade/sales-summary.facade';
@@ -32,6 +34,7 @@ import { EstablishmentFacade } from '@features/facade/establishment.facade';
 import { CreditOrderManualResult } from '@features/models/credit-order.model';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
 import { SalesSummaryManualTransactionInput } from '@features/models/sales-summary.model';
+import { StatusEnum, statusEnumLabel, statusEnumSeverity } from '@models/enums/status.enum';
 import {
   ModalityEnum,
   STATUS_CODE_MAP,
@@ -41,6 +44,10 @@ import {
 interface SelectOption<T = string> {
   value: T;
   label: string;
+  pvNumber?: string;
+  companyName?: string | null;
+  cnpj?: string | null;
+  status?: StatusEnum | null;
 }
 
 interface CsvSummaryGroup {
@@ -69,6 +76,8 @@ interface CsvSummaryGroup {
     ButtonModule,
     SelectModule,
     DividerModule,
+    CsTagComponent,
+    CsDocumentPipe,
     TranslateModule,
     InputTextModule,
     FloatLabelModule,
@@ -124,6 +133,10 @@ export class ManualSalesSummaryComponent implements OnInit {
     this.establishmentFacade.activeOptions().map((e) => ({
       value: e.id,
       label: e.company?.fantasyName ? `${e.pvNumber} — ${e.company.fantasyName}` : e.pvNumber,
+      pvNumber: e.pvNumber,
+      companyName: e.company?.fantasyName ?? null,
+      cnpj: e.company?.cnpj ?? null,
+      status: e.status,
     })),
   );
 
@@ -131,6 +144,8 @@ export class ManualSalesSummaryComponent implements OnInit {
     this.acquirerFacade.activeOptions().map((a) => ({
       value: a.id,
       label: a.fantasyName || a.socialReason,
+      cnpj: a.cnpj,
+      status: a.status,
     })),
   );
 
@@ -138,6 +153,8 @@ export class ManualSalesSummaryComponent implements OnInit {
     this.companyFacade.activeOptions().map((c) => ({
       value: c.id,
       label: c.fantasyName || c.socialReason,
+      cnpj: c.cnpj,
+      status: c.status,
     })),
   );
 
@@ -223,6 +240,14 @@ export class ManualSalesSummaryComponent implements OnInit {
     this.acquirerFacade.loadAcquirerOptionsFilter();
     this.companyFacade.loadCompanyOptionsFilter();
     this.flagFacade.loadFlagOptionsFilter();
+  }
+
+  protected statusEnumLabel(value: StatusEnum | null | undefined): string {
+    return statusEnumLabel(value ?? null, this.i18n);
+  }
+
+  protected statusEnumSeverity(value: StatusEnum | null | undefined): CsTagTone {
+    return statusEnumSeverity(value ?? null);
   }
 
   protected setImportMode(mode: 'manual' | 'csv'): void {

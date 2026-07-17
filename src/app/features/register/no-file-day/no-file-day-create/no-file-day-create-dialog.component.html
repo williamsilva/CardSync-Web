@@ -125,7 +125,27 @@
               inputId="bankingDomicileId"
               formControlName="bankingDomicileId"
               [options]="bankingDomicileOptions()"
-            ></p-select>
+            >
+              <ng-template let-option pTemplate="item">
+                <div class="cs-option-item">
+                  <div class="cs-option-item__label">{{ option.bankName }}</div>
+                  <div class="cs-option-item__subtext">{{ option.agencyAccount }}</div>
+                  @if (option.companyName) {
+                    <div class="cs-option-item__subtext">
+                      {{ 'common.company' | translate }}: {{ option.companyName }}
+                    </div>
+                  }
+                  <div class="cs-option-item__subtext">
+                    <cs-tag
+                      [tone]="statusEnumSeverity(option.status)"
+                      [value]="
+                        ('common.status' | translate) + ': ' + statusEnumLabel(option.status)
+                      "
+                    />
+                  </div>
+                </div>
+              </ng-template>
+            </p-select>
             <app-error-msg
               [required]="false"
               [field]="'bankingDomicileId'"

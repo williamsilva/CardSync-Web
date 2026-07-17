@@ -34,6 +34,7 @@ import { CsColumnFilterShellComponent } from '@features/list-base/cs-column-filt
 import { DATA_TABLE_SHELL_IMPORTS } from '@shared/features/data-table-shell/data-table-shell.component';
 import { BankingDomicilePermissionPolicy } from '@features/security/policy/banking-domicile-permission.policy';
 import { CsAdvancedMultiselectFilterComponent } from '@features/list-base/cs-advanced-multiselect-filter.component';
+import { CsAdvancedFilterItemTemplateDirective } from '@features/list-base/cs-advanced-filter-item-template.directive';
 import { BankingDomicileCreateDialogComponent } from '../banking-domicile-create/banking-domicile-create-dialog.component';
 import {
   readArrayFilterValues,
@@ -78,6 +79,7 @@ import { StatusEnum, statusEnumLabel, statusEnumSeverity } from '@models/enums/s
     CsColumnFilterShellComponent,
     BankingDomicileCreateDialogComponent,
     CsAdvancedMultiselectFilterComponent,
+    CsAdvancedFilterItemTemplateDirective,
   ],
 })
 export class BankingDomicileListComponent extends StatefulListPage<

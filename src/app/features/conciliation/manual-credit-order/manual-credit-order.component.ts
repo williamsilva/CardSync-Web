@@ -13,6 +13,7 @@ import { Card } from 'primeng/card';
 import { I18nService } from '@core/i18n/i18n.service';
 import { CsTagComponent, CsTagTone } from '@shared/ui';
 import { CsDatePipe } from '@shared/pipes/cs-date.pipe';
+import { CsDocumentPipe } from '@shared/pipes/cs-document.pipe';
 import { STATE_KEY } from '@features/state-key.constants';
 import { FlagFacade } from '@features/facade/flag.facade';
 import { CompanyFacade } from '@features/facade/company.facade';
@@ -54,6 +55,7 @@ import {
   statusReconciliationEnumSeverity,
   allStatusReconciliationManualCreditEnum,
 } from '@models/enums/status-reconciliation.enum';
+import { StatusEnum, statusEnumLabel, statusEnumSeverity } from '@models/enums/status.enum';
 
 @Component({
   standalone: true,
@@ -71,6 +73,7 @@ import {
     TooltipModule,
     CheckboxModule,
     CsTagComponent,
+    CsDocumentPipe,
     TranslateModule,
     PageHeaderComponent,
     FiltersPanelComponent,
@@ -183,6 +186,14 @@ export class ManualCreditOrderComponent
       this.tableRows().forEach((r) => (checked ? next.add(r.id) : next.delete(r.id)));
       return next;
     });
+  }
+
+  statusEnumLabel(value: StatusEnum | null): string {
+    return statusEnumLabel(value, this.i18n);
+  }
+
+  statusEnumSeverity(value: StatusEnum | null): CsTagTone {
+    return statusEnumSeverity(value);
   }
 
   statusReconciliationLabel(value: StatusReconciliationEnum | null): string {

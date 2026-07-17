@@ -10,16 +10,20 @@ import { TranslateModule } from '@ngx-translate/core';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { ProgressBarModule } from 'primeng/progressbar';
 
+import { CsTagComponent, CsTagTone } from '@shared/ui';
 import { I18nService } from '@core/i18n/i18n.service';
 import { FlagFacade } from '@features/facade/flag.facade';
 import { CompanyFacade } from '@features/facade/company.facade';
 import { AcquirerFacade } from '@features/facade/acquirer.facade';
+import { CsDocumentPipe } from '@shared/pipes/cs-document.pipe';
+import { StatusEnum, statusEnumLabel, statusEnumSeverity } from '@models/enums/status.enum';
 import { PeriodEnum, allPeriodEnum, periodEnumLabel } from '@models/enums/period.enum';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
 import { ManagementDashboardService } from '@features/service/management-dashboard.service';
 import { ModalityEnum, allModalityEnum, modalityEnumLabel } from '@models/enums/modality.enum';
 import { CsAdvancedPeriodDateFilterComponent } from '@features/list-base/cs-advanced-period-date-filter.component';
 import { CsAdvancedMultiselectFilterComponent } from '@features/list-base/cs-advanced-multiselect-filter.component';
+import { CsAdvancedFilterItemTemplateDirective } from '@features/list-base/cs-advanced-filter-item-template.directive';
 import {
   ManagementGroupBy,
   ManagementTableRow,
@@ -59,6 +63,8 @@ interface TableTotal {
     ChartModule,
     ButtonModule,
     SelectModule,
+    CsTagComponent,
+    CsDocumentPipe,
     TranslateModule,
     MultiSelectModule,
     ProgressBarModule,
@@ -66,6 +72,7 @@ interface TableTotal {
     FiltersPanelComponent,
     CsAdvancedPeriodDateFilterComponent,
     CsAdvancedMultiselectFilterComponent,
+    CsAdvancedFilterItemTemplateDirective,
   ],
 })
 export class ManagementDashboardComponent implements OnInit {
@@ -359,6 +366,14 @@ export class ManagementDashboardComponent implements OnInit {
     this.filterPeriod.set(null);
     this.filterDate.set(null);
     this.search();
+  }
+
+  protected statusEnumLabel(value: StatusEnum | null): string {
+    return statusEnumLabel(value, this.i18n);
+  }
+
+  protected statusEnumSeverity(value: StatusEnum | null): CsTagTone {
+    return statusEnumSeverity(value);
   }
 
   protected setViewFormat(period: PeriodEnum | null): 'date' | 'month' | 'year' {

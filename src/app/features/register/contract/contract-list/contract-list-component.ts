@@ -16,7 +16,7 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService, MessageService } from 'primeng/api';
 
-import { CsTagComponent } from '@shared/ui';
+import { CsTagComponent, CsTagTone } from '@shared/ui';
 import { I18nService } from '@core/i18n/i18n.service';
 import { CsDatePipe } from '@shared/pipes/cs-date.pipe';
 import { UsersFacade } from '@features/facade/users.facade';
@@ -66,6 +66,7 @@ import {
   typeEstablishmentEnumLabel,
   typeEstablishmentEnumSeverity,
 } from '@models/enums/type-establishment.enum';
+import { StatusEnum, statusEnumLabel, statusEnumSeverity } from '@models/enums/status.enum';
 
 @Component({
   standalone: true,
@@ -290,6 +291,14 @@ export class ContractListComponent
   onPeriodStartDateChange(period: PeriodEnum | null): void {
     this.periodStartDate.set(period);
     this.startDate.set(null);
+  }
+
+  statusEnumLabel(status: StatusEnum | null): string {
+    return statusEnumLabel(status, this.i18n);
+  }
+
+  statusEnumSeverity(status: StatusEnum | null): CsTagTone {
+    return statusEnumSeverity(status);
   }
 
   statusLabel(status: ContractEnum | null) {

@@ -43,21 +43,51 @@
         optionLabel="fantasyName"
         [value]="selectedCompanyIds()"
         [options]="companyFacade.options()"
-        class="col-12 md:col-3 xl:col-2 p-1"
+        class="col-12 md:col-3 xl:col-3 p-1"
         [label]="'managementDashboard.filter.company' | translate"
         (valueChange)="selectedCompanyIds.set($event ?? [])"
-      />
+      >
+        <ng-template csAdvancedFilterItem let-option>
+          <div class="cs-option-item">
+            <div class="cs-option-item__label">{{ option.fantasyName }}</div>
+            <div class="cs-option-item__subtext">
+              {{ 'common.registrationNumber' | translate }}: {{ option.cnpj | csDocument }}
+            </div>
+            <div class="cs-option-item__subtext">
+              <cs-tag
+                [tone]="statusEnumSeverity(option.status)"
+                [value]="('common.status' | translate) + ': ' + statusEnumLabel(option.status)"
+              />
+            </div>
+          </div>
+        </ng-template>
+      </cs-advanced-multiselect-filter>
 
       <cs-advanced-multiselect-filter
         optionValue="id"
         inputId="acquirerIds"
         optionLabel="fantasyName"
         [value]="selectedAcquirerIds()"
-        class="col-12 md:col-3 xl:col-2 p-1"
+        class="col-12 md:col-3 xl:col-3 p-1"
         [options]="acquirerFacade.options()"
         [label]="'managementDashboard.filter.acquirer' | translate"
         (valueChange)="selectedAcquirerIds.set($event ?? [])"
-      />
+      >
+        <ng-template csAdvancedFilterItem let-option>
+          <div class="cs-option-item">
+            <div class="cs-option-item__label">{{ option.fantasyName }}</div>
+            <div class="cs-option-item__subtext">
+              {{ 'common.registrationNumber' | translate }}: {{ option.cnpj | csDocument }}
+            </div>
+            <div class="cs-option-item__subtext">
+              <cs-tag
+                [tone]="statusEnumSeverity(option.status)"
+                [value]="('common.status' | translate) + ': ' + statusEnumLabel(option.status)"
+              />
+            </div>
+          </div>
+        </ng-template>
+      </cs-advanced-multiselect-filter>
 
       <cs-advanced-multiselect-filter
         inputId="flagIds"

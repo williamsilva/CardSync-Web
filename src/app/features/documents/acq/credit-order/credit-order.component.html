@@ -143,6 +143,12 @@
           <div class="cs-option-item__subtext">
             {{ 'common.code' | translate }}: {{ option.code }}
           </div>
+          <div class="cs-option-item__subtext">
+            <cs-tag
+              [tone]="statusEnumSeverity(option.status)"
+              [value]="('common.status' | translate) + ': ' + statusEnumLabel(option.status)"
+            />
+          </div>
         </div>
       </ng-template>
     </cs-advanced-multiselect-filter>

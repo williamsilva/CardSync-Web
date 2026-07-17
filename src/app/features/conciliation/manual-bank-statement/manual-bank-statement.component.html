@@ -31,7 +31,22 @@
           optionLabel="fantasyName"
           [formControl]="companyIdCtrl"
           [options]="companyFacade.activeOptions()"
-        ></p-select>
+        >
+          <ng-template let-option pTemplate="item">
+            <div class="cs-option-item">
+              <div class="cs-option-item__label">{{ option.fantasyName }}</div>
+              <div class="cs-option-item__subtext">
+                {{ 'common.registrationNumber' | translate }}: {{ option.cnpj | csDocument }}
+              </div>
+              <div class="cs-option-item__subtext">
+                <cs-tag
+                  [tone]="statusEnumSeverity(option.status)"
+                  [value]="('common.status' | translate) + ': ' + statusEnumLabel(option.status)"
+                />
+              </div>
+            </div>
+          </ng-template>
+        </p-select>
         <app-error-msg
           forId="companyId"
           [control]="companyIdCtrl"
@@ -54,7 +69,20 @@
           inputId="bankingDomicileId"
           [formControl]="bankingDomicileIdCtrl"
           [options]="bankingDomicileOptions()"
-        ></p-select>
+        >
+          <ng-template let-option pTemplate="item">
+            <div class="cs-option-item">
+              <div class="cs-option-item__label">{{ option.bankName }}</div>
+              <div class="cs-option-item__subtext">{{ option.agencyAccount }}</div>
+              <div class="cs-option-item__subtext">
+                <cs-tag
+                  [tone]="statusEnumSeverity(option.status)"
+                  [value]="('common.status' | translate) + ': ' + statusEnumLabel(option.status)"
+                />
+              </div>
+            </div>
+          </ng-template>
+        </p-select>
         <app-error-msg
           forId="bankingDomicileId"
           [control]="bankingDomicileIdCtrl"
@@ -161,7 +189,22 @@
           optionLabel="fantasyName"
           [formControl]="acquirerIdCtrl"
           [options]="acquirerFacade.activeOptions()"
-        ></p-select>
+        >
+          <ng-template let-option pTemplate="item">
+            <div class="cs-option-item">
+              <div class="cs-option-item__label">{{ option.fantasyName }}</div>
+              <div class="cs-option-item__subtext">
+                {{ 'common.registrationNumber' | translate }}: {{ option.cnpj | csDocument }}
+              </div>
+              <div class="cs-option-item__subtext">
+                <cs-tag
+                  [tone]="statusEnumSeverity(option.status)"
+                  [value]="('common.status' | translate) + ': ' + statusEnumLabel(option.status)"
+                />
+              </div>
+            </div>
+          </ng-template>
+        </p-select>
         <app-error-msg
           forId="acquirerId"
           [control]="acquirerIdCtrl"
@@ -197,7 +240,25 @@
           [ngModel]="establishmentId()"
           [options]="filteredEstablishments()"
           (ngModelChange)="establishmentId.set($event)"
-        ></p-select>
+        >
+          <ng-template let-option pTemplate="item">
+            <div class="cs-option-item">
+              <div class="cs-option-item__label">{{ option.pvNumber }}</div>
+              <div class="cs-option-item__subtext">
+                {{ 'common.company' | translate }}: {{ option.company?.fantasyName }}
+              </div>
+              <div class="cs-option-item__subtext">
+                {{ 'common.acquirer' | translate }}: {{ option.acquirer?.fantasyName }}
+              </div>
+              <div class="cs-option-item__subtext">
+                <cs-tag
+                  [tone]="statusEnumSeverity(option.status)"
+                  [value]="('common.status' | translate) + ': ' + statusEnumLabel(option.status)"
+                />
+              </div>
+            </div>
+          </ng-template>
+        </p-select>
         <label for="establishmentId">
           {{ 'conciliation.manualBankStatement.establishment' | translate }}
         </label>

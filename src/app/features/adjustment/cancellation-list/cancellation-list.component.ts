@@ -68,6 +68,7 @@ import {
   adjustmentStatusEnumSeverity,
   allAdjustmentCancellationStatusEnum,
 } from '@models/enums/adjustment-status.enum';
+import { StatusEnum, statusEnumLabel, statusEnumSeverity } from '@models/enums/status.enum';
 
 /**
  * Lista paginada de cancelamentos de vendas aplicados pela adquirente.
@@ -287,6 +288,14 @@ export class CancellationListComponent
 
     this.dt?.clear();
     this.clearTableAndReload(this.dt);
+  }
+
+  statusEnumLabel(value: StatusEnum | null): string {
+    return statusEnumLabel(value, this.i18n);
+  }
+
+  statusEnumSeverity(value: StatusEnum | null): CsTagTone {
+    return statusEnumSeverity(value);
   }
 
   adjustmentReasonLabel(value: AdjustmentReasonEnum | null): string {

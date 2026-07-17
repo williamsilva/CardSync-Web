@@ -45,6 +45,7 @@ import { CsColumnFilterShellComponent } from '@features/list-base/cs-column-filt
 import { CsAdvancedTextFilterComponent } from '@features/list-base/cs-advanced-text-filter.component';
 import { CsAdvancedPeriodDateFilterComponent } from '@features/list-base/cs-advanced-period-date-filter.component';
 import { CsAdvancedMultiselectFilterComponent } from '@features/list-base/cs-advanced-multiselect-filter.component';
+import { CsAdvancedFilterItemTemplateDirective } from '@features/list-base/cs-advanced-filter-item-template.directive';
 import {
   ErpVsAcquirerConfirmAction,
   ErpVsAcquirerActionDialogComponent,
@@ -124,6 +125,7 @@ import {
     ErpVsAcquirerActionDialogComponent,
     CsAdvancedPeriodDateFilterComponent,
     CsAdvancedMultiselectFilterComponent,
+    CsAdvancedFilterItemTemplateDirective,
   ],
 })
 export class MissingErpListComponent

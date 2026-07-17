@@ -19,15 +19,18 @@ import { DatePickerModule } from 'primeng/datepicker';
 import { TranslateModule } from '@ngx-translate/core';
 import { InputNumberModule } from 'primeng/inputnumber';
 
+import { CsTagComponent, CsTagTone } from '@shared/ui';
 import { I18nService } from '@core/i18n/i18n.service';
 import { FlagFacade } from '@features/facade/flag.facade';
 import { CompanyFacade } from '@features/facade/company.facade';
+import { CsDocumentPipe } from '@shared/pipes/cs-document.pipe';
 import { AcquirerFacade } from '@features/facade/acquirer.facade';
 import { ErrorMsgComponent } from '@shared/error-msg/error-msg.component';
 import { EstablishmentFacade } from '@features/facade/establishment.facade';
 import { BankStatementFacade } from '@features/facade/bank-statement.facade';
 import { BankingDomicileFacade } from '@features/facade/banking-domicile.facade';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
+import { StatusEnum, statusEnumLabel, statusEnumSeverity } from '@models/enums/status.enum';
 import {
   ReleaseCategoryEnum,
   releaseCategoryLabel,
@@ -50,6 +53,8 @@ import {
     Button,
     Divider,
     FloatLabel,
+    CsTagComponent,
+    CsDocumentPipe,
     InputTextModule,
     TranslateModule,
     DatePickerModule,
@@ -138,6 +143,9 @@ export class ManualBankStatementComponent implements OnInit {
     this.filteredDomiciles().map((d) => ({
       id: d.id,
       label: `${d.bank?.name ?? '—'} · Ag. ${d.agency} / CC. ${d.currentAccount}`,
+      bankName: d.bank?.name ?? '—',
+      agencyAccount: `Ag. ${d.agency} / CC. ${d.currentAccount}`,
+      status: d.status,
     })),
   );
 
@@ -161,6 +169,14 @@ export class ManualBankStatementComponent implements OnInit {
       value,
     }));
   });
+
+  statusEnumLabel(value: StatusEnum | null | undefined): string {
+    return statusEnumLabel(value ?? null, this.i18n);
+  }
+
+  statusEnumSeverity(value: StatusEnum | null | undefined): CsTagTone {
+    return statusEnumSeverity(value ?? null);
+  }
 
   ngOnInit(): void {
     this.flagFacade.loadFlagOptionsFilter();

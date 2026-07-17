@@ -1,8 +1,11 @@
+import { normalizeStatusEnum, StatusEnum } from './enums/status.enum';
+
 export interface BankMinimalModel {
   id: string;
 
   code: string | null;
   name: string | null;
+  status: StatusEnum | null;
 }
 
 export interface BankMinimalCreateInput {}
@@ -18,11 +21,13 @@ export interface BankMinimalApiModel {
 
   code: string | null;
   name: string | null;
+  status: StatusEnum | null;
 }
 
 export function mapBankMinimalApiModel(input: BankMinimalApiModel): BankMinimalModel {
   return {
     ...input,
+    status: normalizeStatusEnum(input.status),
   };
 }
 

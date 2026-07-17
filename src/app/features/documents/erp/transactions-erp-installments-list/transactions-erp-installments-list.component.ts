@@ -38,6 +38,7 @@ import { CsAdvancedTextFilterComponent } from '@features/list-base/cs-advanced-t
 import { TransactionsErpInstallmentFacade } from '@features/facade/transaction-erp-installment.facade';
 import { CsAdvancedPeriodDateFilterComponent } from '@features/list-base/cs-advanced-period-date-filter.component';
 import { CsAdvancedMultiselectFilterComponent } from '@features/list-base/cs-advanced-multiselect-filter.component';
+import { CsAdvancedFilterItemTemplateDirective } from '@features/list-base/cs-advanced-filter-item-template.directive';
 import {
   CaptureEnum,
   allCaptureEnum,
@@ -116,6 +117,7 @@ import {
     CsCurrencyRangeFilterComponent,
     CsAdvancedPeriodDateFilterComponent,
     CsAdvancedMultiselectFilterComponent,
+    CsAdvancedFilterItemTemplateDirective,
   ],
 })
 export class ErpInstallmentsListComponent

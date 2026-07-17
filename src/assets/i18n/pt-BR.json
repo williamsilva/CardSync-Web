@@ -973,7 +973,6 @@
       "bankingDomicile": "Domicílio Bancário"
     },
     "fields": {
-
       "noFileDate": "Data sem Arquivo",
       "fileGroup": "Grupo de Arquivo",
       "dayType": "Tipo de Dia",

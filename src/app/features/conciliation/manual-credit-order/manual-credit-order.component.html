@@ -40,7 +40,13 @@
         <div class="cs-option-item">
           <div class="cs-option-item__label">{{ option.fantasyName }}</div>
           <div class="cs-option-item__subtext">
-            {{ 'common.registrationNumber' | translate }}: {{ option.cnpj }}
+            {{ 'common.registrationNumber' | translate }}: {{ option.cnpj | csDocument }}
+          </div>
+          <div class="cs-option-item__subtext">
+            <cs-tag
+              [tone]="statusEnumSeverity(option.status)"
+              [value]="('common.status' | translate) + ': ' + statusEnumLabel(option.status)"
+            />
           </div>
         </div>
       </ng-template>
@@ -55,7 +61,22 @@
       class="col-12 md:col-3 xl:col-2 p-1"
       (valueChange)="acquirers.set($event)"
       [label]="'saleSummary.fields.acquirer' | translate"
-    ></cs-advanced-multiselect-filter>
+    >
+      <ng-template csAdvancedFilterItem let-option>
+        <div class="cs-option-item">
+          <div class="cs-option-item__label">{{ option.fantasyName }}</div>
+          <div class="cs-option-item__subtext">
+            {{ 'common.registrationNumber' | translate }}: {{ option.cnpj | csDocument }}
+          </div>
+          <div class="cs-option-item__subtext">
+            <cs-tag
+              [tone]="statusEnumSeverity(option.status)"
+              [value]="('common.status' | translate) + ': ' + statusEnumLabel(option.status)"
+            />
+          </div>
+        </div>
+      </ng-template>
+    </cs-advanced-multiselect-filter>
 
     <cs-advanced-multiselect-filter
       inputId="flags"
