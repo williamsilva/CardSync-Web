@@ -236,19 +236,11 @@ export class ConciliationWaitingApiService {
     );
   }
 
-  // TODO: remover ignoreLookback após o backfill único dos resumos antigos (ver
-  // reconciliation-actions.component.*) — foi adicionado só para expor o parâmetro do
-  // backend numa chamada manual, não é para virar comportamento permanente da tela.
-  reconcileSalesSummaryTransactions(
-    ignoreLookback = false,
-  ): Observable<ReconcileSalesSummaryTransactionsResultModel> {
+  reconcileSalesSummaryTransactions(): Observable<ReconcileSalesSummaryTransactionsResultModel> {
     return this.http.post<ReconcileSalesSummaryTransactionsResultModel>(
       `${this.baseUrl}/reconcile-sales-summary-transactions`,
       {},
-      {
-        params: new HttpParams().set('ignoreLookback', ignoreLookback),
-        withCredentials: true,
-      },
+      { withCredentials: true },
     );
   }
 
