@@ -70,9 +70,7 @@
       "contractAudit": {
         "title": "Applied Fees"
       },
-      "fees": {
-        "title": "Fees"
-      },
+      "fees": {},
       "sales": {
         "title": "Acquirer Sales"
       },
@@ -91,15 +89,9 @@
           "title": "Other unreconciled sales"
         }
       },
-      "debits": {
-        "title": "Debits"
-      },
-      "chargebacks": {
-        "title": "Chargebacks"
-      },
-      "bankSettlement": {
-        "title": "Bank Settlement"
-      },
+      "debits": {},
+      "chargebacks": {},
+      "bankSettlement": {},
       "aging": {
         "title": "Pending Aging"
       },
@@ -124,9 +116,7 @@
       "executionHistory": {
         "title": "Execution History"
       },
-      "divergences": {
-        "title": "Operational divergences"
-      }
+      "divergences": {}
     },
     "settings": {
       "scheduler": {
@@ -250,14 +240,12 @@
     },
     "conciliation": {
       "contractAudit": "Applied Fees",
-      "fees": "Applied fees",
       "sales": "Acquirer sales",
       "title": "Reconciliation",
       "dashboard": "Dashboard",
       "erpVsAcquirer": "ERP x Acquirer",
       "bankSettlement": "Bank settlement",
       "debits": "Debits",
-      "chargebacks": "Chargebacks",
       "divergences": "Divergences",
       "aging": "Pending aging",
       "settings": "Settings",
@@ -306,17 +294,10 @@
         "upload": "File Upload",
         "dashboard": "Dashboard",
         "erpPendent": "Pending ERP",
-        "movementRede": "Rede movements",
         "scheduler": "Scheduler",
         "analysis": "Processing Analysis",
         "calendar": "File Calendar",
-        "creditOrders": "Credit orders",
-        "adjustments": "Rede adjustments",
-        "anticipations": "Anticipations",
-        "pendingDebts": "Pending debits",
-        "settledDebts": "Settled debits",
         "totalizers": "Totalizers",
-        "bankReleases": "Bank releases",
         "divergences": "Divergences"
       }
     }
@@ -564,7 +545,6 @@
       "canceled": "Canceled",
       "reconciled": "Reconciled",
       "unknown": "Not informed",
-      "notReconciled": "Unreconciled",
       "excludedSale": "Deleted sale",
       "canceledSale": "Canceled sale",
       "naoTokenizadas": "Not tokenized",
@@ -878,7 +858,6 @@
       "fileGroup": "Group",
       "dayType": "Type",
       "statusEnum": "Status",
-      "bank": "Bank",
       "origen": "Origin",
       "company": "Company",
       "acquirer": "Acquirer",
@@ -893,8 +872,6 @@
       "noFileDate": "No File Date",
       "fileGroup": "File Group",
       "dayType": "Day Type",
-      "bank": "Bank",
-      "acquirer": "Acquirer",
       "statusEnum": "Status",
       "statusDate": "Status Date",
       "createdAt": "Registered on",
@@ -1011,9 +988,6 @@
     "columns": {
       "agency": "Agency",
       "currentAccount": "Current Account",
-      "holderDocument": "Document",
-      "holderName": "Holder",
-      "active": "Status",
       "bank": "Bank",
       "status": "Status",
       "company": "Company",
@@ -1035,15 +1009,9 @@
       "agencyDigit": "Agency Digit",
       "currentAccount": "Current Account",
       "accountDigit": "Account Digit",
-      "holderDocument": "Holder Document",
-      "holderName": "Holder Name",
-      "active": "Status",
       "bank": "Bank",
       "status": "Status",
       "company": "Company",
-      "establishment": "Establishment",
-      "createdAt": "Registered on",
-      "updatedAt": "Updated on",
       "accountOpeningDate": "Opening Date",
       "accountClosingDate": "Closing Date",
       "expectsFile": "Expects File"
@@ -1845,13 +1813,10 @@
   "conciliation": {
     "reconcileUsingERP": "Reconcile using ERP",
     "errorReconciliation": "Reconciliation error",
-    "processReconciliation": "Process reconciliation",
     "reconcileUsingAcquirer": "Reconcile using acquirer",
     "reconciliationFinalizedTitle": "Reconciliation finalized",
-    "textTooltip": "Manually runs ERP x acquirer reconciliation",
     "reconciliationFinalized": "ERP x acquirer reconciliation was processed.",
     "noDiscrepancyFound": "No divergent field was found in this comparison.",
-    "processReconciliationError": "Could not process ERP x acquirer reconciliation.",
     "processReconcileManualSwapped": "Reconcile Swapped NSU",
     "processReconciliationErpVsAcquirer": "Reconcile ERP vs ACQ",
     "textTooltipErpVsAcquirer": "Manually runs ERP x acquirer reconciliation",
@@ -2527,49 +2492,6 @@
     },
     "reconciliationActions": {
       "subtitle": "Run each step of the financial reconciliation pipeline individually or the full pipeline at once."
-    },
-    "fees": {
-      "title": "Applied fees",
-      "subtitle": "Compare contracted fee, applied fee, and difference charged by the acquirer.",
-      "fields": {
-        "saleDate": "Sale date",
-        "periodSaleDate": "Sale date period",
-        "period": "Period",
-        "company": "Company",
-        "establishment": "Establishment",
-        "acquirer": "Acquirer",
-        "flag": "Card brand",
-        "status": "Status",
-        "nsu": "NSU",
-        "fees": "Fees",
-        "authorization": "Authorization",
-        "grossValue": "Gross value",
-        "expectedFeeValue": "Expected fee",
-        "appliedFeeValue": "Applied fee",
-        "feeDifference": "Difference",
-        "analysis": "Analysis"
-      },
-      "columns": {
-        "date": "Date",
-        "establishmentShort": "PV",
-        "authorizationShort": "Auth.",
-        "value": "Value",
-        "fees": "Fees",
-        "analysis": "Analysis"
-      },
-      "table": {
-        "appliedRate": "Applied",
-        "contractRate": "Contract",
-        "expectedFee": "Expected",
-        "differenceShort": "Diff."
-      },
-      "status": {
-        "ok": "OK",
-        "missingContract": "Missing contract",
-        "rateDivergence": "Fee divergence",
-        "valueDivergence": "Value divergence",
-        "missingAcquirerSale": "Missing acquirer sale"
-      }
     }
   },
   "session": {
@@ -2894,7 +2816,6 @@
     },
     "detail": {
       "title": "Day details",
-      "filesCount": "file(s)",
       "futureDate": "Future date",
       "noImportation": "No import",
       "futureDateMessage": "This date has not arrived yet.",
@@ -2987,25 +2908,22 @@
       "bank": "Bank",
       "flag": "Flag",
       "type": "Type",
-      "value": "Amount",
       "company": "Company",
       "category": "Category",
       "acquirer": "Acquirer",
       "document": "Document",
       "statusShort": "Status",
-      "launchDate": "Launch date",
       "releaseDate": "Release date",
       "bankHistory": "Bank history",
-      "launchDateShort": "Launch",
       "releaseDateShort": "Rel.",
       "establishment": "Establishment",
       "establishmentShort": "Estab.",
       "bankingDomicile": "Domicile",
       "releaseCategory": "Release category",
       "statusPaymentBank": "Bank payment status",
-      "periodLaunchDate": "Launch date period",
       "periodReleaseDate": "Release date period",
       "modalityPaymentBank": "Bank payment modality",
+      "modalityPaymentBankShort": "Modality",
       "releaseValue": "Release value",
       "releaseValueShort": "Value"
     },
@@ -3113,7 +3031,6 @@
       "acquirer": "Acquirer",
       "installment": "Installment",
       "grossValue": "Gross value",
-      "liquidValue": "Net value",
       "installmentNumber": "Installment",
       "creditOrder": "Credit order",
       "salesSummary": "Sales summary",

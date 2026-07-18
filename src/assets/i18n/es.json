@@ -67,9 +67,7 @@
       }
     },
     "conciliation": {
-      "fees": {
-        "title": "Tarifas"
-      },
+      "fees": {},
       "contractAudit": {
         "title": "Tasas Aplicadas"
       },
@@ -91,15 +89,9 @@
           "title": "Otras ventas no conciliadas"
         }
       },
-      "debits": {
-        "title": "Débitos"
-      },
-      "chargebacks": {
-        "title": "Chargebacks"
-      },
-      "bankSettlement": {
-        "title": "Liquidación bancaria"
-      },
+      "debits": {},
+      "chargebacks": {},
+      "bankSettlement": {},
       "aging": {
         "title": "Aging de pendientes"
       },
@@ -124,9 +116,7 @@
       "executionHistory": {
         "title": "Historial de Ejecuciones"
       },
-      "divergences": {
-        "title": "Divergencias operativas"
-      }
+      "divergences": {}
     },
     "settings": {
       "scheduler": {
@@ -249,7 +239,6 @@
       "noFileDay": "Días sin Archivo"
     },
     "conciliation": {
-      "fees": "Tarifas aplicadas",
       "contractAudit": "Tasas aplicadas",
       "sales": "Ventas adquirente",
       "title": "Conciliación",
@@ -257,7 +246,6 @@
       "erpVsAcquirer": "ERP x adquirente",
       "bankSettlement": "Liquidación bancaria",
       "debits": "Débitos",
-      "chargebacks": "Chargebacks",
       "divergences": "Divergencias",
       "aging": "Aging de pendientes",
       "settings": "Configuración",
@@ -307,16 +295,9 @@
         "calendar": "Agenda de Archivos",
         "dashboard": "Dashboard",
         "erpPendent": "ERP pendientes",
-        "movementRede": "Movimientos Rede",
         "scheduler": "Scheduler",
         "analysis": "Análisis de Procesamiento",
-        "creditOrders": "Órdenes de crédito",
-        "adjustments": "Ajustes Rede",
-        "anticipations": "Anticipaciones",
-        "pendingDebts": "Débitos pendientes",
-        "settledDebts": "Débitos liquidados",
         "totalizers": "Totalizadores",
-        "bankReleases": "Lanzamientos bancarios",
         "divergences": "Divergencias"
       }
     }
@@ -564,7 +545,6 @@
       "canceled": "Cancelado",
       "reconciled": "Conciliado",
       "unknown": "No informado",
-      "notReconciled": "No conciliado",
       "excludedSale": "Venta eliminada",
       "canceledSale": "Venta cancelada",
       "naoTokenizadas": "No tokenizada",
@@ -938,9 +918,6 @@
     "columns": {
       "agency": "Agencia",
       "currentAccount": "Cuenta Corriente",
-      "holderDocument": "Documento",
-      "holderName": "Titular",
-      "active": "Estado",
       "bank": "Banco",
       "status": "Estado",
       "company": "Empresa",
@@ -962,15 +939,9 @@
       "agencyDigit": "Dígito de Agencia",
       "currentAccount": "Cuenta Corriente",
       "accountDigit": "Dígito de Cuenta",
-      "holderDocument": "Documento del Titular",
-      "holderName": "Nombre del Titular",
-      "active": "Estado",
       "bank": "Banco",
       "status": "Estado",
       "company": "Empresa",
-      "establishment": "Establecimiento",
-      "createdAt": "Registrado el",
-      "updatedAt": "Actualizado el",
       "accountOpeningDate": "Fecha de Apertura",
       "accountClosingDate": "Fecha de Cierre",
       "expectsFile": "Recibe Archivo"
@@ -1018,7 +989,6 @@
       "fileGroup": "Grupo",
       "dayType": "Tipo",
       "statusEnum": "Estado",
-      "bank": "Banco",
       "origen": "Origen",
       "company": "Empresa",
       "acquirer": "Adquirente",
@@ -1033,8 +1003,6 @@
       "noFileDate": "Fecha sin Archivo",
       "fileGroup": "Grupo de Archivo",
       "dayType": "Tipo de Día",
-      "bank": "Banco",
-      "acquirer": "Adquirente",
       "statusEnum": "Estado",
       "statusDate": "Fecha de Estado",
       "createdAt": "Registrado el",
@@ -1845,13 +1813,10 @@
   "conciliation": {
     "reconcileUsingERP": "Conciliar usando ERP",
     "errorReconciliation": "Error en la conciliación",
-    "processReconciliation": "Procesar conciliación",
     "reconcileUsingAcquirer": "Conciliar usando adquirente",
     "reconciliationFinalizedTitle": "Conciliación finalizada",
-    "textTooltip": "Ejecuta manualmente la conciliación ERP x adquirente",
     "reconciliationFinalized": "La conciliación ERP x adquirente fue procesada.",
     "noDiscrepancyFound": "No se encontró ningún campo divergente en esta comparación.",
-    "processReconciliationError": "No fue posible procesar la conciliación ERP x adquirente.",
     "processReconcileManualSwapped": "Conciliar NSU Invertido",
     "processReconciliationErpVsAcquirer": "Conciliar ERP vs ADQ",
     "textTooltipErpVsAcquirer": "Ejecuta manualmente la conciliación ERP x adquirente",
@@ -2527,49 +2492,6 @@
     },
     "reconciliationActions": {
       "subtitle": "Ejecute cada paso de la pipeline de conciliación financiera individualmente o la pipeline completa de una vez."
-    },
-    "fees": {
-      "title": "Tasas aplicadas",
-      "subtitle": "Compara la tasa contratada, la tasa aplicada y la diferencia cobrada por la adquirente.",
-      "fields": {
-        "saleDate": "Fecha de venta",
-        "periodSaleDate": "Período de venta",
-        "period": "Período",
-        "company": "Empresa",
-        "establishment": "Establecimiento",
-        "acquirer": "Adquirente",
-        "flag": "Bandera",
-        "status": "Estado",
-        "nsu": "NSU",
-        "fees": "Tasas",
-        "authorization": "Autorización",
-        "grossValue": "Valor bruto",
-        "expectedFeeValue": "Tasa esperada",
-        "appliedFeeValue": "Tasa aplicada",
-        "feeDifference": "Diferencia",
-        "analysis": "Análisis"
-      },
-      "columns": {
-        "date": "Fecha",
-        "establishmentShort": "PV",
-        "authorizationShort": "Aut.",
-        "value": "Valor",
-        "fees": "Tasas",
-        "analysis": "Análisis"
-      },
-      "table": {
-        "appliedRate": "Aplicada",
-        "contractRate": "Contrato",
-        "expectedFee": "Esperada",
-        "differenceShort": "Dif."
-      },
-      "status": {
-        "ok": "OK",
-        "missingContract": "Contrato ausente",
-        "rateDivergence": "Divergencia de tasa",
-        "valueDivergence": "Divergencia de valor",
-        "missingAcquirerSale": "Venta de adquirente ausente"
-      }
     }
   },
   "session": {
@@ -2894,7 +2816,6 @@
     },
     "detail": {
       "title": "Detalles del día",
-      "filesCount": "archivo(s)",
       "futureDate": "Fecha futura",
       "noImportation": "Sin importación",
       "futureDateMessage": "Esta fecha aún no ha llegado.",
@@ -2987,25 +2908,22 @@
       "bank": "Banco",
       "flag": "Marca",
       "type": "Tipo",
-      "value": "Importe",
       "company": "Empresa",
       "category": "Categoría",
       "acquirer": "Adquirente",
       "document": "Documento",
       "statusShort": "Estado",
-      "launchDate": "Fecha lanzamiento",
       "releaseDate": "Fecha lanzamiento",
       "bankHistory": "Historial banco",
-      "launchDateShort": "Lanzam.",
       "releaseDateShort": "Lanz.",
       "establishment": "Establecimiento",
       "establishmentShort": "Estab.",
       "bankingDomicile": "Domicilio",
       "releaseCategory": "Categoría lanzamiento",
       "statusPaymentBank": "Estado pago banco",
-      "periodLaunchDate": "Período fecha lanzamiento",
       "periodReleaseDate": "Período fecha lanzamiento",
       "modalityPaymentBank": "Modalidad pago banco",
+      "modalityPaymentBankShort": "Modalidad",
       "releaseValue": "Valor lanzamiento",
       "releaseValueShort": "Valor"
     },
@@ -3113,7 +3031,6 @@
       "acquirer": "Adquirente",
       "installment": "Cuota",
       "grossValue": "Valor bruto",
-      "liquidValue": "Valor neto",
       "installmentNumber": "Cuota",
       "creditOrder": "Orden crédito",
       "salesSummary": "Resumen ventas",

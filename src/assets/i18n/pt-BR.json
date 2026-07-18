@@ -618,6 +618,7 @@
       "aplAut": "Aplicação Automatica"
     },
     "statusReconciliationEnum": {
+      "null": "N/A",
       "pending": "Pendente",
       "canceled": "Cancelado",
       "divergent": "Divergente",
@@ -980,7 +981,8 @@
       "statusEnum": "Status",
       "statusDate": "Data do Status",
       "createdAt": "Cadastrado em",
-      "updatedAt": "Atualizado em"
+      "updatedAt": "Atualizado em",
+      "description": "Descrição"
     },
     "selection": {
       "mode": { "none": "Nenhum" },
