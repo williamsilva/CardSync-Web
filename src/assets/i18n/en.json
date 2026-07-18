@@ -303,6 +303,7 @@
       "processing": {
         "file": "Files",
         "title": "Processing",
+        "upload": "File Upload",
         "dashboard": "Dashboard",
         "erpPendent": "Pending ERP",
         "movementRede": "Rede movements",
@@ -3300,6 +3301,25 @@
     },
     "bank": {
       "title": "Bank / CNAB"
+    }
+  },
+  "fileProcessing": {
+    "upload": {
+      "subtitle": "Manually upload ERP, acquirer or bank files for processing.",
+      "system": "System",
+      "systems": {
+        "erp": "ERP",
+        "rede": "Rede acquirer",
+        "itau": "Itaú bank",
+        "santander": "Santander bank",
+        "bradesco": "Bradesco bank"
+      },
+      "dropLabel": "Click or drag files here",
+      "dropHint": "Accepts one or more files at a time.",
+      "submit": "Upload",
+      "processNow": "Process now",
+      "success": "file(s) uploaded successfully",
+      "errors": "file(s) with errors"
     }
   },
   "notFound": {

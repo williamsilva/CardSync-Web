@@ -353,3 +353,11 @@ export interface ReconciliationExecutionLogModel {
   totalPending?: number | null;
   steps?: FinancialReconciliationStepResultModel[] | null;
 }
+
+export type FileUploadSystem = 'erp' | 'rede' | 'itau' | 'santander' | 'bradesco';
+
+export interface FileUploadItemResultModel {
+  fileName: string | null;
+  success: boolean;
+  message?: string | null;
+}

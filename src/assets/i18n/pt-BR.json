@@ -288,6 +288,7 @@
       "processing": {
         "file": "Arquivos",
         "title": "Processamento",
+        "upload": "Upload de Arquivos",
         "dashboard": "Dashboard",
         "scheduler": "Scheduler",
         "analysis": "Análise de Processamento",
@@ -3184,6 +3185,25 @@
     "erp": { "title": "ERP" },
     "rede": { "title": "Rede" },
     "bank": { "title": "Banco / CNAB" }
+  },
+  "fileProcessing": {
+    "upload": {
+      "subtitle": "Envie manualmente os arquivos de ERP, adquirente ou banco para processamento.",
+      "system": "Sistema",
+      "systems": {
+        "erp": "ERP",
+        "rede": "Adquirente Rede",
+        "itau": "Banco Itaú",
+        "santander": "Banco Santander",
+        "bradesco": "Banco Bradesco"
+      },
+      "dropLabel": "Clique ou arraste os arquivos aqui",
+      "dropHint": "Aceita um ou mais arquivos por vez.",
+      "submit": "Enviar",
+      "processNow": "Processar agora",
+      "success": "arquivo(s) enviado(s) com sucesso",
+      "errors": "arquivo(s) com erro"
+    }
   },
   "notFound": {
     "attemptedUrl": "URL acessada",

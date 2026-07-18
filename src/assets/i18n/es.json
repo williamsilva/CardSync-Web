@@ -303,6 +303,7 @@
       "processing": {
         "file": "Archivos",
         "title": "Procesamiento",
+        "upload": "Subir Archivos",
         "calendar": "Agenda de Archivos",
         "dashboard": "Dashboard",
         "erpPendent": "ERP pendientes",
@@ -3300,6 +3301,25 @@
     },
     "bank": {
       "title": "Banco / CNAB"
+    }
+  },
+  "fileProcessing": {
+    "upload": {
+      "subtitle": "Suba manualmente los archivos de ERP, adquirente o banco para procesamiento.",
+      "system": "Sistema",
+      "systems": {
+        "erp": "ERP",
+        "rede": "Adquirente Rede",
+        "itau": "Banco Itaú",
+        "santander": "Banco Santander",
+        "bradesco": "Banco Bradesco"
+      },
+      "dropLabel": "Haga clic o arrastre los archivos aquí",
+      "dropHint": "Acepta uno o más archivos a la vez.",
+      "submit": "Enviar",
+      "processNow": "Procesar ahora",
+      "success": "archivo(s) enviado(s) con éxito",
+      "errors": "archivo(s) con error"
     }
   },
   "notFound": {

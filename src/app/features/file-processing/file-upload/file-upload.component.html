@@ -1,0 +1,132 @@
+<cs-page-header
+  [compact]="false"
+  [subtitle]="'fileProcessing.upload.subtitle' | translate"
+  [breadcrumb]="[
+    { label: ('breadcrumb.dashboard.title' | translate), url: '/' },
+    { label: ('menu.file.processing.title' | translate), url: '/file-processing/analytics' },
+    { label: ('menu.file.processing.upload' | translate) },
+  ]"
+></cs-page-header>
+
+<p-card class="mt-2 block">
+  <div class="grid formgrid gap-0">
+    <div class="col-12 md:col-4 p-2">
+      <p-floatLabel variant="on" class="w-full">
+        <p-select
+          size="small"
+          class="w-full"
+          appendTo="body"
+          [showClear]="true"
+          optionLabel="label"
+          optionValue="value"
+          inputId="uploadSystem"
+          [options]="systemOptions()"
+          [ngModel]="system()"
+          (ngModelChange)="system.set($event)"
+        ></p-select>
+        <label for="uploadSystem">{{ 'fileProcessing.upload.system' | translate }}</label>
+      </p-floatLabel>
+    </div>
+  </div>
+
+  <label
+    tabindex="0"
+    role="button"
+    for="uploadFileInput"
+    class="cs-file-zone"
+    (keydown.enter)="fileInput.click()"
+  >
+    <i class="pi pi-upload cs-file-zone__icon"></i>
+    <span class="cs-file-zone__label">{{ 'fileProcessing.upload.dropLabel' | translate }}</span>
+    <span class="cs-file-zone__hint">{{ 'fileProcessing.upload.dropHint' | translate }}</span>
+    <input
+      type="file"
+      multiple
+      #fileInput
+      id="uploadFileInput"
+      class="cs-file-zone__input"
+      (change)="onFilesSelected($event)"
+    />
+  </label>
+
+  @if (selectedFiles().length > 0) {
+    <div class="cs-upload-list">
+      @for (file of selectedFiles(); track file.name + $index) {
+        <div class="cs-upload-list__item">
+          <i class="pi pi-file"></i>
+          <span class="cs-upload-list__name">{{ file.name }}</span>
+          <span class="cs-upload-list__size">{{ formatFileSize(file.size) }}</span>
+          <button
+            pButton
+            type="button"
+            icon="pi pi-times"
+            class="p-button-text p-button-sm p-button-danger"
+            (click)="removeFile($index)"
+          ></button>
+        </div>
+      }
+    </div>
+  }
+
+  <div class="flex gap-2 mt-3">
+    <p-button
+      type="button"
+      icon="pi pi-upload"
+      [loading]="uploading()"
+      [disabled]="!canUpload()"
+      (onClick)="upload()"
+      [label]="'fileProcessing.upload.submit' | translate"
+    ></p-button>
+
+    @if (selectedFiles().length > 0) {
+      <p-button
+        type="button"
+        icon="pi pi-trash"
+        [outlined]="true"
+        (onClick)="clearFiles()"
+        [label]="'common.clear' | translate"
+      ></p-button>
+    }
+
+    @if (system()) {
+      <p-button
+        type="button"
+        icon="pi pi-sync"
+        [outlined]="true"
+        [loading]="processing()"
+        [disabled]="!canProcess()"
+        (onClick)="processNow()"
+        [label]="'fileProcessing.upload.processNow' | translate"
+      ></p-button>
+    }
+  </div>
+
+  @if (results(); as r) {
+    <p-divider></p-divider>
+
+    <div class="flex align-items-center gap-2 mb-2">
+      <cs-tag
+        [tone]="'success'"
+        [value]="successCount() + ' ' + ('fileProcessing.upload.success' | translate)"
+      ></cs-tag>
+      @if (errorCount() > 0) {
+        <cs-tag
+          [tone]="'danger'"
+          [value]="errorCount() + ' ' + ('fileProcessing.upload.errors' | translate)"
+        ></cs-tag>
+      }
+    </div>
+
+    <div class="cs-upload-list">
+      @for (item of r; track item.fileName) {
+        <div class="cs-upload-list__item">
+          <i class="pi" [class.pi-check-circle]="item.success" [class.pi-times-circle]="!item.success"></i>
+          <span class="cs-upload-list__name">{{ item.fileName }}</span>
+          @if (!item.success) {
+            <span class="cs-upload-list__error">{{ item.message }}</span>
+          }
+        </div>
+      }
+    </div>
+  }
+</p-card>

@@ -102,6 +102,7 @@ export const UI_KEYS = {
       processing: {
         file: 'menu.file.processing.file',
         title: 'menu.file.processing.title',
+        upload: 'menu.file.processing.upload',
         calendar: 'menu.file.processing.calendar',
         dashboard: 'menu.file.processing.dashboard',
         scheduler: 'menu.file.processing.scheduler',
@@ -1013,6 +1014,25 @@ export const UI_KEYS = {
         title: 'fileProcessingDashboard.shortcuts.divergences.title',
         description: 'fileProcessingDashboard.shortcuts.divergences.description',
       },
+    },
+  },
+  fileProcessing: {
+    upload: {
+      subtitle: 'fileProcessing.upload.subtitle',
+      system: 'fileProcessing.upload.system',
+      systems: {
+        erp: 'fileProcessing.upload.systems.erp',
+        rede: 'fileProcessing.upload.systems.rede',
+        itau: 'fileProcessing.upload.systems.itau',
+        santander: 'fileProcessing.upload.systems.santander',
+        bradesco: 'fileProcessing.upload.systems.bradesco',
+      },
+      dropLabel: 'fileProcessing.upload.dropLabel',
+      dropHint: 'fileProcessing.upload.dropHint',
+      submit: 'fileProcessing.upload.submit',
+      processNow: 'fileProcessing.upload.processNow',
+      success: 'fileProcessing.upload.success',
+      errors: 'fileProcessing.upload.errors',
     },
   },
   bankStatement: {

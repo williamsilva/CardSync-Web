@@ -10,11 +10,13 @@ import { ProcessedFilesAdvancedFilters } from '@features/filter/processed-files.
 import {
   PageQuery,
   PageResponse,
+  FileUploadSystem,
   ProcessedFileModel,
   ErpPendingSaleModel,
   ProcessedFileApiModel,
   ScheduleStatusResponse,
   ProcessedFileErrorModel,
+  FileUploadItemResultModel,
   ProcessedFileSummaryModel,
   ImportedFileCalendarModel,
   FileProcessingTotalsModel,
@@ -87,6 +89,16 @@ export class FileProcessingService {
 
   processBank(): Observable<void> {
     return this.http.post<void>(`${this.baseUrl}/bank/process`, {}, { withCredentials: true });
+  }
+
+  uploadFiles(system: FileUploadSystem, files: File[]): Observable<FileUploadItemResultModel[]> {
+    const formData = new FormData();
+    formData.append('system', system);
+    files.forEach((file) => formData.append('files', file, file.name));
+
+    return this.http.post<FileUploadItemResultModel[]>(`${this.baseUrl}/upload`, formData, {
+      withCredentials: true,
+    });
   }
 
   runFinancialPipeline(): Observable<FinancialReconciliationPipelineResultModel> {

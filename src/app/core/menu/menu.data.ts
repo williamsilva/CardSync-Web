@@ -305,6 +305,13 @@ export const APP_MENU: AppMenuItem[] = [
     icon: 'pi pi-folder-open text-blue-600',
     children: [
       {
+        labelKey: 'menu.file.processing.upload',
+        icon: 'pi pi-upload text-blue-400',
+        route: '/file-processing/upload',
+        exact: false,
+        permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.FILE_PROCESSING.PROCESS],
+      },
+      {
         labelKey: 'menu.file.processing.dashboard',
         icon: 'pi pi-chart-line text-blue-400',
         route: '/file-processing/analytics',

@@ -1,10 +1,10 @@
 {
-  "ok": true,
-  "generatedAt": "2026-07-12T18:41:11.929Z",
+  "ok": false,
+  "generatedAt": "2026-07-18T17:23:22.088Z",
   "targets": [
     {
       "target": "primeng",
-      "dir": "C:\\WorkSpace\\NimbusSystems\\CardSync_web\\src\\assets\\i18n\\primeng",
+      "dir": "C:\\WorkSpace\\NimbusSystems\\CardSyncWeb\\src\\assets\\i18n\\primeng",
       "baseLang": "pt-BR",
       "langs": [
         "en",
@@ -12,7 +12,7 @@
       ],
       "files": {
         "pt-BR": {
-          "file": "C:\\WorkSpace\\NimbusSystems\\CardSync_web\\src\\assets\\i18n\\primeng\\pt-BR.json",
+          "file": "C:\\WorkSpace\\NimbusSystems\\CardSyncWeb\\src\\assets\\i18n\\primeng\\pt-BR.json",
           "ok": true,
           "missingKeys": [],
           "extraKeys": [],
@@ -21,7 +21,7 @@
           "icuErrors": []
         },
         "en": {
-          "file": "C:\\WorkSpace\\NimbusSystems\\CardSync_web\\src\\assets\\i18n\\primeng\\en.json",
+          "file": "C:\\WorkSpace\\NimbusSystems\\CardSyncWeb\\src\\assets\\i18n\\primeng\\en.json",
           "ok": true,
           "missingKeys": [],
           "extraKeys": [],
@@ -30,7 +30,7 @@
           "icuErrors": []
         },
         "es": {
-          "file": "C:\\WorkSpace\\NimbusSystems\\CardSync_web\\src\\assets\\i18n\\primeng\\es.json",
+          "file": "C:\\WorkSpace\\NimbusSystems\\CardSyncWeb\\src\\assets\\i18n\\primeng\\es.json",
           "ok": true,
           "missingKeys": [],
           "extraKeys": [],
@@ -51,7 +51,7 @@
     },
     {
       "target": "i18n",
-      "dir": "C:\\WorkSpace\\NimbusSystems\\CardSync_web\\src\\assets\\i18n",
+      "dir": "C:\\WorkSpace\\NimbusSystems\\CardSyncWeb\\src\\assets\\i18n",
       "baseLang": "pt-BR",
       "langs": [
         "en",
@@ -59,7 +59,7 @@
       ],
       "files": {
         "pt-BR": {
-          "file": "C:\\WorkSpace\\NimbusSystems\\CardSync_web\\src\\assets\\i18n\\pt-BR.json",
+          "file": "C:\\WorkSpace\\NimbusSystems\\CardSyncWeb\\src\\assets\\i18n\\pt-BR.json",
           "ok": true,
           "missingKeys": [],
           "extraKeys": [],
@@ -68,9 +68,11 @@
           "icuErrors": []
         },
         "en": {
-          "file": "C:\\WorkSpace\\NimbusSystems\\CardSync_web\\src\\assets\\i18n\\en.json",
-          "ok": true,
-          "missingKeys": [],
+          "file": "C:\\WorkSpace\\NimbusSystems\\CardSyncWeb\\src\\assets\\i18n\\en.json",
+          "ok": false,
+          "missingKeys": [
+            "bankStatement.fields.modalityPaymentBankShort"
+          ],
           "extraKeys": [
             "bankStatement.fields.launchDate",
             "bankStatement.fields.launchDateShort",
@@ -149,9 +151,11 @@
           "icuErrors": []
         },
         "es": {
-          "file": "C:\\WorkSpace\\NimbusSystems\\CardSync_web\\src\\assets\\i18n\\es.json",
-          "ok": true,
-          "missingKeys": [],
+          "file": "C:\\WorkSpace\\NimbusSystems\\CardSyncWeb\\src\\assets\\i18n\\es.json",
+          "ok": false,
+          "missingKeys": [
+            "bankStatement.fields.modalityPaymentBankShort"
+          ],
           "extraKeys": [
             "bankStatement.fields.launchDate",
             "bankStatement.fields.launchDateShort",
@@ -231,9 +235,9 @@
         }
       },
       "summary": {
-        "ok": true,
+        "ok": false,
         "missingFiles": 0,
-        "missingKeys": 0,
+        "missingKeys": 2,
         "extraKeys": 142,
         "emptyValues": 0,
         "arrayLengthMismatch": 0,
