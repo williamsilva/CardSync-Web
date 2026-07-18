@@ -45,6 +45,10 @@ import {
   createEmptySaleSummaryFiltersState,
 } from '@features/filter/sale-summary.filters';
 import {
+  CreditOrderAdvancedFilters,
+  createEmptyCreditOrderFiltersState,
+} from '@features/filter/credit-order.filters';
+import {
   readArrayFilterValues,
   readPeriodFilterValue,
   readSingleFilterValue,
@@ -755,6 +759,11 @@ export class SaleSummaryListComponent
         icon: 'pi pi-search',
         command: () => this.searchOnTransactions(row),
       },
+      {
+        label: this.i18n.tUi('common.search.creditOrder'),
+        icon: 'pi pi-search',
+        command: () => this.searchOnCreditOrder(row),
+      },
     ];
   }
 
@@ -795,6 +804,32 @@ export class SaleSummaryListComponent
       flags: row.flag?.id ? [row.flag.id] : null,
       companies: row.company?.id ? [row.company.id] : null,
       acquirers: row.acquirer?.id ? [row.acquirer.id] : null,
+    };
+  }
+
+  protected searchOnCreditOrder(row: SaleSummaryModel): void {
+    const targetFilters = this.buildTargetCreditOrder(row);
+
+    localStorage.setItem(
+      STATE_KEY.CARDSYNC.CREDIT_ORDER.FILTERS.V1,
+      JSON.stringify(targetFilters),
+    );
+    localStorage.removeItem(STATE_KEY.CARDSYNC.CREDIT_ORDER.TABLE.STATE.V1);
+
+    this.openRouteInNewTab(['/documents/acq/credit-order']);
+  }
+
+  protected buildTargetCreditOrder(row: SaleSummaryModel): CreditOrderAdvancedFilters {
+    return {
+      ...createEmptyCreditOrderFiltersState(),
+      rvNumber: row.rvNumber ? String(row.rvNumber) : '',
+
+      flags: row.flag?.id ? [row.flag.id] : null,
+      companies: row.company?.id ? [row.company.id] : null,
+      acquirers: row.acquirer?.id ? [row.acquirer.id] : null,
+      // O filtro "establishments" da Ordem de Crédito casa por pvNumber, não por
+      // establishment.id (mesma exceção documentada na skill cs-filters-panel).
+      establishments: row.pvNumber != null ? [String(row.pvNumber)] : null,
     };
   }
 

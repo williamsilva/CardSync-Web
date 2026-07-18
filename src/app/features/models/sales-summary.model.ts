@@ -17,6 +17,7 @@ export interface SaleSummaryModel {
   id: string;
   rvDate: string;
   rvNumber: string;
+  pvNumber: number;
   lineNumber: number;
 
   flag: FlagMinimalModel;
@@ -72,6 +73,7 @@ export interface SaleSummaryApiModel {
   id: string;
   rvDate: string;
   rvNumber: string;
+  pvNumber: number;
   lineNumber: number;
 
   flag: FlagMinimalModel;

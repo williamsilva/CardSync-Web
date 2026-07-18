@@ -2,6 +2,7 @@ import { CaptureEnum } from './enums/capture.enum';
 import { FlagMinimalModel } from './flag-minimal.models';
 import { CompanyMinimalModel } from './company-minimal.models';
 import { AcquirerMinimalModel } from './acquirer-minimal.models';
+import { SalesSummaryMinimalModel } from './sales-summary-minimal.models';
 import { EstablishmentMinimalModel } from './establishment-minimal.models';
 import { ModalityEnum, normalizeModalityEnum } from './enums/modality.enum';
 import { ProcessedFileMinimalModel } from './processed-file-minimal.models';
@@ -39,6 +40,7 @@ export interface TransactionsAcqModel {
   acquirer: AcquirerMinimalModel;
   processedFile: ProcessedFileMinimalModel;
   establishment: EstablishmentMinimalModel;
+  salesSummary?: SalesSummaryMinimalModel | null;
   installments?: TransactionsAcqInstallmentModel[] | null;
 }
 
@@ -82,6 +84,7 @@ export interface TransactionsAcqApiModel {
   acquirer: AcquirerMinimalModel;
   processedFile: ProcessedFileMinimalModel;
   establishment: EstablishmentMinimalModel;
+  salesSummary?: SalesSummaryMinimalModel | null;
   installments?: TransactionsAcqInstallmentModel[] | null;
 }
 

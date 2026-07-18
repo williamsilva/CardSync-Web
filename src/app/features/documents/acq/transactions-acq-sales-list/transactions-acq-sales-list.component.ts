@@ -34,6 +34,7 @@ import { allPeriodEnum, PeriodEnum, periodEnumLabel } from '@models/enums/period
 import { StatusEnum, statusEnumLabel, statusEnumSeverity } from '@models/enums/status.enum';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
 import { statusTransactionReasonEnumLabel } from '@models/enums/status-transaction-reason.enum';
+import { createEmptySaleSummaryFiltersState } from '@features/filter/sale-summary.filters';
 import { createEmptyTransactionsErpFiltersState } from '@features/filter/transaction-erp.filters';
 import { CsColumnFilterShellComponent } from '@features/list-base/cs-column-filter-shell.component';
 import { CsAdvancedTextFilterComponent } from '@features/list-base/cs-advanced-text-filter.component';
@@ -1205,6 +1206,11 @@ export class TransactionsAcquirersSalesListComponent
         icon: 'pi pi-search',
         command: () => this.searchOnErpSales(row),
       },
+      {
+        label: this.i18n.tUi('common.search.salesSummary'),
+        icon: 'pi pi-search',
+        command: () => this.searchOnSalesSummary(row),
+      },
     ];
   }
 
@@ -1241,6 +1247,29 @@ export class TransactionsAcquirersSalesListComponent
     this.openRouteInNewTab(['/documents/erp/sales']);
   }
 
+  protected searchOnSalesSummary(row: TransactionsAcqModel): void {
+    const targetFilters = {
+      ...createEmptySaleSummaryFiltersState(),
+      // O rvNumber não é um campo direto da transação — vem do resumo de vendas vinculado.
+      rvNumber: row.salesSummary?.rvNumber != null ? String(row.salesSummary.rvNumber) : '',
+
+      flags: row.flag?.id ? [row.flag.id] : null,
+      companies: row.company?.id ? [row.company.id] : null,
+      acquirers: row.acquirer?.id ? [row.acquirer.id] : null,
+      // O filtro "establishments" do Resumo de Vendas casa por pvNumber, não por
+      // establishment.id (mesma exceção documentada na skill cs-filters-panel).
+      establishments: row.establishmentPvNumber ? [row.establishmentPvNumber] : null,
+    };
+
+    localStorage.setItem(
+      STATE_KEY.CARDSYNC.SALES_SUMMARY.FILTERS.V1,
+      JSON.stringify(targetFilters),
+    );
+    localStorage.removeItem(STATE_KEY.CARDSYNC.SALES_SUMMARY.TABLE.STATE.V1);
+
+    this.openRouteInNewTab(['/documents/acq/sales-summary']);
+  }
+
   protected buildTargetFileFilters(row: TransactionsAcqModel): TransactionsAcqFiltersState {
     return {
       ...this.emptyFiltersState(),
@@ -1251,7 +1280,7 @@ export class TransactionsAcquirersSalesListComponent
     const modality = normalizeModalityEnum(row.modality);
     return {
       ...createEmptyTransactionsErpFiltersState(),
-      rvNumber: row.rvNumber ?? '',
+      rvNumber: row.salesSummary?.rvNumber != null ? String(row.salesSummary.rvNumber) : '',
       authorization: row.authorization ?? '',
       cvNsu: row.cvNsu != null ? String(row.cvNsu) : '',
 
