@@ -13,16 +13,15 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { I18nService } from '@core/i18n/i18n.service';
 import { CsTagComponent, CsTagTone } from '@shared/ui';
 import { CsDatePipe } from '@shared/pipes/cs-date.pipe';
-import { CsDocumentPipe } from '@shared/pipes/cs-document.pipe';
-import { StatusEnum, statusEnumLabel, statusEnumSeverity } from '@models/enums/status.enum';
 import { STATE_KEY } from '@features/state-key.constants';
 import { BankFacade } from '@features/facade/bank.facade';
-import { PersistedFilters } from '@shared/utils/persisted-filters';
 import { FlagFacade } from '@features/facade/flag.facade';
+import { CsDocumentPipe } from '@shared/pipes/cs-document.pipe';
 import { CsCurrencyPipe } from '@shared/pipes/cs-currency.pipe';
 import { CompanyFacade } from '@features/facade/company.facade';
 import { CreditOrderApiModel } from '@models/credit-order.model';
 import { AcquirerFacade } from '@features/facade/acquirer.facade';
+import { PersistedFilters } from '@shared/utils/persisted-filters';
 import { BankStatementApiModel } from '@models/bank-statement.model';
 import { buildListQuery } from '@shared/features/list-query/list-query.builder';
 import { CreditOrderAdvancedFilters } from '@features/filter/credit-order.filters';
@@ -30,6 +29,7 @@ import { BankStatementAdvancedFilters } from '@features/filter/bank-statement.fi
 import { allPeriodEnum, PeriodEnum, periodEnumLabel } from '@models/enums/period.enum';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
 import { mapPrimeLazyToTableQuery } from '@shared/features/list-query/primeng-lazy.mapper';
+import { StatusEnum, statusEnumLabel, statusEnumSeverity } from '@models/enums/status.enum';
 import { ManualBankReconciliationFacade } from '@features/facade/manual-bank-reconciliation.facade';
 import { ReconciliationSettingsApiService } from '@features/service/reconciliation-settings.api.service';
 import { CsAdvancedPeriodDateFilterComponent } from '@features/list-base/cs-advanced-period-date-filter.component';
@@ -559,7 +559,8 @@ export class ManualBankReconciliationComponent implements OnInit {
   selectRelease(release: BankStatementApiModel): void {
     const eligible = this.isEligibleForLegacy(release);
     const current = this.facade.selectedReleases();
-    const currentAllEligible = current.length > 0 && current.every((r) => this.isEligibleForLegacy(r));
+    const currentAllEligible =
+      current.length > 0 && current.every((r) => this.isEligibleForLegacy(r));
 
     if (eligible && (current.length === 0 || currentAllEligible)) {
       this.facade.toggleReleaseInSelection(release);
@@ -596,9 +597,9 @@ export class ManualBankReconciliationComponent implements OnInit {
     }
 
     const start = new Date(base);
-    start.setDate(start.getDate() - this.bankDateToleranceDaysBefore());
+    start.setDate(start.getDate() - this.bankDateToleranceDaysAfter());
     const end = new Date(base);
-    end.setDate(end.getDate() + this.bankDateToleranceDaysAfter());
+    end.setDate(end.getDate() + this.bankDateToleranceDaysBefore());
 
     this.orderReleasePeriod.set(PeriodEnum.INTERVAL);
     this.orderReleaseDate.set([this.formatBrDate(start), this.formatBrDate(end)]);
