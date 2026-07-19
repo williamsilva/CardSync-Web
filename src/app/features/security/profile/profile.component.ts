@@ -5,6 +5,7 @@ import { Component, computed, inject, signal, DestroyRef } from '@angular/core';
 
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
+import { DialogModule } from 'primeng/dialog';
 import { DividerModule } from 'primeng/divider';
 import { TranslateModule } from '@ngx-translate/core';
 
@@ -45,6 +46,7 @@ type ProfileView = {
     CardModule,
     RouterModule,
     ButtonModule,
+    DialogModule,
     DividerModule,
     CsTagComponent,
     TranslateModule,
@@ -62,8 +64,19 @@ export class ProfilePageComponent {
   readonly loadError = signal<string | null>(null);
   readonly profile = signal<ProfileView | null>(null);
 
+  readonly groupsModalVisible = signal(false);
+  readonly permissionsModalVisible = signal(false);
+
   readonly groups = computed(() => this.profile()?.groups ?? []);
   readonly authorities = computed(() => this.profile()?.authorities ?? []);
+
+  openGroupsModal(): void {
+    this.groupsModalVisible.set(true);
+  }
+
+  openPermissionsModal(): void {
+    this.permissionsModalVisible.set(true);
+  }
 
   constructor() {
     void this.load();
@@ -231,26 +244,83 @@ export class ProfilePageComponent {
     return `${days} ${this.i18n.tUi('profile.password.days' as any, 'dias')}`;
   }
 
+  /** Realça cada permissão pela cor já usada no menu lateral pra mesma área da tela
+   * (ex.: Conciliação é roxo, Cadastros é laranja, Ajustes é âmbar — ver menu.data.ts). */
   permissionClass(permission?: string | null): string {
     const v = (permission ?? '').toUpperCase();
 
     if (v === 'SUPPORT') return 'is-support';
-    if (v.startsWith('GROUP')) return 'is-groups';
-    if (v.startsWith('USERS')) return 'is-users';
+
+    if (v.startsWith('BANK_STATEMENT')) return 'is-perm-bank-statement';
+
+    if (
+      v.startsWith('CONTRACT_AUDIT') ||
+      v.startsWith('CONCILIATION_') ||
+      v.startsWith('MANUAL_BANK_RECONCILIATION') ||
+      v.startsWith('BANK_ACQUIRER_CONCILIATION') ||
+      v.startsWith('FINANCIAL_RECONCILIATION_PIPELINE')
+    ) {
+      return 'is-perm-conciliation';
+    }
+
+    if (v.startsWith('ADJUSTMENT_') || v.startsWith('CHARGEBACK_ANALYSIS')) {
+      return 'is-perm-adjustment';
+    }
+
+    if (v.startsWith('ERP_SALES') || v.startsWith('ERP_INSTALLMENTS')) {
+      return 'is-perm-erp';
+    }
+
+    if (
+      v.startsWith('ACQUIRERS_SALES') ||
+      v.startsWith('ACQUIRERS_INSTALLMENTS') ||
+      v.startsWith('ANTICIPATION') ||
+      v.startsWith('SALES_SUMMARY') ||
+      v.startsWith('CREDIT_ORDER')
+    ) {
+      return 'is-perm-acq';
+    }
+
+    if (v.startsWith('USERS') || v.startsWith('GROUP')) return 'is-perm-security';
+
+    if (v.startsWith('FILE_PROCESSING')) return 'is-perm-file-processing';
+
+    if (
+      v.startsWith('SCHEDULER_SETTINGS') ||
+      v.startsWith('EMAIL_SETTINGS') ||
+      v.startsWith('RECONCILIATION_SETTINGS')
+    ) {
+      return 'is-perm-settings';
+    }
+
+    if (v.startsWith('AUDIT_MAIL')) return 'is-perm-audit';
+
+    if (v.startsWith('MANAGEMENT_DASHBOARD') || v.startsWith('DASHBOARD_AUDIT')) {
+      return 'is-perm-dashboard';
+    }
+
+    if (
+      v.startsWith('COMPANIES') ||
+      v.startsWith('ACQUIRER_') ||
+      v.startsWith('ESTABLISHMENT') ||
+      v.startsWith('FLAGS') ||
+      v.startsWith('CONTRACTS') ||
+      v.startsWith('HOLIDAYS') ||
+      v.startsWith('BANK_') ||
+      v.startsWith('BANKING_DOMICILE') ||
+      v.startsWith('NO_FILE_DAY')
+    ) {
+      return 'is-perm-cadastros';
+    }
 
     return 'is-default';
   }
 
-  permissionLabel(permission?: string | null): string {
+  permissionDescription(permission?: string | null): string {
     const value = (permission ?? '').trim().toUpperCase();
-    if (!value) return '—';
+    if (!value) return '';
 
-    const translated = this.i18n.tUi(
-      `profile.permission.${value}` as any,
-      this.humanizeEnum(value),
-    );
-
-    return translated;
+    return this.i18n.tUi(`profile.permissionDescription.${value}` as any, '');
   }
 
   groupLabel(group?: string | null): string {

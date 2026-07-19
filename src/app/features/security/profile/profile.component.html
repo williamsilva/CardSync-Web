@@ -9,7 +9,7 @@
     </p>
   </div>
 
-  <ng-container *ngIf="!loading() && profile() as p; else stateTpl">
+  @if (!loading() && profile(); as p) {
     <div class="grid">
       <!-- HERO -->
       <div class="col-12 lg:col-4">
@@ -47,7 +47,14 @@
           <!-- metrics -->
           <div class="cs-profile-metrics-list">
             <!-- groups -->
-            <div class="cs-permission-chip-card is-groups">
+            <div
+              role="button"
+              tabindex="0"
+              class="cs-permission-chip-card is-groups cs-permission-chip-card--clickable"
+              (click)="openGroupsModal()"
+              (keydown.enter)="openGroupsModal()"
+              (keydown.space)="openGroupsModal()"
+            >
               <span class="cs-permission-chip-index">1</span>
 
               <div class="cs-permission-chip-content">
@@ -66,7 +73,14 @@
             </div>
 
             <!-- permissions -->
-            <div class="cs-permission-chip-card is-users">
+            <div
+              role="button"
+              tabindex="0"
+              class="cs-permission-chip-card is-users cs-permission-chip-card--clickable"
+              (click)="openPermissionsModal()"
+              (keydown.enter)="openPermissionsModal()"
+              (keydown.space)="openPermissionsModal()"
+            >
               <span class="cs-permission-chip-index">2</span>
 
               <div class="cs-permission-chip-content">
@@ -289,114 +303,9 @@
           </div>
         </p-card>
       </div>
-
-      <!-- GROUPS -->
-      <div class="col-12 lg:col-5">
-        <p-card class="h-full">
-          <ng-template pTemplate="title">
-            <div class="flex items-center justify-between gap-3">
-              <span>
-                {{ 'profile.card.groups' | translate }}
-              </span>
-
-              <div class="flex items-center gap-2">
-                <cs-badge
-                  severity="info"
-                  [value]="'profile.items' | translate: { count: groups().length }"
-                ></cs-badge>
-              </div>
-            </div>
-          </ng-template>
-
-          <ng-template pTemplate="subtitle">
-            {{ 'profile.card.groupsSubtitle' | translate }}
-          </ng-template>
-
-          <div class="cs-permissions-chip-grid">
-            <div
-              *ngFor="let g of sortedGroups(groups()); let i = index"
-              class="cs-permission-chip-card"
-              [ngClass]="groupClass(g)"
-            >
-              <span class="cs-permission-chip-index">
-                {{ i + 1 }}
-              </span>
-
-              <div class="cs-permission-chip-content">
-                <span class="cs-permission-chip-text">
-                  {{ groupLabel(g) }}
-                </span>
-
-                <span class="cs-permission-chip-raw">
-                  {{ g }}
-                </span>
-              </div>
-            </div>
-
-            <span *ngIf="!groups().length" class="text-sm opacity-60">
-              {{ 'profile.empty.groups' | translate }}
-            </span>
-          </div>
-        </p-card>
-      </div>
-
-      <!-- PERMISSIONS -->
-      <div class="col-12 lg:col-7">
-        <p-card class="h-full">
-          <ng-template pTemplate="title">
-            <div class="flex items-center justify-between gap-3">
-              <span>
-                {{ 'profile.card.permissions' | translate }}
-              </span>
-
-              <div class="flex items-center gap-2">
-                <span class="text-sm opacity-70"> </span>
-
-                <cs-badge
-                  severity="warn"
-                  [value]="'profile.items' | translate: { count: authorities().length }"
-                ></cs-badge>
-              </div>
-            </div>
-          </ng-template>
-
-          <ng-template pTemplate="subtitle">
-            {{ 'profile.card.permissionsSubtitle' | translate }}
-          </ng-template>
-
-          <div class="cs-permissions-chip-grid">
-            <div
-              *ngFor="let a of sortedAuthorities(authorities()); let i = index"
-              class="cs-permission-chip-card"
-              [ngClass]="permissionClass(a)"
-            >
-              <span class="cs-permission-chip-index">
-                {{ i + 1 }}
-              </span>
-
-              <div class="cs-permission-chip-content">
-                <span class="cs-permission-chip-text">
-                  {{ permissionLabel(a) }}
-                </span>
-
-                <span class="cs-permission-chip-raw">
-                  {{ a }}
-                </span>
-              </div>
-            </div>
-
-            <span *ngIf="!authorities().length" class="text-sm opacity-60">
-              {{ 'profile.empty.permissions' | translate }}
-            </span>
-          </div>
-        </p-card>
-      </div>
     </div>
-  </ng-container>
-
-  <!-- loading -->
-  <ng-template #stateTpl>
-    <p-card *ngIf="loading(); else errorTpl">
+  } @else if (loading()) {
+    <p-card>
       <ng-template pTemplate="title">
         {{ 'profile.title' | translate }}
       </ng-template>
@@ -409,10 +318,7 @@
         {{ 'common.loading' | translate }}
       </div>
     </p-card>
-  </ng-template>
-
-  <!-- error -->
-  <ng-template #errorTpl>
+  } @else {
     <p-card>
       <ng-template pTemplate="title">
         {{ 'profile.title' | translate }}
@@ -426,5 +332,83 @@
         {{ loadError() }}
       </div>
     </p-card>
-  </ng-template>
+  }
+
+  <!-- GROUPS MODAL -->
+  <p-dialog
+    [modal]="true"
+    appendTo="body"
+    [closable]="true"
+    [draggable]="false"
+    [resizable]="false"
+    [dismissableMask]="true"
+    [(visible)]="groupsModalVisible"
+    [header]="'profile.card.groups' | translate"
+    [style]="{ width: '92vw', 'max-width': '700px' }"
+  >
+    <p class="m-0 mb-2 text-sm opacity-70">
+      {{ 'profile.card.groupsSubtitle' | translate }}
+    </p>
+
+    <div class="cs-permissions-chip-grid">
+      @for (g of sortedGroups(groups()); track g; let i = $index) {
+        <div class="cs-permission-chip-card" [ngClass]="groupClass(g)">
+          <span class="cs-permission-chip-index">
+            {{ i + 1 }}
+          </span>
+
+          <div class="cs-permission-chip-content">
+            <span class="cs-permission-chip-text">
+              {{ groupLabel(g) }}
+            </span>
+          </div>
+        </div>
+      }
+
+      @if (!groups().length) {
+        <span class="text-sm opacity-60">
+          {{ 'profile.empty.groups' | translate }}
+        </span>
+      }
+    </div>
+  </p-dialog>
+
+  <!-- PERMISSIONS MODAL -->
+  <p-dialog
+    [modal]="true"
+    appendTo="body"
+    [closable]="true"
+    [draggable]="false"
+    [resizable]="false"
+    [dismissableMask]="true"
+    [(visible)]="permissionsModalVisible"
+    [header]="'profile.card.permissions' | translate"
+    [style]="{ width: '92vw', 'max-width': '1100px' }"
+  >
+    <p class="m-0 mb-2 text-sm opacity-70">
+      {{ 'profile.card.permissionsSubtitle' | translate }}
+    </p>
+
+    <div class="cs-permissions-chip-grid">
+      @for (a of sortedAuthorities(authorities()); track a; let i = $index) {
+        <div class="cs-permission-chip-card" [ngClass]="permissionClass(a)">
+          <span class="cs-permission-chip-index">
+            {{ i + 1 }}
+          </span>
+
+          <div class="cs-permission-chip-content">
+            <span class="cs-permission-chip-text">
+              {{ permissionDescription(a) }}
+            </span>
+          </div>
+        </div>
+      }
+
+      @if (!authorities().length) {
+        <span class="text-sm opacity-60">
+          {{ 'profile.empty.permissions' | translate }}
+        </span>
+      }
+    </div>
+  </p-dialog>
 </div>

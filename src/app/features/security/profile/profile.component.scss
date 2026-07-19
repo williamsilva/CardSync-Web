@@ -213,6 +213,19 @@
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.05);
 }
 
+.cs-permission-chip-card--clickable {
+  cursor: pointer;
+}
+
+.cs-permission-chip-card--clickable:hover {
+  border-color: var(--primary-color);
+}
+
+.cs-permission-chip-card--clickable:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
 .cs-permission-chip-index {
   width: 1.45rem;
   height: 1.45rem;
@@ -285,6 +298,118 @@
 .cs-permission-chip-card.is-default .cs-permission-chip-index {
   background: rgba(99, 102, 241, 0.14);
   color: var(--primary-color);
+}
+
+/* Cores por área de permissão — mesma paleta usada nos ícones do menu lateral
+   (ver menu.data.ts) pra manter a categorização visualmente consistente com o resto do app. */
+.cs-permission-chip-card.is-perm-erp {
+  border-left-color: #14b8a6;
+  background: rgba(20, 184, 166, 0.06);
+}
+
+.cs-permission-chip-card.is-perm-erp .cs-permission-chip-index {
+  background: rgba(20, 184, 166, 0.16);
+  color: #0f766e;
+}
+
+.cs-permission-chip-card.is-perm-acq {
+  border-left-color: #06b6d4;
+  background: rgba(6, 182, 212, 0.06);
+}
+
+.cs-permission-chip-card.is-perm-acq .cs-permission-chip-index {
+  background: rgba(6, 182, 212, 0.16);
+  color: #0e7490;
+}
+
+.cs-permission-chip-card.is-perm-bank-statement {
+  border-left-color: #10b981;
+  background: rgba(16, 185, 129, 0.06);
+}
+
+.cs-permission-chip-card.is-perm-bank-statement .cs-permission-chip-index {
+  background: rgba(16, 185, 129, 0.16);
+  color: #047857;
+}
+
+.cs-permission-chip-card.is-perm-security {
+  border-left-color: #ef4444;
+  background: rgba(239, 68, 68, 0.06);
+}
+
+.cs-permission-chip-card.is-perm-security .cs-permission-chip-index {
+  background: rgba(239, 68, 68, 0.16);
+  color: #b91c1c;
+}
+
+.cs-permission-chip-card.is-perm-cadastros {
+  border-left-color: #f97316;
+  background: rgba(249, 115, 22, 0.06);
+}
+
+.cs-permission-chip-card.is-perm-cadastros .cs-permission-chip-index {
+  background: rgba(249, 115, 22, 0.16);
+  color: #c2410c;
+}
+
+.cs-permission-chip-card.is-perm-file-processing {
+  border-left-color: #3b82f6;
+  background: rgba(59, 130, 246, 0.06);
+}
+
+.cs-permission-chip-card.is-perm-file-processing .cs-permission-chip-index {
+  background: rgba(59, 130, 246, 0.16);
+  color: #1d4ed8;
+}
+
+.cs-permission-chip-card.is-perm-conciliation {
+  border-left-color: #a855f7;
+  background: rgba(168, 85, 247, 0.06);
+}
+
+.cs-permission-chip-card.is-perm-conciliation .cs-permission-chip-index {
+  background: rgba(168, 85, 247, 0.16);
+  color: #7e22ce;
+}
+
+.cs-permission-chip-card.is-perm-adjustment {
+  border-left-color: #f59e0b;
+  background: rgba(245, 158, 11, 0.06);
+}
+
+.cs-permission-chip-card.is-perm-adjustment .cs-permission-chip-index {
+  background: rgba(245, 158, 11, 0.16);
+  color: #b45309;
+}
+
+.cs-permission-chip-card.is-perm-audit {
+  border-left-color: #0ea5e9;
+  background: rgba(14, 165, 233, 0.06);
+}
+
+.cs-permission-chip-card.is-perm-audit .cs-permission-chip-index {
+  background: rgba(14, 165, 233, 0.16);
+  color: #0369a1;
+}
+
+.cs-permission-chip-card.is-perm-settings {
+  border-left-color: #64748b;
+  background: rgba(100, 116, 139, 0.06);
+}
+
+.cs-permission-chip-card.is-perm-settings .cs-permission-chip-index {
+  background: rgba(100, 116, 139, 0.16);
+  color: #334155;
+}
+
+.cs-permission-chip-card.is-perm-dashboard {
+  border-left-color: #3b82f6;
+  background: rgba(59, 130, 246, 0.06);
+}
+
+.cs-permission-chip-card.is-perm-dashboard .cs-permission-chip-index {
+  background: rgba(59, 130, 246, 0.16);
+  color: #1d4ed8;
 }
 
 @media (max-width: 1200px) {

@@ -299,10 +299,6 @@ export class AccountPasswordComponent {
     this.validatePolicyLive();
   }
 
-  trackRule(_: number, item: PolicyRuleVm): string {
-    return item.code;
-  }
-
   initials(value?: string | null): string {
     const text = (value || '').trim();
     if (!text) return '?';
