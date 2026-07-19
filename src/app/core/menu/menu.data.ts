@@ -312,6 +312,13 @@ export const APP_MENU: AppMenuItem[] = [
         permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.FILE_PROCESSING.PROCESS],
       },
       {
+        labelKey: 'menu.file.processing.browser',
+        icon: 'pi pi-folder text-blue-400',
+        route: '/file-processing/browser',
+        exact: false,
+        permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.FILE_PROCESSING.READ],
+      },
+      {
         labelKey: 'menu.file.processing.dashboard',
         icon: 'pi pi-chart-line text-blue-400',
         route: '/file-processing/analytics',

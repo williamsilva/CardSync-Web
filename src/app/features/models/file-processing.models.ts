@@ -361,3 +361,11 @@ export interface FileUploadItemResultModel {
   success: boolean;
   message?: string | null;
 }
+
+export type FileBrowserFolder = 'input' | 'processed' | 'error' | 'duplicate' | 'invalid_file' | 'log';
+
+export interface FileBrowserItemModel {
+  name: string;
+  size: number;
+  lastModified: string;
+}

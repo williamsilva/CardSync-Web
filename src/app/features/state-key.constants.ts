@@ -140,6 +140,13 @@ export const STATE_KEY = {
         },
         FILTERS: { V1: 'cardsync.file_processing_dashboard.filters.v1' },
       },
+      BROWSER: {
+        TABLE: {
+          ROWS: { V1: 'cardsync.processed_files.browser.table.rows.v1' },
+          STATE: { V1: 'cardsync.processed_files.browser.table.state.v1' },
+        },
+        FILTERS: { V1: 'cardsync.processed_files.browser.filters.v1' },
+      },
     },
     /* Ajustamentos */
     ADJUSTMENT: {

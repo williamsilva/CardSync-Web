@@ -103,6 +103,7 @@ export const UI_KEYS = {
         file: 'menu.file.processing.file',
         title: 'menu.file.processing.title',
         upload: 'menu.file.processing.upload',
+        browser: 'menu.file.processing.browser',
         calendar: 'menu.file.processing.calendar',
         dashboard: 'menu.file.processing.dashboard',
         scheduler: 'menu.file.processing.scheduler',
@@ -1034,6 +1035,17 @@ export const UI_KEYS = {
       success: 'fileProcessing.upload.success',
       errors: 'fileProcessing.upload.errors',
     },
+    browser: {
+      folder: 'fileProcessing.browser.folder',
+      folders: {
+        input: 'fileProcessing.browser.folders.input',
+        processed: 'fileProcessing.browser.folders.processed',
+        error: 'fileProcessing.browser.folders.error',
+        duplicate: 'fileProcessing.browser.folders.duplicate',
+        invalidFile: 'fileProcessing.browser.folders.invalidFile',
+        log: 'fileProcessing.browser.folders.log',
+      },
+    },
   },
   bankStatement: {
     subtitle: 'bankStatement.subtitle',
@@ -1608,6 +1620,7 @@ export const UI_KEYS = {
     save: 'common.save',
     until: 'common.until',
     error: 'common.error',
+    filter: 'common.filter',
     cancel: 'common.cancel',
     delete: 'common.delete',
     logout: 'common.logout',

@@ -292,6 +292,7 @@
         "file": "Files",
         "title": "Processing",
         "upload": "File Upload",
+        "browser": "Volume Files",
         "dashboard": "Dashboard",
         "erpPendent": "Pending ERP",
         "scheduler": "Scheduler",
@@ -3237,6 +3238,24 @@
       "processNow": "Process now",
       "success": "file(s) uploaded successfully",
       "errors": "file(s) with errors"
+    },
+    "browser": {
+      "subtitle": "Browse and download files stored in the processing volume.",
+      "folder": "Folder",
+      "empty": "No files found in this folder.",
+      "folders": {
+        "input": "Input",
+        "processed": "Processed",
+        "error": "Error",
+        "duplicate": "Duplicate",
+        "invalidFile": "Invalid",
+        "log": "Log (ERP)"
+      },
+      "columns": {
+        "name": "Name",
+        "size": "Size",
+        "lastModified": "Last modified"
+      }
     }
   },
   "notFound": {

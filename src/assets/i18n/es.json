@@ -292,6 +292,7 @@
         "file": "Archivos",
         "title": "Procesamiento",
         "upload": "Subir Archivos",
+        "browser": "Archivos del Volumen",
         "calendar": "Agenda de Archivos",
         "dashboard": "Dashboard",
         "erpPendent": "ERP pendientes",
@@ -3237,6 +3238,24 @@
       "processNow": "Procesar ahora",
       "success": "archivo(s) enviado(s) con éxito",
       "errors": "archivo(s) con error"
+    },
+    "browser": {
+      "subtitle": "Consulte y descargue los archivos guardados en el volumen de procesamiento.",
+      "folder": "Carpeta",
+      "empty": "Ningún archivo encontrado en esta carpeta.",
+      "folders": {
+        "input": "Entrada",
+        "processed": "Procesados",
+        "error": "Error",
+        "duplicate": "Duplicados",
+        "invalidFile": "Inválidos",
+        "log": "Log (ERP)"
+      },
+      "columns": {
+        "name": "Nombre",
+        "size": "Tamaño",
+        "lastModified": "Modificado el"
+      }
     }
   },
   "notFound": {

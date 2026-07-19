@@ -78,6 +78,18 @@ export const FILE_PROCESSING_ROUTES: Routes = [
       import('./file-upload/file-upload.component').then((m) => m.FileUploadComponent),
   },
   {
+    path: 'browser',
+    title: 'Arquivos no Volume',
+    canActivate: [permissionGuard],
+    data: {
+      requireAll: false,
+      redirectTo: '/forbidden',
+      permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.FILE_PROCESSING.READ],
+    },
+    loadComponent: () =>
+      import('./file-browser/file-browser.component').then((m) => m.FileBrowserComponent),
+  },
+  {
     path: 'erp/pending-sales',
     title: 'Vendas ERP Pendentes',
     loadComponent: () =>

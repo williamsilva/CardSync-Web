@@ -1,0 +1,161 @@
+<cs-page-header
+  [compact]="false"
+  [subtitle]="'fileProcessing.browser.subtitle' | translate"
+  [breadcrumb]="[
+    { label: ('breadcrumb.dashboard.title' | translate), url: '/' },
+    { label: ('menu.file.processing.title' | translate), url: '/file-processing/analytics' },
+    { label: ('menu.file.processing.browser' | translate) },
+  ]"
+>
+  <button
+    pButton
+    type="button"
+    (click)="refresh()"
+    icon="pi pi-refresh"
+    class="p-button-text p-button-sm"
+    [label]="'common.update' | translate"
+  ></button>
+</cs-page-header>
+
+<cs-filters-panel
+  (clear)="clear()"
+  [collapsed]="false"
+  (search)="search()"
+  [actionsAlign]="'start'"
+  [activeCount]="activeFiltersCount()"
+  [title]="'common.filter' | translate"
+  [activeFilterGroups]="activeFilterGroups()"
+>
+  <div class="grid formgrid gap-0 align-items-end">
+    <div class="col-12 md:col-3 xl:col-2 p-1">
+      <p-floatLabel variant="on" class="w-full">
+        <p-select
+          size="small"
+          class="w-full"
+          appendTo="body"
+          [showClear]="true"
+          optionLabel="label"
+          optionValue="value"
+          inputId="browserSystem"
+          [options]="systemOptions()"
+          [ngModel]="system()"
+          (ngModelChange)="system.set($event)"
+        ></p-select>
+        <label for="browserSystem">{{ 'fileProcessing.upload.system' | translate }}</label>
+      </p-floatLabel>
+    </div>
+
+    <div class="col-12 md:col-3 xl:col-2 p-1">
+      <p-floatLabel variant="on" class="w-full">
+        <p-select
+          size="small"
+          class="w-full"
+          appendTo="body"
+          optionLabel="label"
+          optionValue="value"
+          inputId="browserFolder"
+          [options]="folderOptions()"
+          [ngModel]="folder()"
+          (ngModelChange)="folder.set($event)"
+        ></p-select>
+        <label for="browserFolder">{{ 'fileProcessing.browser.folder' | translate }}</label>
+      </p-floatLabel>
+    </div>
+  </div>
+</cs-filters-panel>
+
+@if (files(); as items) {
+  <div class="surface-card border-round px-3 pt-2 pb-3 mt-2">
+    <p-table
+      stripedRows
+      dataKey="name"
+      size="small"
+      [rows]="rows"
+      showGridlines
+      [value]="items"
+      [rowHover]="true"
+      [paginator]="true"
+      sortMode="multiple"
+      stateStorage="local"
+      class="cs-admin-table"
+      [stateKey]="tableStateKey"
+      [loading]="loading()"
+      [showCurrentPageReport]="true"
+      [paginatorDropdownAppendTo]="'body'"
+      [rowsPerPageOptions]="rowsPerPageOptions"
+      [currentPageReportTemplate]="'pagination.report' | translate"
+    >
+      <ng-template pTemplate="colgroup">
+        <colgroup>
+          <col style="width: auto" />
+          <col style="width: 140px" />
+          <col style="width: 180px" />
+          <col style="width: 90px" />
+        </colgroup>
+      </ng-template>
+
+      <ng-template pTemplate="header">
+        <tr>
+          <th pSortableColumn="name">
+            <div class="th-flex">
+              <span class="th-label">{{ 'fileProcessing.browser.columns.name' | translate }}</span>
+              <span class="th-icons"><p-sortIcon field="name"></p-sortIcon></span>
+            </div>
+          </th>
+
+          <th pSortableColumn="size" class="text-center">
+            <div class="th-flex th-flex--center">
+              <span class="th-label">{{ 'fileProcessing.browser.columns.size' | translate }}</span>
+              <span class="th-icons"><p-sortIcon field="size"></p-sortIcon></span>
+            </div>
+          </th>
+
+          <th pSortableColumn="lastModified" class="text-center">
+            <div class="th-flex th-flex--center">
+              <span class="th-label">{{
+                'fileProcessing.browser.columns.lastModified' | translate
+              }}</span>
+              <span class="th-icons"><p-sortIcon field="lastModified"></p-sortIcon></span>
+            </div>
+          </th>
+
+          <th class="text-center"></th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-item>
+        <tr>
+          <td>
+            <span class="cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="item.name">
+              {{ item.name }}
+            </span>
+          </td>
+          <td class="text-center">{{ formatFileSize(item.size) }}</td>
+          <td class="text-center">{{ item.lastModified | csDate: 'datetime' }}</td>
+          <td class="text-center">
+            <div class="table-actions justify-content-center">
+              <button
+                text
+                pButton
+                rounded
+                size="small"
+                type="button"
+                icon="pi pi-download"
+                class="p-button-text p-button-sm"
+                (click)="download(item)"
+              ></button>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="4" class="text-center py-4 text-500">
+            {{ 'fileProcessing.browser.empty' | translate }}
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+}

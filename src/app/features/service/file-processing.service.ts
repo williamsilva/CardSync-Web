@@ -11,8 +11,10 @@ import {
   PageQuery,
   PageResponse,
   FileUploadSystem,
+  FileBrowserFolder,
   ProcessedFileModel,
   ErpPendingSaleModel,
+  FileBrowserItemModel,
   ProcessedFileApiModel,
   ScheduleStatusResponse,
   ProcessedFileErrorModel,
@@ -99,6 +101,21 @@ export class FileProcessingService {
     return this.http.post<FileUploadItemResultModel[]>(`${this.baseUrl}/upload`, formData, {
       withCredentials: true,
     });
+  }
+
+  browseFiles(
+    system: FileUploadSystem,
+    folder: FileBrowserFolder,
+  ): Observable<FileBrowserItemModel[]> {
+    return this.http.get<FileBrowserItemModel[]>(`${this.baseUrl}/browse`, {
+      params: { system, folder },
+      withCredentials: true,
+    });
+  }
+
+  getDownloadUrl(system: FileUploadSystem, folder: FileBrowserFolder, path: string): string {
+    const params = new HttpParams().set('system', system).set('folder', folder).set('path', path);
+    return `${this.baseUrl}/browse/download?${params.toString()}`;
   }
 
   runFinancialPipeline(): Observable<FinancialReconciliationPipelineResultModel> {

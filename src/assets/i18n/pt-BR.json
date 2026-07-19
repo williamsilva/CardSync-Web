@@ -289,6 +289,7 @@
         "file": "Arquivos",
         "title": "Processamento",
         "upload": "Upload de Arquivos",
+        "browser": "Arquivos no Volume",
         "dashboard": "Dashboard",
         "scheduler": "Scheduler",
         "analysis": "Análise de Processamento",
@@ -3205,6 +3206,24 @@
       "processNow": "Processar agora",
       "success": "arquivo(s) enviado(s) com sucesso",
       "errors": "arquivo(s) com erro"
+    },
+    "browser": {
+      "subtitle": "Consulte e baixe os arquivos gravados no volume de processamento.",
+      "folder": "Pasta",
+      "empty": "Nenhum arquivo encontrado nessa pasta.",
+      "folders": {
+        "input": "Entrada (input)",
+        "processed": "Processados",
+        "error": "Erro",
+        "duplicate": "Duplicados",
+        "invalidFile": "Inválidos",
+        "log": "Log (ERP)"
+      },
+      "columns": {
+        "name": "Nome",
+        "size": "Tamanho",
+        "lastModified": "Modificado em"
+      }
     }
   },
   "notFound": {
