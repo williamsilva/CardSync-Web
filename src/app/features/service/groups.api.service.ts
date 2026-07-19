@@ -1,9 +1,9 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 
 import { map } from 'rxjs/operators';
 
-import { API } from '@core/api/api.config';
+import { API, APP_KEY } from '@core/api/api.config';
 import { HalPagedResponse } from '@core/api/page.model';
 import { GroupsAdvancedFilters } from '@features/filter/groups.filters';
 import { ListQueryDto } from '@shared/features/list-query/list-query.types';
@@ -40,7 +40,10 @@ export class GroupsApiService {
 
   getAll() {
     return this.http
-      .get<GroupApiModel[]>(`${this.baseUrl}/options`, { withCredentials: true })
+      .get<GroupApiModel[]>(`${this.baseUrl}/options`, {
+        withCredentials: true,
+        params: new HttpParams().set('appKey', APP_KEY),
+      })
       .pipe(map((res) => mapGroupApiModels(Array.isArray(res) ? res : [])));
   }
 
