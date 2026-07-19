@@ -53,7 +53,11 @@ export class ReconciliationActionsComponent {
   protected readonly comparison = computed(() => this.dashboard()?.erpVsAcquirer ?? null);
 
   protected readonly canProcess = computed(() =>
-    this.perms.hasSupportOr(PERMISSIONS.FILE_PROCESSING.PROCESS),
+    this.perms.hasSupportOrAny(
+      PERMISSIONS.CONCILIATION.PIPELINE_PROCESS,
+      PERMISSIONS.CONCILIATION.WAITING_PROCESS,
+      PERMISSIONS.CONCILIATION.BANK_ACQUIRER_PROCESS,
+    ),
   );
 
   // loading flags

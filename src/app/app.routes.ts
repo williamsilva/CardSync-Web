@@ -60,6 +60,12 @@ export const appRoutes: Routes = [
       {
         path: 'dashboard',
         title: 'routes.dashboard.title',
+        canActivate: [permissionGuard],
+        data: {
+          requireAll: false,
+          redirectTo: '/forbidden',
+          permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.MANAGEMENT.DASHBOARD_AUDIT_VIEW],
+        },
         loadComponent: () =>
           import('./features/dashboard/audit/audit-dashboard.component').then(
             (m) => m.AuditDashboardComponent,
@@ -69,6 +75,12 @@ export const appRoutes: Routes = [
       {
         path: 'dashboard/management',
         title: 'routes.managementDashboard.title',
+        canActivate: [permissionGuard],
+        data: {
+          requireAll: false,
+          redirectTo: '/forbidden',
+          permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.MANAGEMENT.DASHBOARD_VIEW],
+        },
         loadComponent: () =>
           import('./features/dashboard/management/management-dashboard.component').then(
             (m) => m.ManagementDashboardComponent,

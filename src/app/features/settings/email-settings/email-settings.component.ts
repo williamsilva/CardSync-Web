@@ -59,8 +59,14 @@ export class EmailSettingsComponent {
   protected readonly loading = signal(false);
   protected readonly implOptions = EMAIL_IMPL_OPTIONS;
 
+  // O backend nunca devolve o segredo real (só uma versão mascarada, ex. "••••••1234") —
+  // guarda o valor mascarado carregado pra saber, no save(), se o usuário realmente digitou
+  // um valor novo ou só deixou o placeholder mascarado como veio.
+  private loadedBrevoApiKeyMask = '';
+  private loadedSmtpPasswordMask = '';
+
   protected readonly canEdit = computed(() =>
-    this.perms.hasSupportOr(PERMISSIONS.FILE_PROCESSING.PROCESS),
+    this.perms.hasSupportOr(PERMISSIONS.SETTINGS.EMAIL_CHANGE),
   );
 
   readonly form = this.fb.group({
@@ -93,6 +99,8 @@ export class EmailSettingsComponent {
     this.loading.set(true);
     this.service.getSettings().subscribe({
       next: (s) => {
+        this.loadedBrevoApiKeyMask = s.brevoApiKey ?? '';
+        this.loadedSmtpPasswordMask = s.smtpPassword ?? '';
         this.form.patchValue({
           impl: s.impl ?? 'FAKE',
           fromName: s.fromName ?? '',
@@ -124,13 +132,20 @@ export class EmailSettingsComponent {
     if (this.form.invalid) return;
 
     const v = this.form.getRawValue();
+    // Só envia brevoApiKey/smtpPassword se o usuário realmente digitou algo diferente do
+    // placeholder mascarado carregado — senão o backend manteria o segredo atual (ver
+    // EmailSettingsService.update()), mas aqui evitamos até mandar o texto mascarado à toa.
+    const brevoApiKey = v.brevoApiKey && v.brevoApiKey !== this.loadedBrevoApiKeyMask ? v.brevoApiKey : null;
+    const smtpPassword =
+      v.smtpPassword && v.smtpPassword !== this.loadedSmtpPasswordMask ? v.smtpPassword : null;
+
     this.saving.set(true);
     this.service
       .updateSettings({
         impl: v.impl ?? 'FAKE',
         fromName: v.fromName ?? '',
         fromEmail: v.fromEmail ?? '',
-        brevoApiKey: v.brevoApiKey || null,
+        brevoApiKey,
         brevoBaseUrl: v.brevoBaseUrl || null,
         brevoPort: v.brevoPort ?? null,
         brevoUsername: v.brevoUsername || null,
@@ -138,14 +153,20 @@ export class EmailSettingsComponent {
         smtpHost: v.smtpHost || null,
         smtpPort: v.smtpPort ?? null,
         smtpUsername: v.smtpUsername || null,
-        smtpPassword: v.smtpPassword || null,
+        smtpPassword,
         smtpAuth: v.smtpAuth ?? null,
         smtpStarttls: v.smtpStarttls ?? null,
         smtpSsl: v.smtpSsl ?? null,
       })
       .subscribe({
-        next: () => {
+        next: (updated) => {
           this.saving.set(false);
+          this.loadedBrevoApiKeyMask = updated.brevoApiKey ?? '';
+          this.loadedSmtpPasswordMask = updated.smtpPassword ?? '';
+          this.form.patchValue({
+            brevoApiKey: this.loadedBrevoApiKeyMask,
+            smtpPassword: this.loadedSmtpPasswordMask,
+          });
           this.toast.add({
             severity: 'success',
             summary: this.i18n.tUi('common.success'),

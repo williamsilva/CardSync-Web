@@ -62,7 +62,7 @@ export class ReconciliationSettingsComponent {
   protected readonly saving = signal(false);
 
   protected readonly canEdit = computed(() =>
-    this.perms.hasSupportOr(PERMISSIONS.FILE_PROCESSING.PROCESS),
+    this.perms.hasSupportOr(PERMISSIONS.SETTINGS.RECONCILIATION_CHANGE),
   );
 
   readonly form = this.fb.group({

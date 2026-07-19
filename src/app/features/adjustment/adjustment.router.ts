@@ -3,12 +3,6 @@ import { Routes } from '@angular/router';
 import { permissionGuard } from '@core/auth/permission.guard';
 import { PERMISSIONS } from '@core/auth/permissions.constants';
 
-const defaultPermissions = [
-  PERMISSIONS.SUPPORT,
-  PERMISSIONS.COMPANIES.VIEW,
-  PERMISSIONS.ACQUIRER.VIEW,
-];
-
 export const ADJUSTMENT_ROUTES: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'tariffs' },
 
@@ -16,7 +10,11 @@ export const ADJUSTMENT_ROUTES: Routes = [
     path: 'chargeback-requests',
     title: 'routes.adjustment.chargebackRequests.title',
     canActivate: [permissionGuard],
-    data: { requireAll: false, redirectTo: '/forbidden', permissions: defaultPermissions },
+    data: {
+      requireAll: false,
+      redirectTo: '/forbidden',
+      permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.ADJUSTMENT.CHARGEBACK_REQUESTS_VIEW],
+    },
     loadComponent: () =>
       import('./chargeback-request-list/chargeback-request-list.component').then(
         (m) => m.ChargebackRequestListComponent,
@@ -27,7 +25,11 @@ export const ADJUSTMENT_ROUTES: Routes = [
     path: 'cancellation',
     title: 'routes.adjustment.cancellation.title',
     canActivate: [permissionGuard],
-    data: { requireAll: false, redirectTo: '/forbidden', permissions: defaultPermissions },
+    data: {
+      requireAll: false,
+      redirectTo: '/forbidden',
+      permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.ADJUSTMENT.CANCELLATION_VIEW],
+    },
     loadComponent: () =>
       import('./cancellation-list/cancellation-list.component').then(
         (m) => m.CancellationListComponent,
@@ -38,7 +40,11 @@ export const ADJUSTMENT_ROUTES: Routes = [
     path: 'tariffs',
     canActivate: [permissionGuard],
     title: 'routes.adjustment.tariffs.title',
-    data: { requireAll: false, redirectTo: '/forbidden', permissions: defaultPermissions },
+    data: {
+      requireAll: false,
+      redirectTo: '/forbidden',
+      permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.ADJUSTMENT.TARIFFS_VIEW],
+    },
     loadComponent: () =>
       import('./tariffs-list/tariffs-list.component').then((m) => m.TariffsListComponent),
   },
@@ -47,7 +53,11 @@ export const ADJUSTMENT_ROUTES: Routes = [
     path: 'chargebacks',
     canActivate: [permissionGuard],
     title: 'routes.adjustment.chargebacks.title',
-    data: { requireAll: false, redirectTo: '/forbidden', permissions: defaultPermissions },
+    data: {
+      requireAll: false,
+      redirectTo: '/forbidden',
+      permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.ADJUSTMENT.CHARGEBACK_ANALYSIS_VIEW],
+    },
     loadComponent: () =>
       import('./chargebacks-list/chargebacks-list.component').then(
         (m) => m.ChargebacksListComponent,

@@ -36,6 +36,12 @@ export const FILE_PROCESSING_ROUTES: Routes = [
   {
     path: 'calendar',
     title: 'Agenda de Arquivos Importados',
+    canActivate: [permissionGuard],
+    data: {
+      requireAll: false,
+      redirectTo: '/forbidden',
+      permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.COMPANIES.VIEW],
+    },
     loadComponent: () =>
       import('./imported-files-calendar/imported-files-calendar.component').then(
         (m) => m.ImportedFilesCalendarComponent,
@@ -44,6 +50,12 @@ export const FILE_PROCESSING_ROUTES: Routes = [
   {
     path: 'files',
     title: 'Arquivos Processados',
+    canActivate: [permissionGuard],
+    data: {
+      requireAll: false,
+      redirectTo: '/forbidden',
+      permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.COMPANIES.VIEW],
+    },
     loadComponent: () =>
       import('./processed-files-list/processed-files-list.component').then(
         (m) => m.ProcessedFilesListComponent,
@@ -52,6 +64,12 @@ export const FILE_PROCESSING_ROUTES: Routes = [
   {
     path: 'files/:id',
     title: 'Detalhe do Arquivo',
+    canActivate: [permissionGuard],
+    data: {
+      requireAll: false,
+      redirectTo: '/forbidden',
+      permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.COMPANIES.VIEW],
+    },
     loadComponent: () =>
       import('./file-processing-dashboard/detail/detail.component').then(
         (m) => m.ProcessedFileDetailComponent,
@@ -60,6 +78,12 @@ export const FILE_PROCESSING_ROUTES: Routes = [
   {
     path: 'schedules',
     title: 'Status do Scheduler',
+    canActivate: [permissionGuard],
+    data: {
+      requireAll: false,
+      redirectTo: '/forbidden',
+      permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.COMPANIES.VIEW],
+    },
     loadComponent: () =>
       import('./scheduler-status/scheduler-status.component').then(
         (m) => m.SchedulerStatusComponent,
@@ -92,6 +116,12 @@ export const FILE_PROCESSING_ROUTES: Routes = [
   {
     path: 'erp/pending-sales',
     title: 'Vendas ERP Pendentes',
+    canActivate: [permissionGuard],
+    data: {
+      requireAll: false,
+      redirectTo: '/forbidden',
+      permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.COMPANIES.VIEW],
+    },
     loadComponent: () =>
       import('./erp-pending-sales/erp-pending-sales.component').then(
         (m) => m.ErpPendingSalesComponent,
@@ -101,6 +131,12 @@ export const FILE_PROCESSING_ROUTES: Routes = [
   {
     path: 'rede/totalizers',
     title: 'Totalizadores Rede',
+    canActivate: [permissionGuard],
+    data: {
+      requireAll: false,
+      redirectTo: '/forbidden',
+      permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.COMPANIES.VIEW],
+    },
     loadComponent: () =>
       import('./rede-totalizers/rede-totalizers.component').then((m) => m.RedeTotalizersComponent),
   },
@@ -108,6 +144,12 @@ export const FILE_PROCESSING_ROUTES: Routes = [
   {
     path: 'divergences',
     title: 'Análise de Divergências',
+    canActivate: [permissionGuard],
+    data: {
+      requireAll: false,
+      redirectTo: '/forbidden',
+      permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.COMPANIES.VIEW],
+    },
     loadComponent: () =>
       import('./divergence-analysis/divergence-analysis.component').then(
         (m) => m.DivergenceAnalysisComponent,

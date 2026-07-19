@@ -3,19 +3,17 @@ import { Routes } from '@angular/router';
 import { permissionGuard } from '@core/auth/permission.guard';
 import { PERMISSIONS } from '@core/auth/permissions.constants';
 
-const defaultPermissions = [
-  PERMISSIONS.SUPPORT,
-  PERMISSIONS.COMPANIES.VIEW,
-  PERMISSIONS.ACQUIRER.VIEW,
-];
-
 export const CONCILIATION_ROUTES: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
   {
     path: 'dashboard',
     title: 'routes.conciliation.dashboard.title',
     canActivate: [permissionGuard],
-    data: { requireAll: false, redirectTo: '/forbidden', permissions: defaultPermissions },
+    data: {
+      requireAll: false,
+      redirectTo: '/forbidden',
+      permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.CONCILIATION.DASHBOARD_VIEW],
+    },
     loadComponent: () =>
       import('./conciliation-dashboard/conciliation-dashboard.component').then(
         (m) => m.ConciliationDashboardComponent,
@@ -26,7 +24,11 @@ export const CONCILIATION_ROUTES: Routes = [
     path: 'execution-history',
     title: 'routes.conciliation.executionHistory.title',
     canActivate: [permissionGuard],
-    data: { requireAll: false, redirectTo: '/forbidden', permissions: defaultPermissions },
+    data: {
+      requireAll: false,
+      redirectTo: '/forbidden',
+      permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.CONCILIATION.PIPELINE_VIEW],
+    },
     loadComponent: () =>
       import('./conciliation-execution-history/conciliation-execution-history.component').then(
         (m) => m.ConciliationExecutionHistoryComponent,
@@ -39,7 +41,12 @@ export const CONCILIATION_ROUTES: Routes = [
     data: {
       requireAll: false,
       redirectTo: '/forbidden',
-      permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.FILE_PROCESSING.PROCESS],
+      permissions: [
+        PERMISSIONS.SUPPORT,
+        PERMISSIONS.CONCILIATION.PIPELINE_PROCESS,
+        PERMISSIONS.CONCILIATION.WAITING_PROCESS,
+        PERMISSIONS.CONCILIATION.BANK_ACQUIRER_PROCESS,
+      ],
     },
     loadComponent: () =>
       import('./reconciliation-actions/reconciliation-actions.component').then(
@@ -58,7 +65,7 @@ export const CONCILIATION_ROUTES: Routes = [
     data: {
       requireAll: false,
       redirectTo: '/forbidden',
-      permissions: defaultPermissions,
+      permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.CONCILIATION.WAITING_VIEW],
       view: 'MISSING_ACQUIRER',
     },
     loadComponent: () =>
@@ -73,7 +80,7 @@ export const CONCILIATION_ROUTES: Routes = [
     data: {
       requireAll: false,
       redirectTo: '/forbidden',
-      permissions: defaultPermissions,
+      permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.CONCILIATION.WAITING_VIEW],
       view: 'MISSING_ERP',
     },
     loadComponent: () =>
@@ -88,7 +95,7 @@ export const CONCILIATION_ROUTES: Routes = [
     data: {
       requireAll: false,
       redirectTo: '/forbidden',
-      permissions: defaultPermissions,
+      permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.CONCILIATION.WAITING_VIEW],
       view: 'OTHER_DIVERGENCES',
     },
     loadComponent: () =>
@@ -100,7 +107,11 @@ export const CONCILIATION_ROUTES: Routes = [
     path: 'manual-sales-summary',
     title: 'routes.conciliation.manualSalesSummary.title',
     canActivate: [permissionGuard],
-    data: { requireAll: false, redirectTo: '/forbidden', permissions: defaultPermissions },
+    data: {
+      requireAll: false,
+      redirectTo: '/forbidden',
+      permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.FILE_PROCESSING.PROCESS],
+    },
     loadComponent: () =>
       import('./manual-sales-summary/manual-sales-summary.component').then(
         (m) => m.ManualSalesSummaryComponent,
@@ -133,7 +144,7 @@ export const CONCILIATION_ROUTES: Routes = [
     data: {
       requireAll: false,
       redirectTo: '/forbidden',
-      permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.FILE_PROCESSING.PROCESS],
+      permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.CONCILIATION.MANUAL_BANK_RECONCILIATION],
     },
     loadComponent: () =>
       import('./manual-bank-reconciliation/manual-bank-reconciliation.component').then(
@@ -144,7 +155,11 @@ export const CONCILIATION_ROUTES: Routes = [
     path: 'contract-audit',
     title: 'routes.conciliation.contractAudit.title',
     canActivate: [permissionGuard],
-    data: { requireAll: false, redirectTo: '/forbidden', permissions: defaultPermissions },
+    data: {
+      requireAll: false,
+      redirectTo: '/forbidden',
+      permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.CONTRACT_AUDIT.VIEW],
+    },
     loadComponent: () =>
       import('./contract-audit-list/contract-audit-list.component').then(
         (m) => m.ContractAuditListComponent,
@@ -154,7 +169,11 @@ export const CONCILIATION_ROUTES: Routes = [
     path: 'aging',
     title: 'routes.conciliation.aging.title',
     canActivate: [permissionGuard],
-    data: { requireAll: false, redirectTo: '/forbidden', permissions: defaultPermissions },
+    data: {
+      requireAll: false,
+      redirectTo: '/forbidden',
+      permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.CONCILIATION.DASHBOARD_VIEW],
+    },
     loadComponent: () =>
       import('./conciliation-aging/conciliation-aging.component').then(
         (m) => m.ConciliationAgingComponent,
