@@ -7,7 +7,16 @@ export const authGuard: CanActivateFn = async (_route, state: RouterStateSnapsho
   const auth = inject(AuthService);
   const router = inject(Router);
 
-  const ok = await auth.ensureSessionChecked();
+  let ok: boolean;
+  try {
+    ok = await auth.ensureSessionChecked();
+  } catch {
+    // Falha de transporte (não uma rejeição de autenticação real, tipo 502/timeout) - não
+    // redireciona pro /bff/login: a sessão pode continuar válida no backend, e forçar esse
+    // redirect aqui é o que causava o loop (ver comentário em AuthService.fetchMe).
+    return false;
+  }
+
   if (!ok) {
     await auth.startLogin(state.url);
     return false;

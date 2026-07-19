@@ -4,6 +4,7 @@ export interface PermissionOptionModel {
   id: string;
   name: string;
   description: string;
+  appKey: string;
 }
 
 export interface UserOptionModel {
@@ -65,6 +66,7 @@ export interface PermissionOptionApiModel {
   id: string;
   name: string;
   description?: string | null;
+  appKey?: string | null;
 }
 
 export interface UserOptionApiModel {
@@ -80,6 +82,7 @@ export function mapPermissionOptionApiModel(
     id: input.id,
     name: input.name,
     description: input.description ?? '',
+    appKey: input.appKey ?? 'cardsync',
   };
 }
 

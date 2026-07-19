@@ -1,5 +1,5 @@
 import { Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 
 import { firstValueFrom } from 'rxjs';
@@ -27,6 +27,19 @@ export class AuthService {
   }
 
   async loadMe(): Promise<BffMeResponse | null> {
+    return this.fetchMe(true);
+  }
+
+  /**
+   * @param swallowTransientErrors quando false, um erro que não seja um 401 real (ex: 502 do
+   * Railway acordando de um cold start, timeout, falha de rede) é relançado em vez de tratado
+   * como "sessão inválida". Isso importa porque tratar os dois casos igual causava um loop de
+   * redirect: o /bff/me falhava por um motivo transitório (não a sessão expirar de verdade),
+   * o guard achava que precisava relogar e mandava pro /bff/login, mas a sessão no backend
+   * ainda era válida - ele redirecionava de volta pra SPA, que checava de novo e repetia o
+   * ciclo enquanto a falha transitória persistisse (ERR_TOO_MANY_REDIRECTS em produção).
+   */
+  private async fetchMe(swallowTransientErrors: boolean): Promise<BffMeResponse | null> {
     try {
       const me = await firstValueFrom(
         this.http.get<BffMeResponse>(`${API.bff}/me`, { withCredentials: true }),
@@ -42,7 +55,13 @@ export class AuthService {
       this.meStore.setMe(null);
       this.session.stop();
       return null;
-    } catch {
+    } catch (err) {
+      const isConfirmedAuthRejection = err instanceof HttpErrorResponse && err.status === 401;
+
+      if (!isConfirmedAuthRejection && !swallowTransientErrors) {
+        throw err;
+      }
+
       this.meStore.setMe(null);
       this.session.stop();
       return null;
@@ -58,7 +77,7 @@ export class AuthService {
     if (this.meStore.isAuthenticated()) return true;
 
     if (!this.meLoadPromise) {
-      this.meLoadPromise = this.loadMe().finally(() => {
+      this.meLoadPromise = this.fetchMe(false).finally(() => {
         this.meLoadPromise = null;
       });
     }
