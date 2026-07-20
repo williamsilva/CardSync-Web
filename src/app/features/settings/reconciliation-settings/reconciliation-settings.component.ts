@@ -144,6 +144,9 @@ export class ReconciliationSettingsComponent {
         Validators.max(this.MAX_BANK_NOT_RECONCILED_DAYS),
       ],
     ],
+    flagMatchRequired: [false],
+    establishmentMatchRequired: [false],
+    paymentKindMatchRequired: [false],
     goLiveDate: [null as Date | null, [Validators.required]],
     legacyMarkingMonths: [
       12,
@@ -186,6 +189,9 @@ export class ReconciliationSettingsComponent {
           dateToleranceDaysAfter: settings.dateToleranceDaysAfter,
           valueTolerance: settings.valueTolerance,
           bankMarkNotReconciledAfterDays: settings.bankMarkNotReconciledAfterDays,
+          flagMatchRequired: settings.flagMatchRequired,
+          establishmentMatchRequired: settings.establishmentMatchRequired,
+          paymentKindMatchRequired: settings.paymentKindMatchRequired,
           goLiveDate: this.parseIsoDate(settings.goLiveDate),
           legacyMarkingMonths: settings.legacyMarkingMonths,
         });
@@ -228,6 +234,9 @@ export class ReconciliationSettingsComponent {
         dateToleranceDaysAfter: v.dateToleranceDaysAfter ?? 10,
         valueTolerance: v.valueTolerance ?? 0.05,
         bankMarkNotReconciledAfterDays: v.bankMarkNotReconciledAfterDays ?? 3,
+        flagMatchRequired: v.flagMatchRequired ?? false,
+        establishmentMatchRequired: v.establishmentMatchRequired ?? false,
+        paymentKindMatchRequired: v.paymentKindMatchRequired ?? false,
         goLiveDate: this.formatIsoDate(v.goLiveDate) ?? '2024-07-01',
         legacyMarkingMonths: v.legacyMarkingMonths ?? 12,
       })

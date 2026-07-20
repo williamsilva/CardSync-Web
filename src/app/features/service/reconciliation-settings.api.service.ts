@@ -30,6 +30,10 @@ export interface ReconciliationSettingsModel {
   dateToleranceDaysAfter: number;
   valueTolerance: number;
   bankMarkNotReconciledAfterDays: number;
+  // Rigidez do matching Banco x Ordem de Crédito / Parcela (Etapa 7)
+  flagMatchRequired: boolean;
+  establishmentMatchRequired: boolean;
+  paymentKindMatchRequired: boolean;
   // Implantação e marcação de lançamentos como legado
   goLiveDate: string | null;
   legacyMarkingMonths: number;
@@ -63,6 +67,10 @@ export interface ReconciliationSettingsRequest {
   dateToleranceDaysAfter: number;
   valueTolerance: number;
   bankMarkNotReconciledAfterDays: number;
+  // Rigidez do matching Banco x Ordem de Crédito / Parcela (Etapa 7)
+  flagMatchRequired: boolean;
+  establishmentMatchRequired: boolean;
+  paymentKindMatchRequired: boolean;
   // Implantação e marcação de lançamentos como legado
   goLiveDate: string;
   legacyMarkingMonths: number;

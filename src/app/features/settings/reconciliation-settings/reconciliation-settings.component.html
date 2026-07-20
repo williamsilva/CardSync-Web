@@ -542,6 +542,82 @@
       </div>
     </div>
 
+    <p-divider></p-divider>
+
+    <!-- Rigidez do Matching (Etapa 7) -->
+    <div class="flex align-items-center gap-2 mb-2">
+      <span class="text-sm font-semibold">{{
+        'conciliation.settings.strictMatchingTitle' | translate
+      }}</span>
+      <i
+        tooltipPosition="right"
+        [pTooltip]="'conciliation.settings.strictMatchingSubtitle' | translate"
+        class="pi pi-info-circle text-color-secondary text-sm cursor-pointer"
+      ></i>
+    </div>
+
+    <div class="grid formgrid gap-0">
+      <div class="col-12 md:col-4 p-2">
+        <div
+          class="flex align-items-center justify-content-between border-1 surface-border border-round p-3 h-full gap-3"
+        >
+          <label for="flagMatchRequired" class="text-sm flex-1">
+            {{ 'conciliation.settings.flagMatchRequired' | translate }}
+            <i
+              tooltipPosition="top"
+              style="pointer-events: auto"
+              class="pi pi-info-circle text-xs ml-1 text-color-secondary cursor-pointer"
+              [pTooltip]="'conciliation.settings.flagMatchRequiredHint' | translate"
+            ></i>
+          </label>
+          <p-toggleswitch
+            formControlName="flagMatchRequired"
+            inputId="flagMatchRequired"
+          ></p-toggleswitch>
+        </div>
+      </div>
+
+      <div class="col-12 md:col-4 p-2">
+        <div
+          class="flex align-items-center justify-content-between border-1 surface-border border-round p-3 h-full gap-3"
+        >
+          <label for="establishmentMatchRequired" class="text-sm flex-1">
+            {{ 'conciliation.settings.establishmentMatchRequired' | translate }}
+            <i
+              tooltipPosition="top"
+              style="pointer-events: auto"
+              class="pi pi-info-circle text-xs ml-1 text-color-secondary cursor-pointer"
+              [pTooltip]="'conciliation.settings.establishmentMatchRequiredHint' | translate"
+            ></i>
+          </label>
+          <p-toggleswitch
+            formControlName="establishmentMatchRequired"
+            inputId="establishmentMatchRequired"
+          ></p-toggleswitch>
+        </div>
+      </div>
+
+      <div class="col-12 md:col-4 p-2">
+        <div
+          class="flex align-items-center justify-content-between border-1 surface-border border-round p-3 h-full gap-3"
+        >
+          <label for="paymentKindMatchRequired" class="text-sm flex-1">
+            {{ 'conciliation.settings.paymentKindMatchRequired' | translate }}
+            <i
+              tooltipPosition="top"
+              style="pointer-events: auto"
+              class="pi pi-info-circle text-xs ml-1 text-color-secondary cursor-pointer"
+              [pTooltip]="'conciliation.settings.paymentKindMatchRequiredHint' | translate"
+            ></i>
+          </label>
+          <p-toggleswitch
+            formControlName="paymentKindMatchRequired"
+            inputId="paymentKindMatchRequired"
+          ></p-toggleswitch>
+        </div>
+      </div>
+    </div>
+
     @if (canEdit()) {
       <div class="mt-4 px-2">
         <p-button
