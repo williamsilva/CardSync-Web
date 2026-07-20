@@ -30,8 +30,9 @@ import { StatefulListPage } from '@features/list-base/stateful-list-page';
 import { EstablishmentFacade } from '@features/facade/establishment.facade';
 import { buildListQuery } from '@shared/features/list-query/list-query.builder';
 import { allPeriodEnum, PeriodEnum, periodEnumLabel } from '@models/enums/period.enum';
-import { StatusEnum, statusEnumLabel, statusEnumSeverity } from '@models/enums/status.enum';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
+import { StatusEnum, statusEnumLabel, statusEnumSeverity } from '@models/enums/status.enum';
+import { createEmptyBankStatementFiltersState } from '@features/filter/bank-statement.filters';
 import { CsColumnFilterShellComponent } from '@features/list-base/cs-column-filter-shell.component';
 import { CsAdvancedTextFilterComponent } from '@features/list-base/cs-advanced-text-filter.component';
 import { CsAdvancedPeriodDateFilterComponent } from '@features/list-base/cs-advanced-period-date-filter.component';
@@ -82,7 +83,6 @@ import {
   SaleSummaryAdvancedFilters,
   createEmptySaleSummaryFiltersState,
 } from '@features/filter/sale-summary.filters';
-import { createEmptyBankStatementFiltersState } from '@features/filter/bank-statement.filters';
 
 @Component({
   standalone: true,
@@ -944,7 +944,10 @@ export class CreditOrderListComponent
       id: row.releaseBankId,
     };
 
-    localStorage.setItem(STATE_KEY.CARDSYNC.BANK_STATEMENT.FILTERS.V1, JSON.stringify(targetFilters));
+    localStorage.setItem(
+      STATE_KEY.CARDSYNC.BANK_STATEMENT.FILTERS.V1,
+      JSON.stringify(targetFilters),
+    );
     localStorage.removeItem(STATE_KEY.CARDSYNC.BANK_STATEMENT.TABLE.STATE.V1);
 
     this.openRouteInNewTab(['/documents/bank/bank_statement']);

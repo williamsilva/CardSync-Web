@@ -280,8 +280,8 @@
           class="col-12 md:col-6 p-1"
           [value]="releaseValueRange()"
           [endLabel]="'common.filters.final' | translate"
-          (valueChange)="onReleaseValueRangeChange($event)"
           [startLabel]="'common.filters.initial' | translate"
+          (valueChange)="onReleaseValueRangeChange($event)"
           [label]="'bankStatement.fields.releaseValue' | translate"
         ></cs-currency-range-filter>
       </div>
@@ -292,13 +292,13 @@
         stripedRows
         dataKey="id"
         size="small"
-        [rows]="rows"
         [lazy]="true"
         showGridlines
         [rowHover]="true"
         [paginator]="true"
         sortMode="multiple"
         stateStorage="local"
+        [rows]="releasesRows"
         class="cs-admin-table"
         [value]="facade.releases()"
         [showCurrentPageReport]="true"
@@ -430,18 +430,18 @@
 
         <ng-template pTemplate="body" let-row>
           <tr
+            [class.opacity-60]="!isReleaseSelectable(row)"
             [class.cs-row-selected]="isReleaseSelected(row)"
             [class.cursor-pointer]="isReleaseSelectable(row)"
             [class.cursor-not-allowed]="!isReleaseSelectable(row)"
-            [class.opacity-60]="!isReleaseSelectable(row)"
             (click)="isReleaseSelectable(row) && selectRelease(row)"
           >
             <td class="text-center" (click)="$event.stopPropagation()">
               <p-checkbox
                 [binary]="true"
-                [disabled]="!isReleaseSelectable(row)"
                 [ngModel]="isReleaseSelected(row)"
                 (ngModelChange)="selectRelease(row)"
+                [disabled]="!isReleaseSelectable(row)"
               ></p-checkbox>
             </td>
             <td class="text-center">
@@ -562,11 +562,11 @@
         stripedRows
         dataKey="id"
         size="small"
-        [rows]="rows"
         [lazy]="true"
         showGridlines
         [rowHover]="true"
         [paginator]="true"
+        [rows]="ordersRows"
         sortMode="multiple"
         stateStorage="local"
         class="cs-admin-table"

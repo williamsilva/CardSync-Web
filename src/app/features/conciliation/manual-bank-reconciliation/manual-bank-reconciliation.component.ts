@@ -157,10 +157,13 @@ export class ManualBankReconciliationComponent implements OnInit {
     STATE_KEY.CARDSYNC.CONCILIATION.MANUAL_BANK_RECONCILIATION.RELEASES_TABLE.STATE.V1;
   protected readonly ordersTableStateKey =
     STATE_KEY.CARDSYNC.CONCILIATION.MANUAL_BANK_RECONCILIATION.ORDERS_TABLE.STATE.V1;
-  private readonly tableRowsKey =
-    STATE_KEY.CARDSYNC.CONCILIATION.MANUAL_BANK_RECONCILIATION.TABLE.ROWS.V1;
+  private readonly releasesTableRowsKey =
+    STATE_KEY.CARDSYNC.CONCILIATION.MANUAL_BANK_RECONCILIATION.RELEASES_TABLE.ROWS.V1;
+  private readonly ordersTableRowsKey =
+    STATE_KEY.CARDSYNC.CONCILIATION.MANUAL_BANK_RECONCILIATION.ORDERS_TABLE.ROWS.V1;
 
-  rows = Number(localStorage.getItem(this.tableRowsKey)) || 15;
+  releasesRows = Number(localStorage.getItem(this.releasesTableRowsKey)) || 15;
+  ordersRows = Number(localStorage.getItem(this.ordersTableRowsKey)) || 15;
   readonly rowsPerPageOptions = [13, 15, 30, 50, 100];
 
   private readonly lastOrdersEvent = signal<any>(null);
@@ -380,7 +383,7 @@ export class ManualBankReconciliationComponent implements OnInit {
     if (!restored) return;
     this.lastReleasesEvent.set({
       first: restored.first ?? 0,
-      rows: this.rows,
+      rows: this.releasesRows,
       sortField: restored.sortField,
       sortOrder: restored.sortOrder,
       multiSortMeta: restored.multiSortMeta,
@@ -394,7 +397,7 @@ export class ManualBankReconciliationComponent implements OnInit {
     if (!restored) return;
     this.lastOrdersEvent.set({
       first: restored.first ?? 0,
-      rows: this.rows,
+      rows: this.ordersRows,
       sortField: restored.sortField,
       sortOrder: restored.sortOrder,
       multiSortMeta: restored.multiSortMeta,
@@ -540,13 +543,13 @@ export class ManualBankReconciliationComponent implements OnInit {
   }
 
   onReleasesPageChange(event: any): void {
-    this.rows = event.rows;
-    localStorage.setItem(this.tableRowsKey, String(this.rows));
+    this.releasesRows = event.rows;
+    localStorage.setItem(this.releasesTableRowsKey, String(this.releasesRows));
   }
 
   onOrdersPageChange(event: any): void {
-    this.rows = event.rows;
-    localStorage.setItem(this.tableRowsKey, String(this.rows));
+    this.ordersRows = event.rows;
+    localStorage.setItem(this.ordersTableRowsKey, String(this.ordersRows));
   }
 
   /**
@@ -774,8 +777,8 @@ export class ManualBankReconciliationComponent implements OnInit {
 
   private reloadReleases(): void {
     const tableQuery = mapPrimeLazyToTableQuery(
-      this.lastReleasesEvent() ?? { first: 0, rows: this.rows },
-      this.rows,
+      this.lastReleasesEvent() ?? { first: 0, rows: this.releasesRows },
+      this.releasesRows,
     );
     const query = buildListQuery<BankStatementAdvancedFilters>(
       tableQuery,
@@ -786,8 +789,8 @@ export class ManualBankReconciliationComponent implements OnInit {
 
   private reloadOrders(): void {
     const tableQuery = mapPrimeLazyToTableQuery(
-      this.lastOrdersEvent() ?? { first: 0, rows: this.rows },
-      this.rows,
+      this.lastOrdersEvent() ?? { first: 0, rows: this.ordersRows },
+      this.ordersRows,
     );
     const query = buildListQuery<CreditOrderAdvancedFilters>(
       tableQuery,

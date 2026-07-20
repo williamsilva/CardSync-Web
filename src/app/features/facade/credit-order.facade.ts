@@ -2,11 +2,15 @@ import { Injectable, inject, signal } from '@angular/core';
 
 import { finalize, Observable } from 'rxjs';
 
-import { CreditOrderApiModel, CreditOrderManualInput, CreditOrderManualResult } from '@models/credit-order.model';
 import { TransactionsTotalsModel } from '@models/transactionsTotalsModel';
 import { ListQueryDto } from '@shared/features/list-query/list-query.types';
 import { CreditOrderAdvancedFilters } from '@features/filter/credit-order.filters';
 import { CreditOrderApiService } from '@features/service/credit-order.api.service';
+import {
+  CreditOrderApiModel,
+  CreditOrderManualInput,
+  CreditOrderManualResult,
+} from '@models/credit-order.model';
 
 type LastQuery = ListQueryDto<CreditOrderAdvancedFilters>;
 
@@ -18,8 +22,8 @@ export class CreditOrderFacade {
   private readonly _loading = signal(false);
   private readonly _totalsLoading = signal(false);
 
-  private readonly _lastQuery = signal<LastQuery | null>(null);
   private readonly _data = signal<CreditOrderApiModel[]>([]);
+  private readonly _lastQuery = signal<LastQuery | null>(null);
   private readonly _totals = signal<TransactionsTotalsModel | null>(null);
 
   readonly sales = this._data.asReadonly();

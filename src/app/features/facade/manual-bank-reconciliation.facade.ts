@@ -31,9 +31,9 @@ export class ManualBankReconciliationFacade {
   private readonly _ordersTotal = signal(0);
   private readonly _ordersLoading = signal(false);
   private readonly _orders = signal<CreditOrderApiModel[]>([]);
+  private readonly _selectedOrders = signal<CreditOrderApiModel[]>([]);
   private readonly _ordersLastQuery = signal<ListQueryDto<CreditOrderAdvancedFilters> | null>(null);
 
-  private readonly _selectedOrders = signal<CreditOrderApiModel[]>([]);
   /**
    * Lançamentos bancários selecionados. Normalmente contém no máximo 1 item — a
    * conciliação manual (vínculo com ordens de crédito) exige exatamente 1. Quando
