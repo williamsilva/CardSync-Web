@@ -2187,6 +2187,14 @@
       "reprocessSalesSummaryCreditOrderHint": "Reprocesses summaries whose creditOrderStatus is already reconciled.",
       "reprocessBankAcquirer": "Step 7 — Payment Order x Bank Statement",
       "reprocessBankAcquirerHint": "Reprocesses already-paid credit orders and already-reconciled bank releases.",
+      "strictMatchingTitle": "Matching Strictness (Step 7)",
+      "strictMatchingSubtitle": "By default, flag, establishment and payment kind are optional when matching a bank release against a credit order/installment — null or unknown on either side is accepted. Turn these on to require each field and reduce wrong reconciliations.",
+      "flagMatchRequired": "Flag required",
+      "flagMatchRequiredHint": "Requires the bank release's flag and the credit order's/installment's flag to match. Today, a missing flag on either side is accepted as a wildcard.",
+      "establishmentMatchRequired": "Establishment required",
+      "establishmentMatchRequiredHint": "Requires the bank release's establishment (PV) number and the credit order's/installment's to match. Before enabling, confirm PV extraction from the CNAB file is reliable — see the impact diagnostics.",
+      "paymentKindMatchRequired": "Payment kind (debit/credit) required",
+      "paymentKindMatchRequiredHint": "Requires the bank release's payment kind (debit or credit) and the credit order's/installment's to match. Today, an unknown payment kind on either side is accepted as a wildcard.",
       "dateToleranceDaysBefore": "Days before allowed (bank)",
       "dateToleranceDaysBeforeHint": "Days a bank release can be BEFORE the credit order date. Recommended: 0 (avoids false positives).",
       "dateToleranceDaysAfter": "Days after allowed (bank)",
@@ -3161,7 +3169,10 @@
       "salesSummaryStatus": "Sales summary status",
       "statusPaymentBank": "Bank payment status",
       "periodCreditOrderDate": "Credit order date period",
-      "releaseValueShort": "Release"
+      "releaseValueShort": "Release",
+      "paymentDate": "Payment date",
+      "expectedPaymentDate": "Expected payment date",
+      "expectedPaymentDateShort": "Forecast"
     }
   },
   "adjustments": {

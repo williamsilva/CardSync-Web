@@ -21,13 +21,14 @@
     <ng-template pTemplate="colgroup">
       <colgroup>
         <col style="width: 80px" />
+        <col style="width: 90px" />
         <col style="width: 100px" />
+        <col style="width: 90px" />
         <col style="width: 100px" />
         <col style="width: 90px" />
+        <col style="width: 70px" />
         <col style="width: 90px" />
-        <col style="width: 90px" />
-        <col style="width: 90px" />
-        <col style="width: 90px" />
+        <col style="width: 100px" />
       </colgroup>
     </ng-template>
 
@@ -77,9 +78,19 @@
           <span
             tooltipPosition="top"
             class="cs-table-cell-ellipsis"
-            [pTooltip]="'creditOrders.fields.releaseDate' | translate"
+            [pTooltip]="'creditOrders.fields.expectedPaymentDate' | translate"
           >
-            {{ 'creditOrders.fields.releaseDate' | translate }}
+            {{ 'creditOrders.fields.expectedPaymentDateShort' | translate }}
+          </span>
+        </th>
+
+        <th class="text-center">
+          <span
+            tooltipPosition="top"
+            class="cs-table-cell-ellipsis"
+            [pTooltip]="'creditOrders.fields.paymentDate' | translate"
+          >
+            {{ 'creditOrders.fields.paymentDate' | translate }}
           </span>
         </th>
 
@@ -109,7 +120,7 @@
             tooltipPosition="top"
             [pTooltip]="'creditOrders.fields.statusPaymentBank' | translate"
           >
-            {{ 'creditOrders.fields.statusPaymentBank' | translate }}
+            {{ 'creditOrders.fields.paymentBank' | translate }}
           </span>
         </th>
       </tr>
@@ -157,6 +168,15 @@
           <span
             tooltipPosition="top"
             class="cs-table-cell-ellipsis"
+            [pTooltip]="row.releaseDate | csDate: 'date'"
+          >
+            {{ row.releaseDate | csDate: 'date' }}
+          </span>
+        </td>
+        <td class="text-center">
+          <span
+            tooltipPosition="top"
+            class="cs-table-cell-ellipsis"
             [pTooltip]="row.releasesBank?.releaseDate | csDate: 'date'"
           >
             {{ row.releasesBank?.releaseDate | csDate: 'date' }}
@@ -192,7 +212,7 @@
 
     <ng-template pTemplate="emptymessage">
       <tr>
-        <td colspan="8" class="text-center py-4 text-500">
+        <td colspan="9" class="text-center py-4 text-500">
           {{ 'pagination.emptymessage' | translate }}
         </td>
       </tr>

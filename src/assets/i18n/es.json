@@ -2187,6 +2187,14 @@
       "reprocessSalesSummaryCreditOrderHint": "Reprocesa resúmenes cuyo creditOrderStatus ya está conciliado.",
       "reprocessBankAcquirer": "Etapa 7 — Orden de Pago x Extracto Bancario",
       "reprocessBankAcquirerHint": "Reprocesa órdenes de crédito ya pagadas y lanzamientos bancarios ya conciliados.",
+      "strictMatchingTitle": "Rigidez del Matching (Etapa 7)",
+      "strictMatchingSubtitle": "Por defecto, bandera, establecimiento y modalidad son opcionales al emparejar un lanzamiento bancario con una orden de crédito/cuota — nulo o desconocido en cualquier lado se acepta. Actívelos para exigir cada campo y reducir conciliaciones incorrectas.",
+      "flagMatchRequired": "Bandera obligatoria",
+      "flagMatchRequiredHint": "Exige que la bandera del lanzamiento bancario y de la orden de crédito/cuota coincidan. Hoy, una bandera ausente en cualquier lado se acepta como comodín.",
+      "establishmentMatchRequired": "Establecimiento obligatorio",
+      "establishmentMatchRequiredHint": "Exige que el número de establecimiento (PV) del lanzamiento bancario y de la orden de crédito/cuota coincidan. Antes de activar, confirme que la extracción del PV desde el CNAB es confiable — vea el diagnóstico de impacto.",
+      "paymentKindMatchRequired": "Modalidad (débito/crédito) obligatoria",
+      "paymentKindMatchRequiredHint": "Exige que la modalidad (débito o crédito) del lanzamiento bancario y de la orden de crédito/cuota coincidan. Hoy, una modalidad desconocida en cualquier lado se acepta como comodín.",
       "dateToleranceDaysBefore": "Días anteriores permitidos (banco)",
       "dateToleranceDaysBeforeHint": "Días que el lanzamiento bancario puede ser ANTERIOR a la orden de crédito. Recomendado: 0 (evita falsos positivos).",
       "dateToleranceDaysAfter": "Días posteriores permitidos (banco)",
@@ -3161,7 +3169,10 @@
       "salesSummaryStatus": "Estado resumen ventas",
       "statusPaymentBank": "Estado pago banco",
       "periodCreditOrderDate": "Período orden crédito",
-      "releaseValueShort": "Lanzamiento"
+      "releaseValueShort": "Lanzamiento",
+      "paymentDate": "Fecha de pago",
+      "expectedPaymentDate": "Fecha prevista de pago",
+      "expectedPaymentDateShort": "Previsión"
     }
   },
   "adjustments": {

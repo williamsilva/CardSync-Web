@@ -1231,6 +1231,9 @@ export const UI_KEYS = {
       periodReleaseDate: 'creditOrders.fields.periodReleaseDate',
       salesSummaryStatus: 'creditOrders.fields.salesSummaryStatus',
       periodCreditOrderDate: 'creditOrders.fields.periodCreditOrderDate',
+      paymentDate: 'creditOrders.fields.paymentDate',
+      expectedPaymentDate: 'creditOrders.fields.expectedPaymentDate',
+      expectedPaymentDateShort: 'creditOrders.fields.expectedPaymentDateShort',
     },
   },
   enum: {

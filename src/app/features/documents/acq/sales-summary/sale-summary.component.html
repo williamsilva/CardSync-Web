@@ -1356,7 +1356,7 @@
                 text
                 pButton
                 type="button"
-                icon="pi pi-wallet"
+                [icon]="'pi pi-wallet ' + creditOrdersIconClass(row.statusPaymentBank)"
                 class="p-button-text p-button-sm"
                 (click)="toggleCreditOrders(row)"
                 [pTooltip]="'common.viewCreditOrders' | translate"

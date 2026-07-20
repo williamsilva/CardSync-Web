@@ -1916,7 +1916,10 @@
       "periodRvDate": "Período Resumo de Vendas",
       "salesSummaryStatus": "Status Resumo Vendas",
       "statusPaymentBank": "Status Pagamento Banco",
-      "periodCreditOrderDate": "Período Ordem Crédito"
+      "periodCreditOrderDate": "Período Ordem Crédito",
+      "paymentDate": "Data Pagamento",
+      "expectedPaymentDate": "Data Prevista Pagamento",
+      "expectedPaymentDateShort": "Previsão"
     }
   },
   "adjustments": {
@@ -2605,6 +2608,14 @@
       "reprocessSalesSummaryCreditOrderHint": "Reprocessa resumos com creditOrderStatus já conciliado.",
       "reprocessBankAcquirer": "Etapa 7 — Ordem de Pagamento x Banco",
       "reprocessBankAcquirerHint": "Reprocessa ordens de crédito já pagas e lançamentos bancários já conciliados.",
+      "strictMatchingTitle": "Rigidez do Matching (Etapa 7)",
+      "strictMatchingSubtitle": "Por padrão, bandeira, estabelecimento e modalidade são opcionais no casamento entre lançamento bancário e ordem de crédito/parcela — nulo ou desconhecido em qualquer lado é aceito. Ligue aqui para exigir cada campo e reduzir conciliações erradas.",
+      "flagMatchRequired": "Bandeira obrigatória",
+      "flagMatchRequiredHint": "Exige que a bandeira do lançamento bancário e da ordem de crédito/parcela sejam iguais. Hoje, bandeira ausente em qualquer lado é aceita como coringa.",
+      "establishmentMatchRequired": "Estabelecimento obrigatório",
+      "establishmentMatchRequiredHint": "Exige que o número de estabelecimento (PV) do lançamento bancário e da ordem de crédito/parcela sejam iguais. Antes de ligar, confirme que a extração do PV a partir do CNAB está confiável — veja o diagnóstico de impacto.",
+      "paymentKindMatchRequired": "Modalidade (débito/crédito) obrigatória",
+      "paymentKindMatchRequiredHint": "Exige que a modalidade (débito ou crédito) do lançamento bancário e da ordem de crédito/parcela sejam iguais. Hoje, modalidade desconhecida em qualquer lado é aceita como coringa.",
       "dateToleranceDaysBefore": "Dias anteriores permitidos (banco)",
       "dateToleranceDaysBeforeHint": "Dias que o lançamento bancário pode ser ANTERIOR à ordem de crédito. Recomendado: 0 (evita falsos positivos).",
       "dateToleranceDaysAfter": "Dias posteriores permitidos (banco)",

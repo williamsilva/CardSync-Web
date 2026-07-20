@@ -46,3 +46,7 @@ export function tagPropsFromTone(tone: CsTagTone | null | undefined): CsTagProps
 function isPrimeSeverity(tone: CsTagTone | null | undefined): tone is CsTagSeverity {
   return !!tone && PRIME_SEVERITIES.includes(tone as CsTagSeverity);
 }
+
+export function iconClassFromTone(tone: CsTagTone | null | undefined): string {
+  return `cs-icon-tone-${tone ?? 'secondary'}`;
+}

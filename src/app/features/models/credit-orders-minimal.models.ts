@@ -1,5 +1,24 @@
+export interface CreditOrdersReleasesBankMinimalModel {
+  id: string;
+  releaseDate: string | null;
+}
+
 export interface CreditOrdersMinimalModel {
+  id: string;
+  creditOrderNumber: number;
+  installmentTotal: number;
   installmentNumber: number;
+
+  statusPaymentBank: string | null;
+  salesSummaryStatus: string | null;
+
+  releaseDate: string | null;
+  creditOrderDate: string | null;
+
+  grossRvValue: number | null;
+  releaseValue: number | null;
+
+  releasesBank: CreditOrdersReleasesBankMinimalModel | null;
 }
 
 export interface CreditOrdersMinimalCreateInput {}
@@ -11,7 +30,21 @@ export interface CreditOrdersMinimalUpdateInput {}
  * Aceita status numérico ou string para tolerar mudanças no backend.
  */
 export interface CreditOrdersMinimalApiModel {
+  id: string;
+  creditOrderNumber: number;
+  installmentTotal: number;
   installmentNumber: number;
+
+  statusPaymentBank: string | null;
+  salesSummaryStatus: string | null;
+
+  releaseDate: string | null;
+  creditOrderDate: string | null;
+
+  grossRvValue: number | null;
+  releaseValue: number | null;
+
+  releasesBank: CreditOrdersReleasesBankMinimalModel | null;
 }
 
 export function mapCreditOrdersMinimalApiModel(

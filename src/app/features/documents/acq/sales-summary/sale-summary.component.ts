@@ -15,7 +15,7 @@ import { Table, TableModule } from 'primeng/table';
 import { InputTextModule } from 'primeng/inputtext';
 import { TranslateModule } from '@ngx-translate/core';
 
-import { CsTagTone, CsTagComponent } from '@shared/ui';
+import { CsTagTone, CsTagComponent, iconClassFromTone } from '@shared/ui';
 import { I18nService } from '@core/i18n/i18n.service';
 import { CsDatePipe } from '@shared/pipes/cs-date.pipe';
 import { STATE_KEY } from '@features/state-key.constants';
@@ -290,6 +290,10 @@ export class SaleSummaryListComponent
 
   statusPaymentBankSeverity(value: StatusPaymentBankEnum | null): CsTagTone {
     return statusPaymentBankEnumSeverity(value);
+  }
+
+  creditOrdersIconClass(value: StatusPaymentBankEnum | null): string {
+    return iconClassFromTone(this.statusPaymentBankSeverity(value));
   }
 
   modalityLabel(value: ModalityEnum | null): string {
