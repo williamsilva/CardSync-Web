@@ -127,6 +127,9 @@
       },
       "email": {
         "title": "E-mail"
+      },
+      "backup": {
+        "title": "Backup"
       }
     },
     "transactions": {
@@ -285,7 +288,8 @@
       "title": "Configuraciones",
       "email": "E-mail",
       "scheduler": "Programación",
-      "reconciliation": "Conciliación"
+      "reconciliation": "Conciliación",
+      "backup": "Backup"
     },
     "file": {
       "processing": {
@@ -3314,6 +3318,20 @@
       "smtpStarttlsHint": "Habilita la actualización de la conexión a TLS mediante STARTTLS. Recomendado para el puerto 587.",
       "smtpSsl": "SSL/TLS",
       "smtpSslHint": "Habilita conexión SSL/TLS directa. Recomendado para el puerto 465."
+    }
+  },
+  "backup": {
+    "settings": {
+      "subtitle": "Genera un backup bajo demanda de los bancos de datos y/o de la carpeta de archivos, para descarga inmediata.",
+      "targetsTitle": "Qué incluir en el backup",
+      "cardsyncDb": "Base de datos Cardsync",
+      "nimbusauthDb": "Base de datos NimbusAuth",
+      "files": "Carpeta de archivos (Volume)",
+      "executeButton": "Ejecutar Backup",
+      "executeHint": "Puede demorar algunos minutos, según el tamaño de los bancos de datos y de la carpeta de archivos. No cierre esta página mientras el backup esté en curso.",
+      "noSelection": "Seleccione al menos un elemento para incluir en el backup.",
+      "executed": "Backup generado con éxito — la descarga debería comenzar automáticamente.",
+      "executeError": "No fue posible generar el backup. Intente nuevamente."
     }
   },
   "scheduler": {

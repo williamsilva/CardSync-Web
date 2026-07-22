@@ -100,7 +100,7 @@ export class ManualSalesSummaryComponent implements OnInit {
   protected readonly establishmentFacade = inject(EstablishmentFacade);
 
   protected readonly saving = signal(false);
-  protected readonly importMode = signal<'manual' | 'csv'>('manual');
+  protected readonly importMode = signal<'manual' | 'csv'>('csv');
 
   protected readonly csvParsing = signal(false);
   protected readonly csvSubmitting = signal(false);

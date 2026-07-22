@@ -127,6 +127,9 @@
       },
       "email": {
         "title": "E-mail"
+      },
+      "backup": {
+        "title": "Backup"
       }
     },
     "transactions": {
@@ -285,7 +288,8 @@
       "title": "Settings",
       "email": "E-mail",
       "scheduler": "Scheduler",
-      "reconciliation": "Reconciliation"
+      "reconciliation": "Reconciliation",
+      "backup": "Backup"
     },
     "file": {
       "processing": {
@@ -3314,6 +3318,20 @@
       "smtpSslHint": "Enables direct SSL/TLS connection. Recommended for port 465.",
       "saved": "Email settings saved successfully.",
       "saveError": "Could not save email settings."
+    }
+  },
+  "backup": {
+    "settings": {
+      "subtitle": "Generates an on-demand backup of the databases and/or the files folder, for immediate download.",
+      "targetsTitle": "What to include in the backup",
+      "cardsyncDb": "Cardsync database",
+      "nimbusauthDb": "NimbusAuth database",
+      "files": "Files folder (Volume)",
+      "executeButton": "Run Backup",
+      "executeHint": "May take a few minutes depending on the size of the databases and files folder. Do not close this page while the backup is running.",
+      "noSelection": "Select at least one item to include in the backup.",
+      "executed": "Backup generated successfully — the download should start automatically.",
+      "executeError": "Could not generate the backup. Please try again."
     }
   },
   "scheduler": {

@@ -24,7 +24,14 @@ export class GroupsApiService {
   private readonly baseUrl = `${API.bff}/v1/groups`;
 
   searchPaged(body: ListQueryDto<GroupsAdvancedFilters>) {
-    return this.http.post<HalPagedResponse<GroupApiModel>>(`${this.baseUrl}/search`, body).pipe(
+    // appKey é sempre fixado aqui (nunca escolhido pelo usuário) — a tela de grupos do Cardsync
+    // não deve listar grupos de outros apps Nimbus (ex.: NimbusFlow), mesmo que o catálogo de
+    // grupos seja compartilhado no NimbusAuth.
+    const scopedBody: ListQueryDto<GroupsAdvancedFilters> = {
+      ...body,
+      advanced: { ...body.advanced, appKey: APP_KEY },
+    };
+    return this.http.post<HalPagedResponse<GroupApiModel>>(`${this.baseUrl}/search`, scopedBody).pipe(
       map((res) => {
         const content = mapGroupApiModels(res?._embedded?.content);
         return {

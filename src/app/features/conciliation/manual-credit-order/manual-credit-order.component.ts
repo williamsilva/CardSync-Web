@@ -13,9 +13,9 @@ import { Card } from 'primeng/card';
 import { I18nService } from '@core/i18n/i18n.service';
 import { CsTagComponent, CsTagTone } from '@shared/ui';
 import { CsDatePipe } from '@shared/pipes/cs-date.pipe';
-import { CsDocumentPipe } from '@shared/pipes/cs-document.pipe';
 import { STATE_KEY } from '@features/state-key.constants';
 import { FlagFacade } from '@features/facade/flag.facade';
+import { CsDocumentPipe } from '@shared/pipes/cs-document.pipe';
 import { CompanyFacade } from '@features/facade/company.facade';
 import { AcquirerFacade } from '@features/facade/acquirer.facade';
 import { StatefulListPage } from '@features/list-base/stateful-list-page';
@@ -26,6 +26,7 @@ import { SaleSummaryAdvancedFilters } from '@features/filter/sale-summary.filter
 import { CreditOrderApiService } from '@features/service/credit-order.api.service';
 import { ManualCreditOrderFacade } from '@features/facade/manual-credit-order.facade';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
+import { StatusEnum, statusEnumLabel, statusEnumSeverity } from '@models/enums/status.enum';
 import { CsColumnFilterShellComponent } from '@features/list-base/cs-column-filter-shell.component';
 import { CsAdvancedTextFilterComponent } from '@features/list-base/cs-advanced-text-filter.component';
 import { CsAdvancedMultiselectFilterComponent } from '@features/list-base/cs-advanced-multiselect-filter.component';
@@ -55,7 +56,6 @@ import {
   statusReconciliationEnumSeverity,
   allStatusReconciliationManualCreditEnum,
 } from '@models/enums/status-reconciliation.enum';
-import { StatusEnum, statusEnumLabel, statusEnumSeverity } from '@models/enums/status.enum';
 
 @Component({
   standalone: true,

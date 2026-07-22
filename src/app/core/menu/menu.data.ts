@@ -436,6 +436,13 @@ export const APP_MENU: AppMenuItem[] = [
         icon: 'pi pi-envelope text-slate-400',
         permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.SETTINGS.EMAIL_VIEW],
       },
+      {
+        exact: false,
+        route: '/settings/backup',
+        labelKey: 'menu.settings.backup',
+        icon: 'pi pi-database text-slate-400',
+        permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.SETTINGS.BACKUP_PROCESS],
+      },
     ],
   },
 ];

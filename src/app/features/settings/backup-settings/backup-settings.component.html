@@ -1,0 +1,63 @@
+<cs-page-header
+  [subtitle]="'backup.settings.subtitle' | translate"
+  [breadcrumb]="[
+    { label: ('menu.settings.title' | translate), url: '/settings' },
+    { label: ('routes.settings.backup.title' | translate) },
+  ]"
+></cs-page-header>
+
+<p-card class="mt-2 block">
+  <h3 class="mt-0 mb-3 text-base font-semibold">
+    {{ 'backup.settings.targetsTitle' | translate }}
+  </h3>
+
+  <div class="flex flex-column gap-3 mb-4">
+    <div class="flex align-items-center gap-2">
+      <p-checkbox
+        inputId="target-cardsync-db"
+        [(ngModel)]="selectedTargets"
+        value="CARDSYNC_DB"
+        name="targets"
+        [disabled]="!canExecute() || running()"
+      ></p-checkbox>
+      <label for="target-cardsync-db">{{ 'backup.settings.cardsyncDb' | translate }}</label>
+    </div>
+
+    <div class="flex align-items-center gap-2">
+      <p-checkbox
+        inputId="target-nimbusauth-db"
+        [(ngModel)]="selectedTargets"
+        value="NIMBUSAUTH_DB"
+        name="targets"
+        [disabled]="!canExecute() || running()"
+      ></p-checkbox>
+      <label for="target-nimbusauth-db">{{ 'backup.settings.nimbusauthDb' | translate }}</label>
+    </div>
+
+    <div class="flex align-items-center gap-2">
+      <p-checkbox
+        inputId="target-files"
+        [(ngModel)]="selectedTargets"
+        value="FILES"
+        name="targets"
+        [disabled]="!canExecute() || running()"
+      ></p-checkbox>
+      <label for="target-files">{{ 'backup.settings.files' | translate }}</label>
+    </div>
+  </div>
+
+  <p class="text-sm text-color-secondary mb-4">
+    <i class="pi pi-info-circle mr-1"></i>
+    {{ 'backup.settings.executeHint' | translate }}
+  </p>
+
+  @if (canExecute()) {
+    <p-button
+      icon="pi pi-download"
+      [loading]="running()"
+      [label]="'backup.settings.executeButton' | translate"
+      [disabled]="selectedTargets.length === 0"
+      (onClick)="execute()"
+    ></p-button>
+  }
+</p-card>

@@ -122,6 +122,9 @@
       },
       "email": {
         "title": "E-mail"
+      },
+      "backup": {
+        "title": "Backup"
       }
     },
     "transactions": {
@@ -282,7 +285,8 @@
       "title": "Configurações",
       "email": "E-mail",
       "scheduler": "Agendamento",
-      "reconciliation": "Conciliação"
+      "reconciliation": "Conciliação",
+      "backup": "Backup"
     },
     "file": {
       "processing": {
@@ -3288,6 +3292,20 @@
       "smtpSslHint": "Habilita conexão SSL/TLS direta. Recomendado para a porta 465.",
       "saved": "Configurações de e-mail salvas com sucesso.",
       "saveError": "Não foi possível salvar as configurações de e-mail."
+    }
+  },
+  "backup": {
+    "settings": {
+      "subtitle": "Gera um backup sob demanda dos bancos e/ou da pasta de arquivos, para download imediato.",
+      "targetsTitle": "O que incluir no backup",
+      "cardsyncDb": "Banco de dados Cardsync",
+      "nimbusauthDb": "Banco de dados NimbusAuth",
+      "files": "Pasta de arquivos (Volume)",
+      "executeButton": "Executar Backup",
+      "executeHint": "Pode demorar alguns minutos, dependendo do tamanho dos bancos e da pasta de arquivos. Não feche esta página enquanto o backup estiver em andamento.",
+      "noSelection": "Selecione ao menos um item para incluir no backup.",
+      "executed": "Backup gerado com sucesso — o download deve começar automaticamente.",
+      "executeError": "Não foi possível gerar o backup. Tente novamente."
     }
   },
   "scheduler": {

@@ -118,6 +118,7 @@ export const UI_KEYS = {
       email: 'menu.settings.email',
       scheduler: 'menu.settings.scheduler',
       reconciliation: 'menu.settings.reconciliation',
+      backup: 'menu.settings.backup',
     },
     reconciliation: 'menu.reconciliation',
   },
@@ -1602,6 +1603,13 @@ export const UI_KEYS = {
     settings: {
       saved: 'email.settings.saved',
       saveError: 'email.settings.saveError',
+    },
+  },
+  backup: {
+    settings: {
+      noSelection: 'backup.settings.noSelection',
+      executed: 'backup.settings.executed',
+      executeError: 'backup.settings.executeError',
     },
   },
   validation: {
