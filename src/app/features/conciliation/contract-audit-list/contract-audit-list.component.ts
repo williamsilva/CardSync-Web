@@ -1,5 +1,5 @@
 import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+
 import { inject, signal, computed, Component, ViewChild, AfterViewInit } from '@angular/core';
 
 import { ButtonModule } from 'primeng/button';
@@ -76,7 +76,6 @@ import {
   styleUrl: './contract-audit-list.component.scss',
   templateUrl: './contract-audit-list.component.html',
   imports: [
-    CommonModule,
     CsDatePipe,
     FloatLabel,
     FormsModule,
@@ -100,8 +99,8 @@ import {
     CsCurrencyRangeFilterComponent,
     CsAdvancedPeriodDateFilterComponent,
     CsAdvancedMultiselectFilterComponent,
-    CsAdvancedFilterItemTemplateDirective,
-  ],
+    CsAdvancedFilterItemTemplateDirective
+],
 })
 export class ContractAuditListComponent
   extends StatefulListPage<ContractAuditFiltersState, ContractAuditAdvancedFilters>

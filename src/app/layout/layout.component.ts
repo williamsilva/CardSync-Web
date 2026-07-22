@@ -1,5 +1,5 @@
 import { RouterOutlet } from '@angular/router';
-import { CommonModule } from '@angular/common';
+
 import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 
 import { TopbarComponent } from './topbar/topbar.component';
@@ -13,7 +13,7 @@ import { SidebarComponent } from './sidebar/sidebar.component';
   styleUrl: './layout.component.css',
   templateUrl: './layout.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, RouterOutlet, TopbarComponent, SidebarComponent, FooterComponent],
+  imports: [RouterOutlet, TopbarComponent, SidebarComponent, FooterComponent],
 })
 export class LayoutComponent {
   private readonly layout = inject(LayoutStateService);

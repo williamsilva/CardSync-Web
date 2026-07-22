@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import {
   inject,
   OnInit,
@@ -99,7 +99,6 @@ import {
   selector: 'app-missing-erp-list',
   templateUrl: './missing-erp-list.component.html',
   imports: [
-    CommonModule,
     Select,
     Tooltip,
     Checkbox,
@@ -125,8 +124,8 @@ import {
     ErpVsAcquirerActionDialogComponent,
     CsAdvancedPeriodDateFilterComponent,
     CsAdvancedMultiselectFilterComponent,
-    CsAdvancedFilterItemTemplateDirective,
-  ],
+    CsAdvancedFilterItemTemplateDirective
+],
 })
 export class MissingErpListComponent
   extends StatefulListPage<ConciliationWaitingFiltersState, ConciliationWaitingAdvancedFilters>

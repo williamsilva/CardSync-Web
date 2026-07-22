@@ -23,12 +23,12 @@ import { CsTagComponent } from '@shared/ui';
 import { I18nService } from '@core/i18n/i18n.service';
 import { CsDatePipe } from '@shared/pipes/cs-date.pipe';
 import { onlyDigits } from '@shared/utils/document.utils';
+import { STATE_KEY } from '@features/state-key.constants';
 import { UsersFacade } from '@features/facade/users.facade';
 import { CsDocumentPipe } from '@shared/pipes/cs-document.pipe';
 import { PermissionService } from '@core/auth/permission.service';
 import { UserModel, UsersFiltersState } from '@models/users.models';
 import { UsersAdvancedFilters } from '@features/filter/users.filters';
-import { STATE_KEY } from '@features/state-key.constants';
 import { StatefulListPage } from '@features/list-base/stateful-list-page';
 import { BulkActionListPage } from '@features/list-base/bulk-action-list-page';
 import { buildListQuery } from '@shared/features/list-query/list-query.builder';
@@ -74,6 +74,7 @@ import {
     CheckboxModule,
     CsDocumentPipe,
     SkeletonModule,
+    CsTagComponent,
     InputTextModule,
     TranslateModule,
     DatePickerModule,
@@ -84,7 +85,6 @@ import {
     FiltersPanelComponent,
     DATA_TABLE_SHELL_IMPORTS,
     UsersCreateDialogComponent,
-    CsTagComponent,
   ],
 })
 export class UsersListComponent extends StatefulListPage<UsersFiltersState, UsersAdvancedFilters> {

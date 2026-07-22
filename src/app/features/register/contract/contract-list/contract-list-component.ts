@@ -1,5 +1,5 @@
 import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+
 import { AfterViewInit, Component, ViewChild, computed, inject, signal } from '@angular/core';
 
 import { Table } from 'primeng/table';
@@ -73,7 +73,6 @@ import { StatusEnum, statusEnumLabel, statusEnumSeverity } from '@models/enums/s
   selector: 'app-contract-list',
   templateUrl: './contract-list-component.html',
   imports: [
-    CommonModule,
     FloatLabel,
     CsDatePipe,
     FormsModule,
@@ -101,8 +100,8 @@ import { StatusEnum, statusEnumLabel, statusEnumSeverity } from '@models/enums/s
     CsColumnFilterTemplateDirective,
     CsAdvancedPeriodDateFilterComponent,
     CsAdvancedMultiselectFilterComponent,
-    CsAdvancedFilterItemTemplateDirective,
-  ],
+    CsAdvancedFilterItemTemplateDirective
+],
 })
 export class ContractListComponent
   extends SelectableStatefulListPage<

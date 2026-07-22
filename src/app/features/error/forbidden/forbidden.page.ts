@@ -1,4 +1,4 @@
-import { CommonModule, Location } from '@angular/common';
+import { Location } from '@angular/common';
 import { Component, computed, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
@@ -6,25 +6,25 @@ import { ButtonModule } from 'primeng/button';
 @Component({
   standalone: true,
   selector: 'cs-forbidden-page',
-  imports: [CommonModule, RouterLink, ButtonModule],
+  imports: [RouterLink, ButtonModule],
   template: `
     <div class="cs-page p-4 md:p-6">
       <div class="mx-auto max-w-2xl">
         <div
           class="cs-glass rounded-2xl p-6 md:p-8 shadow-sm border border-[var(--surface-border)]"
-        >
+          >
           <div class="flex items-start gap-4">
             <div class="cs-icon-wrap shrink-0">
               <i class="pi pi-lock text-2xl"></i>
             </div>
-
+    
             <div class="min-w-0">
               <h1 class="text-xl md:text-2xl font-semibold m-0">Acesso negado</h1>
-
+    
               <p class="mt-2 text-sm md:text-base opacity-80 leading-relaxed">
                 Você não tem permissão para acessar esta página ou executar esta ação.
               </p>
-
+    
               <div class="mt-5 flex flex-wrap gap-2">
                 <button
                   pButton
@@ -34,30 +34,32 @@ import { ButtonModule } from 'primeng/button';
                   label="Voltar"
                   (click)="goBack()"
                 ></button>
-
+    
                 <a
                   pButton
                   class="p-button-outlined"
                   icon="pi pi-home"
                   label="Ir para Home"
                   [routerLink]="['/']"
-                >
+                  >
                 </a>
               </div>
-
-              <div *ngIf="correlationId()" class="mt-5 text-xs opacity-60">
-                <span class="font-medium">Correlation ID:</span> {{ correlationId() }}
-              </div>
+    
+              @if (correlationId()) {
+                <div class="mt-5 text-xs opacity-60">
+                  <span class="font-medium">Correlation ID:</span> {{ correlationId() }}
+                </div>
+              }
             </div>
           </div>
         </div>
-
+    
         <div class="mt-4 text-xs opacity-50">
           Se você acha que isso é um erro, peça ao administrador para revisar suas permissões.
         </div>
       </div>
     </div>
-  `,
+    `,
   styles: [
     `
       .cs-page {

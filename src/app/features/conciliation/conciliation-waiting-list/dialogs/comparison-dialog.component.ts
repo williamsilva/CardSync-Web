@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 
 import { TableModule } from 'primeng/table';
@@ -24,15 +24,14 @@ import {
   templateUrl: './comparison-dialog.component.html',
   providers: [CsDatePipe, CsCurrencyPipe, CsNumberPipe],
   imports: [
-    CommonModule,
     CsDatePipe,
     TableModule,
     DialogModule,
     ButtonModule,
     CsTagComponent,
     CsCurrencyPipe,
-    TranslateModule,
-  ],
+    TranslateModule
+],
 })
 export class ErpVsAcquirerComparisonDialogComponent {
   protected readonly i18n = inject(I18nService);

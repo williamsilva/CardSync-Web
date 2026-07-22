@@ -1,5 +1,5 @@
 import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+
 import { AfterViewInit, Component, ViewChild, computed, inject, signal } from '@angular/core';
 
 import { Table } from 'primeng/table';
@@ -74,7 +74,6 @@ import {
   selector: 'app-establishment-list',
   templateUrl: './establishment-list-component.html',
   imports: [
-    CommonModule,
     FloatLabel,
     CsDatePipe,
     FormsModule,
@@ -101,8 +100,8 @@ import {
     EstablishmentCreateDialogComponent,
     CsAdvancedPeriodDateFilterComponent,
     CsAdvancedMultiselectFilterComponent,
-    CsAdvancedFilterItemTemplateDirective,
-  ],
+    CsAdvancedFilterItemTemplateDirective
+],
 })
 export class EstablishmentListComponent
   extends SelectableStatefulListPage<

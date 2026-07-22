@@ -1,6 +1,6 @@
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+
 import { Component, computed, inject, signal } from '@angular/core';
 
 import { CardModule } from 'primeng/card';
@@ -40,7 +40,6 @@ type DashboardFiltersState = {
   styleUrl: './file-processing-dashboard.component.scss',
   templateUrl: './file-processing-dashboard.component.html',
   imports: [
-    CommonModule,
     CsDatePipe,
     CardModule,
     RouterLink,
@@ -53,8 +52,8 @@ type DashboardFiltersState = {
     PageHeaderComponent,
     FiltersPanelComponent,
     CsAdvancedPeriodDateFilterComponent,
-    CsAdvancedMultiselectFilterComponent,
-  ],
+    CsAdvancedMultiselectFilterComponent
+],
 })
 export class FileProcessingDashboardComponent extends StatefulListPage<
   DashboardFiltersState,

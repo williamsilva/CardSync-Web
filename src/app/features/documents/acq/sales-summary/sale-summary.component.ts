@@ -1,6 +1,6 @@
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+
 import { AfterViewInit, Component, computed, inject, signal, ViewChild } from '@angular/core';
 
 import { Menu } from 'primeng/menu';
@@ -87,7 +87,6 @@ import {
   selector: 'app-sale-summary-list',
   templateUrl: './sale-summary.component.html',
   imports: [
-    CommonModule,
     Menu,
     Select,
     Tooltip,
@@ -111,8 +110,8 @@ import {
     CsAdvancedTextFilterComponent,
     CsAdvancedPeriodDateFilterComponent,
     CsAdvancedMultiselectFilterComponent,
-    CsAdvancedFilterItemTemplateDirective,
-  ],
+    CsAdvancedFilterItemTemplateDirective
+],
 })
 export class SaleSummaryListComponent
   extends StatefulListPage<SaleSummaryFiltersState, SaleSummaryAdvancedFilters>

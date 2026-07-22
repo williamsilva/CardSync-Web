@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { TranslateModule } from '@ngx-translate/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -44,7 +44,6 @@ import {
   selector: 'app-banking-domicile-create-dialog',
   templateUrl: './banking-domicile-create-dialog.component.html',
   imports: [
-    CommonModule,
     DialogModule,
     ButtonModule,
     SelectModule,
@@ -53,8 +52,8 @@ import {
     FloatLabelModule,
     DatePickerModule,
     ErrorMsgComponent,
-    ReactiveFormsModule,
-  ],
+    ReactiveFormsModule
+],
 })
 export class BankingDomicileCreateDialogComponent {
   visible = input.required<boolean>();

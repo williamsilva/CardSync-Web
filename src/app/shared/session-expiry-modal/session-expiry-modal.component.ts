@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, computed, DestroyRef, effect, inject, signal } from '@angular/core';
 
 import { DialogModule } from 'primeng/dialog';
@@ -13,7 +13,7 @@ import { SessionService } from '../../core/auth/session.service';
   selector: 'cs-session-expiry-modal',
   templateUrl: './sesseion-expiry-modal.html',
   styleUrls: ['./sesseion-expiry-modal.scss'],
-  imports: [CommonModule, DialogModule, ButtonModule, TranslateModule],
+  imports: [DialogModule, ButtonModule, TranslateModule],
 })
 export class SessionExpiryModalComponent {
   private readonly auth = inject(AuthService);

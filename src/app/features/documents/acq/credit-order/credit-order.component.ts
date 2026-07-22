@@ -1,6 +1,6 @@
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+
 import { AfterViewInit, Component, computed, inject, signal, ViewChild } from '@angular/core';
 
 import { Menu } from 'primeng/menu';
@@ -90,7 +90,6 @@ import {
   selector: 'app-credit-order-list',
   templateUrl: './credit-order.component.html',
   imports: [
-    CommonModule,
     Menu,
     Select,
     Tooltip,
@@ -113,8 +112,8 @@ import {
     CsCurrencyRangeFilterComponent,
     CsAdvancedPeriodDateFilterComponent,
     CsAdvancedMultiselectFilterComponent,
-    CsAdvancedFilterItemTemplateDirective,
-  ],
+    CsAdvancedFilterItemTemplateDirective
+],
 })
 export class CreditOrderListComponent
   extends StatefulListPage<CreditOrderFiltersState, CreditOrderAdvancedFilters>

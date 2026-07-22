@@ -1,5 +1,5 @@
 import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+
 import { Component, ViewChild, computed, inject, signal } from '@angular/core';
 
 import { TableModule } from 'primeng/table';
@@ -46,7 +46,6 @@ import {
   selector: 'app-flag-list',
   templateUrl: './flag-list.component.html',
   imports: [
-    CommonModule,
     FloatLabel,
     FormsModule,
     TableModule,
@@ -61,8 +60,8 @@ import {
     ConfirmDialogModule,
     PageHeaderComponent,
     FiltersPanelComponent,
-    FlagCreateDialogComponent,
-  ],
+    FlagCreateDialogComponent
+],
 })
 export class FlagListComponent extends StatefulListPage<FlagFiltersState, FlagAdvancedFilters> {
   @ViewChild(FlagTableComponent) private flagTable?: FlagTableComponent;

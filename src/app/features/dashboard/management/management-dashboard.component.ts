@@ -1,5 +1,5 @@
 import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+
 import { Component, OnInit, computed, effect, inject, signal, untracked } from '@angular/core';
 
 import { CardModule } from 'primeng/card';
@@ -57,7 +57,6 @@ interface TableTotal {
   styleUrl: './management-dashboard.component.scss',
   templateUrl: './management-dashboard.component.html',
   imports: [
-    CommonModule,
     FormsModule,
     CardModule,
     ChartModule,
@@ -72,8 +71,8 @@ interface TableTotal {
     FiltersPanelComponent,
     CsAdvancedPeriodDateFilterComponent,
     CsAdvancedMultiselectFilterComponent,
-    CsAdvancedFilterItemTemplateDirective,
-  ],
+    CsAdvancedFilterItemTemplateDirective
+],
 })
 export class ManagementDashboardComponent implements OnInit {
   private readonly service = inject(ManagementDashboardService);

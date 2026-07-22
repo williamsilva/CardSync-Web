@@ -1,6 +1,6 @@
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+
 import { AfterViewInit, Component, computed, inject, signal, ViewChild } from '@angular/core';
 
 import { Menu } from 'primeng/menu';
@@ -91,7 +91,6 @@ import {
   selector: 'app-chargeback-request-list',
   templateUrl: './chargeback-request-list.component.html',
   imports: [
-    CommonModule,
     Menu,
     Select,
     Tooltip,
@@ -112,8 +111,8 @@ import {
     CsAdvancedTextFilterComponent,
     CsAdvancedPeriodDateFilterComponent,
     CsAdvancedMultiselectFilterComponent,
-    CsAdvancedFilterItemTemplateDirective,
-  ],
+    CsAdvancedFilterItemTemplateDirective
+],
 })
 export class ChargebackRequestListComponent
   extends StatefulListPage<ChargebackRequestFiltersState, ChargebackRequestAdvancedFilters>

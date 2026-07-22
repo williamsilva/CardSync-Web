@@ -1,5 +1,5 @@
 import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+
 import { Component, computed, EventEmitter, inject, Input, Output, signal } from '@angular/core';
 
 import { FloatLabel } from 'primeng/floatlabel';
@@ -17,7 +17,7 @@ export type CsCurrencyRangeMask = 'currency' | 'decimal' | 'percent';
 @Component({
   standalone: true,
   selector: 'cs-currency-range-filter',
-  imports: [CommonModule, FormsModule, InputNumberModule, FloatLabel],
+  imports: [FormsModule, InputNumberModule, FloatLabel],
   host: {
     class: 'block',
   },

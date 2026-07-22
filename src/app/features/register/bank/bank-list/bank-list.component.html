@@ -144,21 +144,20 @@
   [lazy]="true"
   showGridlines
   [rowHover]="true"
+  [value]="banks()"
   [paginator]="true"
   sortMode="multiple"
   filterDisplay="menu"
   stateStorage="local"
-  [value]="banks()"
-  class="p-datatable-sm mt-1"
-  styleClass="cs-admin-table"
+  class="cs-admin-table"
+  [stateKey]="tableStateKey()"
   [loading]="facade.loading()"
   [showCurrentPageReport]="true"
   [totalRecords]="totalRecords()"
-  (onPage)="onPageChange($event)"
   (onLazyLoad)="onLazyLoad($event)"
   [paginatorDropdownAppendTo]="'body'"
+  (onPage)="onPageChange($event)"
   [rowsPerPageOptions]="rowsPerPageOptions"
-  [stateKey]="tableStateKey()"
   [tableStyle]="{ width: '100%', 'min-width': '64rem' }"
   [currentPageReportTemplate]="'pagination.report' | translate"
 >
@@ -361,7 +360,9 @@
             tooltipPosition="top"
             class="p-button-text p-button-sm"
             [disabled]="!secPolicy.canDeactivate(row)"
-            [pTooltip]="secPolicy.canDeactivate(row) ? ('common.deactivate' | translate) : undefined"
+            [pTooltip]="
+              secPolicy.canDeactivate(row) ? ('common.deactivate' | translate) : undefined
+            "
             (click)="confirmDeactivate(row)"
           ></button>
 

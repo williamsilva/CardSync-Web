@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { computed, DestroyRef } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -21,10 +21,8 @@ import { GroupsPermissionPolicy } from '@features/security/policy/groups-permiss
 @Component({
   standalone: true,
   selector: 'app-groups-create-dialog',
-  styleUrl: './groups-create-dialog.component.scss',
   templateUrl: './groups-create-dialog.component.html',
   imports: [
-    CommonModule,
     ToastModule,
     DialogModule,
     ButtonModule,
@@ -32,8 +30,8 @@ import { GroupsPermissionPolicy } from '@features/security/policy/groups-permiss
     TranslateModule,
     FloatLabelModule,
     ErrorMsgComponent,
-    ReactiveFormsModule,
-  ],
+    ReactiveFormsModule
+],
 })
 export class GroupsCreateDialogComponent {
   visible = input.required<boolean>();

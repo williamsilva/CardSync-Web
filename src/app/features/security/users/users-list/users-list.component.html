@@ -20,17 +20,17 @@
     type="button"
     icon="pi pi-check-circle"
     (click)="confirmActivateSelected()"
-    class="p-button-success p-button-sm"
     [disabled]="!canActivateSelected()"
+    class="p-button-success p-button-sm"
     [label]="'users.activate.selected' | translate"
   ></button>
 
   <button
     pButton
     type="button"
-    (click)="confirmDeactivateSelected()"
     icon="pi pi-ban"
     class="p-button-danger p-button-sm"
+    (click)="confirmDeactivateSelected()"
     [disabled]="!canDeactivateSelected()"
     [label]="'users.deactivate.selected' | translate"
   ></button>
@@ -58,9 +58,9 @@
   (clear)="clear()"
   (search)="search()"
   [actionsAlign]="'start'"
-  [activeFilterGroups]="activeFilterGroups()"
   [activeCount]="activeFiltersCount()"
   [title]="'common.filter' | translate"
+  [activeFilterGroups]="activeFilterGroups()"
 >
   <div class="grid formgrid gap-0 align-items-end">
     <div class="col-12 md:col-3 p-1">
@@ -79,8 +79,8 @@
     <div class="col-12 md:col-3 p-1">
       <p-floatLabel variant="on" class="w-full">
         <input
-          id="userName"
           pInputText
+          id="userName"
           [value]="userName()"
           class="w-full p-inputtext-sm"
           (input)="userName.set(($any($event.target).value ?? '').toString())"
@@ -92,8 +92,8 @@
     <div class="col-12 md:col-2 p-1">
       <p-floatLabel variant="on" class="w-full">
         <input
-          id="document"
           pInputText
+          id="document"
           csCpfCnpjMask
           [value]="document()"
           class="w-full p-inputtext-sm"
@@ -107,8 +107,8 @@
       <p-floatLabel variant="on" class="w-full">
         <p-multiSelect
           size="small"
-          [filter]="true"
           class="w-full"
+          [filter]="true"
           appendTo="body"
           inputId="status"
           [showClear]="true"
@@ -128,14 +128,14 @@
     <div class="col-12 md:col-3 p-1">
       <p-floatLabel variant="on" class="w-full">
         <p-datepicker
-          inputId="lastLoginAt"
-          class="w-full"
           size="small"
+          class="w-full"
           appendTo="body"
           [showIcon]="true"
-          [readonlyInput]="true"
+          inputId="lastLoginAt"
           selectionMode="range"
           dateFormat="dd/mm/yy"
+          [readonlyInput]="true"
           [ngModel]="lastLoginAtRange()"
           (ngModelChange)="lastLoginAtRange.set($event ?? null)"
         ></p-datepicker>
@@ -146,14 +146,14 @@
     <div class="col-12 md:col-2 p-1">
       <p-floatLabel variant="on" class="w-full">
         <p-datepicker
-          inputId="blockedUntil"
-          class="w-full"
           size="small"
+          class="w-full"
           appendTo="body"
           [showIcon]="true"
-          [readonlyInput]="true"
           selectionMode="range"
           dateFormat="dd/mm/yy"
+          inputId="blockedUntil"
+          [readonlyInput]="true"
           [ngModel]="blockedUntilRange()"
           (ngModelChange)="blockedUntilRange.set($event ?? null)"
         ></p-datepicker>
@@ -164,14 +164,14 @@
     <div class="col-12 md:col-2 p-1">
       <p-floatLabel variant="on" class="w-full">
         <p-datepicker
-          inputId="passwordExpiresAt"
-          class="w-full"
           size="small"
+          class="w-full"
           appendTo="body"
           [showIcon]="true"
-          [readonlyInput]="true"
           selectionMode="range"
           dateFormat="dd/mm/yy"
+          [readonlyInput]="true"
+          inputId="passwordExpiresAt"
           [ngModel]="passwordExpiresAtRange()"
           (ngModelChange)="passwordExpiresAtRange.set($event ?? null)"
         ></p-datepicker>
@@ -225,9 +225,11 @@
     {{ selectionModeLabel() }}
   </small>
 
-  <small class="opacity-80" *ngIf="selectedRows().length">
-    {{ 'users.selection.count' | translate: { count: selectedRows().length } }}
-  </small>
+  @if (selectedRows().length) {
+    <small class="opacity-80">
+      {{ 'users.selection.count' | translate: { count: selectedRows().length } }}
+    </small>
+  }
 </div>
 
 <p-table
@@ -244,15 +246,14 @@
   sortMode="multiple"
   filterDisplay="menu"
   stateStorage="local"
-  class="p-datatable-sm mt-1"
-  styleClass="cs-admin-table"
+  class="cs-admin-table"
   [loading]="facade.loading()"
+  [stateKey]="tableStateKey()"
   [showCurrentPageReport]="true"
   [totalRecords]="totalRecords()"
   (onPage)="onPageChange($event)"
   (onLazyLoad)="onLazyLoad($event)"
   [paginatorDropdownAppendTo]="'body'"
-  [stateKey]="tableStateKey()"
   [rowsPerPageOptions]="rowsPerPageOptions"
   [tableStyle]="{ width: '100%', 'min-width': '62rem' }"
   [currentPageReportTemplate]="'pagination.report' | translate"
@@ -276,22 +277,20 @@
   <ng-template pTemplate="header">
     <tr>
       <th class="text-center">
-        <ng-container *ngIf="selectionMode(); else selectOneHint">
+        @if (selectionMode()) {
           <p-checkbox
             [binary]="true"
             [ngModel]="headerChecked()"
             [indeterminate]="headerIndeterminate()"
             (onChange)="toggleHeaderSelection(!!$event.checked)"
           ></p-checkbox>
-        </ng-container>
-
-        <ng-template #selectOneHint>
+        } @else {
           <i
             class="pi pi-info-circle opacity-70"
             [pTooltip]="'users.selection.pickOneFirst' | translate"
             tooltipPosition="top"
           ></i>
-        </ng-template>
+        }
       </th>
 
       <th pSortableColumn="userName">
@@ -563,8 +562,8 @@
             pButton
             type="button"
             icon="pi pi-ban"
-            class="p-button-text p-button-sm"
             tooltipPosition="top"
+            class="p-button-text p-button-sm"
             [disabled]="!secPolicy.canDeactivate(row)"
             [pTooltip]="
               secPolicy.canDeactivate(row)

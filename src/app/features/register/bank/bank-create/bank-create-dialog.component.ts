@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { TranslateModule } from '@ngx-translate/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -32,7 +32,6 @@ import { StatusEnum, allStatusEnum, statusEnumLabel, normalizeStatusEnum } from 
   selector: 'app-bank-create-dialog',
   templateUrl: './bank-create-dialog.component.html',
   imports: [
-    CommonModule,
     DialogModule,
     ButtonModule,
     SelectModule,
@@ -40,8 +39,8 @@ import { StatusEnum, allStatusEnum, statusEnumLabel, normalizeStatusEnum } from 
     TranslateModule,
     FloatLabelModule,
     ErrorMsgComponent,
-    ReactiveFormsModule,
-  ],
+    ReactiveFormsModule
+],
 })
 export class BankCreateDialogComponent {
   visible = input.required<boolean>();

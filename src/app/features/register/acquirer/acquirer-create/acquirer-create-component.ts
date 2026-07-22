@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { TranslateModule } from '@ngx-translate/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -40,7 +40,6 @@ import { AcquirerCreateInput, AcquirerModel, AcquirerUpdateInput } from '@models
   selector: 'app-acquirer-create-dialog',
   templateUrl: './acquirer-create-component.html',
   imports: [
-    CommonModule,
     ToastModule,
     DialogModule,
     ButtonModule,
@@ -50,8 +49,8 @@ import { AcquirerCreateInput, AcquirerModel, AcquirerUpdateInput } from '@models
     FloatLabelModule,
     ErrorMsgComponent,
     ReactiveFormsModule,
-    CpfCnpjMaskDirective,
-  ],
+    CpfCnpjMaskDirective
+],
 })
 export class AcquirerCreateDialogComponent {
   visible = input.required<boolean>();

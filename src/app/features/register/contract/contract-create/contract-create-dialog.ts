@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
   FormGroup,
@@ -104,7 +104,6 @@ type ContractFlagFormValue = {
   styleUrl: './contract-create-dialog.scss',
   templateUrl: './contract-create-dialog.html',
   imports: [
-    CommonModule,
     ToastModule,
     DialogModule,
     ButtonModule,
@@ -118,8 +117,8 @@ type ContractFlagFormValue = {
     DatePickerModule,
     FloatLabelModule,
     ErrorMsgComponent,
-    ReactiveFormsModule,
-  ],
+    ReactiveFormsModule
+],
 })
 export class ContractCreateDialogComponent {
   readonly visible = input.required<boolean>();

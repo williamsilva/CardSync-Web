@@ -1,6 +1,6 @@
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+
 import { AfterViewInit, Component, ViewChild, computed, inject, signal } from '@angular/core';
 
 import { Menu } from 'primeng/menu';
@@ -95,7 +95,6 @@ import {
   selector: 'app-transactions-erp-installments-list',
   templateUrl: './transactions-erp-installments-list.component.html',
   imports: [
-    CommonModule,
     Menu,
     Select,
     DatePicker,
@@ -117,8 +116,8 @@ import {
     CsCurrencyRangeFilterComponent,
     CsAdvancedPeriodDateFilterComponent,
     CsAdvancedMultiselectFilterComponent,
-    CsAdvancedFilterItemTemplateDirective,
-  ],
+    CsAdvancedFilterItemTemplateDirective
+],
 })
 export class ErpInstallmentsListComponent
   extends StatefulListPage<

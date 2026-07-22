@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, ContentChild, Directive, Input, TemplateRef } from '@angular/core';
 
 import { CardModule } from 'primeng/card';
@@ -39,7 +39,7 @@ export class CsTableEmptyTpl {
 @Component({
   selector: 'cs-data-table-shell',
   standalone: true,
-  imports: [CommonModule, TableModule, CardModule],
+  imports: [TableModule, CardModule],
   templateUrl: './data-table-shell.component.html',
 })
 export class DataTableShellComponent<T extends { id?: any }> {

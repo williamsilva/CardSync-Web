@@ -24,99 +24,101 @@
     </div>
   </div>
 
-  <p-card *ngIf="lastResult() as result" styleClass="cs-result-card">
-    <div class="cs-result">
-      <div>
-        <strong>{{ result.scanned }}</strong
-        ><span>Avaliadas</span>
-      </div>
-      <div>
-        <strong>{{ result.resolved }}</strong
-        ><span>Resolvidas</span>
-      </div>
-      <div>
-        <strong>{{ result.stillPendingContract }}</strong
-        ><span>Pend. contrato</span>
-      </div>
-      <div>
-        <strong>{{ result.stillPendingBusinessContext }}</strong
-        ><span>Pend. contexto</span>
-      </div>
-      <div>
-        <strong>{{ result.errors }}</strong
-        ><span>Erros</span>
-      </div>
-    </div>
-  </p-card>
+  @if (lastResult(); as result) {
+    <p-card styleClass="cs-result-card">
+      <div class="cs-result">
+        <div>
+          <strong>{{ result.scanned }}</strong
+            ><span>Avaliadas</span>
+          </div>
+          <div>
+            <strong>{{ result.resolved }}</strong
+              ><span>Resolvidas</span>
+            </div>
+            <div>
+              <strong>{{ result.stillPendingContract }}</strong
+                ><span>Pend. contrato</span>
+              </div>
+              <div>
+                <strong>{{ result.stillPendingBusinessContext }}</strong
+                  ><span>Pend. contexto</span>
+                </div>
+                <div>
+                  <strong>{{ result.errors }}</strong
+                    ><span>Erros</span>
+                  </div>
+                </div>
+              </p-card>
+            }
 
-  <p-card>
-    <p-table
-      [value]="rows()"
-      [lazy]="true"
-      [loading]="loading()"
-      [paginator]="true"
-      [rows]="pageSize()"
-      [totalRecords]="totalRecords()"
-      [rowsPerPageOptions]="[10, 15, 25, 50]"
-      sortField="saleDate"
-      [sortOrder]="-1"
-      styleClass="p-datatable-sm"
-      (onLazyLoad)="load($event)"
-    >
-      <ng-template pTemplate="header">
-        <tr>
-          <th>Status</th>
-          <th>Venda</th>
-          <th>Origem</th>
-          <th>Contexto resolvido</th>
-          <th>Valor</th>
-          <th>Mensagem</th>
-        </tr>
-      </ng-template>
-      <ng-template pTemplate="body" let-sale>
-        <tr>
-          <td>
-            <cs-tag
-              [value]="sale.commercialStatus"
-              [tone]="commercialStatusSeverity(sale.commercialStatus)"
-            ></cs-tag>
-          </td>
-          <td>
-            <strong>{{ sale.saleDate | date: 'short' }}</strong>
-            <small
-              >NSU {{ sale.nsu || '-' }} · Aut. {{ sale.authorization || '-' }} ·
-              {{ sale.installment || 1 }}x</small
-            >
-          </td>
-          <td>
-            <strong>{{ sale.file || '-' }}</strong>
-            <small
-              >Linha {{ sale.lineNumber || '-' }} · CNPJ {{ sale.sourceCompanyCnpj || '-' }} · PV
-              {{ sale.sourceEstablishmentPvNumber || '-' }}</small
-            >
-          </td>
-          <td>
-            <strong>{{ sale.company || 'Empresa não resolvida' }}</strong>
-            <small
-              >{{ sale.establishment || 'PV não resolvido' }} · {{ sale.acquirer || '-' }} ·
-              {{ sale.flag || '-' }}</small
-            >
-          </td>
-          <td>
-            <strong>{{ formatCurrency(sale.grossValue) }}</strong>
-            <small
-              >Líquido {{ formatCurrency(sale.liquidValue) }} · Desc.
-              {{ formatCurrency(sale.discountValue) }}</small
-            >
-          </td>
-          <td class="cs-message-cell">{{ sale.commercialStatusMessage }}</td>
-        </tr>
-      </ng-template>
-      <ng-template pTemplate="emptymessage"
-        ><tr>
-          <td colspan="6">Nenhuma venda pendente encontrada.</td>
-        </tr></ng-template
-      >
-    </p-table>
-  </p-card>
-</div>
+            <p-card>
+              <p-table
+                [value]="rows()"
+                [lazy]="true"
+                [loading]="loading()"
+                [paginator]="true"
+                [rows]="pageSize()"
+                [totalRecords]="totalRecords()"
+                [rowsPerPageOptions]="[10, 15, 25, 50]"
+                sortField="saleDate"
+                [sortOrder]="-1"
+                styleClass="p-datatable-sm"
+                (onLazyLoad)="load($event)"
+                >
+                <ng-template pTemplate="header">
+                  <tr>
+                    <th>Status</th>
+                    <th>Venda</th>
+                    <th>Origem</th>
+                    <th>Contexto resolvido</th>
+                    <th>Valor</th>
+                    <th>Mensagem</th>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-sale>
+                  <tr>
+                    <td>
+                      <cs-tag
+                        [value]="sale.commercialStatus"
+                        [tone]="commercialStatusSeverity(sale.commercialStatus)"
+                      ></cs-tag>
+                    </td>
+                    <td>
+                      <strong>{{ sale.saleDate | date: 'short' }}</strong>
+                      <small
+                        >NSU {{ sale.nsu || '-' }} · Aut. {{ sale.authorization || '-' }} ·
+                        {{ sale.installment || 1 }}x</small
+                        >
+                      </td>
+                      <td>
+                        <strong>{{ sale.file || '-' }}</strong>
+                        <small
+                          >Linha {{ sale.lineNumber || '-' }} · CNPJ {{ sale.sourceCompanyCnpj || '-' }} · PV
+                          {{ sale.sourceEstablishmentPvNumber || '-' }}</small
+                          >
+                        </td>
+                        <td>
+                          <strong>{{ sale.company || 'Empresa não resolvida' }}</strong>
+                          <small
+                            >{{ sale.establishment || 'PV não resolvido' }} · {{ sale.acquirer || '-' }} ·
+                            {{ sale.flag || '-' }}</small
+                            >
+                          </td>
+                          <td>
+                            <strong>{{ formatCurrency(sale.grossValue) }}</strong>
+                            <small
+                              >Líquido {{ formatCurrency(sale.liquidValue) }} · Desc.
+                              {{ formatCurrency(sale.discountValue) }}</small
+                              >
+                            </td>
+                            <td class="cs-message-cell">{{ sale.commercialStatusMessage }}</td>
+                          </tr>
+                        </ng-template>
+                        <ng-template pTemplate="emptymessage"
+                          ><tr>
+                          <td colspan="6">Nenhuma venda pendente encontrada.</td>
+                        </tr></ng-template
+                        >
+                      </p-table>
+                    </p-card>
+                  </div>

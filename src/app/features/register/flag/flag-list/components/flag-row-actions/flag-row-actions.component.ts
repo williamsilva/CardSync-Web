@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, EventEmitter, Output, input } from '@angular/core';
 
 import { ButtonModule } from 'primeng/button';
@@ -12,7 +12,7 @@ import { FlagPermissionPolicy } from '@features/security/policy/flag-permission.
   standalone: true,
   selector: 'app-flag-row-actions',
   templateUrl: './flag-row-actions.component.html',
-  imports: [CommonModule, ButtonModule, TooltipModule, TranslateModule],
+  imports: [ButtonModule, TooltipModule, TranslateModule],
 })
 export class FlagRowActionsComponent {
   row = input.required<FlagModel>();

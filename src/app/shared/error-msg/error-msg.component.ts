@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { AbstractControl, ValidationErrors } from '@angular/forms';
 import { Component, Input, inject } from '@angular/core';
 
@@ -8,25 +8,26 @@ import { ErrorMapperService } from '../../core/errors/error-mapper.service';
 @Component({
   selector: 'app-error-msg',
   standalone: true,
-  imports: [CommonModule, TooltipModule],
+  imports: [TooltipModule],
   template: `
     <span class="cs-error-wrap">
       <label
         [attr.for]="forId || null"
         class="cs-float-label"
         [class.cs-float-label-error]="hasErrorMessage"
-      >
+        >
         {{ text }}
       </label>
-
-      <i
-        *ngIf="showTechnicalDetails && technicalMessage"
-        class="pi pi-info-circle cs-error-tech"
-        [pTooltip]="technicalMessage"
-        tooltipPosition="top"
-      ></i>
+    
+      @if (showTechnicalDetails && technicalMessage) {
+        <i
+          class="pi pi-info-circle cs-error-tech"
+          [pTooltip]="technicalMessage"
+          tooltipPosition="top"
+        ></i>
+      }
     </span>
-  `,
+    `,
   styles: [
     `
       :host {

@@ -1,7 +1,9 @@
 <app-topbar class="topbar-wrapper"></app-topbar>
 
 <div class="shell" [class.sidebar-collapsed]="!sidebarVisible()">
-  <app-sidebar *ngIf="sidebarVisible()" class="sidebar-host"></app-sidebar>
+  @if (sidebarVisible()) {
+    <app-sidebar class="sidebar-host"></app-sidebar>
+  }
 
   <main class="content">
     <div class="content-inner cs-glass">

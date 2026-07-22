@@ -1,6 +1,6 @@
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { CommonModule } from '@angular/common';
+
 import {
   inject,
   OnInit,
@@ -104,7 +104,6 @@ import {
   selector: 'cs-erp-vs-acquirer-other-divergences-list',
   templateUrl: './other-divergences-list.component.html',
   imports: [
-    CommonModule,
     Select,
     Tooltip,
     Checkbox,
@@ -131,8 +130,8 @@ import {
     CsAdvancedPeriodDateFilterComponent,
     CsAdvancedMultiselectFilterComponent,
     CsAdvancedFilterItemTemplateDirective,
-    ErpVsAcquirerComparisonDialogComponent,
-  ],
+    ErpVsAcquirerComparisonDialogComponent
+],
 })
 export class ErpVsAcquirerOtherDivergencesListComponent
   extends StatefulListPage<ConciliationWaitingFiltersState, ConciliationWaitingAdvancedFilters>

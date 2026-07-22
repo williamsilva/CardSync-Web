@@ -14,10 +14,10 @@
   <div class="flex flex-column gap-3 mb-4">
     <div class="flex align-items-center gap-2">
       <p-checkbox
+        name="targets"
+        value="CARDSYNC_DB"
         inputId="target-cardsync-db"
         [(ngModel)]="selectedTargets"
-        value="CARDSYNC_DB"
-        name="targets"
         [disabled]="!canExecute() || running()"
       ></p-checkbox>
       <label for="target-cardsync-db">{{ 'backup.settings.cardsyncDb' | translate }}</label>
@@ -25,10 +25,10 @@
 
     <div class="flex align-items-center gap-2">
       <p-checkbox
-        inputId="target-nimbusauth-db"
-        [(ngModel)]="selectedTargets"
-        value="NIMBUSAUTH_DB"
         name="targets"
+        value="NIMBUSAUTH_DB"
+        [(ngModel)]="selectedTargets"
+        inputId="target-nimbusauth-db"
         [disabled]="!canExecute() || running()"
       ></p-checkbox>
       <label for="target-nimbusauth-db">{{ 'backup.settings.nimbusauthDb' | translate }}</label>
@@ -36,10 +36,10 @@
 
     <div class="flex align-items-center gap-2">
       <p-checkbox
-        inputId="target-files"
-        [(ngModel)]="selectedTargets"
         value="FILES"
         name="targets"
+        inputId="target-files"
+        [(ngModel)]="selectedTargets"
         [disabled]="!canExecute() || running()"
       ></p-checkbox>
       <label for="target-files">{{ 'backup.settings.files' | translate }}</label>
@@ -55,9 +55,9 @@
     <p-button
       icon="pi pi-download"
       [loading]="running()"
-      [label]="'backup.settings.executeButton' | translate"
-      [disabled]="selectedTargets.length === 0"
       (onClick)="execute()"
+      [disabled]="selectedTargets.length === 0"
+      [label]="'backup.settings.executeButton' | translate"
     ></p-button>
   }
 </p-card>

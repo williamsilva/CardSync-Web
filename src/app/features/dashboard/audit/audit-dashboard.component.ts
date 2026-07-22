@@ -1,5 +1,5 @@
 import { Router } from '@angular/router';
-import { CommonModule } from '@angular/common';
+
 import { TranslateModule } from '@ngx-translate/core';
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
 
@@ -38,7 +38,7 @@ interface AuditFileGroup {
   selector: 'cs-audit-dashboard',
   styleUrl: './audit-dashboard.component.scss',
   templateUrl: './audit-dashboard.component.html',
-  imports: [CommonModule, TranslateModule],
+  imports: [TranslateModule],
 })
 export class AuditDashboardComponent implements OnInit {
   private readonly router = inject(Router);

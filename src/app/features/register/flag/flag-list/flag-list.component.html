@@ -5,7 +5,7 @@
     { label: ('breadcrumb.register.flag' | translate) },
   ]"
   [compact]="false"
->
+  >
   <button
     pButton
     type="button"
@@ -71,7 +71,7 @@
   [activeCount]="activeFiltersCount()"
   [title]="'common.filter' | translate"
   [activeFilterGroups]="activeFilterGroups()"
->
+  >
   <div class="grid formgrid gap-0 align-items-end">
     <div class="col-12 md:col-3">
       <p-floatLabel variant="on" class="w-full">
@@ -82,78 +82,80 @@
           [ngModel]="name()"
           class="w-full p-inputtext-sm"
           (ngModelChange)="name.set($event ?? '')"
-        />
-        <label for="name">{{ 'flag.fields.name' | translate }}</label>
-      </p-floatLabel>
-    </div>
+          />
+          <label for="name">{{ 'flag.fields.name' | translate }}</label>
+        </p-floatLabel>
+      </div>
 
-    <div class="col-12 md:col-3">
-      <p-floatLabel variant="on" class="w-full">
-        <input
-          id="erpCode"
-          pInputText
-          type="number"
-          [ngModel]="erpCode()"
-          class="w-full p-inputtext-sm"
-          (ngModelChange)="erpCode.set($event == null || $event === '' ? null : $event)"
-        />
-        <label for="erpCode">{{ 'flag.fields.erpCode' | translate }}</label>
-      </p-floatLabel>
-    </div>
+      <div class="col-12 md:col-3">
+        <p-floatLabel variant="on" class="w-full">
+          <input
+            id="erpCode"
+            pInputText
+            type="number"
+            [ngModel]="erpCode()"
+            class="w-full p-inputtext-sm"
+            (ngModelChange)="erpCode.set($event == null || $event === '' ? null : $event)"
+            />
+            <label for="erpCode">{{ 'flag.fields.erpCode' | translate }}</label>
+          </p-floatLabel>
+        </div>
 
-    <div class="col-12 md:col-3">
-      <p-floatLabel variant="on" class="w-full">
-        <p-multiSelect
-          size="small"
-          class="w-full"
-          appendTo="body"
-          display="chip"
-          [filter]="false"
-          [showClear]="true"
-          optionLabel="label"
-          optionValue="value"
-          inputId="statusEnum"
-          [showToggleAll]="false"
-          [ngModel]="statusEnum()"
-          [options]="statusOptions()"
-          (ngModelChange)="statusEnum.set($event?.length ? $event : null)"
-        />
-        <label for="statusEnum">{{ 'flag.fields.statusEnum' | translate }}</label>
-      </p-floatLabel>
-    </div>
-  </div>
-</cs-filters-panel>
+        <div class="col-12 md:col-3">
+          <p-floatLabel variant="on" class="w-full">
+            <p-multiSelect
+              size="small"
+              class="w-full"
+              appendTo="body"
+              display="chip"
+              [filter]="false"
+              [showClear]="true"
+              optionLabel="label"
+              optionValue="value"
+              inputId="statusEnum"
+              [showToggleAll]="false"
+              [ngModel]="statusEnum()"
+              [options]="statusOptions()"
+              (ngModelChange)="statusEnum.set($event?.length ? $event : null)"
+              />
+              <label for="statusEnum">{{ 'flag.fields.statusEnum' | translate }}</label>
+            </p-floatLabel>
+          </div>
+        </div>
+      </cs-filters-panel>
 
-<div class="flex align-items-center justify-content-between mb-2 px-1">
-  <small class="opacity-80">
-    {{ 'flag.selection.currentMode' | translate }}:
-    {{ selectionModeLabel() }}
-  </small>
+      <div class="flex align-items-center justify-content-between mb-2 px-1">
+        <small class="opacity-80">
+          {{ 'flag.selection.currentMode' | translate }}:
+          {{ selectionModeLabel() }}
+        </small>
 
-  <small class="opacity-80" *ngIf="selectedRows().length">
-    {{ 'flag.selection.count' | translate: { count: selectedRows().length } }}
-  </small>
-</div>
+        @if (selectedRows().length) {
+          <small class="opacity-80">
+            {{ 'flag.selection.count' | translate: { count: selectedRows().length } }}
+          </small>
+        }
+      </div>
 
-<app-flag-table
-  [rows]="rows"
-  [flags]="flags()"
-  (edit)="edit($event)"
-  [secPolicy]="secPolicy"
-  (refreshRelations)="refresh()"
-  (block)="confirmBlock($event)"
-  [totalRecords]="totalRecords()"
-  [selectedRows]="selectedRows()"
-  (lazyLoad)="onLazyLoad($event)"
-  [loading]="flagFacade.loading()"
-  [expandedFlagId]="expandedFlagId()"
-  (pageChange)="onPageChange($event)"
-  (activate)="confirmActivate($event)"
-  [loadedOnce]="flagFacade.loadedOnce()"
-  (deactivate)="confirmDeactivate($event)"
-  [rowsPerPageOptions]="rowsPerPageOptions"
-  (toggleCompanies)="toggleCompanies($event)"
-  (toggleAcquirers)="toggleAcquirers($event)"
-  [expandedRelationType]="expandedRelationType()"
-  (selectionChange)="onTableSelectionChange($event)"
-></app-flag-table>
+      <app-flag-table
+        [rows]="rows"
+        [flags]="flags()"
+        (edit)="edit($event)"
+        [secPolicy]="secPolicy"
+        (refreshRelations)="refresh()"
+        (block)="confirmBlock($event)"
+        [totalRecords]="totalRecords()"
+        [selectedRows]="selectedRows()"
+        (lazyLoad)="onLazyLoad($event)"
+        [loading]="flagFacade.loading()"
+        [expandedFlagId]="expandedFlagId()"
+        (pageChange)="onPageChange($event)"
+        (activate)="confirmActivate($event)"
+        [loadedOnce]="flagFacade.loadedOnce()"
+        (deactivate)="confirmDeactivate($event)"
+        [rowsPerPageOptions]="rowsPerPageOptions"
+        (toggleCompanies)="toggleCompanies($event)"
+        (toggleAcquirers)="toggleAcquirers($event)"
+        [expandedRelationType]="expandedRelationType()"
+        (selectionChange)="onTableSelectionChange($event)"
+      ></app-flag-table>

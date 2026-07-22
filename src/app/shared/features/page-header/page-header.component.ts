@@ -1,5 +1,5 @@
 import { RouterLink } from '@angular/router';
-import { CommonModule } from '@angular/common';
+
 import { Component, Input } from '@angular/core';
 
 export interface PageBreadcrumbItem {
@@ -11,7 +11,7 @@ export interface PageBreadcrumbItem {
   standalone: true,
   selector: 'cs-page-header',
   templateUrl: './page-header.component.html',
-  imports: [CommonModule, RouterLink],
+  imports: [RouterLink],
 })
 export class PageHeaderComponent {
   @Input() icon?: string;

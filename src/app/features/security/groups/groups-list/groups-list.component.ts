@@ -1,6 +1,6 @@
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+
 import { Component, ViewChild, computed, inject, signal } from '@angular/core';
 
 import { Table } from 'primeng/table';
@@ -43,7 +43,6 @@ import {
   selector: 'app-groups-list',
   templateUrl: './groups-list.component.html',
   imports: [
-    CommonModule,
     FloatLabel,
     CsDatePipe,
     FormsModule,
@@ -57,8 +56,8 @@ import {
     PageHeaderComponent,
     ConfirmDialogModule,
     FiltersPanelComponent,
-    GroupsCreateDialogComponent,
-  ],
+    GroupsCreateDialogComponent
+],
 })
 export class GroupsListComponent extends StatefulListPage<
   GroupsFiltersState,

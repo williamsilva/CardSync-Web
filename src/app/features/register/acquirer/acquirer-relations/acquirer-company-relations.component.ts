@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Component, EventEmitter, Output, computed, inject, input, signal } from '@angular/core';
 
@@ -28,7 +28,6 @@ import { AcquirerPermissionPolicy } from '@features/security/policy/acquirer-per
   selector: 'app-acquirer-company-relations',
   templateUrl: './acquirer-company-relations.component.html',
   imports: [
-    CommonModule,
     TableModule,
     ButtonModule,
     DialogModule,
@@ -40,8 +39,8 @@ import { AcquirerPermissionPolicy } from '@features/security/policy/acquirer-per
     FloatLabelModule,
     ErrorMsgComponent,
     ReactiveFormsModule,
-    ConfirmDialogModule,
-  ],
+    ConfirmDialogModule
+],
 })
 export class AcquirerCompanyRelationsComponent {
   acquirer = input.required<AcquirerModel>();

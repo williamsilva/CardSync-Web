@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, computed, inject, signal } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
@@ -10,7 +10,7 @@ import { formatCurrency } from '../conciliation-ui';
 @Component({
   selector: 'cs-conciliation-aging',
   standalone: true,
-  imports: [CommonModule, ButtonModule, CardModule, TableModule],
+  imports: [ButtonModule, CardModule, TableModule],
   templateUrl: './conciliation-aging.component.html',
   styleUrl: './conciliation-aging.component.scss',
 })

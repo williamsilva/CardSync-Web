@@ -1,5 +1,5 @@
 import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 import { SelectModule } from 'primeng/select';
@@ -9,7 +9,7 @@ import { DatePickerModule } from 'primeng/datepicker';
 @Component({
   standalone: true,
   selector: 'cs-advanced-period-date-filter',
-  imports: [CommonModule, FormsModule, SelectModule, FloatLabel, DatePickerModule],
+  imports: [FormsModule, SelectModule, FloatLabel, DatePickerModule],
   styles: [
     `
       :host {

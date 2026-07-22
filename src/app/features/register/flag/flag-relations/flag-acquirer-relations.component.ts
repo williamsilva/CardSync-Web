@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Component, EventEmitter, Output, computed, inject, input, signal } from '@angular/core';
 
@@ -33,7 +33,6 @@ type PendingAcquirerRelation = {
   selector: 'app-flag-acquirer-relations',
   templateUrl: './flag-acquirer-relations.component.html',
   imports: [
-    CommonModule,
     TableModule,
     ButtonModule,
     DialogModule,
@@ -45,8 +44,8 @@ type PendingAcquirerRelation = {
     FloatLabelModule,
     ErrorMsgComponent,
     ReactiveFormsModule,
-    ConfirmDialogModule,
-  ],
+    ConfirmDialogModule
+],
 })
 export class FlagAcquirerRelationsComponent {
   flag = input.required<FlagModel>();

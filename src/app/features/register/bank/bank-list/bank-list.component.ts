@@ -1,5 +1,5 @@
 import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+
 import { Component, ViewChild, computed, inject, signal } from '@angular/core';
 
 import { Table } from 'primeng/table';
@@ -51,7 +51,6 @@ import {
   selector: 'app-bank-list',
   templateUrl: './bank-list.component.html',
   imports: [
-    CommonModule,
     FloatLabel,
     CsDatePipe,
     FormsModule,
@@ -70,8 +69,8 @@ import {
     ConfirmDialogModule,
     FiltersPanelComponent,
     DATA_TABLE_SHELL_IMPORTS,
-    BankCreateDialogComponent,
-  ],
+    BankCreateDialogComponent
+],
 })
 export class BankListComponent extends StatefulListPage<BankFiltersState, BankAdvancedFilters> {
   @ViewChild('dt') private dt?: Table;

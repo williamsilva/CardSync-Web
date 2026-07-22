@@ -38,23 +38,23 @@ import { CsAdvancedFilterItemTemplateDirective } from './cs-advanced-filter-item
         [optionValue]="optionValue"
         [showToggleAll]="showToggleAll"
         (ngModelChange)="onValueChange($event)"
-      >
+        >
         <ng-template pTemplate="item" let-option>
-          <ng-container
-            *ngIf="itemTemplate; else defaultItemTemplate"
-            [ngTemplateOutlet]="itemTemplate.templateRef"
-            [ngTemplateOutletContext]="{ $implicit: option, option: option }"
-          ></ng-container>
-
-          <ng-template #defaultItemTemplate>
+          @if (itemTemplate) {
+            <ng-container
+              [ngTemplateOutlet]="itemTemplate.templateRef"
+              [ngTemplateOutletContext]="{ $implicit: option, option: option }"
+            ></ng-container>
+          } @else {
             {{ getOptionLabel(option) }}
-          </ng-template>
+          }
+    
         </ng-template>
       </p-multiSelect>
-
+    
       <label [for]="inputId">{{ label }}</label>
     </p-floatLabel>
-  `,
+    `,
 })
 export class CsAdvancedMultiselectFilterComponent implements OnChanges {
   @Input() label = '';

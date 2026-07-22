@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 import { Tooltip } from 'primeng/tooltip';
@@ -23,7 +23,7 @@ export interface ActiveFilterGroup {
   selector: 'cs-filters-panel',
   styleUrl: './filters-panel.component.scss',
   templateUrl: './filters-panel.component.html',
-  imports: [CommonModule, PanelModule, Tooltip, TranslateModule, ButtonModule, Popover, ChipModule],
+  imports: [PanelModule, Tooltip, TranslateModule, ButtonModule, Popover, ChipModule],
 })
 export class FiltersPanelComponent {
   @Input() title = 'Filtrar';

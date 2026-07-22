@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { TranslateModule } from '@ngx-translate/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -47,7 +47,6 @@ import {
   styleUrl: './company-create-dialog.component.scss',
   templateUrl: './company-create-dialog.component.html',
   imports: [
-    CommonModule,
     ToastModule,
     DialogModule,
     ButtonModule,
@@ -57,8 +56,8 @@ import {
     FloatLabelModule,
     ErrorMsgComponent,
     ReactiveFormsModule,
-    CpfCnpjMaskDirective,
-  ],
+    CpfCnpjMaskDirective
+],
 })
 export class CompanyCreateDialogComponent {
   visible = input.required<boolean>();

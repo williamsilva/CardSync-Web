@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, computed, inject, input } from '@angular/core';
 
 import { TableModule } from 'primeng/table';
@@ -27,14 +27,13 @@ import {
   selector: 'app-credit-orders-table',
   templateUrl: './credit-orders-table.component.html',
   imports: [
-    CommonModule,
     CsDatePipe,
     TableModule,
     TooltipModule,
     CsCurrencyPipe,
     CsTagComponent,
-    TranslateModule,
-  ],
+    TranslateModule
+],
 })
 export class CreditOrdersTableComponent {
   protected readonly i18n = inject(I18nService);

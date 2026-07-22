@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 import { FloatLabel } from 'primeng/floatlabel';
@@ -7,7 +7,7 @@ import { InputTextModule } from 'primeng/inputtext';
 @Component({
   standalone: true,
   selector: 'cs-advanced-text-filter',
-  imports: [CommonModule, FloatLabel, InputTextModule],
+  imports: [FloatLabel, InputTextModule],
   host: {
     class: 'block',
   },

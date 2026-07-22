@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Component, computed, inject, signal, ViewChild } from '@angular/core';
 
@@ -50,7 +50,6 @@ import {
   selector: 'app-email-logs',
   templateUrl: './email-logs.component.html',
   imports: [
-    CommonModule,
     FloatLabel,
     CsDatePipe,
     TableModule,
@@ -66,8 +65,8 @@ import {
     PageHeaderComponent,
     ReactiveFormsModule,
     FiltersPanelComponent,
-    OverflowTooltipDirective,
-  ],
+    OverflowTooltipDirective
+],
 })
 export class EmailLogsComponent extends StatefulListPage<EmailLogsFiltersState, EmailLogsFilters> {
   @ViewChild('dt') private dt?: Table;

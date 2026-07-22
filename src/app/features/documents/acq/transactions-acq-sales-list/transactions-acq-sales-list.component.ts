@@ -1,6 +1,6 @@
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+
 import { AfterViewInit, Component, ViewChild, computed, inject, signal } from '@angular/core';
 
 import { Table } from 'primeng/table';
@@ -98,7 +98,6 @@ import {
   selector: 'app-transactions-acquirers-sales-list',
   templateUrl: './transactions-acq-sales-list.component.html',
   imports: [
-    CommonModule,
     FloatLabel,
     CsDatePipe,
     MenuModule,
@@ -122,8 +121,8 @@ import {
     CsAdvancedPeriodDateFilterComponent,
     CsAdvancedMultiselectFilterComponent,
     CsAdvancedFilterItemTemplateDirective,
-    TransactionsAcquirersSalesInstallmentsTableComponent,
-  ],
+    TransactionsAcquirersSalesInstallmentsTableComponent
+],
 })
 export class TransactionsAcquirersSalesListComponent
   extends StatefulListPage<TransactionsAcqFiltersState, TransactionsAcqAdvancedFilters>

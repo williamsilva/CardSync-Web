@@ -1,6 +1,6 @@
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+
 import { AfterViewInit, Component, computed, inject, signal, ViewChild } from '@angular/core';
 
 import { MenuModule } from 'primeng/menu';
@@ -82,7 +82,6 @@ import {
   selector: 'app-bank-statement-list',
   templateUrl: './bank-statement-list.component.html',
   imports: [
-    CommonModule,
     CsDatePipe,
     MenuModule,
     FormsModule,
@@ -103,8 +102,8 @@ import {
     CsCurrencyRangeFilterComponent,
     CsAdvancedPeriodDateFilterComponent,
     CsAdvancedMultiselectFilterComponent,
-    CsAdvancedFilterItemTemplateDirective,
-  ],
+    CsAdvancedFilterItemTemplateDirective
+],
 })
 export class BankStatementListComponent
   extends StatefulListPage<BankStatementFiltersState, BankStatementAdvancedFilters>

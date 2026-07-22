@@ -1,5 +1,5 @@
 import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+
 import { Component, EventEmitter, Output, ViewChild, computed, inject, input } from '@angular/core';
 
 import { ButtonModule } from 'primeng/button';
@@ -29,7 +29,6 @@ import {
   selector: 'app-flag-table',
   templateUrl: './flag-table.component.html',
   imports: [
-    CommonModule,
     TableModule,
     FormsModule,
     ButtonModule,
@@ -40,8 +39,8 @@ import {
     MultiSelectModule,
     FlagRowActionsComponent,
     FlagCompanyRelationsComponent,
-    FlagAcquirerRelationsComponent,
-  ],
+    FlagAcquirerRelationsComponent
+],
 })
 export class FlagTableComponent {
   protected readonly tableStateKey = STATE_KEY.CARDSYNC.REGISTER.FLAG.TABLE.STATE.V1;

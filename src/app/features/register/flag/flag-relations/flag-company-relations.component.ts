@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Component, EventEmitter, Output, computed, inject, input, signal } from '@angular/core';
 
@@ -28,7 +28,6 @@ import { StatusEnum, statusEnumLabel, statusEnumSeverity } from '@models/enums/s
   selector: 'app-flag-company-relations',
   templateUrl: './flag-company-relations.component.html',
   imports: [
-    CommonModule,
     TableModule,
     ButtonModule,
     DialogModule,
@@ -40,8 +39,8 @@ import { StatusEnum, statusEnumLabel, statusEnumSeverity } from '@models/enums/s
     FloatLabelModule,
     ErrorMsgComponent,
     ReactiveFormsModule,
-    ConfirmDialogModule,
-  ],
+    ConfirmDialogModule
+],
 })
 export class FlagCompanyRelationsComponent {
   flag = input.required<FlagModel>();

@@ -35,23 +35,24 @@
       [class.expired]="sessionExpired()"
       (click)="sessionExpired() && auth.startLogin()"
       [pTooltip]="sessionExpired() ? statusTooltip() : undefined"
-    >
+      >
       <span class="dot"></span>
 
       <span class="status-text" [class.blink]="sessionExpired()">
         {{ sessionExpired() ? i18n.tUi('topbar.sessionExpired') : i18n.tUi('topbar.online') }}
       </span>
 
-      <span
-        class="session-timer"
-        tooltipPosition="bottom"
-        [ngClass]="sessionState()"
-        *ngIf="!sessionExpired() && mmss() as time"
-        [pTooltip]="'topbar.sessionExpireTooltip' | translate"
-      >
-        <i class="pi pi-clock"></i>
-        {{ time }}
-      </span>
+      @if (!sessionExpired() && mmss(); as time) {
+        <span
+          class="session-timer"
+          tooltipPosition="bottom"
+          [ngClass]="sessionState()"
+          [pTooltip]="'topbar.sessionExpireTooltip' | translate"
+          >
+          <i class="pi pi-clock"></i>
+          {{ time }}
+        </span>
+      }
     </div>
 
     <button
@@ -79,7 +80,7 @@
       (click)="langMenu.toggle($event)"
       class="cs-topbar-trigger cs-lang-trigger"
       [attr.aria-label]="i18n.tUi('topbar.langAria')"
-    >
+      >
       <span class="cs-trigger-badge">{{ currentLangLabel() }}</span>
       <i class="pi pi-angle-down cs-trigger-chevron"></i>
     </button>
@@ -100,7 +101,7 @@
       (click)="accountMenu.toggle($event)"
       [attr.aria-label]="'menu.me' | translate"
       class="cs-topbar-trigger cs-account-trigger"
-    >
+      >
       <span class="cs-account-avatar">{{ initials() }}</span>
       <i class="pi pi-angle-down cs-trigger-chevron"></i>
     </button>

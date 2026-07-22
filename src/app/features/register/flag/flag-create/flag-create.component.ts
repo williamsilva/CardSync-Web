@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import {
@@ -38,7 +38,6 @@ import {
   selector: 'app-flag-create-dialog',
   templateUrl: './flag-create.component.html',
   imports: [
-    CommonModule,
     ToastModule,
     DialogModule,
     ButtonModule,
@@ -47,8 +46,8 @@ import {
     TranslateModule,
     FloatLabelModule,
     ErrorMsgComponent,
-    ReactiveFormsModule,
-  ],
+    ReactiveFormsModule
+],
 })
 export class FlagCreateDialogComponent {
   visible = input.required<boolean>();

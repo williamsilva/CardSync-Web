@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { TranslateModule } from '@ngx-translate/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -33,7 +33,6 @@ import { StatusEnum, allStatusEnum, statusEnumLabel, normalizeStatusEnum } from 
   selector: 'app-holiday-create-dialog',
   templateUrl: './holiday-create-dialog.component.html',
   imports: [
-    CommonModule,
     DialogModule,
     ButtonModule,
     SelectModule,
@@ -42,8 +41,8 @@ import { StatusEnum, allStatusEnum, statusEnumLabel, normalizeStatusEnum } from 
     FloatLabelModule,
     DatePickerModule,
     ErrorMsgComponent,
-    ReactiveFormsModule,
-  ],
+    ReactiveFormsModule
+],
 })
 export class HolidayCreateDialogComponent {
   visible = input.required<boolean>();

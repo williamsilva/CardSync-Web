@@ -5,7 +5,7 @@
     { label: ('breadcrumb.register.acquirer' | translate) },
   ]"
   [compact]="false"
->
+  >
   <button
     pButton
     type="button"
@@ -54,7 +54,7 @@
   [activeFilterGroups]="activeFilterGroups()"
   [activeCount]="activeFiltersCount()"
   [title]="'common.filter' | translate"
->
+  >
   <div class="grid formgrid gap-0 align-items-end">
     <div class="col-12 md:col-3 p-1">
       <p-floatLabel variant="on" class="w-full">
@@ -64,510 +64,514 @@
           [value]="fantasyName()"
           class="w-full p-inputtext-sm"
           (input)="fantasyName.set(($any($event.target).value ?? '').toString())"
-        />
-        <label for="fantasyName">{{ 'acquirer.fields.fantasyName' | translate }}</label>
-      </p-floatLabel>
-    </div>
+          />
+          <label for="fantasyName">{{ 'acquirer.fields.fantasyName' | translate }}</label>
+        </p-floatLabel>
+      </div>
 
-    <div class="col-12 md:col-3 p-1">
-      <p-floatLabel variant="on" class="w-full">
-        <input
-          pInputText
-          id="socialReason"
-          [value]="socialReason()"
-          class="w-full p-inputtext-sm"
-          (input)="socialReason.set(($any($event.target).value ?? '').toString())"
-        />
-        <label for="socialReason">{{ 'acquirer.fields.socialReason' | translate }}</label>
-      </p-floatLabel>
-    </div>
-
-    <div class="col-12 md:col-2 p-1">
-      <p-floatLabel variant="on" class="w-full">
-        <input
-          id="cnpj"
-          pInputText
-          csCpfCnpjMask
-          [value]="cnpj()"
-          class="w-full p-inputtext-sm"
-          (input)="cnpj.set(($any($event.target).value ?? '').toString().replace(/\D+/g, ''))"
-        />
-        <label for="cnpj">{{ 'acquirer.fields.cnpj' | translate }}</label>
-      </p-floatLabel>
-    </div>
-
-    <div class="col-12 md:col-2 p-1">
-      <p-floatLabel variant="on" class="w-full">
-        <p-multiSelect
-          size="small"
-          class="w-full"
-          [filter]="true"
-          appendTo="body"
-          [showClear]="true"
-          optionLabel="label"
-          optionValue="value"
-          inputId="statusEnum"
-          [showToggleAll]="false"
-          [ngModel]="statusEnum()"
-          [options]="statusEnumOptions()"
-          (ngModelChange)="statusEnum.set($event?.length ? $event : null)"
-        ></p-multiSelect>
-        <label for="statusEnum">{{ 'acquirer.fields.statusEnum' | translate }}</label>
-      </p-floatLabel>
-    </div>
-  </div>
-
-  <div class="grid formgrid gap-0 align-items-end">
-    <div class="col-12 md:col-3 p-1">
-      <p-floatLabel variant="on" class="w-full">
-        <p-datepicker
-          size="small"
-          class="w-full"
-          appendTo="body"
-          [showIcon]="true"
-          inputId="createdAt"
-          selectionMode="range"
-          dateFormat="dd/mm/yy"
-          [readonlyInput]="true"
-          [ngModel]="createdAtRange()"
-          (ngModelChange)="createdAtRange.set($event ?? null)"
-        ></p-datepicker>
-        <label for="createdAt">{{ 'users.fields.createdAt' | translate }}</label>
-      </p-floatLabel>
-    </div>
-
-    <div class="col-12 md:col-3 p-1">
-      <p-floatLabel variant="on" class="w-full">
-        <p-multiSelect
-          size="small"
-          class="w-full"
-          [filter]="true"
-          appendTo="body"
-          [showClear]="true"
-          optionLabel="label"
-          optionValue="value"
-          inputId="createdBy"
-          [showToggleAll]="false"
-          [ngModel]="createdBy()"
-          [options]="usersOptions()"
-          (ngModelChange)="createdBy.set($event?.length ? $event : null)"
-        ></p-multiSelect>
-        <label for="createdBy">{{ 'acquirer.fields.createdBy' | translate }}</label>
-      </p-floatLabel>
-    </div>
-  </div>
-</cs-filters-panel>
-
-<div class="flex align-items-center justify-content-between mb-2 px-1">
-  <small class="opacity-80">
-    {{ 'acquirer.selection.currentMode' | translate }}:
-    {{ selectionModeLabel() }}
-  </small>
-
-  <small class="opacity-80" *ngIf="selectedRows().length">
-    {{ 'acquirer.selection.count' | translate: { count: selectedRows().length } }}
-  </small>
-</div>
-
-<p-table
-  #dt
-  stripedRows
-  dataKey="id"
-  size="small"
-  [rows]="rows"
-  [lazy]="true"
-  showGridlines
-  [rowHover]="true"
-  [paginator]="true"
-  sortMode="multiple"
-  stateStorage="local"
-  filterDisplay="menu"
-  [value]="acquirers()"
-  class="cs-admin-table"
-  [loading]="facade.loading()"
-  [showCurrentPageReport]="true"
-  [totalRecords]="totalRecords()"
-  (onPage)="onPageChange($event)"
-  (onLazyLoad)="onLazyLoad($event)"
-  [paginatorDropdownAppendTo]="'body'"
-  [rowsPerPageOptions]="rowsPerPageOptions"
-  [stateKey]="tableStateKey()"
-  [tableStyle]="{ width: '100%', 'min-width': '62rem' }"
-  [currentPageReportTemplate]="'pagination.report' | translate"
->
-  <ng-template pTemplate="colgroup">
-    <colgroup>
-      <col style="width: 44px" />
-      <col style="width: auto" />
-      <col style="width: auto" />
-      <col style="width: 170px" />
-      <col style="width: 150px" />
-      <col style="width: 150px" />
-      <col style="width: 150px" />
-      <col style="width: 150px" />
-      <col style="width: 170px" />
-      <col style="width: 80px" />
-      <col style="width: 80px" />
-      <col style="width: 80px" />
-    </colgroup>
-  </ng-template>
-
-  <ng-template pTemplate="header">
-    <tr>
-      <th class="text-center">
-        <ng-container *ngIf="selectionStatus(); else selectOneHint">
-          <p-checkbox
-            [binary]="true"
-            [ngModel]="headerChecked()"
-            [indeterminate]="headerIndeterminate()"
-            (onChange)="toggleHeaderSelection(!!$event.checked)"
-          ></p-checkbox>
-        </ng-container>
-
-        <ng-template #selectOneHint>
-          <i
-            class="pi pi-info-circle opacity-70"
-            [pTooltip]="'acquirer.selection.pickOneFirst' | translate"
-            tooltipPosition="top"
-          ></i>
-        </ng-template>
-      </th>
-
-      <th pSortableColumn="fantasyName">
-        <div class="th-flex text-center">
-          <span class="th-label">{{ 'acquirer.columns.fantasyName' | translate }}</span>
-          <span class="th-icons">
-            <p-sortIcon field="fantasyName"></p-sortIcon>
-            <p-columnFilter
-              type="text"
-              display="menu"
-              class="ml-auto"
-              field="fantasyName"
-              matchMode="contains"
-              [useGrouping]="false"
-              [showOperator]="false"
-              [showAddButton]="false"
-              styleClass="cs-colfilter"
-            ></p-columnFilter>
-          </span>
+      <div class="col-12 md:col-3 p-1">
+        <p-floatLabel variant="on" class="w-full">
+          <input
+            pInputText
+            id="socialReason"
+            [value]="socialReason()"
+            class="w-full p-inputtext-sm"
+            (input)="socialReason.set(($any($event.target).value ?? '').toString())"
+            />
+            <label for="socialReason">{{ 'acquirer.fields.socialReason' | translate }}</label>
+          </p-floatLabel>
         </div>
-      </th>
 
-      <th pSortableColumn="socialReason">
-        <div class="th-flex text-center">
-          <span class="th-label">{{ 'acquirer.columns.socialReason' | translate }}</span>
-          <span class="th-icons">
-            <p-sortIcon field="socialReason"></p-sortIcon>
-            <p-columnFilter
-              type="text"
-              display="menu"
-              class="ml-auto"
-              field="socialReason"
-              matchMode="contains"
-              [useGrouping]="false"
-              [showOperator]="false"
-              [showAddButton]="false"
-              styleClass="cs-colfilter"
-            ></p-columnFilter>
-          </span>
+        <div class="col-12 md:col-2 p-1">
+          <p-floatLabel variant="on" class="w-full">
+            <input
+              id="cnpj"
+              pInputText
+              csCpfCnpjMask
+              [value]="cnpj()"
+              class="w-full p-inputtext-sm"
+              (input)="cnpj.set(($any($event.target).value ?? '').toString().replace(/\D+/g, ''))"
+              />
+              <label for="cnpj">{{ 'acquirer.fields.cnpj' | translate }}</label>
+            </p-floatLabel>
+          </div>
+
+          <div class="col-12 md:col-2 p-1">
+            <p-floatLabel variant="on" class="w-full">
+              <p-multiSelect
+                size="small"
+                class="w-full"
+                [filter]="true"
+                appendTo="body"
+                [showClear]="true"
+                optionLabel="label"
+                optionValue="value"
+                inputId="statusEnum"
+                [showToggleAll]="false"
+                [ngModel]="statusEnum()"
+                [options]="statusEnumOptions()"
+                (ngModelChange)="statusEnum.set($event?.length ? $event : null)"
+              ></p-multiSelect>
+              <label for="statusEnum">{{ 'acquirer.fields.statusEnum' | translate }}</label>
+            </p-floatLabel>
+          </div>
         </div>
-      </th>
 
-      <th pSortableColumn="cnpj">
-        <div class="th-flex text-center">
-          <span class="th-label">{{ 'acquirer.columns.cnpj' | translate }}</span>
-          <span class="th-icons">
-            <p-sortIcon field="cnpj"></p-sortIcon>
-            <p-columnFilter
-              field="cnpj"
-              display="menu"
-              matchMode="contains"
-              [useGrouping]="false"
-              [showOperator]="false"
-              [showAddButton]="false"
-              styleClass="cs-colfilter"
-            ></p-columnFilter>
-          </span>
+        <div class="grid formgrid gap-0 align-items-end">
+          <div class="col-12 md:col-3 p-1">
+            <p-floatLabel variant="on" class="w-full">
+              <p-datepicker
+                size="small"
+                class="w-full"
+                appendTo="body"
+                [showIcon]="true"
+                inputId="createdAt"
+                selectionMode="range"
+                dateFormat="dd/mm/yy"
+                [readonlyInput]="true"
+                [ngModel]="createdAtRange()"
+                (ngModelChange)="createdAtRange.set($event ?? null)"
+              ></p-datepicker>
+              <label for="createdAt">{{ 'users.fields.createdAt' | translate }}</label>
+            </p-floatLabel>
+          </div>
+
+          <div class="col-12 md:col-3 p-1">
+            <p-floatLabel variant="on" class="w-full">
+              <p-multiSelect
+                size="small"
+                class="w-full"
+                [filter]="true"
+                appendTo="body"
+                [showClear]="true"
+                optionLabel="label"
+                optionValue="value"
+                inputId="createdBy"
+                [showToggleAll]="false"
+                [ngModel]="createdBy()"
+                [options]="usersOptions()"
+                (ngModelChange)="createdBy.set($event?.length ? $event : null)"
+              ></p-multiSelect>
+              <label for="createdBy">{{ 'acquirer.fields.createdBy' | translate }}</label>
+            </p-floatLabel>
+          </div>
         </div>
-      </th>
+      </cs-filters-panel>
 
-      <th pSortableColumn="openingDate">
-        <div class="th-flex">
-          <span class="th-label">{{ 'acquirer.columns.openingDate' | translate }}</span>
-          <span class="th-icons">
-            <p-sortIcon field="openingDate"></p-sortIcon>
-          </span>
-        </div>
-      </th>
+      <div class="flex align-items-center justify-content-between mb-2 px-1">
+        <small class="opacity-80">
+          {{ 'acquirer.selection.currentMode' | translate }}:
+          {{ selectionModeLabel() }}
+        </small>
 
-      <th pSortableColumn="closingDate">
-        <div class="th-flex">
-          <span class="th-label">{{ 'acquirer.columns.closingDate' | translate }}</span>
-          <span class="th-icons">
-            <p-sortIcon field="closingDate"></p-sortIcon>
-          </span>
-        </div>
-      </th>
+        @if (selectedRows().length) {
+          <small class="opacity-80">
+            {{ 'acquirer.selection.count' | translate: { count: selectedRows().length } }}
+          </small>
+        }
+      </div>
 
-      <th pSortableColumn="statusEnum">
-        <div class="th-flex text-center">
-          <span class="th-label">{{ 'acquirer.columns.statusEnum' | translate }}</span>
-          <span class="th-icons">
-            <p-sortIcon field="statusEnum"></p-sortIcon>
-            <p-columnFilter
-              field="statusEnum"
-              display="menu"
-              matchMode="in"
-              [showOperator]="false"
-              [showAddButton]="false"
-              [showMatchModes]="false"
-              styleClass="cs-colfilter"
-            >
-              <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                <p-multiSelect
-                  class="w-full"
-                  appendTo="body"
-                  [ngModel]="value"
-                  [showClear]="true"
-                  optionLabel="label"
-                  optionValue="value"
-                  [options]="statusEnumOptions()"
-                  (onChange)="filter($event.value)"
-                  [placeholder]="'common.all' | translate"
-                ></p-multiSelect>
-              </ng-template>
-            </p-columnFilter>
-          </span>
-        </div>
-      </th>
+      <p-table
+        #dt
+        stripedRows
+        dataKey="id"
+        size="small"
+        [rows]="rows"
+        [lazy]="true"
+        showGridlines
+        [rowHover]="true"
+        [paginator]="true"
+        sortMode="multiple"
+        stateStorage="local"
+        filterDisplay="menu"
+        [value]="acquirers()"
+        class="cs-admin-table"
+        [loading]="facade.loading()"
+        [showCurrentPageReport]="true"
+        [totalRecords]="totalRecords()"
+        (onPage)="onPageChange($event)"
+        (onLazyLoad)="onLazyLoad($event)"
+        [paginatorDropdownAppendTo]="'body'"
+        [rowsPerPageOptions]="rowsPerPageOptions"
+        [stateKey]="tableStateKey()"
+        [tableStyle]="{ width: '100%', 'min-width': '62rem' }"
+        [currentPageReportTemplate]="'pagination.report' | translate"
+        >
+        <ng-template pTemplate="colgroup">
+          <colgroup>
+          <col style="width: 44px" />
+          <col style="width: auto" />
+          <col style="width: auto" />
+          <col style="width: 170px" />
+          <col style="width: 150px" />
+          <col style="width: 150px" />
+          <col style="width: 150px" />
+          <col style="width: 150px" />
+          <col style="width: 170px" />
+          <col style="width: 80px" />
+          <col style="width: 80px" />
+          <col style="width: 80px" />
+        </colgroup>
+      </ng-template>
 
-      <th pSortableColumn="createdAt">
-        <div class="th-flex text-center">
-          <span class="th-label">{{ 'acquirer.columns.createdAt' | translate }}</span>
-          <span class="th-icons">
-            <p-sortIcon field="createdAt"></p-sortIcon>
+      <ng-template pTemplate="header">
+        <tr>
+          <th class="text-center">
+            @if (selectionStatus()) {
+              <p-checkbox
+                [binary]="true"
+                [ngModel]="headerChecked()"
+                [indeterminate]="headerIndeterminate()"
+                (onChange)="toggleHeaderSelection(!!$event.checked)"
+              ></p-checkbox>
+            } @else {
+              <i
+                class="pi pi-info-circle opacity-70"
+                [pTooltip]="'acquirer.selection.pickOneFirst' | translate"
+                tooltipPosition="top"
+              ></i>
+            }
 
-            <p-columnFilter
-              display="menu"
-              field="createdAt"
-              matchMode="between"
-              [showOperator]="false"
-              [showAddButton]="false"
-              [showMatchModes]="false"
-              styleClass="cs-colfilter"
-            >
-              <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                <p-datepicker
-                  class="w-full"
-                  appendTo="body"
-                  [showIcon]="true"
-                  [ngModel]="value"
-                  selectionMode="range"
-                  dateFormat="dd/mm/yy"
-                  [readonlyInput]="true"
-                  (ngModelChange)="filter($event)"
-                  [placeholder]="'common.period' | translate"
-                ></p-datepicker>
-              </ng-template>
-            </p-columnFilter>
-          </span>
-        </div>
-      </th>
+          </th>
 
-      <th pSortableColumn="createdBy">
-        <div class="th-flex text-center">
-          <span class="th-label">{{ 'acquirer.columns.createdBy' | translate }}</span>
-          <span class="th-icons">
-            <p-sortIcon field="createdBy"></p-sortIcon>
-            <p-columnFilter
-              display="menu"
-              matchMode="in"
-              field="createdBy"
-              [showOperator]="false"
-              [showAddButton]="false"
-              [showMatchModes]="false"
-              styleClass="cs-colfilter"
-            >
-              <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                <p-multiSelect
-                  class="w-full"
-                  appendTo="body"
-                  [filter]="true"
-                  [ngModel]="value"
-                  [showClear]="true"
-                  optionLabel="label"
-                  optionValue="value"
-                  [options]="usersOptions()"
-                  (onChange)="filter($event.value)"
-                  [placeholder]="'common.all' | translate"
-                ></p-multiSelect>
-              </ng-template>
-            </p-columnFilter>
-          </span>
-        </div>
-      </th>
+          <th pSortableColumn="fantasyName">
+            <div class="th-flex text-center">
+              <span class="th-label">{{ 'acquirer.columns.fantasyName' | translate }}</span>
+              <span class="th-icons">
+                <p-sortIcon field="fantasyName"></p-sortIcon>
+                <p-columnFilter
+                  type="text"
+                  display="menu"
+                  class="ml-auto"
+                  field="fantasyName"
+                  matchMode="contains"
+                  [useGrouping]="false"
+                  [showOperator]="false"
+                  [showAddButton]="false"
+                  styleClass="cs-colfilter"
+                ></p-columnFilter>
+              </span>
+            </div>
+          </th>
 
-      <th class="text-center">{{ 'acquirer.columns.company' | translate }}</th>
-      <th class="text-center">{{ 'acquirer.columns.establishment' | translate }}</th>
+          <th pSortableColumn="socialReason">
+            <div class="th-flex text-center">
+              <span class="th-label">{{ 'acquirer.columns.socialReason' | translate }}</span>
+              <span class="th-icons">
+                <p-sortIcon field="socialReason"></p-sortIcon>
+                <p-columnFilter
+                  type="text"
+                  display="menu"
+                  class="ml-auto"
+                  field="socialReason"
+                  matchMode="contains"
+                  [useGrouping]="false"
+                  [showOperator]="false"
+                  [showAddButton]="false"
+                  styleClass="cs-colfilter"
+                ></p-columnFilter>
+              </span>
+            </div>
+          </th>
 
-      <th class="text-center">
-        <div class="th-flex text-center justify-content-center">
-          <span class="th-label">{{ 'common.actions' | translate }}</span>
-        </div>
-      </th>
-    </tr>
-  </ng-template>
+          <th pSortableColumn="cnpj">
+            <div class="th-flex text-center">
+              <span class="th-label">{{ 'acquirer.columns.cnpj' | translate }}</span>
+              <span class="th-icons">
+                <p-sortIcon field="cnpj"></p-sortIcon>
+                <p-columnFilter
+                  field="cnpj"
+                  display="menu"
+                  matchMode="contains"
+                  [useGrouping]="false"
+                  [showOperator]="false"
+                  [showAddButton]="false"
+                  styleClass="cs-colfilter"
+                ></p-columnFilter>
+              </span>
+            </div>
+          </th>
 
-  <ng-template pTemplate="body" let-row>
-    <tr>
-      <td class="text-center">
-        <p-checkbox
-          [binary]="true"
-          [ngModel]="isRowSelected(row)"
-          [disabled]="isRowCheckboxDisabled(row)"
-          (onChange)="toggleRowSelection(row, !!$event.checked)"
-        ></p-checkbox>
-      </td>
+          <th pSortableColumn="openingDate">
+            <div class="th-flex">
+              <span class="th-label">{{ 'acquirer.columns.openingDate' | translate }}</span>
+              <span class="th-icons">
+                <p-sortIcon field="openingDate"></p-sortIcon>
+              </span>
+            </div>
+          </th>
 
-      <td class="cell-strong">{{ row.fantasyName }}</td>
+          <th pSortableColumn="closingDate">
+            <div class="th-flex">
+              <span class="th-label">{{ 'acquirer.columns.closingDate' | translate }}</span>
+              <span class="th-icons">
+                <p-sortIcon field="closingDate"></p-sortIcon>
+              </span>
+            </div>
+          </th>
 
-      <td class="cell-muted">
-        {{ row.socialReason }}
-      </td>
+          <th pSortableColumn="statusEnum">
+            <div class="th-flex text-center">
+              <span class="th-label">{{ 'acquirer.columns.statusEnum' | translate }}</span>
+              <span class="th-icons">
+                <p-sortIcon field="statusEnum"></p-sortIcon>
+                <p-columnFilter
+                  field="statusEnum"
+                  display="menu"
+                  matchMode="in"
+                  [showOperator]="false"
+                  [showAddButton]="false"
+                  [showMatchModes]="false"
+                  styleClass="cs-colfilter"
+                  >
+                  <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                    <p-multiSelect
+                      class="w-full"
+                      appendTo="body"
+                      [ngModel]="value"
+                      [showClear]="true"
+                      optionLabel="label"
+                      optionValue="value"
+                      [options]="statusEnumOptions()"
+                      (onChange)="filter($event.value)"
+                      [placeholder]="'common.all' | translate"
+                    ></p-multiSelect>
+                  </ng-template>
+                </p-columnFilter>
+              </span>
+            </div>
+          </th>
 
-      <td class="cell-muted text-center">
-        <span [pTooltip]="row.cnpj" tooltipPosition="top">
-          {{ row.cnpj | csDocument }}
-        </span>
-      </td>
-      <td class="cell-muted text-center">
-        {{ row.openingDate ? (row.openingDate | csDate: 'date') : '-' }}
-      </td>
-      <td class="cell-muted text-center">
-        {{ row.closingDate ? (row.closingDate | csDate: 'date') : '-' }}
-      </td>
-      <td class="cell-muted text-center">
-        <cs-tag [value]="statusEnumLabel(row.status)" [tone]="severityEnum(row.status)" />
-      </td>
+          <th pSortableColumn="createdAt">
+            <div class="th-flex text-center">
+              <span class="th-label">{{ 'acquirer.columns.createdAt' | translate }}</span>
+              <span class="th-icons">
+                <p-sortIcon field="createdAt"></p-sortIcon>
 
-      <td class="cell-muted text-center">
-        {{ row.createdAt ? (row.createdAt | csDate: 'short') : '-' }}
-      </td>
+                <p-columnFilter
+                  display="menu"
+                  field="createdAt"
+                  matchMode="between"
+                  [showOperator]="false"
+                  [showAddButton]="false"
+                  [showMatchModes]="false"
+                  styleClass="cs-colfilter"
+                  >
+                  <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                    <p-datepicker
+                      class="w-full"
+                      appendTo="body"
+                      [showIcon]="true"
+                      [ngModel]="value"
+                      selectionMode="range"
+                      dateFormat="dd/mm/yy"
+                      [readonlyInput]="true"
+                      (ngModelChange)="filter($event)"
+                      [placeholder]="'common.period' | translate"
+                    ></p-datepicker>
+                  </ng-template>
+                </p-columnFilter>
+              </span>
+            </div>
+          </th>
 
-      <td class="cell-muted text-center">
-        {{ row.createdBy?.name }}
-      </td>
+          <th pSortableColumn="createdBy">
+            <div class="th-flex text-center">
+              <span class="th-label">{{ 'acquirer.columns.createdBy' | translate }}</span>
+              <span class="th-icons">
+                <p-sortIcon field="createdBy"></p-sortIcon>
+                <p-columnFilter
+                  display="menu"
+                  matchMode="in"
+                  field="createdBy"
+                  [showOperator]="false"
+                  [showAddButton]="false"
+                  [showMatchModes]="false"
+                  styleClass="cs-colfilter"
+                  >
+                  <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                    <p-multiSelect
+                      class="w-full"
+                      appendTo="body"
+                      [filter]="true"
+                      [ngModel]="value"
+                      [showClear]="true"
+                      optionLabel="label"
+                      optionValue="value"
+                      [options]="usersOptions()"
+                      (onChange)="filter($event.value)"
+                      [placeholder]="'common.all' | translate"
+                    ></p-multiSelect>
+                  </ng-template>
+                </p-columnFilter>
+              </span>
+            </div>
+          </th>
 
-      <td class="text-center">
-        <div class="table-actions justify-content-center">
-          <button
-            pButton
-            type="button"
-            icon="pi pi-building"
-            (click)="toggleCompanies(row)"
-            class="p-button-text p-button-sm"
-            [pTooltip]="'flag.relationships.companies' | translate"
-          ></button>
-        </div>
-      </td>
+          <th class="text-center">{{ 'acquirer.columns.company' | translate }}</th>
+          <th class="text-center">{{ 'acquirer.columns.establishment' | translate }}</th>
 
-      <td class="text-center">
-        <div class="table-actions justify-content-center">
-          <button
-            pButton
-            type="button"
-            icon="pi pi-briefcase"
-            class="p-button-text p-button-sm"
-            (click)="toggleEstablishments(row)"
-            [pTooltip]="'flag.relationships.establishment' | translate"
-          ></button>
-        </div>
-      </td>
+          <th class="text-center">
+            <div class="th-flex text-center justify-content-center">
+              <span class="th-label">{{ 'common.actions' | translate }}</span>
+            </div>
+          </th>
+        </tr>
+      </ng-template>
 
-      <td class="text-center">
-        <div class="table-actions">
-          <button
-            pButton
-            type="button"
-            tooltipPosition="top"
-            icon="pi pi-check-circle"
-            class="p-button-text p-button-sm"
-            [disabled]="!secPolicy.canActivate(row)"
+      <ng-template pTemplate="body" let-row>
+        <tr>
+          <td class="text-center">
+            <p-checkbox
+              [binary]="true"
+              [ngModel]="isRowSelected(row)"
+              [disabled]="isRowCheckboxDisabled(row)"
+              (onChange)="toggleRowSelection(row, !!$event.checked)"
+            ></p-checkbox>
+          </td>
+
+          <td class="cell-strong">{{ row.fantasyName }}</td>
+
+          <td class="cell-muted">
+            {{ row.socialReason }}
+          </td>
+
+          <td class="cell-muted text-center">
+            <span [pTooltip]="row.cnpj" tooltipPosition="top">
+              {{ row.cnpj | csDocument }}
+            </span>
+          </td>
+          <td class="cell-muted text-center">
+            {{ row.openingDate ? (row.openingDate | csDate: 'date') : '-' }}
+          </td>
+          <td class="cell-muted text-center">
+            {{ row.closingDate ? (row.closingDate | csDate: 'date') : '-' }}
+          </td>
+          <td class="cell-muted text-center">
+            <cs-tag [value]="statusEnumLabel(row.status)" [tone]="severityEnum(row.status)" />
+          </td>
+
+          <td class="cell-muted text-center">
+            {{ row.createdAt ? (row.createdAt | csDate: 'short') : '-' }}
+          </td>
+
+          <td class="cell-muted text-center">
+            {{ row.createdBy?.name }}
+          </td>
+
+          <td class="text-center">
+            <div class="table-actions justify-content-center">
+              <button
+                pButton
+                type="button"
+                icon="pi pi-building"
+                (click)="toggleCompanies(row)"
+                class="p-button-text p-button-sm"
+                [pTooltip]="'flag.relationships.companies' | translate"
+              ></button>
+            </div>
+          </td>
+
+          <td class="text-center">
+            <div class="table-actions justify-content-center">
+              <button
+                pButton
+                type="button"
+                icon="pi pi-briefcase"
+                class="p-button-text p-button-sm"
+                (click)="toggleEstablishments(row)"
+                [pTooltip]="'flag.relationships.establishment' | translate"
+              ></button>
+            </div>
+          </td>
+
+          <td class="text-center">
+            <div class="table-actions">
+              <button
+                pButton
+                type="button"
+                tooltipPosition="top"
+                icon="pi pi-check-circle"
+                class="p-button-text p-button-sm"
+                [disabled]="!secPolicy.canActivate(row)"
             [pTooltip]="
               secPolicy.canActivate(row)
                 ? ('acquirer.action.activate.label' | translate)
                 : (secPolicy.activateDisabledReason(row) ?? '' | translate)
             "
-            (click)="confirmActivate(row)"
-          ></button>
+                (click)="confirmActivate(row)"
+              ></button>
 
-          <button
-            pButton
-            type="button"
-            icon="pi pi-ban"
-            class="p-button-text p-button-sm"
-            tooltipPosition="top"
-            [disabled]="!secPolicy.canDeactivate(row)"
+              <button
+                pButton
+                type="button"
+                icon="pi pi-ban"
+                class="p-button-text p-button-sm"
+                tooltipPosition="top"
+                [disabled]="!secPolicy.canDeactivate(row)"
             [pTooltip]="
               secPolicy.canDeactivate(row)
                 ? ('acquirer.action.deactivate.label' | translate)
                 : (secPolicy.deactivateDisabledReason(row) ?? '' | translate)
             "
-            (click)="confirmDeactivate(row)"
-          ></button>
+                (click)="confirmDeactivate(row)"
+              ></button>
 
-          <button
-            pButton
-            type="button"
-            icon="pi pi-lock"
-            class="p-button-text p-button-sm"
-            tooltipPosition="top"
-            [disabled]="!secPolicy.canBlock(row)"
+              <button
+                pButton
+                type="button"
+                icon="pi pi-lock"
+                class="p-button-text p-button-sm"
+                tooltipPosition="top"
+                [disabled]="!secPolicy.canBlock(row)"
             [pTooltip]="
               secPolicy.canBlock(row)
                 ? ('acquirer.action.block.label' | translate)
                 : (secPolicy.blockDisabledReason(row) ?? '' | translate)
             "
-            (click)="confirmBlock(row)"
-          ></button>
-        </div>
-      </td>
-    </tr>
+                (click)="confirmBlock(row)"
+              ></button>
+            </div>
+          </td>
+        </tr>
 
-    <tr *ngIf="expandedAcquirerId() === row.id">
-      <td colspan="10" class="p-3 surface-ground flag-expanded-cell">
-        <div class="flag-expanded-wrap">
-          <ng-container [ngSwitch]="expandedRelationType()">
-            <app-acquirer-company-relations
-              [acquirer]="row"
-              (changed)="refresh()"
-              *ngSwitchCase="'companies'"
-            ></app-acquirer-company-relations>
+        @if (expandedAcquirerId() === row.id) {
+          <tr>
+            <td colspan="10" class="p-3 surface-ground flag-expanded-cell">
+              <div class="flag-expanded-wrap">
+                @switch (expandedRelationType()) {
+                  @case ('companies') {
+                    <app-acquirer-company-relations
+                      [acquirer]="row"
+                      (changed)="refresh()"
+                    ></app-acquirer-company-relations>
+                  }
+                  @case ('establishments') {
+                    <app-acquirer-establishment-relations
+                      [acquirer]="row"
+                      (changed)="refresh()"
+                    ></app-acquirer-establishment-relations>
+                  }
+                }
+              </div>
+            </td>
+          </tr>
+        }
+      </ng-template>
 
-            <app-acquirer-establishment-relations
-              [acquirer]="row"
-              (changed)="refresh()"
-              *ngSwitchCase="'establishments'"
-            ></app-acquirer-establishment-relations>
-          </ng-container>
-        </div>
-      </td>
-    </tr>
-  </ng-template>
-
-  <ng-template pTemplate="emptymessage">
-    <tr>
-      <td [attr.colspan]="8" class="empty-td">
-        <div class="empty empty-center">
-          <div class="empty-title">
-            {{
-              facade.loadedOnce()
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td [attr.colspan]="8" class="empty-td">
+            <div class="empty empty-center">
+              <div class="empty-title">
+                {{
+                facade.loadedOnce()
                 ? ('acquirer.empty.title' | translate)
                 : ('common.loading' | translate)
-            }}
-          </div>
-        </div>
-      </td>
-    </tr>
-  </ng-template>
-</p-table>
+                }}
+              </div>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>

@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Component, EventEmitter, Output, computed, inject, input, signal } from '@angular/core';
 
@@ -49,7 +49,6 @@ type PendingEstablishmentRelation = {
   selector: 'app-acquirer-establishment-relations',
   templateUrl: './acquirer-establishment-relations.component.html',
   imports: [
-    CommonModule,
     TableModule,
     ButtonModule,
     DialogModule,
@@ -61,8 +60,8 @@ type PendingEstablishmentRelation = {
     FloatLabelModule,
     ErrorMsgComponent,
     ReactiveFormsModule,
-    ConfirmDialogModule,
-  ],
+    ConfirmDialogModule
+],
 })
 export class AcquirerEstablishmentRelationsComponent {
   acquirer = input.required<AcquirerModel>();

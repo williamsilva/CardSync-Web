@@ -110,229 +110,230 @@
   </div>
 </cs-filters-panel>
 
-<p-table
-  #dt
-  stripedRows
-  dataKey="id"
-  size="small"
-  [rows]="rows"
-  [lazy]="true"
-  showGridlines
-  [value]="groups()"
-  [rowHover]="true"
-  [paginator]="true"
-  sortMode="multiple"
-  filterDisplay="menu"
-  stateStorage="local"
-  class="p-datatable-sm mt-1"
-  styleClass="cs-admin-table"
-  [loading]="facade.loading()"
-  [showCurrentPageReport]="true"
-  [totalRecords]="totalRecords()"
-  (onPage)="onPageChange($event)"
-  (onLazyLoad)="onLazyLoad($event)"
-  [paginatorDropdownAppendTo]="'body'"
-  [rowsPerPageOptions]="rowsPerPageOptions"
-  [stateKey]="tableStateKey()"
-  [tableStyle]="{ width: '100%', 'min-width': '48rem' }"
-  [currentPageReportTemplate]="'pagination.report' | translate"
->
-  <ng-template pTemplate="colgroup">
-    <colgroup>
-      <col style="width: auto" />
-      <col style="width: auto" />
-      <col style="width: 170px" />
-      <col style="width: 170px" />
-      <col style="width: 90px" />
-      <col style="width: 90px" />
-      <col style="width: 90px" />
-    </colgroup>
-  </ng-template>
+<div class="surface-card border-round px-3 pt-2 pb-3 mt-2">
+  <p-table
+    #dt
+    stripedRows
+    dataKey="id"
+    size="small"
+    [rows]="rows"
+    [lazy]="true"
+    showGridlines
+    [value]="groups()"
+    [rowHover]="true"
+    [paginator]="true"
+    sortMode="multiple"
+    filterDisplay="menu"
+    stateStorage="local"
+    class="cs-admin-table"
+    [loading]="facade.loading()"
+    [showCurrentPageReport]="true"
+    [totalRecords]="totalRecords()"
+    (onPage)="onPageChange($event)"
+    (onLazyLoad)="onLazyLoad($event)"
+    [paginatorDropdownAppendTo]="'body'"
+    [rowsPerPageOptions]="rowsPerPageOptions"
+    [stateKey]="tableStateKey()"
+    [tableStyle]="{ width: '100%', 'min-width': '48rem' }"
+    [currentPageReportTemplate]="'pagination.report' | translate"
+  >
+    <ng-template pTemplate="colgroup">
+      <colgroup>
+        <col style="width: auto" />
+        <col style="width: auto" />
+        <col style="width: 170px" />
+        <col style="width: 170px" />
+        <col style="width: 90px" />
+        <col style="width: 90px" />
+        <col style="width: 90px" />
+      </colgroup>
+    </ng-template>
 
-  <ng-template pTemplate="header">
-    <tr>
-      <th pSortableColumn="name">
-        <div class="th-flex text-center">
-          <span class="th-label">{{ 'groups.columns.name' | translate }}</span>
-          <span class="th-icons">
-            <p-sortIcon field="name"></p-sortIcon>
-            <p-columnFilter
-              field="name"
-              type="text"
-              display="menu"
-              class="ml-auto"
-              matchMode="contains"
-              [useGrouping]="false"
-              [showOperator]="false"
-              [showAddButton]="false"
-              styleClass="cs-colfilter"
-            ></p-columnFilter>
-          </span>
-        </div>
-      </th>
+    <ng-template pTemplate="header">
+      <tr>
+        <th pSortableColumn="name">
+          <div class="th-flex text-center">
+            <span class="th-label">{{ 'groups.columns.name' | translate }}</span>
+            <span class="th-icons">
+              <p-sortIcon field="name"></p-sortIcon>
+              <p-columnFilter
+                field="name"
+                type="text"
+                display="menu"
+                class="ml-auto"
+                matchMode="contains"
+                [useGrouping]="false"
+                [showOperator]="false"
+                [showAddButton]="false"
+                styleClass="cs-colfilter"
+              ></p-columnFilter>
+            </span>
+          </div>
+        </th>
 
-      <th pSortableColumn="description">
-        <div class="th-flex text-center">
-          <span class="th-label">{{ 'groups.columns.description' | translate }}</span>
-          <span class="th-icons">
-            <p-sortIcon field="description"></p-sortIcon>
-            <p-columnFilter
-              type="text"
-              display="menu"
-              class="ml-auto"
-              field="description"
-              matchMode="contains"
-              [useGrouping]="false"
-              [showOperator]="false"
-              [showAddButton]="false"
-              styleClass="cs-colfilter"
-            ></p-columnFilter>
-          </span>
-        </div>
-      </th>
+        <th pSortableColumn="description">
+          <div class="th-flex text-center">
+            <span class="th-label">{{ 'groups.columns.description' | translate }}</span>
+            <span class="th-icons">
+              <p-sortIcon field="description"></p-sortIcon>
+              <p-columnFilter
+                type="text"
+                display="menu"
+                class="ml-auto"
+                field="description"
+                matchMode="contains"
+                [useGrouping]="false"
+                [showOperator]="false"
+                [showAddButton]="false"
+                styleClass="cs-colfilter"
+              ></p-columnFilter>
+            </span>
+          </div>
+        </th>
 
-      <th pSortableColumn="createdAt">
-        <div class="th-flex text-center">
-          <span class="th-label">{{ 'groups.columns.createdAt' | translate }}</span>
-          <span class="th-icons">
-            <p-sortIcon field="createdAt"></p-sortIcon>
-            <p-columnFilter
-              display="menu"
-              field="createdAt"
-              matchMode="between"
-              [showOperator]="false"
-              [showAddButton]="false"
-              [showMatchModes]="false"
-              styleClass="cs-colfilter"
-            >
-              <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                <p-datepicker
-                  class="w-full"
-                  appendTo="body"
-                  [showIcon]="true"
-                  [ngModel]="value"
-                  selectionMode="range"
-                  dateFormat="dd/mm/yy"
-                  [readonlyInput]="true"
-                  (ngModelChange)="filter($event)"
-                  [placeholder]="'common.period' | translate"
-                ></p-datepicker>
-              </ng-template>
-            </p-columnFilter>
-          </span>
-        </div>
-      </th>
+        <th pSortableColumn="createdAt">
+          <div class="th-flex text-center">
+            <span class="th-label">{{ 'groups.columns.createdAt' | translate }}</span>
+            <span class="th-icons">
+              <p-sortIcon field="createdAt"></p-sortIcon>
+              <p-columnFilter
+                display="menu"
+                field="createdAt"
+                matchMode="between"
+                [showOperator]="false"
+                [showAddButton]="false"
+                [showMatchModes]="false"
+                styleClass="cs-colfilter"
+              >
+                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                  <p-datepicker
+                    class="w-full"
+                    appendTo="body"
+                    [showIcon]="true"
+                    [ngModel]="value"
+                    selectionMode="range"
+                    dateFormat="dd/mm/yy"
+                    [readonlyInput]="true"
+                    (ngModelChange)="filter($event)"
+                    [placeholder]="'common.period' | translate"
+                  ></p-datepicker>
+                </ng-template>
+              </p-columnFilter>
+            </span>
+          </div>
+        </th>
 
-      <th pSortableColumn="createdBy">
-        <div class="th-flex text-center">
-          <span class="th-label">{{ 'groups.columns.createdBy' | translate }}</span>
-          <span class="th-icons">
-            <p-sortIcon field="createdBy"></p-sortIcon>
-            <p-columnFilter
-              display="menu"
-              matchMode="in"
-              field="createdBy"
-              [showOperator]="false"
-              [showAddButton]="false"
-              [showMatchModes]="false"
-              styleClass="cs-colfilter"
-            >
-              <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                <p-multiSelect
-                  class="w-full"
-                  appendTo="body"
-                  [filter]="true"
-                  [ngModel]="value"
-                  [showClear]="true"
-                  optionLabel="label"
-                  optionValue="value"
-                  [options]="usersOptions()"
-                  (onChange)="filter($event.value)"
-                  [placeholder]="'common.all' | translate"
-                ></p-multiSelect>
-              </ng-template>
-            </p-columnFilter>
-          </span>
-        </div>
-      </th>
+        <th pSortableColumn="createdBy">
+          <div class="th-flex text-center">
+            <span class="th-label">{{ 'groups.columns.createdBy' | translate }}</span>
+            <span class="th-icons">
+              <p-sortIcon field="createdBy"></p-sortIcon>
+              <p-columnFilter
+                display="menu"
+                matchMode="in"
+                field="createdBy"
+                [showOperator]="false"
+                [showAddButton]="false"
+                [showMatchModes]="false"
+                styleClass="cs-colfilter"
+              >
+                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                  <p-multiSelect
+                    class="w-full"
+                    appendTo="body"
+                    [filter]="true"
+                    [ngModel]="value"
+                    [showClear]="true"
+                    optionLabel="label"
+                    optionValue="value"
+                    [options]="usersOptions()"
+                    (onChange)="filter($event.value)"
+                    [placeholder]="'common.all' | translate"
+                  ></p-multiSelect>
+                </ng-template>
+              </p-columnFilter>
+            </span>
+          </div>
+        </th>
 
-      <th>
-        <div class="th-flex text-center">
-          <span class="th-label">{{ 'groups.columns.usersCount' | translate }}</span>
-        </div>
-      </th>
-      <th>
-        <div class="th-flex text-center">
-          <span class="th-label">{{ 'groups.columns.permissionsCount' | translate }}</span>
-        </div>
-      </th>
+        <th>
+          <div class="th-flex text-center">
+            <span class="th-label">{{ 'groups.columns.usersCount' | translate }}</span>
+          </div>
+        </th>
+        <th>
+          <div class="th-flex text-center">
+            <span class="th-label">{{ 'groups.columns.permissionsCount' | translate }}</span>
+          </div>
+        </th>
 
-      <th class="text-center">
-        <div class="th-flex text-center justify-content-center">
-          <span class="th-label">{{ 'common.actions' | translate }}</span>
-        </div>
-      </th>
-    </tr>
-  </ng-template>
+        <th class="text-center">
+          <div class="th-flex text-center justify-content-center">
+            <span class="th-label">{{ 'common.actions' | translate }}</span>
+          </div>
+        </th>
+      </tr>
+    </ng-template>
 
-  <ng-template pTemplate="body" let-row>
-    <tr>
-      <td>{{ row.name }}</td>
-      <td>{{ row.description }}</td>
-      <td class="text-center">{{ row.createdAt ? (row.createdAt | csDate: 'short') : '-' }}</td>
-      <td class="text-center">{{ row.createdBy?.name ?? '-' }}</td>
-      <td class="text-center">{{ row.usersCount ?? '-' }}</td>
-      <td class="text-center">{{ row.permissionsCount ?? '-' }}</td>
-      <td class="text-center">
-        <button
-          pButton
-          type="button"
-          icon="pi pi-eye"
-          (click)="view(row)"
-          tooltipPosition="top"
-          class="p-button-text p-button-sm"
-          [pTooltip]="'common.view' | translate"
-        ></button>
+    <ng-template pTemplate="body" let-row>
+      <tr>
+        <td>{{ row.name }}</td>
+        <td>{{ row.description }}</td>
+        <td class="text-center">{{ row.createdAt ? (row.createdAt | csDate: 'short') : '-' }}</td>
+        <td class="text-center">{{ row.createdBy?.name ?? '-' }}</td>
+        <td class="text-center">{{ row.usersCount ?? '-' }}</td>
+        <td class="text-center">{{ row.permissionsCount ?? '-' }}</td>
+        <td class="text-center">
+          <button
+            pButton
+            type="button"
+            icon="pi pi-eye"
+            (click)="view(row)"
+            tooltipPosition="top"
+            class="p-button-text p-button-sm"
+            [pTooltip]="'common.view' | translate"
+          ></button>
 
-        <button
-          pButton
-          type="button"
-          icon="pi pi-pencil"
-          (click)="edit(row)"
-          class="p-button-text p-button-sm"
-          [disabled]="!secPolicy.canEdit(row)"
-          [pTooltip]="
-            secPolicy.canEdit(row)
-              ? ('common.edit' | translate)
-              : (secPolicy.editDisabledReason(row) ?? 'groups.action.edit.noPermission' | translate)
-          "
-          tooltipPosition="top"
-        ></button>
+          <button
+            pButton
+            type="button"
+            icon="pi pi-pencil"
+            (click)="edit(row)"
+            class="p-button-text p-button-sm"
+            [disabled]="!secPolicy.canEdit(row)"
+            [pTooltip]="
+              secPolicy.canEdit(row)
+                ? ('common.edit' | translate)
+                : (secPolicy.editDisabledReason(row) ?? 'groups.action.edit.noPermission' | translate)
+            "
+            tooltipPosition="top"
+          ></button>
 
-        <button
-          pButton
-          type="button"
-          icon="pi pi-trash"
-          (click)="confirmDelete(row)"
-          class="p-button-text p-button-sm"
-          [disabled]="!secPolicy.canDelete(row)"
-          [pTooltip]="
-            secPolicy.canDelete(row)
-              ? ('common.delete' | translate)
-              : (secPolicy.deleteDisabledReason(row) ?? 'groups.action.delete.noPermission'
-                | translate)
-          "
-          tooltipPosition="top"
-        ></button>
-      </td>
-    </tr>
-  </ng-template>
+          <button
+            pButton
+            type="button"
+            icon="pi pi-trash"
+            (click)="confirmDelete(row)"
+            class="p-button-text p-button-sm"
+            [disabled]="!secPolicy.canDelete(row)"
+            [pTooltip]="
+              secPolicy.canDelete(row)
+                ? ('common.delete' | translate)
+                : (secPolicy.deleteDisabledReason(row) ?? 'groups.action.delete.noPermission'
+                  | translate)
+            "
+            tooltipPosition="top"
+          ></button>
+        </td>
+      </tr>
+    </ng-template>
 
-  <ng-template pTemplate="emptymessage">
-    <tr>
-      <td colspan="7" class="text-center py-5 opacity-70">
-        {{ 'groups.empty.title' | translate }}
-      </td>
-    </tr>
-  </ng-template>
-</p-table>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="7" class="text-center py-5 opacity-70">
+          {{ 'groups.empty.title' | translate }}
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

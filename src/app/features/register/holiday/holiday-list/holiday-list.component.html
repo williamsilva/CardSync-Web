@@ -154,16 +154,15 @@
   filterDisplay="menu"
   stateStorage="local"
   [value]="holidays()"
-  class="p-datatable-sm mt-1"
-  styleClass="cs-admin-table"
+  class="cs-admin-table"
   [loading]="facade.loading()"
+  [stateKey]="tableStateKey()"
   [showCurrentPageReport]="true"
   [totalRecords]="totalRecords()"
   (onPage)="onPageChange($event)"
   (onLazyLoad)="onLazyLoad($event)"
   [paginatorDropdownAppendTo]="'body'"
   [rowsPerPageOptions]="rowsPerPageOptions"
-  [stateKey]="tableStateKey()"
   [tableStyle]="{ width: '100%', 'min-width': '58rem' }"
   [currentPageReportTemplate]="'pagination.report' | translate"
 >
@@ -358,7 +357,9 @@
             tooltipPosition="top"
             class="p-button-text p-button-sm"
             [disabled]="!secPolicy.canDeactivate(row)"
-            [pTooltip]="secPolicy.canDeactivate(row) ? ('common.deactivate' | translate) : undefined"
+            [pTooltip]="
+              secPolicy.canDeactivate(row) ? ('common.deactivate' | translate) : undefined
+            "
             (click)="confirmDeactivate(row)"
           ></button>
 

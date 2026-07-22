@@ -1,16 +1,17 @@
 <p-dialog
   [modal]="true"
+  [closable]="false"
+  (onHide)="onHide()"
   [draggable]="false"
   [resizable]="false"
-  [closable]="!saving() && !loadingGroup()"
-  [style]="{ width: '42rem', maxWidth: '95vw' }"
   [visible]="visible()"
-  (onHide)="onHide()"
+  [contentStyle]="{ overflow: 'visible' }"
+  [style]="{ width: '720px', maxWidth: '95vw' }"
   [header]="isEditMode() ? ('groups.edit.title' | translate) : ('groups.new.title' | translate)"
 >
   <form [formGroup]="form" class="cs-dialog-form">
     <div class="grid formgrid gap-0">
-      <div class="col-12 p-2">
+      <div class="col-12 md:col-6 p-2">
         <p-floatLabel variant="on" class="w-full">
           <input
             id="name"
@@ -29,7 +30,7 @@
         </p-floatLabel>
       </div>
 
-      <div class="col-12 p-2">
+      <div class="col-12 md:col-6 p-2">
         <p-floatLabel variant="on" class="w-full">
           <input
             id="description"

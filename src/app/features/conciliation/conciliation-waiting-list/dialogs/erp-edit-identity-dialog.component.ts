@@ -1,5 +1,5 @@
 import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+
 import {
   Input,
   Output,
@@ -27,15 +27,14 @@ export interface ErpEditIdentityPayload {
   templateUrl: './erp-edit-identity-dialog.component.html',
   styleUrl: './erp-edit-identity-dialog.component.scss',
   imports: [
-    CommonModule,
     FormsModule,
     DialogModule,
     ButtonModule,
     FloatLabelModule,
     InputTextModule,
     InputNumberModule,
-    TranslateModule,
-  ],
+    TranslateModule
+],
 })
 export class ErpEditIdentityDialogComponent implements OnChanges {
   @Input() visible = false;

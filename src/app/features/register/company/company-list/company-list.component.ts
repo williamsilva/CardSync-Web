@@ -1,5 +1,5 @@
 import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+
 import { Component, ViewChild, computed, inject, signal } from '@angular/core';
 
 import { Table } from 'primeng/table';
@@ -66,7 +66,6 @@ import {
   selector: 'app-company-list',
   templateUrl: './company-list.component.html',
   imports: [
-    CommonModule,
     FloatLabel,
     CsDatePipe,
     FormsModule,
@@ -89,8 +88,8 @@ import {
     CpfCnpjMaskDirective,
     FiltersPanelComponent,
     DATA_TABLE_SHELL_IMPORTS,
-    CompanyCreateDialogComponent,
-  ],
+    CompanyCreateDialogComponent
+],
 })
 export class CompanyListComponent extends StatefulListPage<
   CompanyFiltersState,

@@ -1,5 +1,5 @@
 import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+
 import { Component, ViewChild, computed, inject, signal } from '@angular/core';
 
 import { Table } from 'primeng/table';
@@ -65,7 +65,6 @@ import {
   selector: 'app-no-file-day-list',
   templateUrl: './no-file-day-list.component.html',
   imports: [
-    CommonModule,
     FloatLabel,
     CsDatePipe,
     FormsModule,
@@ -85,8 +84,8 @@ import {
     ConfirmDialogModule,
     FiltersPanelComponent,
     DATA_TABLE_SHELL_IMPORTS,
-    NoFileDayCreateDialogComponent,
-  ],
+    NoFileDayCreateDialogComponent
+],
 })
 export class NoFileDayListComponent extends StatefulListPage<
   NoFileDayFiltersState,

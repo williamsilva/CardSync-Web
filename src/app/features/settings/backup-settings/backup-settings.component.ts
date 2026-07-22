@@ -1,6 +1,6 @@
-import { Component, computed, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpResponse } from '@angular/common/http';
+import { Component, computed, inject, signal } from '@angular/core';
 
 import { CardModule } from 'primeng/card';
 import { MessageService } from 'primeng/api';
@@ -21,11 +21,11 @@ import { PageHeaderComponent } from '@shared/features/page-header/page-header.co
   templateUrl: './backup-settings.component.html',
   imports: [
     CardModule,
+    FormsModule,
     ButtonModule,
     TooltipModule,
     CheckboxModule,
     TranslateModule,
-    FormsModule,
     PageHeaderComponent,
   ],
 })
@@ -81,7 +81,7 @@ export class BackupSettingsComponent {
 
     const contentDisposition = response.headers.get('Content-Disposition') ?? '';
     const filenameMatch = /filename\*?=(?:UTF-8'')?"?([^";]+)"?/i.exec(contentDisposition);
-    const filename = filenameMatch?.[1] ?? 'cardsync-backup.zip';
+    const filename = filenameMatch?.[1] ?? 'backup_nb.zip';
 
     const url = URL.createObjectURL(blob);
     const anchor = document.createElement('a');

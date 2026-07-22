@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { computed, DestroyRef } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -26,10 +26,8 @@ import { CpfCnpjMaskDirective } from '@shared/directives/cpf-cnpj-mask.directive
 @Component({
   standalone: true,
   selector: 'app-users-create-dialog',
-  styleUrl: './users-create-dialog.component.scss',
   templateUrl: './users-create-dialog.component.html',
   imports: [
-    CommonModule,
     ToastModule,
     DialogModule,
     ButtonModule,
@@ -40,8 +38,8 @@ import { CpfCnpjMaskDirective } from '@shared/directives/cpf-cnpj-mask.directive
     ErrorMsgComponent,
     MultiSelectModule,
     ReactiveFormsModule,
-    CpfCnpjMaskDirective,
-  ],
+    CpfCnpjMaskDirective
+],
 })
 export class UsersCreateDialogComponent {
   visible = input.required<boolean>();
@@ -61,6 +59,7 @@ export class UsersCreateDialogComponent {
   readonly sendingInvite = signal(false);
   readonly usersFacade = inject(UsersFacade);
   readonly loadedUser = signal<UserModel | null>(null);
+
   readonly isEditMode = computed(() => !!this.user());
 
   readonly saving = signal(false);

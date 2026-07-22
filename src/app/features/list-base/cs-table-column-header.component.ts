@@ -12,26 +12,28 @@ import { CsColumnFilterTemplateDirective } from './cs-column-filter-template.dir
   template: `
     <div class="th-flex text-center" [class.justify-content-center]="center">
       <span class="th-label">{{ label }}</span>
-
-      <span class="th-icons" *ngIf="sortField || filterField">
-        <p-sortIcon *ngIf="sortField" [field]="sortField"></p-sortIcon>
-
-        <p-columnFilter
-          *ngIf="filterField"
-          #columnFilter
-          [field]="filterField"
-          [matchMode]="matchMode"
-          [display]="filterDisplay"
-          styleClass="cs-colfilter"
-          [useGrouping]="useGrouping"
-          [showOperator]="showOperator"
-          [showAddButton]="showAddButton"
-          [showMatchModes]="showMatchModes"
-          [showClearButton]="showClearButton"
-          [showApplyButton]="showApplyButton"
-        >
-          <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-            <ng-container
+    
+      @if (sortField || filterField) {
+        <span class="th-icons">
+          @if (sortField) {
+            <p-sortIcon [field]="sortField"></p-sortIcon>
+          }
+          @if (filterField) {
+            <p-columnFilter
+              #columnFilter
+              [field]="filterField"
+              [matchMode]="matchMode"
+              [display]="filterDisplay"
+              styleClass="cs-colfilter"
+              [useGrouping]="useGrouping"
+              [showOperator]="showOperator"
+              [showAddButton]="showAddButton"
+              [showMatchModes]="showMatchModes"
+              [showClearButton]="showClearButton"
+              [showApplyButton]="showApplyButton"
+              >
+              <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                <ng-container
               *ngTemplateOutlet="
                 filterTemplate?.templateRef ?? null;
                 context: {
@@ -41,12 +43,14 @@ import { CsColumnFilterTemplateDirective } from './cs-column-filter-template.dir
                   columnFilter: columnFilter,
                 }
               "
-            ></ng-container>
-          </ng-template>
-        </p-columnFilter>
+              ></ng-container>
+            </ng-template>
+          </p-columnFilter>
+        }
       </span>
+    }
     </div>
-  `,
+    `,
 })
 export class CsTableColumnHeaderComponent {
   @Input() label = '';

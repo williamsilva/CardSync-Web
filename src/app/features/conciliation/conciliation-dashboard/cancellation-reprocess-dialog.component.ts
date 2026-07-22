@@ -1,5 +1,5 @@
 import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+
 import {
   Input,
   Output,
@@ -26,14 +26,13 @@ export interface CancellationReprocessPayload {
   templateUrl: './cancellation-reprocess-dialog.component.html',
   styleUrl: './cancellation-reprocess-dialog.component.scss',
   imports: [
-    CommonModule,
     FormsModule,
     DialogModule,
     ButtonModule,
     FloatLabelModule,
     DatePickerModule,
-    TranslateModule,
-  ],
+    TranslateModule
+],
 })
 export class CancellationReprocessDialogComponent implements OnChanges {
   @Input() visible = false;

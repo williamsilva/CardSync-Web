@@ -1,5 +1,5 @@
 import { RouterLink } from '@angular/router';
-import { CommonModule } from '@angular/common';
+
 import { Component, computed, inject, signal } from '@angular/core';
 
 import { TranslateModule } from '@ngx-translate/core';
@@ -20,7 +20,7 @@ import { FileProcessingService } from '@features/service/file-processing.service
   styleUrl: './scheduler-status.component.scss',
   templateUrl: './scheduler-status.component.html',
   providers: [CsDatePipe],
-  imports: [CommonModule, RouterLink, ButtonModule, CardModule, DividerModule, CsTagComponent, CsDatePipe, PageHeaderComponent, TranslateModule],
+  imports: [RouterLink, ButtonModule, CardModule, DividerModule, CsTagComponent, CsDatePipe, PageHeaderComponent, TranslateModule],
 })
 export class SchedulerStatusComponent {
   private readonly service = inject(FileProcessingService);

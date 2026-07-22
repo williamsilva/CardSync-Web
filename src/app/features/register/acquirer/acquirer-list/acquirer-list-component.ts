@@ -1,5 +1,5 @@
 import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+
 import { Component, ViewChild, computed, inject, signal } from '@angular/core';
 
 import { Table } from 'primeng/table';
@@ -60,7 +60,6 @@ import {
   selector: 'app-acquirer-list',
   templateUrl: './acquirer-list-component.html',
   imports: [
-    CommonModule,
     FloatLabel,
     CsDatePipe,
     FormsModule,
@@ -84,8 +83,8 @@ import {
     FiltersPanelComponent,
     DATA_TABLE_SHELL_IMPORTS,
     AcquirerCompanyRelationsComponent,
-    AcquirerEstablishmentRelationsComponent,
-  ],
+    AcquirerEstablishmentRelationsComponent
+],
 })
 export class AcquirerListComponent extends StatefulListPage<
   AcquirerFiltersState,

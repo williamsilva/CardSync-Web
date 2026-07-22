@@ -1,5 +1,5 @@
 import { ActivatedRoute } from '@angular/router';
-import { CommonModule, Location } from '@angular/common';
+import { Location } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Component, DestroyRef, computed, inject, signal } from '@angular/core';
 
@@ -29,7 +29,6 @@ import { GroupsCreateDialogComponent } from '@features/security/groups/groups-cr
   styleUrl: './group-detail.component.scss',
   templateUrl: './group-detail.component.html',
   imports: [
-    CommonModule,
     CardModule,
     FormsModule,
     ButtonModule,
@@ -40,8 +39,8 @@ import { GroupsCreateDialogComponent } from '@features/security/groups/groups-cr
     PageHeaderComponent,
     ProgressSpinnerModule,
     GroupsCreateDialogComponent,
-    CsTagComponent,
-  ],
+    CsTagComponent
+],
 })
 export class GroupDetailComponent {
   private readonly location = inject(Location);

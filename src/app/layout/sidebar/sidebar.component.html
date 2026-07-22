@@ -8,58 +8,59 @@
   </a>
 
   <nav class="nav">
-    <ng-container *ngFor="let item of menu(); trackBy: trackByLabelKey">
-      <a
-        *ngIf="item.route"
-        class="nav-item"
-        [routerLink]="item.route"
-        routerLinkActive="active"
-        [routerLinkActiveOptions]="{ exact: item.exact ?? false }"
-      >
-        <i
-          class="nav-icon"
-          [ngClass]="isActive(item) ? activeIcon(item) : item.icon"
-        ></i>
-
-        <span class="nav-label">{{ item.labelKey | translate }}</span>
-      </a>
-
-      <div *ngIf="!item.route && item.children?.length" class="nav-group">
-        <button
-          type="button"
-          class="nav-group-title"
-          [class.active]="hasActiveChild(item)"
-          (click)="toggleGroup(item)"
-        >
-          <span class="nav-group-left">
-            <i class="nav-icon" [ngClass]="item.icon"></i>
-            <span class="nav-label">{{ item.labelKey | translate }}</span>
-          </span>
-
-          <i
-            class="pi nav-group-chevron"
-            [ngClass]="isExpanded(item) ? 'pi-chevron-down' : 'pi-chevron-right'"
-          ></i>
-        </button>
-
-        <div *ngIf="isExpanded(item)" class="nav-children">
-          <a
-            *ngFor="let child of item.children; trackBy: trackByLabelKey"
-            class="nav-item child"
-            [routerLink]="child.route!"
-            routerLinkActive="active"
-            [routerLinkActiveOptions]="{ exact: child.exact ?? false }"
+    @for (item of menu(); track trackByLabelKey($index, item)) {
+      @if (item.route) {
+        <a
+          class="nav-item"
+          [routerLink]="item.route"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: item.exact ?? false }"
           >
+          <i
+            class="nav-icon"
+            [ngClass]="isActive(item) ? activeIcon(item) : item.icon"
+          ></i>
+          <span class="nav-label">{{ item.labelKey | translate }}</span>
+        </a>
+      }
+      @if (!item.route && item.children?.length) {
+        <div class="nav-group">
+          <button
+            type="button"
+            class="nav-group-title"
+            [class.active]="hasActiveChild(item)"
+            (click)="toggleGroup(item)"
+            >
+            <span class="nav-group-left">
+              <i class="nav-icon" [ngClass]="item.icon"></i>
+              <span class="nav-label">{{ item.labelKey | translate }}</span>
+            </span>
             <i
-              class="nav-icon"
-              [ngClass]="isActive(child) ? activeIcon(child) : child.icon"
+              class="pi nav-group-chevron"
+              [ngClass]="isExpanded(item) ? 'pi-chevron-down' : 'pi-chevron-right'"
             ></i>
-
-            <span class="nav-label">{{ child.labelKey | translate }}</span>
-          </a>
+          </button>
+          @if (isExpanded(item)) {
+            <div class="nav-children">
+              @for (child of item.children; track trackByLabelKey($index, child)) {
+                <a
+                  class="nav-item child"
+                  [routerLink]="child.route!"
+                  routerLinkActive="active"
+                  [routerLinkActiveOptions]="{ exact: child.exact ?? false }"
+                  >
+                  <i
+                    class="nav-icon"
+                    [ngClass]="isActive(child) ? activeIcon(child) : child.icon"
+                  ></i>
+                  <span class="nav-label">{{ child.labelKey | translate }}</span>
+                </a>
+              }
+            </div>
+          }
         </div>
-      </div>
-    </ng-container>
+      }
+    }
   </nav>
 
   <div class="sidebar-profile">
@@ -72,7 +73,7 @@
         <div
           class="profile-name"
           [title]="me()?.name || me()?.email || ('sidebar.userFallback' | translate)"
-        >
+          >
           {{ me()?.name || me()?.email || ('sidebar.userFallback' | translate) }}
         </div>
       </div>

@@ -1,6 +1,6 @@
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+
 import { AfterViewInit, Component, computed, inject, signal, ViewChild } from '@angular/core';
 
 import { Menu } from 'primeng/menu';
@@ -91,7 +91,6 @@ import { StatusEnum, statusEnumLabel, statusEnumSeverity } from '@models/enums/s
   selector: 'app-cancellation-list',
   templateUrl: './cancellation-list.component.html',
   imports: [
-    CommonModule,
     Menu,
     Select,
     Tooltip,
@@ -114,8 +113,8 @@ import { StatusEnum, statusEnumLabel, statusEnumSeverity } from '@models/enums/s
     CsCurrencyRangeFilterComponent,
     CsAdvancedPeriodDateFilterComponent,
     CsAdvancedMultiselectFilterComponent,
-    CsAdvancedFilterItemTemplateDirective,
-  ],
+    CsAdvancedFilterItemTemplateDirective
+],
 })
 export class CancellationListComponent
   extends StatefulListPage<AdjustmentCancellationFiltersState, CancellationAdvancedFilters>
