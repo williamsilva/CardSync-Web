@@ -1,11 +1,11 @@
 <p-dialog
   [modal]="true"
+  appendTo="body"
   [closable]="false"
   (onHide)="onHide()"
   [draggable]="false"
   [resizable]="false"
   [visible]="visible()"
-  [contentStyle]="{ overflow: 'visible' }"
   [style]="{ width: '720px', maxWidth: '95vw' }"
   [header]="isEditMode() ? ('groups.edit.title' | translate) : ('groups.new.title' | translate)"
 >

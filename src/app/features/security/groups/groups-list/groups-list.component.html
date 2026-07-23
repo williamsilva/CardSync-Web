@@ -127,13 +127,13 @@
     stateStorage="local"
     class="cs-admin-table"
     [loading]="facade.loading()"
+    [stateKey]="tableStateKey()"
     [showCurrentPageReport]="true"
     [totalRecords]="totalRecords()"
-    (onPage)="onPageChange($event)"
     (onLazyLoad)="onLazyLoad($event)"
     [paginatorDropdownAppendTo]="'body'"
+    (onPage)="onPageChange($event)"
     [rowsPerPageOptions]="rowsPerPageOptions"
-    [stateKey]="tableStateKey()"
     [tableStyle]="{ width: '100%', 'min-width': '48rem' }"
     [currentPageReportTemplate]="'pagination.report' | translate"
   >
@@ -284,46 +284,49 @@
         <td class="text-center">{{ row.usersCount ?? '-' }}</td>
         <td class="text-center">{{ row.permissionsCount ?? '-' }}</td>
         <td class="text-center">
-          <button
-            pButton
-            type="button"
-            icon="pi pi-eye"
-            (click)="view(row)"
-            tooltipPosition="top"
-            class="p-button-text p-button-sm"
-            [pTooltip]="'common.view' | translate"
-          ></button>
+          <div class="table-actions">
+            <button
+              pButton
+              type="button"
+              icon="pi pi-eye"
+              (click)="view(row)"
+              tooltipPosition="top"
+              class="p-button-text p-button-sm"
+              [pTooltip]="'common.view' | translate"
+            ></button>
 
-          <button
-            pButton
-            type="button"
-            icon="pi pi-pencil"
-            (click)="edit(row)"
-            class="p-button-text p-button-sm"
-            [disabled]="!secPolicy.canEdit(row)"
-            [pTooltip]="
-              secPolicy.canEdit(row)
-                ? ('common.edit' | translate)
-                : (secPolicy.editDisabledReason(row) ?? 'groups.action.edit.noPermission' | translate)
-            "
-            tooltipPosition="top"
-          ></button>
+            <button
+              pButton
+              type="button"
+              icon="pi pi-pencil"
+              (click)="edit(row)"
+              class="p-button-text p-button-sm"
+              [disabled]="!secPolicy.canEdit(row)"
+              [pTooltip]="
+                secPolicy.canEdit(row)
+                  ? ('common.edit' | translate)
+                  : (secPolicy.editDisabledReason(row) ?? 'groups.action.edit.noPermission'
+                    | translate)
+              "
+              tooltipPosition="top"
+            ></button>
 
-          <button
-            pButton
-            type="button"
-            icon="pi pi-trash"
-            (click)="confirmDelete(row)"
-            class="p-button-text p-button-sm"
-            [disabled]="!secPolicy.canDelete(row)"
-            [pTooltip]="
-              secPolicy.canDelete(row)
-                ? ('common.delete' | translate)
-                : (secPolicy.deleteDisabledReason(row) ?? 'groups.action.delete.noPermission'
-                  | translate)
-            "
-            tooltipPosition="top"
-          ></button>
+            <button
+              pButton
+              type="button"
+              icon="pi pi-trash"
+              (click)="confirmDelete(row)"
+              class="p-button-text p-button-sm"
+              [disabled]="!secPolicy.canDelete(row)"
+              [pTooltip]="
+                secPolicy.canDelete(row)
+                  ? ('common.delete' | translate)
+                  : (secPolicy.deleteDisabledReason(row) ?? 'groups.action.delete.noPermission'
+                    | translate)
+              "
+              tooltipPosition="top"
+            ></button>
+          </div>
         </td>
       </tr>
     </ng-template>

@@ -22,12 +22,12 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { CsTagComponent } from '@shared/ui';
 import { I18nService } from '@core/i18n/i18n.service';
 import { CsDatePipe } from '@shared/pipes/cs-date.pipe';
+import { STATE_KEY } from '@features/state-key.constants';
 import { UsersFacade } from '@features/facade/users.facade';
 import { CompanyFacade } from '@features/facade/company.facade';
 import { CsDocumentPipe } from '@shared/pipes/cs-document.pipe';
 import { PermissionService } from '@core/auth/permission.service';
 import { CompanyAdvancedFilters } from '@features/filter/company.filters';
-import { STATE_KEY } from '@features/state-key.constants';
 import { StatefulListPage } from '@features/list-base/stateful-list-page';
 import { CompanyModel, CompanyFiltersState } from '@models/company.models';
 import { BulkActionListPage } from '@features/list-base/bulk-action-list-page';
@@ -88,8 +88,8 @@ import {
     CpfCnpjMaskDirective,
     FiltersPanelComponent,
     DATA_TABLE_SHELL_IMPORTS,
-    CompanyCreateDialogComponent
-],
+    CompanyCreateDialogComponent,
+  ],
 })
 export class CompanyListComponent extends StatefulListPage<
   CompanyFiltersState,
