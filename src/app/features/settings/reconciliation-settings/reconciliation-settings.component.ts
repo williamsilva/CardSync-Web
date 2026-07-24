@@ -57,6 +57,8 @@ export class ReconciliationSettingsComponent {
   protected readonly MAX_BANK_NOT_RECONCILED_DAYS = 60;
   protected readonly MIN_LEGACY_MARKING_MONTHS = 0;
   protected readonly MAX_LEGACY_MARKING_MONTHS = 120;
+  protected readonly MIN_SUBSET_DP_MAX_CENTS = 0;
+  protected readonly MAX_SUBSET_DP_MAX_CENTS = 100_000_000;
 
   protected readonly loading = signal(false);
   protected readonly saving = signal(false);
@@ -144,6 +146,14 @@ export class ReconciliationSettingsComponent {
         Validators.max(this.MAX_BANK_NOT_RECONCILED_DAYS),
       ],
     ],
+    subsetDpMaxCents: [
+      50_000_000,
+      [
+        Validators.required,
+        Validators.min(this.MIN_SUBSET_DP_MAX_CENTS),
+        Validators.max(this.MAX_SUBSET_DP_MAX_CENTS),
+      ],
+    ],
     flagMatchRequired: [false],
     establishmentMatchRequired: [false],
     paymentKindMatchRequired: [false],
@@ -189,6 +199,7 @@ export class ReconciliationSettingsComponent {
           dateToleranceDaysAfter: settings.dateToleranceDaysAfter,
           valueTolerance: settings.valueTolerance,
           bankMarkNotReconciledAfterDays: settings.bankMarkNotReconciledAfterDays,
+          subsetDpMaxCents: settings.subsetDpMaxCents,
           flagMatchRequired: settings.flagMatchRequired,
           establishmentMatchRequired: settings.establishmentMatchRequired,
           paymentKindMatchRequired: settings.paymentKindMatchRequired,
@@ -234,6 +245,7 @@ export class ReconciliationSettingsComponent {
         dateToleranceDaysAfter: v.dateToleranceDaysAfter ?? 10,
         valueTolerance: v.valueTolerance ?? 0.05,
         bankMarkNotReconciledAfterDays: v.bankMarkNotReconciledAfterDays ?? 3,
+        subsetDpMaxCents: v.subsetDpMaxCents ?? 50_000_000,
         flagMatchRequired: v.flagMatchRequired ?? false,
         establishmentMatchRequired: v.establishmentMatchRequired ?? false,
         paymentKindMatchRequired: v.paymentKindMatchRequired ?? false,

@@ -7,12 +7,15 @@ import { API } from '@core/api/api.config';
 export interface ManualBankReconciliationRequest {
   releaseBankId: string;
   creditOrderIds: string[];
+  /** Obrigatório quando a soma das ordens não bate com o valor do lançamento. */
+  divergenceReason?: string | null;
 }
 
 export interface ManualBankReconciliationResult {
   reconciled: number;
   alreadyReconciled: number;
   zeroValueReconciled: number;
+  divergenceValue: number | null;
 }
 
 export interface MarkLegacyResult {
@@ -23,6 +26,12 @@ export interface MarkLegacyResult {
 export interface UndoBankReconciliationResult {
   creditOrdersUnlinked: number;
   installmentsUnlinked: number;
+}
+
+export interface ReclassifyBankStatementFlagsResult {
+  analyzed: number;
+  updated: number;
+  stillUnresolved: number;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -40,5 +49,13 @@ export class ManualBankReconciliationApiService {
 
   undoReconciliation(releaseBankId: string): Observable<UndoBankReconciliationResult> {
     return this.http.post<UndoBankReconciliationResult>(`${this.baseUrl}/undo/${releaseBankId}`, {});
+  }
+
+  /** Backfill único: reclassifica a bandeira dos lançamentos bancários CNAB240 já importados. */
+  reclassifyFlags(): Observable<ReclassifyBankStatementFlagsResult> {
+    return this.http.post<ReclassifyBankStatementFlagsResult>(
+      `${this.baseUrl}/reclassify-flags`,
+      {},
+    );
   }
 }

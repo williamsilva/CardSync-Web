@@ -13,6 +13,7 @@ import {
   MarkLegacyResult,
   ManualBankReconciliationResult,
   ManualBankReconciliationApiService,
+  ReclassifyBankStatementFlagsResult,
 } from '@features/service/manual-bank-reconciliation.api.service';
 
 @Injectable({ providedIn: 'root' })
@@ -45,6 +46,8 @@ export class ManualBankReconciliationFacade {
   private readonly _reconciling = signal(false);
   private readonly _lastResult = signal<ManualBankReconciliationResult | null>(null);
 
+  private readonly _reclassifyingFlags = signal(false);
+
   readonly releases = this._releases.asReadonly();
   readonly releasesTotal = this._releasesTotal.asReadonly();
   readonly releasesLoading = this._releasesLoading.asReadonly();
@@ -64,6 +67,7 @@ export class ManualBankReconciliationFacade {
 
   readonly reconciling = this._reconciling.asReadonly();
   readonly lastResult = this._lastResult.asReadonly();
+  readonly reclassifyingFlags = this._reclassifyingFlags.asReadonly();
 
   loadReleases(q: ListQueryDto<BankStatementAdvancedFilters>): void {
     if (this._releasesLoading()) return;
@@ -164,7 +168,7 @@ export class ManualBankReconciliationFacade {
     );
   }
 
-  reconcile(): Observable<ManualBankReconciliationResult> {
+  reconcile(divergenceReason?: string | null): Observable<ManualBankReconciliationResult> {
     const releases = this._selectedReleases();
     const orders = this._selectedOrders();
     if (releases.length !== 1 || !orders.length || this._reconciling()) return EMPTY;
@@ -172,7 +176,11 @@ export class ManualBankReconciliationFacade {
     const release = releases[0];
     this._reconciling.set(true);
     return this.reconcileApi
-      .reconcile({ releaseBankId: release.id, creditOrderIds: orders.map((o) => o.id) })
+      .reconcile({
+        releaseBankId: release.id,
+        creditOrderIds: orders.map((o) => o.id),
+        divergenceReason,
+      })
       .pipe(
         tap((result) => {
           this._lastResult.set(result);
@@ -181,5 +189,15 @@ export class ManualBankReconciliationFacade {
         }),
         finalize(() => this._reconciling.set(false)),
       );
+  }
+
+  /** Backfill único: reclassifica a bandeira de todos os lançamentos bancários já importados. */
+  reclassifyFlags(): Observable<ReclassifyBankStatementFlagsResult> {
+    if (this._reclassifyingFlags()) return EMPTY;
+
+    this._reclassifyingFlags.set(true);
+    return this.reconcileApi
+      .reclassifyFlags()
+      .pipe(finalize(() => this._reclassifyingFlags.set(false)));
   }
 }

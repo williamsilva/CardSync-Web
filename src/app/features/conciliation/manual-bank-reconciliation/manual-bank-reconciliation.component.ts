@@ -3,9 +3,11 @@ import { Component, OnInit, WritableSignal, computed, inject, signal } from '@an
 
 import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
+import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
 import { CheckboxModule } from 'primeng/checkbox';
+import { TextareaModule } from 'primeng/textarea';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -86,7 +88,7 @@ interface OrderFiltersState {
 @Component({
   standalone: true,
   selector: 'cs-manual-bank-reconciliation',
-  providers: [ConfirmationService, MessageService],
+  providers: [ConfirmationService, MessageService, CsCurrencyPipe],
   templateUrl: './manual-bank-reconciliation.component.html',
   styles: [
     `
@@ -104,7 +106,9 @@ interface OrderFiltersState {
     ButtonModule,
     TooltipModule,
     CsCurrencyPipe,
+    DialogModule,
     CheckboxModule,
+    TextareaModule,
     CsTagComponent,
     CsDocumentPipe,
     TranslateModule,
@@ -121,6 +125,7 @@ export class ManualBankReconciliationComponent implements OnInit {
   protected readonly i18n = inject(I18nService);
   private readonly messageService = inject(MessageService);
   private readonly translateSvc = inject(TranslateService);
+  protected readonly currencyPipe = inject(CsCurrencyPipe);
   private readonly confirmationService = inject(ConfirmationService);
 
   private readonly bankFacade = inject(BankFacade);
@@ -168,7 +173,7 @@ export class ManualBankReconciliationComponent implements OnInit {
 
   releasesRows = Number(localStorage.getItem(this.releasesTableRowsKey)) || 15;
   ordersRows = Number(localStorage.getItem(this.ordersTableRowsKey)) || 15;
-  readonly rowsPerPageOptions = [13, 15, 30, 50, 100];
+  readonly rowsPerPageOptions = [15, 30, 50, 100];
 
   private readonly lastOrdersEvent = signal<any>(null);
   private readonly lastReleasesEvent = signal<any>(null);
@@ -221,9 +226,13 @@ export class ManualBankReconciliationComponent implements OnInit {
     );
   });
 
-  readonly canReconcile = computed(
-    () => this.facade.selectedOrders().length > 0 && this.valuesMatch(),
-  );
+  /** Justificativa obrigatória quando os valores não batem exato (ex.: lançamento mistura vendas
+   * anteriores à implantação, sem CreditOrder no sistema, com vendas atuais — nunca fecha).
+   * Só é pedida depois de clicar em "Vincular" (diálogo próprio), não fica exposta o tempo todo. */
+  readonly divergenceReason = signal('');
+  readonly showDivergenceDialog = signal(false);
+
+  readonly canReconcile = computed(() => this.facade.selectedOrders().length > 0);
 
   readonly valueDifference = computed(() => {
     const release = this.facade.selectedRelease();
@@ -586,9 +595,16 @@ export class ManualBankReconciliationComponent implements OnInit {
   /** Cancela a seleção de lançamento(s) e limpa os filtros de ordens aplicados automaticamente. */
   cancelSelection(): void {
     this.facade.clearSelection();
+    this.divergenceReason.set('');
     this.clearOrderReleaseDerivedFilters();
     this.lastOrdersEvent.set(null);
     this.reloadOrders();
+  }
+
+  /** Limpa as ordens selecionadas e a justificativa de divergência (que não se aplica mais a uma seleção diferente). */
+  clearSelectedOrders(): void {
+    this.facade.clearOrders();
+    this.divergenceReason.set('');
   }
 
   onReleasesLazyLoad(event: any): void {
@@ -627,6 +643,7 @@ export class ManualBankReconciliationComponent implements OnInit {
    * de uma vez. Clicar em um lançamento não elegível sempre volta ao modo único.
    */
   selectRelease(release: BankStatementApiModel): void {
+    this.divergenceReason.set('');
     const eligible = this.isEligibleForLegacy(release);
     const current = this.facade.selectedReleases();
     const currentAllEligible =
@@ -735,7 +752,18 @@ export class ManualBankReconciliationComponent implements OnInit {
     return !!releaseDate && releaseDate <= cutoff;
   }
 
+  /**
+   * Sem divergência: segue direto para o diálogo de confirmação simples, como antes. Com
+   * divergência, abre um diálogo próprio pedindo a justificativa — o motivo só é solicitado
+   * neste momento (ao clicar em Vincular), não fica um campo exposto o tempo todo na tela.
+   */
   confirmReconcile(): void {
+    if (!this.valuesMatch()) {
+      this.divergenceReason.set('');
+      this.showDivergenceDialog.set(true);
+      return;
+    }
+
     const count = this.facade.selectedOrders().length;
     this.confirmationService.confirm({
       message: this.translateSvc.instant('conciliation.manualBankReconciliation.confirmMessage', {
@@ -748,6 +776,32 @@ export class ManualBankReconciliationComponent implements OnInit {
       acceptButtonStyleClass: 'p-button-success',
       accept: () => this.doReconcile(),
     });
+  }
+
+  protected divergenceDialogMessage(): string {
+    return this.translateSvc.instant(
+      'conciliation.manualBankReconciliation.divergenceDialogMessage',
+      {
+        count: this.facade.selectedOrders().length,
+        difference: this.currencyPipe.transform(this.valueDifference()),
+      },
+    );
+  }
+
+  protected onDivergenceDialogVisibleChange(visible: boolean): void {
+    this.showDivergenceDialog.set(visible);
+    if (!visible) this.divergenceReason.set('');
+  }
+
+  protected cancelDivergenceDialog(): void {
+    this.showDivergenceDialog.set(false);
+    this.divergenceReason.set('');
+  }
+
+  protected confirmDivergenceReconcile(): void {
+    if (!this.divergenceReason().trim()) return;
+    this.showDivergenceDialog.set(false);
+    this.doReconcile();
   }
 
   confirmMarkLegacy(): void {
@@ -765,6 +819,48 @@ export class ManualBankReconciliationComponent implements OnInit {
       rejectLabel: this.translateSvc.instant('common.cancel'),
       acceptButtonStyleClass: 'p-button-warn',
       accept: () => this.doMarkLegacy(),
+    });
+  }
+
+  confirmReclassifyFlags(): void {
+    this.confirmationService.confirm({
+      message: this.translateSvc.instant(
+        'conciliation.manualBankReconciliation.reclassifyFlagsConfirmMessage',
+      ),
+      header: this.translateSvc.instant(
+        'conciliation.manualBankReconciliation.reclassifyFlagsConfirmTitle',
+      ),
+      icon: 'pi pi-refresh',
+      acceptLabel: this.translateSvc.instant(
+        'conciliation.manualBankReconciliation.reclassifyFlags',
+      ),
+      rejectLabel: this.translateSvc.instant('common.cancel'),
+      acceptButtonStyleClass: 'p-button-warn',
+      accept: () => this.doReclassifyFlags(),
+    });
+  }
+
+  private doReclassifyFlags(): void {
+    this.facade.reclassifyFlags().subscribe({
+      next: (result) => {
+        this.messageService.add({
+          severity: 'success',
+          summary: this.i18n.tUi('common.success'),
+          detail: this.translateSvc.instant(
+            'conciliation.manualBankReconciliation.reclassifyFlagsSuccess',
+            result,
+          ),
+        });
+        this.reloadReleases();
+        this.reloadOrders();
+      },
+      error: () => {
+        this.messageService.add({
+          severity: 'error',
+          summary: this.i18n.tUi('common.error'),
+          detail: this.i18n.tUi('common.errorMessage'),
+        });
+      },
     });
   }
 
@@ -844,7 +940,8 @@ export class ManualBankReconciliationComponent implements OnInit {
   }
 
   private doReconcile(): void {
-    this.facade.reconcile().subscribe({
+    const reason = this.divergenceReason().trim();
+    this.facade.reconcile(reason || null).subscribe({
       next: (result) => {
         this.messageService.add({
           severity: 'success',
@@ -854,6 +951,7 @@ export class ManualBankReconciliationComponent implements OnInit {
             zeroValueReconciled: result.zeroValueReconciled,
           }),
         });
+        this.divergenceReason.set('');
         this.reloadReleases();
         this.clearOrderFilters();
       },

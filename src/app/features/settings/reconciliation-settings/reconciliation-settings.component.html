@@ -268,6 +268,29 @@
           </label>
         </p-floatLabel>
       </div>
+
+      <div class="col-12 md:col-3 xl:col-2 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-inputnumber
+            class="w-full"
+            [showButtons]="true"
+            [allowEmpty]="false"
+            [min]="MIN_SUBSET_DP_MAX_CENTS"
+            [max]="MAX_SUBSET_DP_MAX_CENTS"
+            inputId="subsetDpMaxCents"
+            formControlName="subsetDpMaxCents"
+          ></p-inputnumber>
+          <label for="subsetDpMaxCents">
+            {{ 'conciliation.settings.subsetDpMaxCents' | translate }}
+            <i
+              tooltipPosition="top"
+              style="pointer-events: auto"
+              class="pi pi-info-circle text-xs ml-1 text-color-secondary cursor-pointer"
+              [pTooltip]="'conciliation.settings.subsetDpMaxCentsHint' | translate"
+            ></i>
+          </label>
+        </p-floatLabel>
+      </div>
     </div>
 
     <p-divider></p-divider>

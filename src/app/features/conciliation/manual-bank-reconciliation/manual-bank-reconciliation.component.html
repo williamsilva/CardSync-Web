@@ -1,6 +1,51 @@
 ﻿<p-toast></p-toast>
 <p-confirmDialog></p-confirmDialog>
 
+<!-- Diálogo de divergência: só aparece ao clicar em Vincular quando os valores não batem exato. -->
+<p-dialog
+  appendTo="body"
+  [modal]="true"
+  [closable]="true"
+  [style]="{ width: '32rem' }"
+  [visible]="showDivergenceDialog()"
+  (visibleChange)="onDivergenceDialogVisibleChange($event)"
+  [header]="'conciliation.manualBankReconciliation.divergenceDialogTitle' | translate"
+>
+  <p class="text-sm mb-3">{{ divergenceDialogMessage() }}</p>
+  <div class="flex flex-column gap-1">
+    <label class="text-xs font-medium text-color-secondary">
+      {{ 'conciliation.manualBankReconciliation.divergenceReasonLabel' | translate }}
+    </label>
+    <textarea
+      [rows]="3"
+      pInputTextarea
+      [autoResize]="false"
+      class="w-full text-sm"
+      [ngModel]="divergenceReason()"
+      (ngModelChange)="divergenceReason.set($event)"
+      [placeholder]="
+        'conciliation.manualBankReconciliation.divergenceReasonPlaceholder' | translate
+      "
+    ></textarea>
+  </div>
+  <ng-template pTemplate="footer">
+    <p-button
+      [outlined]="true"
+      severity="secondary"
+      (onClick)="cancelDivergenceDialog()"
+      [label]="'common.cancel' | translate"
+    ></p-button>
+    <p-button
+      severity="warn"
+      icon="pi pi-link"
+      [loading]="facade.reconciling()"
+      (onClick)="confirmDivergenceReconcile()"
+      [disabled]="!divergenceReason().trim()"
+      [label]="'conciliation.manualBankReconciliation.link' | translate"
+    ></p-button>
+  </ng-template>
+</p-dialog>
+
 <cs-page-header
   [compact]="false"
   [title]="'conciliation.manualBankReconciliation.title' | translate"
@@ -13,6 +58,17 @@
     icon="pi pi-refresh"
     class="p-button-text p-button-sm"
     [label]="'common.update' | translate"
+  ></button>
+  <button
+    pButton
+    type="button"
+    icon="pi pi-flag"
+    tooltipPosition="bottom"
+    class="p-button-text p-button-sm"
+    (click)="confirmReclassifyFlags()"
+    [loading]="facade.reclassifyingFlags()"
+    [label]="'conciliation.manualBankReconciliation.reclassifyFlags' | translate"
+    [pTooltip]="'conciliation.manualBankReconciliation.reclassifyFlagsTooltip' | translate"
   ></button>
 </cs-page-header>
 
@@ -71,7 +127,7 @@
           icon="pi pi-eraser"
           severity="secondary"
           tooltipPosition="top"
-          (onClick)="facade.clearOrders()"
+          (onClick)="clearSelectedOrders()"
           [pTooltip]="'conciliation.manualBankReconciliation.clearOrders' | translate"
         ></p-button>
       }

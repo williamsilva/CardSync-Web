@@ -30,6 +30,8 @@ export interface ReconciliationSettingsModel {
   dateToleranceDaysAfter: number;
   valueTolerance: number;
   bankMarkNotReconciledAfterDays: number;
+  /** Teto de centavos para o subset-sum por programação dinâmica (Etapa 7). */
+  subsetDpMaxCents: number;
   // Rigidez do matching Banco x Ordem de Crédito / Parcela (Etapa 7)
   flagMatchRequired: boolean;
   establishmentMatchRequired: boolean;
@@ -67,6 +69,7 @@ export interface ReconciliationSettingsRequest {
   dateToleranceDaysAfter: number;
   valueTolerance: number;
   bankMarkNotReconciledAfterDays: number;
+  subsetDpMaxCents: number;
   // Rigidez do matching Banco x Ordem de Crédito / Parcela (Etapa 7)
   flagMatchRequired: boolean;
   establishmentMatchRequired: boolean;
