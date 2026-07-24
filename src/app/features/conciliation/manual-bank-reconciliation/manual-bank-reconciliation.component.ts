@@ -73,6 +73,10 @@ interface ReleaseFiltersState {
 }
 
 interface OrderFiltersState {
+  orderBanks: string[] | null;
+  orderFlags: string[] | null;
+  orderCompanies: string[] | null;
+  orderAcquirers: string[] | null;
   orderReleasePeriod: PeriodEnum | null;
   orderReleaseDate: string | string[] | null;
   orderReleaseValueStart: number | null;
@@ -178,6 +182,10 @@ export class ManualBankReconciliationComponent implements OnInit {
   readonly releaseDate = signal<string | string[] | null>(null);
 
   // Order filters
+  readonly orderBanks = signal<string[] | null>(null);
+  readonly orderFlags = signal<string[] | null>(null);
+  readonly orderCompanies = signal<string[] | null>(null);
+  readonly orderAcquirers = signal<string[] | null>(null);
   readonly orderReleasePeriod = signal<PeriodEnum | null>(null);
   readonly orderReleaseDate = signal<string | string[] | null>(null);
 
@@ -326,6 +334,30 @@ export class ManualBankReconciliationComponent implements OnInit {
       items.push({ label: this.i18n.tUi('bankStatement.fields.releaseDate'), value: dateValue });
     }
 
+    const companies = this.orderCompanies();
+    if (companies?.length) {
+      const labels = this.companiesOptions()
+        .filter((o) => companies.includes(o.id))
+        .map((o) => o.fantasyName)
+        .join(', ');
+      items.push({
+        label: this.i18n.tUi('bankStatement.fields.company'),
+        value: labels || String(companies.length),
+      });
+    }
+
+    const banks = this.orderBanks();
+    if (banks?.length) {
+      const labels = this.banksOptions()
+        .filter((o) => banks.includes(o.id))
+        .map((o) => o.name)
+        .join(', ');
+      items.push({
+        label: this.i18n.tUi('bankStatement.fields.bank'),
+        value: labels || String(banks.length),
+      });
+    }
+
     const valueStart = this.orderReleaseValueStart();
     const valueEnd = this.orderReleaseValueEnd();
     if (valueStart != null || valueEnd != null) {
@@ -336,6 +368,30 @@ export class ManualBankReconciliationComponent implements OnInit {
       items.push({
         label: this.i18n.tUi('bankStatement.fields.releaseValue'),
         value: parts.join(' - '),
+      });
+    }
+
+    const acquirers = this.orderAcquirers();
+    if (acquirers?.length) {
+      const labels = this.acquirersOptions()
+        .filter((o) => acquirers.includes(o.id))
+        .map((o) => o.fantasyName)
+        .join(', ');
+      items.push({
+        label: this.i18n.tUi('bankStatement.fields.acquirer'),
+        value: labels || String(acquirers.length),
+      });
+    }
+
+    const flags = this.orderFlags();
+    if (flags?.length) {
+      const labels = this.flagsOptions()
+        .filter((o) => flags.includes(o.id))
+        .map((o) => o.name)
+        .join(', ');
+      items.push({
+        label: this.i18n.tUi('bankStatement.fields.flag'),
+        value: labels || String(flags.length),
       });
     }
 
@@ -451,6 +507,10 @@ export class ManualBankReconciliationComponent implements OnInit {
 
   private toOrderFiltersState(): OrderFiltersState {
     return {
+      orderBanks: this.orderBanks(),
+      orderFlags: this.orderFlags(),
+      orderCompanies: this.orderCompanies(),
+      orderAcquirers: this.orderAcquirers(),
       orderReleasePeriod: this.orderReleasePeriod(),
       orderReleaseDate: this.orderReleaseDate(),
       orderReleaseValueStart: this.orderReleaseValueStart(),
@@ -459,6 +519,10 @@ export class ManualBankReconciliationComponent implements OnInit {
   }
 
   private applyOrderFiltersState(state: OrderFiltersState): void {
+    this.orderBanks.set(state.orderBanks ?? null);
+    this.orderFlags.set(state.orderFlags ?? null);
+    this.orderCompanies.set(state.orderCompanies ?? null);
+    this.orderAcquirers.set(state.orderAcquirers ?? null);
     this.orderReleasePeriod.set(state.orderReleasePeriod ?? null);
     this.orderReleaseDate.set(state.orderReleaseDate ?? null);
     this.orderReleaseValueStart.set(state.orderReleaseValueStart ?? null);
@@ -506,6 +570,10 @@ export class ManualBankReconciliationComponent implements OnInit {
   }
 
   clearOrderFilters(): void {
+    this.orderBanks.set(null);
+    this.orderFlags.set(null);
+    this.orderCompanies.set(null);
+    this.orderAcquirers.set(null);
     this.orderReleaseDate.set(null);
     this.orderReleasePeriod.set(null);
     this.lastOrdersEvent.set(null);
@@ -515,11 +583,10 @@ export class ManualBankReconciliationComponent implements OnInit {
     this.reloadOrders();
   }
 
-  /** Cancela a seleção de lançamento(s) e limpa o filtro de período de ordens aplicado automaticamente. */
+  /** Cancela a seleção de lançamento(s) e limpa os filtros de ordens aplicados automaticamente. */
   cancelSelection(): void {
     this.facade.clearSelection();
-    this.orderReleasePeriod.set(null);
-    this.orderReleaseDate.set(null);
+    this.clearOrderReleaseDerivedFilters();
     this.lastOrdersEvent.set(null);
     this.reloadOrders();
   }
@@ -580,19 +647,34 @@ export class ManualBankReconciliationComponent implements OnInit {
   /**
    * Ao selecionar um único lançamento bancário, filtra as ordens de crédito por
    * período (intervalo), usando a data do lançamento ± os dias de tolerância
-   * configurados em conciliação (Dias anteriores/posteriores permitidos - banco).
-   * Sem exatamente 1 lançamento selecionado, o filtro de período é limpo.
+   * configurados em conciliação (Dias anteriores/posteriores permitidos - banco),
+   * e também reflete banco/bandeira/empresa/adquirente do lançamento nos próprios
+   * filtros do lado de ordens — antes esses 4 eram só um fallback dentro da query
+   * (filtrava certo), mas não apareciam nos campos nem no contador "N filtros
+   * ativos" do painel de ordens. Sem exatamente 1 lançamento selecionado, todos
+   * esses filtros derivados são limpos.
    */
   private applyOrderDateRangeForSelection(): void {
     const releases = this.facade.selectedReleases();
 
-    if (releases.length !== 1 || !releases[0].releaseDate) {
+    if (releases.length !== 1) {
+      this.clearOrderReleaseDerivedFilters();
+      return;
+    }
+
+    const release = releases[0];
+    this.orderCompanies.set(release.company?.id ? [release.company.id] : null);
+    this.orderBanks.set(release.bank?.id ? [release.bank.id] : null);
+    this.orderAcquirers.set(release.acquirer?.id ? [release.acquirer.id] : null);
+    this.orderFlags.set(release.flag?.id ? [release.flag.id] : null);
+
+    if (!release.releaseDate) {
       this.orderReleasePeriod.set(null);
       this.orderReleaseDate.set(null);
       return;
     }
 
-    const base = this.parseIsoDate(releases[0].releaseDate);
+    const base = this.parseIsoDate(release.releaseDate);
     if (!base) {
       this.orderReleasePeriod.set(null);
       this.orderReleaseDate.set(null);
@@ -606,6 +688,16 @@ export class ManualBankReconciliationComponent implements OnInit {
 
     this.orderReleasePeriod.set(PeriodEnum.INTERVAL);
     this.orderReleaseDate.set([this.formatBrDate(start), this.formatBrDate(end)]);
+  }
+
+  /** Limpa período + banco/bandeira/empresa/adquirente derivados do lançamento selecionado. */
+  private clearOrderReleaseDerivedFilters(): void {
+    this.orderReleasePeriod.set(null);
+    this.orderReleaseDate.set(null);
+    this.orderCompanies.set(null);
+    this.orderBanks.set(null);
+    this.orderAcquirers.set(null);
+    this.orderFlags.set(null);
   }
 
   private parseIsoDate(value: string): Date | null {
@@ -825,8 +917,14 @@ export class ManualBankReconciliationComponent implements OnInit {
     this.orderReleaseValueEnd.set(value.end ?? null);
   }
 
+  /**
+   * Banco/bandeira/empresa/adquirente aqui são sempre os valores dos próprios sinais
+   * `order*` — ao selecionar um lançamento, `applyOrderDateRangeForSelection()` já os
+   * preenche com os dados do lançamento (mesmo padrão do período/data), e o usuário pode
+   * então sobrescrever manualmente qualquer um deles (mesmos controles do lado de
+   * lançamentos bancários).
+   */
   private buildOrdersAdvancedFilters(): Partial<CreditOrderAdvancedFilters> {
-    const release = this.facade.selectedRelease();
     return {
       releaseDate: this.orderReleaseDate() ?? undefined,
       periodReleaseDate: this.orderReleasePeriod() ?? undefined,
@@ -835,10 +933,10 @@ export class ManualBankReconciliationComponent implements OnInit {
       releaseValueStart: this.orderReleaseValueStart() ?? undefined,
 
       statusPaymentBank: [StatusPaymentBankEnum.PENDING],
-      banks: release?.bank?.id ? [release.bank.id] : undefined,
-      flags: release?.flag?.id ? [release.flag.id] : undefined,
-      companies: release?.company?.id ? [release.company.id] : undefined,
-      acquirers: release?.acquirer?.id ? [release.acquirer.id] : undefined,
+      banks: this.orderBanks()?.length ? this.orderBanks()! : undefined,
+      flags: this.orderFlags()?.length ? this.orderFlags()! : undefined,
+      companies: this.orderCompanies()?.length ? this.orderCompanies()! : undefined,
+      acquirers: this.orderAcquirers()?.length ? this.orderAcquirers()! : undefined,
     };
   }
 

@@ -542,6 +542,95 @@
           [periodLabel]="'bankStatement.fields.periodReleaseDate' | translate"
           (periodChange)="onPeriodColumnChange(orderReleasePeriod, orderReleaseDate, $event)"
         ></cs-advanced-period-date-filter>
+
+        <cs-advanced-multiselect-filter
+          optionValue="id"
+          optionLabel="fantasyName"
+          inputId="orderCompanies"
+          class="col-12 md:col-6 p-1"
+          [value]="orderCompanies()"
+          [options]="companiesOptions()"
+          (valueChange)="orderCompanies.set($event)"
+          [label]="'bankStatement.fields.company' | translate"
+        >
+          <ng-template csAdvancedFilterItem let-option>
+            <div class="cs-option-item">
+              <div class="cs-option-item__label">{{ option.fantasyName }}</div>
+              <div class="cs-option-item__subtext">
+                {{ 'common.registrationNumber' | translate }}: {{ option.cnpj | csDocument }}
+              </div>
+              <div class="cs-option-item__subtext">
+                <cs-tag
+                  [tone]="statusEnumSeverity(option.status)"
+                  [value]="('common.status' | translate) + ': ' + statusEnumLabel(option.status)"
+                />
+              </div>
+            </div>
+          </ng-template>
+        </cs-advanced-multiselect-filter>
+
+        <cs-advanced-multiselect-filter
+          optionValue="id"
+          optionLabel="fantasyName"
+          inputId="orderAcquirers"
+          class="col-12 md:col-4 p-1"
+          [value]="orderAcquirers()"
+          [options]="acquirersOptions()"
+          (valueChange)="orderAcquirers.set($event)"
+          [label]="'bankStatement.fields.acquirer' | translate"
+        >
+          <ng-template csAdvancedFilterItem let-option>
+            <div class="cs-option-item">
+              <div class="cs-option-item__label">{{ option.fantasyName }}</div>
+              <div class="cs-option-item__subtext">
+                {{ 'common.registrationNumber' | translate }}: {{ option.cnpj | csDocument }}
+              </div>
+              <div class="cs-option-item__subtext">
+                <cs-tag
+                  [tone]="statusEnumSeverity(option.status)"
+                  [value]="('common.status' | translate) + ': ' + statusEnumLabel(option.status)"
+                />
+              </div>
+            </div>
+          </ng-template>
+        </cs-advanced-multiselect-filter>
+
+        <cs-advanced-multiselect-filter
+          optionValue="id"
+          optionLabel="name"
+          inputId="orderBanks"
+          [value]="orderBanks()"
+          [options]="banksOptions()"
+          class="col-12 md:col-4 p-1"
+          (valueChange)="orderBanks.set($event)"
+          [label]="'bankStatement.fields.bank' | translate"
+        >
+          <ng-template csAdvancedFilterItem let-option>
+            <div class="cs-option-item">
+              <div class="cs-option-item__label">{{ option.name }}</div>
+              <div class="cs-option-item__subtext">
+                {{ 'common.code' | translate }}: {{ option.code }}
+              </div>
+              <div class="cs-option-item__subtext">
+                <cs-tag
+                  [tone]="statusEnumSeverity(option.status)"
+                  [value]="('common.status' | translate) + ': ' + statusEnumLabel(option.status)"
+                />
+              </div>
+            </div>
+          </ng-template>
+        </cs-advanced-multiselect-filter>
+
+        <cs-advanced-multiselect-filter
+          optionValue="id"
+          optionLabel="name"
+          inputId="orderFlags"
+          [value]="orderFlags()"
+          [options]="flagsOptions()"
+          class="col-12 md:col-4 p-1"
+          (valueChange)="orderFlags.set($event)"
+          [label]="'bankStatement.fields.flag' | translate"
+        ></cs-advanced-multiselect-filter>
       </div>
 
       <div class="grid formgrid gap-0 align-items-end">
