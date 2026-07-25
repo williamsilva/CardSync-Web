@@ -7,6 +7,7 @@ import { MenuModule } from 'primeng/menu';
 import { SelectModule } from 'primeng/select';
 import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
+import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { Table, TableModule } from 'primeng/table';
 import { InputTextModule } from 'primeng/inputtext';
 import { DatePickerModule } from 'primeng/datepicker';
@@ -93,6 +94,7 @@ import {
     CsDocumentPipe,
     CsTagComponent,
     InputTextModule,
+    ToggleSwitchModule,
     TranslateModule,
     DatePickerModule,
     MultiSelectModule,
@@ -165,6 +167,9 @@ export class BankStatementListComponent
 
   readonly releaseValueEnd = signal<number | null>(null);
   readonly releaseValueStart = signal<number | null>(null);
+
+  /** Só lançamentos vinculados manualmente com diferença de valor aceita. */
+  readonly hasDivergence = signal<boolean | null>(null);
 
   readonly isReleaseDateDisabled = computed(() => !this.periodReleaseDate());
 
@@ -416,6 +421,13 @@ export class BankStatementListComponent
       });
     }
 
+    if (this.hasDivergence()) {
+      items.push({
+        label: this.i18n.tUi('bankStatement.fields.hasDivergence'),
+        value: this.i18n.tUi('common.yes'),
+      });
+    }
+
     return items;
   });
 
@@ -442,6 +454,7 @@ export class BankStatementListComponent
       companies: this.companies()?.length ? this.companies()! : undefined,
       establishments: this.establishments()?.length ? this.establishments()! : undefined,
       id: this.id() ?? undefined,
+      hasDivergence: this.hasDivergence() ? true : undefined,
     };
   }
 
@@ -615,6 +628,7 @@ export class BankStatementListComponent
       companies: this.companies(),
       establishments: this.establishments(),
       id: this.id(),
+      hasDivergence: this.hasDivergence(),
     };
   }
 
@@ -625,6 +639,7 @@ export class BankStatementListComponent
     this.companies.set(s.companies ?? null);
     this.establishments.set(s.establishments ?? null);
     this.id.set(s.id ?? null);
+    this.hasDivergence.set(s.hasDivergence ?? null);
 
     this.releaseValueEnd.set(s.releaseValueEnd ?? null);
     this.releaseValueStart.set(s.releaseValueStart ?? null);

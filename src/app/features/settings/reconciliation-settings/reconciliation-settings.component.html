@@ -151,7 +151,7 @@
       ></i>
     </div>
 
-    <div class="grid formgrid gap-3">
+    <div class="grid formgrid gap-0">
       <div class="col-12 md:col-3 xl:col-2 p-2">
         <p-floatLabel variant="on" class="w-full">
           <p-inputnumber
@@ -248,8 +248,11 @@
         <p-floatLabel variant="on" class="w-full">
           <p-inputnumber
             class="w-full"
+            mode="currency"
             [showButtons]="true"
             [allowEmpty]="false"
+            [locale]="locale()"
+            [currency]="currency()"
             [minFractionDigits]="2"
             [maxFractionDigits]="4"
             [min]="MIN_VALUE_TOLERANCE"
@@ -273,14 +276,17 @@
         <p-floatLabel variant="on" class="w-full">
           <p-inputnumber
             class="w-full"
+            mode="currency"
             [showButtons]="true"
             [allowEmpty]="false"
-            [min]="MIN_SUBSET_DP_MAX_CENTS"
-            [max]="MAX_SUBSET_DP_MAX_CENTS"
-            inputId="subsetDpMaxCents"
-            formControlName="subsetDpMaxCents"
+            [locale]="locale()"
+            [currency]="currency()"
+            [min]="MIN_SUBSET_DP_MAX"
+            [max]="MAX_SUBSET_DP_MAX"
+            inputId="subsetDpMax"
+            formControlName="subsetDpMax"
           ></p-inputnumber>
-          <label for="subsetDpMaxCents">
+          <label for="subsetDpMax">
             {{ 'conciliation.settings.subsetDpMaxCents' | translate }}
             <i
               tooltipPosition="top"

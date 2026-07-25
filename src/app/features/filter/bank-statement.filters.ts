@@ -24,6 +24,9 @@ export type BankStatementFiltersState = {
 
   /** Filtro exato: lançamento bancário específico (id). Sem controle de UI — usado por navegação a partir da ordem de crédito. */
   id: string | null;
+
+  /** Só lançamentos vinculados manualmente com diferença de valor aceita. */
+  hasDivergence: boolean | null;
 };
 
 export type BankStatementAdvancedFilters = Partial<BankStatementFiltersState>;
@@ -50,6 +53,7 @@ export function createEmptyBankStatementFiltersState(): BankStatementFiltersStat
     companies: null,
     establishments: null,
     id: null,
+    hasDivergence: null,
   };
 }
 
@@ -74,4 +78,6 @@ export function resetBankStatementAdvancedFilters(
   filters.releaseCategory.set(empty.releaseCategory);
   filters.statusPaymentBank.set(empty.statusPaymentBank);
   filters.modalityPaymentBank.set(empty.modalityPaymentBank);
+
+  filters.hasDivergence.set(empty.hasDivergence);
 }

@@ -156,7 +156,7 @@ export class SaleSummaryListComponent
   readonly banks = signal<string[] | null>(null);
   readonly companies = signal<string[] | null>(null);
   readonly acquirers = signal<string[] | null>(null);
-  readonly establishments = signal<string[] | null>(null);
+  readonly establishments = signal<(string | number)[] | null>(null);
 
   readonly modality = signal<ModalityEnum[] | null>(null);
   readonly statusPaymentBank = signal<StatusPaymentBankEnum[] | null>(null);
@@ -832,7 +832,10 @@ export class SaleSummaryListComponent
       acquirers: row.acquirer?.id ? [row.acquirer.id] : null,
       // O filtro "establishments" da Ordem de Crédito casa por pvNumber, não por
       // establishment.id (mesma exceção documentada na skill cs-filters-panel).
-      establishments: row.pvNumber != null ? [String(row.pvNumber)] : null,
+      // pvNumber é numérico no backend — não converter para string, ou o
+      // multiselect (optionValue="pvNumber") não encontra a option correspondente
+      // e exibe "null" no campo (PrimeNG concatena null ao rótulo quando não acha match).
+      establishments: row.pvNumber != null ? [row.pvNumber] : null,
     };
   }
 

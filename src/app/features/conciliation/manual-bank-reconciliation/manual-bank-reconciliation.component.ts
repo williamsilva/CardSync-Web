@@ -3,6 +3,7 @@ import { Component, OnInit, WritableSignal, computed, inject, signal } from '@an
 
 import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
+import { SelectModule } from 'primeng/select';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
@@ -107,6 +108,7 @@ interface OrderFiltersState {
     TooltipModule,
     CsCurrencyPipe,
     DialogModule,
+    SelectModule,
     CheckboxModule,
     TextareaModule,
     CsTagComponent,
@@ -231,6 +233,32 @@ export class ManualBankReconciliationComponent implements OnInit {
    * Só é pedida depois de clicar em "Vincular" (diálogo próprio), não fica exposta o tempo todo. */
   readonly divergenceReason = signal('');
   readonly showDivergenceDialog = signal(false);
+
+  /** Sentinela: quando selecionado, revela o textarea pra digitar um motivo livre. */
+  protected readonly OTHER_DIVERGENCE_REASON = 'other';
+  protected readonly selectedDivergenceReasonPreset = signal<string | null>(null);
+
+  /** Motivos pré-cadastrados (só front-end, sem configuração de backend) — o texto do motivo
+   * enviado/gravado é o label já traduzido, não a chave. "Outro" revela o textarea abaixo. */
+  private readonly divergenceReasonPresetKeys = ['preImplantation', 'rounding', 'bankFee'] as const;
+
+  protected readonly divergenceReasonPresetOptions = computed(() => {
+    this.i18n.getAppliedLang();
+    return [
+      ...this.divergenceReasonPresetKeys.map((key) => ({
+        value: key,
+        label: this.translateSvc.instant(
+          `conciliation.manualBankReconciliation.divergenceReasonPreset.${key}`,
+        ),
+      })),
+      {
+        value: this.OTHER_DIVERGENCE_REASON,
+        label: this.translateSvc.instant(
+          'conciliation.manualBankReconciliation.divergenceReasonPreset.other',
+        ),
+      },
+    ];
+  });
 
   readonly canReconcile = computed(() => this.facade.selectedOrders().length > 0);
 
@@ -596,6 +624,7 @@ export class ManualBankReconciliationComponent implements OnInit {
   cancelSelection(): void {
     this.facade.clearSelection();
     this.divergenceReason.set('');
+    this.selectedDivergenceReasonPreset.set(null);
     this.clearOrderReleaseDerivedFilters();
     this.lastOrdersEvent.set(null);
     this.reloadOrders();
@@ -605,6 +634,7 @@ export class ManualBankReconciliationComponent implements OnInit {
   clearSelectedOrders(): void {
     this.facade.clearOrders();
     this.divergenceReason.set('');
+    this.selectedDivergenceReasonPreset.set(null);
   }
 
   onReleasesLazyLoad(event: any): void {
@@ -644,6 +674,7 @@ export class ManualBankReconciliationComponent implements OnInit {
    */
   selectRelease(release: BankStatementApiModel): void {
     this.divergenceReason.set('');
+    this.selectedDivergenceReasonPreset.set(null);
     const eligible = this.isEligibleForLegacy(release);
     const current = this.facade.selectedReleases();
     const currentAllEligible =
@@ -760,6 +791,7 @@ export class ManualBankReconciliationComponent implements OnInit {
   confirmReconcile(): void {
     if (!this.valuesMatch()) {
       this.divergenceReason.set('');
+      this.selectedDivergenceReasonPreset.set(null);
       this.showDivergenceDialog.set(true);
       return;
     }
@@ -790,12 +822,28 @@ export class ManualBankReconciliationComponent implements OnInit {
 
   protected onDivergenceDialogVisibleChange(visible: boolean): void {
     this.showDivergenceDialog.set(visible);
-    if (!visible) this.divergenceReason.set('');
+    if (!visible) {
+      this.divergenceReason.set('');
+      this.selectedDivergenceReasonPreset.set(null);
+    }
   }
 
   protected cancelDivergenceDialog(): void {
     this.showDivergenceDialog.set(false);
     this.divergenceReason.set('');
+    this.selectedDivergenceReasonPreset.set(null);
+  }
+
+  /** Motivo pré-cadastrado selecionado: usa o texto já traduzido direto. "Outro" só limpa o
+   * texto e deixa o textarea livre para o usuário digitar. */
+  protected onDivergenceReasonPresetChange(value: string): void {
+    this.selectedDivergenceReasonPreset.set(value);
+    if (value === this.OTHER_DIVERGENCE_REASON) {
+      this.divergenceReason.set('');
+      return;
+    }
+    const preset = this.divergenceReasonPresetOptions().find((option) => option.value === value);
+    this.divergenceReason.set(preset?.label ?? '');
   }
 
   protected confirmDivergenceReconcile(): void {
@@ -952,6 +1000,7 @@ export class ManualBankReconciliationComponent implements OnInit {
           }),
         });
         this.divergenceReason.set('');
+        this.selectedDivergenceReasonPreset.set(null);
         this.reloadReleases();
         this.clearOrderFilters();
       },

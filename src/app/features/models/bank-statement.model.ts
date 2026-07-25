@@ -27,6 +27,10 @@ export interface BankStatementModel {
   statusPaymentBank: StatusPaymentBankEnum | null;
   modalityPaymentBank: ModalityPaymentBankEnum | null;
 
+  /** Diferença aceita na conciliação manual (com motivo). Null quando o vínculo bateu exato. */
+  divergenceValue: number | null;
+  divergenceReason: string | null;
+
   flag: FlagMinimalModel | null;
   bank: BankMinimalModel | null;
   company: CompanyMinimalModel | null;
@@ -48,6 +52,10 @@ export interface BankStatementApiModel {
   descriptionHistoricalBank: string | null;
   statusPaymentBank: StatusPaymentBankEnum | null;
   modalityPaymentBank: ModalityPaymentBankEnum | null;
+
+  /** Diferença aceita na conciliação manual (com motivo). Null quando o vínculo bateu exato. */
+  divergenceValue: number | null;
+  divergenceReason: string | null;
 
   flag: FlagMinimalModel | null;
   bank: BankMinimalModel | null;

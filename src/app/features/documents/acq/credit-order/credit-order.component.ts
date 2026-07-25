@@ -158,7 +158,7 @@ export class CreditOrderListComponent
   readonly banks = signal<string[] | null>(null);
   readonly companies = signal<string[] | null>(null);
   readonly acquirers = signal<string[] | null>(null);
-  readonly establishments = signal<string[] | null>(null);
+  readonly establishments = signal<(string | number)[] | null>(null);
   /** Sem controle de UI — preenchido apenas ao chegar via link do extrato bancário. */
   readonly releaseBankIds = signal<string[] | null>(null);
 
@@ -917,14 +917,14 @@ export class CreditOrderListComponent
   protected buildTargetSalesSummary(row: CreditOrderModel): SaleSummaryAdvancedFilters {
     return {
       ...createEmptySaleSummaryFiltersState(),
-      rvDate: row.salesSummary?.rvNumber ? String(row.salesSummary.rvNumber) : undefined,
-
       rvNumber: row.rvNumber ? row.rvNumber : undefined,
 
       flags: row.flag?.id ? [row.flag.id] : null,
       companies: row.company?.id ? [row.company.id] : null,
       acquirers: row.acquirer?.id ? [row.acquirer.id] : null,
-      establishments: row.establishment?.id ? [row.establishment.id] : null,
+      // O filtro "establishments" do Resumo de Vendas casa por pvNumber, não por
+      // establishment.id (mesma exceção documentada na skill cs-filters-panel).
+      establishments: row.establishment?.pvNumber != null ? [row.establishment.pvNumber] : null,
     };
   }
 

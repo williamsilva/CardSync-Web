@@ -1070,6 +1070,8 @@ export const UI_KEYS = {
       statusPaymentBank: 'bankStatement.fields.statusPaymentBank',
       establishmentShort: 'bankStatement.fields.establishmentShort',
       modalityPaymentBank: 'bankStatement.fields.modalityPaymentBank',
+      hasDivergence: 'bankStatement.fields.hasDivergence',
+      divergenceTooltip: 'bankStatement.fields.divergenceTooltip',
     },
     deleteManual: {
       header: 'bankStatement.deleteManual.header',

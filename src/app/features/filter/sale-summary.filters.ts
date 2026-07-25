@@ -15,7 +15,8 @@ export type SaleSummaryFiltersState = {
   banks: string[] | null;
   acquirers: string[] | null;
   companies: string[] | null;
-  establishments: string[] | null;
+  /** Casa por pvNumber (numérico no backend), não por establishment.id — ver skill cs-filters-panel. */
+  establishments: (string | number)[] | null;
 
   modality: ModalityEnum[] | null;
   statusPaymentBank: StatusPaymentBankEnum[] | null;

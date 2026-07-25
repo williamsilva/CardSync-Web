@@ -12,22 +12,34 @@
   [header]="'conciliation.manualBankReconciliation.divergenceDialogTitle' | translate"
 >
   <p class="text-sm mb-3">{{ divergenceDialogMessage() }}</p>
-  <div class="flex flex-column gap-1">
+  <div class="flex flex-column gap-1 mb-3">
     <label class="text-xs font-medium text-color-secondary">
       {{ 'conciliation.manualBankReconciliation.divergenceReasonLabel' | translate }}
     </label>
-    <textarea
-      [rows]="3"
-      pInputTextarea
-      [autoResize]="false"
-      class="w-full text-sm"
-      [ngModel]="divergenceReason()"
-      (ngModelChange)="divergenceReason.set($event)"
-      [placeholder]="
-        'conciliation.manualBankReconciliation.divergenceReasonPlaceholder' | translate
-      "
-    ></textarea>
+    <p-select
+      class="w-full"
+      appendTo="body"
+      [options]="divergenceReasonPresetOptions()"
+      [ngModel]="selectedDivergenceReasonPreset()"
+      (ngModelChange)="onDivergenceReasonPresetChange($event)"
+      [placeholder]="'conciliation.manualBankReconciliation.divergenceReasonSelectPlaceholder' | translate"
+    ></p-select>
   </div>
+  @if (selectedDivergenceReasonPreset() === OTHER_DIVERGENCE_REASON) {
+    <div class="flex flex-column gap-1">
+      <textarea
+        [rows]="3"
+        pInputTextarea
+        [autoResize]="false"
+        class="w-full text-sm"
+        [ngModel]="divergenceReason()"
+        (ngModelChange)="divergenceReason.set($event)"
+        [placeholder]="
+          'conciliation.manualBankReconciliation.divergenceReasonPlaceholder' | translate
+        "
+      ></textarea>
+    </div>
+  }
   <ng-template pTemplate="footer">
     <p-button
       [outlined]="true"

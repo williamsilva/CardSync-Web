@@ -198,6 +198,21 @@
       (valueChange)="statusPaymentBank.set($event)"
       [label]="'bankStatement.fields.statusPaymentBank' | translate"
     ></cs-advanced-multiselect-filter>
+
+    <div class="col-12 md:col-3 xl:col-2 p-1">
+      <div
+        class="flex align-items-center justify-content-between border-1 surface-border border-round px-3 h-full gap-3"
+      >
+        <label for="hasDivergence" class="text-sm cursor-pointer flex-1">
+          {{ 'bankStatement.fields.hasDivergence' | translate }}
+        </label>
+        <p-toggleswitch
+          inputId="hasDivergence"
+          [ngModel]="hasDivergence()"
+          (ngModelChange)="hasDivergence.set($event)"
+        ></p-toggleswitch>
+      </div>
+    </div>
   </div>
 
   <div class="grid formgrid gap-0 align-items-end">
@@ -960,7 +975,20 @@
             {{ formatHistoric(row) }}
           </span>
         </td>
-        <td class="text-right">{{ row.releaseValue | csCurrency }}</td>
+        <td class="text-right">
+          {{ row.releaseValue | csCurrency }}
+          @if (row.divergenceValue) {
+            <i
+              tooltipPosition="top"
+              class="pi pi-exclamation-triangle text-orange-400 text-xs ml-1"
+              [pTooltip]="
+                'bankStatement.fields.divergenceTooltip'
+                  | translate
+                    : { value: row.divergenceValue | csCurrency, reason: row.divergenceReason }
+              "
+            ></i>
+          }
+        </td>
         <td class="text-center">
           @if (row.statusPaymentBank) {
             <cs-tag

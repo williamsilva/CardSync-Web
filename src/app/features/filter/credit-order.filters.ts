@@ -35,7 +35,8 @@ export type CreditOrderFiltersState = {
   banks: string[] | null;
   acquirers: string[] | null;
   companies: string[] | null;
-  establishments: string[] | null;
+  /** Casa por pvNumber (numérico no backend), não por establishment.id — ver skill cs-filters-panel. */
+  establishments: (string | number)[] | null;
 
   /** Filtro exato: ordens vinculadas a lançamento(s) bancário(s) específico(s). Sem controle de UI — usado por navegação a partir do extrato bancário. */
   releaseBankIds: string[] | null;
