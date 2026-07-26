@@ -1,7 +1,7 @@
 import { WritableSignal } from '@angular/core';
 
 import { ModalityEnum } from '@models/enums/modality.enum';
-import { StatusReconciliationEnum } from '@models/enums/status-reconciliation.enum';
+import { StatusPaymentBankEnum } from '@models/enums/status-payment-bank.enum';
 
 export type ManualCreditOrderFiltersState = {
   rvNumber: string;
@@ -9,7 +9,7 @@ export type ManualCreditOrderFiltersState = {
   flags: string[] | null;
   acquirers: string[] | null;
   modality: ModalityEnum[] | null;
-  creditOrderStatus: StatusReconciliationEnum[] | null;
+  statusPaymentBank: StatusPaymentBankEnum[] | null;
 };
 
 export type ManualCreditOrderAdvancedFilters = Partial<ManualCreditOrderFiltersState>;
@@ -25,7 +25,7 @@ export function createEmptyManualCreditOrderFiltersState(): ManualCreditOrderFil
     flags: null,
     acquirers: null,
     modality: null,
-    creditOrderStatus: null,
+    statusPaymentBank: null,
   };
 }
 
@@ -38,5 +38,5 @@ export function resetManualCreditOrderFilters(
   filters.flags.set(empty.flags);
   filters.acquirers.set(empty.acquirers);
   filters.modality.set(empty.modality);
-  filters.creditOrderStatus.set(empty.creditOrderStatus);
+  filters.statusPaymentBank.set(empty.statusPaymentBank);
 }

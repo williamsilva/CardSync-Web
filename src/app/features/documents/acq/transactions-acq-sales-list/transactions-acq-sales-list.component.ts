@@ -31,10 +31,10 @@ import { EstablishmentFacade } from '@features/facade/establishment.facade';
 import { TransactionsAcqFacade } from '@features/facade/transaction-acq.facade';
 import { buildListQuery } from '@shared/features/list-query/list-query.builder';
 import { allPeriodEnum, PeriodEnum, periodEnumLabel } from '@models/enums/period.enum';
-import { StatusEnum, statusEnumLabel, statusEnumSeverity } from '@models/enums/status.enum';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
-import { statusTransactionReasonEnumLabel } from '@models/enums/status-transaction-reason.enum';
 import { createEmptySaleSummaryFiltersState } from '@features/filter/sale-summary.filters';
+import { StatusEnum, statusEnumLabel, statusEnumSeverity } from '@models/enums/status.enum';
+import { statusTransactionReasonEnumLabel } from '@models/enums/status-transaction-reason.enum';
 import { createEmptyTransactionsErpFiltersState } from '@features/filter/transaction-erp.filters';
 import { CsColumnFilterShellComponent } from '@features/list-base/cs-column-filter-shell.component';
 import { CsAdvancedTextFilterComponent } from '@features/list-base/cs-advanced-text-filter.component';
@@ -121,8 +121,8 @@ import {
     CsAdvancedPeriodDateFilterComponent,
     CsAdvancedMultiselectFilterComponent,
     CsAdvancedFilterItemTemplateDirective,
-    TransactionsAcquirersSalesInstallmentsTableComponent
-],
+    TransactionsAcquirersSalesInstallmentsTableComponent,
+  ],
 })
 export class TransactionsAcquirersSalesListComponent
   extends StatefulListPage<TransactionsAcqFiltersState, TransactionsAcqAdvancedFilters>

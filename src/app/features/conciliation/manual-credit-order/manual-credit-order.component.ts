@@ -51,11 +51,11 @@ import {
   modalityEnumSeverity,
 } from '@models/enums/modality.enum';
 import {
-  StatusReconciliationEnum,
-  statusReconciliationEnumLabel,
-  statusReconciliationEnumSeverity,
-  allStatusReconciliationManualCreditEnum,
-} from '@models/enums/status-reconciliation.enum';
+  StatusPaymentBankEnum,
+  statusPaymentBankEnumLabel,
+  statusPaymentBankEnumSeverity,
+  allStatusPaymentSaleSummaryEnum,
+} from '@models/enums/status-payment-bank.enum';
 
 @Component({
   standalone: true,
@@ -117,7 +117,7 @@ export class ManualCreditOrderComponent
   readonly companies = signal<string[] | null>(null);
   readonly acquirers = signal<string[] | null>(null);
   readonly modality = signal<ModalityEnum[] | null>(null);
-  readonly creditOrderStatus = signal<StatusReconciliationEnum[] | null>(null);
+  readonly statusPaymentBank = signal<StatusPaymentBankEnum[] | null>(null);
 
   /* Filtros de coluna (drafts) */
   readonly rvNumberColumnDraft = signal('');
@@ -125,7 +125,7 @@ export class ManualCreditOrderComponent
   readonly companyColumnDraft = signal<string[] | null>(null);
   readonly acquirerColumnDraft = signal<string[] | null>(null);
   readonly modalityColumnDraft = signal<ModalityEnum[] | null>(null);
-  readonly creditOrderStatusColumnDraft = signal<StatusReconciliationEnum[] | null>(null);
+  readonly statusPaymentBankColumnDraft = signal<StatusPaymentBankEnum[] | null>(null);
 
   readonly selectedCount = computed(() => this.selectedIds().size);
   readonly totalRecords = computed(() => this.facade.totalRecords());
@@ -149,10 +149,10 @@ export class ManualCreditOrderComponent
     }));
   });
 
-  readonly statusReconciliationOptions = computed(() => {
+  readonly statusPaymentBankOptions = computed(() => {
     this.i18n.getAppliedLang();
-    return allStatusReconciliationManualCreditEnum().map((value) => ({
-      label: statusReconciliationEnumLabel(value, this.i18n),
+    return allStatusPaymentSaleSummaryEnum().map((value) => ({
+      label: statusPaymentBankEnumLabel(value, this.i18n),
       value,
     }));
   });
@@ -196,12 +196,12 @@ export class ManualCreditOrderComponent
     return statusEnumSeverity(value);
   }
 
-  statusReconciliationLabel(value: StatusReconciliationEnum | null): string {
-    return statusReconciliationEnumLabel(value, this.i18n);
+  statusPaymentBankLabel(value: StatusPaymentBankEnum | null): string {
+    return statusPaymentBankEnumLabel(value, this.i18n);
   }
 
-  statusReconciliationSeverity(value: StatusReconciliationEnum | null): CsTagTone {
-    return statusReconciliationEnumSeverity(value);
+  statusPaymentBankSeverity(value: StatusPaymentBankEnum | null): CsTagTone {
+    return statusPaymentBankEnumSeverity(value);
   }
 
   modalityLabel(value: ModalityEnum | null): string {
@@ -312,7 +312,7 @@ export class ManualCreditOrderComponent
       flags: this.flags(),
       acquirers: this.acquirers(),
       modality: this.modality(),
-      creditOrderStatus: this.creditOrderStatus(),
+      statusPaymentBank: this.statusPaymentBank(),
     };
   }
 
@@ -322,7 +322,7 @@ export class ManualCreditOrderComponent
     this.flags.set(s.flags ?? null);
     this.acquirers.set(s.acquirers ?? null);
     this.modality.set(s.modality ?? null);
-    this.creditOrderStatus.set(s.creditOrderStatus ?? null);
+    this.statusPaymentBank.set(s.statusPaymentBank ?? null);
   }
 
   protected override buildAdvancedFilters(): Partial<SaleSummaryAdvancedFilters> {
@@ -332,7 +332,7 @@ export class ManualCreditOrderComponent
       flags: this.flags()?.length ? this.flags()! : undefined,
       acquirers: this.acquirers()?.length ? this.acquirers()! : undefined,
       modality: this.modality()?.length ? this.modality()! : undefined,
-      creditOrderStatus: this.creditOrderStatus()?.length ? this.creditOrderStatus()! : undefined,
+      statusPaymentBank: this.statusPaymentBank()?.length ? this.statusPaymentBank()! : undefined,
     };
   }
 
@@ -379,11 +379,11 @@ export class ManualCreditOrderComponent
       });
     }
 
-    const creditOrderStatus = this.creditOrderStatus();
-    if (creditOrderStatus?.length) {
+    const statusPaymentBank = this.statusPaymentBank();
+    if (statusPaymentBank?.length) {
       items.push({
-        label: this.i18n.tUi('saleSummary.fields.creditOrderStatusEnum'),
-        value: creditOrderStatus.map((v) => statusReconciliationEnumLabel(v, this.i18n)).join(', '),
+        label: this.i18n.tUi('saleSummary.fields.statusPaymentBankEnum'),
+        value: statusPaymentBank.map((v) => statusPaymentBankEnumLabel(v, this.i18n)).join(', '),
       });
     }
 
@@ -435,12 +435,12 @@ export class ManualCreditOrderComponent
       });
     }
 
-    const creditOrderStatuses = readArrayFilterValues(filters, 'creditOrderStatus');
-    if (creditOrderStatuses.length) {
+    const statusPaymentBanks = readArrayFilterValues(filters, 'statusPaymentBank');
+    if (statusPaymentBanks.length) {
       items.push({
-        label: this.i18n.tUi('saleSummary.fields.creditOrderStatusEnum'),
-        value: creditOrderStatuses
-          .map((v) => statusReconciliationEnumLabel(v as StatusReconciliationEnum, this.i18n))
+        label: this.i18n.tUi('saleSummary.fields.statusPaymentBankEnum'),
+        value: statusPaymentBanks
+          .map((v) => statusPaymentBankEnumLabel(v as StatusPaymentBankEnum, this.i18n))
           .join(', '),
       });
     }
@@ -483,8 +483,8 @@ export class ManualCreditOrderComponent
     );
     this.syncArrayColumnDraftFromTableState(
       filters,
-      'creditOrderStatus',
-      this.creditOrderStatusColumnDraft,
+      'statusPaymentBank',
+      this.statusPaymentBankColumnDraft,
       readArrayFilterValues,
     );
     this.syncTextColumnDraftFromTableState(

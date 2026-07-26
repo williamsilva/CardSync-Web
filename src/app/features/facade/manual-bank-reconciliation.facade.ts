@@ -14,6 +14,8 @@ import {
   ManualBankReconciliationResult,
   ManualBankReconciliationApiService,
   ReclassifyBankStatementFlagsResult,
+  ReclassifyBankStatementModalityResult,
+  ReclassifyBankStatementEstablishmentResult,
 } from '@features/service/manual-bank-reconciliation.api.service';
 
 @Injectable({ providedIn: 'root' })
@@ -47,6 +49,8 @@ export class ManualBankReconciliationFacade {
   private readonly _lastResult = signal<ManualBankReconciliationResult | null>(null);
 
   private readonly _reclassifyingFlags = signal(false);
+  private readonly _reclassifyingModality = signal(false);
+  private readonly _reclassifyingEstablishment = signal(false);
 
   readonly releases = this._releases.asReadonly();
   readonly releasesTotal = this._releasesTotal.asReadonly();
@@ -68,6 +72,8 @@ export class ManualBankReconciliationFacade {
   readonly reconciling = this._reconciling.asReadonly();
   readonly lastResult = this._lastResult.asReadonly();
   readonly reclassifyingFlags = this._reclassifyingFlags.asReadonly();
+  readonly reclassifyingModality = this._reclassifyingModality.asReadonly();
+  readonly reclassifyingEstablishment = this._reclassifyingEstablishment.asReadonly();
 
   loadReleases(q: ListQueryDto<BankStatementAdvancedFilters>): void {
     if (this._releasesLoading()) return;
@@ -199,5 +205,25 @@ export class ManualBankReconciliationFacade {
     return this.reconcileApi
       .reclassifyFlags()
       .pipe(finalize(() => this._reclassifyingFlags.set(false)));
+  }
+
+  /** Backfill único: reclassifica a modalidade (débito/crédito) dos lançamentos já importados. */
+  reclassifyModality(): Observable<ReclassifyBankStatementModalityResult> {
+    if (this._reclassifyingModality()) return EMPTY;
+
+    this._reclassifyingModality.set(true);
+    return this.reconcileApi
+      .reclassifyModality()
+      .pipe(finalize(() => this._reclassifyingModality.set(false)));
+  }
+
+  /** Backfill único: vincula o estabelecimento dos lançamentos já importados sem vínculo. */
+  reclassifyEstablishment(): Observable<ReclassifyBankStatementEstablishmentResult> {
+    if (this._reclassifyingEstablishment()) return EMPTY;
+
+    this._reclassifyingEstablishment.set(true);
+    return this.reconcileApi
+      .reclassifyEstablishment()
+      .pipe(finalize(() => this._reclassifyingEstablishment.set(false)));
   }
 }

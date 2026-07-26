@@ -2313,6 +2313,7 @@
       "skippedReasons": "Reasons for skipped orders",
       "skipReason": {
         "ALL_INSTALLMENTS_COVERED": "RV {rvNumber}: {installmentTotal, plural, =1 {the only installment already has a credit order} other {all # installments already have credit orders}}.",
+        "FUTURE_RELEASE_DATE": "RV {rvNumber}: installment {installmentTotal} skipped — future due date.",
         "SUMMARY_NOT_FOUND": "Summary not found.",
         "UNEXPECTED_ERROR": "RV {rvNumber}: unexpected error while creating the credit order."
       },
@@ -2384,6 +2385,16 @@
       "reclassifyFlagsConfirmTitle": "Reclassify flags",
       "reclassifyFlagsConfirmMessage": "Reclassify the flag of pending bank releases from the bank's historical text? Only releases whose flag differs from the currently stored one are changed. Already reconciled releases are not affected.",
       "reclassifyFlagsSuccess": "Pending releases analyzed: {analyzed}. Flags fixed: {updated}. Still unresolved: {stillUnresolved}.",
+      "reclassifyModality": "Reclassify Modality",
+      "reclassifyModalityTooltip": "Fixes the modality (debit/credit) of receipt releases with no modality identified, invisible in the bank statement listing (one-time backfill)",
+      "reclassifyModalityConfirmTitle": "Reclassify modality",
+      "reclassifyModalityConfirmMessage": "Reclassify the modality (debit/credit) of receipt releases with no modality identified, from the bank's historical text? Releases with no debit/credit signal at all in the text (e.g. TED, SISPAG, corrections) are left unchanged.",
+      "reclassifyModalitySuccess": "Releases analyzed: {analyzed}. Modality fixed: {updated}. Still unresolved: {stillUnresolved}.",
+      "reclassifyEstablishment": "Reclassify Establishment",
+      "reclassifyEstablishmentTooltip": "Links the establishment of receipt releases with no establishment identified, from the PV found in the bank's historical text or document (one-time backfill)",
+      "reclassifyEstablishmentConfirmTitle": "Reclassify establishment",
+      "reclassifyEstablishmentConfirmMessage": "Link the establishment of receipt releases with no establishment identified, from the PV found in the bank's historical text or document? Releases with no recognizable PV in the text (e.g. PIX, TED) are left unchanged.",
+      "reclassifyEstablishmentSuccess": "Releases analyzed: {analyzed}. Establishment linked: {updated}. Still unresolved: {stillUnresolved}.",
       "filters": {
         "releaseDate": "Release date",
         "rvDate": "RV date"

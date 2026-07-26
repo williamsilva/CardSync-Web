@@ -34,6 +34,18 @@ export interface ReclassifyBankStatementFlagsResult {
   stillUnresolved: number;
 }
 
+export interface ReclassifyBankStatementModalityResult {
+  analyzed: number;
+  updated: number;
+  stillUnresolved: number;
+}
+
+export interface ReclassifyBankStatementEstablishmentResult {
+  analyzed: number;
+  updated: number;
+  stillUnresolved: number;
+}
+
 @Injectable({ providedIn: 'root' })
 export class ManualBankReconciliationApiService {
   private readonly http = inject(HttpClient);
@@ -55,6 +67,22 @@ export class ManualBankReconciliationApiService {
   reclassifyFlags(): Observable<ReclassifyBankStatementFlagsResult> {
     return this.http.post<ReclassifyBankStatementFlagsResult>(
       `${this.baseUrl}/reclassify-flags`,
+      {},
+    );
+  }
+
+  /** Backfill único: reclassifica a modalidade (débito/crédito) dos lançamentos já importados. */
+  reclassifyModality(): Observable<ReclassifyBankStatementModalityResult> {
+    return this.http.post<ReclassifyBankStatementModalityResult>(
+      `${this.baseUrl}/reclassify-modality`,
+      {},
+    );
+  }
+
+  /** Backfill único: vincula o estabelecimento dos lançamentos já importados sem vínculo. */
+  reclassifyEstablishment(): Observable<ReclassifyBankStatementEstablishmentResult> {
+    return this.http.post<ReclassifyBankStatementEstablishmentResult>(
+      `${this.baseUrl}/reclassify-establishment`,
       {},
     );
   }

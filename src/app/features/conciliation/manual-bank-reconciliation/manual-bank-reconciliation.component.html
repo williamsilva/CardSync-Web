@@ -82,6 +82,28 @@
     [label]="'conciliation.manualBankReconciliation.reclassifyFlags' | translate"
     [pTooltip]="'conciliation.manualBankReconciliation.reclassifyFlagsTooltip' | translate"
   ></button>
+  <button
+    pButton
+    type="button"
+    icon="pi pi-sync"
+    tooltipPosition="bottom"
+    class="p-button-text p-button-sm"
+    (click)="confirmReclassifyModality()"
+    [loading]="facade.reclassifyingModality()"
+    [label]="'conciliation.manualBankReconciliation.reclassifyModality' | translate"
+    [pTooltip]="'conciliation.manualBankReconciliation.reclassifyModalityTooltip' | translate"
+  ></button>
+  <button
+    pButton
+    type="button"
+    icon="pi pi-building"
+    tooltipPosition="bottom"
+    class="p-button-text p-button-sm"
+    (click)="confirmReclassifyEstablishment()"
+    [loading]="facade.reclassifyingEstablishment()"
+    [label]="'conciliation.manualBankReconciliation.reclassifyEstablishment' | translate"
+    [pTooltip]="'conciliation.manualBankReconciliation.reclassifyEstablishmentTooltip' | translate"
+  ></button>
 </cs-page-header>
 
 <!-- Action bar: single release selected -->

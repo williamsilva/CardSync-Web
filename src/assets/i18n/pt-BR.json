@@ -2737,6 +2737,7 @@
       "skippedReasons": "Motivos das ordens ignoradas",
       "skipReason": {
         "ALL_INSTALLMENTS_COVERED": "RV {rvNumber}: {installmentTotal, plural, =1 {a única parcela já possui ordem de crédito} other {todas as # parcelas já possuem ordens de crédito}}.",
+        "FUTURE_RELEASE_DATE": "RV {rvNumber}: parcela {installmentTotal} ignorada — vencimento futuro.",
         "SUMMARY_NOT_FOUND": "Resumo não encontrado.",
         "UNEXPECTED_ERROR": "RV {rvNumber}: erro inesperado ao criar a ordem de crédito."
       },
@@ -2807,6 +2808,16 @@
       "reclassifyFlagsConfirmTitle": "Reclassificar bandeiras",
       "reclassifyFlagsConfirmMessage": "Reclassificar a bandeira dos lançamentos bancários pendentes a partir do histórico do banco? Só os lançamentos com bandeira diferente da já cadastrada são alterados. Lançamentos já conciliados não são afetados.",
       "reclassifyFlagsSuccess": "Lançamentos pendentes analisados: {analyzed}. Bandeiras corrigidas: {updated}. Sem bandeira identificada: {stillUnresolved}.",
+      "reclassifyModality": "Reclassificar Modalidade",
+      "reclassifyModalityTooltip": "Corrige a modalidade (débito/crédito) de lançamentos de recebimento sem modalidade identificada, invisíveis no Extrato Bancário (backfill único)",
+      "reclassifyModalityConfirmTitle": "Reclassificar modalidade",
+      "reclassifyModalityConfirmMessage": "Reclassificar a modalidade (débito/crédito) dos lançamentos de recebimento sem modalidade identificada, a partir do histórico do banco? Lançamentos sem nenhum sinal de débito/crédito no texto (ex.: TED, SISPAG, correções) permanecem sem alteração.",
+      "reclassifyModalitySuccess": "Lançamentos analisados: {analyzed}. Modalidade corrigida: {updated}. Sem modalidade identificada: {stillUnresolved}.",
+      "reclassifyEstablishment": "Reclassificar Estabelecimento",
+      "reclassifyEstablishmentTooltip": "Vincula o estabelecimento de lançamentos de recebimento sem estabelecimento identificado, a partir do PV no histórico do banco ou no documento (backfill único)",
+      "reclassifyEstablishmentConfirmTitle": "Reclassificar estabelecimento",
+      "reclassifyEstablishmentConfirmMessage": "Vincular o estabelecimento dos lançamentos de recebimento sem estabelecimento identificado, a partir do PV encontrado no histórico do banco ou no documento? Lançamentos sem nenhum PV reconhecível no texto (ex.: PIX, TED) permanecem sem alteração.",
+      "reclassifyEstablishmentSuccess": "Lançamentos analisados: {analyzed}. Estabelecimento vinculado: {updated}. Sem estabelecimento identificado: {stillUnresolved}.",
       "filters": {
         "releaseDate": "Data do lançamento",
         "rvDate": "Data da RV"

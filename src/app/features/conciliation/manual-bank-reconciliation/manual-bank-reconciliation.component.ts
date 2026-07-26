@@ -89,8 +89,8 @@ interface OrderFiltersState {
 @Component({
   standalone: true,
   selector: 'cs-manual-bank-reconciliation',
-  providers: [ConfirmationService, MessageService, CsCurrencyPipe],
   templateUrl: './manual-bank-reconciliation.component.html',
+  providers: [ConfirmationService, MessageService, CsCurrencyPipe],
   styles: [
     `
       :host ::ng-deep .cs-row-selected td {
@@ -104,11 +104,11 @@ interface OrderFiltersState {
     FormsModule,
     TableModule,
     ToastModule,
+    DialogModule,
     ButtonModule,
+    SelectModule,
     TooltipModule,
     CsCurrencyPipe,
-    DialogModule,
-    SelectModule,
     CheckboxModule,
     TextareaModule,
     CsTagComponent,
@@ -888,6 +888,42 @@ export class ManualBankReconciliationComponent implements OnInit {
     });
   }
 
+  confirmReclassifyModality(): void {
+    this.confirmationService.confirm({
+      message: this.translateSvc.instant(
+        'conciliation.manualBankReconciliation.reclassifyModalityConfirmMessage',
+      ),
+      header: this.translateSvc.instant(
+        'conciliation.manualBankReconciliation.reclassifyModalityConfirmTitle',
+      ),
+      icon: 'pi pi-refresh',
+      acceptLabel: this.translateSvc.instant(
+        'conciliation.manualBankReconciliation.reclassifyModality',
+      ),
+      rejectLabel: this.translateSvc.instant('common.cancel'),
+      acceptButtonStyleClass: 'p-button-warn',
+      accept: () => this.doReclassifyModality(),
+    });
+  }
+
+  confirmReclassifyEstablishment(): void {
+    this.confirmationService.confirm({
+      message: this.translateSvc.instant(
+        'conciliation.manualBankReconciliation.reclassifyEstablishmentConfirmMessage',
+      ),
+      header: this.translateSvc.instant(
+        'conciliation.manualBankReconciliation.reclassifyEstablishmentConfirmTitle',
+      ),
+      icon: 'pi pi-refresh',
+      acceptLabel: this.translateSvc.instant(
+        'conciliation.manualBankReconciliation.reclassifyEstablishment',
+      ),
+      rejectLabel: this.translateSvc.instant('common.cancel'),
+      acceptButtonStyleClass: 'p-button-warn',
+      accept: () => this.doReclassifyEstablishment(),
+    });
+  }
+
   private doReclassifyFlags(): void {
     this.facade.reclassifyFlags().subscribe({
       next: (result) => {
@@ -896,6 +932,54 @@ export class ManualBankReconciliationComponent implements OnInit {
           summary: this.i18n.tUi('common.success'),
           detail: this.translateSvc.instant(
             'conciliation.manualBankReconciliation.reclassifyFlagsSuccess',
+            result,
+          ),
+        });
+        this.reloadReleases();
+        this.reloadOrders();
+      },
+      error: () => {
+        this.messageService.add({
+          severity: 'error',
+          summary: this.i18n.tUi('common.error'),
+          detail: this.i18n.tUi('common.errorMessage'),
+        });
+      },
+    });
+  }
+
+  private doReclassifyModality(): void {
+    this.facade.reclassifyModality().subscribe({
+      next: (result) => {
+        this.messageService.add({
+          severity: 'success',
+          summary: this.i18n.tUi('common.success'),
+          detail: this.translateSvc.instant(
+            'conciliation.manualBankReconciliation.reclassifyModalitySuccess',
+            result,
+          ),
+        });
+        this.reloadReleases();
+        this.reloadOrders();
+      },
+      error: () => {
+        this.messageService.add({
+          severity: 'error',
+          summary: this.i18n.tUi('common.error'),
+          detail: this.i18n.tUi('common.errorMessage'),
+        });
+      },
+    });
+  }
+
+  private doReclassifyEstablishment(): void {
+    this.facade.reclassifyEstablishment().subscribe({
+      next: (result) => {
+        this.messageService.add({
+          severity: 'success',
+          summary: this.i18n.tUi('common.success'),
+          detail: this.translateSvc.instant(
+            'conciliation.manualBankReconciliation.reclassifyEstablishmentSuccess',
             result,
           ),
         });
