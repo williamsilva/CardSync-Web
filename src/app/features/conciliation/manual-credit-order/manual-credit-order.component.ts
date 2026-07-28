@@ -1,26 +1,27 @@
 import { FormsModule } from '@angular/forms';
 import { AfterViewInit, Component, computed, inject, signal, ViewChild } from '@angular/core';
 
+import { Card } from 'primeng/card';
 import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
+import { DialogModule } from 'primeng/dialog';
 import { TooltipModule } from 'primeng/tooltip';
 import { CheckboxModule } from 'primeng/checkbox';
 import { MultiSelect } from 'primeng/multiselect';
 import { Table, TableModule } from 'primeng/table';
 import { TranslateModule } from '@ngx-translate/core';
 
-import { Card } from 'primeng/card';
 import { I18nService } from '@core/i18n/i18n.service';
 import { CsTagComponent, CsTagTone } from '@shared/ui';
 import { CsDatePipe } from '@shared/pipes/cs-date.pipe';
 import { STATE_KEY } from '@features/state-key.constants';
 import { FlagFacade } from '@features/facade/flag.facade';
+import { CsCurrencyPipe } from '@shared/pipes/cs-currency.pipe';
 import { CsDocumentPipe } from '@shared/pipes/cs-document.pipe';
 import { CompanyFacade } from '@features/facade/company.facade';
 import { AcquirerFacade } from '@features/facade/acquirer.facade';
 import { StatefulListPage } from '@features/list-base/stateful-list-page';
 import { SaleSummaryApiModel } from '@features/models/sales-summary.model';
-import { CreditOrderManualResult } from '@features/models/credit-order.model';
 import { buildListQuery } from '@shared/features/list-query/list-query.builder';
 import { SaleSummaryAdvancedFilters } from '@features/filter/sale-summary.filters';
 import { CreditOrderApiService } from '@features/service/credit-order.api.service';
@@ -31,6 +32,11 @@ import { CsColumnFilterShellComponent } from '@features/list-base/cs-column-filt
 import { CsAdvancedTextFilterComponent } from '@features/list-base/cs-advanced-text-filter.component';
 import { CsAdvancedMultiselectFilterComponent } from '@features/list-base/cs-advanced-multiselect-filter.component';
 import { CsAdvancedFilterItemTemplateDirective } from '@features/list-base/cs-advanced-filter-item-template.directive';
+import {
+  CreditOrderImportResult,
+  CreditOrderManualResult,
+  CreditOrderImportPreviewResult,
+} from '@features/models/credit-order.model';
 import {
   ActiveFilterItem,
   FiltersPanelComponent,
@@ -70,10 +76,12 @@ import {
     MultiSelect,
     TableModule,
     ButtonModule,
+    DialogModule,
     TooltipModule,
     CheckboxModule,
     CsTagComponent,
     CsDocumentPipe,
+    CsCurrencyPipe,
     TranslateModule,
     PageHeaderComponent,
     FiltersPanelComponent,
@@ -107,9 +115,17 @@ export class ManualCreditOrderComponent
 
   /* Seleção de linhas */
   readonly saving = signal(false);
+  readonly importing = signal(false);
+  readonly previewingImport = signal(false);
   readonly creatingId = signal<string | null>(null);
   readonly selectedIds = signal<Set<string>>(new Set());
   readonly lastResult = signal<CreditOrderManualResult | null>(null);
+  readonly lastImportResult = signal<CreditOrderImportResult | null>(null);
+
+  /* Prévia de importação (confirmação antes de gravar) */
+  readonly importPreviewVisible = signal(false);
+  readonly importPreview = signal<CreditOrderImportPreviewResult | null>(null);
+  readonly pendingImportFiles = signal<File[] | null>(null);
 
   /* Filtros avançados */
   readonly rvNumber = signal('');
@@ -262,10 +278,71 @@ export class ManualCreditOrderComponent
     });
   }
 
+  onImportFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const files = input.files ? Array.from(input.files) : [];
+    input.value = '';
+    if (!files.length) return;
+
+    this.previewingImport.set(true);
+    this.pendingImportFiles.set(files);
+
+    this.creditOrderService.previewImportManual(files).subscribe({
+      next: (preview) => {
+        this.previewingImport.set(false);
+        this.importPreview.set(preview);
+        this.importPreviewVisible.set(true);
+      },
+      error: () => {
+        this.previewingImport.set(false);
+        this.pendingImportFiles.set(null);
+      },
+    });
+  }
+
+  confirmImport(): void {
+    const files = this.pendingImportFiles();
+    if (!files?.length) return;
+
+    this.importing.set(true);
+    this.importPreviewVisible.set(false);
+    this.lastImportResult.set(null);
+
+    this.creditOrderService.importManual(files).subscribe({
+      next: (result) => {
+        this.importing.set(false);
+        this.pendingImportFiles.set(null);
+        this.importPreview.set(null);
+        this.lastImportResult.set(result);
+        this.facade.reloadLast();
+        this.toast.add({
+          severity: result.created > 0 ? 'success' : 'warn',
+          summary: this.i18n.tUi(result.created > 0 ? 'common.success' : 'common.warning'),
+          detail: this.i18n.tUi('conciliation.manualCreditOrder.import.saved', {
+            analyzed: result.analyzed,
+            created: result.created,
+            skipped: result.skipped,
+          }),
+        });
+      },
+      error: () => {
+        this.importing.set(false);
+        this.pendingImportFiles.set(null);
+      },
+    });
+  }
+
+  cancelImportPreview(): void {
+    this.importPreviewVisible.set(false);
+    this.importPreview.set(null);
+    this.pendingImportFiles.set(null);
+  }
+
   clear(): void {
     localStorage.removeItem(this.tableStateKey());
     sessionStorage.removeItem(this.tableStateKey());
     this.lastResult.set(null);
+    this.lastImportResult.set(null);
     this.dt?.clear();
     this.clearTableAndReload(this.dt);
   }

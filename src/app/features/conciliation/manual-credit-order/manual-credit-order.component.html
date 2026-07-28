@@ -6,6 +6,23 @@
     { label: ('conciliation.manualCreditOrder.title' | translate) },
   ]"
 >
+  <input
+    type="file"
+    hidden
+    multiple
+    accept=".csv"
+    #importFileInput
+    (change)="onImportFileSelected($event)"
+  />
+  <button
+    pButton
+    type="button"
+    icon="pi pi-upload"
+    class="p-button-text p-button-sm"
+    [loading]="previewingImport()"
+    [label]="'conciliation.manualCreditOrder.import.button' | translate"
+    (click)="importFileInput.click()"
+  ></button>
   <button
     pButton
     type="button"
@@ -15,6 +32,97 @@
     [label]="'common.update' | translate"
   ></button>
 </cs-page-header>
+
+<!-- Confirmação da importação: prévia do que será gerado antes de gravar -->
+<p-dialog
+  [modal]="true"
+  appendTo="body"
+  [closable]="false"
+  [visible]="importPreviewVisible()"
+  [style]="{ width: 'min(860px, 94vw)' }"
+  (visibleChange)="!$event && cancelImportPreview()"
+  [header]="'conciliation.manualCreditOrder.import.previewTitle' | translate"
+>
+  @if (importPreview(); as preview) {
+    <div class="cs-result-panel">
+      <div class="cs-result-panel__row">
+        @for (name of preview.fileNames; track name) {
+          <span>
+            <i class="pi pi-file"></i>
+            {{ name }}
+          </span>
+        }
+      </div>
+      <div class="cs-result-panel__row">
+        <span>
+          {{
+            'conciliation.manualCreditOrder.import.analyzedCount'
+              | translate: { count: preview.analyzed }
+          }}
+        </span>
+        <span class="cs-result-panel__created">
+          <i class="pi pi-check-circle"></i>
+          {{
+            'conciliation.manualCreditOrder.import.wouldCreateCount'
+              | translate: { count: preview.wouldCreate }
+          }}
+        </span>
+        @if (preview.skipped > 0) {
+          <span class="cs-result-panel__skipped">
+            <i class="pi pi-exclamation-triangle"></i>
+            {{
+              'conciliation.manualCreditOrder.skippedCount' | translate: { count: preview.skipped }
+            }}
+          </span>
+        }
+      </div>
+      <div class="cs-result-panel__row">
+        <strong>{{ 'conciliation.manualCreditOrder.import.totalValue' | translate }}:</strong>
+        {{ preview.totalValue | csCurrency }}
+      </div>
+      @if (preview.skippedReasons.length > 0) {
+        <div class="cs-result-panel__reasons">
+          <span class="cs-section-label">{{
+            'conciliation.manualCreditOrder.import.skippedReasons' | translate
+          }}</span>
+          @for (reason of preview.skippedReasons; track $index) {
+            <div class="cs-result-panel__reason">
+              {{
+                'conciliation.manualCreditOrder.import.skipReason.' + reason.code
+                  | translate
+                    : {
+                        fileName: reason.fileName,
+                        lineNumber: reason.lineNumber,
+                        rvNumber: reason.rvNumber,
+                        installmentNumber: reason.installmentNumber,
+                      }
+              }}
+            </div>
+          }
+        </div>
+      }
+    </div>
+  }
+  <ng-template pTemplate="footer">
+    <button
+      pButton
+      type="button"
+      icon="pi pi-times"
+      (click)="cancelImportPreview()"
+      class="p-button-text p-button-sm"
+      [label]="'common.cancel' | translate"
+    ></button>
+    <button
+      pButton
+      type="button"
+      icon="pi pi-check"
+      [loading]="importing()"
+      (click)="confirmImport()"
+      [disabled]="!importPreview() || importPreview()!.wouldCreate === 0"
+      [label]="'conciliation.manualCreditOrder.import.confirm' | translate"
+    ></button>
+  </ng-template>
+</p-dialog>
 
 <cs-filters-panel
   (clear)="clear()"
@@ -132,11 +240,11 @@
   </small>
 
   <p-button
+    size="small"
     type="button"
     icon="pi pi-check"
-    size="small"
-    [disabled]="selectedCount() === 0"
     [loading]="saving()"
+    [disabled]="selectedCount() === 0"
     [label]="
       'conciliation.manualCreditOrder.createSelected' | translate: { count: selectedCount() }
     "
@@ -179,6 +287,8 @@
       <col style="width: 100px" />
       <col style="width: 110px" />
       <col style="width: 100px" />
+      <col style="width: 110px" />
+      <col style="width: 110px" />
       <col style="width: 110px" />
       <col style="width: 140px" />
       <col style="width: 60px" />
@@ -468,6 +578,38 @@
         </div>
       </th>
 
+      <!-- Valor da próxima ordem de crédito -->
+      <th pSortableColumn="nextInstallmentValue" class="text-right">
+        <div class="th-flex th-flex--center justify-content-end">
+          <span
+            class="th-label"
+            tooltipPosition="top"
+            [pTooltip]="'saleSummary.fields.nextInstallmentValueTooltip' | translate"
+          >
+            {{ 'saleSummary.fields.nextInstallmentValue' | translate }}
+          </span>
+          <span class="th-icons">
+            <p-sortIcon field="nextInstallmentValue"></p-sortIcon>
+          </span>
+        </div>
+      </th>
+
+      <!-- Data prevista da próxima ordem de crédito -->
+      <th pSortableColumn="nextInstallmentDate" class="text-center">
+        <div class="th-flex th-flex--center justify-content-center">
+          <span
+            class="th-label"
+            tooltipPosition="top"
+            [pTooltip]="'saleSummary.fields.nextInstallmentDateTooltip' | translate"
+          >
+            {{ 'saleSummary.fields.nextInstallmentDate' | translate }}
+          </span>
+          <span class="th-icons">
+            <p-sortIcon field="nextInstallmentDate"></p-sortIcon>
+          </span>
+        </div>
+      </th>
+
       <!-- Status Pagamento Banco -->
       <th pSortableColumn="statusPaymentBank">
         <div class="th-flex">
@@ -560,6 +702,12 @@
       </td>
       <td class="cell-strong">{{ row.rvNumber }}</td>
       <td class="cell-muted text-center">{{ row.rvDate | csDate: 'date' }}</td>
+      <td class="cell-strong text-right">
+        {{ row.nextInstallmentValue != null ? (row.nextInstallmentValue | csCurrency) : '-' }}
+      </td>
+      <td class="cell-muted text-center">
+        {{ row.nextInstallmentDate != null ? (row.nextInstallmentDate | csDate: 'date') : '-' }}
+      </td>
       <td>
         <cs-tag
           [value]="statusPaymentBankLabel(row.statusPaymentBank)"
@@ -585,7 +733,7 @@
 
   <ng-template pTemplate="emptymessage">
     <tr>
-      <td [attr.colspan]="9" class="empty-td">
+      <td [attr.colspan]="11" class="empty-td">
         <div class="empty empty-center">
           <div class="empty-title">
             {{ 'conciliation.manualCreditOrder.emptyTable' | translate }}
@@ -625,6 +773,59 @@
                 'conciliation.manualCreditOrder.skipReason.' + reason.code
                   | translate
                     : { rvNumber: reason.rvNumber, installmentTotal: reason.installmentTotal }
+              }}
+            </div>
+          }
+        </div>
+      }
+    </div>
+  </p-card>
+}
+
+<!-- Resultado da importação do relatório da adquirente -->
+@if (lastImportResult(); as importResult) {
+  <p-card>
+    <div class="cs-result-panel">
+      <div class="cs-result-panel__row">
+        <span>
+          {{
+            'conciliation.manualCreditOrder.import.analyzedCount'
+              | translate: { count: importResult.analyzed }
+          }}
+        </span>
+        <span class="cs-result-panel__created">
+          <i class="pi pi-check-circle"></i>
+          {{
+            'conciliation.manualCreditOrder.createdCount'
+              | translate: { count: importResult.created }
+          }}
+        </span>
+        @if (importResult.skipped > 0) {
+          <span class="cs-result-panel__skipped">
+            <i class="pi pi-exclamation-triangle"></i>
+            {{
+              'conciliation.manualCreditOrder.skippedCount'
+                | translate: { count: importResult.skipped }
+            }}
+          </span>
+        }
+      </div>
+      @if (importResult.skippedReasons.length > 0) {
+        <div class="cs-result-panel__reasons">
+          <span class="cs-section-label">{{
+            'conciliation.manualCreditOrder.import.skippedReasons' | translate
+          }}</span>
+          @for (reason of importResult.skippedReasons; track $index) {
+            <div class="cs-result-panel__reason">
+              {{
+                'conciliation.manualCreditOrder.import.skipReason.' + reason.code
+                  | translate
+                    : {
+                        fileName: reason.fileName,
+                        lineNumber: reason.lineNumber,
+                        rvNumber: reason.rvNumber,
+                        installmentNumber: reason.installmentNumber,
+                      }
               }}
             </div>
           }

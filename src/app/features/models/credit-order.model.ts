@@ -52,6 +52,37 @@ export interface CreditOrderManualResult {
   skippedReasons: CreditOrderSkipReason[];
 }
 
+export type CreditOrderImportSkipCode =
+  | 'SUMMARY_NOT_FOUND'
+  | 'AMBIGUOUS_RV'
+  | 'ALREADY_HAS_CREDIT_ORDER'
+  | 'PARSE_ERROR';
+
+export interface CreditOrderImportSkipReason {
+  fileName: string | null;
+  lineNumber: number;
+  rvNumber: string | null;
+  installmentNumber: number | null;
+  code: CreditOrderImportSkipCode;
+}
+
+export interface CreditOrderImportResult {
+  analyzed: number;
+  created: number;
+  skipped: number;
+  createdIds: string[];
+  skippedReasons: CreditOrderImportSkipReason[];
+}
+
+export interface CreditOrderImportPreviewResult {
+  fileNames: string[];
+  analyzed: number;
+  wouldCreate: number;
+  totalValue: number;
+  skipped: number;
+  skippedReasons: CreditOrderImportSkipReason[];
+}
+
 export interface CreditOrderApiModel {
   id: string;
   rvNumber: string;

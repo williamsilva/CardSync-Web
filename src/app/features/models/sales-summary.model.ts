@@ -81,6 +81,12 @@ export interface SaleSummaryApiModel {
   acquirer: AcquirerMinimalModel;
   bankingDomicile: BankingDomicileModel;
   processedFile: ProcessedFileMinimalModel;
+
+  /** Prévia do valor da próxima ordem de crédito que seria gerada para este resumo (calculado no backend, não persistido). */
+  nextInstallmentValue?: number | null;
+
+  /** Prévia da data de vencimento da próxima ordem de crédito que seria gerada (mesmo ajuste de dia útil usado na criação real). */
+  nextInstallmentDate?: string | null;
 }
 
 export function mapSaleSummaryApiModel(input: SaleSummaryApiModel): SaleSummaryModel {

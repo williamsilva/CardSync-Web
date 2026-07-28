@@ -8,7 +8,14 @@ import { HalPagedResponse } from '@core/api/page.model';
 import { TransactionsTotalsModel } from '@models/transactionsTotalsModel';
 import { ListQueryDto } from '@shared/features/list-query/list-query.types';
 import { CreditOrderAdvancedFilters } from '@features/filter/credit-order.filters';
-import { CreditOrderApiModel, CreditOrderManualInput, CreditOrderManualResult, mapCreditOrderApiModels } from '@models/credit-order.model';
+import {
+  CreditOrderApiModel,
+  CreditOrderImportPreviewResult,
+  CreditOrderImportResult,
+  CreditOrderManualInput,
+  CreditOrderManualResult,
+  mapCreditOrderApiModels,
+} from '@models/credit-order.model';
 
 @Injectable({ providedIn: 'root' })
 export class CreditOrderApiService {
@@ -38,5 +45,17 @@ export class CreditOrderApiService {
 
   createManual(body: CreditOrderManualInput) {
     return this.http.post<CreditOrderManualResult>(`${this.baseUrl}/manual`, body);
+  }
+
+  previewImportManual(files: File[]) {
+    const formData = new FormData();
+    files.forEach((file) => formData.append('files', file, file.name));
+    return this.http.post<CreditOrderImportPreviewResult>(`${this.baseUrl}/manual/import/preview`, formData);
+  }
+
+  importManual(files: File[]) {
+    const formData = new FormData();
+    files.forEach((file) => formData.append('files', file, file.name));
+    return this.http.post<CreditOrderImportResult>(`${this.baseUrl}/manual/import`, formData);
   }
 }
