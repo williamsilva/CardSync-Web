@@ -15,7 +15,12 @@ import {
   ManualBankReconciliationApiService,
   ReclassifyBankStatementFlagsResult,
   ReclassifyBankStatementModalityResult,
+  ReclassifyBankStatementAcquirerResult,
   ReclassifyBankStatementEstablishmentResult,
+  PreImplantationDivergencePreviewResult,
+  PreImplantationDivergenceApplyResult,
+  NoCreditOrderLegacyPreviewResult,
+  NoCreditOrderLegacyApplyResult,
 } from '@features/service/manual-bank-reconciliation.api.service';
 
 @Injectable({ providedIn: 'root' })
@@ -50,7 +55,12 @@ export class ManualBankReconciliationFacade {
 
   private readonly _reclassifyingFlags = signal(false);
   private readonly _reclassifyingModality = signal(false);
+  private readonly _reclassifyingAcquirer = signal(false);
   private readonly _reclassifyingEstablishment = signal(false);
+  private readonly _analyzingPreImplantationDivergence = signal(false);
+  private readonly _applyingPreImplantationDivergence = signal(false);
+  private readonly _analyzingNoCreditOrderLegacy = signal(false);
+  private readonly _applyingNoCreditOrderLegacy = signal(false);
 
   readonly releases = this._releases.asReadonly();
   readonly releasesTotal = this._releasesTotal.asReadonly();
@@ -73,7 +83,12 @@ export class ManualBankReconciliationFacade {
   readonly lastResult = this._lastResult.asReadonly();
   readonly reclassifyingFlags = this._reclassifyingFlags.asReadonly();
   readonly reclassifyingModality = this._reclassifyingModality.asReadonly();
+  readonly reclassifyingAcquirer = this._reclassifyingAcquirer.asReadonly();
   readonly reclassifyingEstablishment = this._reclassifyingEstablishment.asReadonly();
+  readonly analyzingPreImplantationDivergence = this._analyzingPreImplantationDivergence.asReadonly();
+  readonly applyingPreImplantationDivergence = this._applyingPreImplantationDivergence.asReadonly();
+  readonly analyzingNoCreditOrderLegacy = this._analyzingNoCreditOrderLegacy.asReadonly();
+  readonly applyingNoCreditOrderLegacy = this._applyingNoCreditOrderLegacy.asReadonly();
 
   loadReleases(q: ListQueryDto<BankStatementAdvancedFilters>): void {
     if (this._releasesLoading()) return;
@@ -225,5 +240,75 @@ export class ManualBankReconciliationFacade {
     return this.reconcileApi
       .reclassifyEstablishment()
       .pipe(finalize(() => this._reclassifyingEstablishment.set(false)));
+  }
+
+  /** Backfill único: vincula o adquirente dos lançamentos já importados sem vínculo. */
+  reclassifyAcquirer(): Observable<ReclassifyBankStatementAcquirerResult> {
+    if (this._reclassifyingAcquirer()) return EMPTY;
+
+    this._reclassifyingAcquirer.set(true);
+    return this.reconcileApi
+      .reclassifyAcquirer()
+      .pipe(finalize(() => this._reclassifyingAcquirer.set(false)));
+  }
+
+  /** Só análise, não grava nada — ver applyPreImplantationDivergence. */
+  previewPreImplantationDivergence(): Observable<PreImplantationDivergencePreviewResult> {
+    if (this._analyzingPreImplantationDivergence()) return EMPTY;
+
+    this._analyzingPreImplantationDivergence.set(true);
+    return this.reconcileApi
+      .previewPreImplantationDivergence()
+      .pipe(finalize(() => this._analyzingPreImplantationDivergence.set(false)));
+  }
+
+  /**
+   * Vincula automaticamente, com a justificativa padrão de divergência pré-implantação, os
+   * lançamentos selecionados (recalculado no momento da execução — não reusa o resultado do
+   * preview). Sem releaseBankIds, aplica a todos os elegíveis identificados na prévia.
+   */
+  applyPreImplantationDivergence(
+    releaseBankIds?: string[],
+  ): Observable<PreImplantationDivergenceApplyResult> {
+    if (this._applyingPreImplantationDivergence()) return EMPTY;
+
+    this._applyingPreImplantationDivergence.set(true);
+    return this.reconcileApi.applyPreImplantationDivergence(releaseBankIds).pipe(
+      tap(() => {
+        this.reloadReleases();
+        this.reloadOrders();
+      }),
+      finalize(() => this._applyingPreImplantationDivergence.set(false)),
+    );
+  }
+
+  /** Só análise, não grava nada — ver applyNoCreditOrderLegacyMarking. */
+  previewNoCreditOrderLegacyMarking(): Observable<NoCreditOrderLegacyPreviewResult> {
+    if (this._analyzingNoCreditOrderLegacy()) return EMPTY;
+
+    this._analyzingNoCreditOrderLegacy.set(true);
+    return this.reconcileApi
+      .previewNoCreditOrderLegacyMarking()
+      .pipe(finalize(() => this._analyzingNoCreditOrderLegacy.set(false)));
+  }
+
+  /**
+   * Marca como legado os lançamentos selecionados sem nenhuma ordem de crédito candidata
+   * (recalculado no momento da execução — não reusa o resultado do preview). Sem
+   * releaseBankIds, aplica a todos os elegíveis identificados na prévia.
+   */
+  applyNoCreditOrderLegacyMarking(
+    releaseBankIds?: string[],
+  ): Observable<NoCreditOrderLegacyApplyResult> {
+    if (this._applyingNoCreditOrderLegacy()) return EMPTY;
+
+    this._applyingNoCreditOrderLegacy.set(true);
+    return this.reconcileApi.applyNoCreditOrderLegacyMarking(releaseBankIds).pipe(
+      tap(() => {
+        this.reloadReleases();
+        this.reloadOrders();
+      }),
+      finalize(() => this._applyingNoCreditOrderLegacy.set(false)),
+    );
   }
 }

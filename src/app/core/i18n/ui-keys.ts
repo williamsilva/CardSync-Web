@@ -707,10 +707,21 @@ export const UI_KEYS = {
     },
     manualCreditOrder: {
       saved: 'conciliation.manualCreditOrder.saved',
+      import: {
+        saved: 'conciliation.manualCreditOrder.import.saved',
+      },
     },
     manualBankStatement: {
       saved: 'conciliation.manualBankStatement.saved',
       saveError: 'conciliation.manualBankStatement.saveError',
+    },
+    manualBankReconciliation: {
+      reclassifyFlags: 'conciliation.manualBankReconciliation.reclassifyFlags',
+      reclassifyModality: 'conciliation.manualBankReconciliation.reclassifyModality',
+      reclassifyAcquirer: 'conciliation.manualBankReconciliation.reclassifyAcquirer',
+      reclassifyEstablishment: 'conciliation.manualBankReconciliation.reclassifyEstablishment',
+      preImplantationAnalyze: 'conciliation.manualBankReconciliation.preImplantationAnalyze',
+      noCreditOrderLegacyAnalyze: 'conciliation.manualBankReconciliation.noCreditOrderLegacyAnalyze',
     },
     result: {
       okRates: 'conciliation.result.okRates',

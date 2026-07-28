@@ -1,6 +1,7 @@
 ﻿import { FormsModule } from '@angular/forms';
 import { Component, OnInit, WritableSignal, computed, inject, signal } from '@angular/core';
 
+import { MenuModule } from 'primeng/menu';
 import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
 import { SelectModule } from 'primeng/select';
@@ -10,8 +11,8 @@ import { TooltipModule } from 'primeng/tooltip';
 import { CheckboxModule } from 'primeng/checkbox';
 import { TextareaModule } from 'primeng/textarea';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { ConfirmationService, MessageService } from 'primeng/api';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { ConfirmationService, MenuItem, MessageService } from 'primeng/api';
 
 import { I18nService } from '@core/i18n/i18n.service';
 import { CsTagComponent, CsTagTone } from '@shared/ui';
@@ -38,6 +39,12 @@ import { ReconciliationSettingsApiService } from '@features/service/reconciliati
 import { CsAdvancedPeriodDateFilterComponent } from '@features/list-base/cs-advanced-period-date-filter.component';
 import { CsAdvancedMultiselectFilterComponent } from '@features/list-base/cs-advanced-multiselect-filter.component';
 import { CsAdvancedFilterItemTemplateDirective } from '@features/list-base/cs-advanced-filter-item-template.directive';
+import {
+  NoCreditOrderLegacyCandidate,
+  NoCreditOrderLegacyPreviewResult,
+  PreImplantationDivergenceCandidate,
+  PreImplantationDivergencePreviewResult,
+} from '@features/service/manual-bank-reconciliation.api.service';
 import {
   CsCurrencyRangeValue,
   CsCurrencyRangeFilterComponent,
@@ -101,6 +108,7 @@ interface OrderFiltersState {
   ],
   imports: [
     CsDatePipe,
+    MenuModule,
     FormsModule,
     TableModule,
     ToastModule,
@@ -233,6 +241,139 @@ export class ManualBankReconciliationComponent implements OnInit {
    * Só é pedida depois de clicar em "Vincular" (diálogo próprio), não fica exposta o tempo todo. */
   readonly divergenceReason = signal('');
   readonly showDivergenceDialog = signal(false);
+
+  /** Diálogo de análise/prévia da divergência pré-implantação (ver openPreImplantationDivergencePreview). */
+  protected readonly showPreImplantationPreviewDialog = signal(false);
+  protected readonly preImplantationPreview = signal<PreImplantationDivergencePreviewResult | null>(
+    null,
+  );
+  /** Seleção da tabela de prévia — começa com todos os elegíveis marcados; o usuário desmarca o que não quer vincular. */
+  protected readonly selectedPreImplantationCandidates = signal<
+    PreImplantationDivergenceCandidate[]
+  >([]);
+
+  /** Filtros locais da tabela de prévia — a lista inteira já veio numa única chamada, então filtra em memória, sem nova requisição. */
+  protected readonly preImplantationCompanyFilter = signal<string | null>(null);
+  protected readonly preImplantationAcquirerFilter = signal<string | null>(null);
+
+  protected readonly preImplantationCompanyOptions = computed(() =>
+    this.uniquePreImplantationOptions((c) => c.companyName),
+  );
+
+  protected readonly preImplantationAcquirerOptions = computed(() =>
+    this.uniquePreImplantationOptions((c) => c.acquirerName),
+  );
+
+  protected readonly filteredPreImplantationCandidates = computed(() => {
+    const candidates = this.preImplantationPreview()?.candidates ?? [];
+    const company = this.preImplantationCompanyFilter();
+    const acquirer = this.preImplantationAcquirerFilter();
+    return candidates.filter(
+      (c) => (!company || c.companyName === company) && (!acquirer || c.acquirerName === acquirer),
+    );
+  });
+
+  /** Diálogo de análise/prévia da marcação de legado sem ordem de crédito (ver openNoCreditOrderLegacyPreview). */
+  protected readonly showNoCreditOrderLegacyPreviewDialog = signal(false);
+  protected readonly noCreditOrderLegacyPreview = signal<NoCreditOrderLegacyPreviewResult | null>(
+    null,
+  );
+  /** Seleção da tabela de prévia — começa com todos os elegíveis marcados; o usuário desmarca o que não quer marcar. */
+  protected readonly selectedNoCreditOrderLegacyCandidates = signal<NoCreditOrderLegacyCandidate[]>(
+    [],
+  );
+
+  /** Filtros locais da tabela de prévia — a lista inteira já veio numa única chamada, então filtra em memória, sem nova requisição. */
+  protected readonly noCreditOrderLegacyCompanyFilter = signal<string | null>(null);
+  protected readonly noCreditOrderLegacyAcquirerFilter = signal<string | null>(null);
+
+  protected readonly noCreditOrderLegacyCompanyOptions = computed(() =>
+    this.uniqueNoCreditOrderLegacyOptions((c) => c.companyName),
+  );
+
+  protected readonly noCreditOrderLegacyAcquirerOptions = computed(() =>
+    this.uniqueNoCreditOrderLegacyOptions((c) => c.acquirerName),
+  );
+
+  protected readonly filteredNoCreditOrderLegacyCandidates = computed(() => {
+    const candidates = this.noCreditOrderLegacyPreview()?.candidates ?? [];
+    const company = this.noCreditOrderLegacyCompanyFilter();
+    const acquirer = this.noCreditOrderLegacyAcquirerFilter();
+    return candidates.filter(
+      (c) => (!company || c.companyName === company) && (!acquirer || c.acquirerName === acquirer),
+    );
+  });
+
+  /** Verdadeiro enquanto qualquer uma das ferramentas do menu estiver rodando — mostra o spinner no botão "Ações". */
+  protected readonly anyDataToolRunning = computed(
+    () =>
+      this.facade.reclassifyingFlags() ||
+      this.facade.reclassifyingModality() ||
+      this.facade.reclassifyingAcquirer() ||
+      this.facade.reclassifyingEstablishment() ||
+      this.facade.analyzingPreImplantationDivergence() ||
+      this.facade.analyzingNoCreditOrderLegacy(),
+  );
+
+  /** Menu "Ações" no cabeçalho — agrupa os backfills/ferramentas de análise, deixando só "Atualizar" como botão direto. */
+  protected readonly dataToolsMenuItems = computed<MenuItem[]>(() => [
+    {
+      label: this.i18n.tUi('conciliation.manualBankReconciliation.reclassifyFlags'),
+      icon: 'pi pi-flag',
+      disabled: this.facade.reclassifyingFlags(),
+      command: () => this.confirmReclassifyFlags(),
+    },
+    {
+      label: this.i18n.tUi('conciliation.manualBankReconciliation.reclassifyModality'),
+      icon: 'pi pi-sync',
+      disabled: this.facade.reclassifyingModality(),
+      command: () => this.confirmReclassifyModality(),
+    },
+    {
+      label: this.i18n.tUi('conciliation.manualBankReconciliation.reclassifyAcquirer'),
+      icon: 'pi pi-briefcase',
+      disabled: this.facade.reclassifyingAcquirer(),
+      command: () => this.confirmReclassifyAcquirer(),
+    },
+    {
+      label: this.i18n.tUi('conciliation.manualBankReconciliation.reclassifyEstablishment'),
+      icon: 'pi pi-building',
+      disabled: this.facade.reclassifyingEstablishment(),
+      command: () => this.confirmReclassifyEstablishment(),
+    },
+    {
+      label: this.i18n.tUi('conciliation.manualBankReconciliation.preImplantationAnalyze'),
+      icon: 'pi pi-history',
+      disabled: this.facade.analyzingPreImplantationDivergence(),
+      command: () => this.openPreImplantationDivergencePreview(),
+    },
+    {
+      label: this.i18n.tUi('conciliation.manualBankReconciliation.noCreditOrderLegacyAnalyze'),
+      icon: 'pi pi-inbox',
+      disabled: this.facade.analyzingNoCreditOrderLegacy(),
+      command: () => this.openNoCreditOrderLegacyPreview(),
+    },
+  ]);
+
+  private uniquePreImplantationOptions(
+    pick: (c: PreImplantationDivergenceCandidate) => string | null,
+  ): { label: string; value: string }[] {
+    const candidates = this.preImplantationPreview()?.candidates ?? [];
+    const names = new Set(candidates.map(pick).filter((n): n is string => !!n));
+    return Array.from(names)
+      .sort((a, b) => a.localeCompare(b))
+      .map((name) => ({ label: name, value: name }));
+  }
+
+  private uniqueNoCreditOrderLegacyOptions(
+    pick: (c: NoCreditOrderLegacyCandidate) => string | null,
+  ): { label: string; value: string }[] {
+    const candidates = this.noCreditOrderLegacyPreview()?.candidates ?? [];
+    const names = new Set(candidates.map(pick).filter((n): n is string => !!n));
+    return Array.from(names)
+      .sort((a, b) => a.localeCompare(b))
+      .map((name) => ({ label: name, value: name }));
+  }
 
   /** Sentinela: quando selecionado, revela o textarea pra digitar um motivo livre. */
   protected readonly OTHER_DIVERGENCE_REASON = 'other';
@@ -906,6 +1047,24 @@ export class ManualBankReconciliationComponent implements OnInit {
     });
   }
 
+  confirmReclassifyAcquirer(): void {
+    this.confirmationService.confirm({
+      message: this.translateSvc.instant(
+        'conciliation.manualBankReconciliation.reclassifyAcquirerConfirmMessage',
+      ),
+      header: this.translateSvc.instant(
+        'conciliation.manualBankReconciliation.reclassifyAcquirerConfirmTitle',
+      ),
+      icon: 'pi pi-refresh',
+      acceptLabel: this.translateSvc.instant(
+        'conciliation.manualBankReconciliation.reclassifyAcquirer',
+      ),
+      rejectLabel: this.translateSvc.instant('common.cancel'),
+      acceptButtonStyleClass: 'p-button-warn',
+      accept: () => this.doReclassifyAcquirer(),
+    });
+  }
+
   confirmReclassifyEstablishment(): void {
     this.confirmationService.confirm({
       message: this.translateSvc.instant(
@@ -972,6 +1131,30 @@ export class ManualBankReconciliationComponent implements OnInit {
     });
   }
 
+  private doReclassifyAcquirer(): void {
+    this.facade.reclassifyAcquirer().subscribe({
+      next: (result) => {
+        this.messageService.add({
+          severity: 'success',
+          summary: this.i18n.tUi('common.success'),
+          detail: this.translateSvc.instant(
+            'conciliation.manualBankReconciliation.reclassifyAcquirerSuccess',
+            result,
+          ),
+        });
+        this.reloadReleases();
+        this.reloadOrders();
+      },
+      error: () => {
+        this.messageService.add({
+          severity: 'error',
+          summary: this.i18n.tUi('common.error'),
+          detail: this.i18n.tUi('common.errorMessage'),
+        });
+      },
+    });
+  }
+
   private doReclassifyEstablishment(): void {
     this.facade.reclassifyEstablishment().subscribe({
       next: (result) => {
@@ -985,6 +1168,196 @@ export class ManualBankReconciliationComponent implements OnInit {
         });
         this.reloadReleases();
         this.reloadOrders();
+      },
+      error: () => {
+        this.messageService.add({
+          severity: 'error',
+          summary: this.i18n.tUi('common.error'),
+          detail: this.i18n.tUi('common.errorMessage'),
+        });
+      },
+    });
+  }
+
+  /** Abre o diálogo de análise: nunca grava nada, só lista o que applyPreImplantationDivergence executaria. */
+  openPreImplantationDivergencePreview(): void {
+    this.facade.previewPreImplantationDivergence().subscribe({
+      next: (result) => {
+        this.preImplantationPreview.set(result);
+        // Começa com todos os elegíveis marcados — o usuário desmarca o que não quer vincular.
+        this.selectedPreImplantationCandidates.set(result.candidates);
+        this.preImplantationCompanyFilter.set(null);
+        this.preImplantationAcquirerFilter.set(null);
+        this.showPreImplantationPreviewDialog.set(true);
+      },
+      error: () => {
+        this.messageService.add({
+          severity: 'error',
+          summary: this.i18n.tUi('common.error'),
+          detail: this.i18n.tUi('common.errorMessage'),
+        });
+      },
+    });
+  }
+
+  protected onPreImplantationPreviewDialogVisibleChange(visible: boolean): void {
+    this.showPreImplantationPreviewDialog.set(visible);
+    if (!visible) {
+      this.preImplantationPreview.set(null);
+      this.selectedPreImplantationCandidates.set([]);
+      this.preImplantationCompanyFilter.set(null);
+      this.preImplantationAcquirerFilter.set(null);
+    }
+  }
+
+  protected closePreImplantationPreviewDialog(): void {
+    this.showPreImplantationPreviewDialog.set(false);
+    this.preImplantationPreview.set(null);
+    this.selectedPreImplantationCandidates.set([]);
+    this.preImplantationCompanyFilter.set(null);
+    this.preImplantationAcquirerFilter.set(null);
+  }
+
+  /** Ao trocar o filtro, a seleção passa a ser só o que ficou visível — evita "selecionados"
+   * escondidos fora do filtro atual. */
+  protected onPreImplantationCompanyFilterChange(value: string | null): void {
+    this.preImplantationCompanyFilter.set(value);
+    this.selectedPreImplantationCandidates.set(this.filteredPreImplantationCandidates());
+  }
+
+  protected onPreImplantationAcquirerFilterChange(value: string | null): void {
+    this.preImplantationAcquirerFilter.set(value);
+    this.selectedPreImplantationCandidates.set(this.filteredPreImplantationCandidates());
+  }
+
+  protected confirmApplyPreImplantationDivergence(): void {
+    const eligible = this.selectedPreImplantationCandidates().length;
+    this.confirmationService.confirm({
+      message: this.translateSvc.instant(
+        'conciliation.manualBankReconciliation.preImplantationApplyConfirmMessage',
+        { eligible },
+      ),
+      header: this.translateSvc.instant(
+        'conciliation.manualBankReconciliation.preImplantationApplyConfirmTitle',
+      ),
+      icon: 'pi pi-exclamation-triangle',
+      acceptLabel: this.translateSvc.instant(
+        'conciliation.manualBankReconciliation.preImplantationApply',
+      ),
+      rejectLabel: this.translateSvc.instant('common.cancel'),
+      acceptButtonStyleClass: 'p-button-warn',
+      accept: () => this.doApplyPreImplantationDivergence(),
+    });
+  }
+
+  private doApplyPreImplantationDivergence(): void {
+    const releaseBankIds = this.selectedPreImplantationCandidates().map((c) => c.releaseBankId);
+    this.facade.applyPreImplantationDivergence(releaseBankIds).subscribe({
+      next: (result) => {
+        this.messageService.add({
+          severity: 'success',
+          summary: this.i18n.tUi('common.success'),
+          detail: this.translateSvc.instant(
+            'conciliation.manualBankReconciliation.preImplantationApplySuccess',
+            result,
+          ),
+        });
+        this.closePreImplantationPreviewDialog();
+      },
+      error: () => {
+        this.messageService.add({
+          severity: 'error',
+          summary: this.i18n.tUi('common.error'),
+          detail: this.i18n.tUi('common.errorMessage'),
+        });
+      },
+    });
+  }
+
+  /** Abre o diálogo de análise: nunca grava nada, só lista o que applyNoCreditOrderLegacyMarking executaria. */
+  openNoCreditOrderLegacyPreview(): void {
+    this.facade.previewNoCreditOrderLegacyMarking().subscribe({
+      next: (result) => {
+        this.noCreditOrderLegacyPreview.set(result);
+        // Começa com todos os elegíveis marcados — o usuário desmarca o que não quer marcar.
+        this.selectedNoCreditOrderLegacyCandidates.set(result.candidates);
+        this.noCreditOrderLegacyCompanyFilter.set(null);
+        this.noCreditOrderLegacyAcquirerFilter.set(null);
+        this.showNoCreditOrderLegacyPreviewDialog.set(true);
+      },
+      error: () => {
+        this.messageService.add({
+          severity: 'error',
+          summary: this.i18n.tUi('common.error'),
+          detail: this.i18n.tUi('common.errorMessage'),
+        });
+      },
+    });
+  }
+
+  protected onNoCreditOrderLegacyPreviewDialogVisibleChange(visible: boolean): void {
+    this.showNoCreditOrderLegacyPreviewDialog.set(visible);
+    if (!visible) {
+      this.noCreditOrderLegacyPreview.set(null);
+      this.selectedNoCreditOrderLegacyCandidates.set([]);
+      this.noCreditOrderLegacyCompanyFilter.set(null);
+      this.noCreditOrderLegacyAcquirerFilter.set(null);
+    }
+  }
+
+  protected closeNoCreditOrderLegacyPreviewDialog(): void {
+    this.showNoCreditOrderLegacyPreviewDialog.set(false);
+    this.noCreditOrderLegacyPreview.set(null);
+    this.selectedNoCreditOrderLegacyCandidates.set([]);
+    this.noCreditOrderLegacyCompanyFilter.set(null);
+    this.noCreditOrderLegacyAcquirerFilter.set(null);
+  }
+
+  /** Ao trocar o filtro, a seleção passa a ser só o que ficou visível — evita "selecionados"
+   * escondidos fora do filtro atual. */
+  protected onNoCreditOrderLegacyCompanyFilterChange(value: string | null): void {
+    this.noCreditOrderLegacyCompanyFilter.set(value);
+    this.selectedNoCreditOrderLegacyCandidates.set(this.filteredNoCreditOrderLegacyCandidates());
+  }
+
+  protected onNoCreditOrderLegacyAcquirerFilterChange(value: string | null): void {
+    this.noCreditOrderLegacyAcquirerFilter.set(value);
+    this.selectedNoCreditOrderLegacyCandidates.set(this.filteredNoCreditOrderLegacyCandidates());
+  }
+
+  protected confirmApplyNoCreditOrderLegacyMarking(): void {
+    const eligible = this.selectedNoCreditOrderLegacyCandidates().length;
+    this.confirmationService.confirm({
+      message: this.translateSvc.instant(
+        'conciliation.manualBankReconciliation.noCreditOrderLegacyApplyConfirmMessage',
+        { eligible },
+      ),
+      header: this.translateSvc.instant(
+        'conciliation.manualBankReconciliation.noCreditOrderLegacyApplyConfirmTitle',
+      ),
+      icon: 'pi pi-exclamation-triangle',
+      acceptLabel: this.translateSvc.instant(
+        'conciliation.manualBankReconciliation.noCreditOrderLegacyApply',
+      ),
+      rejectLabel: this.translateSvc.instant('common.cancel'),
+      acceptButtonStyleClass: 'p-button-warn',
+      accept: () => this.doApplyNoCreditOrderLegacyMarking(),
+    });
+  }
+
+  private doApplyNoCreditOrderLegacyMarking(): void {
+    const releaseBankIds = this.selectedNoCreditOrderLegacyCandidates().map((c) => c.releaseBankId);
+    this.facade.applyNoCreditOrderLegacyMarking(releaseBankIds).subscribe({
+      next: (result) => {
+        this.messageService.add({
+          severity: 'success',
+          summary: this.i18n.tUi('common.success'),
+          detail: this.translateSvc.instant(
+            'conciliation.manualBankReconciliation.noCreditOrderLegacyApplySuccess',
+            result,
+          ),
+        });
+        this.closeNoCreditOrderLegacyPreviewDialog();
       },
       error: () => {
         this.messageService.add({

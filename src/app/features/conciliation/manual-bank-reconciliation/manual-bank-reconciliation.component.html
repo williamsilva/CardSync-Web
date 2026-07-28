@@ -3,8 +3,8 @@
 
 <!-- Diálogo de divergência: só aparece ao clicar em Vincular quando os valores não batem exato. -->
 <p-dialog
-  appendTo="body"
   [modal]="true"
+  appendTo="body"
   [closable]="true"
   [style]="{ width: '32rem' }"
   [visible]="showDivergenceDialog()"
@@ -22,7 +22,9 @@
       [options]="divergenceReasonPresetOptions()"
       [ngModel]="selectedDivergenceReasonPreset()"
       (ngModelChange)="onDivergenceReasonPresetChange($event)"
-      [placeholder]="'conciliation.manualBankReconciliation.divergenceReasonSelectPlaceholder' | translate"
+      [placeholder]="
+        'conciliation.manualBankReconciliation.divergenceReasonSelectPlaceholder' | translate
+      "
     ></p-select>
   </div>
   @if (selectedDivergenceReasonPreset() === OTHER_DIVERGENCE_REASON) {
@@ -58,6 +60,431 @@
   </ng-template>
 </p-dialog>
 
+<!-- Diálogo de análise de divergência pré-implantação: só análise (nada é gravado) até clicar "Vincular elegíveis". -->
+<p-dialog
+  [modal]="true"
+  appendTo="body"
+  [closable]="true"
+  [style]="{ width: '52rem' }"
+  [visible]="showPreImplantationPreviewDialog()"
+  (visibleChange)="onPreImplantationPreviewDialogVisibleChange($event)"
+  [header]="'conciliation.manualBankReconciliation.preImplantationDialogTitle' | translate"
+>
+  @if (preImplantationPreview(); as preview) {
+    <p class="text-sm text-color-secondary mb-3">
+      {{ 'conciliation.manualBankReconciliation.preImplantationDialogMessage' | translate }}
+    </p>
+    <div class="flex flex-wrap gap-4 mb-3 text-sm">
+      <span>
+        {{ 'conciliation.manualBankReconciliation.preImplantationAnalyzed' | translate }}:
+        <strong>{{ preview.analyzed }}</strong>
+      </span>
+      <span class="text-green-400">
+        {{ 'conciliation.manualBankReconciliation.preImplantationEligible' | translate }}:
+        <strong>{{ preview.eligibleToLink }}</strong>
+      </span>
+      <span class="text-orange-400">
+        {{ 'conciliation.manualBankReconciliation.preImplantationSkippedNegative' | translate }}:
+        <strong>{{ preview.skippedNegativeDifference }}</strong>
+      </span>
+      <span class="text-color-secondary">
+        {{
+          'conciliation.manualBankReconciliation.preImplantationSkippedNoCandidates' | translate
+        }}:
+        <strong>{{ preview.skippedNoCandidates }}</strong>
+      </span>
+    </div>
+
+    @if (preview.candidates.length) {
+      <div class="flex flex-wrap gap-2 mb-2">
+        <p-select
+          appendTo="body"
+          class="w-14rem"
+          [showClear]="true"
+          [ngModel]="preImplantationCompanyFilter()"
+          [options]="preImplantationCompanyOptions()"
+          (ngModelChange)="onPreImplantationCompanyFilterChange($event)"
+          [placeholder]="
+            'conciliation.manualBankReconciliation.preImplantationColCompany' | translate
+          "
+        ></p-select>
+        <p-select
+          appendTo="body"
+          class="w-14rem"
+          [showClear]="true"
+          [ngModel]="preImplantationAcquirerFilter()"
+          [options]="preImplantationAcquirerOptions()"
+          (ngModelChange)="onPreImplantationAcquirerFilterChange($event)"
+          [placeholder]="
+            'conciliation.manualBankReconciliation.preImplantationColAcquirer' | translate
+          "
+        ></p-select>
+      </div>
+      <p-table
+        size="small"
+        [scrollable]="true"
+        scrollHeight="320px"
+        dataKey="releaseBankId"
+        selectionMode="multiple"
+        styleClass="cs-admin-table"
+        [value]="filteredPreImplantationCandidates()"
+        [selection]="selectedPreImplantationCandidates()"
+        (selectionChange)="selectedPreImplantationCandidates.set($event)"
+      >
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="width: 3rem">
+              <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+            </th>
+            <th>
+              <span
+                tooltipPosition="top"
+                [pTooltip]="
+                  'conciliation.manualBankReconciliation.preImplantationColCompany' | translate
+                "
+              >
+                {{ 'conciliation.manualBankReconciliation.preImplantationColCompany' | translate }}
+              </span>
+            </th>
+            <th>
+              <span
+                tooltipPosition="top"
+                [pTooltip]="
+                  'conciliation.manualBankReconciliation.preImplantationColAcquirer' | translate
+                "
+              >
+                {{ 'conciliation.manualBankReconciliation.preImplantationColAcquirer' | translate }}
+              </span>
+            </th>
+            <th>
+              <span
+                tooltipPosition="top"
+                [pTooltip]="
+                  'conciliation.manualBankReconciliation.preImplantationColDate' | translate
+                "
+              >
+                {{ 'conciliation.manualBankReconciliation.preImplantationColDate' | translate }}
+              </span>
+            </th>
+            <th>
+              <span
+                tooltipPosition="top"
+                [pTooltip]="
+                  'conciliation.manualBankReconciliation.preImplantationColValue' | translate
+                "
+              >
+                {{ 'conciliation.manualBankReconciliation.preImplantationColValue' | translate }}
+              </span>
+            </th>
+            <th>
+              <span
+                tooltipPosition="top"
+                [pTooltip]="
+                  'conciliation.manualBankReconciliation.preImplantationColMatchedOrders'
+                    | translate
+                "
+              >
+                {{
+                  'conciliation.manualBankReconciliation.preImplantationColMatchedOrders'
+                    | translate
+                }}
+              </span>
+            </th>
+            <th>
+              <span
+                tooltipPosition="top"
+                [pTooltip]="
+                  'conciliation.manualBankReconciliation.preImplantationColSum' | translate
+                "
+              >
+                {{ 'conciliation.manualBankReconciliation.preImplantationColSum' | translate }}
+              </span>
+            </th>
+            <th>
+              <span
+                tooltipPosition="top"
+                [pTooltip]="
+                  'conciliation.manualBankReconciliation.preImplantationColDifference' | translate
+                "
+              >
+                {{
+                  'conciliation.manualBankReconciliation.preImplantationColDifference' | translate
+                }}
+              </span>
+            </th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-row>
+          <tr>
+            <td>
+              <p-tableCheckbox [value]="row"></p-tableCheckbox>
+            </td>
+            <td>
+              <span [pTooltip]="row.companyName" tooltipPosition="top">{{ row.companyName }}</span>
+            </td>
+            <td>
+              <span [pTooltip]="row.acquirerName" tooltipPosition="top">{{
+                row.acquirerName
+              }}</span>
+            </td>
+            <td>
+              <span [pTooltip]="row.releaseDate | csDate: 'date'" tooltipPosition="top">
+                {{ row.releaseDate | csDate: 'date' }}
+              </span>
+            </td>
+            <td>
+              <span [pTooltip]="row.releaseValue | csCurrency" tooltipPosition="top">
+                {{ row.releaseValue | csCurrency }}
+              </span>
+            </td>
+            <td>
+              <span [pTooltip]="row.matchedOrders" tooltipPosition="top">{{
+                row.matchedOrders
+              }}</span>
+            </td>
+            <td>
+              <span [pTooltip]="row.sumOrders | csCurrency" tooltipPosition="top">
+                {{ row.sumOrders | csCurrency }}
+              </span>
+            </td>
+            <td>
+              <span [pTooltip]="row.difference | csCurrency" tooltipPosition="top">
+                {{ row.difference | csCurrency }}
+              </span>
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="8" class="text-center text-sm text-color-secondary">
+              {{ 'conciliation.manualBankReconciliation.preImplantationNoneEligible' | translate }}
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+      <p class="text-xs text-color-secondary mt-2">
+        {{
+          'conciliation.manualBankReconciliation.preImplantationSelectedCount'
+            | translate: { count: selectedPreImplantationCandidates().length }
+        }}
+      </p>
+    } @else {
+      <p class="text-sm text-color-secondary">
+        {{ 'conciliation.manualBankReconciliation.preImplantationNoneEligible' | translate }}
+      </p>
+    }
+  }
+  <ng-template pTemplate="footer">
+    <p-button
+      [outlined]="true"
+      severity="secondary"
+      [label]="'common.cancel' | translate"
+      (onClick)="closePreImplantationPreviewDialog()"
+    ></p-button>
+    <p-button
+      severity="warn"
+      icon="pi pi-link"
+      (onClick)="confirmApplyPreImplantationDivergence()"
+      [loading]="facade.applyingPreImplantationDivergence()"
+      [disabled]="!selectedPreImplantationCandidates().length"
+      [label]="'conciliation.manualBankReconciliation.preImplantationApply' | translate"
+    ></p-button>
+  </ng-template>
+</p-dialog>
+
+<!-- Diálogo de análise de legado sem ordem de crédito: só análise (nada é gravado) até clicar "Marcar elegíveis". -->
+<p-dialog
+  [modal]="true"
+  appendTo="body"
+  [closable]="true"
+  [style]="{ width: '48rem' }"
+  [visible]="showNoCreditOrderLegacyPreviewDialog()"
+  (visibleChange)="onNoCreditOrderLegacyPreviewDialogVisibleChange($event)"
+  [header]="'conciliation.manualBankReconciliation.noCreditOrderLegacyDialogTitle' | translate"
+>
+  @if (noCreditOrderLegacyPreview(); as preview) {
+    <p class="text-sm text-color-secondary mb-3">
+      {{ 'conciliation.manualBankReconciliation.noCreditOrderLegacyDialogMessage' | translate }}
+    </p>
+    <div class="flex flex-wrap gap-4 mb-3 text-sm">
+      <span>
+        {{ 'conciliation.manualBankReconciliation.noCreditOrderLegacyAnalyzed' | translate }}:
+        <strong>{{ preview.analyzed }}</strong>
+      </span>
+      <span class="text-green-400">
+        {{ 'conciliation.manualBankReconciliation.noCreditOrderLegacyEligible' | translate }}:
+        <strong>{{ preview.eligibleToMark }}</strong>
+      </span>
+      <span class="text-orange-400">
+        {{
+          'conciliation.manualBankReconciliation.noCreditOrderLegacySkippedHasCandidates'
+            | translate
+        }}:
+        <strong>{{ preview.skippedHasCandidates }}</strong>
+      </span>
+      <span class="text-color-secondary">
+        {{
+          'conciliation.manualBankReconciliation.noCreditOrderLegacySkippedOutsideWindow'
+            | translate
+        }}:
+        <strong>{{ preview.skippedOutsideLegacyWindow }}</strong>
+      </span>
+    </div>
+
+    @if (preview.candidates.length) {
+      <div class="flex flex-wrap gap-2 mb-2">
+        <p-select
+          appendTo="body"
+          class="w-14rem"
+          [showClear]="true"
+          [ngModel]="noCreditOrderLegacyCompanyFilter()"
+          [options]="noCreditOrderLegacyCompanyOptions()"
+          (ngModelChange)="onNoCreditOrderLegacyCompanyFilterChange($event)"
+          [placeholder]="
+            'conciliation.manualBankReconciliation.noCreditOrderLegacyColCompany' | translate
+          "
+        ></p-select>
+        <p-select
+          appendTo="body"
+          class="w-14rem"
+          [showClear]="true"
+          [ngModel]="noCreditOrderLegacyAcquirerFilter()"
+          [options]="noCreditOrderLegacyAcquirerOptions()"
+          (ngModelChange)="onNoCreditOrderLegacyAcquirerFilterChange($event)"
+          [placeholder]="
+            'conciliation.manualBankReconciliation.noCreditOrderLegacyColAcquirer' | translate
+          "
+        ></p-select>
+      </div>
+      <p-table
+        size="small"
+        [scrollable]="true"
+        scrollHeight="320px"
+        dataKey="releaseBankId"
+        selectionMode="multiple"
+        styleClass="cs-admin-table"
+        [value]="filteredNoCreditOrderLegacyCandidates()"
+        [selection]="selectedNoCreditOrderLegacyCandidates()"
+        (selectionChange)="selectedNoCreditOrderLegacyCandidates.set($event)"
+      >
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="width: 3rem">
+              <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+            </th>
+            <th>
+              <span
+                tooltipPosition="top"
+                [pTooltip]="
+                  'conciliation.manualBankReconciliation.noCreditOrderLegacyColCompany' | translate
+                "
+              >
+                {{
+                  'conciliation.manualBankReconciliation.noCreditOrderLegacyColCompany' | translate
+                }}
+              </span>
+            </th>
+            <th>
+              <span
+                tooltipPosition="top"
+                [pTooltip]="
+                  'conciliation.manualBankReconciliation.noCreditOrderLegacyColAcquirer' | translate
+                "
+              >
+                {{
+                  'conciliation.manualBankReconciliation.noCreditOrderLegacyColAcquirer' | translate
+                }}
+              </span>
+            </th>
+            <th>
+              <span
+                tooltipPosition="top"
+                [pTooltip]="
+                  'conciliation.manualBankReconciliation.noCreditOrderLegacyColDate' | translate
+                "
+              >
+                {{ 'conciliation.manualBankReconciliation.noCreditOrderLegacyColDate' | translate }}
+              </span>
+            </th>
+            <th>
+              <span
+                tooltipPosition="top"
+                [pTooltip]="
+                  'conciliation.manualBankReconciliation.noCreditOrderLegacyColValue' | translate
+                "
+              >
+                {{
+                  'conciliation.manualBankReconciliation.noCreditOrderLegacyColValue' | translate
+                }}
+              </span>
+            </th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-row>
+          <tr>
+            <td>
+              <p-tableCheckbox [value]="row"></p-tableCheckbox>
+            </td>
+            <td>
+              <span [pTooltip]="row.companyName" tooltipPosition="top">{{ row.companyName }}</span>
+            </td>
+            <td>
+              <span [pTooltip]="row.acquirerName" tooltipPosition="top">{{
+                row.acquirerName
+              }}</span>
+            </td>
+            <td>
+              <span [pTooltip]="row.releaseDate | csDate: 'date'" tooltipPosition="top">
+                {{ row.releaseDate | csDate: 'date' }}
+              </span>
+            </td>
+            <td>
+              <span [pTooltip]="row.releaseValue | csCurrency" tooltipPosition="top">
+                {{ row.releaseValue | csCurrency }}
+              </span>
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="5" class="text-center text-sm text-color-secondary">
+              {{
+                'conciliation.manualBankReconciliation.noCreditOrderLegacyNoneEligible' | translate
+              }}
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+      <p class="text-xs text-color-secondary mt-2">
+        {{
+          'conciliation.manualBankReconciliation.noCreditOrderLegacySelectedCount'
+            | translate: { count: selectedNoCreditOrderLegacyCandidates().length }
+        }}
+      </p>
+    } @else {
+      <p class="text-sm text-color-secondary">
+        {{ 'conciliation.manualBankReconciliation.noCreditOrderLegacyNoneEligible' | translate }}
+      </p>
+    }
+  }
+  <ng-template pTemplate="footer">
+    <p-button
+      [outlined]="true"
+      severity="secondary"
+      [label]="'common.cancel' | translate"
+      (onClick)="closeNoCreditOrderLegacyPreviewDialog()"
+    ></p-button>
+    <p-button
+      severity="warn"
+      icon="pi pi-history"
+      (onClick)="confirmApplyNoCreditOrderLegacyMarking()"
+      [loading]="facade.applyingNoCreditOrderLegacy()"
+      [disabled]="!selectedNoCreditOrderLegacyCandidates().length"
+      [label]="'conciliation.manualBankReconciliation.noCreditOrderLegacyApply' | translate"
+    ></p-button>
+  </ng-template>
+</p-dialog>
+
 <cs-page-header
   [compact]="false"
   [title]="'conciliation.manualBankReconciliation.title' | translate"
@@ -71,38 +498,15 @@
     class="p-button-text p-button-sm"
     [label]="'common.update' | translate"
   ></button>
+  <p-menu #dataToolsMenu [popup]="true" appendTo="body" [model]="dataToolsMenuItems()"></p-menu>
   <button
     pButton
     type="button"
-    icon="pi pi-flag"
-    tooltipPosition="bottom"
+    icon="pi pi-bars"
     class="p-button-text p-button-sm"
-    (click)="confirmReclassifyFlags()"
-    [loading]="facade.reclassifyingFlags()"
-    [label]="'conciliation.manualBankReconciliation.reclassifyFlags' | translate"
-    [pTooltip]="'conciliation.manualBankReconciliation.reclassifyFlagsTooltip' | translate"
-  ></button>
-  <button
-    pButton
-    type="button"
-    icon="pi pi-sync"
-    tooltipPosition="bottom"
-    class="p-button-text p-button-sm"
-    (click)="confirmReclassifyModality()"
-    [loading]="facade.reclassifyingModality()"
-    [label]="'conciliation.manualBankReconciliation.reclassifyModality' | translate"
-    [pTooltip]="'conciliation.manualBankReconciliation.reclassifyModalityTooltip' | translate"
-  ></button>
-  <button
-    pButton
-    type="button"
-    icon="pi pi-building"
-    tooltipPosition="bottom"
-    class="p-button-text p-button-sm"
-    (click)="confirmReclassifyEstablishment()"
-    [loading]="facade.reclassifyingEstablishment()"
-    [label]="'conciliation.manualBankReconciliation.reclassifyEstablishment' | translate"
-    [pTooltip]="'conciliation.manualBankReconciliation.reclassifyEstablishmentTooltip' | translate"
+    [loading]="anyDataToolRunning()"
+    (click)="dataToolsMenu.toggle($event)"
+    [label]="'conciliation.manualBankReconciliation.dataToolsMenu' | translate"
   ></button>
 </cs-page-header>
 
