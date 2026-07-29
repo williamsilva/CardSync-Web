@@ -1,0 +1,60 @@
+<cs-page-header
+  [compact]="false"
+  [subtitle]="subtitleKey() | translate"
+  [breadcrumb]="[
+    { label: ('breadcrumb.dashboard.title' | translate), url: '/' },
+    { label: ('breadcrumb.conciliation.title' | translate), url: '/conciliation' },
+    { label: 'routes.conciliation.erpVsAcquirer.title' | translate },
+  ]"
+>
+  <button
+    pButton
+    type="button"
+    icon="pi pi-exclamation-circle"
+    class="p-button-sm"
+    [class.p-button-outlined]="activeTab() !== 'missingAcquirer'"
+    (click)="setTab('missingAcquirer')"
+    [label]="'conciliation.action.missingAcquirer' | translate"
+  ></button>
+
+  <button
+    pButton
+    type="button"
+    icon="pi pi-plus-circle"
+    class="p-button-sm"
+    [class.p-button-outlined]="activeTab() !== 'missingErp'"
+    (click)="setTab('missingErp')"
+    [label]="'conciliation.action.missingErp' | translate"
+  ></button>
+
+  <button
+    pButton
+    type="button"
+    icon="pi pi-search"
+    class="p-button-sm"
+    [class.p-button-outlined]="activeTab() !== 'otherDivergences'"
+    (click)="setTab('otherDivergences')"
+    [label]="'conciliation.action.missingOther' | translate"
+  ></button>
+
+  <button
+    pButton
+    type="button"
+    (click)="refresh()"
+    icon="pi pi-refresh"
+    class="p-button-text p-button-sm"
+    [label]="'common.update' | translate"
+  ></button>
+</cs-page-header>
+
+@switch (activeTab()) {
+  @case ('missingAcquirer') {
+    <app-missing-acquirer-list />
+  }
+  @case ('missingErp') {
+    <app-missing-erp-list />
+  }
+  @case ('otherDivergences') {
+    <cs-erp-vs-acquirer-other-divergences-list />
+  }
+}

@@ -13,7 +13,6 @@ import { finalize } from 'rxjs';
 import { Select } from 'primeng/select';
 import { Tooltip } from 'primeng/tooltip';
 import { Checkbox } from 'primeng/checkbox';
-import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { FloatLabel } from 'primeng/floatlabel';
@@ -40,7 +39,6 @@ import { buildListQuery } from '@shared/features/list-query/list-query.builder';
 import { allPeriodEnum, PeriodEnum, periodEnumLabel } from '@models/enums/period.enum';
 import { StatusEnum, statusEnumLabel, statusEnumSeverity } from '@models/enums/status.enum';
 import { ConciliationWaitingFacade } from '@features/facade/conciliation-waiting.facade';
-import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
 import { CsColumnFilterShellComponent } from '@features/list-base/cs-column-filter-shell.component';
 import { CsAdvancedTextFilterComponent } from '@features/list-base/cs-advanced-text-filter.component';
 import { CsAdvancedPeriodDateFilterComponent } from '@features/list-base/cs-advanced-period-date-filter.component';
@@ -108,7 +106,6 @@ import {
     Tooltip,
     Checkbox,
     CsDatePipe,
-    RouterLink,
     DatePicker,
     FloatLabel,
     FormsModule,
@@ -120,7 +117,6 @@ import {
     CsDocumentPipe,
     InputTextModule,
     TranslateModule,
-    PageHeaderComponent,
     BatchDialogComponent,
     FiltersPanelComponent,
     CsColumnFilterShellComponent,
@@ -372,7 +368,7 @@ export class MissingAcquirerListComponent
     return STATE_KEY.CARDSYNC.CONCILIATION.MISSING.ACQ.FILTERS.V1;
   }
 
-  protected override refresh(): void {
+  override refresh(): void {
     this.reloadWithCurrentState();
   }
 

@@ -55,53 +55,30 @@ export const CONCILIATION_ROUTES: Routes = [
   },
   {
     path: 'erp-vs-acquirer',
-    pathMatch: 'full',
-    redirectTo: 'erp-vs-acquirer/missing-acquirer',
-  },
-  {
-    path: 'erp-vs-acquirer/missing-acquirer',
-    title: 'routes.conciliation.erpVsAcquirer.missingAcquirer.title',
+    title: 'routes.conciliation.erpVsAcquirer.title',
     canActivate: [permissionGuard],
     data: {
       requireAll: false,
       redirectTo: '/forbidden',
       permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.CONCILIATION.WAITING_VIEW],
-      view: 'MISSING_ACQUIRER',
     },
     loadComponent: () =>
-      import('./conciliation-waiting-list/missing-acquirer-list/missing-acquirer-list.component').then(
-        (m) => m.MissingAcquirerListComponent,
+      import('./conciliation-waiting-list/erp-vs-acquirer-list/erp-vs-acquirer-list.component').then(
+        (m) => m.ErpVsAcquirerListComponent,
       ),
+  },
+  // Compatibilidade com links/favoritos antigos (as 3 views agora são abas dentro de erp-vs-acquirer).
+  {
+    path: 'erp-vs-acquirer/missing-acquirer',
+    redirectTo: () => '/conciliation/erp-vs-acquirer?view=missing-acquirer',
   },
   {
     path: 'erp-vs-acquirer/missing-erp',
-    title: 'routes.conciliation.erpVsAcquirer.missingErp.title',
-    canActivate: [permissionGuard],
-    data: {
-      requireAll: false,
-      redirectTo: '/forbidden',
-      permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.CONCILIATION.WAITING_VIEW],
-      view: 'MISSING_ERP',
-    },
-    loadComponent: () =>
-      import('./conciliation-waiting-list/missing-erp-list/missing-erp-list.component').then(
-        (m) => m.MissingErpListComponent,
-      ),
+    redirectTo: () => '/conciliation/erp-vs-acquirer?view=missing-erp',
   },
   {
     path: 'erp-vs-acquirer/other-divergences',
-    title: 'routes.conciliation.erpVsAcquirer.otherDivergences.title',
-    canActivate: [permissionGuard],
-    data: {
-      requireAll: false,
-      redirectTo: '/forbidden',
-      permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.CONCILIATION.WAITING_VIEW],
-      view: 'OTHER_DIVERGENCES',
-    },
-    loadComponent: () =>
-      import('./conciliation-waiting-list/other-divergences-list/other-divergences-list.component').then(
-        (m) => m.ErpVsAcquirerOtherDivergencesListComponent,
-      ),
+    redirectTo: () => '/conciliation/erp-vs-acquirer?view=other-divergences',
   },
   {
     path: 'manual-sales-summary',

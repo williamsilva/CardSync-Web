@@ -145,7 +145,7 @@ export class AuditDashboardComponent implements OnInit {
       JSON.stringify(filters),
     );
     localStorage.removeItem(STATE_KEY.CARDSYNC.CONCILIATION.MISSING.ERP.TABLE.STATE.V1);
-    this.openRouteInNewTab(['/conciliation/erp-vs-acquirer/missing-erp']);
+    this.openRouteInNewTab(['/conciliation/erp-vs-acquirer'], { view: 'missing-erp' });
   }
 
   protected navigateToMissingErp(
@@ -158,7 +158,7 @@ export class AuditDashboardComponent implements OnInit {
       JSON.stringify(filters),
     );
     localStorage.removeItem(STATE_KEY.CARDSYNC.CONCILIATION.MISSING.ACQ.TABLE.STATE.V1);
-    this.openRouteInNewTab(['/conciliation/erp-vs-acquirer/missing-acquirer']);
+    this.openRouteInNewTab(['/conciliation/erp-vs-acquirer'], { view: 'missing-acquirer' });
   }
 
   private buildMissingFilters(
@@ -173,8 +173,8 @@ export class AuditDashboardComponent implements OnInit {
     };
   }
 
-  private openRouteInNewTab(commands: unknown[]): void {
-    const url = this.router.serializeUrl(this.router.createUrlTree(commands));
+  private openRouteInNewTab(commands: unknown[], queryParams?: Record<string, string>): void {
+    const url = this.router.serializeUrl(this.router.createUrlTree(commands, { queryParams }));
     window.open(`${window.location.origin}${url}`, '_blank', 'noopener,noreferrer');
   }
 

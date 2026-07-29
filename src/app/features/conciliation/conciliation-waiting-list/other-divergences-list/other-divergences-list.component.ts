@@ -1,5 +1,4 @@
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
 
 import {
   inject,
@@ -39,7 +38,6 @@ import { EstablishmentFacade } from '@features/facade/establishment.facade';
 import { buildListQuery } from '@shared/features/list-query/list-query.builder';
 import { allPeriodEnum, PeriodEnum, periodEnumLabel } from '@models/enums/period.enum';
 import { StatusEnum, statusEnumLabel, statusEnumSeverity } from '@models/enums/status.enum';
-import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
 import { ConciliationWaitingFacade } from '@features/facade/conciliation-waiting.facade';
 import { ErpVsAcquirerComparisonDialogComponent } from '../dialogs/comparison-dialog.component';
 import { CsColumnFilterShellComponent } from '@features/list-base/cs-column-filter-shell.component';
@@ -108,7 +106,6 @@ import {
     Tooltip,
     Checkbox,
     CsDatePipe,
-    RouterLink,
     DatePicker,
     FloatLabel,
     FormsModule,
@@ -120,7 +117,6 @@ import {
     CsDocumentPipe,
     InputTextModule,
     TranslateModule,
-    PageHeaderComponent,
     BatchDialogComponent,
     FiltersPanelComponent,
     CsColumnFilterShellComponent,
@@ -491,7 +487,7 @@ export class ErpVsAcquirerOtherDivergencesListComponent
     return STATE_KEY.CARDSYNC.CONCILIATION.MISSING.OTHER_DIVERGENCES.FILTERS.V1;
   }
 
-  protected override refresh(): void {
+  override refresh(): void {
     this.reloadWithCurrentState();
   }
 
