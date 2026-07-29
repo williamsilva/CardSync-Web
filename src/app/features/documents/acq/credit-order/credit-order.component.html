@@ -54,8 +54,8 @@
       (valueChange)="creditOrderDate.set($event)"
       [view]="setViewFormat(periodCreditOrderDate())"
       [dateFormat]="setDateFormat(periodCreditOrderDate())"
-      [selectionMode]="setSelectionMode(periodCreditOrderDate())"
       [dateLabel]="'creditOrders.fields.creditOrderDate' | translate"
+      [selectionMode]="setSelectionMode(periodCreditOrderDate())"
       [periodLabel]="'creditOrders.fields.periodCreditOrderDate' | translate"
       (periodChange)="onPeriodColumnChange(periodCreditOrderDate, creditOrderDate, $event)"
     ></cs-advanced-period-date-filter>
@@ -1403,7 +1403,7 @@
 
     <ng-template pTemplate="emptymessage">
       <tr>
-        <td colspan="14" class="text-center py-4 text-500">
+        <td colspan="15" class="text-center py-4 text-500">
           {{ 'common.noRecordsFound' | translate }}
         </td>
       </tr>

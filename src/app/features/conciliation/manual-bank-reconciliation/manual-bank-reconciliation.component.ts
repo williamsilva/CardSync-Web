@@ -29,9 +29,11 @@ import { PersistedFilters } from '@shared/utils/persisted-filters';
 import { BankStatementApiModel } from '@models/bank-statement.model';
 import { buildListQuery } from '@shared/features/list-query/list-query.builder';
 import { CreditOrderAdvancedFilters } from '@features/filter/credit-order.filters';
+import { CreditOrderApiService } from '@features/service/credit-order.api.service';
 import { BankStatementAdvancedFilters } from '@features/filter/bank-statement.filters';
 import { allPeriodEnum, PeriodEnum, periodEnumLabel } from '@models/enums/period.enum';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
+import { ConciliationWaitingFacade } from '@features/facade/conciliation-waiting.facade';
 import { mapPrimeLazyToTableQuery } from '@shared/features/list-query/primeng-lazy.mapper';
 import { StatusEnum, statusEnumLabel, statusEnumSeverity } from '@models/enums/status.enum';
 import { ManualBankReconciliationFacade } from '@features/facade/manual-bank-reconciliation.facade';
@@ -39,6 +41,14 @@ import { ReconciliationSettingsApiService } from '@features/service/reconciliati
 import { CsAdvancedPeriodDateFilterComponent } from '@features/list-base/cs-advanced-period-date-filter.component';
 import { CsAdvancedMultiselectFilterComponent } from '@features/list-base/cs-advanced-multiselect-filter.component';
 import { CsAdvancedFilterItemTemplateDirective } from '@features/list-base/cs-advanced-filter-item-template.directive';
+import {
+  ReconcileSalesSummaryCreditOrderResultModel,
+  SalesSummaryPreImplantationPreviewResultModel,
+} from '@models/conciliation-waiting.model';
+import {
+  CreditOrderPreImplantationLinkingApplyResult,
+  CreditOrderPreImplantationLinkingPreviewResult,
+} from '@features/models/credit-order.model';
 import {
   NoCreditOrderLegacyCandidate,
   NoCreditOrderLegacyPreviewResult,
@@ -143,6 +153,8 @@ export class ManualBankReconciliationComponent implements OnInit {
   private readonly companyFacade = inject(CompanyFacade);
   readonly facade = inject(ManualBankReconciliationFacade);
   private readonly acquirerFacade = inject(AcquirerFacade);
+  private readonly conciliationWaitingFacade = inject(ConciliationWaitingFacade);
+  private readonly creditOrderApiService = inject(CreditOrderApiService);
   private readonly settingsApi = inject(ReconciliationSettingsApiService);
 
   /** Persistência dos filtros avançados (localStorage) para sobreviver a atualização de página, igual ao BankStatementListComponent. */
@@ -295,6 +307,24 @@ export class ManualBankReconciliationComponent implements OnInit {
     this.uniqueNoCreditOrderLegacyOptions((c) => c.acquirerName),
   );
 
+  /** Diálogo de análise/prévia do backfill de SalesSummary pré-implantação (Etapa 6) — ver
+   * openSalesSummaryPreImplantationPreview. Só estimativa agregada (sem lista de itens): a
+   * ferramenta reavalia em lote, não por seleção individual. */
+  protected readonly previewingSalesSummaryPreImplantation = signal(false);
+  protected readonly applyingSalesSummaryPreImplantation = signal(false);
+  protected readonly showSalesSummaryPreImplantationDialog = signal(false);
+  protected readonly salesSummaryPreImplantationPreview =
+    signal<SalesSummaryPreImplantationPreviewResultModel | null>(null);
+
+  /** Diálogo de análise/prévia de vínculo de CreditOrder órfãs pré-implantação (Etapa 4/7) — ver
+   * openCreditOrderPreImplantationPreview. Só estimativa agregada (sem lista de itens): igual ao
+   * comportamento original na tela de Ordem de Pagamento Manual. */
+  protected readonly previewingCreditOrderPreImplantation = signal(false);
+  protected readonly applyingCreditOrderPreImplantation = signal(false);
+  protected readonly showCreditOrderPreImplantationDialog = signal(false);
+  protected readonly creditOrderPreImplantationPreview =
+    signal<CreditOrderPreImplantationLinkingPreviewResult | null>(null);
+
   protected readonly filteredNoCreditOrderLegacyCandidates = computed(() => {
     const candidates = this.noCreditOrderLegacyPreview()?.candidates ?? [];
     const company = this.noCreditOrderLegacyCompanyFilter();
@@ -312,7 +342,11 @@ export class ManualBankReconciliationComponent implements OnInit {
       this.facade.reclassifyingAcquirer() ||
       this.facade.reclassifyingEstablishment() ||
       this.facade.analyzingPreImplantationDivergence() ||
-      this.facade.analyzingNoCreditOrderLegacy(),
+      this.facade.analyzingNoCreditOrderLegacy() ||
+      this.previewingSalesSummaryPreImplantation() ||
+      this.applyingSalesSummaryPreImplantation() ||
+      this.previewingCreditOrderPreImplantation() ||
+      this.applyingCreditOrderPreImplantation(),
   );
 
   /** Menu "Ações" no cabeçalho — agrupa os backfills/ferramentas de análise, deixando só "Atualizar" como botão direto. */
@@ -352,6 +386,22 @@ export class ManualBankReconciliationComponent implements OnInit {
       icon: 'pi pi-inbox',
       disabled: this.facade.analyzingNoCreditOrderLegacy(),
       command: () => this.openNoCreditOrderLegacyPreview(),
+    },
+    {
+      label: this.i18n.tUi(
+        'conciliation.manualBankReconciliation.salesSummaryPreImplantationAnalyze',
+      ),
+      icon: 'pi pi-database',
+      disabled: this.previewingSalesSummaryPreImplantation(),
+      command: () => this.openSalesSummaryPreImplantationPreview(),
+    },
+    {
+      label: this.i18n.tUi(
+        'conciliation.manualBankReconciliation.creditOrderPreImplantationAnalyze',
+      ),
+      icon: 'pi pi-link',
+      disabled: this.previewingCreditOrderPreImplantation(),
+      command: () => this.openCreditOrderPreImplantationPreview(),
     },
   ]);
 
@@ -1360,6 +1410,164 @@ export class ManualBankReconciliationComponent implements OnInit {
         this.closeNoCreditOrderLegacyPreviewDialog();
       },
       error: () => {
+        this.messageService.add({
+          severity: 'error',
+          summary: this.i18n.tUi('common.error'),
+          detail: this.i18n.tUi('common.errorMessage'),
+        });
+      },
+    });
+  }
+
+  /** Abre o diálogo de análise: nunca grava nada, só estima o que applySalesSummaryCreditOrderPreImplantation executaria. */
+  protected openSalesSummaryPreImplantationPreview(): void {
+    if (this.previewingSalesSummaryPreImplantation()) return;
+    this.previewingSalesSummaryPreImplantation.set(true);
+    this.conciliationWaitingFacade.previewSalesSummaryCreditOrderPreImplantation().subscribe({
+      next: (result) => {
+        this.previewingSalesSummaryPreImplantation.set(false);
+        this.salesSummaryPreImplantationPreview.set(result);
+        this.showSalesSummaryPreImplantationDialog.set(true);
+      },
+      error: () => {
+        this.previewingSalesSummaryPreImplantation.set(false);
+        this.messageService.add({
+          severity: 'error',
+          summary: this.i18n.tUi('common.error'),
+          detail: this.i18n.tUi('common.errorMessage'),
+        });
+      },
+    });
+  }
+
+  protected onSalesSummaryPreImplantationDialogVisibleChange(visible: boolean): void {
+    this.showSalesSummaryPreImplantationDialog.set(visible);
+    if (!visible) {
+      this.salesSummaryPreImplantationPreview.set(null);
+    }
+  }
+
+  protected closeSalesSummaryPreImplantationDialog(): void {
+    this.showSalesSummaryPreImplantationDialog.set(false);
+    this.salesSummaryPreImplantationPreview.set(null);
+  }
+
+  protected confirmApplySalesSummaryPreImplantation(): void {
+    this.confirmationService.confirm({
+      message: this.translateSvc.instant(
+        'conciliation.manualBankReconciliation.salesSummaryPreImplantationApplyConfirmMessage',
+      ),
+      header: this.translateSvc.instant(
+        'conciliation.manualBankReconciliation.salesSummaryPreImplantationApplyConfirmTitle',
+      ),
+      icon: 'pi pi-exclamation-triangle',
+      acceptLabel: this.translateSvc.instant(
+        'conciliation.manualBankReconciliation.salesSummaryPreImplantationApply',
+      ),
+      rejectLabel: this.translateSvc.instant('common.cancel'),
+      acceptButtonStyleClass: 'p-button-warn',
+      accept: () => this.doApplySalesSummaryPreImplantation(),
+    });
+  }
+
+  private doApplySalesSummaryPreImplantation(): void {
+    if (this.applyingSalesSummaryPreImplantation()) return;
+    this.applyingSalesSummaryPreImplantation.set(true);
+    this.conciliationWaitingFacade.applySalesSummaryCreditOrderPreImplantation().subscribe({
+      next: (result: ReconcileSalesSummaryCreditOrderResultModel) => {
+        this.applyingSalesSummaryPreImplantation.set(false);
+        this.messageService.add({
+          severity: 'success',
+          summary: this.i18n.tUi('common.success'),
+          detail: this.translateSvc.instant(
+            'conciliation.manualBankReconciliation.salesSummaryPreImplantationApplySuccess',
+            result,
+          ),
+        });
+        this.closeSalesSummaryPreImplantationDialog();
+      },
+      error: () => {
+        this.applyingSalesSummaryPreImplantation.set(false);
+        this.messageService.add({
+          severity: 'error',
+          summary: this.i18n.tUi('common.error'),
+          detail: this.i18n.tUi('common.errorMessage'),
+        });
+      },
+    });
+  }
+
+  /** Abre o diálogo de análise: nunca grava nada, só mostra o que confirmApplyCreditOrderPreImplantation executaria. */
+  protected openCreditOrderPreImplantationPreview(): void {
+    if (this.previewingCreditOrderPreImplantation()) return;
+    this.previewingCreditOrderPreImplantation.set(true);
+    this.creditOrderApiService.previewLinkPreImplantation().subscribe({
+      next: (preview) => {
+        this.previewingCreditOrderPreImplantation.set(false);
+        this.creditOrderPreImplantationPreview.set(preview);
+        this.showCreditOrderPreImplantationDialog.set(true);
+      },
+      error: () => {
+        this.previewingCreditOrderPreImplantation.set(false);
+        this.messageService.add({
+          severity: 'error',
+          summary: this.i18n.tUi('common.error'),
+          detail: this.i18n.tUi('common.errorMessage'),
+        });
+      },
+    });
+  }
+
+  protected onCreditOrderPreImplantationDialogVisibleChange(visible: boolean): void {
+    this.showCreditOrderPreImplantationDialog.set(visible);
+    if (!visible) {
+      this.creditOrderPreImplantationPreview.set(null);
+    }
+  }
+
+  protected closeCreditOrderPreImplantationDialog(): void {
+    this.showCreditOrderPreImplantationDialog.set(false);
+    this.creditOrderPreImplantationPreview.set(null);
+  }
+
+  protected confirmApplyCreditOrderPreImplantation(): void {
+    const preview = this.creditOrderPreImplantationPreview();
+    this.confirmationService.confirm({
+      message: this.translateSvc.instant(
+        'conciliation.manualBankReconciliation.creditOrderPreImplantationApplyConfirmMessage',
+        { eligible: preview?.exactMatch ?? 0 },
+      ),
+      header: this.translateSvc.instant(
+        'conciliation.manualBankReconciliation.creditOrderPreImplantationApplyConfirmTitle',
+      ),
+      icon: 'pi pi-exclamation-triangle',
+      acceptLabel: this.translateSvc.instant(
+        'conciliation.manualBankReconciliation.creditOrderPreImplantationApply',
+      ),
+      rejectLabel: this.translateSvc.instant('common.cancel'),
+      acceptButtonStyleClass: 'p-button-warn',
+      accept: () => this.doApplyCreditOrderPreImplantation(),
+    });
+  }
+
+  private doApplyCreditOrderPreImplantation(): void {
+    if (this.applyingCreditOrderPreImplantation()) return;
+    this.applyingCreditOrderPreImplantation.set(true);
+    this.creditOrderApiService.applyLinkPreImplantation().subscribe({
+      next: (result: CreditOrderPreImplantationLinkingApplyResult) => {
+        this.applyingCreditOrderPreImplantation.set(false);
+        this.messageService.add({
+          severity: 'success',
+          summary: this.i18n.tUi('common.success'),
+          detail: this.translateSvc.instant(
+            'conciliation.manualBankReconciliation.creditOrderPreImplantationApplySuccess',
+            result,
+          ),
+        });
+        this.closeCreditOrderPreImplantationDialog();
+      },
+      error: () => {
+        this.applyingCreditOrderPreImplantation.set(false);
         this.messageService.add({
           severity: 'error',
           summary: this.i18n.tUi('common.error'),

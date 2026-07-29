@@ -485,6 +485,125 @@
   </ng-template>
 </p-dialog>
 
+<!-- Diálogo de análise do backfill de SalesSummary pré-implantação (Etapa 6): só análise (nada
+     é gravado) até clicar "Aplicar". Cobre vendas anteriores à implantação cujas parcelas
+     (ordens de crédito) só vencem/liberam depois do go-live e por isso nunca são reavaliadas
+     pelo fluxo normal de conciliação Resumo x Ordem. -->
+<p-dialog
+  [modal]="true"
+  appendTo="body"
+  [closable]="true"
+  [style]="{ width: '36rem' }"
+  [visible]="showSalesSummaryPreImplantationDialog()"
+  (visibleChange)="onSalesSummaryPreImplantationDialogVisibleChange($event)"
+  [header]="'conciliation.manualBankReconciliation.salesSummaryPreImplantationDialogTitle' | translate"
+>
+  @if (salesSummaryPreImplantationPreview(); as preview) {
+    <p class="text-sm text-color-secondary mb-3">
+      {{ 'conciliation.manualBankReconciliation.salesSummaryPreImplantationDialogMessage' | translate }}
+    </p>
+    <div class="flex flex-column gap-2 text-sm">
+      <span>
+        {{ 'conciliation.manualBankReconciliation.salesSummaryPreImplantationAnalyzed' | translate }}:
+        <strong>{{ preview.summariesAnalyzed }}</strong>
+      </span>
+      <span class="text-green-400">
+        {{ 'conciliation.manualBankReconciliation.salesSummaryPreImplantationWouldReconcile' | translate }}:
+        <strong>{{ preview.wouldReconcile }}</strong>
+      </span>
+      <span class="text-blue-400">
+        {{ 'conciliation.manualBankReconciliation.salesSummaryPreImplantationWouldPartial' | translate }}:
+        <strong>{{ preview.wouldPartiallyReconcile }}</strong>
+      </span>
+      <span class="text-orange-400">
+        {{ 'conciliation.manualBankReconciliation.salesSummaryPreImplantationWouldGenerate' | translate }}:
+        <strong>{{ preview.wouldGenerateSynthetic }}</strong>
+      </span>
+      <span class="text-color-secondary">
+        {{ 'conciliation.manualBankReconciliation.salesSummaryPreImplantationWouldRemainPending' | translate }}:
+        <strong>{{ preview.wouldRemainPending }}</strong>
+      </span>
+      <span>
+        {{ 'conciliation.manualBankReconciliation.salesSummaryPreImplantationGrossValue' | translate }}:
+        <strong>{{ preview.totalGrossValueAnalyzed | csCurrency }}</strong>
+      </span>
+    </div>
+  }
+  <ng-template pTemplate="footer">
+    <p-button
+      [outlined]="true"
+      severity="secondary"
+      [label]="'common.cancel' | translate"
+      (onClick)="closeSalesSummaryPreImplantationDialog()"
+    ></p-button>
+    <p-button
+      severity="warn"
+      icon="pi pi-database"
+      (onClick)="confirmApplySalesSummaryPreImplantation()"
+      [loading]="applyingSalesSummaryPreImplantation()"
+      [disabled]="!salesSummaryPreImplantationPreview()?.summariesAnalyzed"
+      [label]="'conciliation.manualBankReconciliation.salesSummaryPreImplantationApply' | translate"
+    ></p-button>
+  </ng-template>
+</p-dialog>
+
+<!-- Diálogo de análise do vínculo de CreditOrder órfãs pré-implantação (movido da tela de Ordem
+     de Pagamento Manual): só análise (nada é gravado) até clicar "Vincular Elegíveis". -->
+<p-dialog
+  [modal]="true"
+  appendTo="body"
+  [closable]="true"
+  [style]="{ width: '36rem' }"
+  [visible]="showCreditOrderPreImplantationDialog()"
+  (visibleChange)="onCreditOrderPreImplantationDialogVisibleChange($event)"
+  [header]="'conciliation.manualBankReconciliation.creditOrderPreImplantationDialogTitle' | translate"
+>
+  @if (creditOrderPreImplantationPreview(); as preview) {
+    <p class="text-sm text-color-secondary mb-3">
+      {{ 'conciliation.manualBankReconciliation.creditOrderPreImplantationDialogMessage' | translate }}
+    </p>
+    <div class="flex flex-column gap-2 text-sm">
+      <span>
+        {{ 'conciliation.manualBankReconciliation.creditOrderPreImplantationAnalyzed' | translate }}:
+        <strong>{{ preview.analyzed }}</strong>
+      </span>
+      <span class="text-green-400">
+        {{ 'conciliation.manualBankReconciliation.creditOrderPreImplantationExactMatch' | translate }}:
+        <strong>{{ preview.exactMatch }}</strong>
+      </span>
+      @if (preview.pvMismatch > 0) {
+        <span class="text-orange-400">
+          {{ 'conciliation.manualBankReconciliation.creditOrderPreImplantationPvMismatch' | translate }}:
+          <strong>{{ preview.pvMismatch }}</strong>
+        </span>
+        <small class="text-color-secondary">
+          {{ 'conciliation.manualBankReconciliation.creditOrderPreImplantationPvMismatchHint' | translate }}
+        </small>
+      }
+      <span class="text-color-secondary">
+        {{ 'conciliation.manualBankReconciliation.creditOrderPreImplantationNoMatch' | translate }}:
+        <strong>{{ preview.noMatch }}</strong>
+      </span>
+    </div>
+  }
+  <ng-template pTemplate="footer">
+    <p-button
+      [outlined]="true"
+      severity="secondary"
+      [label]="'common.cancel' | translate"
+      (onClick)="closeCreditOrderPreImplantationDialog()"
+    ></p-button>
+    <p-button
+      severity="warn"
+      icon="pi pi-link"
+      (onClick)="confirmApplyCreditOrderPreImplantation()"
+      [loading]="applyingCreditOrderPreImplantation()"
+      [disabled]="!creditOrderPreImplantationPreview() || creditOrderPreImplantationPreview()!.exactMatch === 0"
+      [label]="'conciliation.manualBankReconciliation.creditOrderPreImplantationApply' | translate"
+    ></p-button>
+  </ng-template>
+</p-dialog>
+
 <cs-page-header
   [compact]="false"
   [title]="'conciliation.manualBankReconciliation.title' | translate"

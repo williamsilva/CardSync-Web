@@ -722,6 +722,10 @@ export const UI_KEYS = {
       reclassifyEstablishment: 'conciliation.manualBankReconciliation.reclassifyEstablishment',
       preImplantationAnalyze: 'conciliation.manualBankReconciliation.preImplantationAnalyze',
       noCreditOrderLegacyAnalyze: 'conciliation.manualBankReconciliation.noCreditOrderLegacyAnalyze',
+      salesSummaryPreImplantationAnalyze:
+        'conciliation.manualBankReconciliation.salesSummaryPreImplantationAnalyze',
+      creditOrderPreImplantationAnalyze:
+        'conciliation.manualBankReconciliation.creditOrderPreImplantationAnalyze',
     },
     result: {
       okRates: 'conciliation.result.okRates',

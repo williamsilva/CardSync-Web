@@ -83,6 +83,46 @@ export interface CreditOrderImportPreviewResult {
   skippedReasons: CreditOrderImportSkipReason[];
 }
 
+export interface CreditOrderPreImplantationLinkingCandidate {
+  creditOrderId: string;
+  companyName: string | null;
+  acquirerName: string | null;
+  rvNumber: number | null;
+  pvCentralizer: number | null;
+  rvDate: string | null;
+  releaseDate: string | null;
+  releaseValue: number;
+  matchedSalesSummaryId: string;
+}
+
+export interface CreditOrderPreImplantationPvMismatch {
+  creditOrderId: string;
+  companyName: string | null;
+  acquirerName: string | null;
+  rvNumber: number | null;
+  pvCentralizerOrder: number | null;
+  pvNumberSummary: number | null;
+  releaseDate: string | null;
+  releaseValue: number;
+  candidateSalesSummaryId: string;
+}
+
+export interface CreditOrderPreImplantationLinkingPreviewResult {
+  analyzed: number;
+  exactMatch: number;
+  pvMismatch: number;
+  noMatch: number;
+  candidates: CreditOrderPreImplantationLinkingCandidate[];
+  mismatches: CreditOrderPreImplantationPvMismatch[];
+}
+
+export interface CreditOrderPreImplantationLinkingApplyResult {
+  analyzed: number;
+  linked: number;
+  pvMismatch: number;
+  noMatch: number;
+}
+
 export interface CreditOrderApiModel {
   id: string;
   rvNumber: string;

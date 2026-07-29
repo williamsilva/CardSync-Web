@@ -26,6 +26,7 @@ import {
   ReconcileSalesSummaryCreditOrderResultModel,
   ReconcileSalesSummaryTransactionsResultModel,
   ReconcileAcquirerSaleSummaryResultModel,
+  SalesSummaryPreImplantationPreviewResultModel,
 } from '@models/conciliation-waiting.model';
 
 @Injectable({ providedIn: 'root' })
@@ -231,6 +232,22 @@ export class ConciliationWaitingApiService {
   reconcileSalesSummaryCreditOrder(): Observable<ReconcileSalesSummaryCreditOrderResultModel> {
     return this.http.post<ReconcileSalesSummaryCreditOrderResultModel>(
       `${this.baseUrl}/reconcile-sales-summary-credit-order`,
+      {},
+      { withCredentials: true },
+    );
+  }
+
+  previewSalesSummaryCreditOrderPreImplantation(): Observable<SalesSummaryPreImplantationPreviewResultModel> {
+    return this.http.post<SalesSummaryPreImplantationPreviewResultModel>(
+      `${this.baseUrl}/sales-summary-credit-order/pre-implantation/preview`,
+      {},
+      { withCredentials: true },
+    );
+  }
+
+  applySalesSummaryCreditOrderPreImplantation(): Observable<ReconcileSalesSummaryCreditOrderResultModel> {
+    return this.http.post<ReconcileSalesSummaryCreditOrderResultModel>(
+      `${this.baseUrl}/sales-summary-credit-order/pre-implantation/apply`,
       {},
       { withCredentials: true },
     );

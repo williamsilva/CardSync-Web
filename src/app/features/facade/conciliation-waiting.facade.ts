@@ -23,6 +23,7 @@ import {
   ReconcileSalesSummaryCreditOrderResultModel,
   ReconcileSalesSummaryTransactionsResultModel,
   ReconcileAcquirerSaleSummaryResultModel,
+  SalesSummaryPreImplantationPreviewResultModel,
 } from '@models/conciliation-waiting.model';
 
 export type ConciliationErpVsAcquirerView =
@@ -222,6 +223,16 @@ export class ConciliationWaitingFacade {
 
   reconcileSalesSummaryTransactions(): Observable<ReconcileSalesSummaryTransactionsResultModel> {
     return this.api.reconcileSalesSummaryTransactions();
+  }
+
+  previewSalesSummaryCreditOrderPreImplantation(): Observable<SalesSummaryPreImplantationPreviewResultModel> {
+    return this.api.previewSalesSummaryCreditOrderPreImplantation();
+  }
+
+  /** Sem toast próprio: quem chama (tela de Conciliação Manual Bancária) já mostra um resumo
+   * detalhado do resultado, igual às outras ferramentas de backfill daquela tela. */
+  applySalesSummaryCreditOrderPreImplantation(): Observable<ReconcileSalesSummaryCreditOrderResultModel> {
+    return this.api.applySalesSummaryCreditOrderPreImplantation();
   }
 
   reconcileAcquirerSaleSummary(): Observable<ReconcileAcquirerSaleSummaryResultModel> {

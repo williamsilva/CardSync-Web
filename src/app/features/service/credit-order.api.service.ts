@@ -14,6 +14,8 @@ import {
   CreditOrderImportResult,
   CreditOrderManualInput,
   CreditOrderManualResult,
+  CreditOrderPreImplantationLinkingApplyResult,
+  CreditOrderPreImplantationLinkingPreviewResult,
   mapCreditOrderApiModels,
 } from '@models/credit-order.model';
 
@@ -57,5 +59,19 @@ export class CreditOrderApiService {
     const formData = new FormData();
     files.forEach((file) => formData.append('files', file, file.name));
     return this.http.post<CreditOrderImportResult>(`${this.baseUrl}/manual/import`, formData);
+  }
+
+  previewLinkPreImplantation() {
+    return this.http.post<CreditOrderPreImplantationLinkingPreviewResult>(
+      `${this.baseUrl}/manual/link-preimplantation/preview`,
+      {},
+    );
+  }
+
+  applyLinkPreImplantation(creditOrderIds?: string[]) {
+    return this.http.post<CreditOrderPreImplantationLinkingApplyResult>(
+      `${this.baseUrl}/manual/link-preimplantation/apply`,
+      { creditOrderIds: creditOrderIds ?? null },
+    );
   }
 }

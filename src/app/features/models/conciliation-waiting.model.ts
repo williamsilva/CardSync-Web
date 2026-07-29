@@ -67,6 +67,15 @@ export interface ReconcileSalesSummaryCreditOrderResultModel {
   totalGrossValuePending: number;
 }
 
+export interface SalesSummaryPreImplantationPreviewResultModel {
+  summariesAnalyzed: number;
+  wouldReconcile: number;
+  wouldPartiallyReconcile: number;
+  wouldGenerateSynthetic: number;
+  wouldRemainPending: number;
+  totalGrossValueAnalyzed: number;
+}
+
 export interface ReconcileFeesResultModel {
   okRates: number;
   analyzed: number;
