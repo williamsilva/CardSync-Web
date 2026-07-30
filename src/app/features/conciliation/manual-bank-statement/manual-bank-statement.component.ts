@@ -29,7 +29,6 @@ import { ErrorMsgComponent } from '@shared/error-msg/error-msg.component';
 import { EstablishmentFacade } from '@features/facade/establishment.facade';
 import { BankStatementFacade } from '@features/facade/bank-statement.facade';
 import { BankingDomicileFacade } from '@features/facade/banking-domicile.facade';
-import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
 import { StatusEnum, statusEnumLabel, statusEnumSeverity } from '@models/enums/status.enum';
 import {
   ReleaseCategoryEnum,
@@ -61,7 +60,6 @@ import {
     InputNumberModule,
     ErrorMsgComponent,
     ReactiveFormsModule,
-    PageHeaderComponent,
   ],
 })
 export class ManualBankStatementComponent implements OnInit {

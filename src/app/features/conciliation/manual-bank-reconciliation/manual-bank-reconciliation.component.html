@@ -604,19 +604,7 @@
   </ng-template>
 </p-dialog>
 
-<cs-page-header
-  [compact]="false"
-  [title]="'conciliation.manualBankReconciliation.title' | translate"
-  [subtitle]="'conciliation.manualBankReconciliation.subtitle' | translate"
->
-  <button
-    pButton
-    type="button"
-    (click)="refresh()"
-    icon="pi pi-refresh"
-    class="p-button-text p-button-sm"
-    [label]="'common.update' | translate"
-  ></button>
+<div class="flex justify-content-end mb-2">
   <p-menu #dataToolsMenu [popup]="true" appendTo="body" [model]="dataToolsMenuItems()"></p-menu>
   <button
     pButton
@@ -627,7 +615,7 @@
     (click)="dataToolsMenu.toggle($event)"
     [label]="'conciliation.manualBankReconciliation.dataToolsMenu' | translate"
   ></button>
-</cs-page-header>
+</div>
 
 <!-- Action bar: single release selected -->
 @if (facade.selectedRelease(); as release) {

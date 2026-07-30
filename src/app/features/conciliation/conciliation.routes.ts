@@ -4,22 +4,7 @@ import { permissionGuard } from '@core/auth/permission.guard';
 import { PERMISSIONS } from '@core/auth/permissions.constants';
 
 export const CONCILIATION_ROUTES: Routes = [
-  { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
-  {
-    path: 'dashboard',
-    title: 'routes.conciliation.dashboard.title',
-    canActivate: [permissionGuard],
-    data: {
-      requireAll: false,
-      redirectTo: '/forbidden',
-      permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.CONCILIATION.DASHBOARD_VIEW],
-    },
-    loadComponent: () =>
-      import('./conciliation-dashboard/conciliation-dashboard.component').then(
-        (m) => m.ConciliationDashboardComponent,
-      ),
-  },
-
+  { path: '', pathMatch: 'full', redirectTo: 'reconciliation-actions' },
   {
     path: 'execution-history',
     title: 'routes.conciliation.executionHistory.title',
@@ -81,52 +66,39 @@ export const CONCILIATION_ROUTES: Routes = [
     redirectTo: () => '/conciliation/erp-vs-acquirer?view=other-divergences',
   },
   {
-    path: 'manual-sales-summary',
-    title: 'routes.conciliation.manualSalesSummary.title',
+    path: 'manual',
+    title: 'routes.conciliation.manualTools.title',
     canActivate: [permissionGuard],
     data: {
       requireAll: false,
       redirectTo: '/forbidden',
-      permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.FILE_PROCESSING.PROCESS],
+      permissions: [
+        PERMISSIONS.SUPPORT,
+        PERMISSIONS.FILE_PROCESSING.PROCESS,
+        PERMISSIONS.CONCILIATION.MANUAL_BANK_RECONCILIATION,
+      ],
     },
     loadComponent: () =>
-      import('./manual-sales-summary/manual-sales-summary.component').then(
-        (m) => m.ManualSalesSummaryComponent,
+      import('./manual-conciliation/manual-conciliation.component').then(
+        (m) => m.ManualConciliationComponent,
       ),
+  },
+  // Compatibilidade com links/favoritos antigos (as 4 views agora são abas dentro de manual).
+  {
+    path: 'manual-sales-summary',
+    redirectTo: () => '/conciliation/manual?view=manual-sales-summary',
   },
   {
     path: 'manual-credit-order',
-    title: 'routes.conciliation.manualCreditOrder.title',
-    canActivate: [permissionGuard],
-    data: { requireAll: false, redirectTo: '/forbidden', permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.FILE_PROCESSING.PROCESS] },
-    loadComponent: () =>
-      import('./manual-credit-order/manual-credit-order.component').then(
-        (m) => m.ManualCreditOrderComponent,
-      ),
+    redirectTo: () => '/conciliation/manual?view=manual-credit-order',
   },
   {
     path: 'manual-bank-statement',
-    title: 'routes.conciliation.manualBankStatement.title',
-    canActivate: [permissionGuard],
-    data: { requireAll: false, redirectTo: '/forbidden', permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.FILE_PROCESSING.PROCESS] },
-    loadComponent: () =>
-      import('./manual-bank-statement/manual-bank-statement.component').then(
-        (m) => m.ManualBankStatementComponent,
-      ),
+    redirectTo: () => '/conciliation/manual?view=manual-bank-statement',
   },
   {
     path: 'manual-bank-reconciliation',
-    title: 'routes.conciliation.manualBankReconciliation.title',
-    canActivate: [permissionGuard],
-    data: {
-      requireAll: false,
-      redirectTo: '/forbidden',
-      permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.CONCILIATION.MANUAL_BANK_RECONCILIATION],
-    },
-    loadComponent: () =>
-      import('./manual-bank-reconciliation/manual-bank-reconciliation.component').then(
-        (m) => m.ManualBankReconciliationComponent,
-      ),
+    redirectTo: () => '/conciliation/manual?view=manual-bank-reconciliation',
   },
   {
     path: 'contract-audit',
@@ -140,20 +112,6 @@ export const CONCILIATION_ROUTES: Routes = [
     loadComponent: () =>
       import('./contract-audit-list/contract-audit-list.component').then(
         (m) => m.ContractAuditListComponent,
-      ),
-  },
-  {
-    path: 'aging',
-    title: 'routes.conciliation.aging.title',
-    canActivate: [permissionGuard],
-    data: {
-      requireAll: false,
-      redirectTo: '/forbidden',
-      permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.CONCILIATION.DASHBOARD_VIEW],
-    },
-    loadComponent: () =>
-      import('./conciliation-aging/conciliation-aging.component').then(
-        (m) => m.ConciliationAgingComponent,
       ),
   },
   {

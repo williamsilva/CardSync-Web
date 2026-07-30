@@ -1,5 +1,3 @@
-import { PageQuery } from './file-processing.models';
-
 export type ConciliationStatus =
   | 'PENDING'
   | 'MATCHED'
@@ -50,69 +48,6 @@ export type ChargebackStatus =
   | string;
 
 export type ErpVsAcquirerView = 'MISSING_ACQUIRER' | 'MISSING_ERP' | 'OTHER_DIVERGENCES';
-
-export interface ConciliationPageQuery extends PageQuery {
-  startDate?: string;
-  endDate?: string;
-  companyId?: string;
-  establishmentId?: string;
-  acquirerId?: string;
-  flagId?: string;
-  status?: string;
-  view?: ErpVsAcquirerView | string;
-  nsu?: string;
-  authorization?: string;
-}
-
-export interface ConciliationChartPointModel {
-  label: string;
-  value: number;
-  quantity?: number | null;
-}
-
-export interface ConciliationComparisonModel {
-  erpAmount: number;
-  acquirerAmount: number;
-  differenceAmount: number;
-  matchedAmount: number;
-  pendingAmount: number;
-}
-
-export interface ConciliationSummaryModel {
-  erpSalesQuantity: number;
-  erpGrossAmount: number;
-  acquirerSalesQuantity: number;
-  acquirerGrossAmount: number;
-  matchedSalesQuantity: number;
-  matchedAmount: number;
-  pendingSalesQuantity: number;
-  pendingAmount: number;
-  feeAmount: number;
-  expectedFeeAmount: number;
-  feeDifferenceAmount: number;
-  bankSettledAmount: number;
-  bankPendingAmount: number;
-  debitPendingAmount: number;
-  chargebackOpenAmount: number;
-  divergenceQuantity: number;
-  divergenceAmount: number;
-}
-
-export interface ConciliationAgingModel {
-  bucket: string;
-  quantity: number;
-  amount: number;
-  type?: string | null;
-}
-
-export interface ConciliationDashboardModel {
-  summary: ConciliationSummaryModel;
-  salesByPeriod: ConciliationChartPointModel[];
-  erpVsAcquirer: ConciliationComparisonModel;
-  feesByAcquirer: ConciliationChartPointModel[];
-  divergencesByType: ConciliationChartPointModel[];
-  pendingAging: ConciliationAgingModel[];
-}
 
 export interface ConciliationFeeAnalysisModel {
   id: string;

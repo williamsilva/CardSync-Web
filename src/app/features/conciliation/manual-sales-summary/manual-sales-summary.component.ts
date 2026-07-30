@@ -32,7 +32,6 @@ import { CreditOrderFacade } from '@features/facade/credit-order.facade';
 import { SaleSummaryFacade } from '@features/facade/sales-summary.facade';
 import { EstablishmentFacade } from '@features/facade/establishment.facade';
 import { CreditOrderManualResult } from '@features/models/credit-order.model';
-import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
 import { SalesSummaryManualTransactionInput } from '@features/models/sales-summary.model';
 import { StatusEnum, statusEnumLabel, statusEnumSeverity } from '@models/enums/status.enum';
 import {
@@ -83,7 +82,6 @@ interface CsvSummaryGroup {
     FloatLabelModule,
     DatePickerModule,
     InputNumberModule,
-    PageHeaderComponent,
     ReactiveFormsModule,
   ],
 })

@@ -1,4 +1,4 @@
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Component, computed, inject, signal, ViewChild } from '@angular/core';
 
@@ -18,17 +18,12 @@ const TAB_BY_VIEW_QUERY_PARAM: Record<string, ErpVsAcquirerTab> = {
   'other-divergences': 'otherDivergences',
 };
 
-const VIEW_QUERY_PARAM_BY_TAB: Record<ErpVsAcquirerTab, string> = {
-  missingAcquirer: 'missing-acquirer',
-  missingErp: 'missing-erp',
-  otherDivergences: 'other-divergences',
-};
-
 @Component({
   standalone: true,
   selector: 'cs-erp-vs-acquirer-list',
   templateUrl: './erp-vs-acquirer-list.component.html',
   imports: [
+    RouterLink,
     ButtonModule,
     TranslateModule,
     PageHeaderComponent,
@@ -38,7 +33,6 @@ const VIEW_QUERY_PARAM_BY_TAB: Record<ErpVsAcquirerTab, string> = {
   ],
 })
 export class ErpVsAcquirerListComponent {
-  private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
 
   @ViewChild(MissingAcquirerListComponent)
@@ -70,17 +64,6 @@ export class ErpVsAcquirerListComponent {
     this.route.queryParamMap.pipe(takeUntilDestroyed()).subscribe((params) => {
       const tab = TAB_BY_VIEW_QUERY_PARAM[params.get('view') ?? ''];
       if (tab) this.activeTab.set(tab);
-    });
-  }
-
-  protected setTab(tab: ErpVsAcquirerTab): void {
-    this.activeTab.set(tab);
-
-    this.router.navigate([], {
-      relativeTo: this.route,
-      replaceUrl: true,
-      queryParamsHandling: 'merge',
-      queryParams: { view: VIEW_QUERY_PARAM_BY_TAB[tab] },
     });
   }
 

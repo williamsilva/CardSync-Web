@@ -7,35 +7,41 @@
     { label: 'routes.conciliation.erpVsAcquirer.title' | translate },
   ]"
 >
-  <button
+  <a
     pButton
-    type="button"
+    [routerLink]="[]"
+    [replaceUrl]="true"
+    queryParamsHandling="merge"
+    [queryParams]="{ view: 'missing-acquirer' }"
     icon="pi pi-exclamation-circle"
     class="p-button-sm"
     [class.p-button-outlined]="activeTab() !== 'missingAcquirer'"
-    (click)="setTab('missingAcquirer')"
     [label]="'conciliation.action.missingAcquirer' | translate"
-  ></button>
+  ></a>
 
-  <button
+  <a
     pButton
-    type="button"
+    [routerLink]="[]"
+    [replaceUrl]="true"
+    queryParamsHandling="merge"
+    [queryParams]="{ view: 'missing-erp' }"
     icon="pi pi-plus-circle"
     class="p-button-sm"
     [class.p-button-outlined]="activeTab() !== 'missingErp'"
-    (click)="setTab('missingErp')"
     [label]="'conciliation.action.missingErp' | translate"
-  ></button>
+  ></a>
 
-  <button
+  <a
     pButton
-    type="button"
+    [routerLink]="[]"
+    [replaceUrl]="true"
+    queryParamsHandling="merge"
+    [queryParams]="{ view: 'other-divergences' }"
     icon="pi pi-search"
     class="p-button-sm"
     [class.p-button-outlined]="activeTab() !== 'otherDivergences'"
-    (click)="setTab('otherDivergences')"
     [label]="'conciliation.action.missingOther' | translate"
-  ></button>
+  ></a>
 
   <button
     pButton

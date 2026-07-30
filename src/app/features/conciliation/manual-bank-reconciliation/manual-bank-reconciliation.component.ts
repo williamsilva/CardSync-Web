@@ -32,7 +32,6 @@ import { CreditOrderAdvancedFilters } from '@features/filter/credit-order.filter
 import { CreditOrderApiService } from '@features/service/credit-order.api.service';
 import { BankStatementAdvancedFilters } from '@features/filter/bank-statement.filters';
 import { allPeriodEnum, PeriodEnum, periodEnumLabel } from '@models/enums/period.enum';
-import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
 import { ConciliationWaitingFacade } from '@features/facade/conciliation-waiting.facade';
 import { mapPrimeLazyToTableQuery } from '@shared/features/list-query/primeng-lazy.mapper';
 import { StatusEnum, statusEnumLabel, statusEnumSeverity } from '@models/enums/status.enum';
@@ -133,7 +132,6 @@ interface OrderFiltersState {
     CsDocumentPipe,
     TranslateModule,
     ConfirmDialogModule,
-    PageHeaderComponent,
     FiltersPanelComponent,
     CsCurrencyRangeFilterComponent,
     CsAdvancedPeriodDateFilterComponent,
@@ -1647,7 +1645,7 @@ export class ManualBankReconciliationComponent implements OnInit {
     return period === PeriodEnum.INTERVAL ? 'range' : 'single';
   }
 
-  protected refresh(): void {
+  refresh(): void {
     this.reloadReleases();
     this.reloadOrders();
   }

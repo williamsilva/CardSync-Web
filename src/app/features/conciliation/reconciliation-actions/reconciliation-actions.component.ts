@@ -7,8 +7,6 @@ import { TranslateModule } from '@ngx-translate/core';
 
 import { PERMISSIONS } from '@core/auth/permissions.constants';
 import { PermissionService } from '@core/auth/permission.service';
-import { ConciliationDashboardModel } from '@models/conciliation.models';
-import { ConciliationService } from '@features/service/conciliation.service';
 import { FileProcessingService } from '@features/service/file-processing.service';
 import { ConciliationWaitingFacade } from '@features/facade/conciliation-waiting.facade';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
@@ -25,7 +23,7 @@ import {
 import {
   CancellationReprocessPayload,
   CancellationReprocessDialogComponent,
-} from '../conciliation-dashboard/cancellation-reprocess-dialog.component';
+} from './cancellation-reprocess-dialog.component';
 
 @Component({
   standalone: true,
@@ -42,15 +40,8 @@ import {
 })
 export class ReconciliationActionsComponent {
   private readonly perms = inject(PermissionService);
-  private readonly service = inject(ConciliationService);
   private readonly facade = inject(ConciliationWaitingFacade);
   private readonly fileProcessingService = inject(FileProcessingService);
-
-  protected readonly loading = signal(false);
-  protected readonly dashboard = signal<ConciliationDashboardModel | null>(null);
-
-  protected readonly summary = computed(() => this.dashboard()?.summary ?? null);
-  protected readonly comparison = computed(() => this.dashboard()?.erpVsAcquirer ?? null);
 
   protected readonly canProcess = computed(() =>
     this.perms.hasSupportOrAny(
@@ -108,22 +99,6 @@ export class ReconciliationActionsComponent {
       this.reconcilingBank() ||
       this.runningPipeline(),
   );
-
-  constructor() {
-    this.reload();
-  }
-
-  protected reload(): void {
-    this.loading.set(true);
-    this.service.getDashboard().subscribe({
-      next: (response) => this.dashboard.set(response),
-      error: () => {
-        this.dashboard.set(null);
-        this.loading.set(false);
-      },
-      complete: () => this.loading.set(false),
-    });
-  }
 
   protected processReconciliationErpVsAcquirer(): void {
     if (this.reconcilingErpVsAcquirer()) return;

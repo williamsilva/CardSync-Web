@@ -73,9 +73,6 @@
       "sales": {
         "title": "Vendas Adquirente"
       },
-      "dashboard": {
-        "title": "Dashboard de Conciliação"
-      },
       "erpVsAcquirer": {
         "title": "ERP x Adquirente",
         "missingAcquirer": {
@@ -87,9 +84,6 @@
         "otherDivergences": {
           "title": "Outras vendas não conciliadas"
         }
-      },
-      "aging": {
-        "title": "Aging de Pendências"
       },
       "settings": {
         "title": "Configurações de Conciliação"
@@ -105,6 +99,9 @@
       },
       "manualBankReconciliation": {
         "title": "Conciliação Manual Bancária"
+      },
+      "manualTools": {
+        "title": "Conciliação Manual"
       },
       "reconciliationActions": {
         "title": "Ações de Conciliação"
@@ -257,12 +254,10 @@
       "contractAudit": "Taxas Aplicadas",
       "sales": "Vendas adquirente",
       "title": "Conciliação",
-      "dashboard": "Dashboard",
       "erpVsAcquirer": "ERP x Adquirente",
       "bankSettlement": "Liquidação bancária",
       "debits": "Débitos",
       "divergences": "Divergências",
-      "aging": "Aging de pendências",
       "settings": "Configurações",
       "erpMissingAcquirer": "Não localizada na adquirente",
       "acquirerMissingErp": "Não localizada no ERP",
@@ -271,6 +266,7 @@
       "manualCreditOrder": "Ordem de Pagamento Manual",
       "manualBankStatement": "Lançamento Bancário Manual",
       "manualBankReconciliation": "Conciliação Manual Bancária",
+      "manualTools": "Conciliação Manual",
       "reconciliationActions": "Ações de Conciliação",
       "executionHistory": "Histórico de Execuções"
     },
@@ -2647,7 +2643,7 @@
     },
     "manualSalesSummary": {
       "eyebrow": "Conciliação",
-      "title": "Resumo de Vendas Manual",
+      "title": "Resumo de Vendas",
       "subtitle": "Crie manualmente um resumo de vendas quando o arquivo EEVC não estiver disponível, permitindo que a conciliação com as ordens de crédito prossiga.",
       "sectionSummaryRequired": "Resumo de vendas — dados obrigatórios",
       "sectionSummaryOptional": "Resumo de vendas — dados opcionais",
@@ -2712,7 +2708,7 @@
     },
     "manualCreditOrder": {
       "eyebrow": "Conciliação",
-      "title": "Ordem de Pagamento Manual",
+      "title": "Ordem de Pagamento",
       "subtitle": "Busque resumos de vendas ou carregue os pendentes e crie as ordens de pagamento automaticamente pela próxima parcela em aberto.",
       "searchSection": "Buscar resumos de vendas",
       "rvNumber": "Número do RV",
@@ -2771,7 +2767,7 @@
     },
     "manualBankStatement": {
       "eyebrow": "Conciliação",
-      "title": "Lançamento Bancário Manual",
+      "title": "Lançamento Bancário",
       "subtitle": "Crie um lançamento bancário manualmente para domicílios bancários sem arquivo importado.",
       "company": "Empresa",
       "bankingDomicile": "Domicílio bancário",
@@ -2792,7 +2788,7 @@
       "saveError": "Não foi possível criar o lançamento bancário."
     },
     "manualBankReconciliation": {
-      "title": "Conciliação Manual Bancária",
+      "title": "Conciliação Bancária",
       "subtitle": "Vincule lançamentos bancários a ordens de crédito manualmente.",
       "releasesTitle": "Lançamentos Bancários",
       "ordersTitle": "Ordens de Crédito",
@@ -2974,10 +2970,7 @@
       }
     },
     "dashboard": {
-      "subtitle": "Visão executiva de vendas ERP, adquirente, taxas, banco, débitos e chargebacks.",
       "completed": "Conciliação concluída",
-      "difference": "Diferença",
-      "loadError": "Não foi possível carregar os indicadores. Verifique se o endpoint de conciliação já está disponível.",
       "result": {
         "analyzed": "Analisados",
         "matched": "Conciliados",
@@ -3016,7 +3009,6 @@
       "bank": {
         "cardTitle": "Banco / CNAB",
         "settled": "Liquidado",
-        "pending": "Pendente",
         "completed": "Conciliação bancária concluída",
         "releasesAnalyzed": "Lançamentos analisados",
         "releasesReconciled": "Conciliados",
@@ -3026,8 +3018,6 @@
       },
       "cancellation": {
         "cardTitle": "Reprocessar Cancelamentos ERP",
-        "debitPending": "Débitos pendentes",
-        "chargebackOpen": "Chargebacks abertos",
         "acqCancelled": "ACQ canceladas",
         "erpCancelled": "ERP canceladas",
         "erpInstallments": "Parcelas canceladas",
@@ -3122,41 +3112,6 @@
           "CREDIT_ORDER_BANK_RELEASE": "Ordem só fica elegível quando o resumo já está conciliado com a ordem.",
           "SKIPPED": "Etapa ignorada — nenhum dado a processar ou etapa anterior bloqueada."
         }
-      },
-      "kpi": {
-        "erpSales": "Vendas ERP",
-        "salesCount": "{{ count }} vendas",
-        "acquirerSales": "Vendas adquirente",
-        "chargedFees": "Taxas cobradas",
-        "feeDifference": "Diferença",
-        "bankSettled": "Liquidado no banco",
-        "pendencies": "Pendências",
-        "debitsPendingSubtitle": "Débitos e ajustes a liquidar",
-        "chargebackSubtitle": "Valor em disputa",
-        "divergences": "Divergências",
-        "occurrencesCount": "{{ count }} ocorrências"
-      },
-      "chart": {
-        "erpVsAcquirer": "ERP x Adquirente",
-        "matchedValue": "Valor conciliado",
-        "erpLabel": "ERP",
-        "erpSubtitle": "Total importado do sistema comercial",
-        "acquirerLabel": "Adquirente",
-        "acquirerSubtitle": "Total informado nos arquivos da adquirente",
-        "differenceSubtitle": "Valor ainda não equalizado",
-        "shortcuts": "Atalhos de análise",
-        "shortcutAcquirerSales": "Vendas adquirente",
-        "shortcutErpSales": "Vendas ERP",
-        "shortcutFees": "Taxas",
-        "shortcutDebits": "Débitos",
-        "shortcutChargebacks": "Chargebacks",
-        "shortcutBankSettlement": "Liquidação",
-        "divergencesByType": "Divergências por tipo",
-        "occurrencesCount": "{{ count }} ocorrências",
-        "noDivergences": "Nenhuma divergência encontrada.",
-        "pendingAging": "Aging de pendências",
-        "pendenciesCount": "{{ count }} pendências",
-        "noPendencies": "Nenhuma pendência encontrada."
       }
     },
     "reconciliationActions": {

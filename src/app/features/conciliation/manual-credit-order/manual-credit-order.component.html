@@ -1,11 +1,4 @@
-<cs-page-header
-  [compact]="false"
-  [subtitle]="'conciliation.manualCreditOrder.subtitle' | translate"
-  [breadcrumb]="[
-    { label: ('breadcrumb.dashboard.title' | translate), url: '/' },
-    { label: ('conciliation.manualCreditOrder.title' | translate) },
-  ]"
->
+<div class="flex justify-content-end mb-2">
   <input
     type="file"
     hidden
@@ -23,15 +16,7 @@
     [label]="'conciliation.manualCreditOrder.import.button' | translate"
     (click)="importFileInput.click()"
   ></button>
-  <button
-    pButton
-    type="button"
-    (click)="refresh()"
-    icon="pi pi-refresh"
-    class="p-button-text p-button-sm"
-    [label]="'common.update' | translate"
-  ></button>
-</cs-page-header>
+</div>
 
 <!-- Confirmação da importação: prévia do que será gerado antes de gravar -->
 <p-dialog

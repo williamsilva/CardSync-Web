@@ -1,0 +1,91 @@
+<cs-page-header
+  [compact]="false"
+  [subtitle]="subtitleKey() | translate"
+  [breadcrumb]="[
+    { label: ('breadcrumb.dashboard.title' | translate), url: '/' },
+    { label: ('breadcrumb.conciliation.title' | translate), url: '/conciliation' },
+    { label: 'routes.conciliation.manualTools.title' | translate },
+  ]"
+>
+  @if (isTabAccessible('manualSalesSummary')) {
+    <a
+      pButton
+      [routerLink]="[]"
+      [replaceUrl]="true"
+      queryParamsHandling="merge"
+      [queryParams]="{ view: 'manual-sales-summary' }"
+      icon="pi pi-file-plus"
+      class="p-button-sm"
+      [class.p-button-outlined]="activeTab() !== 'manualSalesSummary'"
+      [label]="'conciliation.manualSalesSummary.title' | translate"
+    ></a>
+  }
+
+  @if (isTabAccessible('manualCreditOrder')) {
+    <a
+      pButton
+      [routerLink]="[]"
+      [replaceUrl]="true"
+      queryParamsHandling="merge"
+      [queryParams]="{ view: 'manual-credit-order' }"
+      icon="pi pi-credit-card"
+      class="p-button-sm"
+      [class.p-button-outlined]="activeTab() !== 'manualCreditOrder'"
+      [label]="'conciliation.manualCreditOrder.title' | translate"
+    ></a>
+  }
+
+  @if (isTabAccessible('manualBankStatement')) {
+    <a
+      pButton
+      [routerLink]="[]"
+      [replaceUrl]="true"
+      queryParamsHandling="merge"
+      [queryParams]="{ view: 'manual-bank-statement' }"
+      icon="pi pi-building-columns"
+      class="p-button-sm"
+      [class.p-button-outlined]="activeTab() !== 'manualBankStatement'"
+      [label]="'conciliation.manualBankStatement.title' | translate"
+    ></a>
+  }
+
+  @if (isTabAccessible('manualBankReconciliation')) {
+    <a
+      pButton
+      [routerLink]="[]"
+      [replaceUrl]="true"
+      queryParamsHandling="merge"
+      [queryParams]="{ view: 'manual-bank-reconciliation' }"
+      icon="pi pi-link"
+      class="p-button-sm"
+      [class.p-button-outlined]="activeTab() !== 'manualBankReconciliation'"
+      [label]="'conciliation.manualBankReconciliation.title' | translate"
+    ></a>
+  }
+
+  @if (canRefreshActiveTab()) {
+    <button
+      pButton
+      type="button"
+      (click)="refresh()"
+      icon="pi pi-refresh"
+      class="p-button-text p-button-sm"
+      [label]="'common.update' | translate"
+    ></button>
+  }
+</cs-page-header>
+
+@switch (activeTab()) {
+  @case ('manualSalesSummary') {
+    <cs-manual-sales-summary />
+  }
+  @case ('manualCreditOrder') {
+    <cs-manual-credit-order />
+  }
+  @case ('manualBankStatement') {
+    <cs-manual-bank-statement />
+  }
+  @case ('manualBankReconciliation') {
+    <cs-manual-bank-reconciliation />
+  }
+}

@@ -74,9 +74,6 @@
       "sales": {
         "title": "Acquirer Sales"
       },
-      "dashboard": {
-        "title": "Reconciliation Dashboard"
-      },
       "erpVsAcquirer": {
         "title": "ERP x Acquirer",
         "missingAcquirer": {
@@ -92,9 +89,6 @@
       "debits": {},
       "chargebacks": {},
       "bankSettlement": {},
-      "aging": {
-        "title": "Pending Aging"
-      },
       "settings": {
         "title": "Reconciliation Settings"
       },
@@ -109,6 +103,9 @@
       },
       "manualBankReconciliation": {
         "title": "Manual Bank Reconciliation"
+      },
+      "manualTools": {
+        "title": "Manual Reconciliation"
       },
       "reconciliationActions": {
         "title": "Reconciliation Actions"
@@ -245,12 +242,10 @@
       "contractAudit": "Applied Fees",
       "sales": "Acquirer sales",
       "title": "Reconciliation",
-      "dashboard": "Dashboard",
       "erpVsAcquirer": "ERP x Acquirer",
       "bankSettlement": "Bank settlement",
       "debits": "Debits",
       "divergences": "Divergences",
-      "aging": "Pending aging",
       "settings": "Settings",
       "erpMissingAcquirer": "Not found in acquirer",
       "acquirerMissingErp": "Not found in ERP",
@@ -259,6 +254,7 @@
       "manualCreditOrder": "Manual Credit Order",
       "manualBankStatement": "Manual Bank Statement",
       "manualBankReconciliation": "Manual Bank Reconciliation",
+      "manualTools": "Manual Reconciliation",
       "reconciliationActions": "Reconciliation Actions",
       "executionHistory": "Execution History"
     },
@@ -2220,7 +2216,7 @@
     },
     "manualSalesSummary": {
       "eyebrow": "Reconciliation",
-      "title": "Manual Sales Summary",
+      "title": "Sales Summary",
       "subtitle": "Manually create a sales summary when the EEVC file is unavailable, allowing credit order reconciliation to proceed.",
       "sectionSummaryRequired": "Sales summary — required data",
       "sectionSummaryOptional": "Sales summary — optional data",
@@ -2285,7 +2281,7 @@
     },
     "manualCreditOrder": {
       "eyebrow": "Reconciliation",
-      "title": "Manual Credit Order",
+      "title": "Credit Order",
       "subtitle": "Search summaries or load pending ones and create payment orders automatically for the next open installment.",
       "searchSection": "Search sales summaries",
       "rvNumber": "RV number",
@@ -2344,7 +2340,7 @@
     },
     "manualBankStatement": {
       "eyebrow": "Reconciliation",
-      "title": "Manual Bank Statement",
+      "title": "Bank Statement",
       "subtitle": "Create a bank statement entry manually for banking domiciles without an imported file.",
       "company": "Company",
       "bankingDomicile": "Banking domicile",
@@ -2365,7 +2361,7 @@
       "saveError": "Could not create bank statement."
     },
     "manualBankReconciliation": {
-      "title": "Manual Bank Reconciliation",
+      "title": "Bank Reconciliation",
       "subtitle": "Manually link bank releases to credit orders.",
       "releasesTitle": "Bank Releases",
       "ordersTitle": "Credit Orders",
@@ -2547,10 +2543,7 @@
       }
     },
     "dashboard": {
-      "subtitle": "Executive view of ERP sales, acquirer, fees, bank, debits and chargebacks.",
       "completed": "Reconciliation completed",
-      "difference": "Difference",
-      "loadError": "Could not load indicators. Check if the reconciliation endpoint is available.",
       "result": {
         "analyzed": "Analyzed",
         "matched": "Reconciled",
@@ -2589,7 +2582,6 @@
       "bank": {
         "cardTitle": "Bank / CNAB",
         "settled": "Settled",
-        "pending": "Pending",
         "completed": "Bank reconciliation completed",
         "releasesAnalyzed": "Releases analyzed",
         "releasesReconciled": "Reconciled",
@@ -2599,8 +2591,6 @@
       },
       "cancellation": {
         "cardTitle": "Reprocess ERP Cancellations",
-        "debitPending": "Pending debits",
-        "chargebackOpen": "Open chargebacks",
         "acqCancelled": "ACQ cancelled",
         "erpCancelled": "ERP cancelled",
         "erpInstallments": "Installments cancelled",
@@ -2695,41 +2685,6 @@
           "CREDIT_ORDER_BANK_RELEASE": "A credit order is only eligible when its linked summary is already reconciled.",
           "SKIPPED": "Step skipped — no data to process or a previous step was blocked."
         }
-      },
-      "kpi": {
-        "erpSales": "ERP Sales",
-        "salesCount": "{{ count }} sales",
-        "acquirerSales": "Acquirer sales",
-        "chargedFees": "Charged fees",
-        "feeDifference": "Difference",
-        "bankSettled": "Bank settled",
-        "pendencies": "Pending",
-        "debitsPendingSubtitle": "Debits and adjustments to settle",
-        "chargebackSubtitle": "Amount in dispute",
-        "divergences": "Divergences",
-        "occurrencesCount": "{{ count }} occurrences"
-      },
-      "chart": {
-        "erpVsAcquirer": "ERP vs Acquirer",
-        "matchedValue": "Reconciled value",
-        "erpLabel": "ERP",
-        "erpSubtitle": "Total imported from commercial system",
-        "acquirerLabel": "Acquirer",
-        "acquirerSubtitle": "Total reported in acquirer files",
-        "differenceSubtitle": "Value not yet equalized",
-        "shortcuts": "Analysis shortcuts",
-        "shortcutAcquirerSales": "Acquirer sales",
-        "shortcutErpSales": "ERP sales",
-        "shortcutFees": "Fees",
-        "shortcutDebits": "Debits",
-        "shortcutChargebacks": "Chargebacks",
-        "shortcutBankSettlement": "Settlement",
-        "divergencesByType": "Divergences by type",
-        "occurrencesCount": "{{ count }} occurrences",
-        "noDivergences": "No divergences found.",
-        "pendingAging": "Pending aging",
-        "pendenciesCount": "{{ count }} pending",
-        "noPendencies": "No pending items found."
       }
     },
     "reconciliationActions": {

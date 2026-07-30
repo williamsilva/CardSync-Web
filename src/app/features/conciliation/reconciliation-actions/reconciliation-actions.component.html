@@ -5,17 +5,7 @@
     { label: ('breadcrumb.dashboard.title' | translate), url: '/' },
     { label: ('routes.conciliation.reconciliationActions.title' | translate) },
   ]"
->
-  <button
-    pButton
-    type="button"
-    (click)="reload()"
-    icon="pi pi-refresh"
-    class="p-button-text p-button-sm"
-    [label]="'common.update' | translate"
-    [disabled]="loading() || anyProcessing()"
-  ></button>
-</cs-page-header>
+></cs-page-header>
 
 <div class="surface-card border-round px-3 pt-2 pb-3 mt-2">
   <div>

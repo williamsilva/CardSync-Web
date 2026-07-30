@@ -26,7 +26,6 @@ import { buildListQuery } from '@shared/features/list-query/list-query.builder';
 import { SaleSummaryAdvancedFilters } from '@features/filter/sale-summary.filters';
 import { CreditOrderApiService } from '@features/service/credit-order.api.service';
 import { ManualCreditOrderFacade } from '@features/facade/manual-credit-order.facade';
-import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
 import { StatusEnum, statusEnumLabel, statusEnumSeverity } from '@models/enums/status.enum';
 import { CsColumnFilterShellComponent } from '@features/list-base/cs-column-filter-shell.component';
 import { CsAdvancedTextFilterComponent } from '@features/list-base/cs-advanced-text-filter.component';
@@ -83,7 +82,6 @@ import {
     CsDocumentPipe,
     CsCurrencyPipe,
     TranslateModule,
-    PageHeaderComponent,
     FiltersPanelComponent,
     CsColumnFilterShellComponent,
     CsAdvancedTextFilterComponent,
@@ -374,7 +372,7 @@ export class ManualCreditOrderComponent
     this.facade.loadPage(query);
   }
 
-  protected override refresh(): void {
+  override refresh(): void {
     this.reloadWithCurrentState();
   }
 

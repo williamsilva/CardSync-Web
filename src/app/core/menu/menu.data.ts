@@ -137,13 +137,6 @@ export const APP_MENU: AppMenuItem[] = [
     children: [
       {
         exact: false,
-        route: '/conciliation/dashboard',
-        labelKey: 'menu.conciliation.dashboard',
-        icon: 'pi pi-chart-line text-purple-400',
-        permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.CONCILIATION.DASHBOARD_VIEW],
-      },
-      {
-        exact: false,
         route: '/conciliation/execution-history',
         labelKey: 'menu.conciliation.executionHistory',
         icon: 'pi pi-history text-purple-400',
@@ -170,31 +163,14 @@ export const APP_MENU: AppMenuItem[] = [
       },
       {
         exact: false,
-        route: '/conciliation/manual-sales-summary',
-        labelKey: 'menu.conciliation.manualSalesSummary',
+        route: '/conciliation/manual',
+        labelKey: 'menu.conciliation.manualTools',
         icon: 'pi pi-file-plus text-purple-400',
-        permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.FILE_PROCESSING.PROCESS],
-      },
-      {
-        exact: false,
-        route: '/conciliation/manual-credit-order',
-        labelKey: 'menu.conciliation.manualCreditOrder',
-        icon: 'pi pi-credit-card text-purple-400',
-        permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.FILE_PROCESSING.PROCESS],
-      },
-      {
-        exact: false,
-        route: '/conciliation/manual-bank-statement',
-        labelKey: 'menu.conciliation.manualBankStatement',
-        icon: 'pi pi-building-columns text-purple-400',
-        permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.FILE_PROCESSING.PROCESS],
-      },
-      {
-        exact: false,
-        route: '/conciliation/manual-bank-reconciliation',
-        labelKey: 'menu.conciliation.manualBankReconciliation',
-        icon: 'pi pi-link text-purple-400',
-        permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.CONCILIATION.MANUAL_BANK_RECONCILIATION],
+        permissions: [
+          PERMISSIONS.SUPPORT,
+          PERMISSIONS.FILE_PROCESSING.PROCESS,
+          PERMISSIONS.CONCILIATION.MANUAL_BANK_RECONCILIATION,
+        ],
       },
       {
         exact: false,
@@ -202,13 +178,6 @@ export const APP_MENU: AppMenuItem[] = [
         labelKey: 'menu.conciliation.contractAudit',
         icon: 'pi pi-percentage text-purple-400',
         permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.CONTRACT_AUDIT.VIEW],
-      },
-      {
-        exact: false,
-        route: '/conciliation/aging',
-        labelKey: 'menu.conciliation.aging',
-        icon: 'pi pi-hourglass text-purple-400',
-        permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.CONCILIATION.DASHBOARD_VIEW],
       },
     ],
   },

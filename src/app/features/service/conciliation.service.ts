@@ -1,4 +1,4 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable, map } from 'rxjs';
 
@@ -10,10 +10,7 @@ import {
   ChargebackAnalysisModel,
   ChargebackAnalysisTotalsModel,
   ChargebackLifecycleModel,
-  ConciliationAgingModel,
-  ConciliationDashboardModel,
   ConciliationFeeAnalysisModel,
-  ConciliationPageQuery,
 } from '@models/conciliation.models';
 import { ListQueryDto } from '@shared/features/list-query/list-query.types';
 
@@ -21,12 +18,6 @@ import { ListQueryDto } from '@shared/features/list-query/list-query.types';
 export class ConciliationService {
   private readonly http = inject(HttpClient);
   private readonly baseUrl = `${environment.bffBaseUrl}/bff/v1/conciliation`;
-
-  getDashboard(): Observable<ConciliationDashboardModel> {
-    return this.http.get<ConciliationDashboardModel>(`${this.baseUrl}/dashboard`, {
-      withCredentials: true,
-    });
-  }
 
   listFees(
     body: ListQueryDto<Record<string, unknown>>,
@@ -70,13 +61,6 @@ export class ConciliationService {
     );
   }
 
-  listAging(query: ConciliationPageQuery = {}): Observable<ConciliationAgingModel[]> {
-    return this.http.get<ConciliationAgingModel[]>(`${this.baseUrl}/aging`, {
-      params: this.toParams(query),
-      withCredentials: true,
-    });
-  }
-
   private normalizePage<T>(response: HalPagedResponse<T> | PageResponse<T>): PageResponse<T> {
     if ('content' in response) {
       return response;
@@ -99,17 +83,5 @@ export class ConciliationService {
       numberOfElements: content.length,
       empty: content.length === 0,
     };
-  }
-
-  private toParams(query: ConciliationPageQuery): HttpParams {
-    let params = new HttpParams();
-
-    Object.entries(query).forEach(([key, value]) => {
-      if (value !== undefined && value !== null && value !== '') {
-        params = params.set(key, String(value));
-      }
-    });
-
-    return params;
   }
 }
