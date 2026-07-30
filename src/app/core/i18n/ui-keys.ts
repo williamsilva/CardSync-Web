@@ -1042,6 +1042,7 @@ export const UI_KEYS = {
         itau: 'fileProcessing.upload.systems.itau',
         santander: 'fileProcessing.upload.systems.santander',
         bradesco: 'fileProcessing.upload.systems.bradesco',
+        sicredi: 'fileProcessing.upload.systems.sicredi',
       },
       dropLabel: 'fileProcessing.upload.dropLabel',
       dropHint: 'fileProcessing.upload.dropHint',

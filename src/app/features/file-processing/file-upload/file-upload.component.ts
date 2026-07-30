@@ -61,6 +61,7 @@ export class FileUploadComponent {
       { value: 'itau', label: this.i18n.tUi('fileProcessing.upload.systems.itau') },
       { value: 'santander', label: this.i18n.tUi('fileProcessing.upload.systems.santander') },
       { value: 'bradesco', label: this.i18n.tUi('fileProcessing.upload.systems.bradesco') },
+      { value: 'sicredi', label: this.i18n.tUi('fileProcessing.upload.systems.sicredi') },
     ];
   });
 

@@ -354,7 +354,7 @@ export interface ReconciliationExecutionLogModel {
   steps?: FinancialReconciliationStepResultModel[] | null;
 }
 
-export type FileUploadSystem = 'erp' | 'rede' | 'itau' | 'santander' | 'bradesco';
+export type FileUploadSystem = 'erp' | 'rede' | 'itau' | 'santander' | 'bradesco' | 'sicredi';
 
 export interface FileUploadItemResultModel {
   fileName: string | null;

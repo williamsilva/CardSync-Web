@@ -3449,7 +3449,8 @@
         "rede": "Rede acquirer",
         "itau": "Itaú bank",
         "santander": "Santander bank",
-        "bradesco": "Bradesco bank"
+        "bradesco": "Bradesco bank",
+        "sicredi": "Sicredi bank"
       },
       "dropLabel": "Click or drag files here",
       "dropHint": "Accepts one or more files at a time.",

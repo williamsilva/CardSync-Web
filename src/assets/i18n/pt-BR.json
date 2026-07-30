@@ -3417,7 +3417,8 @@
         "rede": "Adquirente Rede",
         "itau": "Banco Itaú",
         "santander": "Banco Santander",
-        "bradesco": "Banco Bradesco"
+        "bradesco": "Banco Bradesco",
+        "sicredi": "Banco Sicredi"
       },
       "dropLabel": "Clique ou arraste os arquivos aqui",
       "dropHint": "Aceita um ou mais arquivos por vez.",
