@@ -992,8 +992,8 @@
         <td class="text-center">
           @if (row.statusPaymentBank) {
             <cs-tag
-              [tone]="statusPaymentBankSeverity(row.statusPaymentBank)"
               [value]="statusPaymentBankLabel(row.statusPaymentBank)"
+              [tone]="statusPaymentBankSeverity(row.statusPaymentBank)"
             ></cs-tag>
           }
         </td>
@@ -1015,9 +1015,9 @@
               icon="pi pi-undo"
               tooltipPosition="top"
               (click)="confirmUndoReconciliation(row)"
+              class="p-button-text p-button-sm p-button-rounded p-button-warn"
               [disabled]="row.statusPaymentBank !== StatusPaymentBankEnum.PAID"
               [pTooltip]="'bankStatement.undoReconciliation.action' | translate"
-              class="p-button-text p-button-sm p-button-rounded p-button-warn"
             ></button>
 
             @if (row.processedFile === null) {

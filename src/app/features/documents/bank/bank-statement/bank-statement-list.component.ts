@@ -1,18 +1,17 @@
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-
 import { AfterViewInit, Component, computed, inject, signal, ViewChild } from '@angular/core';
 
 import { MenuModule } from 'primeng/menu';
 import { SelectModule } from 'primeng/select';
 import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
-import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { Table, TableModule } from 'primeng/table';
 import { InputTextModule } from 'primeng/inputtext';
 import { DatePickerModule } from 'primeng/datepicker';
 import { TranslateModule } from '@ngx-translate/core';
 import { MultiSelectModule } from 'primeng/multiselect';
+import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { ConfirmationService, MenuItem, MessageService } from 'primeng/api';
 
 import { CsTagTone, CsTagComponent } from '@shared/ui';
@@ -31,9 +30,9 @@ import { EstablishmentFacade } from '@features/facade/establishment.facade';
 import { BankStatementFacade } from '@features/facade/bank-statement.facade';
 import { buildListQuery } from '@shared/features/list-query/list-query.builder';
 import { allPeriodEnum, PeriodEnum, periodEnumLabel } from '@models/enums/period.enum';
-import { StatusEnum, statusEnumLabel, statusEnumSeverity } from '@models/enums/status.enum';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
 import { createEmptyCreditOrderFiltersState } from '@features/filter/credit-order.filters';
+import { StatusEnum, statusEnumLabel, statusEnumSeverity } from '@models/enums/status.enum';
 import { CsColumnFilterShellComponent } from '@features/list-base/cs-column-filter-shell.component';
 import { ManualBankReconciliationApiService } from '@features/service/manual-bank-reconciliation.api.service';
 import { CsAdvancedPeriodDateFilterComponent } from '@features/list-base/cs-advanced-period-date-filter.component';
@@ -94,18 +93,18 @@ import {
     CsDocumentPipe,
     CsTagComponent,
     InputTextModule,
-    ToggleSwitchModule,
     TranslateModule,
     DatePickerModule,
     MultiSelectModule,
+    ToggleSwitchModule,
     PageHeaderComponent,
     FiltersPanelComponent,
     CsColumnFilterShellComponent,
     CsCurrencyRangeFilterComponent,
     CsAdvancedPeriodDateFilterComponent,
     CsAdvancedMultiselectFilterComponent,
-    CsAdvancedFilterItemTemplateDirective
-],
+    CsAdvancedFilterItemTemplateDirective,
+  ],
 })
 export class BankStatementListComponent
   extends StatefulListPage<BankStatementFiltersState, BankStatementAdvancedFilters>
@@ -663,11 +662,10 @@ export class BankStatementListComponent
     return `Ag. ${agency} Cc. ${account}`;
   }
 
-  protected formatHistoric(domicile: BankStatementModel): string {
-    if (domicile) {
-      return `${domicile?.historicalCodeBank} - ${domicile?.descriptionHistoricalBank} `;
-    }
-    return ``;
+  protected formatHistoric(row: BankStatementModel): string {
+    if (!row) return '';
+    const description = row.descriptionHistoricalBank ?? '';
+    return row.historicalCodeBank ? `${row.historicalCodeBank} - ${description}` : description;
   }
 
   protected searchActions(row: BankStatementModel): MenuItem[] {
