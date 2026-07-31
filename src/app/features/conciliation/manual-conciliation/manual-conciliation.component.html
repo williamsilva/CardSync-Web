@@ -49,6 +49,20 @@
     ></a>
   }
 
+  @if (isTabAccessible('manualAdjustment')) {
+    <a
+      pButton
+      [routerLink]="[]"
+      [replaceUrl]="true"
+      queryParamsHandling="merge"
+      [queryParams]="{ view: 'manual-adjustment' }"
+      icon="pi pi-sliders-h"
+      class="p-button-sm"
+      [class.p-button-outlined]="activeTab() !== 'manualAdjustment'"
+      [label]="'conciliation.manualAdjustment.title' | translate"
+    ></a>
+  }
+
   @if (isTabAccessible('manualBankReconciliation')) {
     <a
       pButton
@@ -84,6 +98,9 @@
   }
   @case ('manualBankStatement') {
     <cs-manual-bank-statement />
+  }
+  @case ('manualAdjustment') {
+    <cs-manual-adjustment />
   }
   @case ('manualBankReconciliation') {
     <cs-manual-bank-reconciliation />

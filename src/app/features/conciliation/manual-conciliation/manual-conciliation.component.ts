@@ -8,6 +8,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { PERMISSIONS } from '@core/auth/permissions.constants';
 import { PermissionService } from '@core/auth/permission.service';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
+import { ManualAdjustmentComponent } from '../manual-adjustment/manual-adjustment.component';
 import { ManualCreditOrderComponent } from '../manual-credit-order/manual-credit-order.component';
 import { ManualSalesSummaryComponent } from '../manual-sales-summary/manual-sales-summary.component';
 import { ManualBankStatementComponent } from '../manual-bank-statement/manual-bank-statement.component';
@@ -17,12 +18,14 @@ type ManualConciliationTab =
   | 'manualSalesSummary'
   | 'manualCreditOrder'
   | 'manualBankStatement'
+  | 'manualAdjustment'
   | 'manualBankReconciliation';
 
 const TAB_ORDER: ManualConciliationTab[] = [
   'manualSalesSummary',
   'manualCreditOrder',
   'manualBankStatement',
+  'manualAdjustment',
   'manualBankReconciliation',
 ];
 
@@ -30,6 +33,7 @@ const TAB_BY_VIEW_QUERY_PARAM: Record<string, ManualConciliationTab> = {
   'manual-sales-summary': 'manualSalesSummary',
   'manual-credit-order': 'manualCreditOrder',
   'manual-bank-statement': 'manualBankStatement',
+  'manual-adjustment': 'manualAdjustment',
   'manual-bank-reconciliation': 'manualBankReconciliation',
 };
 
@@ -42,6 +46,7 @@ const TAB_BY_VIEW_QUERY_PARAM: Record<string, ManualConciliationTab> = {
     ButtonModule,
     TranslateModule,
     PageHeaderComponent,
+    ManualAdjustmentComponent,
     ManualCreditOrderComponent,
     ManualSalesSummaryComponent,
     ManualBankStatementComponent,
@@ -74,6 +79,8 @@ export class ManualConciliationComponent {
         return 'conciliation.manualCreditOrder.subtitle';
       case 'manualBankStatement':
         return 'conciliation.manualBankStatement.subtitle';
+      case 'manualAdjustment':
+        return 'conciliation.manualAdjustment.subtitle';
       case 'manualBankReconciliation':
         return 'conciliation.manualBankReconciliation.subtitle';
       default:

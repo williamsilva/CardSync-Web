@@ -103,6 +103,7 @@ export class ManualSalesSummaryComponent implements OnInit {
   protected readonly csvParsing = signal(false);
   protected readonly csvSubmitting = signal(false);
   protected readonly csvGroups = signal<CsvSummaryGroup[]>([]);
+  protected readonly csvFileCount = signal(0);
   protected readonly csvAcquirerId = signal<string | null>(null);
 
   protected readonly loadingOptions = computed(
@@ -252,35 +253,55 @@ export class ManualSalesSummaryComponent implements OnInit {
     this.importMode.set(mode);
   }
 
-  protected onFileSelected(event: Event): void {
+  protected async onFileSelected(event: Event): Promise<void> {
     const input = event.target as HTMLInputElement;
-    const file = input.files?.[0];
-    if (!file) return;
+    const files = Array.from(input.files ?? []);
+    if (!files.length) return;
 
     this.csvParsing.set(true);
     this.csvGroups.set([]);
+    this.csvFileCount.set(0);
 
-    const reader = new FileReader();
-    reader.onload = (e) => {
+    const groupMap = new Map<string, CsvSummaryGroup>();
+    let parsedCount = 0;
+
+    for (const file of files) {
       try {
-        const text = e.target?.result as string;
-        this.csvGroups.set(this.parseCsvToGroups(text));
-      } finally {
-        this.csvParsing.set(false);
+        const text = await this.readFileAsText(file);
+        this.mergeCsvIntoGroups(text, groupMap);
+        parsedCount++;
+      } catch {
+        this.toast.add({
+          severity: 'warn',
+          summary: this.i18n.tUi('conciliation.manualSalesSummary.csv.fileErrorTitle'),
+          detail: this.i18n.tUi('conciliation.manualSalesSummary.csv.fileErrorDetail', {
+            fileName: file.name,
+          }),
+        });
       }
-    };
-    reader.readAsText(file, 'ISO-8859-1');
+    }
+
+    this.csvGroups.set(Array.from(groupMap.values()));
+    this.csvFileCount.set(parsedCount);
+    this.csvParsing.set(false);
     input.value = '';
   }
 
-  private parseCsvToGroups(csv: string): CsvSummaryGroup[] {
+  private readFileAsText(file: File): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (e) => resolve(e.target?.result as string);
+      reader.onerror = () => reject(reader.error);
+      reader.readAsText(file, 'ISO-8859-1');
+    });
+  }
+
+  private mergeCsvIntoGroups(csv: string, groupMap: Map<string, CsvSummaryGroup>): void {
     const lines = csv
       .split('\n')
       .map((l) => l.trim())
       .filter(Boolean);
-    if (lines.length < 2) return [];
-
-    const groupMap = new Map<string, CsvSummaryGroup>();
+    if (lines.length < 2) return;
 
     for (let i = 1; i < lines.length; i++) {
       const cols = lines[i].split(';');
@@ -353,8 +374,6 @@ export class ManualSalesSummaryComponent implements OnInit {
         });
       }
     }
-
-    return Array.from(groupMap.values());
   }
 
   private parseBrDate(s: string): Date | null {

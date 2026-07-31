@@ -702,6 +702,8 @@ export const UI_KEYS = {
       saved: 'conciliation.manualSalesSummary.saved',
       csv: {
         importSuccess: 'conciliation.manualSalesSummary.csv.importSuccess',
+        fileErrorTitle: 'conciliation.manualSalesSummary.csv.fileErrorTitle',
+        fileErrorDetail: 'conciliation.manualSalesSummary.csv.fileErrorDetail',
       },
     },
     manualCreditOrder: {
@@ -713,6 +715,16 @@ export const UI_KEYS = {
     manualBankStatement: {
       saved: 'conciliation.manualBankStatement.saved',
       saveError: 'conciliation.manualBankStatement.saveError',
+    },
+    manualAdjustment: {
+      saved: 'conciliation.manualAdjustment.saved',
+      debitTypeDebit: 'conciliation.manualAdjustment.debitTypeDebit',
+      debitTypeCredit: 'conciliation.manualAdjustment.debitTypeCredit',
+      csv: {
+        importSuccess: 'conciliation.manualAdjustment.csv.importSuccess',
+        fileErrorTitle: 'conciliation.manualAdjustment.csv.fileErrorTitle',
+        fileErrorDetail: 'conciliation.manualAdjustment.csv.fileErrorDetail',
+      },
     },
     manualBankReconciliation: {
       reclassifyFlags: 'conciliation.manualBankReconciliation.reclassifyFlags',

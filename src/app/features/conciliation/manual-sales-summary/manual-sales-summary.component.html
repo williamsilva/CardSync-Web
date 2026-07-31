@@ -86,6 +86,7 @@
         }}</span>
         <input
           type="file"
+          multiple
           accept=".csv"
           #csvFileInput
           id="csvFileInput"
@@ -98,6 +99,16 @@
         <div class="cs-csv-parsing">
           <i class="pi pi-spin pi-spinner"></i>
           <span>{{ 'conciliation.manualSalesSummary.csv.parsing' | translate }}</span>
+        </div>
+      }
+
+      @if (!csvParsing() && csvFileCount() > 0) {
+        <div class="cs-csv-parsing">
+          <i class="pi pi-check-circle"></i>
+          <span>{{
+            'conciliation.manualSalesSummary.csv.filesProcessed'
+              | translate: { count: csvFileCount() }
+          }}</span>
         </div>
       }
 

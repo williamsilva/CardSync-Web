@@ -1,0 +1,606 @@
+<p-card>
+  <!-- Mode toggle -->
+  <div class="flex gap-2 mb-3">
+    <p-button
+      type="button"
+      icon="pi pi-upload"
+      [outlined]="importMode() !== 'csv'"
+      (onClick)="setImportMode('csv')"
+      [label]="'conciliation.manualAdjustment.modeCsv' | translate"
+    ></p-button>
+
+    <p-button
+      type="button"
+      icon="pi pi-pencil"
+      [outlined]="importMode() !== 'manual'"
+      (onClick)="setImportMode('manual')"
+      [label]="'conciliation.manualAdjustment.modeManual' | translate"
+    ></p-button>
+  </div>
+
+  <p-divider></p-divider>
+
+  <!-- ── CSV import mode ── -->
+  @if (importMode() === 'csv') {
+    <div class="cs-csv-section">
+      <div class="flex align-items-center gap-2 mb-2">
+        <span class="text-base font-semibold">
+          {{ 'conciliation.manualAdjustment.csv.sectionConfig' | translate }}
+        </span>
+      </div>
+
+      <div class="grid formgrid gap-0">
+        <div class="col-12 md:col-4 p-2">
+          <p-floatLabel variant="on" class="w-full">
+            <p-select
+              size="small"
+              class="w-full"
+              appendTo="body"
+              [filter]="true"
+              filterBy="label"
+              [showClear]="true"
+              optionLabel="label"
+              optionValue="value"
+              inputId="csvAcquirerId"
+              [loading]="loadingOptions()"
+              [options]="acquirerOptions()"
+              [(ngModel)]="csvAcquirerIdValue"
+            >
+              <ng-template let-option pTemplate="item">
+                <div class="cs-option-item">
+                  <div class="cs-option-item__label">{{ option.label }}</div>
+                  <div class="cs-option-item__subtext">
+                    {{ 'common.registrationNumber' | translate }}: {{ option.cnpj | csDocument }}
+                  </div>
+                  <div class="cs-option-item__subtext">
+                    <cs-tag
+                      [tone]="statusEnumSeverity(option.status)"
+                      [value]="
+                        ('common.status' | translate) + ': ' + statusEnumLabel(option.status)
+                      "
+                    />
+                  </div>
+                </div>
+              </ng-template>
+            </p-select>
+            <label for="csvAcquirerId">
+              {{ 'conciliation.manualAdjustment.acquirer' | translate }}
+            </label>
+          </p-floatLabel>
+        </div>
+      </div>
+
+      <label
+        tabindex="0"
+        role="button"
+        for="csvFileInput"
+        class="cs-file-zone"
+        (keydown.enter)="csvFileInput.click()"
+      >
+        <i class="pi pi-upload cs-file-zone__icon"></i>
+        <span class="cs-file-zone__label">{{
+          'conciliation.manualAdjustment.csv.fileLabel' | translate
+        }}</span>
+        <span class="cs-file-zone__hint">{{
+          'conciliation.manualAdjustment.csv.fileHint' | translate
+        }}</span>
+        <input
+          type="file"
+          multiple
+          accept=".csv"
+          #csvFileInput
+          id="csvFileInput"
+          class="cs-file-zone__input"
+          (change)="onFileSelected($event)"
+        />
+      </label>
+
+      @if (csvParsing()) {
+        <div class="cs-csv-parsing">
+          <i class="pi pi-spin pi-spinner"></i>
+          <span>{{ 'conciliation.manualAdjustment.csv.parsing' | translate }}</span>
+        </div>
+      }
+
+      @if (!csvParsing() && csvFileCount() > 0) {
+        <div class="cs-csv-parsing">
+          <i class="pi pi-check-circle"></i>
+          <span>{{
+            'conciliation.manualAdjustment.csv.filesProcessed'
+              | translate: { count: csvFileCount() }
+          }}</span>
+        </div>
+      }
+
+      @if (!csvParsing() && csvRows().length === 0) {
+        <div class="cs-csv-empty">
+          <i class="pi pi-file-excel"></i>
+          <span>{{ 'conciliation.manualAdjustment.csv.noData' | translate }}</span>
+        </div>
+      }
+
+      @if (csvRows().length > 0) {
+        <div class="cs-section-header cs-section-header--table">
+          <p class="cs-section-label">
+            {{ 'conciliation.manualAdjustment.csv.preview' | translate }}
+            ({{ csvRows().length }})
+          </p>
+        </div>
+
+        <div class="cs-csv-table-wrap">
+          <table class="cs-csv-table">
+            <thead>
+              <tr>
+                <th>{{ 'conciliation.manualAdjustment.csv.colDate' | translate }}</th>
+                <th>{{ 'conciliation.manualAdjustment.csv.colEstablishment' | translate }}</th>
+                <th>{{ 'conciliation.manualAdjustment.csv.colRv' | translate }}</th>
+                <th>{{ 'conciliation.manualAdjustment.csv.colType' | translate }}</th>
+                <th>{{ 'conciliation.manualAdjustment.csv.colReason' | translate }}</th>
+                <th class="cs-csv-table__num">
+                  {{ 'conciliation.manualAdjustment.csv.colValue' | translate }}
+                </th>
+                <th>{{ 'conciliation.manualAdjustment.csv.colStatus' | translate }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (row of csvRows(); track row.key) {
+                <tr
+                  [class.cs-csv-table__row--success]="row.submitStatus === 'success'"
+                  [class.cs-csv-table__row--error]="row.submitStatus === 'error'"
+                >
+                  <td>{{ formatDisplayDate(row.adjustmentDate) }}</td>
+                  <td>
+                    <span class="cs-csv-table__pv">{{ row.pvNumber }}</span>
+                    @if (row.establishmentName && row.establishmentName !== row.pvNumber.toString()) {
+                      <span class="cs-csv-table__est-name">{{ row.establishmentName }}</span>
+                    }
+                  </td>
+                  <td>{{ row.rvNumberOriginal }}</td>
+                  <td>{{ row.debitType || '-' }}</td>
+                  <td>
+                    <span
+                      tooltipPosition="top"
+                      [pTooltip]="row.adjustmentDescription || ''"
+                    >
+                      {{ row.adjustmentDescription || '-' }}
+                    </span>
+                  </td>
+                  <td class="cs-csv-table__num">{{ formatCurrency(row.adjustmentValue) }}</td>
+                  <td>
+                    @switch (row.submitStatus) {
+                      @case ('pending') {
+                        <span class="cs-csv-status cs-csv-status--pending">
+                          <i class="pi pi-clock"></i>
+                          {{ 'conciliation.manualAdjustment.csv.statusPending' | translate }}
+                        </span>
+                      }
+                      @case ('submitting') {
+                        <span class="cs-csv-status cs-csv-status--submitting">
+                          <i class="pi pi-spin pi-spinner"></i>
+                          {{ 'conciliation.manualAdjustment.csv.statusSubmitting' | translate }}
+                        </span>
+                      }
+                      @case ('success') {
+                        <span class="cs-csv-status cs-csv-status--success">
+                          <i class="pi pi-check-circle"></i>
+                          {{ 'conciliation.manualAdjustment.csv.statusSuccess' | translate }}
+                        </span>
+                      }
+                      @case ('error') {
+                        <span class="cs-csv-status cs-csv-status--error">
+                          <i class="pi pi-times-circle"></i>
+                          {{ 'conciliation.manualAdjustment.csv.statusError' | translate }}
+                        </span>
+                      }
+                    }
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+
+        <div class="flex justify-content-end gap-2 mt-3">
+          @if (csvHasErrors()) {
+            <p-button
+              type="button"
+              severity="warn"
+              icon="pi pi-refresh"
+              [disabled]="csvSubmitting()"
+              [label]="'conciliation.manualAdjustment.csv.retryFailed' | translate"
+              (onClick)="retryFailedCsv()"
+            ></p-button>
+          }
+          <p-button
+            type="button"
+            icon="pi pi-upload"
+            [loading]="csvSubmitting()"
+            [disabled]="!csvAcquirerIdValue || csvPendingCount() === 0 || csvSubmitting()"
+            [label]="'conciliation.manualAdjustment.csv.submit' | translate"
+            (onClick)="submitCsv()"
+          ></p-button>
+        </div>
+      }
+    </div>
+  }
+
+  <!-- ── Manual entry mode ── -->
+  @if (importMode() === 'manual') {
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <!-- Dados obrigatórios -->
+      <div class="flex align-items-center gap-2 mb-2">
+        <span class="text-base font-semibold">
+          {{ 'conciliation.manualAdjustment.sectionRequired' | translate }}
+        </span>
+      </div>
+
+      <div class="grid formgrid gap-0">
+        <div class="col-12 md:col-3 p-2">
+          <p-floatLabel variant="on" class="w-full">
+            <p-select
+              size="small"
+              class="w-full"
+              appendTo="body"
+              [filter]="true"
+              filterBy="label"
+              [showClear]="true"
+              optionLabel="label"
+              optionValue="value"
+              inputId="establishmentId"
+              [loading]="loadingOptions()"
+              formControlName="establishmentId"
+              [options]="establishmentOptions()"
+            >
+              <ng-template let-option pTemplate="item">
+                <div class="cs-option-item">
+                  <div class="cs-option-item__label">{{ option.pvNumber }}</div>
+                  <div class="cs-option-item__subtext">
+                    {{ 'common.company' | translate }}: {{ option.companyName }}
+                  </div>
+                  <div class="cs-option-item__subtext">
+                    {{ 'common.registrationNumber' | translate }}: {{ option.cnpj | csDocument }}
+                  </div>
+                  <div class="cs-option-item__subtext">
+                    <cs-tag
+                      [tone]="statusEnumSeverity(option.status)"
+                      [value]="
+                        ('common.status' | translate) + ': ' + statusEnumLabel(option.status)
+                      "
+                    />
+                  </div>
+                </div>
+              </ng-template>
+            </p-select>
+            <label for="establishmentId">
+              {{ 'conciliation.manualAdjustment.establishment' | translate }}
+            </label>
+          </p-floatLabel>
+        </div>
+
+        <div class="col-12 md:col-3 p-2">
+          <p-floatLabel variant="on" class="w-full">
+            <p-select
+              size="small"
+              class="w-full"
+              appendTo="body"
+              [filter]="true"
+              filterBy="label"
+              [showClear]="true"
+              optionLabel="label"
+              optionValue="value"
+              inputId="acquirerId"
+              [loading]="loadingOptions()"
+              formControlName="acquirerId"
+              [options]="acquirerOptions()"
+            >
+              <ng-template let-option pTemplate="item">
+                <div class="cs-option-item">
+                  <div class="cs-option-item__label">{{ option.label }}</div>
+                  <div class="cs-option-item__subtext">
+                    {{ 'common.registrationNumber' | translate }}: {{ option.cnpj | csDocument }}
+                  </div>
+                  <div class="cs-option-item__subtext">
+                    <cs-tag
+                      [tone]="statusEnumSeverity(option.status)"
+                      [value]="
+                        ('common.status' | translate) + ': ' + statusEnumLabel(option.status)
+                      "
+                    />
+                  </div>
+                </div>
+              </ng-template>
+            </p-select>
+            <label for="acquirerId">
+              {{ 'conciliation.manualAdjustment.acquirer' | translate }}
+            </label>
+          </p-floatLabel>
+        </div>
+
+        <div class="col-12 md:col-2 p-2">
+          <p-floatLabel variant="on" class="w-full">
+            <p-inputnumber
+              class="w-full"
+              inputId="rvNumberOriginal"
+              [allowEmpty]="false"
+              [showButtons]="false"
+              [useGrouping]="false"
+              formControlName="rvNumberOriginal"
+              inputStyleClass="w-full p-inputtext-sm"
+            ></p-inputnumber>
+            <label for="rvNumberOriginal">
+              {{ 'conciliation.manualAdjustment.rvNumberOriginal' | translate }}
+            </label>
+          </p-floatLabel>
+        </div>
+
+        <div class="col-12 md:col-2 p-2">
+          <p-floatLabel variant="on" class="w-full">
+            <p-datepicker
+              appendTo="body"
+              inputId="adjustmentDate"
+              [showIcon]="true"
+              dateFormat="dd/mm/yy"
+              class="w-full"
+              formControlName="adjustmentDate"
+              inputStyleClass="p-inputtext-sm"
+            ></p-datepicker>
+            <label for="adjustmentDate">
+              {{ 'conciliation.manualAdjustment.adjustmentDate' | translate }}
+            </label>
+          </p-floatLabel>
+        </div>
+
+        <div class="col-12 md:col-2 p-2">
+          <p-floatLabel variant="on" class="w-full">
+            <p-inputnumber
+              class="w-full"
+              mode="decimal"
+              locale="pt-BR"
+              inputId="adjustmentValue"
+              [minFractionDigits]="2"
+              [maxFractionDigits]="2"
+              formControlName="adjustmentValue"
+              inputStyleClass="w-full p-inputtext-sm"
+            ></p-inputnumber>
+            <label for="adjustmentValue">
+              {{ 'conciliation.manualAdjustment.adjustmentValue' | translate }}
+            </label>
+          </p-floatLabel>
+        </div>
+      </div>
+
+      <p-divider></p-divider>
+
+      <!-- Dados opcionais -->
+      <div class="flex align-items-center gap-2 mb-2">
+        <span class="text-base font-semibold">
+          {{ 'conciliation.manualAdjustment.sectionOptional' | translate }}
+        </span>
+      </div>
+
+      <div class="grid formgrid gap-0">
+        <div class="col-12 md:col-4 p-2">
+          <p-floatLabel variant="on" class="w-full">
+            <p-select
+              size="small"
+              class="w-full"
+              appendTo="body"
+              [filter]="true"
+              filterBy="label"
+              [showClear]="true"
+              optionLabel="label"
+              optionValue="value"
+              inputId="companyId"
+              [options]="companyOptions()"
+              [loading]="loadingOptions()"
+              formControlName="companyId"
+            >
+              <ng-template let-option pTemplate="item">
+                <div class="cs-option-item">
+                  <div class="cs-option-item__label">{{ option.label }}</div>
+                  <div class="cs-option-item__subtext">
+                    {{ 'common.registrationNumber' | translate }}: {{ option.cnpj | csDocument }}
+                  </div>
+                  <div class="cs-option-item__subtext">
+                    <cs-tag
+                      [tone]="statusEnumSeverity(option.status)"
+                      [value]="
+                        ('common.status' | translate) + ': ' + statusEnumLabel(option.status)
+                      "
+                    />
+                  </div>
+                </div>
+              </ng-template>
+            </p-select>
+            <label for="companyId">
+              {{ 'conciliation.manualAdjustment.company' | translate }}
+            </label>
+          </p-floatLabel>
+        </div>
+
+        <div class="col-12 md:col-2 p-2">
+          <p-floatLabel variant="on" class="w-full">
+            <p-inputnumber
+              class="w-full"
+              inputId="pvNumberOriginal"
+              [showButtons]="false"
+              [useGrouping]="false"
+              formControlName="pvNumberOriginal"
+              inputStyleClass="w-full p-inputtext-sm"
+            ></p-inputnumber>
+            <label for="pvNumberOriginal">
+              {{ 'conciliation.manualAdjustment.pvNumberOriginal' | translate }}
+            </label>
+          </p-floatLabel>
+        </div>
+
+        <div class="col-12 md:col-2 p-2">
+          <p-floatLabel variant="on" class="w-full">
+            <p-datepicker
+              appendTo="body"
+              inputId="creditDate"
+              [showIcon]="true"
+              dateFormat="dd/mm/yy"
+              class="w-full"
+              formControlName="creditDate"
+              inputStyleClass="p-inputtext-sm"
+            ></p-datepicker>
+            <label for="creditDate">
+              {{ 'conciliation.manualAdjustment.creditDate' | translate }}
+            </label>
+          </p-floatLabel>
+        </div>
+
+        <div class="col-12 md:col-2 p-2">
+          <p-floatLabel variant="on" class="w-full">
+            <p-select
+              size="small"
+              class="w-full"
+              appendTo="body"
+              [showClear]="true"
+              optionLabel="label"
+              optionValue="value"
+              inputId="debitType"
+              [options]="debitTypeOptions()"
+              formControlName="debitType"
+            ></p-select>
+            <label for="debitType">
+              {{ 'conciliation.manualAdjustment.debitType' | translate }}
+            </label>
+          </p-floatLabel>
+        </div>
+
+        <div class="col-12 md:col-2 p-2">
+          <p-floatLabel variant="on" class="w-full">
+            <p-select
+              size="small"
+              class="w-full"
+              appendTo="body"
+              [filter]="true"
+              filterBy="label"
+              [showClear]="true"
+              optionLabel="label"
+              optionValue="value"
+              inputId="flagId"
+              [loading]="loadingOptions()"
+              [options]="flagOptions()"
+              formControlName="flagId"
+            ></p-select>
+            <label for="flagId">
+              {{ 'conciliation.manualAdjustment.flag' | translate }}
+            </label>
+          </p-floatLabel>
+        </div>
+
+        <div class="col-12 md:col-4 p-2">
+          <p-floatLabel variant="on" class="w-full">
+            <input
+              pInputText
+              type="text"
+              id="adjustmentType"
+              class="w-full p-inputtext-sm"
+              formControlName="adjustmentType"
+            />
+            <label for="adjustmentType">
+              {{ 'conciliation.manualAdjustment.adjustmentType' | translate }}
+            </label>
+          </p-floatLabel>
+        </div>
+
+        <div class="col-12 md:col-4 p-2">
+          <p-floatLabel variant="on" class="w-full">
+            <input
+              pInputText
+              type="text"
+              id="adjustmentDescription"
+              class="w-full p-inputtext-sm"
+              formControlName="adjustmentDescription"
+            />
+            <label for="adjustmentDescription">
+              {{ 'conciliation.manualAdjustment.adjustmentDescription' | translate }}
+            </label>
+          </p-floatLabel>
+        </div>
+
+        <div class="col-12 md:col-4 p-2">
+          <p-floatLabel variant="on" class="w-full">
+            <input
+              pInputText
+              type="text"
+              id="rawAdjustmentCode"
+              class="w-full p-inputtext-sm"
+              formControlName="rawAdjustmentCode"
+            />
+            <label for="rawAdjustmentCode">
+              {{ 'conciliation.manualAdjustment.rawAdjustmentCode' | translate }}
+            </label>
+          </p-floatLabel>
+        </div>
+
+        <div class="col-12 md:col-2 p-2">
+          <p-floatLabel variant="on" class="w-full">
+            <p-inputnumber
+              class="w-full"
+              mode="decimal"
+              locale="pt-BR"
+              [minFractionDigits]="2"
+              [maxFractionDigits]="2"
+              inputId="transactionValue"
+              formControlName="transactionValue"
+              inputStyleClass="w-full p-inputtext-sm"
+            ></p-inputnumber>
+            <label for="transactionValue">
+              {{ 'conciliation.manualAdjustment.transactionValue' | translate }}
+            </label>
+          </p-floatLabel>
+        </div>
+
+        <div class="col-12 md:col-2 p-2">
+          <p-floatLabel variant="on" class="w-full">
+            <p-inputnumber
+              class="w-full"
+              mode="decimal"
+              locale="pt-BR"
+              [minFractionDigits]="2"
+              [maxFractionDigits]="2"
+              inputId="totalDebitValue"
+              formControlName="totalDebitValue"
+              inputStyleClass="w-full p-inputtext-sm"
+            ></p-inputnumber>
+            <label for="totalDebitValue">
+              {{ 'conciliation.manualAdjustment.totalDebitValue' | translate }}
+            </label>
+          </p-floatLabel>
+        </div>
+
+        <div class="col-12 md:col-2 p-2">
+          <p-floatLabel variant="on" class="w-full">
+            <p-inputnumber
+              class="w-full"
+              mode="decimal"
+              locale="pt-BR"
+              [minFractionDigits]="2"
+              [maxFractionDigits]="2"
+              inputId="pendingValue"
+              formControlName="pendingValue"
+              inputStyleClass="w-full p-inputtext-sm"
+            ></p-inputnumber>
+            <label for="pendingValue">
+              {{ 'conciliation.manualAdjustment.pendingValue' | translate }}
+            </label>
+          </p-floatLabel>
+        </div>
+      </div>
+
+      <div class="flex justify-content-end mt-4">
+        <p-button
+          type="submit"
+          icon="pi pi-plus"
+          [loading]="saving()"
+          [label]="'conciliation.manualAdjustment.submit' | translate"
+          [disabled]="form.invalid"
+        ></p-button>
+      </div>
+    </form>
+  }
+</p-card>
