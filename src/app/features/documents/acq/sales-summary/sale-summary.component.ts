@@ -1,6 +1,5 @@
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-
 import { AfterViewInit, Component, computed, inject, signal, ViewChild } from '@angular/core';
 
 import { Menu } from 'primeng/menu';
@@ -15,7 +14,6 @@ import { Table, TableModule } from 'primeng/table';
 import { InputTextModule } from 'primeng/inputtext';
 import { TranslateModule } from '@ngx-translate/core';
 
-import { CsTagTone, CsTagComponent, iconClassFromTone } from '@shared/ui';
 import { I18nService } from '@core/i18n/i18n.service';
 import { CsDatePipe } from '@shared/pipes/cs-date.pipe';
 import { STATE_KEY } from '@features/state-key.constants';
@@ -26,13 +24,14 @@ import { CompanyFacade } from '@features/facade/company.facade';
 import { CsCurrencyPipe } from '@shared/pipes/cs-currency.pipe';
 import { AcquirerFacade } from '@features/facade/acquirer.facade';
 import { StatefulListPage } from '@features/list-base/stateful-list-page';
+import { CsTagTone, CsTagComponent, iconClassFromTone } from '@shared/ui';
 import { SaleSummaryFacade } from '@features/facade/sales-summary.facade';
 import { EstablishmentFacade } from '@features/facade/establishment.facade';
 import { buildListQuery } from '@shared/features/list-query/list-query.builder';
 import { allPeriodEnum, PeriodEnum, periodEnumLabel } from '@models/enums/period.enum';
-import { StatusEnum, statusEnumLabel, statusEnumSeverity } from '@models/enums/status.enum';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
 import { AdjustmentTableComponent } from './adjustments-table/adjustments-table.component';
+import { StatusEnum, statusEnumLabel, statusEnumSeverity } from '@models/enums/status.enum';
 import { CreditOrdersTableComponent } from './credit-orders-table/credit-orders-table.component';
 import { CsColumnFilterShellComponent } from '@features/list-base/cs-column-filter-shell.component';
 import { CsAdvancedTextFilterComponent } from '@features/list-base/cs-advanced-text-filter.component';
@@ -110,8 +109,8 @@ import {
     CsAdvancedTextFilterComponent,
     CsAdvancedPeriodDateFilterComponent,
     CsAdvancedMultiselectFilterComponent,
-    CsAdvancedFilterItemTemplateDirective
-],
+    CsAdvancedFilterItemTemplateDirective,
+  ],
 })
 export class SaleSummaryListComponent
   extends StatefulListPage<SaleSummaryFiltersState, SaleSummaryAdvancedFilters>
@@ -142,13 +141,14 @@ export class SaleSummaryListComponent
   readonly expandedRowId = signal<string | null>(null);
   readonly expandedTableType = signal<'orders' | 'adjustments' | null>(null);
 
+  readonly isRvDateDisabled = computed(() => !this.periodRvDate());
   readonly isRvDateColumnDisabled = computed(() => !this.rvDateColumnPeriod());
   override rows =
     Number(localStorage.getItem(this.tableRowsKey())) || StatefulListPage.DEFAULT_ROWS;
 
   /* Campos Filtros avançados */
-  readonly periodRvDate = signal<PeriodEnum | null>(null);
-  readonly rvDate = signal<string | string[] | null>(null);
+  readonly periodRvDate = signal<PeriodEnum | null>(this.defaultRvDateWindow().period);
+  readonly rvDate = signal<string | string[] | null>(this.defaultRvDateWindow().date);
 
   readonly rvNumber = signal('');
 
@@ -161,9 +161,9 @@ export class SaleSummaryListComponent
   readonly modality = signal<ModalityEnum[] | null>(null);
   readonly statusPaymentBank = signal<StatusPaymentBankEnum[] | null>(null);
   readonly transactionsStatus = signal<StatusReconciliationEnum[] | null>(null);
-  readonly creditOrderStatus = signal<StatusReconciliationEnum[] | null>(null);
-
-  readonly isRvDateDisabled = computed(() => !this.periodRvDate());
+  readonly creditOrderStatus = signal<StatusReconciliationEnum[] | null>(
+    this.defaultCreditOrderStatus(),
+  );
 
   /* Campos Tabela */
   readonly rvNumberColumnDraft = signal('');
@@ -180,8 +180,8 @@ export class SaleSummaryListComponent
   readonly modalityColumnDraft = signal<ModalityEnum[] | null>(null);
   readonly rvDateColumnDraft = signal<string | string[] | null>(null);
   readonly statusPaymentBankColumnDraft = signal<StatusPaymentBankEnum[] | null>(null);
-  readonly transactionsStatusColumnDraft = signal<StatusReconciliationEnum[] | null>(null);
   readonly creditOrderStatusColumnDraft = signal<StatusReconciliationEnum[] | null>(null);
+  readonly transactionsStatusColumnDraft = signal<StatusReconciliationEnum[] | null>(null);
 
   readonly periodEnumOptions = computed(() => {
     this.i18n.getAppliedLang();
@@ -329,6 +329,45 @@ export class SaleSummaryListComponent
     return createEmptySaleSummaryAdvancedFilters();
   }
 
+  /**
+   * Só entra quando NENHUM filtro avançado está setado (painel inteiro vazio) — primeira visita à
+   * tela (nada persistido ainda), filtros persistidos totalmente vazios, ou logo após "Limpar".
+   * Checa o painel inteiro, não campo a campo: se o usuário deixou data/status vazios de propósito
+   * mas definiu outro filtro (ex.: Empresa), isso já conta como painel "não vazio" e não deve
+   * reaplicar nenhum default — senão a escolha dele nunca "gruda" (bug relatado: mudava um filtro,
+   * o default de data/status voltava sozinho). Quando aplica, assume período "Final" (rvDate <=
+   * data) com a data atual menos 31 dias e Status Ordem Crédito "Pendente".
+   */
+  private applyDefaultFiltersIfEmpty(): void {
+    if (this.advancedActiveFilters().length > 0) return;
+
+    const { period, date } = this.defaultRvDateWindow();
+    this.periodRvDate.set(period);
+    this.rvDate.set(date);
+    this.creditOrderStatus.set(this.defaultCreditOrderStatus());
+  }
+
+  private defaultRvDateWindow(): { period: PeriodEnum; date: string } {
+    const date = new Date();
+    date.setDate(date.getDate() - 31);
+
+    return {
+      period: PeriodEnum.END,
+      date: this.formatBrDate(date),
+    };
+  }
+
+  private defaultCreditOrderStatus(): StatusReconciliationEnum[] {
+    return [StatusReconciliationEnum.PENDING];
+  }
+
+  /** dd/MM/yyyy — formato esperado pelo p-datepicker (dataType="string", dateFormat="dd/mm/yy"). */
+  private formatBrDate(value: Date): string {
+    const month = String(value.getMonth() + 1).padStart(2, '0');
+    const day = String(value.getDate()).padStart(2, '0');
+    return `${day}/${month}/${value.getFullYear()}`;
+  }
+
   protected override onAfterClear(): void {
     this.expandedRowId.set(null);
     this.expandedTableType.set(null);
@@ -367,6 +406,7 @@ export class SaleSummaryListComponent
 
   protected override resetFilters(): void {
     resetSaleSummaryAdvancedFilters(this);
+    this.applyDefaultFiltersIfEmpty();
   }
 
   /* Filtros Avançados */
@@ -468,7 +508,9 @@ export class SaleSummaryListComponent
     if (transactionsStatus?.length) {
       items.push({
         label: this.i18n.tUi('saleSummary.fields.transactionsStatusEnum'),
-        value: transactionsStatus.map((v) => statusReconciliationEnumLabel(v, this.i18n)).join(', '),
+        value: transactionsStatus
+          .map((v) => statusReconciliationEnumLabel(v, this.i18n))
+          .join(', '),
       });
     }
 
@@ -746,6 +788,8 @@ export class SaleSummaryListComponent
     this.creditOrderStatus.set(s.creditOrderStatus ?? null);
     this.statusPaymentBank.set(s.statusPaymentBank ?? null);
     this.transactionsStatus.set(s.transactionsStatus ?? null);
+
+    this.applyDefaultFiltersIfEmpty();
   }
 
   /* Metodos busca */
@@ -813,10 +857,7 @@ export class SaleSummaryListComponent
   protected searchOnCreditOrder(row: SaleSummaryModel): void {
     const targetFilters = this.buildTargetCreditOrder(row);
 
-    localStorage.setItem(
-      STATE_KEY.CARDSYNC.CREDIT_ORDER.FILTERS.V1,
-      JSON.stringify(targetFilters),
-    );
+    localStorage.setItem(STATE_KEY.CARDSYNC.CREDIT_ORDER.FILTERS.V1, JSON.stringify(targetFilters));
     localStorage.removeItem(STATE_KEY.CARDSYNC.CREDIT_ORDER.TABLE.STATE.V1);
 
     this.openRouteInNewTab(['/documents/acq/credit-order']);
