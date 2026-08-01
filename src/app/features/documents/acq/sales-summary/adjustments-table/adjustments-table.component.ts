@@ -15,6 +15,7 @@ import {
   AdjustmentReasonEnum,
   adjustmentReasonEnumLabel,
   adjustmentReasonEnumSeverity,
+  normalizeAdjustmentReasonEnum,
 } from '@models/enums/adjustment-reason.enum';
 
 @Component({
@@ -47,6 +48,20 @@ export class AdjustmentTableComponent {
 
   adjustmentReasonLabel(value: AdjustmentReasonEnum | null): string {
     return adjustmentReasonEnumLabel(value, this.i18n);
+  }
+
+  /**
+   * Ajustes criados manualmente (tela de Ajuste) não têm adjustmentReason (código do arquivo
+   * automático da adquirente) — só o motivo em texto livre digitado/importado. Sem esse fallback,
+   * a coluna sempre mostrava "N/A" pra esses ajustes, mesmo com o motivo real preenchido
+   * (confirmado com dados reais: RV 82730892, "aluguel de maquininha").
+   */
+  adjustmentMotivoLabel(row: AdjustmentsMinimalModel): string {
+    const normalized = normalizeAdjustmentReasonEnum(row.adjustmentReason);
+    if (normalized && normalized !== AdjustmentReasonEnum.NULL) {
+      return adjustmentReasonEnumLabel(row.adjustmentReason, this.i18n);
+    }
+    return row.adjustmentDescription?.trim() || adjustmentReasonEnumLabel(row.adjustmentReason, this.i18n);
   }
 
   adjustmentReasonSeverity(value: AdjustmentReasonEnum | null): CsTagTone {

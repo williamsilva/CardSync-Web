@@ -132,10 +132,10 @@
           <span
             tooltipPosition="top"
             class="cs-table-cell-ellipsis"
-            [pTooltip]="adjustmentReasonLabel(row.adjustmentReason)"
+            [pTooltip]="adjustmentMotivoLabel(row)"
           >
             <cs-tag
-              [value]="adjustmentReasonLabel(row.adjustmentReason)"
+              [value]="adjustmentMotivoLabel(row)"
               [tone]="adjustmentReasonSeverity(row.adjustmentReason)"
             />
           </span>

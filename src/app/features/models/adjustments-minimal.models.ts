@@ -1,5 +1,12 @@
 export interface AdjustmentsMinimalModel {
   installmentNumber: number;
+  adjustmentReason?: number | null;
+  /**
+   * Motivo em texto livre — só vem preenchido em ajustes criados manualmente (tela de Ajuste),
+   * que não têm adjustmentReason (código do arquivo automático da adquirente). Ver
+   * AdjustmentTableComponent#adjustmentMotivoLabel.
+   */
+  adjustmentDescription?: string | null;
 }
 
 export interface AdjustmentsMinimalCreateInput {}
