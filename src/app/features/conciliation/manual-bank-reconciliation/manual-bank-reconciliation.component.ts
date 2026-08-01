@@ -4,12 +4,9 @@ import { Component, OnInit, WritableSignal, computed, inject, signal } from '@an
 import { MenuModule } from 'primeng/menu';
 import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
-import { SelectModule } from 'primeng/select';
-import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
 import { CheckboxModule } from 'primeng/checkbox';
-import { TextareaModule } from 'primeng/textarea';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { ConfirmationService, MenuItem, MessageService } from 'primeng/api';
@@ -35,11 +32,16 @@ import { allPeriodEnum, PeriodEnum, periodEnumLabel } from '@models/enums/period
 import { ConciliationWaitingFacade } from '@features/facade/conciliation-waiting.facade';
 import { mapPrimeLazyToTableQuery } from '@shared/features/list-query/primeng-lazy.mapper';
 import { StatusEnum, statusEnumLabel, statusEnumSeverity } from '@models/enums/status.enum';
+import { DivergenceDialogComponent } from './divergence-dialog/divergence-dialog.component';
 import { ManualBankReconciliationFacade } from '@features/facade/manual-bank-reconciliation.facade';
 import { ReconciliationSettingsApiService } from '@features/service/reconciliation-settings.api.service';
 import { CsAdvancedPeriodDateFilterComponent } from '@features/list-base/cs-advanced-period-date-filter.component';
 import { CsAdvancedMultiselectFilterComponent } from '@features/list-base/cs-advanced-multiselect-filter.component';
 import { CsAdvancedFilterItemTemplateDirective } from '@features/list-base/cs-advanced-filter-item-template.directive';
+import { NoCreditOrderLegacyDialogComponent } from './no-credit-order-legacy-dialog/no-credit-order-legacy-dialog.component';
+import { PreImplantationDivergenceDialogComponent } from './pre-implantation-divergence-dialog/pre-implantation-divergence-dialog.component';
+import { CreditOrderPreImplantationDialogComponent } from './credit-order-pre-implantation-dialog/credit-order-pre-implantation-dialog.component';
+import { SalesSummaryPreImplantationDialogComponent } from './sales-summary-pre-implantation-dialog/sales-summary-pre-implantation-dialog.component';
 import {
   ReconcileSalesSummaryCreditOrderResultModel,
   SalesSummaryPreImplantationPreviewResultModel,
@@ -49,9 +51,7 @@ import {
   CreditOrderPreImplantationLinkingPreviewResult,
 } from '@features/models/credit-order.model';
 import {
-  NoCreditOrderLegacyCandidate,
   NoCreditOrderLegacyPreviewResult,
-  PreImplantationDivergenceCandidate,
   PreImplantationDivergencePreviewResult,
 } from '@features/service/manual-bank-reconciliation.api.service';
 import {
@@ -121,22 +121,24 @@ interface OrderFiltersState {
     FormsModule,
     TableModule,
     ToastModule,
-    DialogModule,
     ButtonModule,
-    SelectModule,
     TooltipModule,
     CsCurrencyPipe,
     CheckboxModule,
-    TextareaModule,
     CsTagComponent,
     CsDocumentPipe,
     TranslateModule,
     ConfirmDialogModule,
     FiltersPanelComponent,
+    DivergenceDialogComponent,
     CsCurrencyRangeFilterComponent,
+    NoCreditOrderLegacyDialogComponent,
     CsAdvancedPeriodDateFilterComponent,
     CsAdvancedMultiselectFilterComponent,
     CsAdvancedFilterItemTemplateDirective,
+    PreImplantationDivergenceDialogComponent,
+    CreditOrderPreImplantationDialogComponent,
+    SalesSummaryPreImplantationDialogComponent,
   ],
 })
 export class ManualBankReconciliationComponent implements OnInit {
@@ -151,9 +153,9 @@ export class ManualBankReconciliationComponent implements OnInit {
   private readonly companyFacade = inject(CompanyFacade);
   readonly facade = inject(ManualBankReconciliationFacade);
   private readonly acquirerFacade = inject(AcquirerFacade);
-  private readonly conciliationWaitingFacade = inject(ConciliationWaitingFacade);
   private readonly creditOrderApiService = inject(CreditOrderApiService);
   private readonly settingsApi = inject(ReconciliationSettingsApiService);
+  private readonly conciliationWaitingFacade = inject(ConciliationWaitingFacade);
 
   /** Persistência dos filtros avançados (localStorage) para sobreviver a atualização de página, igual ao BankStatementListComponent. */
   private readonly persistedReleaseFilters = new PersistedFilters<ReleaseFiltersState>(
@@ -246,10 +248,6 @@ export class ManualBankReconciliationComponent implements OnInit {
     );
   });
 
-  /** Justificativa obrigatória quando os valores não batem exato (ex.: lançamento mistura vendas
-   * anteriores à implantação, sem CreditOrder no sistema, com vendas atuais — nunca fecha).
-   * Só é pedida depois de clicar em "Vincular" (diálogo próprio), não fica exposta o tempo todo. */
-  readonly divergenceReason = signal('');
   readonly showDivergenceDialog = signal(false);
 
   /** Diálogo de análise/prévia da divergência pré-implantação (ver openPreImplantationDivergencePreview). */
@@ -257,52 +255,11 @@ export class ManualBankReconciliationComponent implements OnInit {
   protected readonly preImplantationPreview = signal<PreImplantationDivergencePreviewResult | null>(
     null,
   );
-  /** Seleção da tabela de prévia — começa com todos os elegíveis marcados; o usuário desmarca o que não quer vincular. */
-  protected readonly selectedPreImplantationCandidates = signal<
-    PreImplantationDivergenceCandidate[]
-  >([]);
-
-  /** Filtros locais da tabela de prévia — a lista inteira já veio numa única chamada, então filtra em memória, sem nova requisição. */
-  protected readonly preImplantationCompanyFilter = signal<string | null>(null);
-  protected readonly preImplantationAcquirerFilter = signal<string | null>(null);
-
-  protected readonly preImplantationCompanyOptions = computed(() =>
-    this.uniquePreImplantationOptions((c) => c.companyName),
-  );
-
-  protected readonly preImplantationAcquirerOptions = computed(() =>
-    this.uniquePreImplantationOptions((c) => c.acquirerName),
-  );
-
-  protected readonly filteredPreImplantationCandidates = computed(() => {
-    const candidates = this.preImplantationPreview()?.candidates ?? [];
-    const company = this.preImplantationCompanyFilter();
-    const acquirer = this.preImplantationAcquirerFilter();
-    return candidates.filter(
-      (c) => (!company || c.companyName === company) && (!acquirer || c.acquirerName === acquirer),
-    );
-  });
 
   /** Diálogo de análise/prévia da marcação de legado sem ordem de crédito (ver openNoCreditOrderLegacyPreview). */
   protected readonly showNoCreditOrderLegacyPreviewDialog = signal(false);
   protected readonly noCreditOrderLegacyPreview = signal<NoCreditOrderLegacyPreviewResult | null>(
     null,
-  );
-  /** Seleção da tabela de prévia — começa com todos os elegíveis marcados; o usuário desmarca o que não quer marcar. */
-  protected readonly selectedNoCreditOrderLegacyCandidates = signal<NoCreditOrderLegacyCandidate[]>(
-    [],
-  );
-
-  /** Filtros locais da tabela de prévia — a lista inteira já veio numa única chamada, então filtra em memória, sem nova requisição. */
-  protected readonly noCreditOrderLegacyCompanyFilter = signal<string | null>(null);
-  protected readonly noCreditOrderLegacyAcquirerFilter = signal<string | null>(null);
-
-  protected readonly noCreditOrderLegacyCompanyOptions = computed(() =>
-    this.uniqueNoCreditOrderLegacyOptions((c) => c.companyName),
-  );
-
-  protected readonly noCreditOrderLegacyAcquirerOptions = computed(() =>
-    this.uniqueNoCreditOrderLegacyOptions((c) => c.acquirerName),
   );
 
   /** Diálogo de análise/prévia do backfill de SalesSummary pré-implantação (Etapa 6) — ver
@@ -322,15 +279,6 @@ export class ManualBankReconciliationComponent implements OnInit {
   protected readonly showCreditOrderPreImplantationDialog = signal(false);
   protected readonly creditOrderPreImplantationPreview =
     signal<CreditOrderPreImplantationLinkingPreviewResult | null>(null);
-
-  protected readonly filteredNoCreditOrderLegacyCandidates = computed(() => {
-    const candidates = this.noCreditOrderLegacyPreview()?.candidates ?? [];
-    const company = this.noCreditOrderLegacyCompanyFilter();
-    const acquirer = this.noCreditOrderLegacyAcquirerFilter();
-    return candidates.filter(
-      (c) => (!company || c.companyName === company) && (!acquirer || c.acquirerName === acquirer),
-    );
-  });
 
   /** Verdadeiro enquanto qualquer uma das ferramentas do menu estiver rodando — mostra o spinner no botão "Ações". */
   protected readonly anyDataToolRunning = computed(
@@ -402,52 +350,6 @@ export class ManualBankReconciliationComponent implements OnInit {
       command: () => this.openCreditOrderPreImplantationPreview(),
     },
   ]);
-
-  private uniquePreImplantationOptions(
-    pick: (c: PreImplantationDivergenceCandidate) => string | null,
-  ): { label: string; value: string }[] {
-    const candidates = this.preImplantationPreview()?.candidates ?? [];
-    const names = new Set(candidates.map(pick).filter((n): n is string => !!n));
-    return Array.from(names)
-      .sort((a, b) => a.localeCompare(b))
-      .map((name) => ({ label: name, value: name }));
-  }
-
-  private uniqueNoCreditOrderLegacyOptions(
-    pick: (c: NoCreditOrderLegacyCandidate) => string | null,
-  ): { label: string; value: string }[] {
-    const candidates = this.noCreditOrderLegacyPreview()?.candidates ?? [];
-    const names = new Set(candidates.map(pick).filter((n): n is string => !!n));
-    return Array.from(names)
-      .sort((a, b) => a.localeCompare(b))
-      .map((name) => ({ label: name, value: name }));
-  }
-
-  /** Sentinela: quando selecionado, revela o textarea pra digitar um motivo livre. */
-  protected readonly OTHER_DIVERGENCE_REASON = 'other';
-  protected readonly selectedDivergenceReasonPreset = signal<string | null>(null);
-
-  /** Motivos pré-cadastrados (só front-end, sem configuração de backend) — o texto do motivo
-   * enviado/gravado é o label já traduzido, não a chave. "Outro" revela o textarea abaixo. */
-  private readonly divergenceReasonPresetKeys = ['preImplantation', 'rounding', 'bankFee'] as const;
-
-  protected readonly divergenceReasonPresetOptions = computed(() => {
-    this.i18n.getAppliedLang();
-    return [
-      ...this.divergenceReasonPresetKeys.map((key) => ({
-        value: key,
-        label: this.translateSvc.instant(
-          `conciliation.manualBankReconciliation.divergenceReasonPreset.${key}`,
-        ),
-      })),
-      {
-        value: this.OTHER_DIVERGENCE_REASON,
-        label: this.translateSvc.instant(
-          'conciliation.manualBankReconciliation.divergenceReasonPreset.other',
-        ),
-      },
-    ];
-  });
 
   readonly canReconcile = computed(() => this.facade.selectedOrders().length > 0);
 
@@ -812,18 +714,14 @@ export class ManualBankReconciliationComponent implements OnInit {
   /** Cancela a seleção de lançamento(s) e limpa os filtros de ordens aplicados automaticamente. */
   cancelSelection(): void {
     this.facade.clearSelection();
-    this.divergenceReason.set('');
-    this.selectedDivergenceReasonPreset.set(null);
     this.clearOrderReleaseDerivedFilters();
     this.lastOrdersEvent.set(null);
     this.reloadOrders();
   }
 
-  /** Limpa as ordens selecionadas e a justificativa de divergência (que não se aplica mais a uma seleção diferente). */
+  /** Limpa as ordens selecionadas. */
   clearSelectedOrders(): void {
     this.facade.clearOrders();
-    this.divergenceReason.set('');
-    this.selectedDivergenceReasonPreset.set(null);
   }
 
   onReleasesLazyLoad(event: any): void {
@@ -862,8 +760,6 @@ export class ManualBankReconciliationComponent implements OnInit {
    * de uma vez. Clicar em um lançamento não elegível sempre volta ao modo único.
    */
   selectRelease(release: BankStatementApiModel): void {
-    this.divergenceReason.set('');
-    this.selectedDivergenceReasonPreset.set(null);
     const eligible = this.isEligibleForLegacy(release);
     const current = this.facade.selectedReleases();
     const currentAllEligible =
@@ -979,8 +875,6 @@ export class ManualBankReconciliationComponent implements OnInit {
    */
   confirmReconcile(): void {
     if (!this.valuesMatch()) {
-      this.divergenceReason.set('');
-      this.selectedDivergenceReasonPreset.set(null);
       this.showDivergenceDialog.set(true);
       return;
     }
@@ -995,7 +889,7 @@ export class ManualBankReconciliationComponent implements OnInit {
       acceptLabel: this.translateSvc.instant('conciliation.manualBankReconciliation.link'),
       rejectLabel: this.translateSvc.instant('common.cancel'),
       acceptButtonStyleClass: 'p-button-success',
-      accept: () => this.doReconcile(),
+      accept: () => this.doReconcile(null),
     });
   }
 
@@ -1011,34 +905,11 @@ export class ManualBankReconciliationComponent implements OnInit {
 
   protected onDivergenceDialogVisibleChange(visible: boolean): void {
     this.showDivergenceDialog.set(visible);
-    if (!visible) {
-      this.divergenceReason.set('');
-      this.selectedDivergenceReasonPreset.set(null);
-    }
   }
 
-  protected cancelDivergenceDialog(): void {
+  protected onDivergenceConfirm(reason: string): void {
     this.showDivergenceDialog.set(false);
-    this.divergenceReason.set('');
-    this.selectedDivergenceReasonPreset.set(null);
-  }
-
-  /** Motivo pré-cadastrado selecionado: usa o texto já traduzido direto. "Outro" só limpa o
-   * texto e deixa o textarea livre para o usuário digitar. */
-  protected onDivergenceReasonPresetChange(value: string): void {
-    this.selectedDivergenceReasonPreset.set(value);
-    if (value === this.OTHER_DIVERGENCE_REASON) {
-      this.divergenceReason.set('');
-      return;
-    }
-    const preset = this.divergenceReasonPresetOptions().find((option) => option.value === value);
-    this.divergenceReason.set(preset?.label ?? '');
-  }
-
-  protected confirmDivergenceReconcile(): void {
-    if (!this.divergenceReason().trim()) return;
-    this.showDivergenceDialog.set(false);
-    this.doReconcile();
+    this.doReconcile(reason);
   }
 
   confirmMarkLegacy(): void {
@@ -1232,10 +1103,6 @@ export class ManualBankReconciliationComponent implements OnInit {
     this.facade.previewPreImplantationDivergence().subscribe({
       next: (result) => {
         this.preImplantationPreview.set(result);
-        // Começa com todos os elegíveis marcados — o usuário desmarca o que não quer vincular.
-        this.selectedPreImplantationCandidates.set(result.candidates);
-        this.preImplantationCompanyFilter.set(null);
-        this.preImplantationAcquirerFilter.set(null);
         this.showPreImplantationPreviewDialog.set(true);
       },
       error: () => {
@@ -1252,34 +1119,16 @@ export class ManualBankReconciliationComponent implements OnInit {
     this.showPreImplantationPreviewDialog.set(visible);
     if (!visible) {
       this.preImplantationPreview.set(null);
-      this.selectedPreImplantationCandidates.set([]);
-      this.preImplantationCompanyFilter.set(null);
-      this.preImplantationAcquirerFilter.set(null);
     }
   }
 
   protected closePreImplantationPreviewDialog(): void {
     this.showPreImplantationPreviewDialog.set(false);
     this.preImplantationPreview.set(null);
-    this.selectedPreImplantationCandidates.set([]);
-    this.preImplantationCompanyFilter.set(null);
-    this.preImplantationAcquirerFilter.set(null);
   }
 
-  /** Ao trocar o filtro, a seleção passa a ser só o que ficou visível — evita "selecionados"
-   * escondidos fora do filtro atual. */
-  protected onPreImplantationCompanyFilterChange(value: string | null): void {
-    this.preImplantationCompanyFilter.set(value);
-    this.selectedPreImplantationCandidates.set(this.filteredPreImplantationCandidates());
-  }
-
-  protected onPreImplantationAcquirerFilterChange(value: string | null): void {
-    this.preImplantationAcquirerFilter.set(value);
-    this.selectedPreImplantationCandidates.set(this.filteredPreImplantationCandidates());
-  }
-
-  protected confirmApplyPreImplantationDivergence(): void {
-    const eligible = this.selectedPreImplantationCandidates().length;
+  protected onApplyPreImplantationDivergence(releaseBankIds: string[]): void {
+    const eligible = releaseBankIds.length;
     this.confirmationService.confirm({
       message: this.translateSvc.instant(
         'conciliation.manualBankReconciliation.preImplantationApplyConfirmMessage',
@@ -1294,12 +1143,11 @@ export class ManualBankReconciliationComponent implements OnInit {
       ),
       rejectLabel: this.translateSvc.instant('common.cancel'),
       acceptButtonStyleClass: 'p-button-warn',
-      accept: () => this.doApplyPreImplantationDivergence(),
+      accept: () => this.doApplyPreImplantationDivergence(releaseBankIds),
     });
   }
 
-  private doApplyPreImplantationDivergence(): void {
-    const releaseBankIds = this.selectedPreImplantationCandidates().map((c) => c.releaseBankId);
+  private doApplyPreImplantationDivergence(releaseBankIds: string[]): void {
     this.facade.applyPreImplantationDivergence(releaseBankIds).subscribe({
       next: (result) => {
         this.messageService.add({
@@ -1327,10 +1175,6 @@ export class ManualBankReconciliationComponent implements OnInit {
     this.facade.previewNoCreditOrderLegacyMarking().subscribe({
       next: (result) => {
         this.noCreditOrderLegacyPreview.set(result);
-        // Começa com todos os elegíveis marcados — o usuário desmarca o que não quer marcar.
-        this.selectedNoCreditOrderLegacyCandidates.set(result.candidates);
-        this.noCreditOrderLegacyCompanyFilter.set(null);
-        this.noCreditOrderLegacyAcquirerFilter.set(null);
         this.showNoCreditOrderLegacyPreviewDialog.set(true);
       },
       error: () => {
@@ -1347,34 +1191,16 @@ export class ManualBankReconciliationComponent implements OnInit {
     this.showNoCreditOrderLegacyPreviewDialog.set(visible);
     if (!visible) {
       this.noCreditOrderLegacyPreview.set(null);
-      this.selectedNoCreditOrderLegacyCandidates.set([]);
-      this.noCreditOrderLegacyCompanyFilter.set(null);
-      this.noCreditOrderLegacyAcquirerFilter.set(null);
     }
   }
 
   protected closeNoCreditOrderLegacyPreviewDialog(): void {
     this.showNoCreditOrderLegacyPreviewDialog.set(false);
     this.noCreditOrderLegacyPreview.set(null);
-    this.selectedNoCreditOrderLegacyCandidates.set([]);
-    this.noCreditOrderLegacyCompanyFilter.set(null);
-    this.noCreditOrderLegacyAcquirerFilter.set(null);
   }
 
-  /** Ao trocar o filtro, a seleção passa a ser só o que ficou visível — evita "selecionados"
-   * escondidos fora do filtro atual. */
-  protected onNoCreditOrderLegacyCompanyFilterChange(value: string | null): void {
-    this.noCreditOrderLegacyCompanyFilter.set(value);
-    this.selectedNoCreditOrderLegacyCandidates.set(this.filteredNoCreditOrderLegacyCandidates());
-  }
-
-  protected onNoCreditOrderLegacyAcquirerFilterChange(value: string | null): void {
-    this.noCreditOrderLegacyAcquirerFilter.set(value);
-    this.selectedNoCreditOrderLegacyCandidates.set(this.filteredNoCreditOrderLegacyCandidates());
-  }
-
-  protected confirmApplyNoCreditOrderLegacyMarking(): void {
-    const eligible = this.selectedNoCreditOrderLegacyCandidates().length;
+  protected onApplyNoCreditOrderLegacyMarking(releaseBankIds: string[]): void {
+    const eligible = releaseBankIds.length;
     this.confirmationService.confirm({
       message: this.translateSvc.instant(
         'conciliation.manualBankReconciliation.noCreditOrderLegacyApplyConfirmMessage',
@@ -1389,12 +1215,11 @@ export class ManualBankReconciliationComponent implements OnInit {
       ),
       rejectLabel: this.translateSvc.instant('common.cancel'),
       acceptButtonStyleClass: 'p-button-warn',
-      accept: () => this.doApplyNoCreditOrderLegacyMarking(),
+      accept: () => this.doApplyNoCreditOrderLegacyMarking(releaseBankIds),
     });
   }
 
-  private doApplyNoCreditOrderLegacyMarking(): void {
-    const releaseBankIds = this.selectedNoCreditOrderLegacyCandidates().map((c) => c.releaseBankId);
+  private doApplyNoCreditOrderLegacyMarking(releaseBankIds: string[]): void {
     this.facade.applyNoCreditOrderLegacyMarking(releaseBankIds).subscribe({
       next: (result) => {
         this.messageService.add({
@@ -1650,9 +1475,8 @@ export class ManualBankReconciliationComponent implements OnInit {
     this.reloadOrders();
   }
 
-  private doReconcile(): void {
-    const reason = this.divergenceReason().trim();
-    this.facade.reconcile(reason || null).subscribe({
+  private doReconcile(reason: string | null): void {
+    this.facade.reconcile(reason).subscribe({
       next: (result) => {
         this.messageService.add({
           severity: 'success',
@@ -1662,8 +1486,6 @@ export class ManualBankReconciliationComponent implements OnInit {
             zeroValueReconciled: result.zeroValueReconciled,
           }),
         });
-        this.divergenceReason.set('');
-        this.selectedDivergenceReasonPreset.set(null);
         this.reloadReleases();
         this.clearOrderFilters();
       },

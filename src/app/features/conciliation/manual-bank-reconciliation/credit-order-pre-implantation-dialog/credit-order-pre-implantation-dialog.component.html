@@ -1,0 +1,70 @@
+<!-- Diálogo de análise do vínculo de CreditOrder órfãs pré-implantação (movido da tela de Ordem
+     de Pagamento Manual): só análise (nada é gravado) até clicar "Vincular Elegíveis". -->
+<p-dialog
+  [modal]="true"
+  appendTo="body"
+  [closable]="true"
+  [style]="{ width: '36rem' }"
+  [visible]="visible"
+  (visibleChange)="onVisibleChange($event)"
+  [header]="
+    'conciliation.manualBankReconciliation.creditOrderPreImplantationDialogTitle' | translate
+  "
+>
+  @if (preview; as preview) {
+    <p class="text-sm text-color-secondary mb-3">
+      {{
+        'conciliation.manualBankReconciliation.creditOrderPreImplantationDialogMessage' | translate
+      }}
+    </p>
+    <div class="flex flex-column gap-2 text-sm">
+      <span>
+        {{
+          'conciliation.manualBankReconciliation.creditOrderPreImplantationAnalyzed' | translate
+        }}:
+        <strong>{{ preview.analyzed }}</strong>
+      </span>
+      <span class="text-green-400">
+        {{
+          'conciliation.manualBankReconciliation.creditOrderPreImplantationExactMatch' | translate
+        }}:
+        <strong>{{ preview.exactMatch }}</strong>
+      </span>
+      @if (preview.pvMismatch > 0) {
+        <span class="text-orange-400">
+          {{
+            'conciliation.manualBankReconciliation.creditOrderPreImplantationPvMismatch'
+              | translate
+          }}:
+          <strong>{{ preview.pvMismatch }}</strong>
+        </span>
+        <small class="text-color-secondary">
+          {{
+            'conciliation.manualBankReconciliation.creditOrderPreImplantationPvMismatchHint'
+              | translate
+          }}
+        </small>
+      }
+      <span class="text-color-secondary">
+        {{ 'conciliation.manualBankReconciliation.creditOrderPreImplantationNoMatch' | translate }}:
+        <strong>{{ preview.noMatch }}</strong>
+      </span>
+    </div>
+  }
+  <ng-template pTemplate="footer">
+    <p-button
+      [outlined]="true"
+      severity="secondary"
+      [label]="'common.cancel' | translate"
+      (onClick)="onCancel()"
+    ></p-button>
+    <p-button
+      severity="warn"
+      icon="pi pi-link"
+      [loading]="applying"
+      (onClick)="onApply()"
+      [label]="'conciliation.manualBankReconciliation.creditOrderPreImplantationApply' | translate"
+      [disabled]="!preview || preview.exactMatch === 0"
+    ></p-button>
+  </ng-template>
+</p-dialog>

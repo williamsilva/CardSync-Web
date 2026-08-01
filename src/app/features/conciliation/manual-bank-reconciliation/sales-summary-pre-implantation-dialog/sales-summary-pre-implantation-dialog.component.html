@@ -1,0 +1,81 @@
+<!-- Diálogo de análise do backfill de SalesSummary pré-implantação (Etapa 6): só análise (nada
+     é gravado) até clicar "Aplicar". Cobre vendas anteriores à implantação cujas parcelas
+     (ordens de crédito) só vencem/liberam depois do go-live e por isso nunca são reavaliadas
+     pelo fluxo normal de conciliação Resumo x Ordem. -->
+<p-dialog
+  [modal]="true"
+  appendTo="body"
+  [closable]="true"
+  [style]="{ width: '36rem' }"
+  [visible]="visible"
+  (visibleChange)="onVisibleChange($event)"
+  [header]="
+    'conciliation.manualBankReconciliation.salesSummaryPreImplantationDialogTitle' | translate
+  "
+>
+  @if (preview; as preview) {
+    <p class="text-sm text-color-secondary mb-3">
+      {{
+        'conciliation.manualBankReconciliation.salesSummaryPreImplantationDialogMessage' | translate
+      }}
+    </p>
+    <div class="flex flex-column gap-2 text-sm">
+      <span>
+        {{
+          'conciliation.manualBankReconciliation.salesSummaryPreImplantationAnalyzed' | translate
+        }}:
+        <strong>{{ preview.summariesAnalyzed }}</strong>
+      </span>
+      <span class="text-green-400">
+        {{
+          'conciliation.manualBankReconciliation.salesSummaryPreImplantationWouldReconcile'
+            | translate
+        }}:
+        <strong>{{ preview.wouldReconcile }}</strong>
+      </span>
+      <span class="text-blue-400">
+        {{
+          'conciliation.manualBankReconciliation.salesSummaryPreImplantationWouldPartial'
+            | translate
+        }}:
+        <strong>{{ preview.wouldPartiallyReconcile }}</strong>
+      </span>
+      <span class="text-orange-400">
+        {{
+          'conciliation.manualBankReconciliation.salesSummaryPreImplantationWouldGenerate'
+            | translate
+        }}:
+        <strong>{{ preview.wouldGenerateSynthetic }}</strong>
+      </span>
+      <span class="text-color-secondary">
+        {{
+          'conciliation.manualBankReconciliation.salesSummaryPreImplantationWouldRemainPending'
+            | translate
+        }}:
+        <strong>{{ preview.wouldRemainPending }}</strong>
+      </span>
+      <span>
+        {{
+          'conciliation.manualBankReconciliation.salesSummaryPreImplantationGrossValue' | translate
+        }}:
+        <strong>{{ preview.totalGrossValueAnalyzed | csCurrency }}</strong>
+      </span>
+    </div>
+  }
+  <ng-template pTemplate="footer">
+    <p-button
+      [outlined]="true"
+      severity="secondary"
+      [label]="'common.cancel' | translate"
+      (onClick)="onCancel()"
+    ></p-button>
+    <p-button
+      severity="warn"
+      icon="pi pi-database"
+      (onClick)="onApply()"
+      [loading]="applying"
+      [disabled]="!preview?.summariesAnalyzed"
+      [label]="'conciliation.manualBankReconciliation.salesSummaryPreImplantationApply' | translate"
+    ></p-button>
+  </ng-template>
+</p-dialog>
