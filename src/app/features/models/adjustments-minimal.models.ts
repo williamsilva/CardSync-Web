@@ -1,5 +1,7 @@
 export interface AdjustmentsMinimalModel {
   installmentNumber: number;
+  installmentTotal?: number | null;
+  nsu?: number | null;
   adjustmentReason?: number | null;
   /**
    * Motivo em texto livre — só vem preenchido em ajustes criados manualmente (tela de Ajuste),

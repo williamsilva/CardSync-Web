@@ -67,4 +67,17 @@ export class AdjustmentTableComponent {
   adjustmentReasonSeverity(value: AdjustmentReasonEnum | null): CsTagTone {
     return adjustmentReasonEnumSeverity(value);
   }
+
+  /** Sem NSU, o valor vem 0/null do backend — mostrar "0" sugere um NSU real que não existe. */
+  nsuLabel(row: AdjustmentsMinimalModel): string {
+    return row.nsu ? String(row.nsu) : '-';
+  }
+
+  /** Ajuste de parcela única (ou sem parcelamento informado) não tem "X / Y" nenhum pra mostrar — "1 / 1" sugere parcelamento que não existe. */
+  installmentLabel(row: AdjustmentsMinimalModel): string {
+    if (!row.installmentTotal || row.installmentTotal <= 1) {
+      return '-';
+    }
+    return `${row.installmentNumber ?? '-'} / ${row.installmentTotal}`;
+  }
 }

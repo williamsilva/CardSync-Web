@@ -114,8 +114,8 @@
           </span>
         </td>
         <td class="text-center">
-          <span tooltipPosition="top" class="cs-table-cell-ellipsis" [pTooltip]="row.nsu || ''">
-            {{ row.nsu }}
+          <span tooltipPosition="top" class="cs-table-cell-ellipsis" [pTooltip]="nsuLabel(row)">
+            {{ nsuLabel(row) }}
           </span>
         </td>
         <td class="text-center">
@@ -127,7 +127,7 @@
             {{ row.rvNumberOriginal }}
           </span>
         </td>
-        <td class="text-center">{{ row.installmentNumber }} / {{ row.installmentTotal }}</td>
+        <td class="text-center">{{ installmentLabel(row) }}</td>
         <td class="cell-muted text-center">
           <span
             tooltipPosition="top"
