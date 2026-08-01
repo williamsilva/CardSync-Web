@@ -355,6 +355,7 @@
             <col style="width: 40px" />
             <col style="width: 80px" />
             <col style="width: 120px" />
+            <col style="width: 90px" />
             <col style="width: 80px" />
             <col style="width: 100px" />
             <col style="width: 80px" />
@@ -389,6 +390,18 @@
                   {{ 'bankStatement.fields.company' | translate }}
                 </span>
                 <span class="th-icons"><p-sortIcon field="company"></p-sortIcon></span>
+              </div>
+            </th>
+            <th pSortableColumn="establishment">
+              <div class="th-flex text-center">
+                <span
+                  class="th-label"
+                  tooltipPosition="top"
+                  [pTooltip]="'bankStatement.fields.establishment' | translate"
+                >
+                  {{ 'bankStatement.fields.establishmentShort' | translate }}
+                </span>
+                <span class="th-icons"><p-sortIcon field="establishment"></p-sortIcon></span>
               </div>
             </th>
             <th pSortableColumn="bank">
@@ -493,6 +506,11 @@
               </span>
             </td>
             <td class="text-center">
+              <span [pTooltip]="row.establishment?.pvNumber" tooltipPosition="top">
+                {{ row.establishment?.pvNumber ?? '-' }}
+              </span>
+            </td>
+            <td class="text-center">
               <span [pTooltip]="row.bank?.name" tooltipPosition="top">{{
                 row.bank?.name ?? '-'
               }}</span>
@@ -531,7 +549,7 @@
 
         <ng-template pTemplate="emptymessage">
           <tr>
-            <td colspan="9" class="text-center">{{ 'common.noRecordsFound' | translate }}</td>
+            <td colspan="10" class="text-center">{{ 'common.noRecordsFound' | translate }}</td>
           </tr>
         </ng-template>
       </p-table>
@@ -715,6 +733,7 @@
             <col style="width: 80px" />
             <col style="width: 80px" />
             <col style="width: 120px" />
+            <col style="width: 90px" />
             <col style="width: 80px" />
             <col style="width: 80px" />
             <col style="width: 80px" />
@@ -762,7 +781,19 @@
                 <span class="th-icons"><p-sortIcon field="company"></p-sortIcon></span>
               </div>
             </th>
-            <th pSortableColumn="bankingDomicile">
+            <th pSortableColumn="establishment">
+              <div class="th-flex text-center">
+                <span
+                  class="th-label"
+                  tooltipPosition="top"
+                  [pTooltip]="'bankStatement.fields.establishment' | translate"
+                >
+                  {{ 'bankStatement.fields.establishmentShort' | translate }}
+                </span>
+                <span class="th-icons"><p-sortIcon field="establishment"></p-sortIcon></span>
+              </div>
+            </th>
+            <th pSortableColumn="bank">
               <div class="th-flex text-center">
                 <span
                   class="th-label"
@@ -771,7 +802,7 @@
                 >
                   {{ 'bankStatement.fields.bank' | translate }}
                 </span>
-                <span class="th-icons"><p-sortIcon field="bankingDomicile"></p-sortIcon></span>
+                <span class="th-icons"><p-sortIcon field="bank"></p-sortIcon></span>
               </div>
             </th>
             <th pSortableColumn="acquirer">
@@ -849,6 +880,11 @@
               </span>
             </td>
             <td class="text-center">
+              <span [pTooltip]="row.establishment?.pvNumber" tooltipPosition="top">
+                {{ row.establishment?.pvNumber ?? '-' }}
+              </span>
+            </td>
+            <td class="text-center">
               <span [pTooltip]="row.bankingDomicile?.bank?.name" tooltipPosition="top">
                 {{ row.bankingDomicile?.bank?.name ?? '-' }}
               </span>
@@ -877,7 +913,7 @@
 
         <ng-template pTemplate="emptymessage">
           <tr>
-            <td colspan="9" class="text-center">{{ 'common.noRecordsFound' | translate }}</td>
+            <td colspan="10" class="text-center">{{ 'common.noRecordsFound' | translate }}</td>
           </tr>
         </ng-template>
       </p-table>
