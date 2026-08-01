@@ -267,7 +267,7 @@ export class ManualAdjustmentComponent implements OnInit {
       const debitType = this.mapDebitType((cols[3] ?? '').trim());
       const adjustmentType = (cols[4] ?? '').trim() || null;
       const adjustmentDescription = (cols[5] ?? '').trim() || null;
-      const adjustmentValue = this.parseBrDecimal(cols[6]);
+      const originalAdjustmentValue = this.parseBrDecimal(cols[6]);
       const chargedValue = this.parseBrDecimal(cols[7]);
       const totalDebitValue = this.parseBrDecimal(cols[8]);
       const pendingValueRaw = this.parseBrDecimal(cols[9]);
@@ -287,8 +287,13 @@ export class ManualAdjustmentComponent implements OnInit {
         debitType,
         adjustmentType,
         adjustmentDescription,
-        adjustmentValue,
-        transactionValue: chargedValue > 0 ? chargedValue : creditedValue > 0 ? creditedValue : null,
+        // "valor cobrado nesta data" é o que efetivamente deduz desta RV agora — "valor total
+        // original do ajuste" pode incluir parcelas futuras ainda não cobradas ("valor ainda
+        // pendente"), e usar o total original aqui gerava ordem de crédito com valor negativo
+        // quando a tarifa é cobrada em mais de uma RV (confirmado com dados reais: RV 82730892,
+        // total R$15,00, cobrado R$9,77 nesta RV, R$5,23 pendente pra uma RV futura).
+        adjustmentValue: chargedValue > 0 ? chargedValue : originalAdjustmentValue,
+        transactionValue: originalAdjustmentValue > 0 ? originalAdjustmentValue : creditedValue > 0 ? creditedValue : null,
         totalDebitValue: totalDebitValue > 0 ? totalDebitValue : null,
         pendingValue: pendingValueRaw > 0 ? pendingValueRaw : null,
         flagName,
