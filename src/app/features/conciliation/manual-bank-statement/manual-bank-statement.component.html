@@ -1,4 +1,276 @@
+<p-confirmDialog></p-confirmDialog>
+
 <p-card>
+  <!-- Mode toggle -->
+  <div class="flex gap-2 mb-3 cs-mode-toggle">
+    <p-button
+      type="button"
+      icon="pi pi-upload"
+      [outlined]="importMode() !== 'csv'"
+      (onClick)="setImportMode('csv')"
+      [label]="'conciliation.manualBankStatement.modeCsv' | translate"
+    ></p-button>
+
+    <p-button
+      type="button"
+      icon="pi pi-pencil"
+      [outlined]="importMode() !== 'manual'"
+      (onClick)="setImportMode('manual')"
+      [label]="'conciliation.manualBankStatement.modeManual' | translate"
+    ></p-button>
+  </div>
+
+  <p-divider></p-divider>
+
+  <!-- ── Importação de extrato (texto/CSV) ── -->
+  @if (importMode() === 'csv') {
+    <div class="cs-csv-section">
+      <div class="flex align-items-center gap-2 mb-2">
+        <span class="text-base font-semibold">
+          {{ 'conciliation.manualBankStatement.csv.sectionConfig' | translate }}
+        </span>
+      </div>
+
+      <div class="grid formgrid gap-0">
+        <div class="col-12 md:col-4 p-2">
+          <p-floatLabel variant="on" class="w-full">
+            <p-select
+              size="small"
+              class="w-full"
+              appendTo="body"
+              [filter]="true"
+              optionValue="id"
+              [showClear]="true"
+              inputId="csvCompanyId"
+              filterBy="fantasyName"
+              optionLabel="fantasyName"
+              [ngModel]="csvCompanyId()"
+              [options]="companyFacade.activeOptions()"
+              (ngModelChange)="onCsvCompanyIdChange($event)"
+            >
+              <ng-template let-option pTemplate="item">
+                <div class="cs-option-item">
+                  <div class="cs-option-item__label">{{ option.fantasyName }}</div>
+                  <div class="cs-option-item__subtext">
+                    {{ 'common.registrationNumber' | translate }}: {{ option.cnpj | csDocument }}
+                  </div>
+                  <div class="cs-option-item__subtext">
+                    <cs-tag
+                      [tone]="statusEnumSeverity(option.status)"
+                      [value]="
+                        ('common.status' | translate) + ': ' + statusEnumLabel(option.status)
+                      "
+                    />
+                  </div>
+                </div>
+              </ng-template>
+            </p-select>
+            <label for="csvCompanyId">
+              {{ 'conciliation.manualBankStatement.company' | translate }}
+            </label>
+          </p-floatLabel>
+        </div>
+
+        <div class="col-12 md:col-4 p-2">
+          <p-floatLabel variant="on" class="w-full">
+            <p-select
+              size="small"
+              class="w-full"
+              appendTo="body"
+              [filter]="true"
+              filterBy="label"
+              optionValue="id"
+              [showClear]="true"
+              optionLabel="label"
+              inputId="csvBankingDomicileId"
+              [disabled]="!csvCompanyId()"
+              [ngModel]="csvBankingDomicileId()"
+              [options]="csvBankingDomicileOptions()"
+              (ngModelChange)="csvBankingDomicileId.set($event)"
+            >
+              <ng-template let-option pTemplate="item">
+                <div class="cs-option-item">
+                  <div class="cs-option-item__label">{{ option.bankName }}</div>
+                  <div class="cs-option-item__subtext">{{ option.agencyAccount }}</div>
+                  <div class="cs-option-item__subtext">
+                    <cs-tag
+                      [tone]="statusEnumSeverity(option.status)"
+                      [value]="
+                        ('common.status' | translate) + ': ' + statusEnumLabel(option.status)
+                      "
+                    />
+                  </div>
+                </div>
+              </ng-template>
+            </p-select>
+            <label for="csvBankingDomicileId">
+              {{ 'conciliation.manualBankStatement.bankingDomicile' | translate }}
+            </label>
+          </p-floatLabel>
+        </div>
+      </div>
+
+      <label
+        tabindex="0"
+        role="button"
+        for="csvFileInput"
+        class="cs-file-zone"
+        (keydown.enter)="csvFileInput.click()"
+      >
+        <i class="pi pi-upload cs-file-zone__icon"></i>
+        <span class="cs-file-zone__label">{{
+          'conciliation.manualBankStatement.csv.fileLabel' | translate
+        }}</span>
+        <span class="cs-file-zone__hint">{{
+          'conciliation.manualBankStatement.csv.fileHint' | translate
+        }}</span>
+        <input
+          type="file"
+          multiple
+          #csvFileInput
+          id="csvFileInput"
+          accept=".csv,.txt"
+          class="cs-file-zone__input"
+          (change)="onFileSelected($event)"
+        />
+      </label>
+
+      @if (csvParsing()) {
+        <div class="cs-csv-parsing">
+          <i class="pi pi-spin pi-spinner"></i>
+          <span>{{ 'conciliation.manualBankStatement.csv.parsing' | translate }}</span>
+        </div>
+      }
+
+      @if (!csvParsing() && csvFileCount() > 0) {
+        <div class="cs-csv-parsing">
+          <i class="pi pi-check-circle"></i>
+          <span>{{
+            'conciliation.manualBankStatement.csv.filesProcessed'
+              | translate: { count: csvFileCount() }
+          }}</span>
+        </div>
+      }
+
+      @if (!csvParsing() && csvRows().length === 0) {
+        <div class="cs-csv-empty">
+          <i class="pi pi-file-excel"></i>
+          <span>{{ 'conciliation.manualBankStatement.csv.noData' | translate }}</span>
+        </div>
+      }
+
+      @if (csvRows().length > 0) {
+        <div class="cs-section-header cs-section-header--table">
+          <p class="cs-section-label">
+            {{ 'conciliation.manualBankStatement.csv.preview' | translate }}
+            ({{ csvRows().length }})
+          </p>
+        </div>
+
+        <div class="cs-csv-table-wrap">
+          <table class="cs-csv-table">
+            <thead>
+              <tr>
+                <th>{{ 'conciliation.manualBankStatement.csv.colDate' | translate }}</th>
+                <th>{{ 'conciliation.manualBankStatement.csv.colDescription' | translate }}</th>
+                <th class="cs-csv-table__num">
+                  {{ 'conciliation.manualBankStatement.csv.colValue' | translate }}
+                </th>
+                <th>{{ 'conciliation.manualBankStatement.csv.colAcquirer' | translate }}</th>
+                <th>{{ 'conciliation.manualBankStatement.csv.colFlag' | translate }}</th>
+                <th>{{ 'conciliation.manualBankStatement.csv.colModality' | translate }}</th>
+                <th>{{ 'conciliation.manualBankStatement.csv.colStatus' | translate }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (row of csvRows(); track row.key) {
+                <tr
+                  [class.cs-csv-table__row--success]="row.submitStatus === 'success'"
+                  [class.cs-csv-table__row--error]="row.submitStatus === 'error'"
+                  [class.cs-csv-table__row--duplicate]="row.submitStatus === 'duplicate'"
+                >
+                  <td>{{ formatDisplayDate(row.releaseDate) }}</td>
+                  <td class="cs-csv-table__desc" [pTooltip]="row.description">
+                    {{ row.description }}
+                  </td>
+                  <td class="cs-csv-table__num">{{ formatCurrency(row.releaseValue) }}</td>
+                  <td>{{ row.acquirerName ?? '-' }}</td>
+                  <td>{{ row.flagName ?? '-' }}</td>
+                  <td>{{ row.modalityPaymentBank ? modalityPaymentBankLabel(row.modalityPaymentBank) : '-' }}</td>
+                  <td>
+                    @switch (row.submitStatus) {
+                      @case ('pending') {
+                        <span class="cs-csv-status cs-csv-status--pending">
+                          <i class="pi pi-clock"></i>
+                          {{ 'conciliation.manualBankStatement.csv.statusPending' | translate }}
+                        </span>
+                      }
+                      @case ('submitting') {
+                        <span class="cs-csv-status cs-csv-status--submitting">
+                          <i class="pi pi-spin pi-spinner"></i>
+                          {{ 'conciliation.manualBankStatement.csv.statusSubmitting' | translate }}
+                        </span>
+                      }
+                      @case ('success') {
+                        <span class="cs-csv-status cs-csv-status--success">
+                          <i class="pi pi-check-circle"></i>
+                          {{ 'conciliation.manualBankStatement.csv.statusSuccess' | translate }}
+                        </span>
+                      }
+                      @case ('duplicate') {
+                        <span
+                          class="cs-csv-status cs-csv-status--duplicate"
+                          [pTooltip]="'conciliation.manualBankStatement.csv.statusDuplicateHint' | translate"
+                        >
+                          <i class="pi pi-copy"></i>
+                          {{ 'conciliation.manualBankStatement.csv.statusDuplicate' | translate }}
+                        </span>
+                      }
+                      @case ('error') {
+                        <span
+                          class="cs-csv-status cs-csv-status--error"
+                          [pTooltip]="row.errorMessage ?? undefined"
+                        >
+                          <i class="pi pi-times-circle"></i>
+                          {{ 'conciliation.manualBankStatement.csv.statusError' | translate }}
+                        </span>
+                      }
+                    }
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+
+        <div class="flex justify-content-end gap-2 mt-3">
+          @if (csvHasErrors()) {
+            <p-button
+              type="button"
+              severity="warn"
+              icon="pi pi-refresh"
+              [disabled]="csvSubmitting()"
+              [label]="'conciliation.manualBankStatement.csv.retryFailed' | translate"
+              (onClick)="retryFailedCsv()"
+            ></p-button>
+          }
+          <p-button
+            type="button"
+            icon="pi pi-upload"
+            [loading]="csvSubmitting()"
+            [label]="'conciliation.manualBankStatement.csv.submit' | translate"
+            (onClick)="submitCsv()"
+            [disabled]="
+              !csvCompanyId() || !csvBankingDomicileId() || csvPendingCount() === 0 || csvSubmitting()
+            "
+          ></p-button>
+        </div>
+      }
+    </div>
+  }
+
+  <!-- ── Lançamento manual ── -->
+  @if (importMode() === 'manual') {
   <!-- Dados obrigatorios -->
   <div class="flex align-items-center gap-2 mb-2">
     <span class="text-base font-semibold">
@@ -337,4 +609,5 @@
       [label]="'conciliation.manualBankStatement.submit' | translate"
     ></p-button>
   </div>
+  }
 </p-card>

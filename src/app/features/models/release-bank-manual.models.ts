@@ -19,3 +19,19 @@ export interface ReleaseBankManualInput {
 export interface ReleaseBankManualResult {
   id: string;
 }
+
+export interface ReleaseBankManualTextImportInput {
+  companyId: string;
+  bankingDomicileId: string;
+  releaseDate: string;
+  description: string;
+  releaseValue: number;
+}
+
+export interface ReleaseBankManualImportResult {
+  id: string;
+  acquirerName: string | null;
+  flagName: string | null;
+  modalityPaymentBank: ModalityPaymentBankEnum | null;
+  establishmentPvNumber: number | null;
+}

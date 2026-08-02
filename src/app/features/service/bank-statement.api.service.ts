@@ -9,7 +9,12 @@ import { ValueTotalsModel } from '@models/value-totals-model';
 import { ListQueryDto } from '@shared/features/list-query/list-query.types';
 import { BankStatementAdvancedFilters } from '@features/filter/bank-statement.filters';
 import { BankStatementApiModel, mapBankStatementApiModels } from '@models/bank-statement.model';
-import { ReleaseBankManualInput, ReleaseBankManualResult } from '@models/release-bank-manual.models';
+import {
+  ReleaseBankManualInput,
+  ReleaseBankManualResult,
+  ReleaseBankManualImportResult,
+  ReleaseBankManualTextImportInput,
+} from '@models/release-bank-manual.models';
 
 @Injectable({ providedIn: 'root' })
 export class BankStatementApiService {
@@ -39,6 +44,10 @@ export class BankStatementApiService {
 
   createManual(body: ReleaseBankManualInput) {
     return this.http.post<ReleaseBankManualResult>(`${this.baseUrl}/manual`, body);
+  }
+
+  importText(body: ReleaseBankManualTextImportInput) {
+    return this.http.post<ReleaseBankManualImportResult>(`${this.baseUrl}/manual/import-text`, body);
   }
 
   deleteManual(id: string) {

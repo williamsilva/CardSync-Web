@@ -4,7 +4,12 @@ import { Observable, finalize } from 'rxjs';
 
 import { ValueTotalsModel } from '@models/value-totals-model';
 import { BankStatementApiModel } from '@models/bank-statement.model';
-import { ReleaseBankManualInput, ReleaseBankManualResult } from '@models/release-bank-manual.models';
+import {
+  ReleaseBankManualInput,
+  ReleaseBankManualResult,
+  ReleaseBankManualImportResult,
+  ReleaseBankManualTextImportInput,
+} from '@models/release-bank-manual.models';
 import { ListQueryDto } from '@shared/features/list-query/list-query.types';
 import { BankStatementAdvancedFilters } from '@features/filter/bank-statement.filters';
 import { BankStatementApiService } from '@features/service/bank-statement.api.service';
@@ -74,6 +79,10 @@ export class BankStatementFacade {
 
   createManual(input: ReleaseBankManualInput): Observable<ReleaseBankManualResult> {
     return this.api.createManual(input);
+  }
+
+  importText(input: ReleaseBankManualTextImportInput): Observable<ReleaseBankManualImportResult> {
+    return this.api.importText(input);
   }
 
   deleteManual(id: string): Observable<void> {

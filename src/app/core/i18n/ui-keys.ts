@@ -715,6 +715,14 @@ export const UI_KEYS = {
     manualBankStatement: {
       saved: 'conciliation.manualBankStatement.saved',
       saveError: 'conciliation.manualBankStatement.saveError',
+      csv: {
+        importSuccess: 'conciliation.manualBankStatement.csv.importSuccess',
+        fileErrorTitle: 'conciliation.manualBankStatement.csv.fileErrorTitle',
+        fileErrorDetail: 'conciliation.manualBankStatement.csv.fileErrorDetail',
+        bankMismatchTitle: 'conciliation.manualBankStatement.csv.bankMismatchTitle',
+        bankMismatchConfirm: 'conciliation.manualBankStatement.csv.bankMismatchConfirm',
+        bankMismatchCancel: 'conciliation.manualBankStatement.csv.bankMismatchCancel',
+      },
     },
     manualAdjustment: {
       saved: 'conciliation.manualAdjustment.saved',
