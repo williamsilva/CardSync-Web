@@ -12,12 +12,12 @@
       pButton
       [routerLink]="[]"
       [replaceUrl]="true"
+      class="p-button-sm"
+      icon="pi pi-file-plus"
       queryParamsHandling="merge"
       [queryParams]="{ view: 'manual-sales-summary' }"
-      icon="pi pi-file-plus"
-      class="p-button-sm"
-      [class.p-button-outlined]="activeTab() !== 'manualSalesSummary'"
       [label]="'conciliation.manualSalesSummary.title' | translate"
+      [class.p-button-outlined]="activeTab() !== 'manualSalesSummary'"
     ></a>
   }
 
@@ -26,12 +26,12 @@
       pButton
       [routerLink]="[]"
       [replaceUrl]="true"
+      class="p-button-sm"
+      icon="pi pi-credit-card"
       queryParamsHandling="merge"
       [queryParams]="{ view: 'manual-credit-order' }"
-      icon="pi pi-credit-card"
-      class="p-button-sm"
-      [class.p-button-outlined]="activeTab() !== 'manualCreditOrder'"
       [label]="'conciliation.manualCreditOrder.title' | translate"
+      [class.p-button-outlined]="activeTab() !== 'manualCreditOrder'"
     ></a>
   }
 
@@ -40,12 +40,12 @@
       pButton
       [routerLink]="[]"
       [replaceUrl]="true"
-      queryParamsHandling="merge"
-      [queryParams]="{ view: 'manual-bank-statement' }"
-      icon="pi pi-building-columns"
       class="p-button-sm"
-      [class.p-button-outlined]="activeTab() !== 'manualBankStatement'"
+      queryParamsHandling="merge"
+      icon="pi pi-building-columns"
+      [queryParams]="{ view: 'manual-bank-statement' }"
       [label]="'conciliation.manualBankStatement.title' | translate"
+      [class.p-button-outlined]="activeTab() !== 'manualBankStatement'"
     ></a>
   }
 
@@ -54,12 +54,12 @@
       pButton
       [routerLink]="[]"
       [replaceUrl]="true"
+      class="p-button-sm"
+      icon="pi pi-sliders-h"
       queryParamsHandling="merge"
       [queryParams]="{ view: 'manual-adjustment' }"
-      icon="pi pi-sliders-h"
-      class="p-button-sm"
-      [class.p-button-outlined]="activeTab() !== 'manualAdjustment'"
       [label]="'conciliation.manualAdjustment.title' | translate"
+      [class.p-button-outlined]="activeTab() !== 'manualAdjustment'"
     ></a>
   }
 
@@ -67,13 +67,13 @@
     <a
       pButton
       [routerLink]="[]"
+      icon="pi pi-link"
       [replaceUrl]="true"
+      class="p-button-sm"
       queryParamsHandling="merge"
       [queryParams]="{ view: 'manual-bank-reconciliation' }"
-      icon="pi pi-link"
-      class="p-button-sm"
-      [class.p-button-outlined]="activeTab() !== 'manualBankReconciliation'"
       [label]="'conciliation.manualBankReconciliation.title' | translate"
+      [class.p-button-outlined]="activeTab() !== 'manualBankReconciliation'"
     ></a>
   }
 
