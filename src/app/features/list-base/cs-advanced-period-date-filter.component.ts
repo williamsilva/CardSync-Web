@@ -1,6 +1,6 @@
 import { FormsModule } from '@angular/forms';
 
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 
 import { SelectModule } from 'primeng/select';
 import { FloatLabel } from 'primeng/floatlabel';
@@ -61,7 +61,7 @@ import { DatePickerModule } from 'primeng/datepicker';
     </div>
   `,
 })
-export class CsAdvancedPeriodDateFilterComponent {
+export class CsAdvancedPeriodDateFilterComponent implements OnChanges {
   @Input() dateInputId = '';
   @Input() periodInputId = '';
 
@@ -100,12 +100,23 @@ export class CsAdvancedPeriodDateFilterComponent {
    * the header to jump into year-selection view) then throws "value.getFullYear is not a
    * function". Pre-parsing the range array ourselves keeps single-value binding (already handled
    * correctly by PrimeNG) untouched and only works around the array case.
+   *
+   * Computed in ngOnChanges (not a getter): a getter re-evaluated on every change-detection pass
+   * would return a brand-new array/Date instances each time even when nothing actually changed,
+   * which PrimeNG's own OnChanges sees as "a new value" on every single tick — each one
+   * re-triggering writeControlValue (and its markForCheck), scheduling another change-detection
+   * pass forever. That tight loop is what was freezing the whole tab (confirmed: page became
+   * unresponsive even to devtools, the signature of a synchronous infinite loop, not just a
+   * one-off crash).
    */
-  protected get pickerValue(): string | Date[] | null {
-    if (Array.isArray(this.value)) {
-      return this.value.map((v) => (v ? this.parseDateByFormat(v, this.dateFormat) : null)) as Date[];
+  protected pickerValue: string | Date[] | null = null;
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['value'] || changes['dateFormat']) {
+      this.pickerValue = Array.isArray(this.value)
+        ? (this.value.map((v) => (v ? this.parseDateByFormat(v, this.dateFormat) : null)) as Date[])
+        : this.value;
     }
-    return this.value;
   }
 
   private parseDateByFormat(text: string, format: string): Date | null {
