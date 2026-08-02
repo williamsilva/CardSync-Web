@@ -167,6 +167,50 @@ export abstract class StatefulListPage<
     return period === PeriodEnum.INTERVAL ? 'range' : 'single';
   }
 
+  /**
+   * PrimeNG's DatePicker (dataType="string") only parses an incoming value into a Date when it's
+   * a plain string — for range selection (period INTERVAL) the value is an array of strings, and
+   * its writeControlValue's `typeof value === 'string'` check skips arrays entirely, leaving raw
+   * strings inside the component. Any internal code path that later calls `.getFullYear()` on
+   * them (e.g. clicking the calendar header to jump into year-selection view, available
+   * regardless of the configured view) then throws mid-render. Column-filter datepickers bind
+   * this directly (not through cs-advanced-period-date-filter, which already guards against this)
+   * — call from a `computed()` in the component, never a getter recomputed every change-detection
+   * pass: a getter would return new array/Date instances every tick, which PrimeNG's own
+   * OnChanges reads as a real change every time, re-triggering writeControlValue (and its
+   * markForCheck) forever — the exact infinite loop that froze the whole tab the first time this
+   * was patched only as a getter.
+   */
+  toDatepickerValue(value: string | string[] | null, format: string): string | Date[] | null {
+    if (!Array.isArray(value)) {
+      return value;
+    }
+    return value.map((v) => (v ? this.parseDateByFormat(v, format) : null)) as Date[];
+  }
+
+  private parseDateByFormat(text: string, format: string): Date | null {
+    const formatParts = format.split('/');
+    const valueParts = text.split('/');
+    if (formatParts.length !== valueParts.length) {
+      return null;
+    }
+
+    let day = 1;
+    let month = 0;
+    let year = new Date().getFullYear();
+
+    formatParts.forEach((token, i) => {
+      const num = Number(valueParts[i]);
+      if (Number.isNaN(num)) return;
+      if (token.startsWith('d')) day = num;
+      else if (token.startsWith('m')) month = num - 1;
+      else if (token.startsWith('y')) year = num;
+    });
+
+    const date = new Date(year, month, day);
+    return Number.isNaN(date.getTime()) ? null : date;
+  }
+
   setArrayColumnDraft(
     draft: WritableSignal<string[] | null>,
     value: string[] | null | undefined,

@@ -194,6 +194,10 @@ export class ContractListComponent
   readonly isStartDateDisabled = computed(() => !this.periodStartDate());
   readonly isCreatedAtColumnDisabled = computed(() => !this.createdAtColumnPeriod());
 
+  protected readonly createdAtColumnPickerValue = computed(() =>
+    this.toDatepickerValue(this.createdAtColumnDraft(), this.setDateFormat(this.createdAtColumnPeriod())),
+  );
+
   readonly periodEnumOptions = computed(() => {
     this.i18n.getAppliedLang();
 

@@ -218,6 +218,10 @@ export class MissingAcquirerListComponent
   readonly isSaleDateDisabled = computed(() => !this.periodSaleDate());
   readonly isSaleDateColumnDisabled = computed(() => !this.saleDateColumnPeriod());
 
+  protected readonly saleDateColumnPickerValue = computed(() =>
+    this.toDatepickerValue(this.saleDateColumnDraft(), this.setDateFormat(this.saleDateColumnPeriod())),
+  );
+
   readonly grossValueRange = computed<CsCurrencyRangeValue>(() => ({
     start: this.grossValueStart(),
     end: this.grossValueEnd(),

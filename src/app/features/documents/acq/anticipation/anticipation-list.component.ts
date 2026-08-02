@@ -220,6 +220,16 @@ export class AnticipationListComponent
   readonly statusPaymentBankColumnDraft = signal<StatusPaymentBankEnum[] | null>(null);
   readonly transactionsStatusColumnDraft = signal<StatusReconciliationEnum[] | null>(null);
 
+  protected readonly releaseDateColumnPickerValue = computed(() =>
+    this.toDatepickerValue(this.releaseDateColumnDraft(), this.setDateFormat(this.releaseDateColumnPeriod())),
+  );
+  protected readonly originalDueDateColumnPickerValue = computed(() =>
+    this.toDatepickerValue(
+      this.originalDueDateColumnDraft(),
+      this.setDateFormat(this.originalDueDateColumnPeriod()),
+    ),
+  );
+
   readonly modalityOptions = computed(() => {
     this.i18n.getAppliedLang();
     return allModalityEnum().map((value) => ({

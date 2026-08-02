@@ -143,6 +143,10 @@ export class SaleSummaryListComponent
 
   readonly isRvDateDisabled = computed(() => !this.periodRvDate());
   readonly isRvDateColumnDisabled = computed(() => !this.rvDateColumnPeriod());
+
+  protected readonly rvDateColumnPickerValue = computed(() =>
+    this.toDatepickerValue(this.rvDateColumnDraft(), this.setDateFormat(this.rvDateColumnPeriod())),
+  );
   override rows =
     Number(localStorage.getItem(this.tableRowsKey())) || StatefulListPage.DEFAULT_ROWS;
 

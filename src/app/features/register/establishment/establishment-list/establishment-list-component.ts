@@ -183,6 +183,10 @@ export class EstablishmentListComponent
   readonly isCreatedAtDisabled = computed(() => !this.periodCreatedAt());
   readonly isCreatedAtColumnDisabled = computed(() => !this.createdAtColumnPeriod());
 
+  protected readonly createdAtColumnPickerValue = computed(() =>
+    this.toDatepickerValue(this.createdAtColumnDraft(), this.setDateFormat(this.createdAtColumnPeriod())),
+  );
+
   readonly periodEnumOptions = computed(() => {
     this.i18n.getAppliedLang();
 

@@ -129,6 +129,10 @@ export class ContractAuditListComponent
   readonly isSaleDateDisabled = computed(() => !this.periodSaleDate());
   readonly isSaleDateColumnDisabled = computed(() => !this.saleDateColumnPeriod());
 
+  protected readonly saleDateColumnPickerValue = computed(() =>
+    this.toDatepickerValue(this.saleDateColumnDraft(), this.setDateFormat(this.saleDateColumnPeriod())),
+  );
+
   override rows = Number(localStorage.getItem(this.tableRowsKey())) || 13;
 
   /* Campos Filtros avançados */

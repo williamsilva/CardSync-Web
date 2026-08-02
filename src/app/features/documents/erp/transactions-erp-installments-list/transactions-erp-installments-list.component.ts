@@ -205,6 +205,16 @@ export class ErpInstallmentsListComponent
   readonly isSaleDateColumnDisabled = computed(() => !this.saleDateColumnPeriod());
   readonly isExpectedPaymentDateDisabled = computed(() => !this.periodExpectedPaymentDate());
 
+  protected readonly saleDateColumnPickerValue = computed(() =>
+    this.toDatepickerValue(this.saleDateColumnDraft(), this.setDateFormat(this.saleDateColumnPeriod())),
+  );
+  protected readonly expectedPaymentDateColumnPickerValue = computed(() =>
+    this.toDatepickerValue(
+      this.expectedPaymentDateColumnDraft(),
+      this.setDateFormat(this.expectedPaymentDateColumnPeriod()),
+    ),
+  );
+
   readonly grossValueRange = computed<CsCurrencyRangeValue>(() => ({
     start: this.grossValueStart(),
     end: this.grossValueEnd(),

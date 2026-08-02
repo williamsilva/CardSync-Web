@@ -226,6 +226,19 @@ export class CreditOrderListComponent
   readonly modalityColumnDraft = signal<ModalityEnum[] | null>(null);
   readonly releaseDateColumnPeriod = signal<PeriodEnum | null>(null);
   readonly creditOrderDateColumnPeriod = signal<PeriodEnum | null>(null);
+
+  protected readonly rvDateColumnPickerValue = computed(() =>
+    this.toDatepickerValue(this.rvDateColumnDraft(), this.setDateFormat(this.rvDateColumnPeriod())),
+  );
+  protected readonly releaseDateColumnPickerValue = computed(() =>
+    this.toDatepickerValue(this.releaseDateColumnDraft(), this.setDateFormat(this.releaseDateColumnPeriod())),
+  );
+  protected readonly creditOrderDateColumnPickerValue = computed(() =>
+    this.toDatepickerValue(
+      this.creditOrderDateColumnDraft(),
+      this.setDateFormat(this.creditOrderDateColumnPeriod()),
+    ),
+  );
   readonly statusPaymentBankColumnDraft = signal<StatusPaymentBankEnum[] | null>(null);
   readonly salesSummaryStatusColumnDraft = signal<StatusReconciliationEnum[] | null>(null);
 

@@ -208,6 +208,10 @@ export class ErpVsAcquirerOtherDivergencesListComponent
   readonly isSaleDateDisabled = computed(() => !this.periodSaleDate());
   readonly isSaleDateColumnDisabled = computed(() => !this.saleDateColumnPeriod());
 
+  protected readonly saleDateColumnPickerValue = computed(() =>
+    this.toDatepickerValue(this.saleDateColumnDraft(), this.setDateFormat(this.saleDateColumnPeriod())),
+  );
+
   readonly batchRows = computed(() => this.selectedDeleteRows());
 
   protected readonly selectedDeleteRows = computed(() =>
