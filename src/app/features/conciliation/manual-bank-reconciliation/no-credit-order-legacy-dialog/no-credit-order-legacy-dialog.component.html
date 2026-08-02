@@ -61,6 +61,15 @@
             'conciliation.manualBankReconciliation.noCreditOrderLegacyColAcquirer' | translate
           "
         ></p-select>
+        <p-select
+          appendTo="body"
+          class="w-14rem"
+          [showClear]="true"
+          [ngModel]="bankFilter()"
+          [options]="bankOptions()"
+          (ngModelChange)="onBankFilterChange($event)"
+          [placeholder]="'conciliation.manualBankReconciliation.noCreditOrderLegacyColBank' | translate"
+        ></p-select>
       </div>
       <p-table
         size="small"
@@ -106,6 +115,16 @@
               <span
                 tooltipPosition="top"
                 [pTooltip]="
+                  'conciliation.manualBankReconciliation.noCreditOrderLegacyColBank' | translate
+                "
+              >
+                {{ 'conciliation.manualBankReconciliation.noCreditOrderLegacyColBank' | translate }}
+              </span>
+            </th>
+            <th>
+              <span
+                tooltipPosition="top"
+                [pTooltip]="
                   'conciliation.manualBankReconciliation.noCreditOrderLegacyColDate' | translate
                 "
               >
@@ -140,6 +159,9 @@
               }}</span>
             </td>
             <td>
+              <span [pTooltip]="row.bankName" tooltipPosition="top">{{ row.bankName }}</span>
+            </td>
+            <td>
               <span [pTooltip]="row.releaseDate | csDate: 'date'" tooltipPosition="top">
                 {{ row.releaseDate | csDate: 'date' }}
               </span>
@@ -153,7 +175,7 @@
         </ng-template>
         <ng-template pTemplate="emptymessage">
           <tr>
-            <td colspan="5" class="text-center text-sm text-color-secondary">
+            <td colspan="6" class="text-center text-sm text-color-secondary">
               {{
                 'conciliation.manualBankReconciliation.noCreditOrderLegacyNoneEligible' | translate
               }}

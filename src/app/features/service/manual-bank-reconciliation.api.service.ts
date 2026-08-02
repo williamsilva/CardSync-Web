@@ -56,6 +56,7 @@ export interface PreImplantationDivergenceCandidate {
   releaseBankId: string;
   companyName: string | null;
   acquirerName: string | null;
+  bankName: string | null;
   releaseDate: string;
   releaseValue: number;
   matchedOrders: number;
@@ -82,6 +83,7 @@ export interface NoCreditOrderLegacyCandidate {
   releaseBankId: string;
   companyName: string | null;
   acquirerName: string | null;
+  bankName: string | null;
   releaseDate: string;
   releaseValue: number;
 }

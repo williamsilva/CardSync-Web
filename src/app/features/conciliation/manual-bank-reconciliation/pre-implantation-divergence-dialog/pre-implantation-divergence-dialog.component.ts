@@ -54,16 +54,22 @@ export class PreImplantationDivergenceDialogComponent implements OnChanges {
   /** Filtros locais da tabela de prévia — a lista inteira já veio numa única chamada, então filtra em memória, sem nova requisição. */
   protected readonly companyFilter = signal<string | null>(null);
   protected readonly acquirerFilter = signal<string | null>(null);
+  protected readonly bankFilter = signal<string | null>(null);
 
   protected readonly companyOptions = computed(() => this.uniqueOptions((c) => c.companyName));
   protected readonly acquirerOptions = computed(() => this.uniqueOptions((c) => c.acquirerName));
+  protected readonly bankOptions = computed(() => this.uniqueOptions((c) => c.bankName));
 
   protected readonly filteredCandidates = computed(() => {
     const candidates = this.preview?.candidates ?? [];
     const company = this.companyFilter();
     const acquirer = this.acquirerFilter();
+    const bank = this.bankFilter();
     return candidates.filter(
-      (c) => (!company || c.companyName === company) && (!acquirer || c.acquirerName === acquirer),
+      (c) =>
+        (!company || c.companyName === company) &&
+        (!acquirer || c.acquirerName === acquirer) &&
+        (!bank || c.bankName === bank),
     );
   });
 
@@ -73,6 +79,7 @@ export class PreImplantationDivergenceDialogComponent implements OnChanges {
       this.selectedCandidates.set(this.preview?.candidates ?? []);
       this.companyFilter.set(null);
       this.acquirerFilter.set(null);
+      this.bankFilter.set(null);
     }
   }
 
@@ -103,6 +110,11 @@ export class PreImplantationDivergenceDialogComponent implements OnChanges {
 
   protected onAcquirerFilterChange(value: string | null): void {
     this.acquirerFilter.set(value);
+    this.selectedCandidates.set(this.filteredCandidates());
+  }
+
+  protected onBankFilterChange(value: string | null): void {
+    this.bankFilter.set(value);
     this.selectedCandidates.set(this.filteredCandidates());
   }
 
