@@ -47,7 +47,7 @@ import { DatePickerModule } from 'primeng/datepicker';
           appendTo="body"
           dataType="string"
           [showIcon]="true"
-          [ngModel]="value"
+          [ngModel]="pickerValue"
           [disabled]="disabled"
           [readonlyInput]="true"
           [inputId]="dateInputId"
@@ -91,4 +91,43 @@ export class CsAdvancedPeriodDateFilterComponent {
 
   @Output() periodChange = new EventEmitter<any | null>();
   @Output() valueChange = new EventEmitter<string | string[] | null>();
+
+  /**
+   * PrimeNG's DatePicker only parses a STRING value into a Date on write (dataType="string") —
+   * for range selection the value is an array of strings, and its writeControlValue only checks
+   * `typeof value === 'string'` (an array fails that check), so the array elements are never
+   * converted. Any internal code path that later calls `.getFullYear()` on them (e.g. clicking
+   * the header to jump into year-selection view) then throws "value.getFullYear is not a
+   * function". Pre-parsing the range array ourselves keeps single-value binding (already handled
+   * correctly by PrimeNG) untouched and only works around the array case.
+   */
+  protected get pickerValue(): string | Date[] | null {
+    if (Array.isArray(this.value)) {
+      return this.value.map((v) => (v ? this.parseDateByFormat(v, this.dateFormat) : null)) as Date[];
+    }
+    return this.value;
+  }
+
+  private parseDateByFormat(text: string, format: string): Date | null {
+    const formatParts = format.split('/');
+    const valueParts = text.split('/');
+    if (formatParts.length !== valueParts.length) {
+      return null;
+    }
+
+    let day = 1;
+    let month = 0;
+    let year = new Date().getFullYear();
+
+    formatParts.forEach((token, i) => {
+      const num = Number(valueParts[i]);
+      if (Number.isNaN(num)) return;
+      if (token.startsWith('d')) day = num;
+      else if (token.startsWith('m')) month = num - 1;
+      else if (token.startsWith('y')) year = num;
+    });
+
+    const date = new Date(year, month, day);
+    return Number.isNaN(date.getTime()) ? null : date;
+  }
 }
