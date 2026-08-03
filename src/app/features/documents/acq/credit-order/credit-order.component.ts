@@ -184,7 +184,9 @@ export class CreditOrderListComponent
   readonly releaseValueEnd = signal<number | null>(null);
   readonly releaseValueStart = signal<number | null>(null);
 
-  readonly statusPaymentBank = signal<StatusPaymentBankEnum[] | null>(null);
+  readonly statusPaymentBank = signal<StatusPaymentBankEnum[] | null>(
+    this.defaultStatusPaymentBank(),
+  );
   readonly salesSummaryStatus = signal<StatusReconciliationEnum[] | null>(null);
 
   readonly isRvDateDisabled = computed(() => !this.periodRvDate());
@@ -350,6 +352,23 @@ export class CreditOrderListComponent
     return createEmptyCreditOrderAdvancedFilters();
   }
 
+  /**
+   * Só entra quando NENHUM filtro avançado está setado (painel inteiro vazio) — primeira visita à
+   * tela (nada persistido ainda), filtros persistidos totalmente vazios, ou logo após "Limpar".
+   * Checa o painel inteiro, não campo a campo, mesmo critério do SaleSummaryListComponent: se o
+   * usuário já definiu qualquer outro filtro (ex.: Empresa), isso já conta como painel "não vazio"
+   * e não deve reaplicar o default — senão a escolha dele nunca "gruda".
+   */
+  private applyDefaultFiltersIfEmpty(): void {
+    if (this.advancedActiveFilters().length > 0) return;
+
+    this.statusPaymentBank.set(this.defaultStatusPaymentBank());
+  }
+
+  private defaultStatusPaymentBank(): StatusPaymentBankEnum[] {
+    return [StatusPaymentBankEnum.PENDING, StatusPaymentBankEnum.DIVERGENT];
+  }
+
   protected override tableStateKey(): string {
     return STATE_KEY.CARDSYNC.CREDIT_ORDER.TABLE.STATE.V1;
   }
@@ -383,6 +402,7 @@ export class CreditOrderListComponent
 
   protected override resetFilters(): void {
     resetCreditOrderAdvancedFilters(this);
+    this.applyDefaultFiltersIfEmpty();
   }
 
   /* Filtros Avançados */
@@ -857,6 +877,8 @@ export class CreditOrderListComponent
 
     this.salesSummaryStatus.set(s.salesSummaryStatus ?? null);
     this.statusPaymentBank.set(s.statusPaymentBank ?? null);
+
+    this.applyDefaultFiltersIfEmpty();
   }
 
   protected onGrossValueRangeChange(value: CsCurrencyRangeValue): void {
