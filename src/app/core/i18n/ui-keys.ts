@@ -1021,7 +1021,7 @@ export const UI_KEYS = {
     },
     scheduler: {
       erp: 'fileProcessingDashboard.scheduler.erp',
-      rede: 'fileProcessingDashboard.scheduler.rede',
+      acquirer: 'fileProcessingDashboard.scheduler.acquirer',
       bank: 'fileProcessingDashboard.scheduler.bank',
       noRun: 'fileProcessingDashboard.scheduler.noRun',
       running: 'fileProcessingDashboard.scheduler.running',

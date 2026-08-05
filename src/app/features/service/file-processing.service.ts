@@ -68,8 +68,8 @@ export class FileProcessingService {
     return this.http.post<void>(`${this.baseUrl}/erp/process`, {}, { withCredentials: true });
   }
 
-  processRede(): Observable<void> {
-    return this.http.post<void>(`${this.baseUrl}/rede/process`, {}, { withCredentials: true });
+  processAcquirer(): Observable<void> {
+    return this.http.post<void>(`${this.baseUrl}/acquirer/process`, {}, { withCredentials: true });
   }
 
   searchFilesPaged(body: ListQueryDto<ProcessedFilesAdvancedFilters>) {

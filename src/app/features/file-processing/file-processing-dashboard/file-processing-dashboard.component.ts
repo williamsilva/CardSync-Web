@@ -69,10 +69,6 @@ export class FileProcessingDashboardComponent extends StatefulListPage<
   protected readonly scheduleLoading = signal(false);
   protected readonly loading = computed(() => this.scheduleLoading() || this.totalsLoading());
 
-  protected readonly processingErp = signal(false);
-  protected readonly processingRede = signal(false);
-  protected readonly processingBank = signal(false);
-
   protected readonly schedule = signal<ScheduleStatusResponse | null>(null);
   protected readonly totals = signal<FileProcessingTotalsModel | null>(null);
 

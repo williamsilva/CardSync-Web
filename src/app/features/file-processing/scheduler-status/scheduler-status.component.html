@@ -77,19 +77,19 @@
     </p-card>
   </div>
 
-  <!-- Rede -->
+  <!-- Adquirentes (Rede + Cielo + futuras) -->
   <div class="col-12 lg:col-4">
     <p-card>
-      <ng-template pTemplate="title">{{ 'scheduler.rede.title' | translate }}</ng-template>
+      <ng-template pTemplate="title">{{ 'scheduler.acquirer.title' | translate }}</ng-template>
       <div class="flex flex-column gap-3">
 
         <div class="flex align-items-center justify-content-between">
           <span class="text-sm text-color-secondary">{{ 'scheduler.status.lastResult' | translate }}</span>
-          @if (processingRede() || schedule()?.rede?.running) {
+          @if (processingAcquirer() || schedule()?.acquirer?.running) {
             <cs-tag [value]="'scheduler.status.running' | translate" tone="info"></cs-tag>
-          } @else if (schedule()?.rede?.lastSuccess === true) {
+          } @else if (schedule()?.acquirer?.lastSuccess === true) {
             <cs-tag [value]="'scheduler.status.success' | translate" tone="success"></cs-tag>
-          } @else if (schedule()?.rede?.lastSuccess === false) {
+          } @else if (schedule()?.acquirer?.lastSuccess === false) {
             <cs-tag [value]="'scheduler.status.failed' | translate" tone="danger"></cs-tag>
           } @else {
             <span class="text-sm text-color-secondary">{{ 'scheduler.status.noRun' | translate }}</span>
@@ -101,31 +101,31 @@
         <div class="flex flex-column gap-2 text-sm">
           <div class="flex justify-content-between gap-2">
             <span class="text-color-secondary">{{ 'scheduler.status.lastStart' | translate }}</span>
-            <span>{{ schedule()?.rede?.lastStartedAt | csDate: 'short' }}</span>
+            <span>{{ schedule()?.acquirer?.lastStartedAt | csDate: 'short' }}</span>
           </div>
           <div class="flex justify-content-between gap-2">
             <span class="text-color-secondary">{{ 'scheduler.status.lastEnd' | translate }}</span>
-            <span>{{ schedule()?.rede?.lastFinishedAt | csDate: 'short' }}</span>
+            <span>{{ schedule()?.acquirer?.lastFinishedAt | csDate: 'short' }}</span>
           </div>
           <div class="flex justify-content-between gap-2">
             <span class="text-color-secondary">{{ 'scheduler.status.trigger' | translate }}</span>
-            <span>{{ schedule()?.rede?.lastTrigger || '-' }}</span>
+            <span>{{ schedule()?.acquirer?.lastTrigger || '-' }}</span>
           </div>
         </div>
 
         <div class="text-sm border-1 surface-border border-round surface-ground p-3">
           <span class="font-semibold">{{ 'scheduler.status.message' | translate }}:</span>
-          <span class="ml-2 text-color-secondary">{{ formatMessage(schedule()?.rede?.lastMessage) }}</span>
+          <span class="ml-2 text-color-secondary">{{ formatMessage(schedule()?.acquirer?.lastMessage) }}</span>
         </div>
 
         <button
           pButton
           type="button"
-          icon="pi pi-play"
-          [label]="'scheduler.status.processRede' | translate"
-          [loading]="processingRede()"
+          icon="pi pi-credit-card"
+          [label]="'scheduler.status.processAcquirer' | translate"
+          [loading]="processingAcquirer()"
           [disabled]="anyProcessing()"
-          (click)="processRede()"
+          (click)="processAcquirer()"
         ></button>
       </div>
     </p-card>

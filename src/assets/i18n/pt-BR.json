@@ -1635,7 +1635,7 @@
     "scheduler": {
       "ok": "OK",
       "erp": "ERP",
-      "rede": "Rede",
+      "acquirer": "Adquirentes",
       "bank": "Banco / CNAB",
       "attention": "Atenção",
       "running": "Executando",
@@ -3480,7 +3480,7 @@
   "scheduler": {
     "status": {
       "title": "Status do Scheduler",
-      "subtitle": "Acompanhe a última execução automática/manual do processamento ERP, Rede e Banco.",
+      "subtitle": "Acompanhe a última execução automática/manual do processamento ERP, Adquirentes e Banco.",
       "running": "Em execução",
       "lastResult": "Último resultado",
       "success": "Sucesso",
@@ -3492,11 +3492,11 @@
       "message": "Mensagem",
       "files": "Arquivos",
       "processErp": "Processar ERP agora",
-      "processRede": "Processar Rede agora",
+      "processAcquirer": "Processar Adquirentes agora",
       "processBank": "Processar CNAB agora"
     },
     "erp": { "title": "ERP" },
-    "rede": { "title": "Rede" },
+    "acquirer": { "title": "Adquirentes" },
     "bank": { "title": "Banco / CNAB" }
   },
   "fileProcessing": {

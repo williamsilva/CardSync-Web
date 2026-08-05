@@ -196,7 +196,7 @@ export interface ProcessedFileErrorModel {
 }
 
 export interface FileProcessingScheduleStatusModel {
-  system: 'ERP' | 'REDE' | 'BANK' | string;
+  system: 'ERP' | 'ACQUIRER' | 'BANK' | string;
   running: boolean;
   lastStartedAt?: string | null;
   lastFinishedAt?: string | null;
@@ -207,7 +207,7 @@ export interface FileProcessingScheduleStatusModel {
 
 export interface ScheduleStatusResponse {
   erp: FileProcessingScheduleStatusModel;
-  rede: FileProcessingScheduleStatusModel;
+  acquirer: FileProcessingScheduleStatusModel;
   bank?: FileProcessingScheduleStatusModel;
 }
 

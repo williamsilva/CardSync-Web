@@ -27,7 +27,7 @@ export class SchedulerStatusComponent {
 
   protected readonly loading = signal(false);
   protected readonly processingErp = signal(false);
-  protected readonly processingRede = signal(false);
+  protected readonly processingAcquirer = signal(false);
   protected readonly processingBank = signal(false);
 
   protected readonly schedule = signal<ScheduleStatusResponse | null>(null);
@@ -37,7 +37,7 @@ export class SchedulerStatusComponent {
   protected readonly anyProcessing = computed(
     () =>
       this.processingErp() ||
-      this.processingRede() ||
+      this.processingAcquirer() ||
       this.processingBank(),
   );
 
@@ -63,12 +63,12 @@ export class SchedulerStatusComponent {
     });
   }
 
-  protected processRede(): void {
-    this.processingRede.set(true);
-    this.service.processRede().subscribe({
+  protected processAcquirer(): void {
+    this.processingAcquirer.set(true);
+    this.service.processAcquirer().subscribe({
       next: () => this.reload(),
-      error: () => this.processingRede.set(false),
-      complete: () => this.processingRede.set(false),
+      error: () => this.processingAcquirer.set(false),
+      complete: () => this.processingAcquirer.set(false),
     });
   }
 

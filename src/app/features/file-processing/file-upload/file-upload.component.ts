@@ -121,7 +121,7 @@ export class FileUploadComponent {
       system === 'erp'
         ? this.service.processErp()
         : system === 'rede'
-          ? this.service.processRede()
+          ? this.service.processAcquirer()
           : this.service.processBank();
 
     request$.subscribe({

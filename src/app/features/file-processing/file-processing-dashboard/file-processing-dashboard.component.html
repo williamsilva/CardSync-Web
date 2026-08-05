@@ -134,27 +134,27 @@
           </div>
         </div>
 
-        <!-- Rede -->
+        <!-- Adquirentes (Rede + Cielo + futuras) -->
         <div class="cs-scheduler-row">
           <div class="cs-scheduler-row__info">
-            <strong>{{ 'fileProcessingDashboard.scheduler.rede' | translate }}</strong>
+            <strong>{{ 'fileProcessingDashboard.scheduler.acquirer' | translate }}</strong>
             <span>{{
-              s['rede'].lastMessage || ('fileProcessingDashboard.scheduler.noRun' | translate)
+              s['acquirer'].lastMessage || ('fileProcessingDashboard.scheduler.noRun' | translate)
             }}</span>
-            @if (s['rede'].lastStartedAt) {
-              <small>{{ s['rede'].lastStartedAt | csDate: 'short' }}</small>
+            @if (s['acquirer'].lastStartedAt) {
+              <small>{{ s['acquirer'].lastStartedAt | csDate: 'short' }}</small>
             }
           </div>
           <div class="cs-scheduler-row__actions">
             <cs-tag
               [value]="
-                s['rede'].running
+                s['acquirer'].running
                   ? ('fileProcessingDashboard.scheduler.running' | translate)
-                  : s['rede'].lastSuccess === true
+                  : s['acquirer'].lastSuccess === true
                     ? ('fileProcessingDashboard.scheduler.ok' | translate)
                     : ('fileProcessingDashboard.scheduler.attention' | translate)
               "
-              [tone]="s['rede'].running ? 'info' : boolSeverity(s['rede'].lastSuccess)"
+              [tone]="s['acquirer'].running ? 'info' : boolSeverity(s['acquirer'].lastSuccess)"
             ></cs-tag>
           </div>
         </div>
