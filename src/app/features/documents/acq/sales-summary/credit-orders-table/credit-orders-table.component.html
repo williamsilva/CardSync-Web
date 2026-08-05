@@ -182,7 +182,7 @@
             {{ row.releasesBank?.releaseDate | csDate: 'date' }}
           </span>
         </td>
-        <td class="text-center">{{ row.installmentNumber }} / {{ row.installmentTotal }}</td>
+        <td class="text-center">{{ installmentLabel(row) }}</td>
         <td class="cell-muted text-center">
           <span
             tooltipPosition="top"

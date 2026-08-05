@@ -50,6 +50,14 @@ export class CreditOrdersTableComponent {
     return row.installmentNumber ?? 0;
   }
 
+  /** Ordem de parcela única (ou sem parcelamento informado) não tem "X / Y" nenhum pra mostrar — "1 / 1" ou "1 / 0" sugere parcelamento que não existe (mesmo padrão de adjustments-table.component.ts#installmentLabel). */
+  installmentLabel(row: CreditOrdersMinimalModel): string {
+    if (!row.installmentTotal || row.installmentTotal <= 1) {
+      return '-';
+    }
+    return `${row.installmentNumber ?? '-'} / ${row.installmentTotal}`;
+  }
+
   statusReconciliationLabel(value: StatusReconciliationEnum | null): string {
     return statusReconciliationEnumLabel(value, this.i18n);
   }
