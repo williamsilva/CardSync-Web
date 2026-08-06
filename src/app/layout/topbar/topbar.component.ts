@@ -47,18 +47,21 @@ export class TopbarComponent {
   readonly lang = this.i18n.appliedLang;
 
   readonly langMenuItems = computed<MenuItem[]>(() => {
-    this.lang();
+    const current = this.lang();
     return [
       {
         label: 'Português',
+        disabled: current === 'pt-BR',
         command: () => this.onLangChange('pt-BR'),
       },
       {
         label: 'English',
+        disabled: current === 'en',
         command: () => this.onLangChange('en'),
       },
       {
         label: 'Español',
+        disabled: current === 'es',
         command: () => this.onLangChange('es'),
       },
     ];
