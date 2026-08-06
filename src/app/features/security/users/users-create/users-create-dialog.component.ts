@@ -14,6 +14,7 @@ import { FloatLabelModule } from 'primeng/floatlabel';
 import { TranslateModule } from '@ngx-translate/core';
 import { MultiSelectModule } from 'primeng/multiselect';
 
+import { APP_KEY } from '@core/api/api.config';
 import { I18nService } from '@core/i18n/i18n.service';
 import { UsersFacade } from '@features/facade/users.facade';
 import { GroupsFacade } from '@features/facade/groups.facade';
@@ -69,6 +70,10 @@ export class UsersCreateDialogComponent {
   private lastLoadedId: string | null = null;
   readonly groupOptions = this.groups.options;
 
+  /** Grupos do usuário que pertencem a outro app (ex.: nimbusflow) — não editáveis aqui, mas
+   * preservados no save. Ver comentário no effect abaixo. */
+  private readonly otherAppGroupIds = signal<string[]>([]);
+
   readonly form = this.fb.nonNullable.group({
     document: ['', [Validators.required, cpfCnpjValidator()]],
     name: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(80)]],
@@ -109,17 +114,33 @@ export class UsersCreateDialogComponent {
       this.loadingUser.set(true);
 
       const digitsDoc = String(user?.document ?? '').replace(/\D+/g, '');
-      const groupIds = Array.isArray(user?.groups)
-        ? (user.groups as any[])
-            .map((g: any) => (typeof g === 'string' ? g : g?.id))
-            .filter(Boolean)
-        : [];
+      const groupsRaw = Array.isArray(user?.groups) ? (user.groups as any[]) : [];
+
+      // O catálogo de grupos do NimbusAuth é compartilhado entre apps (cardsync, nimbusflow,
+      // ...) — um usuário pode pertencer a grupos de outros apps que este seletor (escopado a
+      // appKey=cardsync, ver GroupsFacade/groupOptions) nem lista. Sem separar os dois, o
+      // multiselect contava TODOS os grupos do usuário como "selecionados" (badge inflado,
+      // ex.: "6 itens" quando só 1 era do cardsync) e, pior, salvar sem tocar em "Grupos"
+      // arriscava apagar a associação do usuário a grupos de outros apps (UserService#update
+      // no NimbusAuth substitui o Set de grupos inteiro, não faz merge). Os de outros apps
+      // ficam guardados à parte e são recolocados no payload no save.
+      const cardsyncGroupIds = groupsRaw
+        .filter((g) => typeof g === 'string' || g?.appKey === APP_KEY)
+        .map((g) => (typeof g === 'string' ? g : g?.id))
+        .filter(Boolean);
+
+      const otherAppGroupIds = groupsRaw
+        .filter((g) => typeof g !== 'string' && g?.appKey && g.appKey !== APP_KEY)
+        .map((g) => g?.id)
+        .filter(Boolean);
+
+      this.otherAppGroupIds.set(otherAppGroupIds);
 
       this.form.reset({
         name: user?.name ?? '',
         userName: user?.userName ?? '',
         document: digitsDoc,
-        groupIds,
+        groupIds: cardsyncGroupIds,
       });
 
       this.submitted.set(false);
@@ -181,11 +202,15 @@ export class UsersCreateDialogComponent {
     }
 
     const v = this.form.getRawValue();
+    // Recoloca os grupos de outros apps (não editáveis neste seletor) junto com os do cardsync
+    // selecionados no form — ver comentário no effect do construtor. Sem isso, salvar o usuário
+    // apagaria a associação dele a grupos de outros apps Nimbus.
+    const groupIds = Array.from(new Set([...(v.groupIds ?? []), ...this.otherAppGroupIds()]));
     const payload: UserCreateInput = {
       name: v.name.trim(),
       userName: (v.userName ?? '').trim().toLowerCase(),
       document: String(v.document ?? '').replace(/\D+/g, ''),
-      groupIds: v.groupIds?.length ? v.groupIds : undefined,
+      groupIds: groupIds.length ? groupIds : undefined,
     };
 
     this.saving.set(true);
@@ -242,6 +267,7 @@ export class UsersCreateDialogComponent {
 
   private resetFormForCreate() {
     this.loadedUser.set(null);
+    this.otherAppGroupIds.set([]);
     this.form.reset({
       name: '',
       userName: '',
