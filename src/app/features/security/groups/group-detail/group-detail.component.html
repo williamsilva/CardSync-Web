@@ -194,7 +194,6 @@
                           </div>
                           <div class="cs-summary-mini-body">
                             <strong>{{ item.description || ('common.notInformed' | translate) }}</strong>
-                            <small>{{ item.name }}</small>
                           </div>
                         </div>
                       }
@@ -258,8 +257,17 @@
                           </div>
                           <div class="cs-entity-card-body">
                             <strong>{{ item.description || ('common.notInformed' | translate) }}</strong>
-                            <small>{{ item.name }}</small>
                           </div>
+                          <button
+                            pButton
+                            type="button"
+                            icon="pi pi-times"
+                            (click)="confirmRemovePermission(item)"
+                            class="p-button-text p-button-sm p-button-danger"
+                            [disabled]="!canManagePermissions() || savingPermissions()"
+                            [pTooltip]="'groups.detail.permissions.removeConfirm.action' | translate"
+                            tooltipPosition="top"
+                          ></button>
                         </div>
                       }
                     </div>
@@ -324,6 +332,16 @@
                             <strong>{{ item.name }}</strong>
                             <small>{{ item.userName }}</small>
                           </div>
+                          <button
+                            pButton
+                            type="button"
+                            icon="pi pi-times"
+                            (click)="confirmRemoveUser(item)"
+                            class="p-button-text p-button-sm p-button-danger"
+                            [disabled]="!canManageUsers() || savingUsers()"
+                            [pTooltip]="'groups.detail.users.removeConfirm.action' | translate"
+                            tooltipPosition="top"
+                          ></button>
                         </div>
                       }
                     </div>

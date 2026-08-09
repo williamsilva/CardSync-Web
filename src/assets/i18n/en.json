@@ -1873,7 +1873,13 @@
         "placeholder": "Select permissions",
         "saved": "Permissions updated successfully.",
         "saveError": "Could not save group permissions.",
-        "empty": "No permission assigned."
+        "empty": "No permission assigned.",
+        "removeConfirm": {
+          "action": "Remove from group",
+          "header": "Remove permission from group",
+          "message": "Are you sure you want to remove permission {permissionName} from this group?",
+          "success": "Permission removed from the group successfully."
+        }
       },
       "users": {
         "title": "Users",
@@ -1881,7 +1887,13 @@
         "placeholder": "Select users",
         "saved": "Users updated successfully.",
         "saveError": "Could not save group users.",
-        "empty": "No user assigned."
+        "empty": "No user assigned.",
+        "removeConfirm": {
+          "action": "Remove from group",
+          "header": "Remove user from group",
+          "message": "Are you sure you want to remove {userName} from this group?",
+          "success": "User removed from the group successfully."
+        }
       }
     },
     "delete": {

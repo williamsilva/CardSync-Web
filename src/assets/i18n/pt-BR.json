@@ -2300,7 +2300,13 @@
         "placeholder": "Selecione as permissões",
         "saved": "Permissões atualizadas com sucesso.",
         "saveError": "Não foi possível salvar as permissões do grupo.",
-        "empty": "Nenhuma permissão associada."
+        "empty": "Nenhuma permissão associada.",
+        "removeConfirm": {
+          "action": "Remover do grupo",
+          "header": "Remover permissão do grupo",
+          "message": "Deseja realmente remover a permissão {permissionName} deste grupo?",
+          "success": "Permissão removida do grupo com sucesso."
+        }
       },
       "users": {
         "title": "Usuários",
@@ -2308,7 +2314,13 @@
         "placeholder": "Selecione os usuários",
         "saved": "Usuários atualizados com sucesso.",
         "saveError": "Não foi possível salvar os usuários do grupo.",
-        "empty": "Nenhum usuário associado."
+        "empty": "Nenhum usuário associado.",
+        "removeConfirm": {
+          "action": "Remover do grupo",
+          "header": "Remover usuário do grupo",
+          "message": "Deseja realmente remover {userName} deste grupo?",
+          "success": "Usuário removido do grupo com sucesso."
+        }
       }
     },
     "delete": {

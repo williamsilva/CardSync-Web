@@ -1873,7 +1873,13 @@
         "placeholder": "Selecciona los permisos",
         "saved": "Permisos actualizados correctamente.",
         "saveError": "No fue posible guardar los permisos del grupo.",
-        "empty": "Ningún permiso asociado."
+        "empty": "Ningún permiso asociado.",
+        "removeConfirm": {
+          "action": "Quitar del grupo",
+          "header": "Quitar permiso del grupo",
+          "message": "¿Desea realmente quitar el permiso {permissionName} de este grupo?",
+          "success": "Permiso quitado del grupo con éxito."
+        }
       },
       "users": {
         "title": "Usuarios",
@@ -1881,7 +1887,13 @@
         "placeholder": "Selecciona los usuarios",
         "saved": "Usuarios actualizados correctamente.",
         "saveError": "No fue posible guardar los usuarios del grupo.",
-        "empty": "Ningún usuario asociado."
+        "empty": "Ningún usuario asociado.",
+        "removeConfirm": {
+          "action": "Quitar del grupo",
+          "header": "Quitar usuario del grupo",
+          "message": "¿Desea realmente quitar a {userName} de este grupo?",
+          "success": "Usuario quitado del grupo con éxito."
+        }
       }
     },
     "delete": {
