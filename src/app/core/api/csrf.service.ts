@@ -23,7 +23,9 @@ export class CsrfService {
   }
 
   getXsrfTokenFromCookie(): string | null {
-    const match = document.cookie.match(/(?:^|;\s*)XSRF-TOKEN=([^;]+)/);
+    // Nome distinto do padrão "XSRF-TOKEN" - evita colisão de cookie com outros apps Nimbus no
+    // mesmo domínio "localhost" (ver SecurityConfig.csrfRepo no CardsyncServer).
+    const match = document.cookie.match(/(?:^|;\s*)CARDSYNC-XSRF-TOKEN=([^;]+)/);
     return match ? decodeURIComponent(match[1]) : null;
   }
 }

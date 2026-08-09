@@ -253,7 +253,9 @@ export class SessionService {
   }
 
   private clearLoginRedirectLock(): void {
-    sessionStorage.removeItem(SessionService.LOGIN_REDIRECT_LOCK_KEY);
+    // localStorage (não sessionStorage) - o lock em auth-redirect.interceptor.ts agora é
+    // compartilhado entre abas via localStorage; precisa limpar do mesmo lugar.
+    localStorage.removeItem(SessionService.LOGIN_REDIRECT_LOCK_KEY);
   }
 
   private broadcast(msg: SessionSyncMessage): void {

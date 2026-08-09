@@ -21,14 +21,23 @@ function isPublicSpaRoute(path: string): boolean {
   return path.startsWith('/public') || path.startsWith('/error');
 }
 
+/**
+ * localStorage (não sessionStorage) - o lock precisa valer entre abas/janelas diferentes da
+ * mesma origem, não só dentro da aba atual. Com múltiplas abas abertas, cada uma tem sua própria
+ * sessionStorage isolada: a aba A detectava 401 e redirecionava (migrando o ID da sessão via
+ * sessionFixation.migrateSession() no backend), enquanto a aba B - sem ver o lock da aba A -
+ * disparava seu PRÓPRIO redirect concorrente, brigando pela mesma sessão/cookie e produzindo
+ * "invalid session id" mesmo com a sessão HTTP ainda longe do timeout de 2h configurado.
+ * 15s (não 3s) para cobrir o round-trip completo do redirect OAuth2 (BFF -> NimbusAuth -> BFF).
+ */
 function canTriggerLoginNow(): boolean {
   const key = 'cs_login_redirect_lock';
   const now = Date.now();
-  const last = Number(sessionStorage.getItem(key) ?? '0');
+  const last = Number(localStorage.getItem(key) ?? '0');
 
-  if (now - last < 3000) return false;
+  if (now - last < 15000) return false;
 
-  sessionStorage.setItem(key, String(now));
+  localStorage.setItem(key, String(now));
   return true;
 }
 
