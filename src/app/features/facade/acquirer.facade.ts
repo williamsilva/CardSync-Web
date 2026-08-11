@@ -96,93 +96,43 @@ export class AcquirerFacade {
     return this.api.getById(id);
   }
 
+  /**
+   * Sem marcar `_loading` aqui: esse signal é o guard de `loadPage()` (evita corrida entre
+   * paginações concorrentes) - o `finalize` externo resetava `_loading` assim que a própria
+   * requisição de create/update completava, mesmo com o `reloadLast()` disparado no `tap` ainda em
+   * andamento (fetch assíncrono da lista) - o `_loading` da tabela piscava como "não carregando"
+   * no meio de um reload real. `reloadLast()`/`loadPage()` já controlam seu próprio `_loading` sem
+   * ajuda externa (mesmo fix aplicado em WorksFacade/SuppliersFacade no NimbusFlow).
+   */
   create(input: AcquirerCreateInput): Observable<AcquirerModel> {
-    this._loading.set(true);
-    return this.api.create(input).pipe(
-      tap((created) => {
-        this._loading.set(false);
-        this.reloadLast();
-        return created;
-      }),
-      finalize(() => this._loading.set(false)),
-    );
+    return this.api.create(input).pipe(tap(() => this.reloadLast()));
   }
 
   update(id: string, input: AcquirerUpdateInput): Observable<AcquirerModel> {
-    this._loading.set(true);
-    return this.api.update(id, input).pipe(
-      tap((updated) => {
-        this._loading.set(false);
-        this.reloadLast();
-        return updated;
-      }),
-      finalize(() => this._loading.set(false)),
-    );
+    return this.api.update(id, input).pipe(tap(() => this.reloadLast()));
   }
 
   activate(id: string): Observable<void> {
-    this._loading.set(true);
-    return this.api.activate(id).pipe(
-      tap(() => {
-        this._loading.set(false);
-        this.reloadLast();
-      }),
-      finalize(() => this._loading.set(false)),
-    );
+    return this.api.activate(id).pipe(tap(() => this.reloadLast()));
   }
 
   deactivate(id: string): Observable<void> {
-    this._loading.set(true);
-    return this.api.deactivate(id).pipe(
-      tap(() => {
-        this._loading.set(false);
-        this.reloadLast();
-      }),
-      finalize(() => this._loading.set(false)),
-    );
+    return this.api.deactivate(id).pipe(tap(() => this.reloadLast()));
   }
 
   block(id: string): Observable<void> {
-    this._loading.set(true);
-    return this.api.block(id).pipe(
-      tap(() => {
-        this._loading.set(false);
-        this.reloadLast();
-      }),
-      finalize(() => this._loading.set(false)),
-    );
+    return this.api.block(id).pipe(tap(() => this.reloadLast()));
   }
 
   blockBulk(ids: string[]): Observable<void> {
-    this._loading.set(true);
-    return this.api.blockBulk({ ids }).pipe(
-      tap(() => {
-        this._loading.set(false);
-        this.reloadLast();
-      }),
-      finalize(() => this._loading.set(false)),
-    );
+    return this.api.blockBulk({ ids }).pipe(tap(() => this.reloadLast()));
   }
 
   activateBulk(ids: string[]): Observable<void> {
-    this._loading.set(true);
-    return this.api.activateBulk({ ids }).pipe(
-      tap(() => {
-        this._loading.set(false);
-        this.reloadLast();
-      }),
-      finalize(() => this._loading.set(false)),
-    );
+    return this.api.activateBulk({ ids }).pipe(tap(() => this.reloadLast()));
   }
 
   deactivateBulk(ids: string[]): Observable<void> {
-    this._loading.set(true);
-    return this.api.deactivateBulk({ ids }).pipe(
-      tap(() => {
-        this._loading.set(false);
-        this.reloadLast();
-      }),
-      finalize(() => this._loading.set(false)),
-    );
+    return this.api.deactivateBulk({ ids }).pipe(tap(() => this.reloadLast()));
   }
 }

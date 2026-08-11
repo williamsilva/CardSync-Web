@@ -109,36 +109,39 @@ export class GroupsFacade {
     return this.api.getById(id);
   }
 
+  /**
+   * Sem marcar `_loading` aqui: esse signal é o guard de `loadPage()` (evita corrida entre
+   * paginações concorrentes) - diferente dos outros facades (acquirer/bank/company/etc.), aqui não
+   * havia nem o reset explícito de `_loading` dentro do `tap` antes do `reloadLast()`, então o
+   * guard de `loadPage()` bloqueava o reload por completo (o `next` do `tap` sempre roda com
+   * `_loading` ainda `true`, setado no início do método, só resetado no `finalize` que ainda não
+   * rodou) - list nunca atualizava após criar/editar/excluir um grupo. Mesmo bug (e mesmo fix) do
+   * WorksFacade no NimbusFlow.
+   */
   create(input: GroupCreateInput): Observable<GroupModel> {
-    this._loading.set(true);
     return this.api.create(input).pipe(
       tap(() => {
         this.reloadLast();
         this.reloadOptions();
       }),
-      finalize(() => this._loading.set(false)),
     );
   }
 
   update(id: string, input: GroupUpdateInput): Observable<GroupModel> {
-    this._loading.set(true);
     return this.api.update(id, input).pipe(
       tap(() => {
         this.reloadLast();
         this.reloadOptions();
       }),
-      finalize(() => this._loading.set(false)),
     );
   }
 
   delete(id: string): Observable<void> {
-    this._loading.set(true);
     return this.api.delete(id).pipe(
       tap(() => {
         this.reloadLast();
         this.reloadOptions();
       }),
-      finalize(() => this._loading.set(false)),
     );
   }
 

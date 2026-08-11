@@ -1775,6 +1775,7 @@
       "EMAIL_SETTINGS_PROCESS": "Edit email settings",
       "RECONCILIATION_SETTINGS_CONSULT": "View reconciliation settings",
       "RECONCILIATION_SETTINGS_PROCESS": "Edit reconciliation settings",
+      "BACKUP_PROCESS": "Trigger manual database backup",
       "MANAGEMENT_DASHBOARD_CONSULT": "View management dashboard",
       "DASHBOARD_AUDIT_CONSULT": "View audit dashboard (sales summary/unreconciled)"
     },

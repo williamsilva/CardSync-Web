@@ -2202,6 +2202,7 @@
       "EMAIL_SETTINGS_PROCESS": "Altera configurações de e-mail",
       "RECONCILIATION_SETTINGS_CONSULT": "Consulta configurações de reconciliação",
       "RECONCILIATION_SETTINGS_PROCESS": "Altera configurações de reconciliação",
+      "BACKUP_PROCESS": "Dispara backup manual do banco de dados",
       "MANAGEMENT_DASHBOARD_CONSULT": "Consulta dashboard gerencial",
       "DASHBOARD_AUDIT_CONSULT": "Consulta dashboard de auditoria (resumo de vendas/não reconciliados)"
     },
