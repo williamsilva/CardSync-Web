@@ -628,15 +628,18 @@
                     <p-datepicker
                       size="small"
                       class="w-full"
+                      csDateInputMask
                       dataType="string"
                       [showIcon]="true"
-                      [readonlyInput]="true"
+                      [readonlyInput]="setSelectionMode(createdAtColumnPeriod()) === 'range'"
                       inputId="createdAtColumnDraft"
                       [ngModel]="createdAtColumnPickerValue()"
                       [disabled]="isCreatedAtColumnDisabled()"
                       [view]="setViewFormat(createdAtColumnPeriod())"
                       [dateFormat]="setDateFormat(createdAtColumnPeriod())"
                       [selectionMode]="setSelectionMode(createdAtColumnPeriod())"
+                      [csDateInputMaskFormat]="setDateFormat(createdAtColumnPeriod())"
+                      [csDateInputMaskRange]="setSelectionMode(createdAtColumnPeriod()) === 'range'"
                       (ngModelChange)="
                         onPeriodColumnDraftChange(createdAtColumnDraft, $event ?? null)
                       "

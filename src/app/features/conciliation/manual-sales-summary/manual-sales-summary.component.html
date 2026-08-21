@@ -339,11 +339,13 @@
             <p-datepicker
               appendTo="body"
               inputId="rvDate"
+              csDateInputMask
               [showIcon]="true"
-              dateFormat="dd/mm/yy"
+              [dateFormat]="i18n.getDateFormat()"
               class="w-full"
               formControlName="rvDate"
               inputStyleClass="p-inputtext-sm"
+              [csDateInputMaskFormat]="i18n.getDateFormat()"
             ></p-datepicker>
             <label for="rvDate">
               {{ 'conciliation.manualSalesSummary.rvDate' | translate }}
@@ -530,12 +532,14 @@
           <p-floatLabel variant="on" class="w-full">
             <p-datepicker
               appendTo="body"
-              dateFormat="dd/mm/yy"
+              csDateInputMask
+              [dateFormat]="i18n.getDateFormat()"
               [showIcon]="true"
               class="w-full"
               inputStyleClass="p-inputtext-sm"
               inputId="firstInstallmentCreditDate"
               formControlName="firstInstallmentCreditDate"
+              [csDateInputMaskFormat]="i18n.getDateFormat()"
             ></p-datepicker>
             <label for="firstInstallmentCreditDate">
               {{ 'conciliation.manualSalesSummary.firstInstallmentCreditDate' | translate }}
@@ -783,12 +787,14 @@
                 <p-floatLabel variant="on" class="w-full">
                   <p-datepicker
                     appendTo="body"
-                    dateFormat="dd/mm/yy"
+                    csDateInputMask
+                    [dateFormat]="i18n.getDateFormat()"
                     [showIcon]="true"
                     class="w-full"
                     inputStyleClass="p-inputtext-sm"
                     [inputId]="'txSaleDate_' + $index"
                     formControlName="saleDate"
+                    [csDateInputMaskFormat]="i18n.getDateFormat()"
                   ></p-datepicker>
                   <label [for]="'txSaleDate_' + $index">
                     {{ 'conciliation.manualSalesSummary.tx.saleDate' | translate }}
@@ -800,12 +806,14 @@
                 <p-floatLabel variant="on" class="w-full">
                   <p-datepicker
                     appendTo="body"
-                    dateFormat="dd/mm/yy"
+                    csDateInputMask
+                    [dateFormat]="i18n.getDateFormat()"
                     [showIcon]="true"
                     class="w-full"
                     inputStyleClass="p-inputtext-sm"
                     [inputId]="'txCreditDate_' + $index"
                     formControlName="creditDate"
+                    [csDateInputMaskFormat]="i18n.getDateFormat()"
                   ></p-datepicker>
                   <label [for]="'txCreditDate_' + $index">
                     {{ 'conciliation.manualSalesSummary.tx.creditDate' | translate }}

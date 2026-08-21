@@ -25,12 +25,14 @@
         <p-floatLabel variant="on" class="w-full">
           <p-datepicker
             class="w-full"
+            csDateInputMask
             appendTo="body"
             [showIcon]="true"
-            dateFormat="dd/mm/yy"
-            [readonlyInput]="true"
+            [dateFormat]="i18n.getDateFormat()"
+            [readonlyInput]="false"
             inputId="goLiveDate"
             formControlName="goLiveDate"
+            [csDateInputMaskFormat]="i18n.getDateFormat()"
           ></p-datepicker>
           <label for="goLiveDate">
             {{ 'conciliation.settings.goLiveDate' | translate }}

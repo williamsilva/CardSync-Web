@@ -16,6 +16,7 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { CsTagComponent, CsTagTone } from '@shared/ui';
 import { I18nService } from '@core/i18n/i18n.service';
 import { CsDatePipe } from '@shared/pipes/cs-date.pipe';
+import { DateInputMaskDirective } from '@shared/directives/date-input-mask.directive';
 import { STATE_KEY } from '@features/state-key.constants';
 import { FlagFacade } from '@features/facade/flag.facade';
 import { CsPercentPipe } from '@shared/pipes/cs-percent.pipe';
@@ -99,7 +100,8 @@ import {
     CsCurrencyRangeFilterComponent,
     CsAdvancedPeriodDateFilterComponent,
     CsAdvancedMultiselectFilterComponent,
-    CsAdvancedFilterItemTemplateDirective
+    CsAdvancedFilterItemTemplateDirective,
+    DateInputMaskDirective,
 ],
 })
 export class ContractAuditListComponent

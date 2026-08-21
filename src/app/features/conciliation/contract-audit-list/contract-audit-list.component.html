@@ -511,15 +511,18 @@
                     <p-datepicker
                       size="small"
                       class="w-full"
+                      csDateInputMask
                       dataType="string"
                       [showIcon]="true"
-                      [readonlyInput]="true"
+                      [readonlyInput]="setSelectionMode(saleDateColumnPeriod()) === 'range'"
                       inputId="saleDateColumnDraft"
                       [ngModel]="saleDateColumnPickerValue()"
                       [disabled]="isSaleDateColumnDisabled()"
                       [view]="setViewFormat(saleDateColumnPeriod())"
                       [dateFormat]="setDateFormat(saleDateColumnPeriod())"
                       [selectionMode]="setSelectionMode(saleDateColumnPeriod())"
+                      [csDateInputMaskFormat]="setDateFormat(saleDateColumnPeriod())"
+                      [csDateInputMaskRange]="setSelectionMode(saleDateColumnPeriod()) === 'range'"
                       (ngModelChange)="
                         onPeriodColumnDraftChange(saleDateColumnDraft, $event ?? null)
                       "

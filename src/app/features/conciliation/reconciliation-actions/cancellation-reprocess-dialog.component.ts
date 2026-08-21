@@ -15,6 +15,8 @@ import { FloatLabelModule } from 'primeng/floatlabel';
 import { DatePickerModule } from 'primeng/datepicker';
 import { TranslateModule } from '@ngx-translate/core';
 
+import { DateInputMaskDirective } from '@shared/directives/date-input-mask.directive';
+
 export interface CancellationReprocessPayload {
   year: number;
   month: number;
@@ -31,7 +33,8 @@ export interface CancellationReprocessPayload {
     ButtonModule,
     FloatLabelModule,
     DatePickerModule,
-    TranslateModule
+    TranslateModule,
+    DateInputMaskDirective
 ],
 })
 export class CancellationReprocessDialogComponent implements OnChanges {

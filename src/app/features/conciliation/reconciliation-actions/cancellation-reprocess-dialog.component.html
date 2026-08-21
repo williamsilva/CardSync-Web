@@ -28,11 +28,13 @@
       <p-datepicker
         inputId="reprocessMonth"
         view="month"
+        csDateInputMask
         appendTo="body"
         dateFormat="mm/yy"
         [showIcon]="true"
         [(ngModel)]="selectedDate"
         [style]="{ width: '100%' }"
+        [csDateInputMaskFormat]="'mm/yy'"
       ></p-datepicker>
       <label for="reprocessMonth">
         {{ 'conciliation.cancellationReprocess.monthLabel' | translate }}

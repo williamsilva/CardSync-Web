@@ -16,6 +16,7 @@ import { TranslateModule } from '@ngx-translate/core';
 
 import { I18nService } from '@core/i18n/i18n.service';
 import { CsDatePipe } from '@shared/pipes/cs-date.pipe';
+import { DateInputMaskDirective } from '@shared/directives/date-input-mask.directive';
 import { STATE_KEY } from '@features/state-key.constants';
 import { FlagFacade } from '@features/facade/flag.facade';
 import { BankFacade } from '@features/facade/bank.facade';
@@ -110,6 +111,7 @@ import {
     CsAdvancedPeriodDateFilterComponent,
     CsAdvancedMultiselectFilterComponent,
     CsAdvancedFilterItemTemplateDirective,
+    DateInputMaskDirective,
   ],
 })
 export class SaleSummaryListComponent

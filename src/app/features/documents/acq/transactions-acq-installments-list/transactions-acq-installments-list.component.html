@@ -452,15 +452,18 @@
                       <p-datepicker
                         size="small"
                         class="w-full"
+                        csDateInputMask
                         dataType="string"
                         [showIcon]="true"
-                        [readonlyInput]="true"
+                        [readonlyInput]="setSelectionMode(saleDateColumnPeriod()) === 'range'"
                         inputId="saleDateColumnDraft"
                         [ngModel]="saleDateColumnPickerValue()"
                         [disabled]="isSaleDateColumnDisabled()"
                         [view]="setViewFormat(saleDateColumnPeriod())"
                         [dateFormat]="setDateFormat(saleDateColumnPeriod())"
                         [selectionMode]="setSelectionMode(saleDateColumnPeriod())"
+                        [csDateInputMaskFormat]="setDateFormat(saleDateColumnPeriod())"
+                        [csDateInputMaskRange]="setSelectionMode(saleDateColumnPeriod()) === 'range'"
                         (ngModelChange)="
                           onPeriodColumnDraftChange(saleDateColumnDraft, $event ?? null)
                         "
@@ -556,15 +559,18 @@
                       <p-datepicker
                         size="small"
                         class="w-full"
+                        csDateInputMask
                         dataType="string"
                         [showIcon]="true"
-                        [readonlyInput]="true"
+                        [readonlyInput]="setSelectionMode(expectedPaymentDateColumnPeriod()) === 'range'"
                         inputId="expectedPaymentDateColumnDraft"
                         [ngModel]="expectedPaymentDateColumnPickerValue()"
                         [disabled]="isExpectedPaymentDateColumnDisabled()"
                         [view]="setViewFormat(expectedPaymentDateColumnPeriod())"
                         [dateFormat]="setDateFormat(expectedPaymentDateColumnPeriod())"
                         [selectionMode]="setSelectionMode(expectedPaymentDateColumnPeriod())"
+                        [csDateInputMaskFormat]="setDateFormat(expectedPaymentDateColumnPeriod())"
+                        [csDateInputMaskRange]="setSelectionMode(expectedPaymentDateColumnPeriod()) === 'range'"
                         (ngModelChange)="
                           onPeriodColumnDraftChange(expectedPaymentDateColumnDraft, $event ?? null)
                         "

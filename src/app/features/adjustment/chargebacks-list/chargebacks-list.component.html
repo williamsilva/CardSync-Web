@@ -175,10 +175,11 @@
                           inputId="chargeback-date-start"
                           class="w-full"
                           size="small"
+                          csDateInputMask
                           appendTo="body"
                           dateFormat="dd/mm/yy"
                           [showIcon]="true"
-                          [readonlyInput]="true"
+                          [readonlyInput]="false"
                           [ngModel]="filterEventDateStart()"
                           (ngModelChange)="filterEventDateStart.set($event)"
                         ></p-datepicker>
@@ -191,10 +192,11 @@
                           inputId="chargeback-date-end"
                           class="w-full"
                           size="small"
+                          csDateInputMask
                           appendTo="body"
                           dateFormat="dd/mm/yy"
                           [showIcon]="true"
-                          [readonlyInput]="true"
+                          [readonlyInput]="false"
                           [ngModel]="filterEventDateEnd()"
                           (ngModelChange)="filterEventDateEnd.set($event)"
                         ></p-datepicker>

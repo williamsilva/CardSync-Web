@@ -18,6 +18,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { I18nService } from '@core/i18n/i18n.service';
 import { CsTagComponent, CsTagTone } from '@shared/ui';
 import { CsDatePipe } from '@shared/pipes/cs-date.pipe';
+import { DateInputMaskDirective } from '@shared/directives/date-input-mask.directive';
 import { FlagFacade } from '@features/facade/flag.facade';
 import { STATE_KEY } from '@features/state-key.constants';
 import { CompanyFacade } from '@features/facade/company.facade';
@@ -116,7 +117,8 @@ import {
     CsCurrencyRangeFilterComponent,
     CsAdvancedPeriodDateFilterComponent,
     CsAdvancedMultiselectFilterComponent,
-    CsAdvancedFilterItemTemplateDirective
+    CsAdvancedFilterItemTemplateDirective,
+    DateInputMaskDirective,
 ],
 })
 export class ErpInstallmentsListComponent

@@ -19,6 +19,7 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { CsTagComponent, CsTagTone } from '@shared/ui';
 import { I18nService } from '@core/i18n/i18n.service';
 import { CsDatePipe } from '@shared/pipes/cs-date.pipe';
+import { DateInputMaskDirective } from '@shared/directives/date-input-mask.directive';
 import { UsersFacade } from '@features/facade/users.facade';
 import { CompanyFacade } from '@features/facade/company.facade';
 import { CsDocumentPipe } from '@shared/pipes/cs-document.pipe';
@@ -100,7 +101,8 @@ import { StatusEnum, statusEnumLabel, statusEnumSeverity } from '@models/enums/s
     CsColumnFilterTemplateDirective,
     CsAdvancedPeriodDateFilterComponent,
     CsAdvancedMultiselectFilterComponent,
-    CsAdvancedFilterItemTemplateDirective
+    CsAdvancedFilterItemTemplateDirective,
+    DateInputMaskDirective,
 ],
 })
 export class ContractListComponent

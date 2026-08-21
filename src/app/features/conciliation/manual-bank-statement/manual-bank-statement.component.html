@@ -357,13 +357,15 @@
       <p-floatLabel variant="on" class="w-full">
         <p-datepicker
           class="w-full"
+          csDateInputMask
           appendTo="body"
           [showIcon]="true"
           inputId="releaseDate"
-          dateFormat="dd/mm/yy"
-          [readonlyInput]="true"
+          [dateFormat]="i18n.getDateFormat()"
+          [readonlyInput]="false"
           [formControl]="releaseDateCtrl"
           inputStyleClass="p-inputtext-sm"
+          [csDateInputMaskFormat]="i18n.getDateFormat()"
         ></p-datepicker>
         <app-error-msg
           forId="releaseDate"

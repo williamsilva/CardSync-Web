@@ -23,6 +23,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { concatMap, toArray, catchError, switchMap } from 'rxjs/operators';
 
 import { CsTagComponent, CsTagTone } from '@shared/ui';
+import { DateInputMaskDirective } from '@shared/directives/date-input-mask.directive';
 import { I18nService } from '@core/i18n/i18n.service';
 import { FlagFacade } from '@features/facade/flag.facade';
 import { CompanyFacade } from '@features/facade/company.facade';
@@ -83,11 +84,12 @@ interface CsvSummaryGroup {
     DatePickerModule,
     InputNumberModule,
     ReactiveFormsModule,
+    DateInputMaskDirective,
   ],
 })
 export class ManualSalesSummaryComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
-  private readonly i18n = inject(I18nService);
+  protected readonly i18n = inject(I18nService);
   private readonly toast = inject(MessageService);
 
   protected readonly flagFacade = inject(FlagFacade);

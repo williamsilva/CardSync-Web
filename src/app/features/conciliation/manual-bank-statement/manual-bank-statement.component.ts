@@ -28,6 +28,7 @@ import { CompanyFacade } from '@features/facade/company.facade';
 import { CsDocumentPipe } from '@shared/pipes/cs-document.pipe';
 import { AcquirerFacade } from '@features/facade/acquirer.facade';
 import { ErrorMsgComponent } from '@shared/error-msg/error-msg.component';
+import { DateInputMaskDirective } from '@shared/directives/date-input-mask.directive';
 import { EstablishmentFacade } from '@features/facade/establishment.facade';
 import { BankStatementFacade } from '@features/facade/bank-statement.facade';
 import { BankingDomicileFacade } from '@features/facade/banking-domicile.facade';
@@ -78,10 +79,11 @@ interface CsvStatementRow {
     ErrorMsgComponent,
     ReactiveFormsModule,
     ConfirmDialogModule,
+    DateInputMaskDirective,
   ],
 })
 export class ManualBankStatementComponent implements OnInit {
-  private readonly i18n = inject(I18nService);
+  protected readonly i18n = inject(I18nService);
   private readonly toast = inject(MessageService);
   private readonly translateSvc = inject(TranslateService);
   private readonly confirmationService = inject(ConfirmationService);

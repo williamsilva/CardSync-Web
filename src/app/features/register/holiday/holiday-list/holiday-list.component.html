@@ -92,11 +92,13 @@
           inputId="holidayDateRange"
           class="w-full"
           size="small"
+          csDateInputMask
           appendTo="body"
           [showIcon]="true"
           [readonlyInput]="true"
           selectionMode="range"
           dateFormat="dd/mm/yy"
+          [csDateInputMaskRange]="true"
           [ngModel]="holidayDateRange()"
           (ngModelChange)="holidayDateRange.set($event ?? null)"
         ></p-datepicker>

@@ -15,6 +15,7 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { CsTagComponent } from '@shared/ui';
 import { I18nService } from '@core/i18n/i18n.service';
 import { CsDatePipe } from '@shared/pipes/cs-date.pipe';
+import { DateInputMaskDirective } from '@shared/directives/date-input-mask.directive';
 import { EmailLogsFacade } from '@features/facade/email-logs.facade';
 import { EmailLogsFilters } from '@features/filter/email-logs.filters';
 import { EmailLogModel, EmailLogsFiltersState } from '@models/email-log.models';
@@ -65,7 +66,8 @@ import {
     PageHeaderComponent,
     ReactiveFormsModule,
     FiltersPanelComponent,
-    OverflowTooltipDirective
+    OverflowTooltipDirective,
+    DateInputMaskDirective,
 ],
 })
 export class EmailLogsComponent extends StatefulListPage<EmailLogsFiltersState, EmailLogsFilters> {

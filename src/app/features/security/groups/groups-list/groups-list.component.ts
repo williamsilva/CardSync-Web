@@ -17,6 +17,7 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 
 import { I18nService } from '@core/i18n/i18n.service';
 import { CsDatePipe } from '@shared/pipes/cs-date.pipe';
+import { DateInputMaskDirective } from '@shared/directives/date-input-mask.directive';
 import { UsersFacade } from '@features/facade/users.facade';
 import { GroupsFacade } from '@features/facade/groups.facade';
 import { GroupModel, GroupsFiltersState } from '@models/groups.models';
@@ -56,7 +57,8 @@ import {
     PageHeaderComponent,
     ConfirmDialogModule,
     FiltersPanelComponent,
-    GroupsCreateDialogComponent
+    GroupsCreateDialogComponent,
+    DateInputMaskDirective,
 ],
 })
 export class GroupsListComponent extends StatefulListPage<

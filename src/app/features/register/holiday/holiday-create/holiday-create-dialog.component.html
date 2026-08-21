@@ -36,11 +36,13 @@
             inputId="holidayDate"
             class="w-full"
             size="small"
+            csDateInputMask
             appendTo="body"
             [showIcon]="true"
-            [readonlyInput]="true"
-            dateFormat="dd/mm/yy"
+            [readonlyInput]="false"
+            [dateFormat]="i18n.getDateFormat()"
             formControlName="holidayDate"
+            [csDateInputMaskFormat]="i18n.getDateFormat()"
             [invalid]="
               form.controls.holidayDate.invalid &&
               (form.controls.holidayDate.dirty || form.controls.holidayDate.touched)

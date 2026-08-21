@@ -37,12 +37,14 @@
           <p-datepicker
             size="small"
             class="w-full"
+            csDateInputMask
             appendTo="body"
             [showIcon]="true"
             inputId="noFileDate"
-            dateFormat="dd/mm/yy"
-            [readonlyInput]="true"
+            [dateFormat]="i18n.getDateFormat()"
+            [readonlyInput]="false"
             formControlName="noFileDate"
+            [csDateInputMaskFormat]="i18n.getDateFormat()"
             [invalid]="
               form.controls.noFileDate.invalid &&
               (form.controls.noFileDate.dirty || form.controls.noFileDate.touched)

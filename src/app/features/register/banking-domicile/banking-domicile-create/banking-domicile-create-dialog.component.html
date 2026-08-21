@@ -95,12 +95,14 @@
           <p-datepicker
             size="small"
             class="w-full"
+            csDateInputMask
             appendTo="body"
             [showIcon]="true"
-            dateFormat="dd/mm/yy"
-            [readonlyInput]="true"
+            [dateFormat]="i18n.getDateFormat()"
+            [readonlyInput]="false"
             inputId="accountOpeningDate"
             formControlName="accountOpeningDate"
+            [csDateInputMaskFormat]="i18n.getDateFormat()"
             [invalid]="
               form.controls.accountOpeningDate.invalid &&
               (form.controls.accountOpeningDate.dirty || form.controls.accountOpeningDate.touched)
@@ -120,12 +122,14 @@
           <p-datepicker
             size="small"
             class="w-full"
+            csDateInputMask
             appendTo="body"
             [showIcon]="true"
-            dateFormat="dd/mm/yy"
-            [readonlyInput]="true"
+            [dateFormat]="i18n.getDateFormat()"
+            [readonlyInput]="false"
             inputId="accountClosingDate"
             formControlName="accountClosingDate"
+            [csDateInputMaskFormat]="i18n.getDateFormat()"
             [invalid]="
               form.controls.accountClosingDate.invalid &&
               (form.controls.accountClosingDate.dirty || form.controls.accountClosingDate.touched)

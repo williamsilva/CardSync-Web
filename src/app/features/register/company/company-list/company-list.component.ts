@@ -33,6 +33,7 @@ import { CompanyModel, CompanyFiltersState } from '@models/company.models';
 import { BulkActionListPage } from '@features/list-base/bulk-action-list-page';
 import { buildListQuery } from '@shared/features/list-query/list-query.builder';
 import { CpfCnpjMaskDirective } from '@shared/directives/cpf-cnpj-mask.directive';
+import { DateInputMaskDirective } from '@shared/directives/date-input-mask.directive';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
 import { CompanyPermissionPolicy } from '@features/security/policy/company-permission.policy';
 import { CompanyCreateDialogComponent } from '../company-create/company-create-dialog.component';
@@ -89,6 +90,7 @@ import {
     FiltersPanelComponent,
     DATA_TABLE_SHELL_IMPORTS,
     CompanyCreateDialogComponent,
+    DateInputMaskDirective,
   ],
 })
 export class CompanyListComponent extends StatefulListPage<

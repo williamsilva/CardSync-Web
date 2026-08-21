@@ -19,6 +19,7 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { I18nService } from '@core/i18n/i18n.service';
 import { CsTagComponent, CsTagTone } from '@shared/ui';
 import { CsDatePipe } from '@shared/pipes/cs-date.pipe';
+import { DateInputMaskDirective } from '@shared/directives/date-input-mask.directive';
 import { FlagFacade } from '@features/facade/flag.facade';
 import { STATE_KEY } from '@features/state-key.constants';
 import { CsCurrencyPipe } from '@shared/pipes/cs-currency.pipe';
@@ -123,7 +124,8 @@ import {
     CsAdvancedPeriodDateFilterComponent,
     CsAdvancedMultiselectFilterComponent,
     CsAdvancedFilterItemTemplateDirective,
-    TransactionsErpSalesInstallmentsTableComponent
+    TransactionsErpSalesInstallmentsTableComponent,
+    DateInputMaskDirective,
 ],
 })
 export class TransactionsErpSalesListComponent

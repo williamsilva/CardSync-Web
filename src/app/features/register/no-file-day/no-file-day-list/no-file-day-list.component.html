@@ -91,11 +91,13 @@
         <p-datepicker
           size="small"
           class="w-full"
+          csDateInputMask
           appendTo="body"
           [showIcon]="true"
           selectionMode="range"
           dateFormat="dd/mm/yy"
           [readonlyInput]="true"
+          [csDateInputMaskRange]="true"
           inputId="noFileDateRange"
           [ngModel]="noFileDateRange()"
           (ngModelChange)="noFileDateRange.set($event ?? null)"

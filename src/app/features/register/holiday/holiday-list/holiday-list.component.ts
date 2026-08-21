@@ -19,6 +19,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService, MessageService } from 'primeng/api';
 
 import { CsTagComponent } from '@shared/ui';
+import { DateInputMaskDirective } from '@shared/directives/date-input-mask.directive';
 import { I18nService } from '@core/i18n/i18n.service';
 import { CsDatePipe } from '@shared/pipes/cs-date.pipe';
 import { HolidayFacade } from '@features/facade/holiday.facade';
@@ -72,7 +73,8 @@ import {
     ConfirmDialogModule,
     FiltersPanelComponent,
     DATA_TABLE_SHELL_IMPORTS,
-    HolidayCreateDialogComponent
+    HolidayCreateDialogComponent,
+    DateInputMaskDirective,
 ],
 })
 export class HolidayListComponent extends StatefulListPage<

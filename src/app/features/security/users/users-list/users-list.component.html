@@ -130,12 +130,14 @@
         <p-datepicker
           size="small"
           class="w-full"
+          csDateInputMask
           appendTo="body"
           [showIcon]="true"
           inputId="lastLoginAt"
           selectionMode="range"
           dateFormat="dd/mm/yy"
           [readonlyInput]="true"
+          [csDateInputMaskRange]="true"
           [ngModel]="lastLoginAtRange()"
           (ngModelChange)="lastLoginAtRange.set($event ?? null)"
         ></p-datepicker>
@@ -148,12 +150,14 @@
         <p-datepicker
           size="small"
           class="w-full"
+          csDateInputMask
           appendTo="body"
           [showIcon]="true"
           selectionMode="range"
           dateFormat="dd/mm/yy"
           inputId="blockedUntil"
           [readonlyInput]="true"
+          [csDateInputMaskRange]="true"
           [ngModel]="blockedUntilRange()"
           (ngModelChange)="blockedUntilRange.set($event ?? null)"
         ></p-datepicker>
@@ -166,12 +170,14 @@
         <p-datepicker
           size="small"
           class="w-full"
+          csDateInputMask
           appendTo="body"
           [showIcon]="true"
           selectionMode="range"
           dateFormat="dd/mm/yy"
           [readonlyInput]="true"
           inputId="passwordExpiresAt"
+          [csDateInputMaskRange]="true"
           [ngModel]="passwordExpiresAtRange()"
           (ngModelChange)="passwordExpiresAtRange.set($event ?? null)"
         ></p-datepicker>
@@ -184,12 +190,14 @@
         <p-datepicker
           size="small"
           class="w-full"
+          csDateInputMask
           appendTo="body"
           [showIcon]="true"
           inputId="createdAt"
           selectionMode="range"
           dateFormat="dd/mm/yy"
           [readonlyInput]="true"
+          [csDateInputMaskRange]="true"
           [ngModel]="createdAtRange()"
           (ngModelChange)="createdAtRange.set($event ?? null)"
         ></p-datepicker>
@@ -427,12 +435,14 @@
               <ng-template pTemplate="filter" let-value let-filter="filterCallback">
                 <p-datepicker
                   class="w-full"
+                  csDateInputMask
                   appendTo="body"
                   [showIcon]="true"
                   [ngModel]="value"
                   selectionMode="range"
                   dateFormat="dd/mm/yy"
                   [readonlyInput]="true"
+                  [csDateInputMaskRange]="true"
                   (ngModelChange)="filter($event)"
                   [placeholder]="'common.period' | translate"
                 ></p-datepicker>

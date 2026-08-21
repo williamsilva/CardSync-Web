@@ -672,15 +672,18 @@
                       <p-datepicker
                         size="small"
                         class="w-full"
+                        csDateInputMask
                         dataType="string"
                         [showIcon]="true"
-                        [readonlyInput]="true"
+                        [readonlyInput]="setSelectionMode(originalDueDateColumnPeriod()) === 'range'"
                         inputId="originalDueDateColumnDraft"
                         [ngModel]="originalDueDateColumnPickerValue()"
                         [disabled]="isOriginalDueDateColumnDisabled()"
                         [view]="setViewFormat(originalDueDateColumnPeriod())"
                         [dateFormat]="setDateFormat(originalDueDateColumnPeriod())"
                         [selectionMode]="setSelectionMode(originalDueDateColumnPeriod())"
+                        [csDateInputMaskFormat]="setDateFormat(originalDueDateColumnPeriod())"
+                        [csDateInputMaskRange]="setSelectionMode(originalDueDateColumnPeriod()) === 'range'"
                         (ngModelChange)="
                           onPeriodColumnDraftChange(originalDueDateColumnDraft, $event ?? null)
                         "
@@ -774,15 +777,18 @@
                       <p-datepicker
                         size="small"
                         class="w-full"
+                        csDateInputMask
                         dataType="string"
                         [showIcon]="true"
-                        [readonlyInput]="true"
+                        [readonlyInput]="setSelectionMode(releaseDateColumnPeriod()) === 'range'"
                         inputId="releaseDateColumnDraft"
                         [ngModel]="releaseDateColumnPickerValue()"
                         [disabled]="isReleaseDateColumnDisabled()"
                         [view]="setViewFormat(releaseDateColumnPeriod())"
                         [dateFormat]="setDateFormat(releaseDateColumnPeriod())"
                         [selectionMode]="setSelectionMode(releaseDateColumnPeriod())"
+                        [csDateInputMaskFormat]="setDateFormat(releaseDateColumnPeriod())"
+                        [csDateInputMaskRange]="setSelectionMode(releaseDateColumnPeriod()) === 'range'"
                         (ngModelChange)="
                           onPeriodColumnDraftChange(releaseDateColumnDraft, $event ?? null)
                         "

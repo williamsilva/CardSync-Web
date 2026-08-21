@@ -16,6 +16,7 @@ import { I18nService } from '@core/i18n/i18n.service';
 import { PERMISSIONS } from '@core/auth/permissions.constants';
 import { PermissionService } from '@core/auth/permission.service';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
+import { DateInputMaskDirective } from '@shared/directives/date-input-mask.directive';
 import { ReconciliationSettingsApiService } from '@features/service/reconciliation-settings.api.service';
 
 @Component({
@@ -34,11 +35,12 @@ import { ReconciliationSettingsApiService } from '@features/service/reconciliati
     ToggleSwitchModule,
     ReactiveFormsModule,
     PageHeaderComponent,
+    DateInputMaskDirective,
   ],
 })
 export class ReconciliationSettingsComponent {
   private readonly fb = inject(FormBuilder);
-  private readonly i18n = inject(I18nService);
+  protected readonly i18n = inject(I18nService);
   private readonly toast = inject(MessageService);
   private readonly perms = inject(PermissionService);
   private readonly service = inject(ReconciliationSettingsApiService);

@@ -59,11 +59,13 @@
         <strong>{{ monthLabel() }}</strong>
         <p-datepicker
           view="month"
+          csDateInputMask
           appendTo="body"
           dateFormat="mm/yy"
           [showIcon]="true"
-          [readonlyInput]="true"
+          [readonlyInput]="false"
           [ngModel]="selectedMonthDate()"
+          [csDateInputMaskFormat]="'mm/yy'"
           (ngModelChange)="onMonthPickerChange($event)"
         ></p-datepicker>
       </div>

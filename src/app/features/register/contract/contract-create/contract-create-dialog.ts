@@ -36,6 +36,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { DatePickerModule } from 'primeng/datepicker';
 
 import { CsTagComponent } from '@shared/ui';
+import { DateInputMaskDirective } from '@shared/directives/date-input-mask.directive';
 import { I18nService } from '@core/i18n/i18n.service';
 import { CompanyFacade } from '@features/facade/company.facade';
 import { CsDocumentPipe } from '@shared/pipes/cs-document.pipe';
@@ -117,7 +118,8 @@ type ContractFlagFormValue = {
     DatePickerModule,
     FloatLabelModule,
     ErrorMsgComponent,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    DateInputMaskDirective
 ],
 })
 export class ContractCreateDialogComponent {

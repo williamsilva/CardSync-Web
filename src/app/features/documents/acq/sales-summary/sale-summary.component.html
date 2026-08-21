@@ -530,15 +530,18 @@
                       <p-datepicker
                         size="small"
                         class="w-full"
+                        csDateInputMask
                         dataType="string"
                         [showIcon]="true"
-                        [readonlyInput]="true"
+                        [readonlyInput]="setSelectionMode(rvDateColumnPeriod()) === 'range'"
                         inputId="rvDateColumnDraft"
                         [ngModel]="rvDateColumnPickerValue()"
                         [disabled]="isRvDateColumnDisabled()"
                         [view]="setViewFormat(rvDateColumnPeriod())"
                         [dateFormat]="setDateFormat(rvDateColumnPeriod())"
                         [selectionMode]="setSelectionMode(rvDateColumnPeriod())"
+                        [csDateInputMaskFormat]="setDateFormat(rvDateColumnPeriod())"
+                        [csDateInputMaskRange]="setSelectionMode(rvDateColumnPeriod()) === 'range'"
                         (ngModelChange)="
                           onPeriodColumnDraftChange(rvDateColumnDraft, $event ?? null)
                         "

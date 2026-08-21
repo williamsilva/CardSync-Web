@@ -142,12 +142,14 @@
                   <p-floatLabel variant="on" class="w-full">
                     <p-datepicker
                       class="w-full"
+                      csDateInputMask
                       dataType="date"
                       [showIcon]="true"
                       [showTime]="false"
                       inputId="startDate"
-                      dateFormat="dd/mm/yy"
+                      [dateFormat]="i18n.getDateFormat()"
                       formControlName="startDate"
+                      [csDateInputMaskFormat]="i18n.getDateFormat()"
                     ></p-datepicker>
 
                     <app-error-msg
@@ -163,12 +165,14 @@
                     <p-floatLabel variant="on" class="w-full">
                       <p-datepicker
                         class="w-full"
+                        csDateInputMask
                         dataType="date"
                         inputId="endDate"
                         [showIcon]="true"
                         [showTime]="false"
-                        dateFormat="dd/mm/yy"
+                        [dateFormat]="i18n.getDateFormat()"
                         formControlName="endDate"
+                        [csDateInputMaskFormat]="i18n.getDateFormat()"
                       ></p-datepicker>
 
                       <app-error-msg

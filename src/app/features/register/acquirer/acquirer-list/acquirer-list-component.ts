@@ -33,6 +33,7 @@ import { AcquirerModel, AcquirerFiltersState } from '@models/acquirer.models';
 import { BulkActionListPage } from '@features/list-base/bulk-action-list-page';
 import { buildListQuery } from '@shared/features/list-query/list-query.builder';
 import { CpfCnpjMaskDirective } from '@shared/directives/cpf-cnpj-mask.directive';
+import { DateInputMaskDirective } from '@shared/directives/date-input-mask.directive';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
 import { AcquirerPermissionPolicy } from '@features/security/policy/acquirer-permission.policy';
 import { DATA_TABLE_SHELL_IMPORTS } from '@shared/features/data-table-shell/data-table-shell.component';
@@ -83,7 +84,8 @@ import {
     FiltersPanelComponent,
     DATA_TABLE_SHELL_IMPORTS,
     AcquirerCompanyRelationsComponent,
-    AcquirerEstablishmentRelationsComponent
+    AcquirerEstablishmentRelationsComponent,
+    DateInputMaskDirective,
 ],
 })
 export class AcquirerListComponent extends StatefulListPage<

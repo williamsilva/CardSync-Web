@@ -111,11 +111,13 @@
           inputId="sentAt"
           class="w-full"
           size="small"
+          csDateInputMask
           appendTo="body"
           [showIcon]="true"
           [readonlyInput]="true"
           selectionMode="range"
           dateFormat="dd/mm/yy"
+          [csDateInputMaskRange]="true"
           [ngModel]="sentAtRange()"
           (ngModelChange)="sentAtRange.set($event ?? null)"
         ></p-datepicker>
@@ -262,11 +264,13 @@
               <ng-template pTemplate="filter" let-value let-filter="filterCallback">
                 <p-datepicker
                   class="w-full"
+                  csDateInputMask
                   appendTo="body"
                   [showIcon]="true"
                   [readonlyInput]="true"
                   selectionMode="range"
                   dateFormat="dd/mm/yy"
+                  [csDateInputMaskRange]="true"
                   [ngModel]="value"
                   (ngModelChange)="filter($event)"
                 ></p-datepicker>

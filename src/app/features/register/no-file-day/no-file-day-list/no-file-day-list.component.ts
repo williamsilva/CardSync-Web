@@ -19,6 +19,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService, MessageService } from 'primeng/api';
 
 import { CsTagComponent } from '@shared/ui';
+import { DateInputMaskDirective } from '@shared/directives/date-input-mask.directive';
 import { I18nService } from '@core/i18n/i18n.service';
 import { CsDatePipe } from '@shared/pipes/cs-date.pipe';
 import { STATE_KEY } from '@features/state-key.constants';
@@ -84,7 +85,8 @@ import {
     ConfirmDialogModule,
     FiltersPanelComponent,
     DATA_TABLE_SHELL_IMPORTS,
-    NoFileDayCreateDialogComponent
+    NoFileDayCreateDialogComponent,
+    DateInputMaskDirective,
 ],
 })
 export class NoFileDayListComponent extends StatefulListPage<
