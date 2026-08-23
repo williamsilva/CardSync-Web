@@ -120,7 +120,7 @@ export class UsersListComponent extends StatefulListPage<UsersFiltersState, User
   name = signal('');
   userName = signal('');
   document = signal('');
-  status = signal<UserStatus[] | null>([UserStatus.ACTIVE, UserStatus.PENDING_PASSWORD]);
+  status = signal<UserStatus[] | null>(this.defaultStatus());
   createdBy = signal<string[] | null>(null);
   createdAtRange = signal<Date[] | null>(null);
   lastLoginAtRange = signal<Date[] | null>(null);
@@ -466,6 +466,18 @@ export class UsersListComponent extends StatefulListPage<UsersFiltersState, User
     this.facade.loadPage(query);
   }
 
+  /** Vem pré-selecionado com Ativo+Pendente de senha — mesmo padrão do CardSync
+   *  (CreditOrderListComponent). O gate que decide SE isso deve ser aplicado (painel inteiro
+   *  vazio, não campo a campo) vive na classe base — ver applyDefaultAdvancedFiltersIfEmpty em
+   *  StatefulListPage. */
+  private defaultStatus(): UserStatus[] {
+    return [UserStatus.ACTIVE, UserStatus.PENDING_PASSWORD];
+  }
+
+  protected override applyDefaultAdvancedFilters(): void {
+    this.status.set(this.defaultStatus());
+  }
+
   protected override resetFilters(): void {
     this.name.set('');
     this.userName.set('');
@@ -476,6 +488,7 @@ export class UsersListComponent extends StatefulListPage<UsersFiltersState, User
     this.lastLoginAtRange.set(null);
     this.blockedUntilRange.set(null);
     this.passwordExpiresAtRange.set(null);
+    this.applyDefaultAdvancedFiltersIfEmpty();
   }
 
   protected override toFiltersState(): UsersFiltersState {
@@ -531,6 +544,8 @@ export class UsersListComponent extends StatefulListPage<UsersFiltersState, User
         ? [new Date(s.passwordExpiresAtRange[0]), new Date(s.passwordExpiresAtRange[1])]
         : null,
     );
+
+    this.applyDefaultAdvancedFiltersIfEmpty();
   }
 
   protected override buildAdvancedFilters(): Partial<UsersAdvancedFilters> {

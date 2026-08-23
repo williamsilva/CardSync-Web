@@ -336,17 +336,11 @@ export class SaleSummaryListComponent
   }
 
   /**
-   * Só entra quando NENHUM filtro avançado está setado (painel inteiro vazio) — primeira visita à
-   * tela (nada persistido ainda), filtros persistidos totalmente vazios, ou logo após "Limpar".
-   * Checa o painel inteiro, não campo a campo: se o usuário deixou data/status vazios de propósito
-   * mas definiu outro filtro (ex.: Empresa), isso já conta como painel "não vazio" e não deve
-   * reaplicar nenhum default — senão a escolha dele nunca "gruda" (bug relatado: mudava um filtro,
-   * o default de data/status voltava sozinho). Quando aplica, assume período "Final" (rvDate <=
-   * data) com a data atual menos 31 dias e Status Ordem Crédito "Pendente".
+   * Assume período "Final" (rvDate <= data) com a data atual menos 31 dias e Status Ordem Crédito
+   * "Pendente". O gate que decide SE isso deve ser aplicado (painel inteiro vazio, não campo a
+   * campo) vive na classe base — ver applyDefaultAdvancedFiltersIfEmpty em StatefulListPage.
    */
-  private applyDefaultFiltersIfEmpty(): void {
-    if (this.advancedActiveFilters().length > 0) return;
-
+  protected override applyDefaultAdvancedFilters(): void {
     const { period, date } = this.defaultRvDateWindow();
     this.periodRvDate.set(period);
     this.rvDate.set(date);
@@ -412,7 +406,7 @@ export class SaleSummaryListComponent
 
   protected override resetFilters(): void {
     resetSaleSummaryAdvancedFilters(this);
-    this.applyDefaultFiltersIfEmpty();
+    this.applyDefaultAdvancedFiltersIfEmpty();
   }
 
   /* Filtros Avançados */
@@ -795,7 +789,7 @@ export class SaleSummaryListComponent
     this.statusPaymentBank.set(s.statusPaymentBank ?? null);
     this.transactionsStatus.set(s.transactionsStatus ?? null);
 
-    this.applyDefaultFiltersIfEmpty();
+    this.applyDefaultAdvancedFiltersIfEmpty();
   }
 
   /* Metodos busca */

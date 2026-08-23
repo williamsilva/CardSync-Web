@@ -355,15 +355,11 @@ export class CreditOrderListComponent
   }
 
   /**
-   * Só entra quando NENHUM filtro avançado está setado (painel inteiro vazio) — primeira visita à
-   * tela (nada persistido ainda), filtros persistidos totalmente vazios, ou logo após "Limpar".
-   * Checa o painel inteiro, não campo a campo, mesmo critério do SaleSummaryListComponent: se o
-   * usuário já definiu qualquer outro filtro (ex.: Empresa), isso já conta como painel "não vazio"
-   * e não deve reaplicar o default — senão a escolha dele nunca "gruda".
+   * Assume Status Pagamento Banco "Pendente"+"Divergente". O gate que decide SE isso deve ser
+   * aplicado (painel inteiro vazio, não campo a campo) vive na classe base — ver
+   * applyDefaultAdvancedFiltersIfEmpty em StatefulListPage.
    */
-  private applyDefaultFiltersIfEmpty(): void {
-    if (this.advancedActiveFilters().length > 0) return;
-
+  protected override applyDefaultAdvancedFilters(): void {
     this.statusPaymentBank.set(this.defaultStatusPaymentBank());
   }
 
@@ -404,7 +400,7 @@ export class CreditOrderListComponent
 
   protected override resetFilters(): void {
     resetCreditOrderAdvancedFilters(this);
-    this.applyDefaultFiltersIfEmpty();
+    this.applyDefaultAdvancedFiltersIfEmpty();
   }
 
   /* Filtros Avançados */
@@ -880,7 +876,7 @@ export class CreditOrderListComponent
     this.salesSummaryStatus.set(s.salesSummaryStatus ?? null);
     this.statusPaymentBank.set(s.statusPaymentBank ?? null);
 
-    this.applyDefaultFiltersIfEmpty();
+    this.applyDefaultAdvancedFiltersIfEmpty();
   }
 
   protected onGrossValueRangeChange(value: CsCurrencyRangeValue): void {
