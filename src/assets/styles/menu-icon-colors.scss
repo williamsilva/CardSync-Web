@@ -1,9 +1,15 @@
 /**
  * Garante que as cores dos ícones do menu lateral estejam sempre disponíveis no CSS.
  *
- * Tailwind v4 escaneia templates HTML para gerar classes, mas pode não detectar
- * strings em arquivos .ts (como menu.data.ts). As cores abaixo são usadas
- * exclusivamente no menu.data.ts e precisam ser declaradas explicitamente.
+ * Dois motivos, não só um:
+ * 1) Tailwind v4 escaneia templates HTML para gerar classes, mas não detecta strings em
+ *    arquivos .ts (como menu.data.ts) - a classe simplesmente não é gerada.
+ * 2) O PrimeNG também gera classes utilitárias `.text-{color}-{tom}` para as cores do seu
+ *    design system (ex.: indigo, slate), mas com `color: var(--p-{color}-{tom}) !important`.
+ *    Como a variável de tema só existe pra a paleta "primary/surface" ativa, essas classes do
+ *    PrimeNG resolvem pra transparente/herdado e, por causa do `!important`, vencem qualquer
+ *    regra nossa sem `!important` - por isso as regras abaixo também usam `!important` (e
+ *    precisam continuar vindo depois do CSS do PrimeNG na ordem de import pra decidir o empate).
  *
  * Padrão de cores do menu:
  *   - Grupo pai: text-{color}-600 (tom mais escuro)
@@ -18,27 +24,27 @@
  *   Security   → red     (red-600 / red-400)          — usados em templates HTML
  *   Register   → orange  (orange-600 / orange-400)    — usados em templates HTML
  *   Audit      → sky     (sky-600 / sky-400)          — APENAS no menu.data.ts
- *   Settings   → slate   (slate-600 / slate-400)      — APENAS no menu.data.ts
+ *   Settings   → indigo  (indigo-600 / indigo-400)    — APENAS no menu.data.ts
  *   File Proc. → blue    (blue-600 / blue-400)        — APENAS no menu.data.ts
  *   Docs Files → violet  (violet-600)                 — usados em templates HTML
  */
 
 /* Banks — emerald */
-.text-emerald-600 { color: #059669; }
-.text-emerald-400 { color: #34d399; }
+.text-emerald-600 { color: #059669 !important; }
+.text-emerald-400 { color: #34d399 !important; }
 
 /* Adjustment — amber */
-.text-amber-600 { color: #d97706; }
-.text-amber-400 { color: #fbbf24; }
+.text-amber-600 { color: #d97706 !important; }
+.text-amber-400 { color: #fbbf24 !important; }
 
 /* Audit — sky */
-.text-sky-600 { color: #0284c7; }
-.text-sky-400 { color: #38bdf8; }
+.text-sky-600 { color: #0284c7 !important; }
+.text-sky-400 { color: #38bdf8 !important; }
 
-/* Settings — slate */
-.text-slate-600 { color: #475569; }
-.text-slate-400 { color: #94a3b8; }
+/* Settings — indigo */
+.text-indigo-600 { color: #4f46e5 !important; }
+.text-indigo-400 { color: #818cf8 !important; }
 
 /* File Processing — blue */
-.text-blue-600 { color: #2563eb; }
-.text-blue-400 { color: #60a5fa; }
+.text-blue-600 { color: #2563eb !important; }
+.text-blue-400 { color: #60a5fa !important; }

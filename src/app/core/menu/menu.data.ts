@@ -367,35 +367,35 @@ export const APP_MENU: AppMenuItem[] = [
   },
   /* Settings — cor slate */
   {
-    icon: 'pi pi-cog text-slate-600',
+    icon: 'pi pi-cog text-indigo-600',
     labelKey: 'menu.settings.title',
     children: [
       {
         exact: false,
         route: '/settings/scheduler',
         labelKey: 'menu.settings.scheduler',
-        icon: 'pi pi-clock text-slate-400',
+        icon: 'pi pi-clock text-indigo-400',
         permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.SETTINGS.SCHEDULER_VIEW],
       },
       {
         exact: false,
         route: '/settings/reconciliation',
         labelKey: 'menu.settings.reconciliation',
-        icon: 'pi pi-sliders-v text-slate-400',
+        icon: 'pi pi-sliders-v text-indigo-400',
         permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.SETTINGS.RECONCILIATION_VIEW],
       },
       {
         exact: false,
         route: '/settings/email',
         labelKey: 'menu.settings.email',
-        icon: 'pi pi-envelope text-slate-400',
+        icon: 'pi pi-envelope text-indigo-400',
         permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.SETTINGS.EMAIL_VIEW],
       },
       {
         exact: false,
         route: '/settings/backup',
         labelKey: 'menu.settings.backup',
-        icon: 'pi pi-database text-slate-400',
+        icon: 'pi pi-database text-indigo-400',
         permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.SETTINGS.BACKUP_PROCESS],
       },
     ],
