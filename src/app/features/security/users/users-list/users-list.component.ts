@@ -120,7 +120,7 @@ export class UsersListComponent extends StatefulListPage<UsersFiltersState, User
   name = signal('');
   userName = signal('');
   document = signal('');
-  status = signal<UserStatus[] | null>(null);
+  status = signal<UserStatus[] | null>([UserStatus.ACTIVE, UserStatus.PENDING_PASSWORD]);
   createdBy = signal<string[] | null>(null);
   createdAtRange = signal<Date[] | null>(null);
   lastLoginAtRange = signal<Date[] | null>(null);

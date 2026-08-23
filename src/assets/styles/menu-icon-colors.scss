@@ -18,7 +18,7 @@
  *   Security   → red     (red-600 / red-400)          — usados em templates HTML
  *   Register   → orange  (orange-600 / orange-400)    — usados em templates HTML
  *   Audit      → sky     (sky-600 / sky-400)          — APENAS no menu.data.ts
- *   Settings   → indigo  (indigo-600 / indigo-400)    — usados em templates HTML
+ *   Settings   → slate   (slate-600 / slate-400)      — APENAS no menu.data.ts
  *   File Proc. → blue    (blue-600 / blue-400)        — APENAS no menu.data.ts
  *   Docs Files → violet  (violet-600)                 — usados em templates HTML
  */
@@ -34,6 +34,10 @@
 /* Audit — sky */
 .text-sky-600 { color: #0284c7; }
 .text-sky-400 { color: #38bdf8; }
+
+/* Settings — slate */
+.text-slate-600 { color: #475569; }
+.text-slate-400 { color: #94a3b8; }
 
 /* File Processing — blue */
 .text-blue-600 { color: #2563eb; }
