@@ -373,7 +373,7 @@
   }
 }
 
-:root.dark {
+:host-context(.dark) {
   .cs-audit__table tbody tr.cs-audit__table-row--odd td {
     background: color-mix(in srgb, var(--surface-900) 25%, transparent);
   }
