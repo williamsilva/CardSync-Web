@@ -181,27 +181,6 @@ export const APP_MENU: AppMenuItem[] = [
       },
     ],
   },
-  /* Security */
-  {
-    icon: 'pi pi-shield text-red-600',
-    labelKey: 'menu.security.title',
-    children: [
-      {
-        labelKey: 'menu.security.users',
-        icon: 'pi pi-user text-red-400',
-        route: '/security/users',
-        exact: false,
-        permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.USERS.VIEW],
-      },
-      {
-        labelKey: 'menu.security.groups',
-        icon: 'pi pi-id-card text-red-400',
-        route: '/security/groups',
-        exact: false,
-        permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.GROUPS.VIEW],
-      },
-    ],
-  },
   /* Register */
   {
     icon: 'pi pi-folder-open text-orange-600',
@@ -362,6 +341,27 @@ export const APP_MENU: AppMenuItem[] = [
         exact: false,
         icon: 'pi pi-envelope text-sky-400',
         permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.AUDIT.VIEW],
+      },
+    ],
+  },
+  /* Security */
+  {
+    icon: 'pi pi-shield text-red-600',
+    labelKey: 'menu.security.title',
+    children: [
+      {
+        labelKey: 'menu.security.users',
+        icon: 'pi pi-user text-red-400',
+        route: '/security/users',
+        exact: false,
+        permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.USERS.VIEW],
+      },
+      {
+        labelKey: 'menu.security.groups',
+        icon: 'pi pi-id-card text-red-400',
+        route: '/security/groups',
+        exact: false,
+        permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.GROUPS.VIEW],
       },
     ],
   },
