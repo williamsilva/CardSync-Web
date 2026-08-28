@@ -129,7 +129,7 @@ export class BankingDomicileListComponent extends StatefulListPage<
   bankColumnDraft = signal<string[] | null>(null);
   companyColumnDraft = signal<string[] | null>(null);
 
-  status = signal<boolean | null>(null);
+  active = signal<boolean | null>(null);
 
   upsertVisible = signal(false);
   selectedRows = signal<BankingDomicileModel[]>([]);
@@ -150,7 +150,7 @@ export class BankingDomicileListComponent extends StatefulListPage<
     const items: ActiveFilterItem[] = [];
 
     const bank = this.banks();
-    const status = this.status();
+    const status = this.active();
     const company = this.companies();
 
     if (company?.length) {
@@ -195,13 +195,6 @@ export class BankingDomicileListComponent extends StatefulListPage<
     if (!filters) {
       return;
     }
-
-    this.syncArrayColumnDraftFromTableState(
-      filters,
-      'bak',
-      this.bankColumnDraft,
-      readArrayFilterValues,
-    );
 
     this.syncArrayColumnDraftFromTableState(
       filters,
@@ -474,18 +467,21 @@ export class BankingDomicileListComponent extends StatefulListPage<
     return {
       banks: this.banks(),
       companies: this.companies(),
+      active: this.active(),
     };
   }
 
   protected override applyFiltersState(s: BankingDomicileFiltersState): void {
     this.banks.set(s.banks ?? null);
     this.companies.set(s.companies ?? null);
+    this.active.set(s.active ?? null);
   }
 
   protected override buildAdvancedFilters(): Partial<BankingDomicileAdvancedFilters> {
     return {
       banks: this.banks()?.length ? this.banks()! : undefined,
       companies: this.companies()?.length ? this.companies()! : undefined,
+      active: this.active() ?? undefined,
     };
   }
 
