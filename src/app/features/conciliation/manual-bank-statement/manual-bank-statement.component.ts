@@ -28,7 +28,7 @@ import { CompanyFacade } from '@features/facade/company.facade';
 import { CsDocumentPipe } from '@shared/pipes/cs-document.pipe';
 import { AcquirerFacade } from '@features/facade/acquirer.facade';
 import { ErrorMsgComponent } from '@shared/error-msg/error-msg.component';
-import { DateInputMaskDirective } from '@shared/directives/date-input-mask.directive';
+import { DateInputMaskDirective } from '@williamsilva/nimbus-web-commons';
 import { EstablishmentFacade } from '@features/facade/establishment.facade';
 import { BankStatementFacade } from '@features/facade/bank-statement.facade';
 import { BankingDomicileFacade } from '@features/facade/banking-domicile.facade';

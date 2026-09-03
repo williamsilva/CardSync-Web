@@ -23,28 +23,28 @@ import { CompanyFacade } from '@features/facade/company.facade';
 import { CsCurrencyPipe } from '@shared/pipes/cs-currency.pipe';
 import { CsDocumentPipe } from '@shared/pipes/cs-document.pipe';
 import { AcquirerFacade } from '@features/facade/acquirer.facade';
-import { StatefulListPage } from '@features/list-base/stateful-list-page';
+import { StatefulListPage } from '@williamsilva/nimbus-web-commons';
 import { ChargebackRequestModel } from '@models/chargeback-request.model';
 import { EstablishmentFacade } from '@features/facade/establishment.facade';
-import { buildListQuery } from '@shared/features/list-query/list-query.builder';
+import { buildListQuery } from '@williamsilva/nimbus-web-commons';
 import { ChargebackRequestFacade } from '@features/facade/chargeback-request.facade';
 import { allPeriodEnum, PeriodEnum, periodEnumLabel } from '@models/enums/period.enum';
 import { StatusEnum, statusEnumLabel, statusEnumSeverity } from '@models/enums/status.enum';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
 import { CsColumnFilterShellComponent } from '@features/list-base/cs-column-filter-shell.component';
 import { CsAdvancedTextFilterComponent } from '@features/list-base/cs-advanced-text-filter.component';
-import { CsAdvancedPeriodDateFilterComponent } from '@features/list-base/cs-advanced-period-date-filter.component';
+import { CsAdvancedPeriodDateFilterComponent } from '@williamsilva/nimbus-web-commons';
 import { CsAdvancedMultiselectFilterComponent } from '@features/list-base/cs-advanced-multiselect-filter.component';
 import { CsAdvancedFilterItemTemplateDirective } from '@features/list-base/cs-advanced-filter-item-template.directive';
 import {
   readArrayFilterValues,
   readPeriodFilterValue,
   readSingleFilterValue,
-} from '@features/list-base/table-filter-readers';
+} from '@williamsilva/nimbus-web-commons';
 import {
   ActiveFilterItem,
   FiltersPanelComponent,
-} from '@shared/features/filters-panel/filters-panel.component';
+} from '@williamsilva/nimbus-web-commons';
 import {
   ChargebackRequestFiltersState,
   ChargebackRequestAdvancedFilters,

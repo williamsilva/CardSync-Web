@@ -20,9 +20,9 @@ import { CsCurrencyPipe } from '@shared/pipes/cs-currency.pipe';
 import { CsDocumentPipe } from '@shared/pipes/cs-document.pipe';
 import { CompanyFacade } from '@features/facade/company.facade';
 import { AcquirerFacade } from '@features/facade/acquirer.facade';
-import { StatefulListPage } from '@features/list-base/stateful-list-page';
+import { StatefulListPage } from '@williamsilva/nimbus-web-commons';
 import { SaleSummaryApiModel } from '@features/models/sales-summary.model';
-import { buildListQuery } from '@shared/features/list-query/list-query.builder';
+import { buildListQuery } from '@williamsilva/nimbus-web-commons';
 import { SaleSummaryAdvancedFilters } from '@features/filter/sale-summary.filters';
 import { CreditOrderApiService } from '@features/service/credit-order.api.service';
 import { ManualCreditOrderFacade } from '@features/facade/manual-credit-order.facade';
@@ -39,7 +39,7 @@ import {
 import {
   ActiveFilterItem,
   FiltersPanelComponent,
-} from '@shared/features/filters-panel/filters-panel.component';
+} from '@williamsilva/nimbus-web-commons';
 import {
   ManualCreditOrderFiltersState,
   resetManualCreditOrderFilters,
@@ -48,7 +48,7 @@ import {
 import {
   readArrayFilterValues,
   readSingleFilterValue,
-} from '@features/list-base/table-filter-readers';
+} from '@williamsilva/nimbus-web-commons';
 import {
   ModalityEnum,
   allModalityEnum,

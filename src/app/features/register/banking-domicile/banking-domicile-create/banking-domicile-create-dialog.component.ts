@@ -26,7 +26,7 @@ import { I18nService } from '@core/i18n/i18n.service';
 import { BankFacade } from '@features/facade/bank.facade';
 import { CompanyFacade } from '@features/facade/company.facade';
 import { ErrorMsgComponent } from '@shared/error-msg/error-msg.component';
-import { DateInputMaskDirective } from '@shared/directives/date-input-mask.directive';
+import { DateInputMaskDirective } from '@williamsilva/nimbus-web-commons';
 import { BankingDomicileFacade } from '@features/facade/banking-domicile.facade';
 import {
   StatusEnum,

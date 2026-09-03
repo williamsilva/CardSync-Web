@@ -12,7 +12,7 @@ import {
   ChargebackLifecycleModel,
   ConciliationFeeAnalysisModel,
 } from '@models/conciliation.models';
-import { ListQueryDto } from '@shared/features/list-query/list-query.types';
+import { ListQueryDto } from '@williamsilva/nimbus-web-commons';
 
 @Injectable({ providedIn: 'root' })
 export class ConciliationService {

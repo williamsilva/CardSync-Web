@@ -6,7 +6,7 @@ import { map } from 'rxjs/operators';
 import { API } from '@core/api/api.config';
 import { HalPagedResponse } from '@core/api/page.model';
 import { TransactionsTotalsModel } from '@models/transactionsTotalsModel';
-import { ListQueryDto } from '@shared/features/list-query/list-query.types';
+import { ListQueryDto } from '@williamsilva/nimbus-web-commons';
 import { SaleSummaryAdvancedFilters } from '@features/filter/sale-summary.filters';
 import { mapSaleSummaryApiModels, SaleSummaryApiModel, SalesSummaryManualCreateInput } from '@models/sales-summary.model';
 

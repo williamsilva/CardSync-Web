@@ -27,7 +27,7 @@ import { I18nService } from '@core/i18n/i18n.service';
 import { AcquirerFacade } from '@features/facade/acquirer.facade';
 import { NoFileDayFacade } from '@features/facade/no-file-day.facade';
 import { ErrorMsgComponent } from '@shared/error-msg/error-msg.component';
-import { DateInputMaskDirective } from '@shared/directives/date-input-mask.directive';
+import { DateInputMaskDirective } from '@williamsilva/nimbus-web-commons';
 import { BankingDomicileFacade } from '@features/facade/banking-domicile.facade';
 import { FileGroupEnum, allFileGroupEnum, fileGroupEnumLabel } from '@models/enums/file-group.enum';
 import {

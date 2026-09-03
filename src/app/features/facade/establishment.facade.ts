@@ -3,7 +3,7 @@ import { computed, Injectable, inject, signal } from '@angular/core';
 import { finalize, Observable, tap } from 'rxjs';
 
 import { StatusEnum } from '@models/enums/status.enum';
-import { ListQueryDto } from '@shared/features/list-query/list-query.types';
+import { ListQueryDto } from '@williamsilva/nimbus-web-commons';
 import { EstablishmentMinimalModel } from '@models/establishment-minimal.models';
 import { EstablishmentAdvancedFilters } from '@features/filter/establishment.filters';
 import { EstablishmentApiService } from '@features/service/establishment.api.service';

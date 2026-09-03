@@ -28,12 +28,12 @@ import { CompanyFacade } from '@features/facade/company.facade';
 import { CsDocumentPipe } from '@shared/pipes/cs-document.pipe';
 import { PermissionService } from '@core/auth/permission.service';
 import { CompanyAdvancedFilters } from '@features/filter/company.filters';
-import { StatefulListPage } from '@features/list-base/stateful-list-page';
+import { StatefulListPage } from '@williamsilva/nimbus-web-commons';
 import { CompanyModel, CompanyFiltersState } from '@models/company.models';
 import { BulkActionListPage } from '@features/list-base/bulk-action-list-page';
-import { buildListQuery } from '@shared/features/list-query/list-query.builder';
+import { buildListQuery } from '@williamsilva/nimbus-web-commons';
 import { CpfCnpjMaskDirective } from '@shared/directives/cpf-cnpj-mask.directive';
-import { DateInputMaskDirective } from '@shared/directives/date-input-mask.directive';
+import { DateInputMaskDirective } from '@williamsilva/nimbus-web-commons';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
 import { CompanyPermissionPolicy } from '@features/security/policy/company-permission.policy';
 import { CompanyCreateDialogComponent } from '../company-create/company-create-dialog.component';
@@ -41,7 +41,7 @@ import { DATA_TABLE_SHELL_IMPORTS } from '@shared/features/data-table-shell/data
 import {
   ActiveFilterItem,
   FiltersPanelComponent,
-} from '@shared/features/filters-panel/filters-panel.component';
+} from '@williamsilva/nimbus-web-commons';
 
 import {
   TypeCompanyEnum,
@@ -60,7 +60,7 @@ import {
   readArrayFilterValues,
   readSingleFilterValue,
   readDateRangeFilterValue,
-} from '@features/list-base/table-filter-readers';
+} from '@williamsilva/nimbus-web-commons';
 
 @Component({
   standalone: true,

@@ -2,7 +2,7 @@ import { Injectable, inject, signal } from '@angular/core';
 
 import { finalize } from 'rxjs';
 
-import { ListQueryDto } from '@shared/features/list-query/list-query.types';
+import { ListQueryDto } from '@williamsilva/nimbus-web-commons';
 import { ChargebackRequestAdvancedFilters } from '@features/filter/chargeback-request.filters';
 import { ChargebackRequestApiService } from '@features/service/adjustment-chargeback-request.api.service';
 import {

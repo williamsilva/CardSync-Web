@@ -6,7 +6,7 @@ import { map } from 'rxjs/operators';
 import { API } from '@core/api/api.config';
 import { HalPagedResponse } from '@core/api/page.model';
 import { BankAdvancedFilters } from '@features/filter/bank.filters';
-import { ListQueryDto } from '@shared/features/list-query/list-query.types';
+import { ListQueryDto } from '@williamsilva/nimbus-web-commons';
 import {
   BankModel,
   BankApiModel,

@@ -4,7 +4,7 @@ import { EMPTY, Observable, finalize, tap } from 'rxjs';
 
 import { CreditOrderApiModel } from '@models/credit-order.model';
 import { BankStatementApiModel } from '@models/bank-statement.model';
-import { ListQueryDto } from '@shared/features/list-query/list-query.types';
+import { ListQueryDto } from '@williamsilva/nimbus-web-commons';
 import { CreditOrderApiService } from '@features/service/credit-order.api.service';
 import { CreditOrderAdvancedFilters } from '@features/filter/credit-order.filters';
 import { BankStatementApiService } from '@features/service/bank-statement.api.service';

@@ -25,17 +25,17 @@ import { CompanyFacade } from '@features/facade/company.facade';
 import { CsCurrencyPipe } from '@shared/pipes/cs-currency.pipe';
 import { AcquirerFacade } from '@features/facade/acquirer.facade';
 import { BankStatementModel } from '@models/bank-statement.model';
-import { StatefulListPage } from '@features/list-base/stateful-list-page';
+import { StatefulListPage } from '@williamsilva/nimbus-web-commons';
 import { EstablishmentFacade } from '@features/facade/establishment.facade';
 import { BankStatementFacade } from '@features/facade/bank-statement.facade';
-import { buildListQuery } from '@shared/features/list-query/list-query.builder';
+import { buildListQuery } from '@williamsilva/nimbus-web-commons';
 import { allPeriodEnum, PeriodEnum, periodEnumLabel } from '@models/enums/period.enum';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
 import { createEmptyCreditOrderFiltersState } from '@features/filter/credit-order.filters';
 import { StatusEnum, statusEnumLabel, statusEnumSeverity } from '@models/enums/status.enum';
 import { CsColumnFilterShellComponent } from '@features/list-base/cs-column-filter-shell.component';
 import { ManualBankReconciliationApiService } from '@features/service/manual-bank-reconciliation.api.service';
-import { CsAdvancedPeriodDateFilterComponent } from '@features/list-base/cs-advanced-period-date-filter.component';
+import { CsAdvancedPeriodDateFilterComponent } from '@williamsilva/nimbus-web-commons';
 import { CsAdvancedMultiselectFilterComponent } from '@features/list-base/cs-advanced-multiselect-filter.component';
 import { CsAdvancedFilterItemTemplateDirective } from '@features/list-base/cs-advanced-filter-item-template.directive';
 import {
@@ -47,11 +47,11 @@ import {
   readArrayFilterValues,
   readPeriodFilterValue,
   readSingleFilterValue,
-} from '@features/list-base/table-filter-readers';
+} from '@williamsilva/nimbus-web-commons';
 import {
   ActiveFilterItem,
   FiltersPanelComponent,
-} from '@shared/features/filters-panel/filters-panel.component';
+} from '@williamsilva/nimbus-web-commons';
 import {
   StatusPaymentBankEnum,
   statusPaymentBankEnumLabel,

@@ -4,7 +4,7 @@ import { finalize } from 'rxjs';
 
 import { TransactionsErpModel } from '@models/transactions-erp.models';
 import { TransactionsTotalsModel } from '@models/transactionsTotalsModel';
-import { ListQueryDto } from '@shared/features/list-query/list-query.types';
+import { ListQueryDto } from '@williamsilva/nimbus-web-commons';
 import { TransactionsErpApiService } from '@features/service/transaction-erp.api.service';
 import { TransactionsErpAdvancedFilters } from '@features/filter/transaction-erp.filters';
 

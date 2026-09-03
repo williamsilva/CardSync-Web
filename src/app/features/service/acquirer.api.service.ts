@@ -6,7 +6,7 @@ import { map } from 'rxjs/operators';
 import { API } from '@core/api/api.config';
 import { HalPagedResponse } from '@core/api/page.model';
 import { AcquirerAdvancedFilters } from '@features/filter/acquirer.filters';
-import { ListQueryDto } from '@shared/features/list-query/list-query.types';
+import { ListQueryDto } from '@williamsilva/nimbus-web-commons';
 import { AcquirerMinimalModel, mapAcquirerMinimalModels } from '@models/acquirer-minimal.models';
 import {
   AcquirerModel,

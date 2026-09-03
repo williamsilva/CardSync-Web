@@ -25,9 +25,9 @@ import { CsDocumentPipe } from '@shared/pipes/cs-document.pipe';
 import { CompanyFacade } from '@features/facade/company.facade';
 import { BankingDomicileModel } from '@models/banking-domicile.models';
 import { STATE_KEY } from '@features/state-key.constants';
-import { StatefulListPage } from '@features/list-base/stateful-list-page';
+import { StatefulListPage } from '@williamsilva/nimbus-web-commons';
 import { BulkActionListPage } from '@features/list-base/bulk-action-list-page';
-import { buildListQuery } from '@shared/features/list-query/list-query.builder';
+import { buildListQuery } from '@williamsilva/nimbus-web-commons';
 import { BankingDomicileFacade } from '@features/facade/banking-domicile.facade';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
 import { CsColumnFilterShellComponent } from '@features/list-base/cs-column-filter-shell.component';
@@ -39,7 +39,7 @@ import { BankingDomicileCreateDialogComponent } from '../banking-domicile-create
 import {
   readArrayFilterValues,
   readSingleFilterValue,
-} from '@features/list-base/table-filter-readers';
+} from '@williamsilva/nimbus-web-commons';
 import {
   BankingDomicileFiltersState,
   BankingDomicileAdvancedFilters,
@@ -48,7 +48,7 @@ import {
 import {
   ActiveFilterItem,
   FiltersPanelComponent,
-} from '@shared/features/filters-panel/filters-panel.component';
+} from '@williamsilva/nimbus-web-commons';
 import { StatusEnum, statusEnumLabel, statusEnumSeverity } from '@models/enums/status.enum';
 
 @Component({

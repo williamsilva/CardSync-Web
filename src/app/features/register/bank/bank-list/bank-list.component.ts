@@ -23,10 +23,10 @@ import { CsDatePipe } from '@shared/pipes/cs-date.pipe';
 import { BankFacade } from '@features/facade/bank.facade';
 import { BankAdvancedFilters } from '@features/filter/bank.filters';
 import { STATE_KEY } from '@features/state-key.constants';
-import { StatefulListPage } from '@features/list-base/stateful-list-page';
+import { StatefulListPage } from '@williamsilva/nimbus-web-commons';
 import { BankModel, BankFiltersState } from '@models/bank.models';
 import { BulkActionListPage } from '@features/list-base/bulk-action-list-page';
-import { buildListQuery } from '@shared/features/list-query/list-query.builder';
+import { buildListQuery } from '@williamsilva/nimbus-web-commons';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
 import { BankPermissionPolicy } from '@features/security/policy/bank-permission.policy';
 import { BankCreateDialogComponent } from '../bank-create/bank-create-dialog.component';
@@ -34,7 +34,7 @@ import { DATA_TABLE_SHELL_IMPORTS } from '@shared/features/data-table-shell/data
 import {
   ActiveFilterItem,
   FiltersPanelComponent,
-} from '@shared/features/filters-panel/filters-panel.component';
+} from '@williamsilva/nimbus-web-commons';
 import {
   StatusEnum,
   allStatusEnum,
@@ -44,7 +44,7 @@ import {
 import {
   readArrayFilterValues,
   readSingleFilterValue,
-} from '@features/list-base/table-filter-readers';
+} from '@williamsilva/nimbus-web-commons';
 
 @Component({
   standalone: true,

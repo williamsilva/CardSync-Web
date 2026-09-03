@@ -4,7 +4,7 @@ import { finalize, Observable, tap } from 'rxjs';
 
 import { BankingDomicileAdvancedFilters } from '@features/filter/banking-domicile.filters';
 import { BankingDomicileApiService } from '@features/service/banking-domicile.api.service';
-import { ListQueryDto } from '@shared/features/list-query/list-query.types';
+import { ListQueryDto } from '@williamsilva/nimbus-web-commons';
 import {
   BankingDomicileModel,
   BankingDomicileCreateInput,

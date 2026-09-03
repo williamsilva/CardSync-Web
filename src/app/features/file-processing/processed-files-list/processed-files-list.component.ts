@@ -13,16 +13,16 @@ import { TranslateModule } from '@ngx-translate/core';
 import { CsTagComponent } from '@shared/ui';
 import { I18nService } from '@core/i18n/i18n.service';
 import { STATE_KEY } from '@features/state-key.constants';
-import { StatefulListPage } from '@features/list-base/stateful-list-page';
+import { StatefulListPage } from '@williamsilva/nimbus-web-commons';
 import { ProcessedFilesFacade } from '@features/facade/processed-files.facade';
-import { buildListQuery } from '@shared/features/list-query/list-query.builder';
+import { buildListQuery } from '@williamsilva/nimbus-web-commons';
 import { fileStatusSeverity as getFileStatusSeverity } from '../file-processing-ui';
 import { allPeriodEnum, PeriodEnum, periodEnumLabel } from '@models/enums/period.enum';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
 import { ProcessedFileModel, FileProcessingStatus } from '@models/file-processing.models';
 import { CsColumnFilterShellComponent } from '@features/list-base/cs-column-filter-shell.component';
 import { CsAdvancedTextFilterComponent } from '@features/list-base/cs-advanced-text-filter.component';
-import { CsAdvancedPeriodDateFilterComponent } from '@features/list-base/cs-advanced-period-date-filter.component';
+import { CsAdvancedPeriodDateFilterComponent } from '@williamsilva/nimbus-web-commons';
 import { CsAdvancedMultiselectFilterComponent } from '@features/list-base/cs-advanced-multiselect-filter.component';
 import {
   ProcessedFilesFiltersState,
@@ -32,11 +32,11 @@ import {
 import {
   readArrayFilterValues,
   readSingleFilterValue,
-} from '@features/list-base/table-filter-readers';
+} from '@williamsilva/nimbus-web-commons';
 import {
   ActiveFilterItem,
   FiltersPanelComponent,
-} from '@shared/features/filters-panel/filters-panel.component';
+} from '@williamsilva/nimbus-web-commons';
 
 /**
  * Lista paginada de arquivos processados (ERP, Rede, CNAB).

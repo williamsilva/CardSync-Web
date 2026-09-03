@@ -15,7 +15,7 @@ import { DatePickerModule } from 'primeng/datepicker';
 import { InputNumberModule } from 'primeng/inputnumber';
 
 import { CsTagComponent, CsTagTone } from '@shared/ui';
-import { DateInputMaskDirective } from '@shared/directives/date-input-mask.directive';
+import { DateInputMaskDirective } from '@williamsilva/nimbus-web-commons';
 import { I18nService } from '@core/i18n/i18n.service';
 import { FlagFacade } from '@features/facade/flag.facade';
 import { CompanyFacade } from '@features/facade/company.facade';

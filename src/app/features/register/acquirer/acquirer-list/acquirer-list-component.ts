@@ -27,13 +27,13 @@ import { CsDocumentPipe } from '@shared/pipes/cs-document.pipe';
 import { AcquirerFacade } from '@features/facade/acquirer.facade';
 import { PermissionService } from '@core/auth/permission.service';
 import { STATE_KEY } from '@features/state-key.constants';
-import { StatefulListPage } from '@features/list-base/stateful-list-page';
+import { StatefulListPage } from '@williamsilva/nimbus-web-commons';
 import { AcquirerAdvancedFilters } from '@features/filter/acquirer.filters';
 import { AcquirerModel, AcquirerFiltersState } from '@models/acquirer.models';
 import { BulkActionListPage } from '@features/list-base/bulk-action-list-page';
-import { buildListQuery } from '@shared/features/list-query/list-query.builder';
+import { buildListQuery } from '@williamsilva/nimbus-web-commons';
 import { CpfCnpjMaskDirective } from '@shared/directives/cpf-cnpj-mask.directive';
-import { DateInputMaskDirective } from '@shared/directives/date-input-mask.directive';
+import { DateInputMaskDirective } from '@williamsilva/nimbus-web-commons';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
 import { AcquirerPermissionPolicy } from '@features/security/policy/acquirer-permission.policy';
 import { DATA_TABLE_SHELL_IMPORTS } from '@shared/features/data-table-shell/data-table-shell.component';
@@ -42,7 +42,7 @@ import { AcquirerEstablishmentRelationsComponent } from '../acquirer-relations/a
 import {
   ActiveFilterItem,
   FiltersPanelComponent,
-} from '@shared/features/filters-panel/filters-panel.component';
+} from '@williamsilva/nimbus-web-commons';
 
 import {
   StatusEnum,
@@ -54,7 +54,7 @@ import {
   readArrayFilterValues,
   readSingleFilterValue,
   readDateRangeFilterValue,
-} from '@features/list-base/table-filter-readers';
+} from '@williamsilva/nimbus-web-commons';
 
 @Component({
   standalone: true,

@@ -12,8 +12,8 @@ import { TableLazyLoadEvent, TableModule } from 'primeng/table';
 import { TooltipModule } from 'primeng/tooltip';
 
 import { CsTagComponent } from '@shared/ui';
-import { DateInputMaskDirective } from '@shared/directives/date-input-mask.directive';
-import { ListQueryDto, SortDto } from '@shared/features/list-query/list-query.types';
+import { DateInputMaskDirective } from '@williamsilva/nimbus-web-commons';
+import { ListQueryDto, SortDto } from '@williamsilva/nimbus-web-commons';
 import {
   ChargebackAnalysisFilter,
   ChargebackAnalysisTotalsModel,

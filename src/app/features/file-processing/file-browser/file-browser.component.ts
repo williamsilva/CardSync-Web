@@ -17,7 +17,7 @@ import {
   ActiveFilterItem,
   ActiveFilterGroup,
   FiltersPanelComponent,
-} from '@shared/features/filters-panel/filters-panel.component';
+} from '@williamsilva/nimbus-web-commons';
 import {
   FileBrowserFolder,
   FileUploadSystem,

@@ -21,7 +21,7 @@ import { PeriodEnum, allPeriodEnum, periodEnumLabel } from '@models/enums/period
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
 import { ManagementDashboardService } from '@features/service/management-dashboard.service';
 import { ModalityEnum, allModalityEnum, modalityEnumLabel } from '@models/enums/modality.enum';
-import { CsAdvancedPeriodDateFilterComponent } from '@features/list-base/cs-advanced-period-date-filter.component';
+import { CsAdvancedPeriodDateFilterComponent } from '@williamsilva/nimbus-web-commons';
 import { CsAdvancedMultiselectFilterComponent } from '@features/list-base/cs-advanced-multiselect-filter.component';
 import { CsAdvancedFilterItemTemplateDirective } from '@features/list-base/cs-advanced-filter-item-template.directive';
 import {
@@ -37,7 +37,7 @@ import {
   ActiveFilterItem,
   ActiveFilterGroup,
   FiltersPanelComponent,
-} from '@shared/features/filters-panel/filters-panel.component';
+} from '@williamsilva/nimbus-web-commons';
 
 interface GroupByOption {
   label: string;

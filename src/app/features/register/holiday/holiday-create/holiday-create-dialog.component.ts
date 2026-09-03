@@ -25,7 +25,7 @@ import { DatePickerModule } from 'primeng/datepicker';
 import { I18nService } from '@core/i18n/i18n.service';
 import { HolidayFacade } from '@features/facade/holiday.facade';
 import { ErrorMsgComponent } from '@shared/error-msg/error-msg.component';
-import { DateInputMaskDirective } from '@shared/directives/date-input-mask.directive';
+import { DateInputMaskDirective } from '@williamsilva/nimbus-web-commons';
 import { HolidayCreateInput, HolidayModel, HolidayUpdateInput } from '@models/holiday.models';
 import { StatusEnum, allStatusEnum, statusEnumLabel, normalizeStatusEnum } from '@models/enums/status.enum';
 

@@ -3,7 +3,7 @@ import { RouterOutlet } from '@angular/router';
 import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 
 import { TopbarComponent } from './topbar/topbar.component';
-import { FooterComponent } from './footer/footer.component';
+import { FooterComponent } from '@williamsilva/nimbus-web-commons';
 import { LayoutStateService } from './layout-state.service';
 import { SidebarComponent } from './sidebar/sidebar.component';
 

@@ -5,7 +5,7 @@ import { finalize, Observable, tap } from 'rxjs';
 import { HolidayModel, HolidayCreateInput, HolidayUpdateInput } from '@models/holiday.models';
 import { HolidayAdvancedFilters } from '@features/filter/holiday.filters';
 import { HolidayApiService } from '@features/service/holiday.api.service';
-import { ListQueryDto } from '@shared/features/list-query/list-query.types';
+import { ListQueryDto } from '@williamsilva/nimbus-web-commons';
 
 type LastQuery = ListQueryDto<HolidayAdvancedFilters>;
 

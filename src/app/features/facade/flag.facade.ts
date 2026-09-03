@@ -5,7 +5,7 @@ import { finalize, Observable, tap } from 'rxjs';
 import { FlagMinimalModel } from '@models/flag-minimal.models';
 import { FlagAdvancedFilters } from '@features/filter/flag.filters';
 import { FlagApiService } from '@features/service/flag.api.service';
-import { ListQueryDto } from '@shared/features/list-query/list-query.types';
+import { ListQueryDto } from '@williamsilva/nimbus-web-commons';
 import { FlagCreateInput, FlagModel, FlagUpdateInput } from '@models/flag.models';
 
 type LastQuery = ListQueryDto<FlagAdvancedFilters>;
