@@ -850,6 +850,43 @@ export abstract class StatefulListPage<
     }
   }
 
+  /**
+   * Chamada via `(onStateSave)` nas telas com seleção de linha por checkbox (dataKey + [selection])
+   * - o PrimeNG Table (stateStorage="local") inclui `selection` automaticamente no state
+   * persistido sempre que o input [selection] estiver definido (mesmo `[]`, que é truthy em JS -
+   * ver `saveState()` em node_modules/primeng/fesm2022/primeng-table.mjs). O problema real (achado
+   * via teste real, não hipotético): `restoreState()` só marca `stateRestored = true` quando
+   * ENCONTRA algo salvo no localStorage; até lá, TODO recarregamento do `[value]` da tabela chama
+   * `restoreState()` de novo (`onChanges`: `if (simpleChange.value) { if (isStateful() &&
+   * !stateRestored) restoreState(); ... }`). Resultado: a PRIMEIRA seleção feita numa sessão nova
+   * (localStorage ainda sem state algum) é salva, e se LOGO DEPOIS a tabela recarregar por
+   * qualquer motivo (ex.: reloadLast() após uma ação em lote) - antes de qualquer outra interação
+   * ter "consumido" o stateRestored -, `restoreState()` reaplica essa seleção recém-salva via
+   * `selectionChange.emit(state.selection)`, sobrescrevendo um `selection.set([])` que a própria
+   * tela já tinha acabado de fazer. Seleção nunca deveria sobreviver a um reload/nova sessão nestas
+   * telas, então ela é removida do state assim que o PrimeNG termina de salvá-lo.
+   *
+   * Mesmo fix do NimbusFlowWeb (achado lá em 2026-08-24) portado aqui de forma preventiva - nenhuma
+   * tela do CardSyncWeb usa hoje [selection] do PrimeNG combinado com stateStorage="local" (o
+   * SelectableStatefulListPage daqui gerencia seleção via signal próprio, não via [selection] da
+   * p-table), mas o método fica pronto pra quando uma tela assim existir.
+   */
+  protected stripSelectionFromPersistedTableState(): void {
+    try {
+      const raw = localStorage.getItem(this.tableStateKey());
+      if (!raw) return;
+
+      const state = JSON.parse(raw);
+      if (state && typeof state === 'object' && 'selection' in state) {
+        delete state.selection;
+        localStorage.setItem(this.tableStateKey(), JSON.stringify(state));
+      }
+    } catch {
+      // localStorage indisponível/JSON corrompido - não crítico, só deixa de prevenir a
+      // restauração de uma seleção obsoleta (o pior caso é o bug acima voltar a acontecer).
+    }
+  }
+
   protected reloadWithCurrentState(): void {
     const tableQuery = mapPrimeLazyToTableQuery(
       this.lastLazyEvent ?? { first: 0, rows: this.rows },
