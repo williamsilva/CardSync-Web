@@ -17,6 +17,9 @@ export class BankingDomicilePermissionPolicy {
     return this.perms.hasSupportOr(PERMISSIONS.BANKING_DOMICILE.CREATE);
   }
 
+  // row mantido pra uniformizar a assinatura com os outros métodos da policy (o
+  // chamador sempre passa a linha), mesmo sem uso aqui.
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   canEdit(_row: BankingDomicileModel): boolean {
     return this.perms.hasSupportOr(PERMISSIONS.BANKING_DOMICILE.CHANGE);
   }
@@ -41,11 +44,11 @@ export class BankingDomicilePermissionPolicy {
     return this.selectableActive(row) === active;
   }
 
-  canActivateBulk(rows: ReadonlyArray<BankingDomicileModel> | null | undefined): boolean {
+  canActivateBulk(rows: readonly BankingDomicileModel[] | null | undefined): boolean {
     return !!rows?.length && rows.every((row) => row.status !== StatusEnum.ACTIVE);
   }
 
-  canDeactivateBulk(rows: ReadonlyArray<BankingDomicileModel> | null | undefined): boolean {
+  canDeactivateBulk(rows: readonly BankingDomicileModel[] | null | undefined): boolean {
     return !!rows?.length && rows.every((row) => row.status === StatusEnum.ACTIVE);
   }
 }

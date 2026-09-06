@@ -20,10 +20,8 @@ export interface AnticipationModel {
   salesSummary: SalesSummaryMinimalApiModel;
 }
 
-export interface AnticipationCreateInput {}
-
-export interface AnticipationUpdateInput {}
-
+export type AnticipationCreateInput = object;
+export type AnticipationUpdateInput = object;
 /**
  * Payload bruto vindo da API.
  * Aceita status numérico ou string para tolerar mudanças no backend.

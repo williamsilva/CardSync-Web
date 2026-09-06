@@ -1,6 +1,6 @@
 import { FormsModule } from '@angular/forms';
 
-import { Component, ViewChild, computed, inject, signal } from '@angular/core';
+import { Component, ViewChild, computed, inject, signal, OnInit } from '@angular/core';
 
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
@@ -63,7 +63,7 @@ import {
     FlagCreateDialogComponent
 ],
 })
-export class FlagListComponent extends StatefulListPage<FlagFiltersState, FlagAdvancedFilters> {
+export class FlagListComponent extends StatefulListPage<FlagFiltersState, FlagAdvancedFilters> implements OnInit {
   @ViewChild(FlagTableComponent) private flagTable?: FlagTableComponent;
 
   readonly i18n = inject(I18nService);
@@ -344,10 +344,7 @@ export class FlagListComponent extends StatefulListPage<FlagFiltersState, FlagAd
 
   protected loadFirstPage(): void {
     const tableQuery = { page: 0, size: this.rows };
-    const query = buildListQuery<FlagAdvancedFilters>(
-      tableQuery as any,
-      this.buildAdvancedFilters(),
-    );
+    const query = buildListQuery<FlagAdvancedFilters>(tableQuery, this.buildAdvancedFilters());
 
     this.clearSelection();
     this.flagFacade.loadPage(query);
@@ -412,7 +409,7 @@ export class FlagListComponent extends StatefulListPage<FlagFiltersState, FlagAd
     return items;
   });
 
-  protected override mapTableFiltersToActiveItems(filters: any): ActiveFilterItem[] {
+  protected override mapTableFiltersToActiveItems(filters: Record<string, unknown>): ActiveFilterItem[] {
     this.i18n.getAppliedLang();
 
     const items: ActiveFilterItem[] = [];

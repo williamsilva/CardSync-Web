@@ -32,7 +32,14 @@
           </table>
 
           @if (showAcquirerDetail()) {
-            <a class="cs-audit__toggle-link" (click)="toggleAcquirerDetail()">
+            <a
+              role="button"
+              tabindex="0"
+              class="cs-audit__toggle-link"
+              (click)="toggleAcquirerDetail()"
+              (keydown.enter)="toggleAcquirerDetail()"
+              (keydown.space)="toggleAcquirerDetail()"
+            >
               {{ 'auditDashboard.salesSummary.collapse' | translate }}
             </a>
             <div class="cs-audit__detail-grid">
@@ -64,7 +71,14 @@
               }
             </div>
           } @else {
-            <a class="cs-audit__toggle-link" (click)="toggleAcquirerDetail()">
+            <a
+              role="button"
+              tabindex="0"
+              class="cs-audit__toggle-link"
+              (click)="toggleAcquirerDetail()"
+              (keydown.enter)="toggleAcquirerDetail()"
+              (keydown.space)="toggleAcquirerDetail()"
+            >
               {{ 'auditDashboard.salesSummary.expand' | translate }}
             </a>
           }
@@ -159,9 +173,13 @@
                             <td class="cs-audit__col-right">
                               @if (d.onlyInErp > 0) {
                                 <a
+                                  role="button"
+                                  tabindex="0"
                                   class="cs-audit__val--nonzero"
                                   [class.cs-audit__val--max]="isMaxInRow(d.onlyInErp, d)"
                                   (click)="navigateToMissingErp(d, item)"
+                                  (keydown.enter)="navigateToMissingErp(d, item)"
+                                  (keydown.space)="navigateToMissingErp(d, item)"
                                 >
                                   {{ d.onlyInErp }}
                                 </a>
@@ -172,9 +190,13 @@
                             <td class="cs-audit__col-right">
                               @if (d.onlyInAcquirer > 0) {
                                 <a
+                                  role="button"
+                                  tabindex="0"
                                   class="cs-audit__val--nonzero"
                                   [class.cs-audit__val--max]="isMaxInRow(d.onlyInAcquirer, d)"
                                   (click)="navigateToMissingAcq(d, item)"
+                                  (keydown.enter)="navigateToMissingAcq(d, item)"
+                                  (keydown.space)="navigateToMissingAcq(d, item)"
                                 >
                                   {{ d.onlyInAcquirer }}
                                 </a>

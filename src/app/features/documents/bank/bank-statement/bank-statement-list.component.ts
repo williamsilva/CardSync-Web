@@ -1,6 +1,6 @@
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { AfterViewInit, Component, computed, inject, signal, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, computed, inject, signal, ViewChild, OnInit } from '@angular/core';
 
 import { MenuModule } from 'primeng/menu';
 import { SelectModule } from 'primeng/select';
@@ -108,7 +108,7 @@ import {
 })
 export class BankStatementListComponent
   extends StatefulListPage<BankStatementFiltersState, BankStatementAdvancedFilters>
-  implements AfterViewInit
+  implements AfterViewInit, OnInit
 {
   @ViewChild('dt') private dt?: Table;
 
@@ -547,7 +547,7 @@ export class BankStatementListComponent
     );
   }
 
-  protected override mapTableFiltersToActiveItems(filters: any): ActiveFilterItem[] {
+  protected override mapTableFiltersToActiveItems(filters: Record<string, unknown>): ActiveFilterItem[] {
     this.i18n.getAppliedLang();
     const items: ActiveFilterItem[] = [];
 

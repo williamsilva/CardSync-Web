@@ -21,10 +21,8 @@ export interface CreditOrdersMinimalModel {
   releasesBank: CreditOrdersReleasesBankMinimalModel | null;
 }
 
-export interface CreditOrdersMinimalCreateInput {}
-
-export interface CreditOrdersMinimalUpdateInput {}
-
+export type CreditOrdersMinimalCreateInput = object;
+export type CreditOrdersMinimalUpdateInput = object;
 /**
  * Payload bruto vindo da API.
  * Aceita status numérico ou string para tolerar mudanças no backend.

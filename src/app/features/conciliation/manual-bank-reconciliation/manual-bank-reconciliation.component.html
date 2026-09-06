@@ -1,7 +1,7 @@
 ﻿<p-toast></p-toast>
 <p-confirmDialog></p-confirmDialog>
 
-<cs-divergence-dialog
+<app-divergence-dialog
   [visible]="showDivergenceDialog()"
   (visibleChange)="onDivergenceDialogVisibleChange($event)"
   [message]="divergenceDialogMessage()"
@@ -9,7 +9,7 @@
   (confirm)="onDivergenceConfirm($event)"
 />
 
-<cs-pre-implantation-divergence-dialog
+<app-pre-implantation-divergence-dialog
   [visible]="showPreImplantationPreviewDialog()"
   (visibleChange)="onPreImplantationPreviewDialogVisibleChange($event)"
   [preview]="preImplantationPreview()"
@@ -17,7 +17,7 @@
   (applyClick)="onApplyPreImplantationDivergence($event)"
 />
 
-<cs-no-credit-order-legacy-dialog
+<app-no-credit-order-legacy-dialog
   [visible]="showNoCreditOrderLegacyPreviewDialog()"
   (visibleChange)="onNoCreditOrderLegacyPreviewDialogVisibleChange($event)"
   [preview]="noCreditOrderLegacyPreview()"
@@ -25,7 +25,7 @@
   (applyClick)="onApplyNoCreditOrderLegacyMarking($event)"
 />
 
-<cs-sales-summary-pre-implantation-dialog
+<app-sales-summary-pre-implantation-dialog
   [visible]="showSalesSummaryPreImplantationDialog()"
   (visibleChange)="onSalesSummaryPreImplantationDialogVisibleChange($event)"
   [preview]="salesSummaryPreImplantationPreview()"
@@ -33,7 +33,7 @@
   (applyClick)="confirmApplySalesSummaryPreImplantation()"
 />
 
-<cs-credit-order-pre-implantation-dialog
+<app-credit-order-pre-implantation-dialog
   [visible]="showCreditOrderPreImplantationDialog()"
   (visibleChange)="onCreditOrderPreImplantationDialogVisibleChange($event)"
   [preview]="creditOrderPreImplantationPreview()"
@@ -97,13 +97,13 @@
 
     <div class="flex align-items-center gap-2">
       @if (facade.selectedOrders().length > 0) {
-        <cs-tag
+        <app-tag
           [value]="
             'conciliation.manualBankReconciliation.ordersSelected'
               | translate: { count: facade.selectedOrders().length }
           "
           [tone]="valuesMatch() ? 'success' : 'danger'"
-        ></cs-tag>
+        ></app-tag>
         <p-button
           [outlined]="true"
           icon="pi pi-eraser"
@@ -149,13 +149,13 @@
     <div class="flex flex-wrap gap-4 flex-1 align-items-center">
       <span class="flex align-items-center gap-2">
         <i class="pi pi-history text-color-secondary"></i>
-        <cs-tag
+        <app-tag
           [value]="
             'conciliation.manualBankReconciliation.releasesSelectedForLegacy'
               | translate: { count: facade.selectedReleases().length }
           "
           tone="warn"
-        ></cs-tag>
+        ></app-tag>
       </span>
       <span class="flex align-items-center gap-2">
         <i class="pi pi-dollar text-color-secondary"></i>
@@ -222,7 +222,7 @@
           (periodChange)="onPeriodColumnChange(releasePeriod, releaseDate, $event)"
         ></cs-advanced-period-date-filter>
 
-        <cs-advanced-multiselect-filter
+        <app-advanced-multiselect-filter
           optionValue="id"
           optionLabel="fantasyName"
           inputId="releaseCompanies"
@@ -232,23 +232,23 @@
           (valueChange)="releaseCompanies.set($event)"
           [label]="'bankStatement.fields.company' | translate"
         >
-          <ng-template csAdvancedFilterItem let-option>
+          <ng-template appAdvancedFilterItem let-option>
             <div class="cs-option-item">
               <div class="cs-option-item__label">{{ option.fantasyName }}</div>
               <div class="cs-option-item__subtext">
                 {{ 'common.registrationNumber' | translate }}: {{ option.cnpj | csDocument }}
               </div>
               <div class="cs-option-item__subtext">
-                <cs-tag
+                <app-tag
                   [tone]="statusEnumSeverity(option.status)"
                   [value]="('common.status' | translate) + ': ' + statusEnumLabel(option.status)"
                 />
               </div>
             </div>
           </ng-template>
-        </cs-advanced-multiselect-filter>
+        </app-advanced-multiselect-filter>
 
-        <cs-advanced-multiselect-filter
+        <app-advanced-multiselect-filter
           optionValue="id"
           optionLabel="fantasyName"
           inputId="releaseAcquirers"
@@ -258,23 +258,23 @@
           (valueChange)="releaseAcquirers.set($event)"
           [label]="'bankStatement.fields.acquirer' | translate"
         >
-          <ng-template csAdvancedFilterItem let-option>
+          <ng-template appAdvancedFilterItem let-option>
             <div class="cs-option-item">
               <div class="cs-option-item__label">{{ option.fantasyName }}</div>
               <div class="cs-option-item__subtext">
                 {{ 'common.registrationNumber' | translate }}: {{ option.cnpj | csDocument }}
               </div>
               <div class="cs-option-item__subtext">
-                <cs-tag
+                <app-tag
                   [tone]="statusEnumSeverity(option.status)"
                   [value]="('common.status' | translate) + ': ' + statusEnumLabel(option.status)"
                 />
               </div>
             </div>
           </ng-template>
-        </cs-advanced-multiselect-filter>
+        </app-advanced-multiselect-filter>
 
-        <cs-advanced-multiselect-filter
+        <app-advanced-multiselect-filter
           optionValue="id"
           optionLabel="name"
           inputId="releaseBanks"
@@ -284,23 +284,23 @@
           (valueChange)="releaseBanks.set($event)"
           [label]="'bankStatement.fields.bank' | translate"
         >
-          <ng-template csAdvancedFilterItem let-option>
+          <ng-template appAdvancedFilterItem let-option>
             <div class="cs-option-item">
               <div class="cs-option-item__label">{{ option.name }}</div>
               <div class="cs-option-item__subtext">
                 {{ 'common.code' | translate }}: {{ option.code }}
               </div>
               <div class="cs-option-item__subtext">
-                <cs-tag
+                <app-tag
                   [tone]="statusEnumSeverity(option.status)"
                   [value]="('common.status' | translate) + ': ' + statusEnumLabel(option.status)"
                 />
               </div>
             </div>
           </ng-template>
-        </cs-advanced-multiselect-filter>
+        </app-advanced-multiselect-filter>
 
-        <cs-advanced-multiselect-filter
+        <app-advanced-multiselect-filter
           optionValue="id"
           optionLabel="name"
           inputId="releaseFlags"
@@ -309,11 +309,11 @@
           class="col-12 md:col-4 p-1"
           (valueChange)="releaseFlags.set($event)"
           [label]="'bankStatement.fields.flag' | translate"
-        ></cs-advanced-multiselect-filter>
+        ></app-advanced-multiselect-filter>
       </div>
 
       <div class="grid formgrid gap-0 align-items-end">
-        <cs-currency-range-filter
+        <app-currency-range-filter
           inputId="releaseValue"
           class="col-12 md:col-6 p-1"
           [value]="releaseValueRange()"
@@ -321,7 +321,7 @@
           [startLabel]="'common.filters.initial' | translate"
           (valueChange)="onReleaseValueRangeChange($event)"
           [label]="'bankStatement.fields.releaseValue' | translate"
-        ></cs-currency-range-filter>
+        ></app-currency-range-filter>
       </div>
     </cs-filters-panel>
 
@@ -517,10 +517,10 @@
             </td>
             <td class="text-center">
               @if (row.modalityPaymentBank) {
-                <cs-tag
+                <app-tag
                   [value]="modalityPaymentBankLabel(row.modalityPaymentBank)"
                   [tone]="modalityPaymentBankSeverity(row.modalityPaymentBank)"
-                ></cs-tag>
+                ></app-tag>
               } @else {
                 <span>-</span>
               }
@@ -538,10 +538,10 @@
             <td class="text-right">{{ row.releaseValue | csCurrency }}</td>
             <td class="text-center">
               @if (row.statusPaymentBank) {
-                <cs-tag
+                <app-tag
                   [value]="statusPaymentBankLabel(row.statusPaymentBank)"
                   [tone]="statusPaymentBankSeverity(row.statusPaymentBank)"
-                ></cs-tag>
+                ></app-tag>
               }
             </td>
           </tr>
@@ -599,7 +599,7 @@
           (periodChange)="onPeriodColumnChange(orderReleasePeriod, orderReleaseDate, $event)"
         ></cs-advanced-period-date-filter>
 
-        <cs-advanced-multiselect-filter
+        <app-advanced-multiselect-filter
           optionValue="id"
           optionLabel="fantasyName"
           inputId="orderCompanies"
@@ -609,23 +609,23 @@
           (valueChange)="orderCompanies.set($event)"
           [label]="'bankStatement.fields.company' | translate"
         >
-          <ng-template csAdvancedFilterItem let-option>
+          <ng-template appAdvancedFilterItem let-option>
             <div class="cs-option-item">
               <div class="cs-option-item__label">{{ option.fantasyName }}</div>
               <div class="cs-option-item__subtext">
                 {{ 'common.registrationNumber' | translate }}: {{ option.cnpj | csDocument }}
               </div>
               <div class="cs-option-item__subtext">
-                <cs-tag
+                <app-tag
                   [tone]="statusEnumSeverity(option.status)"
                   [value]="('common.status' | translate) + ': ' + statusEnumLabel(option.status)"
                 />
               </div>
             </div>
           </ng-template>
-        </cs-advanced-multiselect-filter>
+        </app-advanced-multiselect-filter>
 
-        <cs-advanced-multiselect-filter
+        <app-advanced-multiselect-filter
           optionValue="id"
           optionLabel="fantasyName"
           inputId="orderAcquirers"
@@ -635,23 +635,23 @@
           (valueChange)="orderAcquirers.set($event)"
           [label]="'bankStatement.fields.acquirer' | translate"
         >
-          <ng-template csAdvancedFilterItem let-option>
+          <ng-template appAdvancedFilterItem let-option>
             <div class="cs-option-item">
               <div class="cs-option-item__label">{{ option.fantasyName }}</div>
               <div class="cs-option-item__subtext">
                 {{ 'common.registrationNumber' | translate }}: {{ option.cnpj | csDocument }}
               </div>
               <div class="cs-option-item__subtext">
-                <cs-tag
+                <app-tag
                   [tone]="statusEnumSeverity(option.status)"
                   [value]="('common.status' | translate) + ': ' + statusEnumLabel(option.status)"
                 />
               </div>
             </div>
           </ng-template>
-        </cs-advanced-multiselect-filter>
+        </app-advanced-multiselect-filter>
 
-        <cs-advanced-multiselect-filter
+        <app-advanced-multiselect-filter
           optionValue="id"
           optionLabel="name"
           inputId="orderBanks"
@@ -661,23 +661,23 @@
           (valueChange)="orderBanks.set($event)"
           [label]="'bankStatement.fields.bank' | translate"
         >
-          <ng-template csAdvancedFilterItem let-option>
+          <ng-template appAdvancedFilterItem let-option>
             <div class="cs-option-item">
               <div class="cs-option-item__label">{{ option.name }}</div>
               <div class="cs-option-item__subtext">
                 {{ 'common.code' | translate }}: {{ option.code }}
               </div>
               <div class="cs-option-item__subtext">
-                <cs-tag
+                <app-tag
                   [tone]="statusEnumSeverity(option.status)"
                   [value]="('common.status' | translate) + ': ' + statusEnumLabel(option.status)"
                 />
               </div>
             </div>
           </ng-template>
-        </cs-advanced-multiselect-filter>
+        </app-advanced-multiselect-filter>
 
-        <cs-advanced-multiselect-filter
+        <app-advanced-multiselect-filter
           optionValue="id"
           optionLabel="name"
           inputId="orderFlags"
@@ -686,11 +686,11 @@
           class="col-12 md:col-4 p-1"
           (valueChange)="orderFlags.set($event)"
           [label]="'bankStatement.fields.flag' | translate"
-        ></cs-advanced-multiselect-filter>
+        ></app-advanced-multiselect-filter>
       </div>
 
       <div class="grid formgrid gap-0 align-items-end">
-        <cs-currency-range-filter
+        <app-currency-range-filter
           inputId="orderReleaseValue"
           class="col-12 md:col-6 p-1"
           [value]="orderReleaseValueRange()"
@@ -698,7 +698,7 @@
           [startLabel]="'common.filters.initial' | translate"
           [label]="'creditOrders.fields.releaseValue' | translate"
           (valueChange)="onOrderReleaseValueRangeChange($event)"
-        ></cs-currency-range-filter>
+        ></app-currency-range-filter>
       </div>
     </cs-filters-panel>
 
@@ -902,10 +902,10 @@
             <td class="text-right">{{ row.releaseValue | csCurrency }}</td>
             <td class="text-center">
               @if (row.statusPaymentBank) {
-                <cs-tag
+                <app-tag
                   [value]="statusPaymentBankLabel(row.statusPaymentBank)"
                   [tone]="statusPaymentBankSeverity(row.statusPaymentBank)"
-                ></cs-tag>
+                ></app-tag>
               }
             </td>
           </tr>

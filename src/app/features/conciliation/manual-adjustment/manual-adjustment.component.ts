@@ -58,7 +58,7 @@ interface CsvAdjustmentRow {
 
 @Component({
   standalone: true,
-  selector: 'cs-manual-adjustment',
+  selector: 'app-manual-adjustment',
   styleUrl: './manual-adjustment.component.scss',
   templateUrl: './manual-adjustment.component.html',
   imports: [

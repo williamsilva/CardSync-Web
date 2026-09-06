@@ -1,6 +1,6 @@
 import { FormsModule } from '@angular/forms';
 
-import { AfterViewInit, Component, ViewChild, computed, inject, signal } from '@angular/core';
+import { AfterViewInit, Component, ViewChild, computed, inject, signal, OnInit } from '@angular/core';
 
 import { Table } from 'primeng/table';
 import { TableModule } from 'primeng/table';
@@ -112,7 +112,7 @@ export class EstablishmentListComponent
     EstablishmentFiltersState,
     EstablishmentAdvancedFilters
   >
-  implements AfterViewInit
+  implements AfterViewInit, OnInit
 {
   @ViewChild('dt') private dt?: Table;
 
@@ -615,10 +615,7 @@ export class EstablishmentListComponent
 
   protected override loadFirstPage() {
     const tableQuery = { page: 0, size: this.rows };
-    const query = buildListQuery<EstablishmentAdvancedFilters>(
-      tableQuery as any,
-      this.buildAdvancedFilters(),
-    );
+    const query = buildListQuery<EstablishmentAdvancedFilters>(tableQuery, this.buildAdvancedFilters());
 
     this.clearSelection();
     this.establishmentFacade.loadPage(query);
@@ -695,7 +692,7 @@ export class EstablishmentListComponent
     };
   }
 
-  protected override mapTableFiltersToActiveItems(filters: any): ActiveFilterItem[] {
+  protected override mapTableFiltersToActiveItems(filters: Record<string, unknown>): ActiveFilterItem[] {
     this.i18n.getAppliedLang();
 
     const items: ActiveFilterItem[] = [];

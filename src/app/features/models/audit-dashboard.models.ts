@@ -14,25 +14,27 @@ export interface AuditSalesSummaryModel {
   acquirerDetails: AuditSalesDetail[];
 }
 
-export function mapAuditSaleRow(raw: any): AuditSaleRow {
+export function mapAuditSaleRow(raw: Record<string, unknown>): AuditSaleRow {
   return {
-    date: raw?.date ?? '',
-    value: raw?.value ?? 0,
-    cvCount: raw?.cvCount ?? 0,
+    date: (raw?.['date'] as string) ?? '',
+    value: (raw?.['value'] as number) ?? 0,
+    cvCount: (raw?.['cvCount'] as number) ?? 0,
   };
 }
 
-export function mapAuditSalesDetail(raw: any): AuditSalesDetail {
+export function mapAuditSalesDetail(raw: Record<string, unknown>): AuditSalesDetail {
   return {
-    acquirerName: raw?.acquirerName ?? '',
-    rows: (raw?.rows ?? []).map(mapAuditSaleRow),
+    acquirerName: (raw?.['acquirerName'] as string) ?? '',
+    rows: ((raw?.['rows'] as Record<string, unknown>[]) ?? []).map(mapAuditSaleRow),
   };
 }
 
-export function mapAuditSalesSummaryModel(raw: any): AuditSalesSummaryModel {
+export function mapAuditSalesSummaryModel(raw: Record<string, unknown>): AuditSalesSummaryModel {
   return {
-    summary: (raw?.summary ?? []).map(mapAuditSaleRow),
-    acquirerDetails: (raw?.acquirerDetails ?? []).map(mapAuditSalesDetail),
+    summary: ((raw?.['summary'] as Record<string, unknown>[]) ?? []).map(mapAuditSaleRow),
+    acquirerDetails: ((raw?.['acquirerDetails'] as Record<string, unknown>[]) ?? []).map(
+      mapAuditSalesDetail,
+    ),
   };
 }
 
@@ -57,27 +59,31 @@ export interface AuditUnreconciledModel {
   acquirers: AuditUnreconciledAcquirer[];
 }
 
-export function mapAuditUnreconciledDetail(raw: any): AuditUnreconciledDetail {
+export function mapAuditUnreconciledDetail(raw: Record<string, unknown>): AuditUnreconciledDetail {
   return {
-    date: raw?.date ?? '',
-    erpAcq: raw?.ERP_ACQ ?? 0,
-    onlyInErp: raw?.ONLY_IN_ERP ?? 0,
-    onlyInAcquirer: raw?.ONLY_IN_ACQUIRER ?? 0,
+    date: (raw?.['date'] as string) ?? '',
+    erpAcq: (raw?.['ERP_ACQ'] as number) ?? 0,
+    onlyInErp: (raw?.['ONLY_IN_ERP'] as number) ?? 0,
+    onlyInAcquirer: (raw?.['ONLY_IN_ACQUIRER'] as number) ?? 0,
   };
 }
 
-export function mapAuditUnreconciledAcquirer(raw: any): AuditUnreconciledAcquirer {
+export function mapAuditUnreconciledAcquirer(
+  raw: Record<string, unknown>,
+): AuditUnreconciledAcquirer {
   return {
-    acquirerId: raw?.acquirerId ?? 0,
-    acquirer: raw?.acquirer ?? '',
-    count: raw?.count ?? 0,
-    details: (raw?.details ?? []).map(mapAuditUnreconciledDetail),
+    acquirerId: (raw?.['acquirerId'] as number) ?? 0,
+    acquirer: (raw?.['acquirer'] as string) ?? '',
+    count: (raw?.['count'] as number) ?? 0,
+    details: ((raw?.['details'] as Record<string, unknown>[]) ?? []).map(mapAuditUnreconciledDetail),
   };
 }
 
-export function mapAuditUnreconciledModel(raw: any): AuditUnreconciledModel {
+export function mapAuditUnreconciledModel(raw: Record<string, unknown>): AuditUnreconciledModel {
   return {
-    total: raw?.total ?? 0,
-    acquirers: (raw?.acquirers ?? []).map(mapAuditUnreconciledAcquirer),
+    total: (raw?.['total'] as number) ?? 0,
+    acquirers: ((raw?.['acquirers'] as Record<string, unknown>[]) ?? []).map(
+      mapAuditUnreconciledAcquirer,
+    ),
   };
 }

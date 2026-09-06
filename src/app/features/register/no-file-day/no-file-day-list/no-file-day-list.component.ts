@@ -1,6 +1,6 @@
 import { FormsModule } from '@angular/forms';
 
-import { Component, ViewChild, computed, inject, signal } from '@angular/core';
+import { Component, ViewChild, computed, inject, signal, OnInit } from '@angular/core';
 
 import { Table } from 'primeng/table';
 import { TableModule } from 'primeng/table';
@@ -92,7 +92,7 @@ import {
 export class NoFileDayListComponent extends StatefulListPage<
   NoFileDayFiltersState,
   NoFileDayAdvancedFilters
-> {
+> implements OnInit {
   @ViewChild('dt') private dt?: Table;
 
   readonly facade = inject(NoFileDayFacade);
@@ -474,7 +474,7 @@ export class NoFileDayListComponent extends StatefulListPage<
 
   protected loadFirstPage() {
     const query = buildListQuery<NoFileDayAdvancedFilters>(
-      { page: 0, size: this.rows } as any,
+      { page: 0, size: this.rows },
       this.buildAdvancedFilters(),
     );
     this.clearSelection();
@@ -530,7 +530,7 @@ export class NoFileDayListComponent extends StatefulListPage<
     };
   }
 
-  protected override mapTableFiltersToActiveItems(filters: any): ActiveFilterItem[] {
+  protected override mapTableFiltersToActiveItems(filters: Record<string, unknown>): ActiveFilterItem[] {
     this.i18n.getAppliedLang();
     const items: ActiveFilterItem[] = [];
 

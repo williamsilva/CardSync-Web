@@ -33,7 +33,7 @@ import { CompanyFacade } from '@features/facade/company.facade';
 import { CsDocumentPipe } from '@shared/pipes/cs-document.pipe';
 import { CsCurrencyPipe } from '@shared/pipes/cs-currency.pipe';
 import { AcquirerFacade } from '@features/facade/acquirer.facade';
-import { BatchDialogComponent } from '../dialogs/batch-dialog.component';
+import { BatchAction, BatchDialogComponent } from '../dialogs/batch-dialog.component';
 import { StatefulListPage } from '@williamsilva/nimbus-web-commons';
 import { EstablishmentFacade } from '@features/facade/establishment.facade';
 import { buildListQuery } from '@williamsilva/nimbus-web-commons';
@@ -153,7 +153,7 @@ export class MissingAcquirerListComponent
   readonly batchDialogVisible = signal(false);
   readonly actionDialogVisible = signal(false);
   readonly editIdentityDialogVisible = signal(false);
-  readonly pendingBatchAction = signal<any | null>(null);
+  readonly pendingBatchAction = signal<BatchAction>(null);
   readonly pendingEditRow = signal<ConciliationWaitingModel | null>(null);
   readonly pendingConfirmAction = signal<ErpVsAcquirerConfirmAction | null>(null);
   readonly statusTransactionReason = signal<StatusTransactionReasonEnum[] | null>(null);
@@ -583,7 +583,7 @@ export class MissingAcquirerListComponent
     };
   }
 
-  protected override mapTableFiltersToActiveItems(filters: any): ActiveFilterItem[] {
+  protected override mapTableFiltersToActiveItems(filters: Record<string, unknown>): ActiveFilterItem[] {
     this.i18n.getAppliedLang();
     const items: ActiveFilterItem[] = [];
 
@@ -903,7 +903,7 @@ export class MissingAcquirerListComponent
     this.pendingBatchAction.set(null);
   }
 
-  protected confirmBatchAction(_payload?: any): void {
+  protected confirmBatchAction(): void {
     // handled by confirmBatchDeleteAction for delete; this path covers other batch actions
     this.batchDialogVisible.set(false);
   }
@@ -932,7 +932,7 @@ export class MissingAcquirerListComponent
     this.pendingConfirmRow.set(null);
   }
 
-  protected confirmAction(_payload?: any): void {
+  protected confirmAction(): void {
     // handled by confirmSingleDeleteAction for delete; this path covers other actions (create, reconcile)
     this.actionDialogVisible.set(false);
   }

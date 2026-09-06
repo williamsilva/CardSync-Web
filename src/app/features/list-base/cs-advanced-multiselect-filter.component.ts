@@ -17,7 +17,7 @@ import { CsAdvancedFilterItemTemplateDirective } from './cs-advanced-filter-item
 
 @Component({
   standalone: true,
-  selector: 'cs-advanced-multiselect-filter',
+  selector: 'app-advanced-multiselect-filter',
   imports: [CommonModule, FormsModule, FloatLabel, MultiSelectModule],
   host: {
     class: 'block',
@@ -56,10 +56,17 @@ import { CsAdvancedFilterItemTemplateDirective } from './cs-advanced-filter-item
     </p-floatLabel>
     `,
 })
+// options/value ficam any de propósito: este filtro genérico é usado por ~20 telas com listas de
+// opções de shapes concretos diferentes (AcquirerMinimalModel, SelectOption<string>, etc.) e
+// value é o array de valores selecionados (normalmente string[], mas o componente não assume
+// isso) - tipar como Record<string, unknown>[]/unknown[] quebra a atribuição em todos os
+// consumidores, já que interfaces concretas sem index signature não satisfazem Record.
 export class CsAdvancedMultiselectFilterComponent implements OnChanges {
   @Input() label = '';
   @Input() inputId = '';
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   @Input() options: any[] = [];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   @Input() value: any[] | null = null;
 
   @Input() optionLabel = 'label';
@@ -70,6 +77,7 @@ export class CsAdvancedMultiselectFilterComponent implements OnChanges {
   @Input() showClear = true;
   @Input() showToggleAll = false;
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   @Output() valueChange = new EventEmitter<any[] | null>();
 
   @ContentChild(CsAdvancedFilterItemTemplateDirective)
@@ -88,10 +96,12 @@ export class CsAdvancedMultiselectFilterComponent implements OnChanges {
     }
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onValueChange(value: any[] | null | undefined): void {
     this.valueChange.emit(value?.length ? value : null);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   getOptionLabel(option: any): string {
     if (!option) {
       return '';

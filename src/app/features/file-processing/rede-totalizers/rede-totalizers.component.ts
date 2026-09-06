@@ -7,11 +7,12 @@ import { CardModule } from 'primeng/card';
 import { TableLazyLoadEvent, TableModule } from 'primeng/table';
 
 import { FileProcessingService } from '@features/service/file-processing.service';
+import { RedeTotalizerModel } from '@models/file-processing.models';
 import { formatCurrency } from '../file-processing-ui';
 import { CsTagComponent } from '@shared/ui';
 
 @Component({
-  selector: 'cs-rede-totalizers',
+  selector: 'app-rede-totalizers',
   standalone: true,
   imports: [CommonModule, RouterLink, ButtonModule, CardModule, TableModule, CsTagComponent],
   templateUrl: './rede-totalizers.component.html',
@@ -20,7 +21,7 @@ import { CsTagComponent } from '@shared/ui';
 export class RedeTotalizersComponent {
   private readonly service = inject(FileProcessingService);
 
-  protected readonly rows = signal<any[]>([]);
+  protected readonly rows = signal<RedeTotalizerModel[]>([]);
   protected readonly loading = signal(false);
   protected readonly totalRecords = signal(0);
   protected readonly pageSize = signal(15);

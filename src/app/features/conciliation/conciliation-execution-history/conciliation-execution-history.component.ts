@@ -15,7 +15,7 @@ type Tone = 'success' | 'danger' | 'warn' | 'info' | 'secondary';
 @Component({
   standalone: true,
   providers: [CsDatePipe],
-  selector: 'cs-conciliation-execution-history',
+  selector: 'app-conciliation-execution-history',
   styleUrl: './conciliation-execution-history.component.scss',
   templateUrl: './conciliation-execution-history.component.html',
   imports: [

@@ -94,10 +94,10 @@ type ContractForm = FormGroup<{
   establishmentId: FormControl<string | null>;
 }>;
 
-type ContractFlagFormValue = {
+interface ContractFlagFormValue {
   flagId?: string | null;
   contractRates?: Partial<ContractRateInput>[] | null;
-};
+}
 
 @Component({
   standalone: true,
@@ -205,7 +205,7 @@ export class ContractCreateDialogComponent {
   readonly selectedCompany = computed(() => {
     const companyId = this.form.controls.companyId.value;
     if (!companyId) return null;
-    return this.companyOptions().find((item: any) => item.id === companyId) ?? null;
+    return this.companyOptions().find((item) => item.id === companyId) ?? null;
   });
 
   readonly selectedAcquirer = computed(() => {

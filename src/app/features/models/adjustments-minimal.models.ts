@@ -11,10 +11,8 @@ export interface AdjustmentsMinimalModel {
   adjustmentDescription?: string | null;
 }
 
-export interface AdjustmentsMinimalCreateInput {}
-
-export interface AdjustmentsMinimalUpdateInput {}
-
+export type AdjustmentsMinimalCreateInput = object;
+export type AdjustmentsMinimalUpdateInput = object;
 /**
  * Payload bruto vindo da API.
  * Aceita status numérico ou string para tolerar mudanças no backend.

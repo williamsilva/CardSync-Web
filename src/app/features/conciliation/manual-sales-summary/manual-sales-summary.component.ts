@@ -67,7 +67,7 @@ interface CsvSummaryGroup {
 
 @Component({
   standalone: true,
-  selector: 'cs-manual-sales-summary',
+  selector: 'app-manual-sales-summary',
   styleUrl: './manual-sales-summary.component.scss',
   templateUrl: './manual-sales-summary.component.html',
   imports: [

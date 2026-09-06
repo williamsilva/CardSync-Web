@@ -1,4 +1,4 @@
-<cs-page-header
+<app-page-header
   [compact]="false"
   [subtitle]="'fileProcessing.upload.subtitle' | translate"
   [breadcrumb]="[
@@ -6,7 +6,7 @@
     { label: ('menu.file.processing.title' | translate), url: '/file-processing/analytics' },
     { label: ('menu.file.processing.upload' | translate) },
   ]"
-></cs-page-header>
+></app-page-header>
 
 <p-card class="mt-2 block">
   <div class="grid formgrid gap-0">
@@ -62,6 +62,7 @@
             icon="pi pi-times"
             class="p-button-text p-button-sm p-button-danger"
             (click)="removeFile($index)"
+            [attr.aria-label]="'common.remove' | translate"
           ></button>
         </div>
       }
@@ -105,15 +106,15 @@
     <p-divider></p-divider>
 
     <div class="flex align-items-center gap-2 mb-2">
-      <cs-tag
+      <app-tag
         [tone]="'success'"
         [value]="successCount() + ' ' + ('fileProcessing.upload.success' | translate)"
-      ></cs-tag>
+      ></app-tag>
       @if (errorCount() > 0) {
-        <cs-tag
+        <app-tag
           [tone]="'danger'"
           [value]="errorCount() + ' ' + ('fileProcessing.upload.errors' | translate)"
-        ></cs-tag>
+        ></app-tag>
       }
     </div>
 

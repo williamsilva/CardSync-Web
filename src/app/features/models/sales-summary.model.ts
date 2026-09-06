@@ -29,10 +29,8 @@ export interface SaleSummaryModel {
   creditOrders?: CreditOrdersMinimalModel[] | null;
 }
 
-export interface SaleSummaryCreateInput {}
-
-export interface SaleSummaryUpdateInput {}
-
+export type SaleSummaryCreateInput = object;
+export type SaleSummaryUpdateInput = object;
 export interface SalesSummaryManualTransactionInput {
   nsu?: number | null;
   cardNumber?: string | null;

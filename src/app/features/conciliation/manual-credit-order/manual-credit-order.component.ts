@@ -1,5 +1,5 @@
 import { FormsModule } from '@angular/forms';
-import { AfterViewInit, Component, computed, inject, signal, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, computed, inject, signal, ViewChild, OnInit } from '@angular/core';
 
 import { Card } from 'primeng/card';
 import { MessageService } from 'primeng/api';
@@ -65,7 +65,7 @@ import {
 @Component({
   standalone: true,
   providers: [CsDatePipe],
-  selector: 'cs-manual-credit-order',
+  selector: 'app-manual-credit-order',
   styleUrl: './manual-credit-order.component.scss',
   templateUrl: './manual-credit-order.component.html',
   imports: [
@@ -91,7 +91,7 @@ import {
 })
 export class ManualCreditOrderComponent
   extends StatefulListPage<ManualCreditOrderFiltersState, SaleSummaryAdvancedFilters>
-  implements AfterViewInit
+  implements AfterViewInit, OnInit
 {
   @ViewChild('dt') private dt?: Table;
 
@@ -189,7 +189,11 @@ export class ManualCreditOrderComponent
   toggleRowSelection(row: SaleSummaryApiModel, checked: boolean): void {
     this.selectedIds.update((ids) => {
       const next = new Set(ids);
-      checked ? next.add(row.id) : next.delete(row.id);
+      if (checked) {
+        next.add(row.id);
+      } else {
+        next.delete(row.id);
+      }
       return next;
     });
   }
@@ -465,7 +469,7 @@ export class ManualCreditOrderComponent
     return items;
   });
 
-  protected override mapTableFiltersToActiveItems(filters: any): ActiveFilterItem[] {
+  protected override mapTableFiltersToActiveItems(filters: Record<string, unknown>): ActiveFilterItem[] {
     this.i18n.getAppliedLang();
     const items: ActiveFilterItem[] = [];
 

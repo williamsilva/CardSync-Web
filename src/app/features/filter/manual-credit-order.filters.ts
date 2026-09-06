@@ -3,14 +3,14 @@ import { WritableSignal } from '@angular/core';
 import { ModalityEnum } from '@models/enums/modality.enum';
 import { StatusPaymentBankEnum } from '@models/enums/status-payment-bank.enum';
 
-export type ManualCreditOrderFiltersState = {
+export interface ManualCreditOrderFiltersState {
   rvNumber: string;
   companies: string[] | null;
   flags: string[] | null;
   acquirers: string[] | null;
   modality: ModalityEnum[] | null;
   statusPaymentBank: StatusPaymentBankEnum[] | null;
-};
+}
 
 export type ManualCreditOrderAdvancedFilters = Partial<ManualCreditOrderFiltersState>;
 

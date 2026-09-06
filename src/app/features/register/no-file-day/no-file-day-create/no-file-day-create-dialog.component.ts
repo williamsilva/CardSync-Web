@@ -276,7 +276,7 @@ export class NoFileDayCreateDialogComponent {
     if (this.form.invalid) return;
 
     const v = this.form.getRawValue();
-    const dateVal = v.noFileDate instanceof Date ? v.noFileDate : new Date(v.noFileDate as any);
+    const dateVal = v.noFileDate ?? new Date(0);
     const isoDate = `${dateVal.getFullYear()}-${String(dateVal.getMonth() + 1).padStart(2, '0')}-${String(dateVal.getDate()).padStart(2, '0')}`;
 
     const createPayload: NoFileDayCreateInput = {

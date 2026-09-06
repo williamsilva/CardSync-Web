@@ -9,7 +9,9 @@ export enum NoFileDayTypeEnum {
   OTHER = 'OTHER',
 }
 
-export function normalizeNoFileDayTypeEnum(value: any): NoFileDayTypeEnum | null {
+export type NoFileDayTypeInput = NoFileDayTypeEnum | string | number | null | undefined;
+
+export function normalizeNoFileDayTypeEnum(value: NoFileDayTypeInput): NoFileDayTypeEnum | null {
   if (!value || value === NoFileDayTypeEnum.NULL) return null;
   if (Object.values(NoFileDayTypeEnum).includes(value as NoFileDayTypeEnum)) {
     return value as NoFileDayTypeEnum;

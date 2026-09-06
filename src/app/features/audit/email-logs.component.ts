@@ -1,6 +1,6 @@
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { Component, computed, inject, signal, ViewChild } from '@angular/core';
+import { Component, computed, inject, signal, ViewChild, OnInit } from '@angular/core';
 
 import { ButtonModule } from 'primeng/button';
 import { SelectModule } from 'primeng/select';
@@ -70,7 +70,7 @@ import {
     DateInputMaskDirective,
 ],
 })
-export class EmailLogsComponent extends StatefulListPage<EmailLogsFiltersState, EmailLogsFilters> {
+export class EmailLogsComponent extends StatefulListPage<EmailLogsFiltersState, EmailLogsFilters> implements OnInit {
   @ViewChild('dt') private dt?: Table;
 
   protected override readonly i18n = inject(I18nService);
@@ -185,7 +185,7 @@ export class EmailLogsComponent extends StatefulListPage<EmailLogsFiltersState, 
 
   protected loadFirstPage() {
     const tableQuery = { page: 0, size: this.rows };
-    const query = buildListQuery<EmailLogsFilters>(tableQuery as any, this.buildAdvancedFilters());
+    const query = buildListQuery<EmailLogsFilters>(tableQuery, this.buildAdvancedFilters());
 
     this.facade.loadPage(query);
   }
@@ -248,7 +248,7 @@ export class EmailLogsComponent extends StatefulListPage<EmailLogsFiltersState, 
     };
   }
 
-  protected override mapTableFiltersToActiveItems(filters: any): ActiveFilterItem[] {
+  protected override mapTableFiltersToActiveItems(filters: Record<string, unknown>): ActiveFilterItem[] {
     this.i18n.getAppliedLang();
 
     const items: ActiveFilterItem[] = [];

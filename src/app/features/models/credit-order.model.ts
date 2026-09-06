@@ -26,10 +26,8 @@ export interface CreditOrderModel {
   bankingDomicile: BankingDomicileMinimalModel;
 }
 
-export interface CreditOrderCreateInput {}
-
-export interface CreditOrderUpdateInput {}
-
+export type CreditOrderCreateInput = object;
+export type CreditOrderUpdateInput = object;
 export interface CreditOrderManualInput {
   summaryIds: string[];
 }

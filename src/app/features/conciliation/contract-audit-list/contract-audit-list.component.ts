@@ -1,6 +1,6 @@
 import { FormsModule } from '@angular/forms';
 
-import { inject, signal, computed, Component, ViewChild, AfterViewInit } from '@angular/core';
+import { inject, signal, computed, Component, ViewChild, AfterViewInit, OnInit } from '@angular/core';
 
 import { ButtonModule } from 'primeng/button';
 import { SelectModule } from 'primeng/select';
@@ -73,7 +73,7 @@ import {
 @Component({
   standalone: true,
   providers: [CsDatePipe],
-  selector: 'cs-contract-audit-list',
+  selector: 'app-contract-audit-list',
   styleUrl: './contract-audit-list.component.scss',
   templateUrl: './contract-audit-list.component.html',
   imports: [
@@ -106,7 +106,7 @@ import {
 })
 export class ContractAuditListComponent
   extends StatefulListPage<ContractAuditFiltersState, ContractAuditAdvancedFilters>
-  implements AfterViewInit
+  implements AfterViewInit, OnInit
 {
   @ViewChild('dt') private dt?: Table;
 
@@ -672,7 +672,7 @@ export class ContractAuditListComponent
     );
   }
 
-  protected override mapTableFiltersToActiveItems(filters: any): ActiveFilterItem[] {
+  protected override mapTableFiltersToActiveItems(filters: Record<string, unknown>): ActiveFilterItem[] {
     this.i18n.getAppliedLang();
     const items: ActiveFilterItem[] = [];
 
@@ -969,7 +969,7 @@ export class ContractAuditListComponent
   protected isRowCheckboxDisabled(row: ContractAuditModel): boolean {
     if (this.isRowSelected(row)) return false;
 
-    return !!!row.id || !this.isSameSelectionGroup(row);
+    return !row.id || !this.isSameSelectionGroup(row);
   }
 
   protected isSameSelectionGroup(row: ContractAuditModel): boolean {

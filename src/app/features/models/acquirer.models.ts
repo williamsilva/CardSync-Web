@@ -39,7 +39,7 @@ export interface AcquirerUpdateInput {
   status?: StatusEnum;
 }
 
-export type AcquirerFiltersState = {
+export interface AcquirerFiltersState {
   cnpj: string;
   fantasyName: string;
   socialReason: string;
@@ -47,7 +47,7 @@ export type AcquirerFiltersState = {
 
   createdBy: string[] | null;
   statusEnum: StatusEnum[] | null;
-};
+}
 
 export interface AcquirerBulkStatusInput {
   ids: string[];

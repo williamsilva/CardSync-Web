@@ -1,4 +1,4 @@
-<cs-page-header
+<app-page-header
   [compact]="false"
   [subtitle]="'fileProcessing.browser.subtitle' | translate"
   [breadcrumb]="[
@@ -15,7 +15,7 @@
     class="p-button-text p-button-sm"
     [label]="'common.update' | translate"
   ></button>
-</cs-page-header>
+</app-page-header>
 
 <cs-filters-panel
   (clear)="clear()"
@@ -143,6 +143,7 @@
                 icon="pi pi-download"
                 class="p-button-text p-button-sm"
                 (click)="download(item)"
+                [attr.aria-label]="'fileProcessing.browser.download' | translate"
               ></button>
             </div>
           </td>

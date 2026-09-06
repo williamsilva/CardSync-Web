@@ -1,6 +1,6 @@
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { Component, ViewChild, computed, inject, signal } from '@angular/core';
+import { Component, ViewChild, computed, inject, signal, OnInit } from '@angular/core';
 
 import { Table } from 'primeng/table';
 import { TableModule } from 'primeng/table';
@@ -89,7 +89,7 @@ import {
     DateInputMaskDirective,
   ],
 })
-export class UsersListComponent extends StatefulListPage<UsersFiltersState, UsersAdvancedFilters> {
+export class UsersListComponent extends StatefulListPage<UsersFiltersState, UsersAdvancedFilters> implements OnInit {
   @ViewChild('dt') private dt?: Table;
 
   protected override readonly i18n = inject(I18nService);
@@ -457,10 +457,7 @@ export class UsersListComponent extends StatefulListPage<UsersFiltersState, User
 
   protected loadFirstPage() {
     const tableQuery = { page: 0, size: this.rows };
-    const query = buildListQuery<UsersAdvancedFilters>(
-      tableQuery as any,
-      this.buildAdvancedFilters(),
-    );
+    const query = buildListQuery<UsersAdvancedFilters>(tableQuery, this.buildAdvancedFilters());
 
     this.clearSelection();
     this.facade.loadPage(query);
@@ -591,7 +588,7 @@ export class UsersListComponent extends StatefulListPage<UsersFiltersState, User
     };
   }
 
-  protected override mapTableFiltersToActiveItems(filters: any): ActiveFilterItem[] {
+  protected override mapTableFiltersToActiveItems(filters: Record<string, unknown>): ActiveFilterItem[] {
     this.i18n.getAppliedLang();
 
     const items: ActiveFilterItem[] = [];

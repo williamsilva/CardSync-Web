@@ -5,7 +5,7 @@ import { ModalityEnum } from '@models/enums/modality.enum';
 import { StatusPaymentBankEnum } from '@models/enums/status-payment-bank.enum';
 import { StatusReconciliationEnum } from '@models/enums/status-reconciliation.enum';
 
-export type CreditOrderFiltersState = {
+export interface CreditOrderFiltersState {
   periodRvDate: PeriodEnum | null;
   rvDate: string | string[] | null;
 
@@ -40,7 +40,7 @@ export type CreditOrderFiltersState = {
 
   /** Filtro exato: ordens vinculadas a lançamento(s) bancário(s) específico(s). Sem controle de UI — usado por navegação a partir do extrato bancário. */
   releaseBankIds: string[] | null;
-};
+}
 
 export type CreditOrderAdvancedFilters = Partial<CreditOrderFiltersState>;
 

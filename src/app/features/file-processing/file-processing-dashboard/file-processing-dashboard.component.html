@@ -1,4 +1,4 @@
-<cs-page-header
+<app-page-header
   [compact]="false"
   [subtitle]="'fileProcessingDashboard.subtitle' | translate"
   [breadcrumb]="[
@@ -17,7 +17,7 @@
     class="p-button-text p-button-sm"
     [label]="'common.update' | translate"
   ></button>
-</cs-page-header>
+</app-page-header>
 
 <cs-filters-panel
   [collapsed]="true"
@@ -46,7 +46,7 @@
       (periodChange)="onPeriodChange($event)"
     ></cs-advanced-period-date-filter>
 
-    <cs-advanced-multiselect-filter
+    <app-advanced-multiselect-filter
       inputId="dashboardGroup"
       [value]="group()"
       optionLabel="label"
@@ -55,7 +55,7 @@
       class="col-12 md:col-3 xl:col-2 p-1"
       (valueChange)="group.set($event)"
       [label]="'processedFiles.fields.origin' | translate"
-    ></cs-advanced-multiselect-filter>
+    ></app-advanced-multiselect-filter>
   </div>
 </cs-filters-panel>
 
@@ -121,7 +121,7 @@
             }
           </div>
           <div class="cs-scheduler-row__actions">
-            <cs-tag
+            <app-tag
               [value]="
                 s['erp'].running
                   ? ('fileProcessingDashboard.scheduler.running' | translate)
@@ -130,7 +130,7 @@
                     : ('fileProcessingDashboard.scheduler.attention' | translate)
               "
               [tone]="s['erp'].running ? 'info' : boolSeverity(s['erp'].lastSuccess)"
-            ></cs-tag>
+            ></app-tag>
           </div>
         </div>
 
@@ -146,7 +146,7 @@
             }
           </div>
           <div class="cs-scheduler-row__actions">
-            <cs-tag
+            <app-tag
               [value]="
                 s['acquirer'].running
                   ? ('fileProcessingDashboard.scheduler.running' | translate)
@@ -155,7 +155,7 @@
                     : ('fileProcessingDashboard.scheduler.attention' | translate)
               "
               [tone]="s['acquirer'].running ? 'info' : boolSeverity(s['acquirer'].lastSuccess)"
-            ></cs-tag>
+            ></app-tag>
           </div>
         </div>
 
@@ -172,7 +172,7 @@
               }
             </div>
             <div class="cs-scheduler-row__actions">
-              <cs-tag
+              <app-tag
                 [value]="
                   bank.running
                     ? ('fileProcessingDashboard.scheduler.running' | translate)
@@ -181,7 +181,7 @@
                       : ('fileProcessingDashboard.scheduler.attention' | translate)
                 "
                 [tone]="bank.running ? 'info' : boolSeverity(bank.lastSuccess)"
-              ></cs-tag>
+              ></app-tag>
             </div>
           </div>
         }

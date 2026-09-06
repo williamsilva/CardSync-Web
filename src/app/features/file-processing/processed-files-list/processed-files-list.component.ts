@@ -1,7 +1,7 @@
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component, computed, inject, signal, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, computed, inject, signal, ViewChild, OnInit } from '@angular/core';
 
 import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
@@ -48,7 +48,7 @@ import {
  */
 @Component({
   standalone: true,
-  selector: 'cs-processed-files-list',
+  selector: 'app-processed-files-list',
   styleUrl: './processed-files-list.component.scss',
   templateUrl: './processed-files-list.component.html',
   imports: [
@@ -72,7 +72,7 @@ import {
 })
 export class ProcessedFilesListComponent
   extends StatefulListPage<ProcessedFilesFiltersState, ProcessedFilesAdvancedFilters>
-  implements AfterViewInit
+  implements AfterViewInit, OnInit
 {
   @ViewChild('dt') private dt?: Table;
 
@@ -242,7 +242,7 @@ export class ProcessedFilesListComponent
    * Converte os filtros inline da p-table em chips de filtro ativo.
    * getAppliedLang() garante que os labels reavaliam ao trocar idioma.
    */
-  protected override mapTableFiltersToActiveItems(filters: any): ActiveFilterItem[] {
+  protected override mapTableFiltersToActiveItems(filters: Record<string, unknown>): ActiveFilterItem[] {
     this.i18n.getAppliedLang();
     const items: ActiveFilterItem[] = [];
 

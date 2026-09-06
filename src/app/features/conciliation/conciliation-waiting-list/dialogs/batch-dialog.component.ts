@@ -31,7 +31,7 @@ export type BatchAction = 'CREATE_ERP' | 'MARK_ERP_DELETED' | null;
 
 @Component({
   standalone: true,
-  selector: 'cs-batch-dialog',
+  selector: 'app-batch-dialog',
   styleUrl: './batch-dialog.component.scss',
   templateUrl: './batch-dialog.component.html',
   imports: [

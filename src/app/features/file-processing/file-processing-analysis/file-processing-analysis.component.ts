@@ -15,7 +15,7 @@ import { fileStatusSeverity } from '../file-processing-ui';
 @Component({
   standalone: true,
   providers: [CsDatePipe],
-  selector: 'cs-file-processing-analysis',
+  selector: 'app-file-processing-analysis',
   styleUrl: './file-processing-analysis.component.scss',
   templateUrl: './file-processing-analysis.component.html',
   imports: [

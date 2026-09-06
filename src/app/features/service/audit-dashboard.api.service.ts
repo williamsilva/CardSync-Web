@@ -23,7 +23,7 @@ export class AuditDashboardApiService {
 
   getSalesSummary(): Observable<AuditSalesSummaryModel> {
     return this.http
-      .get<any>(`${this.baseUrl}/sales-summary`, { withCredentials: true })
+      .get<Record<string, unknown>>(`${this.baseUrl}/sales-summary`, { withCredentials: true })
       .pipe(map(mapAuditSalesSummaryModel));
   }
 
@@ -34,7 +34,9 @@ export class AuditDashboardApiService {
         const acquirers = acquirer ? [acquirer.id] : [];
         const body = { advanced: { acquirers } };
         return this.http
-          .post<any>(`${this.baseUrl}/unreconciled`, body, { withCredentials: true })
+          .post<Record<string, unknown>>(`${this.baseUrl}/unreconciled`, body, {
+            withCredentials: true,
+          })
           .pipe(map(mapAuditUnreconciledModel));
       }),
     );

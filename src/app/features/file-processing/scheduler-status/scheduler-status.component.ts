@@ -16,7 +16,7 @@ import { FileProcessingService } from '@features/service/file-processing.service
 
 @Component({
   standalone: true,
-  selector: 'cs-scheduler-status',
+  selector: 'app-scheduler-status',
   styleUrl: './scheduler-status.component.scss',
   templateUrl: './scheduler-status.component.html',
   providers: [CsDatePipe],

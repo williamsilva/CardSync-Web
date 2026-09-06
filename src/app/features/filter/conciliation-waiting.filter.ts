@@ -5,7 +5,7 @@ import { CaptureEnum } from '@models/enums/capture.enum';
 import { ModalityEnum } from '@models/enums/modality.enum';
 import { StatusTransactionReasonEnum } from '@models/enums/status-transaction-reason.enum';
 
-export type ConciliationWaitingFiltersState = {
+export interface ConciliationWaitingFiltersState {
   tid: string;
   cvNsu: string;
   authorization: string;
@@ -26,7 +26,7 @@ export type ConciliationWaitingFiltersState = {
 
   periodSaleDate: PeriodEnum | null;
   saleDate: string | string[] | null;
-};
+}
 
 export type ConciliationWaitingAdvancedFilters = Partial<ConciliationWaitingFiltersState>;
 

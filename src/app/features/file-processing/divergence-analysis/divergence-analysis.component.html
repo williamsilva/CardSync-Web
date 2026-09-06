@@ -71,10 +71,10 @@
                 ><small>PV {{ row.sourceEstablishmentPvNumber || row.establishment || '-' }}</small>
               </td>
               <td>
-                <cs-tag
+                <app-tag
                   [value]="row.commercialStatus"
                   [tone]="commercialStatusSeverity(row.commercialStatus)"
-                ></cs-tag>
+                ></app-tag>
               </td>
               <td class="text-right">{{ formatCurrency(row.grossValue) }}</td>
             </tr>
@@ -102,7 +102,7 @@
                 ><small>{{ row.dateImport | date: 'short' }}</small>
               </td>
               <td>
-                <cs-tag [value]="row.status" [tone]="fileStatusSeverity(row.status)"></cs-tag>
+                <app-tag [value]="row.status" [tone]="fileStatusSeverity(row.status)"></app-tag>
               </td>
               <td>{{ row.errorLines || 0 }}</td>
               <td>{{ row.warningLines || 0 }}</td>

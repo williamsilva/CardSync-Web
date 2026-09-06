@@ -41,12 +41,9 @@ export interface TransactionsAcqInstallmentModel {
   acquirer?: AcquirerMinimalModel | null;
 }
 
-export interface TransactionsAcqInstallmentCreateInput {}
-
-export interface TransactionsAcqInstallmentUpdateInput {}
-
-export interface TransactionsAcqInstallmentApiModel extends TransactionsAcqInstallmentModel {}
-
+export type TransactionsAcqInstallmentCreateInput = object;
+export type TransactionsAcqInstallmentUpdateInput = object;
+export type TransactionsAcqInstallmentApiModel = TransactionsAcqInstallmentModel;
 export function mapTransactionsAcqInstallmentApiModel(
   input: TransactionsAcqInstallmentApiModel,
 ): TransactionsAcqInstallmentModel {

@@ -10,12 +10,13 @@
 >
   <p class="text-sm mb-3">{{ message }}</p>
   <div class="flex flex-column gap-1 mb-3">
-    <label class="text-xs font-medium text-color-secondary">
+    <label for="divergenceReasonPreset" class="text-xs font-medium text-color-secondary">
       {{ 'conciliation.manualBankReconciliation.divergenceReasonLabel' | translate }}
     </label>
     <p-select
       class="w-full"
       appendTo="body"
+      inputId="divergenceReasonPreset"
       [options]="divergenceReasonPresetOptions()"
       [ngModel]="selectedDivergenceReasonPreset()"
       (ngModelChange)="onPresetChange($event)"

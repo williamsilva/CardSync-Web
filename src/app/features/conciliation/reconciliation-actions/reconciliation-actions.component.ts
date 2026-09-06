@@ -27,7 +27,7 @@ import {
 
 @Component({
   standalone: true,
-  selector: 'cs-reconciliation-actions',
+  selector: 'app-reconciliation-actions',
   styleUrl: './reconciliation-actions.component.scss',
   templateUrl: './reconciliation-actions.component.html',
   imports: [

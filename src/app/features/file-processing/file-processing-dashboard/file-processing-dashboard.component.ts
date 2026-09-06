@@ -28,15 +28,15 @@ import {
   FiltersPanelComponent,
 } from '@williamsilva/nimbus-web-commons';
 
-type DashboardFiltersState = {
+interface DashboardFiltersState {
   dateImport: string | string[] | null;
   periodDateImport: PeriodEnum | null;
   group: string[] | null;
-};
+}
 
 @Component({
   standalone: true,
-  selector: 'cs-file-processing-dashboard',
+  selector: 'app-file-processing-dashboard',
   styleUrl: './file-processing-dashboard.component.scss',
   templateUrl: './file-processing-dashboard.component.html',
   imports: [
@@ -141,6 +141,8 @@ export class FileProcessingDashboardComponent extends StatefulListPage<
   }
 
   protected override loadPage(
+    // query não é usado - este dashboard não pagina uma tabela, só recarrega os totais agregados.
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     _query: ReturnType<typeof buildListQuery<ProcessedFilesAdvancedFilters>>,
   ): void {
     this.loadTotals();
@@ -174,7 +176,9 @@ export class FileProcessingDashboardComponent extends StatefulListPage<
     return items;
   });
 
-  protected override mapTableFiltersToActiveItems(_filters: any): ActiveFilterItem[] {
+  // filters não é usado - este dashboard não tem tabela com filtros por coluna.
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  protected override mapTableFiltersToActiveItems(_filters: Record<string, unknown>): ActiveFilterItem[] {
     return [];
   }
 

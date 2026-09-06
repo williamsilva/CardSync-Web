@@ -24,6 +24,14 @@ import { cpfCnpjValidator } from '@shared/validators/cpf-cnpj.validator';
 import { ErrorMsgComponent } from '@shared/error-msg/error-msg.component';
 import { CpfCnpjMaskDirective } from '@shared/directives/cpf-cnpj-mask.directive';
 
+/** Catálogo de grupos do NimbusAuth é compartilhado entre apps - o AdminUserResponse.groups
+ * traz esse appKey pra permitir separar grupos do cardsync dos de outros apps (ver comentário
+ * mais abaixo), campo que o GroupModel "de negócio" (CRUD de grupos) não declara. */
+interface AdminUserGroupRef {
+  id: string;
+  appKey?: string;
+}
+
 @Component({
   standalone: true,
   selector: 'app-users-create-dialog',
@@ -114,7 +122,9 @@ export class UsersCreateDialogComponent {
       this.loadingUser.set(true);
 
       const digitsDoc = String(user?.document ?? '').replace(/\D+/g, '');
-      const groupsRaw = Array.isArray(user?.groups) ? (user.groups as any[]) : [];
+      const groupsRaw = Array.isArray(user?.groups)
+        ? (user.groups as AdminUserGroupRef[] | string[])
+        : [];
 
       // O catálogo de grupos do NimbusAuth é compartilhado entre apps (cardsync, nimbusflow,
       // ...) — um usuário pode pertencer a grupos de outros apps que este seletor (escopado a
@@ -130,7 +140,10 @@ export class UsersCreateDialogComponent {
         .filter(Boolean);
 
       const otherAppGroupIds = groupsRaw
-        .filter((g) => typeof g !== 'string' && g?.appKey && g.appKey !== APP_KEY)
+        .filter(
+          (g): g is AdminUserGroupRef =>
+            typeof g !== 'string' && !!g?.appKey && g.appKey !== APP_KEY,
+        )
         .map((g) => g?.id)
         .filter(Boolean);
 

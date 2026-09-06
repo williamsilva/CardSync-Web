@@ -57,7 +57,7 @@ interface ChargebackStageView extends ChargebackStageDefinition {
 }
 
 @Component({
-  selector: 'cs-chargebacks-list',
+  selector: 'app-chargebacks-list',
   styleUrl: './chargebacks-list.component.scss',
   templateUrl: './chargebacks-list.component.html',
   standalone: true,
@@ -651,7 +651,7 @@ export class ChargebacksListComponent {
     return rightTime >= leftTime ? right : left;
   }
 
-  private firstValue<T>(...values: Array<T | null | undefined>): T | null {
+  private firstValue<T>(...values: (T | null | undefined)[]): T | null {
     for (const value of values) {
       if (value !== null && value !== undefined) return value;
     }
@@ -659,17 +659,17 @@ export class ChargebacksListComponent {
     return null;
   }
 
-  private maxValue(...values: Array<number | null | undefined>): number | null {
+  private maxValue(...values: (number | null | undefined)[]): number | null {
     const valid = values.filter((value): value is number => value !== null && value !== undefined);
     return valid.length ? Math.max(...valid) : null;
   }
 
-  private latestDate(...values: Array<string | null | undefined>): string | null {
+  private latestDate(...values: (string | null | undefined)[]): string | null {
     const ordered = values.filter((value): value is string => !!value).sort();
     return ordered.length ? ordered[ordered.length - 1] : null;
   }
 
-  private earliestDate(...values: Array<string | null | undefined>): string | null {
+  private earliestDate(...values: (string | null | undefined)[]): string | null {
     const ordered = values.filter((value): value is string => !!value).sort();
     return ordered.length ? ordered[0] : null;
   }

@@ -41,7 +41,7 @@ interface FileBrowserFiltersState {
 
 @Component({
   standalone: true,
-  selector: 'cs-file-browser',
+  selector: 'app-file-browser',
   styleUrl: './file-browser.component.scss',
   templateUrl: './file-browser.component.html',
   providers: [CsDatePipe],

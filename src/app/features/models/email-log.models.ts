@@ -23,11 +23,11 @@ export interface EmailLogsPage {
   number: number;
 }
 
-export type EmailLogsFiltersState = {
+export interface EmailLogsFiltersState {
   subject: string;
   recipient: string;
   template: string;
   status: EmailLogStatus[] | null;
   eventType: EmailLogEventType[] | null;
   sentAtRange: [string, string] | null;
-};
+}

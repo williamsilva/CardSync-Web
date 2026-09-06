@@ -3078,6 +3078,8 @@
     "description": "View days with and without ERP, Rede and bank files.",
     "viewFiles": "View files",
     "refresh": "Refresh",
+    "previousMonth": "Previous month",
+    "nextMonth": "Next month",
     "files": "{count, plural, one {# file} other {# files}}",
     "waiting": "Waiting",
     "noImport": "No import",
@@ -3566,6 +3568,7 @@
     "browser": {
       "subtitle": "Browse and download files stored in the processing volume.",
       "folder": "Folder",
+      "download": "Download",
       "empty": "No files found in this folder.",
       "folders": {
         "input": "Input",

@@ -25,6 +25,9 @@ export class AcquirerPermissionPolicy {
     return this.perms.hasSupportOr(PERMISSIONS.ACQUIRER.CREATE);
   }
 
+  // row mantido pra uniformizar a assinatura com os outros métodos da policy (o
+  // chamador sempre passa a linha), mesmo sem uso aqui.
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   canEdit(_row: AcquirerModel): boolean {
     return this.perms.hasSupportOr(PERMISSIONS.ACQUIRER.CHANGE);
   }
@@ -128,7 +131,7 @@ export class AcquirerPermissionPolicy {
     return this.selectableStatus(row) === status;
   }
 
-  canActivateBulk(rows: ReadonlyArray<AcquirerModel> | null | undefined): boolean {
+  canActivateBulk(rows: readonly AcquirerModel[] | null | undefined): boolean {
     return (
       !!rows?.length &&
       rows.every((row) => {
@@ -138,13 +141,13 @@ export class AcquirerPermissionPolicy {
     );
   }
 
-  canDeactivateBulk(rows: ReadonlyArray<AcquirerModel> | null | undefined): boolean {
+  canDeactivateBulk(rows: readonly AcquirerModel[] | null | undefined): boolean {
     return (
       !!rows?.length && rows.every((row) => normalizeStatusEnum(row.status) === StatusEnum.ACTIVE)
     );
   }
 
-  canBlockBulk(rows: ReadonlyArray<AcquirerModel> | null | undefined): boolean {
+  canBlockBulk(rows: readonly AcquirerModel[] | null | undefined): boolean {
     return (
       !!rows?.length && rows.every((row) => normalizeStatusEnum(row.status) === StatusEnum.ACTIVE)
     );

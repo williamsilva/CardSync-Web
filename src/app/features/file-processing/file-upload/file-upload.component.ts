@@ -23,7 +23,7 @@ interface SystemOption {
 
 @Component({
   standalone: true,
-  selector: 'cs-file-upload',
+  selector: 'app-file-upload',
   styleUrl: './file-upload.component.scss',
   templateUrl: './file-upload.component.html',
   imports: [

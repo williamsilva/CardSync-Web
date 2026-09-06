@@ -39,7 +39,7 @@ export interface UserBulkStatusInput {
   ids: string[];
 }
 
-export type UsersFiltersState = {
+export interface UsersFiltersState {
   name: string;
   userName: string;
   document: string;
@@ -49,7 +49,7 @@ export type UsersFiltersState = {
   lastLoginAtRange: [string, string] | null;
   blockedUntilRange: [string, string] | null;
   passwordExpiresAtRange: [string, string] | null;
-};
+}
 
 /**
  * Payload bruto vindo da API.

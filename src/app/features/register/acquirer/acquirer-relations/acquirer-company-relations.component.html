@@ -48,7 +48,7 @@
         <td class="text-center">{{ item.fantasyName }}</td>
         <td class="text-center">{{ item.cnpj | csDocument }}</td>
         <td class="text-center">
-          <cs-tag [value]="statusLabel(item.status)" [tone]="statusSeverity(item.status)" />
+          <app-tag [value]="statusLabel(item.status)" [tone]="statusSeverity(item.status)" />
         </td>
         <td class="text-center">
           <button
@@ -58,6 +58,7 @@
             [disabled]="!canRemoveRelations()"
             class="p-button-text p-button-sm p-button-danger"
             (click)="confirmRemoveCompany(item.companyId, item.fantasyName)"
+            [attr.aria-label]="'common.remove' | translate"
           ></button>
         </td>
       </tr>
@@ -186,6 +187,7 @@
             icon="pi pi-trash"
             (click)="removePendingCompany(item.id)"
             class="p-button-text p-button-sm p-button-danger"
+            [attr.aria-label]="'common.remove' | translate"
           ></button>
         </td>
       </tr>

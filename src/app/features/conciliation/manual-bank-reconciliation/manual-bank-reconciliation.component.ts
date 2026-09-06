@@ -2,14 +2,14 @@
 import { Component, OnInit, WritableSignal, computed, inject, signal } from '@angular/core';
 
 import { MenuModule } from 'primeng/menu';
-import { TableModule } from 'primeng/table';
+import { TableModule, TableLazyLoadEvent, TablePageEvent } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
 import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
 import { CheckboxModule } from 'primeng/checkbox';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { ConfirmationService, MenuItem, MessageService } from 'primeng/api';
+import { ConfirmationService, MenuItem, MessageService, TableState } from 'primeng/api';
 
 import { I18nService } from '@core/i18n/i18n.service';
 import { CsTagComponent, CsTagTone } from '@shared/ui';
@@ -104,7 +104,7 @@ interface OrderFiltersState {
 
 @Component({
   standalone: true,
-  selector: 'cs-manual-bank-reconciliation',
+  selector: 'app-manual-bank-reconciliation',
   templateUrl: './manual-bank-reconciliation.component.html',
   providers: [ConfirmationService, MessageService, CsCurrencyPipe],
   styles: [
@@ -197,8 +197,8 @@ export class ManualBankReconciliationComponent implements OnInit {
   ordersRows = Number(localStorage.getItem(this.ordersTableRowsKey)) || 15;
   readonly rowsPerPageOptions = [15, 30, 50, 100];
 
-  private readonly lastOrdersEvent = signal<any>(null);
-  private readonly lastReleasesEvent = signal<any>(null);
+  private readonly lastOrdersEvent = signal<TableLazyLoadEvent | null>(null);
+  private readonly lastReleasesEvent = signal<TableLazyLoadEvent | null>(null);
 
   // Release filters
   readonly releaseBanks = signal<string[] | null>(null);
@@ -590,7 +590,7 @@ export class ManualBankReconciliationComponent implements OnInit {
     this.skipNextOrdersLazy = true;
   }
 
-  private readTableState(key: string): any | null {
+  private readTableState(key: string): TableState | null {
     const raw = localStorage.getItem(key);
     if (!raw) return null;
     try {
@@ -724,7 +724,7 @@ export class ManualBankReconciliationComponent implements OnInit {
     this.facade.clearOrders();
   }
 
-  onReleasesLazyLoad(event: any): void {
+  onReleasesLazyLoad(event: TableLazyLoadEvent): void {
     this.lastReleasesEvent.set(event);
     if (this.skipNextReleasesLazy) {
       this.skipNextReleasesLazy = false;
@@ -733,7 +733,7 @@ export class ManualBankReconciliationComponent implements OnInit {
     this.reloadReleases();
   }
 
-  onOrdersLazyLoad(event: any): void {
+  onOrdersLazyLoad(event: TableLazyLoadEvent): void {
     this.lastOrdersEvent.set(event);
     if (this.skipNextOrdersLazy) {
       this.skipNextOrdersLazy = false;
@@ -742,12 +742,12 @@ export class ManualBankReconciliationComponent implements OnInit {
     this.reloadOrders();
   }
 
-  onReleasesPageChange(event: any): void {
+  onReleasesPageChange(event: TablePageEvent): void {
     this.releasesRows = event.rows;
     localStorage.setItem(this.releasesTableRowsKey, String(this.releasesRows));
   }
 
-  onOrdersPageChange(event: any): void {
+  onOrdersPageChange(event: TablePageEvent): void {
     this.ordersRows = event.rows;
     localStorage.setItem(this.ordersTableRowsKey, String(this.ordersRows));
   }

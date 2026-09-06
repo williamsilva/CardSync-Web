@@ -1,6 +1,6 @@
 import { FormsModule } from '@angular/forms';
 
-import { AfterViewInit, Component, ViewChild, computed, inject, signal } from '@angular/core';
+import { AfterViewInit, Component, ViewChild, computed, inject, signal, OnInit } from '@angular/core';
 
 import { Table } from 'primeng/table';
 import { TableModule } from 'primeng/table';
@@ -112,7 +112,7 @@ export class ContractListComponent
     ContractFiltersState,
     ContractAdvancedFilters
   >
-  implements AfterViewInit
+  implements AfterViewInit, OnInit
 {
   @ViewChild('dt') private dt?: Table;
 
@@ -592,10 +592,7 @@ export class ContractListComponent
 
   protected override loadFirstPage() {
     const tableQuery = { page: 0, size: this.rows };
-    const query = buildListQuery<ContractAdvancedFilters>(
-      tableQuery as any,
-      this.buildAdvancedFilters(),
-    );
+    const query = buildListQuery<ContractAdvancedFilters>(tableQuery, this.buildAdvancedFilters());
 
     this.clearSelection();
     this.facadeContract.loadPage(query);
@@ -791,7 +788,7 @@ export class ContractListComponent
     };
   }
 
-  protected override mapTableFiltersToActiveItems(filters: any): ActiveFilterItem[] {
+  protected override mapTableFiltersToActiveItems(filters: Record<string, unknown>): ActiveFilterItem[] {
     this.i18n.getAppliedLang();
 
     const items: ActiveFilterItem[] = [];

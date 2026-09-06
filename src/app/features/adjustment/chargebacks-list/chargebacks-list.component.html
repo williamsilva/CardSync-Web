@@ -293,6 +293,7 @@
                           class="p-button-text p-button-rounded p-button-sm"
                           icon="pi pi-eye"
                           pTooltip="Ver rastreamento"
+                          aria-label="Ver rastreamento"
                           tooltipPosition="top"
                           (click)="openChargeback(row)"
                         ></button>
@@ -300,10 +301,10 @@
 
                       <td>
                         <div class="status-stack">
-                          <cs-tag
+                          <app-tag
                             [value]="statusLabel(row.currentStatus)"
                             [tone]="statusSeverity(row.currentStatus)"
-                          ></cs-tag>
+                          ></app-tag>
                           <small>{{ deadlineHint(row) }}</small>
                         </div>
                       </td>
@@ -381,10 +382,10 @@
                         <span>Rastreamento do chargeback</span>
                         <strong>Processo {{ selected.processNumber || '-' }}</strong>
                       </div>
-                      <cs-tag
+                      <app-tag
                         [value]="statusLabel(selected.currentStatus)"
                         [tone]="statusSeverity(selected.currentStatus)"
-                      ></cs-tag>
+                      ></app-tag>
                     </div>
                   }
                 </ng-template>
@@ -395,10 +396,10 @@
                       <div class="chargeback-detail__title">
                         <div class="chargeback-detail__heading">
                           <h3>Processo de chargeback</h3>
-                          <cs-tag
+                          <app-tag
                             [value]="statusLabel(selected.currentStatus)"
                             [tone]="statusSeverity(selected.currentStatus)"
-                          ></cs-tag>
+                          ></app-tag>
                         </div>
                         <p>
                           Processo <strong>{{ selected.processNumber || '-' }}</strong> · NSU
@@ -544,10 +545,10 @@
                                       }
                                     </small>
                                   </div>
-                                  <cs-tag
+                                  <app-tag
                                     [value]="statusLabel(event.status)"
                                     [tone]="statusSeverity(event.status)"
-                                  ></cs-tag>
+                                  ></app-tag>
                                 </div>
                                 <p class="timeline-item__description">
                                   {{ eventFriendlyDescription(event) }}

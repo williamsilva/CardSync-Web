@@ -1,6 +1,6 @@
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { Component, ViewChild, computed, inject, signal } from '@angular/core';
+import { Component, ViewChild, computed, inject, signal, OnInit } from '@angular/core';
 
 import { Table } from 'primeng/table';
 import { TableModule } from 'primeng/table';
@@ -85,7 +85,7 @@ import { StatusEnum, statusEnumLabel, statusEnumSeverity } from '@models/enums/s
 export class BankingDomicileListComponent extends StatefulListPage<
   BankingDomicileFiltersState,
   BankingDomicileAdvancedFilters
-> {
+> implements OnInit {
   @ViewChild('dt') private dt?: Table;
 
   protected readonly toast = inject(MessageService);
@@ -452,7 +452,7 @@ export class BankingDomicileListComponent extends StatefulListPage<
 
   protected loadFirstPage() {
     const query = buildListQuery<BankingDomicileAdvancedFilters>(
-      { page: 0, size: this.rows } as any,
+      { page: 0, size: this.rows },
       this.buildAdvancedFilters(),
     );
     this.clearSelection();
@@ -485,7 +485,7 @@ export class BankingDomicileListComponent extends StatefulListPage<
     };
   }
 
-  protected override mapTableFiltersToActiveItems(filters: any): ActiveFilterItem[] {
+  protected override mapTableFiltersToActiveItems(filters: Record<string, unknown>): ActiveFilterItem[] {
     this.i18n.getAppliedLang();
     const items: ActiveFilterItem[] = [];
 

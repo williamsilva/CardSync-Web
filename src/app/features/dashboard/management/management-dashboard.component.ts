@@ -53,7 +53,7 @@ interface TableTotal {
 
 @Component({
   standalone: true,
-  selector: 'cs-management-dashboard',
+  selector: 'app-management-dashboard',
   styleUrl: './management-dashboard.component.scss',
   templateUrl: './management-dashboard.component.html',
   imports: [
@@ -112,7 +112,7 @@ export class ManagementDashboardComponent implements OnInit {
     return allPeriodEnum().map((value) => ({ label: periodEnumLabel(value, this.i18n), value }));
   });
 
-  readonly tableFiltersState = signal<any | null>(null);
+  readonly tableFiltersState = signal<Record<string, unknown> | null>(null);
   protected readonly isDateDisabled = computed(() => !this.filterPeriod());
 
   protected readonly salesGroupBy = signal<ManagementGroupBy>('COMPANY');
@@ -124,7 +124,12 @@ export class ManagementDashboardComponent implements OnInit {
     this.mapTableFiltersToActiveItems(this.tableFiltersState()),
   );
 
-  protected mapTableFiltersToActiveItems(filters: any): ActiveFilterItem[] {
+  // filters não é usado - este dashboard não tem tabela com filtros por coluna, só os filtros
+  // avançados (advancedActiveFilters), mantido só pra bater com o padrão das outras telas.
+  protected mapTableFiltersToActiveItems(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    filters: Record<string, unknown> | null,
+  ): ActiveFilterItem[] {
     const items: ActiveFilterItem[] = [];
 
     return items;

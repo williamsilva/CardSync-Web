@@ -1,4 +1,4 @@
-<cs-page-header
+<app-page-header
   [subtitle]="'company.subtitle' | translate"
   [breadcrumb]="[
     { label: ('breadcrumb.dashboard.title' | translate), url: '/' },
@@ -54,7 +54,7 @@
     [disabled]="!secPolicy.canCreate()"
     [label]="'company.new.title' | translate"
   ></button>
-</cs-page-header>
+</app-page-header>
 
 <app-company-create-dialog
   (saved)="onSaved()"
@@ -104,7 +104,7 @@
             <input
               id="cnpj"
               pInputText
-              csCpfCnpjMask
+              appCpfCnpjMask
               [value]="cnpj()"
               class="w-full p-inputtext-sm"
               (input)="cnpj.set(($any($event.target).value ?? '').toString().replace(/\D+/g, ''))"
@@ -492,11 +492,11 @@
           </td>
 
           <td class="cell-muted text-center">
-            <cs-tag [value]="statusEnumLabel(row.status)" [tone]="severityEnum(row.status)" />
+            <app-tag [value]="statusEnumLabel(row.status)" [tone]="severityEnum(row.status)" />
           </td>
 
           <td class="cell-muted text-center">
-            <cs-tag
+            <app-tag
               [value]="typeCompanyEnumLabel(row.type)"
               [tone]="severityTypeCompanyEnum(row.type)"
               />
@@ -521,6 +521,7 @@
                   class="p-button-text p-button-sm"
                   [disabled]="!secPolicy.canEdit(row)"
                   [pTooltip]="!secPolicy.canEdit(row) ? undefined : ('common.edit' | translate)"
+                  [attr.aria-label]="!secPolicy.canEdit(row) ? undefined : ('common.edit' | translate)"
                 ></button>
 
                 <button
@@ -531,6 +532,11 @@
                   class="p-button-text p-button-sm"
                   [disabled]="!secPolicy.canActivate(row)"
             [pTooltip]="
+              secPolicy.canActivate(row)
+                ? ('company.action.activate.label' | translate)
+                : (secPolicy.activateDisabledReason(row) ?? '' | translate)
+            "
+            [attr.aria-label]="
               secPolicy.canActivate(row)
                 ? ('company.action.activate.label' | translate)
                 : (secPolicy.activateDisabledReason(row) ?? '' | translate)
@@ -550,6 +556,11 @@
                 ? ('company.action.deactivate.label' | translate)
                 : (secPolicy.deactivateDisabledReason(row) ?? '' | translate)
             "
+            [attr.aria-label]="
+              secPolicy.canDeactivate(row)
+                ? ('company.action.deactivate.label' | translate)
+                : (secPolicy.deactivateDisabledReason(row) ?? '' | translate)
+            "
                   (click)="confirmDeactivate(row)"
                 ></button>
 
@@ -561,6 +572,11 @@
                   class="p-button-text p-button-sm"
                   [disabled]="!secPolicy.canBlock(row)"
             [pTooltip]="
+              secPolicy.canBlock(row)
+                ? ('company.action.block.label' | translate)
+                : (secPolicy.blockDisabledReason(row) ?? '' | translate)
+            "
+            [attr.aria-label]="
               secPolicy.canBlock(row)
                 ? ('company.action.block.label' | translate)
                 : (secPolicy.blockDisabledReason(row) ?? '' | translate)

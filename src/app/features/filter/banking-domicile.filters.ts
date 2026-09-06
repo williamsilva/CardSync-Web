@@ -1,12 +1,12 @@
 import { WritableSignal } from '@angular/core';
 
-export type BankingDomicileFiltersState = {
+export interface BankingDomicileFiltersState {
   banks: string[] | null;
   companies: string[] | null;
   /** Enviado ao backend como `active` (BankingDomicileFilter.active) — a UI trata o campo como
    *  "status" (ativo/inativo), mas o nome de fio segue o mesmo do filtro Java. */
   active: boolean | null;
-};
+}
 
 export type BankingDomicileAdvancedFilters = Partial<BankingDomicileFiltersState>;
 

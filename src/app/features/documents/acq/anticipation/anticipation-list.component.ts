@@ -1,7 +1,7 @@
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component, computed, inject, signal, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, computed, inject, signal, ViewChild, OnInit } from '@angular/core';
 
 import { Menu } from 'primeng/menu';
 import { MenuItem } from 'primeng/api';
@@ -112,7 +112,7 @@ import {
 })
 export class AnticipationListComponent
   extends StatefulListPage<AnticipationFiltersState, AnticipationAdvancedFilters>
-  implements AfterViewInit
+  implements AfterViewInit, OnInit
 {
   @ViewChild('dt') private dt?: Table;
 
@@ -676,7 +676,7 @@ export class AnticipationListComponent
     );
   }
 
-  protected override mapTableFiltersToActiveItems(filters: any): ActiveFilterItem[] {
+  protected override mapTableFiltersToActiveItems(filters: Record<string, unknown>): ActiveFilterItem[] {
     this.i18n.getAppliedLang();
     const items: ActiveFilterItem[] = [];
 
@@ -799,6 +799,10 @@ export class AnticipationListComponent
     this.advanceDiscountValueStart.set(s.advanceDiscountValueStart ?? null);
   }
 
+  // row aqui é o objeto combinado da tabela (venda + domicílio bancário), mais rico que o modelo
+  // tipado desta tela - manter any evita estender o modelo com base em suposição sobre o shape
+  // real da API.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   protected bankingDomicileTooltip(row: any): string {
     const agency = row.bankingDomicile?.agency ?? '-';
     const account = row.bankingDomicile?.currentAccount ?? '-';
@@ -835,7 +839,10 @@ export class AnticipationListComponent
     this.openRouteInNewTab(['/file-processing/files']);
   }
 
-  protected buildTargetFileFilters(row: AnticipationModel): AnticipationAdvancedFilters {
+  // row mantido pra bater com a assinatura de buildTargetFileFilters usada nas
+  // outras telas de lista, mesmo sem uso aqui.
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  protected buildTargetFileFilters(_row: AnticipationModel): AnticipationAdvancedFilters {
     return {
       ...createEmptyAnticipationAdvancedFilters,
     };

@@ -35,10 +35,8 @@ export interface TransactionsErpMinimalModel {
   establishment: EstablishmentMinimalModel;
 }
 
-export interface TransactionsErpMinimalCreateInput {}
-
-export interface TransactionsErpMinimalUpdateInput {}
-
+export type TransactionsErpMinimalCreateInput = object;
+export type TransactionsErpMinimalUpdateInput = object;
 /**
  * Payload bruto vindo da API.
  * Aceita status numérico ou string para tolerar mudanças no backend.

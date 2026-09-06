@@ -37,7 +37,7 @@ export interface DeleteErpConfirmPayload {
 
 @Component({
   standalone: true,
-  selector: 'cs-action-dialog',
+  selector: 'app-action-dialog',
   styleUrl: './action-dialog.component.scss',
   templateUrl: './action-dialog.component.html',
   imports: [

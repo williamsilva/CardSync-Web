@@ -1,7 +1,7 @@
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 
-import { AfterViewInit, Component, computed, inject, signal, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, computed, inject, signal, ViewChild, OnInit } from '@angular/core';
 
 import { Menu } from 'primeng/menu';
 import { MenuItem } from 'primeng/api';
@@ -115,7 +115,7 @@ import {
 })
 export class TariffsListComponent
   extends StatefulListPage<AdjustmentTariffsFiltersState, AdjustmentAdvancedFilters>
-  implements AfterViewInit
+  implements AfterViewInit, OnInit
 {
   @ViewChild('dt') private dt?: Table;
 
@@ -539,7 +539,7 @@ export class TariffsListComponent
    * Chamado pelo StatefulListPage quando a tabela emite evento de filtragem por coluna.
    * getAppliedLang() garante que os labels reavaliam ao trocar idioma.
    */
-  protected override mapTableFiltersToActiveItems(filters: any): ActiveFilterItem[] {
+  protected override mapTableFiltersToActiveItems(filters: Record<string, unknown>): ActiveFilterItem[] {
     this.i18n.getAppliedLang();
     const items: ActiveFilterItem[] = [];
 

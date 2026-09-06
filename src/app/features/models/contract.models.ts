@@ -80,7 +80,7 @@ export interface ContractUpdateInput {
   contractFlags?: ContractFlagInput[];
 }
 
-export type ContractFiltersState = {
+export interface ContractFiltersState {
   description: string;
   contractEnum: ContractEnum[] | null;
 
@@ -95,7 +95,7 @@ export type ContractFiltersState = {
 
   periodEndDate: PeriodEnum | null;
   endDate: string | string[] | null;
-};
+}
 
 export interface ContractBulkStatusInput {
   ids: string[];

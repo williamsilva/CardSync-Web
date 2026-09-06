@@ -36,10 +36,8 @@ export interface TransactionsAcqMinimalModel {
   establishment: EstablishmentMinimalModel;
 }
 
-export interface TransactionsAcqMinimalCreateInput {}
-
-export interface TransactionsAcqMinimalUpdateInput {}
-
+export type TransactionsAcqMinimalCreateInput = object;
+export type TransactionsAcqMinimalUpdateInput = object;
 /**
  * Payload bruto vindo da API.
  * Aceita status numérico ou string para tolerar mudanças no backend.

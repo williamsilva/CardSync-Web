@@ -14,13 +14,14 @@ import { CsCurrencyPipe } from '@shared/pipes/cs-currency.pipe';
 
 import {
   ErpAcquirerTruthSource,
+  ConciliationWaitingModel,
   ErpAcquirerFieldDiffModel,
   ErpAcquirerComparisonModel,
 } from '@models/conciliation-waiting.model';
 
 @Component({
   standalone: true,
-  selector: 'cs-comparison-dialog',
+  selector: 'app-comparison-dialog',
   templateUrl: './comparison-dialog.component.html',
   providers: [CsDatePipe, CsCurrencyPipe, CsNumberPipe],
   imports: [
@@ -42,7 +43,7 @@ export class ErpVsAcquirerComparisonDialogComponent {
   @Input() visible = false;
   @Input() comparing = false;
   @Input() resolving = false;
-  @Input() row: any | null = null;
+  @Input() row: ConciliationWaitingModel | null = null;
   @Input() comparison: ErpAcquirerComparisonModel | null = null;
 
   @Output() closeDialog = new EventEmitter<void>();

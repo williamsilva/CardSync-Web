@@ -1,4 +1,4 @@
-<cs-page-header
+<app-page-header
   [subtitle]="'noFileDay.subtitle' | translate"
   [breadcrumb]="[
     { label: ('breadcrumb.dashboard.title' | translate), url: '/' },
@@ -54,7 +54,7 @@
     [disabled]="!secPolicy.canCreate()"
     [label]="'noFileDay.new.title' | translate"
   ></button>
-</cs-page-header>
+</app-page-header>
 
 <app-no-file-day-create-dialog
   (saved)="onSaved()"
@@ -455,13 +455,13 @@
         {{ row.noFileDate ? (row.noFileDate | csDate: 'date') : '-' }}
       </td>
       <td class="cell-muted text-center">
-        <cs-tag [value]="fileGroupLabel(row.fileGroup)" [tone]="fileGroupSeverity(row.fileGroup)" />
+        <app-tag [value]="fileGroupLabel(row.fileGroup)" [tone]="fileGroupSeverity(row.fileGroup)" />
       </td>
       <td class="cell-muted text-center">
-        <cs-tag [value]="dayTypeLabel(row.dayType)" [tone]="dayTypeSeverity(row.dayType)" />
+        <app-tag [value]="dayTypeLabel(row.dayType)" [tone]="dayTypeSeverity(row.dayType)" />
       </td>
       <td class="cell-muted text-center">
-        <cs-tag [value]="statusEnumLabel(row.status)" [tone]="severityEnum(row.status)" />
+        <app-tag [value]="statusEnumLabel(row.status)" [tone]="severityEnum(row.status)" />
       </td>
       <td class="cell-muted text-center">
         {{ row.statusDate ? (row.statusDate | csDate: 'short') : '-' }}
@@ -480,6 +480,7 @@
             class="p-button-text p-button-sm"
             [disabled]="!secPolicy.canEdit(row)"
             [pTooltip]="secPolicy.canEdit(row) ? ('common.edit' | translate) : undefined"
+            [attr.aria-label]="secPolicy.canEdit(row) ? ('common.edit' | translate) : undefined"
           ></button>
 
           <button
@@ -491,6 +492,7 @@
             class="p-button-text p-button-sm"
             [disabled]="!secPolicy.canActivate(row)"
             [pTooltip]="secPolicy.canActivate(row) ? ('common.activate' | translate) : undefined"
+            [attr.aria-label]="secPolicy.canActivate(row) ? ('common.activate' | translate) : undefined"
           ></button>
 
           <button
@@ -504,6 +506,9 @@
             [pTooltip]="
               secPolicy.canDeactivate(row) ? ('common.deactivate' | translate) : undefined
             "
+            [attr.aria-label]="
+              secPolicy.canDeactivate(row) ? ('common.deactivate' | translate) : undefined
+            "
           ></button>
 
           <button
@@ -515,6 +520,9 @@
             (click)="confirmDelete(row)"
             [disabled]="!secPolicy.canDelete(row)"
             [pTooltip]="
+              secPolicy.canDelete(row) ? ('noFileDay.delete.header' | translate) : undefined
+            "
+            [attr.aria-label]="
               secPolicy.canDelete(row) ? ('noFileDay.delete.header' | translate) : undefined
             "
           ></button>

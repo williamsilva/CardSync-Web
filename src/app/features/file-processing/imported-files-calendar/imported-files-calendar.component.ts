@@ -44,7 +44,7 @@ interface MissingByType {
 
 @Component({
   standalone: true,
-  selector: 'cs-imported-files-calendar',
+  selector: 'app-imported-files-calendar',
   styleUrl: './imported-files-calendar.component.scss',
   templateUrl: './imported-files-calendar.component.html',
   imports: [

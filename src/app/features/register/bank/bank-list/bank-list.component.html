@@ -1,4 +1,4 @@
-<cs-page-header
+<app-page-header
   [subtitle]="'bank.subtitle' | translate"
   [breadcrumb]="[
     { label: ('breadcrumb.dashboard.title' | translate), url: '/' },
@@ -54,7 +54,7 @@
     [disabled]="!secPolicy.canCreate()"
     [label]="'bank.new.title' | translate"
   ></button>
-</cs-page-header>
+</app-page-header>
 
 <app-bank-create-dialog
   (saved)="onSaved()"
@@ -314,7 +314,7 @@
       <td class="cell-strong">{{ row.name }}</td>
 
       <td class="cell-muted text-center">
-        <cs-tag [value]="statusEnumLabel(row.status)" [tone]="severityEnum(row.status)" />
+        <app-tag [value]="statusEnumLabel(row.status)" [tone]="severityEnum(row.status)" />
       </td>
 
       <td class="cell-muted text-center">
@@ -340,6 +340,7 @@
             class="p-button-text p-button-sm"
             [disabled]="!secPolicy.canEdit(row)"
             [pTooltip]="secPolicy.canEdit(row) ? ('common.edit' | translate) : undefined"
+            [attr.aria-label]="secPolicy.canEdit(row) ? ('common.edit' | translate) : undefined"
           ></button>
 
           <button
@@ -350,6 +351,7 @@
             class="p-button-text p-button-sm"
             [disabled]="!secPolicy.canActivate(row)"
             [pTooltip]="secPolicy.canActivate(row) ? ('common.activate' | translate) : undefined"
+            [attr.aria-label]="secPolicy.canActivate(row) ? ('common.activate' | translate) : undefined"
             (click)="confirmActivate(row)"
           ></button>
 
@@ -363,6 +365,9 @@
             [pTooltip]="
               secPolicy.canDeactivate(row) ? ('common.deactivate' | translate) : undefined
             "
+            [attr.aria-label]="
+              secPolicy.canDeactivate(row) ? ('common.deactivate' | translate) : undefined
+            "
             (click)="confirmDeactivate(row)"
           ></button>
 
@@ -374,6 +379,7 @@
             class="p-button-text p-button-sm"
             [disabled]="!secPolicy.canBlock(row)"
             [pTooltip]="secPolicy.canBlock(row) ? ('bank.block.header' | translate) : undefined"
+            [attr.aria-label]="secPolicy.canBlock(row) ? ('bank.block.header' | translate) : undefined"
             (click)="confirmBlock(row)"
           ></button>
         </div>

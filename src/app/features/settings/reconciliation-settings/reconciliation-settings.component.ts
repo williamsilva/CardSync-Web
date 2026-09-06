@@ -21,7 +21,7 @@ import { ReconciliationSettingsApiService } from '@features/service/reconciliati
 
 @Component({
   standalone: true,
-  selector: 'cs-reconciliation-settings',
+  selector: 'app-reconciliation-settings',
   templateUrl: './reconciliation-settings.component.html',
   imports: [
     CardModule,

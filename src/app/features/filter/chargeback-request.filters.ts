@@ -5,7 +5,7 @@ import { ModalityEnum } from '@models/enums/modality.enum';
 import { ChargebackRequestReasonEnum } from '@models/enums/chargeback-request-reason.enum';
 import { ChargebackRequestStatusEnum } from '@models/enums/chargeback-request-status.enum';
 
-export type ChargebackRequestFiltersState = {
+export interface ChargebackRequestFiltersState {
   /* Datas */
   saleDate: string | string[] | null;
   periodSaleDate: PeriodEnum | null;
@@ -29,7 +29,7 @@ export type ChargebackRequestFiltersState = {
   modality: ModalityEnum[] | null;
   requestReason: ChargebackRequestReasonEnum[] | null;
   adjustmentStatus: ChargebackRequestStatusEnum[] | null;
-};
+}
 
 export type ChargebackRequestAdvancedFilters = Partial<ChargebackRequestFiltersState>;
 

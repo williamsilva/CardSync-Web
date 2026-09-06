@@ -1,4 +1,4 @@
-<cs-page-header
+<app-page-header
   [compact]="false"
   [subtitle]="subtitleKey() | translate"
   [breadcrumb]="[
@@ -51,7 +51,7 @@
     class="p-button-text p-button-sm"
     [label]="'common.update' | translate"
   ></button>
-</cs-page-header>
+</app-page-header>
 
 @switch (activeTab()) {
   @case ('missingAcquirer') {
@@ -61,6 +61,6 @@
     <app-missing-erp-list />
   }
   @case ('otherDivergences') {
-    <cs-erp-vs-acquirer-other-divergences-list />
+    <app-erp-vs-acquirer-other-divergences-list />
   }
 }

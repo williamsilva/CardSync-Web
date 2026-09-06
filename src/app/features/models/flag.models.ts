@@ -33,11 +33,11 @@ export interface FlagUpdateInput {
   status?: StatusEnum;
 }
 
-export type FlagFiltersState = {
+export interface FlagFiltersState {
   name: string | null;
   erpCode: number | null;
   statusEnum: StatusEnum[] | null;
-};
+}
 
 export interface FlagBulkStatusInput {
   ids: string[];

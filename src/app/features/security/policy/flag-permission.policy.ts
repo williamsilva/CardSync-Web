@@ -25,6 +25,9 @@ export class FlagPermissionPolicy {
     return this.canManageRelations();
   }
 
+  // row mantido pra uniformizar a assinatura com os outros métodos da policy (o
+  // chamador sempre passa a linha), mesmo sem uso aqui.
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   canEdit(_row: FlagModel): boolean {
     return this.perms.hasSupportOr(PERMISSIONS.FLAGS.CHANGE);
   }
@@ -82,7 +85,7 @@ export class FlagPermissionPolicy {
     return this.selectableStatus(row) === status;
   }
 
-  canActivateBulk(rows: ReadonlyArray<FlagModel> | null | undefined): boolean {
+  canActivateBulk(rows: readonly FlagModel[] | null | undefined): boolean {
     return (
       !!rows?.length &&
       rows.every((row) => {
@@ -92,13 +95,13 @@ export class FlagPermissionPolicy {
     );
   }
 
-  canDeactivateBulk(rows: ReadonlyArray<FlagModel> | null | undefined): boolean {
+  canDeactivateBulk(rows: readonly FlagModel[] | null | undefined): boolean {
     return (
       !!rows?.length && rows.every((row) => normalizeStatusEnum(row.status) === StatusEnum.ACTIVE)
     );
   }
 
-  canBlockBulk(rows: ReadonlyArray<FlagModel> | null | undefined): boolean {
+  canBlockBulk(rows: readonly FlagModel[] | null | undefined): boolean {
     return (
       !!rows?.length && rows.every((row) => normalizeStatusEnum(row.status) === StatusEnum.ACTIVE)
     );

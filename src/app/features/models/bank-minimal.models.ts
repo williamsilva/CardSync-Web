@@ -8,10 +8,8 @@ export interface BankMinimalModel {
   status: StatusEnum | null;
 }
 
-export interface BankMinimalCreateInput {}
-
-export interface BankMinimalUpdateInput {}
-
+export type BankMinimalCreateInput = object;
+export type BankMinimalUpdateInput = object;
 /**
  * Payload bruto vindo da API.
  * Aceita status numérico ou string para tolerar mudanças no backend.

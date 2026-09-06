@@ -17,6 +17,9 @@ export class CompanyPermissionPolicy {
     return this.perms.hasSupportOr(PERMISSIONS.COMPANIES.CREATE);
   }
 
+  // row mantido pra uniformizar a assinatura com os outros métodos da policy (o
+  // chamador sempre passa a linha), mesmo sem uso aqui.
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   canEdit(_row: CompanyModel): boolean {
     return this.perms.hasSupportOr(PERMISSIONS.COMPANIES.CHANGE);
   }
@@ -120,7 +123,7 @@ export class CompanyPermissionPolicy {
     return this.selectableStatus(row) === status;
   }
 
-  canActivateBulk(rows: ReadonlyArray<CompanyModel> | null | undefined): boolean {
+  canActivateBulk(rows: readonly CompanyModel[] | null | undefined): boolean {
     return (
       !!rows?.length &&
       rows.every((row) => {
@@ -130,13 +133,13 @@ export class CompanyPermissionPolicy {
     );
   }
 
-  canDeactivateBulk(rows: ReadonlyArray<CompanyModel> | null | undefined): boolean {
+  canDeactivateBulk(rows: readonly CompanyModel[] | null | undefined): boolean {
     return (
       !!rows?.length && rows.every((row) => normalizeStatusEnum(row.status) === StatusEnum.ACTIVE)
     );
   }
 
-  canBlockBulk(rows: ReadonlyArray<CompanyModel> | null | undefined): boolean {
+  canBlockBulk(rows: readonly CompanyModel[] | null | undefined): boolean {
     return (
       !!rows?.length && rows.every((row) => normalizeStatusEnum(row.status) === StatusEnum.ACTIVE)
     );

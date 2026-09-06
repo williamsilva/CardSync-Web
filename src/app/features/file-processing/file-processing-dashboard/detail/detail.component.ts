@@ -20,7 +20,7 @@ import {
 
 @Component({
   standalone: true,
-  selector: 'cs-detail',
+  selector: 'app-detail',
   styleUrl: './detail.component.scss',
   templateUrl: './detail.component.html',
   imports: [

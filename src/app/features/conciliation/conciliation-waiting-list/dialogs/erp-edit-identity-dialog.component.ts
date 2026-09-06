@@ -23,7 +23,7 @@ export interface ErpEditIdentityPayload {
 
 @Component({
   standalone: true,
-  selector: 'cs-erp-edit-identity-dialog',
+  selector: 'app-erp-edit-identity-dialog',
   templateUrl: './erp-edit-identity-dialog.component.html',
   styleUrl: './erp-edit-identity-dialog.component.scss',
   imports: [

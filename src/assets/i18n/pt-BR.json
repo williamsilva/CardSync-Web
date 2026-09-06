@@ -1540,6 +1540,8 @@
     "description": "Visualize os dias com e sem arquivos ERP, Rede e bancários.",
     "viewFiles": "Ver arquivos",
     "refresh": "Atualizar",
+    "previousMonth": "Mês anterior",
+    "nextMonth": "Próximo mês",
     "files": "{count, plural, one {# arquivo} other {# arquivos}}",
     "waiting": "Aguardando",
     "noImport": "Sem importação",
@@ -3534,6 +3536,7 @@
     "browser": {
       "subtitle": "Consulte e baixe os arquivos gravados no volume de processamento.",
       "folder": "Pasta",
+      "download": "Baixar",
       "empty": "Nenhum arquivo encontrado nessa pasta.",
       "folders": {
         "input": "Entrada (input)",

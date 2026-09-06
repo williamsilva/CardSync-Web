@@ -4,7 +4,7 @@ import { PeriodEnum } from '@models/enums/period.enum';
 import { AdjustmentReasonEnum } from '@models/enums/adjustment-reason.enum';
 import { AdjustmentStatusEnum } from '@models/enums/adjustment-status.enum';
 
-export type AdjustmentCancellationFiltersState = {
+export interface AdjustmentCancellationFiltersState {
   saleDate: string | string[] | null;
   periodSaleDate: PeriodEnum | null;
 
@@ -29,7 +29,7 @@ export type AdjustmentCancellationFiltersState = {
   acquirers: string[] | null;
   companies: string[] | null;
   establishments: string[] | null;
-};
+}
 
 export type CancellationAdvancedFilters = Partial<AdjustmentCancellationFiltersState>;
 

@@ -78,10 +78,10 @@
                 <ng-template pTemplate="body" let-sale>
                   <tr>
                     <td>
-                      <cs-tag
+                      <app-tag
                         [value]="sale.commercialStatus"
                         [tone]="commercialStatusSeverity(sale.commercialStatus)"
-                      ></cs-tag>
+                      ></app-tag>
                     </td>
                     <td>
                       <strong>{{ sale.saleDate | date: 'short' }}</strong>

@@ -55,7 +55,7 @@
                     {{ 'common.registrationNumber' | translate }}: {{ option.cnpj | csDocument }}
                   </div>
                   <div class="cs-option-item__subtext">
-                    <cs-tag
+                    <app-tag
                       [tone]="statusEnumSeverity(option.status)"
                       [value]="
                         ('common.status' | translate) + ': ' + statusEnumLabel(option.status)
@@ -93,7 +93,7 @@
                   <div class="cs-option-item__label">{{ option.bankName }}</div>
                   <div class="cs-option-item__subtext">{{ option.agencyAccount }}</div>
                   <div class="cs-option-item__subtext">
-                    <cs-tag
+                    <app-tag
                       [tone]="statusEnumSeverity(option.status)"
                       [value]="
                         ('common.status' | translate) + ': ' + statusEnumLabel(option.status)
@@ -301,7 +301,7 @@
                 {{ 'common.registrationNumber' | translate }}: {{ option.cnpj | csDocument }}
               </div>
               <div class="cs-option-item__subtext">
-                <cs-tag
+                <app-tag
                   [tone]="statusEnumSeverity(option.status)"
                   [value]="('common.status' | translate) + ': ' + statusEnumLabel(option.status)"
                 />
@@ -337,7 +337,7 @@
               <div class="cs-option-item__label">{{ option.bankName }}</div>
               <div class="cs-option-item__subtext">{{ option.agencyAccount }}</div>
               <div class="cs-option-item__subtext">
-                <cs-tag
+                <app-tag
                   [tone]="statusEnumSeverity(option.status)"
                   [value]="('common.status' | translate) + ': ' + statusEnumLabel(option.status)"
                 />
@@ -461,7 +461,7 @@
                 {{ 'common.registrationNumber' | translate }}: {{ option.cnpj | csDocument }}
               </div>
               <div class="cs-option-item__subtext">
-                <cs-tag
+                <app-tag
                   [tone]="statusEnumSeverity(option.status)"
                   [value]="('common.status' | translate) + ': ' + statusEnumLabel(option.status)"
                 />
@@ -515,7 +515,7 @@
                 {{ 'common.acquirer' | translate }}: {{ option.acquirer?.fantasyName }}
               </div>
               <div class="cs-option-item__subtext">
-                <cs-tag
+                <app-tag
                   [tone]="statusEnumSeverity(option.status)"
                   [value]="('common.status' | translate) + ': ' + statusEnumLabel(option.status)"
                 />

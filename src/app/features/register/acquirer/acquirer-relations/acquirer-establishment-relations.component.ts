@@ -36,13 +36,13 @@ import {
   typeEstablishmentEnumSeverity,
 } from '@models/enums/type-establishment.enum';
 
-type PendingEstablishmentRelation = {
+interface PendingEstablishmentRelation {
   pvNumber: number;
   status: StatusEnum | null;
   type: TypeEstablishmentEnum | null;
   company: CompanyMinimalModel;
   acquirer: AcquirerMinimalModel;
-};
+}
 
 @Component({
   standalone: true,

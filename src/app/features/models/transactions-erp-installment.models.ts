@@ -42,12 +42,9 @@ export interface TransactionsErpInstallmentModel {
   establishment?: EstablishmentMinimalModel | null;
 }
 
-export interface TransactionsErpInstallmentCreateInput {}
-
-export interface TransactionsErpInstallmentUpdateInput {}
-
-export interface TransactionsErpInstallmentApiModel extends TransactionsErpInstallmentModel {}
-
+export type TransactionsErpInstallmentCreateInput = object;
+export type TransactionsErpInstallmentUpdateInput = object;
+export type TransactionsErpInstallmentApiModel = TransactionsErpInstallmentModel;
 export function mapTransactionsErpInstallmentApiModel(
   input: TransactionsErpInstallmentApiModel,
 ): TransactionsErpInstallmentModel {

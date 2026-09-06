@@ -33,7 +33,7 @@
         <div class="cs-summary__top">
           <div>
             <strong>{{ 'processedFileDetail.summary.status' | translate }}</strong>
-            <cs-tag [value]="s.status" [tone]="fileStatusSeverity(s.status)"></cs-tag>
+            <app-tag [value]="s.status" [tone]="fileStatusSeverity(s.status)"></app-tag>
           </div>
           <div>
             <strong>{{ 'processedFileDetail.summary.processed' | translate }}</strong>
@@ -95,7 +95,7 @@
       <ng-template pTemplate="body" let-error>
         <tr>
           <td>{{ error.lineNumber || '-' }}</td>
-          <td><cs-tag [value]="error.errorType || '-'" severity="warn"></cs-tag></td>
+          <td><app-tag [value]="error.errorType || '-'" severity="warn"></app-tag></td>
           <td>
             <code>{{ error.errorCode }}</code>
           </td>

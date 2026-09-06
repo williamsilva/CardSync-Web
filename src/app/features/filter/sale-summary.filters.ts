@@ -5,7 +5,7 @@ import { ModalityEnum } from '@models/enums/modality.enum';
 import { StatusPaymentBankEnum } from '@models/enums/status-payment-bank.enum';
 import { StatusReconciliationEnum } from '@models/enums/status-reconciliation.enum';
 
-export type SaleSummaryFiltersState = {
+export interface SaleSummaryFiltersState {
   periodRvDate: PeriodEnum | null;
   rvDate: string | string[] | null;
 
@@ -22,7 +22,7 @@ export type SaleSummaryFiltersState = {
   statusPaymentBank: StatusPaymentBankEnum[] | null;
   transactionsStatus: StatusReconciliationEnum[] | null;
   creditOrderStatus: StatusReconciliationEnum[] | null;
-};
+}
 
 export type SaleSummaryAdvancedFilters = Partial<SaleSummaryFiltersState>;
 

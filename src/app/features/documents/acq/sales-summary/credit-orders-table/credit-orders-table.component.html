@@ -189,7 +189,7 @@
             class="cs-table-cell-ellipsis"
             [pTooltip]="statusReconciliationLabel(row.salesSummaryStatus)"
           >
-            <cs-tag
+            <app-tag
               [value]="statusReconciliationLabel(row.salesSummaryStatus)"
               [tone]="statusReconciliationSeverity(row.salesSummaryStatus)"
             />
@@ -201,7 +201,7 @@
             class="cs-table-cell-ellipsis"
             [pTooltip]="statusPaymentBankLabel(row.statusPaymentBank)"
           >
-            <cs-tag
+            <app-tag
               [value]="statusPaymentBankLabel(row.statusPaymentBank)"
               [tone]="statusPaymentBankSeverity(row.statusPaymentBank)"
             />

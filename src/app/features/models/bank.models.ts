@@ -25,11 +25,11 @@ export interface BankBulkStatusInput {
   ids: string[];
 }
 
-export type BankFiltersState = {
+export interface BankFiltersState {
   code: string;
   name: string;
   statusEnum: StatusEnum[] | null;
-};
+}
 
 export interface BankApiModel {
   id: string;

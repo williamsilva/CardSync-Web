@@ -1,6 +1,6 @@
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { AfterViewInit, Component, computed, inject, signal, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, computed, inject, signal, ViewChild, OnInit } from '@angular/core';
 
 import { Menu } from 'primeng/menu';
 import { MenuItem } from 'primeng/api';
@@ -116,7 +116,7 @@ import {
 })
 export class SaleSummaryListComponent
   extends StatefulListPage<SaleSummaryFiltersState, SaleSummaryAdvancedFilters>
-  implements AfterViewInit
+  implements AfterViewInit, OnInit
 {
   @ViewChild('dt') private dt?: Table;
 
@@ -660,7 +660,7 @@ export class SaleSummaryListComponent
     );
   }
 
-  protected override mapTableFiltersToActiveItems(filters: any): ActiveFilterItem[] {
+  protected override mapTableFiltersToActiveItems(filters: Record<string, unknown>): ActiveFilterItem[] {
     this.i18n.getAppliedLang();
     const items: ActiveFilterItem[] = [];
 
@@ -826,6 +826,9 @@ export class SaleSummaryListComponent
     this.openRouteInNewTab(['/file-processing/files']);
   }
 
+  // row mantido pra bater com a assinatura de buildTargetFileFilters usada nas
+  // outras telas de lista, mesmo sem uso aqui.
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected buildTargetFileFilters(_row: SaleSummaryModel): SaleSummaryAdvancedFilters {
     return {
       ...this.emptyFiltersState(),

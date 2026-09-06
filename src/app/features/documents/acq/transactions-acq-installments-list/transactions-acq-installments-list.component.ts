@@ -1,7 +1,7 @@
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 
-import { AfterViewInit, Component, ViewChild, computed, inject, signal } from '@angular/core';
+import { AfterViewInit, Component, ViewChild, computed, inject, signal, OnInit } from '@angular/core';
 
 import { Menu } from 'primeng/menu';
 import { Table } from 'primeng/table';
@@ -126,7 +126,7 @@ export class AcqInstallmentsListComponent
     TransactionsAcqInstallmentFiltersState,
     TransactionsAcqInstallmentAdvancedFilters
   >
-  implements AfterViewInit
+  implements AfterViewInit, OnInit
 {
   @ViewChild('dt') private dt?: Table;
 
@@ -409,7 +409,10 @@ export class AcqInstallmentsListComponent
   }
 
   protected buildTargetFileFilters(
-    row: TransactionsAcqInstallmentModel,
+    // row mantido pra bater com a assinatura de buildTargetFileFilters usada nas outras telas de
+    // lista, mesmo sem uso aqui.
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    _row: TransactionsAcqInstallmentModel,
   ): ProcessedFileFiltersState {
     return {
       ...createEmptyProcessedFileFiltersState(),
@@ -595,7 +598,7 @@ export class AcqInstallmentsListComponent
     );
   }
 
-  protected override mapTableFiltersToActiveItems(filters: any): ActiveFilterItem[] {
+  protected override mapTableFiltersToActiveItems(filters: Record<string, unknown>): ActiveFilterItem[] {
     this.i18n.getAppliedLang();
     const items: ActiveFilterItem[] = [];
 
@@ -1078,10 +1081,15 @@ export class AcqInstallmentsListComponent
   }
 
   /* Metodos Tooltip Tabela */
+  // row aqui é o objeto combinado da tabela (installment/venda + pagamento/cartão +
+  // domicílio bancário), mais rico que o modelo tipado desta tela - manter any evita
+  // estender o modelo com base em suposição sobre o shape real da API.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   protected hasCvNsu(row: any): boolean {
     return row?.cvNsu !== null && row?.cvNsu !== undefined && row?.cvNsu !== '';
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   protected discountTooltip(row: any): string {
     const flexRate = 0;
     const rate = row?.contractedFee ?? null;
@@ -1112,6 +1120,7 @@ export class AcqInstallmentsListComponent
     ]);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   protected cvNsuTooltip(row: any): string {
     const tid = row?.tid || this.i18n.tUi('common.notInformed');
     const cardName = row?.cardName || this.i18n.tUi('common.notInformed');
@@ -1141,7 +1150,7 @@ export class AcqInstallmentsListComponent
     ]);
   }
 
-  protected infoTooltip(rows: Array<{ label: string; value: string; nowrap?: boolean }>): string {
+  protected infoTooltip(rows: { label: string; value: string; nowrap?: boolean }[]): string {
     const content = rows
       .filter((row) => row.value !== null && row.value !== undefined && row.value !== '')
       .map((row) => this.infoTooltipRow(row.label, row.value, row.nowrap))
@@ -1162,6 +1171,7 @@ export class AcqInstallmentsListComponent
   }
 
   /* Metodos Tooltip Status */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   protected saleStatusTooltip(row: any): string {
     const status = installmentTooltipStatusLabel(row?.statusTransaction, this.i18n);
     const reason = statusTransactionReasonEnumLabel(row?.statusTransactionReason, this.i18n);
@@ -1198,6 +1208,7 @@ export class AcqInstallmentsListComponent
     ]);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   protected installmentStatusTooltip(row: any): string {
     const status = installmentTooltipStatusLabel(row?.installmentStatus, this.i18n);
 

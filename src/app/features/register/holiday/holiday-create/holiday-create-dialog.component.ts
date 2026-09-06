@@ -139,7 +139,7 @@ export class HolidayCreateDialogComponent {
     if (this.form.invalid) return;
 
     const v = this.form.getRawValue();
-    const dateVal = v.holidayDate instanceof Date ? v.holidayDate : new Date(v.holidayDate as any);
+    const dateVal = v.holidayDate ?? new Date(0);
     const isoDate = `${dateVal.getFullYear()}-${String(dateVal.getMonth() + 1).padStart(2, '0')}-${String(dateVal.getDate()).padStart(2, '0')}`;
 
     const createPayload: HolidayCreateInput = {

@@ -18,7 +18,7 @@ import { SchedulerSettingsApiService } from '@features/service/scheduler-setting
 
 @Component({
   standalone: true,
-  selector: 'cs-scheduler-settings',
+  selector: 'app-scheduler-settings',
   templateUrl: './scheduler-settings.component.html',
   imports: [
     CardModule,

@@ -33,7 +33,7 @@ import { CompanyFacade } from '@features/facade/company.facade';
 import { CsDocumentPipe } from '@shared/pipes/cs-document.pipe';
 import { CsCurrencyPipe } from '@shared/pipes/cs-currency.pipe';
 import { AcquirerFacade } from '@features/facade/acquirer.facade';
-import { BatchDialogComponent } from '../dialogs/batch-dialog.component';
+import { BatchAction, BatchDialogComponent } from '../dialogs/batch-dialog.component';
 import { StatefulListPage } from '@williamsilva/nimbus-web-commons';
 import { EstablishmentFacade } from '@features/facade/establishment.facade';
 import { buildListQuery } from '@williamsilva/nimbus-web-commons';
@@ -100,7 +100,7 @@ import {
 @Component({
   standalone: true,
   providers: [CsDatePipe],
-  selector: 'cs-erp-vs-acquirer-other-divergences-list',
+  selector: 'app-erp-vs-acquirer-other-divergences-list',
   templateUrl: './other-divergences-list.component.html',
   imports: [
     Select,
@@ -145,7 +145,7 @@ export class ErpVsAcquirerOtherDivergencesListComponent
   protected readonly actionDialogVisible = signal(false);
   protected readonly comparisonDialogVisible = signal(false);
 
-  protected readonly pendingBatchAction = signal<any | null>(null);
+  protected readonly pendingBatchAction = signal<BatchAction>(null);
   protected readonly selectedRows = signal<ConciliationWaitingModel[]>([]);
   protected readonly selectedRow = signal<ConciliationWaitingModel | null>(null);
   protected readonly comparison = signal<ErpAcquirerComparisonModel | null>(null);
@@ -368,7 +368,7 @@ export class ErpVsAcquirerOtherDivergencesListComponent
     this.pendingBatchAction.set(null);
   }
 
-  protected confirmBatchAction(_payload?: any): void {
+  protected confirmBatchAction(): void {
     this.batchDialogVisible.set(false);
   }
 
@@ -715,7 +715,7 @@ export class ErpVsAcquirerOtherDivergencesListComponent
     };
   }
 
-  protected override mapTableFiltersToActiveItems(filters: any): ActiveFilterItem[] {
+  protected override mapTableFiltersToActiveItems(filters: Record<string, unknown>): ActiveFilterItem[] {
     this.i18n.getAppliedLang();
     const items: ActiveFilterItem[] = [];
 
@@ -967,6 +967,9 @@ export class ErpVsAcquirerOtherDivergencesListComponent
     return this.facade.loading();
   }
 
+  // row mantido pra bater com a assinatura usada em missing-erp-list (canCreateErp(row)), mesmo
+  // sem uso aqui.
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected canCreateErp(_row: ConciliationWaitingModel | null | undefined): boolean {
     // Na visão de outras divergências não existe ação de criação ERP.
     // A linha pode vir somente com ERP quando o backend ainda não encontrou/vinculou a adquirente.
@@ -1054,7 +1057,7 @@ export class ErpVsAcquirerOtherDivergencesListComponent
     this.pendingConfirmRow.set(null);
   }
 
-  protected confirmAction(_payload?: any): void {
+  protected confirmAction(): void {
     this.actionDialogVisible.set(false);
   }
 

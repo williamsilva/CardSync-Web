@@ -9,10 +9,8 @@ export interface BankingDomicileMinimalModel {
   bank: BankMinimalModel;
 }
 
-export interface BankingDomicileMinimalCreateInput {}
-
-export interface BankingDomicileMinimalUpdateInput {}
-
+export type BankingDomicileMinimalCreateInput = object;
+export type BankingDomicileMinimalUpdateInput = object;
 /**
  * Payload bruto vindo da API.
  * Aceita status numérico ou string para tolerar mudanças no backend.

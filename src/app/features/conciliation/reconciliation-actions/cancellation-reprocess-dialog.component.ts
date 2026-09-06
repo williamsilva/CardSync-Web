@@ -24,7 +24,7 @@ export interface CancellationReprocessPayload {
 
 @Component({
   standalone: true,
-  selector: 'cs-cancellation-reprocess-dialog',
+  selector: 'app-cancellation-reprocess-dialog',
   templateUrl: './cancellation-reprocess-dialog.component.html',
   styleUrl: './cancellation-reprocess-dialog.component.scss',
   imports: [

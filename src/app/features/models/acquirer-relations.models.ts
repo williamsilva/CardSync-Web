@@ -13,10 +13,8 @@ export interface RelationAcquirerEstablishmentCreateItem {
   type: TypeEstablishmentEnum | null;
 }
 
-export interface AcquirerRelationsModel {}
-
-export interface AcquirerRelationsApiModel {}
-
+export type AcquirerRelationsModel = object;
+export type AcquirerRelationsApiModel = object;
 export function mapAcquirerApiModel(input: AcquirerRelationsApiModel): AcquirerRelationsModel {
   return {
     ...input,

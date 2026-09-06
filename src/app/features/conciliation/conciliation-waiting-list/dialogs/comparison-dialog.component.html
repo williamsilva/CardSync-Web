@@ -85,10 +85,10 @@
         'conciliation.dialog.displayingFieldsDiscrepancies' | translate
       }}</span>
 
-      <cs-tag
+      <app-tag
         [value]="'conciliation.dialog.divergence' | translate: { count: fields.length }"
         [tone]="fields.length ? 'danger' : 'success'"
-      ></cs-tag>
+      ></app-tag>
     </div>
 
     @if (fields.length) {

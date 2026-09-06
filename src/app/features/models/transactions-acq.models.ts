@@ -44,10 +44,8 @@ export interface TransactionsAcqModel {
   installments?: TransactionsAcqInstallmentModel[] | null;
 }
 
-export interface TransactionsAcqCreateInput {}
-
-export interface TransactionsAcqUpdateInput {}
-
+export type TransactionsAcqCreateInput = object;
+export type TransactionsAcqUpdateInput = object;
 /**
  * Payload bruto vindo da API.
  * Aceita status numérico ou string para tolerar mudanças no backend.

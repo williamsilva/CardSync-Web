@@ -3,7 +3,7 @@ import { WritableSignal } from '@angular/core';
 import { PeriodEnum } from '@models/enums/period.enum';
 import { FileProcessingStatus } from '@models/file-processing.models';
 
-export type ProcessedFilesFiltersState = {
+export interface ProcessedFilesFiltersState {
   fileName: string;
   group: string[] | null;
   status: FileProcessingStatus[] | null;
@@ -11,7 +11,7 @@ export type ProcessedFilesFiltersState = {
   periodDateFile: PeriodEnum | null;
   dateImport: string | string[] | null;
   periodDateImport: PeriodEnum | null;
-};
+}
 
 export type ProcessedFilesAdvancedFilters = Partial<ProcessedFilesFiltersState>;
 

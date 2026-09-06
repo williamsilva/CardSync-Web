@@ -1,8 +1,8 @@
 import { WritableSignal } from '@angular/core';
 
-export type ProcessedFileFiltersState = {
+export interface ProcessedFileFiltersState {
   id: string;
-};
+}
 
 export type ProcessedFileAdvancedFilters = Partial<ProcessedFileFiltersState>;
 

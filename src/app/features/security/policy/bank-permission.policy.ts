@@ -17,6 +17,9 @@ export class BankPermissionPolicy {
     return this.perms.hasSupportOr(PERMISSIONS.BANKS.CREATE);
   }
 
+  // row mantido pra uniformizar a assinatura com os outros métodos da policy (o
+  // chamador sempre passa a linha), mesmo sem uso aqui.
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   canEdit(_row: BankModel): boolean {
     return this.perms.hasSupportOr(PERMISSIONS.BANKS.CHANGE);
   }
@@ -51,7 +54,7 @@ export class BankPermissionPolicy {
     return this.selectableStatus(row) === status;
   }
 
-  canActivateBulk(rows: ReadonlyArray<BankModel> | null | undefined): boolean {
+  canActivateBulk(rows: readonly BankModel[] | null | undefined): boolean {
     return (
       !!rows?.length &&
       rows.every((row) => {
@@ -61,13 +64,13 @@ export class BankPermissionPolicy {
     );
   }
 
-  canDeactivateBulk(rows: ReadonlyArray<BankModel> | null | undefined): boolean {
+  canDeactivateBulk(rows: readonly BankModel[] | null | undefined): boolean {
     return (
       !!rows?.length && rows.every((row) => normalizeStatusEnum(row.status) === StatusEnum.ACTIVE)
     );
   }
 
-  canBlockBulk(rows: ReadonlyArray<BankModel> | null | undefined): boolean {
+  canBlockBulk(rows: readonly BankModel[] | null | undefined): boolean {
     return (
       !!rows?.length && rows.every((row) => normalizeStatusEnum(row.status) === StatusEnum.ACTIVE)
     );

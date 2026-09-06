@@ -59,7 +59,7 @@ interface CsvStatementRow {
 
 @Component({
   standalone: true,
-  selector: 'cs-manual-bank-statement',
+  selector: 'app-manual-bank-statement',
   styleUrl: './manual-bank-statement.component.scss',
   templateUrl: './manual-bank-statement.component.html',
   imports: [

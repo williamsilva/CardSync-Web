@@ -21,7 +21,7 @@ import { I18nService } from '@core/i18n/i18n.service';
 
 @Component({
   standalone: true,
-  selector: 'cs-divergence-dialog',
+  selector: 'app-divergence-dialog',
   templateUrl: './divergence-dialog.component.html',
   imports: [
     FormsModule,
