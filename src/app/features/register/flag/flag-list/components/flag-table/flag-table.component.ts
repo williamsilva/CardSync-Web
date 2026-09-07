@@ -7,7 +7,7 @@ import { TooltipModule } from 'primeng/tooltip';
 import { CheckboxModule } from 'primeng/checkbox';
 import { TranslateModule } from '@ngx-translate/core';
 import { MultiSelectModule } from 'primeng/multiselect';
-import { Table, TableLazyLoadEvent, TableModule } from 'primeng/table';
+import { Table, TableLazyLoadEvent, TableModule, TablePageEvent } from 'primeng/table';
 
 import { FlagModel } from '@models/flag.models';
 import { I18nService } from '@core/i18n/i18n.service';
@@ -47,7 +47,7 @@ export class FlagTableComponent {
 
   @ViewChild('dt') private dt?: Table;
 
-  @Output() pageChange = new EventEmitter<any>();
+  @Output() pageChange = new EventEmitter<TablePageEvent>();
   @Output() lazyLoad = new EventEmitter<TableLazyLoadEvent>();
 
   @Output() edit = new EventEmitter<FlagModel>();
@@ -127,9 +127,9 @@ export class FlagTableComponent {
       this.dt.clear();
     }
 
-    const tableAny = this.dt as any;
-    if (typeof tableAny.clearState === 'function') {
-      tableAny.clearState();
+    const tableWithClearState = this.dt as unknown as { clearState?: () => void };
+    if (typeof tableWithClearState.clearState === 'function') {
+      tableWithClearState.clearState();
     }
 
     this.selectionChange.emit([]);
@@ -139,7 +139,7 @@ export class FlagTableComponent {
     this.lazyLoad.emit(event);
   }
 
-  onPage(event: any) {
+  onPage(event: TablePageEvent) {
     this.pageChange.emit(event);
   }
 

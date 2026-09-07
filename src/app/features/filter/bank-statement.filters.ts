@@ -5,7 +5,7 @@ import { PeriodEnum } from '@models/enums/period.enum';
 import { ReleaseCategoryEnum } from '@models/enums/release-category.enum';
 import { StatusPaymentBankEnum } from '@models/enums/status-payment-bank.enum';
 
-export type BankStatementFiltersState = {
+export interface BankStatementFiltersState {
   releaseDate: string | string[] | null;
   periodReleaseDate: PeriodEnum | null;
 
@@ -27,7 +27,7 @@ export type BankStatementFiltersState = {
 
   /** Só lançamentos vinculados manualmente com diferença de valor aceita. */
   hasDivergence: boolean | null;
-};
+}
 
 export type BankStatementAdvancedFilters = Partial<BankStatementFiltersState>;
 

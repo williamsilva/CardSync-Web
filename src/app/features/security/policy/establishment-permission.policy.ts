@@ -17,6 +17,9 @@ export class EstablishmentPermissionPolicy {
     return this.perms.hasSupportOr(PERMISSIONS.ESTABLISHMENT.CREATE);
   }
 
+  // row mantido pra uniformizar a assinatura com os outros métodos da policy (o
+  // chamador sempre passa a linha), mesmo sem uso aqui.
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   canEdit(_row: EstablishmentModel): boolean {
     return this.perms.hasSupportOr(PERMISSIONS.ESTABLISHMENT.CHANGE);
   }
@@ -143,7 +146,7 @@ export class EstablishmentPermissionPolicy {
     return this.selectableStatus(row) === status;
   }
 
-  canActivateBulk(rows: ReadonlyArray<EstablishmentModel> | null | undefined): boolean {
+  canActivateBulk(rows: readonly EstablishmentModel[] | null | undefined): boolean {
     return (
       !!rows?.length &&
       rows.every((row) => {
@@ -153,13 +156,13 @@ export class EstablishmentPermissionPolicy {
     );
   }
 
-  canDeactivateBulk(rows: ReadonlyArray<EstablishmentModel> | null | undefined): boolean {
+  canDeactivateBulk(rows: readonly EstablishmentModel[] | null | undefined): boolean {
     return (
       !!rows?.length && rows.every((row) => normalizeStatusEnum(row.status) === StatusEnum.ACTIVE)
     );
   }
 
-  canBlockBulk(rows: ReadonlyArray<EstablishmentModel> | null | undefined): boolean {
+  canBlockBulk(rows: readonly EstablishmentModel[] | null | undefined): boolean {
     return (
       !!rows?.length && rows.every((row) => normalizeStatusEnum(row.status) === StatusEnum.ACTIVE)
     );

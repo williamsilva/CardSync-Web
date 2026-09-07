@@ -6,7 +6,7 @@ import { StatusEnum } from '@models/enums/status.enum';
 import { CompanyMinimalModel } from '@models/company-minimal.models';
 import { CompanyAdvancedFilters } from '@features/filter/company.filters';
 import { CompanyApiService } from '@features/service/company.api.service';
-import { ListQueryDto } from '@shared/features/list-query/list-query.types';
+import { ListQueryDto } from '@williamsilva/nimbus-web-commons';
 import { CompanyCreateInput, CompanyModel, CompanyUpdateInput } from '@models/company.models';
 
 type LastQuery = ListQueryDto<CompanyAdvancedFilters>;

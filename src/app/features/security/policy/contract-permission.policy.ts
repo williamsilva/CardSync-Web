@@ -17,6 +17,9 @@ export class ContractPermissionPolicy {
     return this.perms.hasSupportOr(PERMISSIONS.CONTRACTS.CREATE);
   }
 
+  // row mantido pra uniformizar a assinatura com os outros métodos da policy (o
+  // chamador sempre passa a linha), mesmo sem uso aqui.
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   canEdit(_row: ContractModel): boolean {
     return this.perms.hasSupportOr(PERMISSIONS.CONTRACTS.CHANGE);
   }
@@ -120,7 +123,7 @@ export class ContractPermissionPolicy {
     return this.selectableStatus(row) === status;
   }
 
-  canValidityBulk(rows: ReadonlyArray<ContractModel> | null | undefined): boolean {
+  canValidityBulk(rows: readonly ContractModel[] | null | undefined): boolean {
     return (
       !!rows?.length &&
       rows.every((row) => {
@@ -130,14 +133,14 @@ export class ContractPermissionPolicy {
     );
   }
 
-  canExpiredBulk(rows: ReadonlyArray<ContractModel> | null | undefined): boolean {
+  canExpiredBulk(rows: readonly ContractModel[] | null | undefined): boolean {
     return (
       !!rows?.length &&
       rows.every((row) => normalizeContractEnum(row.status) === ContractEnum.VALIDITY)
     );
   }
 
-  canClosedBulk(rows: ReadonlyArray<ContractModel> | null | undefined): boolean {
+  canClosedBulk(rows: readonly ContractModel[] | null | undefined): boolean {
     return (
       !!rows?.length &&
       rows.every((row) => normalizeContractEnum(row.status) === ContractEnum.VALIDITY)

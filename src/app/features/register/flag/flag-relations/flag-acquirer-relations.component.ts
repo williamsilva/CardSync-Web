@@ -22,11 +22,11 @@ import { FlagRelationsFacade } from '@features/facade/flag-relations.facade';
 import { FlagPermissionPolicy } from '@features/security/policy/flag-permission.policy';
 import { StatusEnum, statusEnumLabel, statusEnumSeverity } from '@models/enums/status.enum';
 
-type PendingAcquirerRelation = {
+interface PendingAcquirerRelation {
   acquirerId: string;
   acquirerName: string;
   acquirerCode: string;
-};
+}
 
 @Component({
   standalone: true,

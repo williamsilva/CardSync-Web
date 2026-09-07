@@ -54,6 +54,7 @@
         type="button"
         icon="pi pi-chevron-left"
         (click)="previousMonth()"
+        [attr.aria-label]="'importedFilesCalendar.previousMonth' | translate"
       ></button>
       <div class="month-title">
         <strong>{{ monthLabel() }}</strong>
@@ -76,6 +77,7 @@
         type="button"
         (click)="nextMonth()"
         icon="pi pi-chevron-right"
+        [attr.aria-label]="'importedFilesCalendar.nextMonth' | translate"
       ></button>
     </div>
 
@@ -258,7 +260,7 @@
           } @else {
             <ul class="missing-list">
               @for (d of missingByType().erp; track d.date) {
-                <li (click)="selectDay(d)">
+                <li role="button" tabindex="0" (click)="selectDay(d)" (keydown.enter)="selectDay(d)" (keydown.space)="selectDay(d)">
                   <span class="status-dot" [style.background-color]="dotColor(d, 'erp')"></span>
                   {{ d.date | csDate: 'dayMonth' }}
                 </li>
@@ -281,7 +283,7 @@
           } @else {
             <ul class="missing-list">
               @for (d of missingByType().adq; track d.date) {
-                <li (click)="selectDay(d)">
+                <li role="button" tabindex="0" (click)="selectDay(d)" (keydown.enter)="selectDay(d)" (keydown.space)="selectDay(d)">
                   <span class="status-dot" [style.background-color]="dotColor(d, 'adq')"></span>
                   {{ d.date | csDate: 'dayMonth' }}
                 </li>
@@ -304,7 +306,7 @@
           } @else {
             <ul class="missing-list">
               @for (d of missingByType().bank; track d.date) {
-                <li (click)="selectDay(d)">
+                <li role="button" tabindex="0" (click)="selectDay(d)" (keydown.enter)="selectDay(d)" (keydown.space)="selectDay(d)">
                   <span class="status-dot" [style.background-color]="dotColor(d, 'bank')"></span>
                   {{ d.date | csDate: 'dayMonth' }}
                 </li>

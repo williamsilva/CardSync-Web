@@ -1,4 +1,4 @@
-<cs-page-header
+<app-page-header
   [subtitle]="'acquirer.subtitle' | translate"
   [breadcrumb]="[
     { label: ('breadcrumb.dashboard.title' | translate), url: '/' },
@@ -44,7 +44,7 @@
     [disabled]="!canDeactivateSelected()"
     [label]="'acquirer.deactivate.selected' | translate"
   ></button>
-</cs-page-header>
+</app-page-header>
 
 <cs-filters-panel
   (clear)="clear()"
@@ -87,7 +87,7 @@
             <input
               id="cnpj"
               pInputText
-              csCpfCnpjMask
+              appCpfCnpjMask
               [value]="cnpj()"
               class="w-full p-inputtext-sm"
               (input)="cnpj.set(($any($event.target).value ?? '').toString().replace(/\D+/g, ''))"
@@ -452,7 +452,7 @@
             {{ row.closingDate ? (row.closingDate | csDate: 'date') : '-' }}
           </td>
           <td class="cell-muted text-center">
-            <cs-tag [value]="statusEnumLabel(row.status)" [tone]="severityEnum(row.status)" />
+            <app-tag [value]="statusEnumLabel(row.status)" [tone]="severityEnum(row.status)" />
           </td>
 
           <td class="cell-muted text-center">
@@ -472,6 +472,7 @@
                 (click)="toggleCompanies(row)"
                 class="p-button-text p-button-sm"
                 [pTooltip]="'flag.relationships.companies' | translate"
+                [attr.aria-label]="'flag.relationships.companies' | translate"
               ></button>
             </div>
           </td>
@@ -485,6 +486,7 @@
                 class="p-button-text p-button-sm"
                 (click)="toggleEstablishments(row)"
                 [pTooltip]="'flag.relationships.establishment' | translate"
+                [attr.aria-label]="'flag.relationships.establishment' | translate"
               ></button>
             </div>
           </td>
@@ -499,6 +501,11 @@
                 class="p-button-text p-button-sm"
                 [disabled]="!secPolicy.canActivate(row)"
             [pTooltip]="
+              secPolicy.canActivate(row)
+                ? ('acquirer.action.activate.label' | translate)
+                : (secPolicy.activateDisabledReason(row) ?? '' | translate)
+            "
+            [attr.aria-label]="
               secPolicy.canActivate(row)
                 ? ('acquirer.action.activate.label' | translate)
                 : (secPolicy.activateDisabledReason(row) ?? '' | translate)
@@ -518,6 +525,11 @@
                 ? ('acquirer.action.deactivate.label' | translate)
                 : (secPolicy.deactivateDisabledReason(row) ?? '' | translate)
             "
+            [attr.aria-label]="
+              secPolicy.canDeactivate(row)
+                ? ('acquirer.action.deactivate.label' | translate)
+                : (secPolicy.deactivateDisabledReason(row) ?? '' | translate)
+            "
                 (click)="confirmDeactivate(row)"
               ></button>
 
@@ -529,6 +541,11 @@
                 tooltipPosition="top"
                 [disabled]="!secPolicy.canBlock(row)"
             [pTooltip]="
+              secPolicy.canBlock(row)
+                ? ('acquirer.action.block.label' | translate)
+                : (secPolicy.blockDisabledReason(row) ?? '' | translate)
+            "
+            [attr.aria-label]="
               secPolicy.canBlock(row)
                 ? ('acquirer.action.block.label' | translate)
                 : (secPolicy.blockDisabledReason(row) ?? '' | translate)

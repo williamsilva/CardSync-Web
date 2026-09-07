@@ -39,7 +39,7 @@ const TAB_BY_VIEW_QUERY_PARAM: Record<string, ManualConciliationTab> = {
 
 @Component({
   standalone: true,
-  selector: 'cs-manual-conciliation',
+  selector: 'app-manual-conciliation',
   templateUrl: './manual-conciliation.component.html',
   imports: [
     RouterLink,

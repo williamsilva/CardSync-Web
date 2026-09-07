@@ -5,7 +5,7 @@ import { finalize, Observable, tap } from 'rxjs';
 import { NoFileDayModel, NoFileDayCreateInput, NoFileDayUpdateInput } from '@models/no-file-day.models';
 import { NoFileDayAdvancedFilters } from '@features/filter/no-file-day.filters';
 import { NoFileDayApiService } from '@features/service/no-file-day.api.service';
-import { ListQueryDto } from '@shared/features/list-query/list-query.types';
+import { ListQueryDto } from '@williamsilva/nimbus-web-commons';
 
 type LastQuery = ListQueryDto<NoFileDayAdvancedFilters>;
 

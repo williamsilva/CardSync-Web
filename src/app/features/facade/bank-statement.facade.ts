@@ -10,7 +10,7 @@ import {
   ReleaseBankManualImportResult,
   ReleaseBankManualTextImportInput,
 } from '@models/release-bank-manual.models';
-import { ListQueryDto } from '@shared/features/list-query/list-query.types';
+import { ListQueryDto } from '@williamsilva/nimbus-web-commons';
 import { BankStatementAdvancedFilters } from '@features/filter/bank-statement.filters';
 import { BankStatementApiService } from '@features/service/bank-statement.api.service';
 

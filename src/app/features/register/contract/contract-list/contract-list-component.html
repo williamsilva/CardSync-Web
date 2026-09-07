@@ -1,4 +1,4 @@
-<cs-page-header
+<app-page-header
   [compact]="false"
   [subtitle]="'contract.subtitle' | translate"
   [breadcrumb]="[
@@ -54,7 +54,7 @@
     [disabled]="!secPolicy.canCreate()"
     [label]="'contract.new.title' | translate"
   ></button>
-</cs-page-header>
+</app-page-header>
 
 <app-contract-create-dialog
   (saved)="onSaved()"
@@ -113,17 +113,17 @@
       (periodChange)="onPeriodColumnChange(periodEndDate, endDate, $event)"
     ></cs-advanced-period-date-filter>
 
-    <cs-advanced-text-filter
+    <app-advanced-text-filter
       inputId="description"
       [value]="description()"
       class="col-12 md:col-4 p-1"
       (valueChange)="description.set($event)"
       [label]="'contract.fields.description' | translate"
-    ></cs-advanced-text-filter>
+    ></app-advanced-text-filter>
   </div>
 
   <div class="grid formgrid gap-0 align-items-end">
-    <cs-advanced-multiselect-filter
+    <app-advanced-multiselect-filter
       optionValue="value"
       optionLabel="label"
       inputId="contractEnum"
@@ -132,9 +132,9 @@
       [options]="statusEnumOptions()"
       (valueChange)="contractEnum.set($event)"
       [label]="'contract.fields.contractEnum' | translate"
-    ></cs-advanced-multiselect-filter>
+    ></app-advanced-multiselect-filter>
 
-    <cs-advanced-multiselect-filter
+    <app-advanced-multiselect-filter
       optionValue="id"
       inputId="company"
       [value]="companies()"
@@ -144,23 +144,23 @@
       (valueChange)="companies.set($event)"
       [label]="'contract.fields.company' | translate"
     >
-      <ng-template csAdvancedFilterItem let-option>
+      <ng-template appAdvancedFilterItem let-option>
         <div class="cs-option-item">
           <div class="cs-option-item__label">{{ $any(option).fantasyName }}</div>
           <div class="cs-option-item__subtext">
             {{ 'common.registrationNumber' | translate }}: {{ $any(option).cnpj | csDocument }}
           </div>
           <div class="cs-option-item__subtext">
-            <cs-tag
+            <app-tag
               [tone]="statusEnumSeverity($any(option).status)"
               [value]="('common.status' | translate) + ': ' + statusEnumLabel($any(option).status)"
             />
           </div>
         </div>
       </ng-template>
-    </cs-advanced-multiselect-filter>
+    </app-advanced-multiselect-filter>
 
-    <cs-advanced-multiselect-filter
+    <app-advanced-multiselect-filter
       optionValue="id"
       inputId="acquirer"
       [value]="acquirers()"
@@ -170,23 +170,23 @@
       (valueChange)="acquirers.set($event)"
       [label]="'contract.fields.acquirer' | translate"
     >
-      <ng-template csAdvancedFilterItem let-option>
+      <ng-template appAdvancedFilterItem let-option>
         <div class="cs-option-item">
           <div class="cs-option-item__label">{{ $any(option).fantasyName }}</div>
           <div class="cs-option-item__subtext">
             {{ 'common.registrationNumber' | translate }}: {{ $any(option).cnpj | csDocument }}
           </div>
           <div class="cs-option-item__subtext">
-            <cs-tag
+            <app-tag
               [tone]="statusEnumSeverity($any(option).status)"
               [value]="('common.status' | translate) + ': ' + statusEnumLabel($any(option).status)"
             />
           </div>
         </div>
       </ng-template>
-    </cs-advanced-multiselect-filter>
+    </app-advanced-multiselect-filter>
 
-    <cs-advanced-multiselect-filter
+    <app-advanced-multiselect-filter
       optionValue="id"
       [showClear]="true"
       optionLabel="pvNumber"
@@ -197,7 +197,7 @@
       (valueChange)="establishments.set($event)"
       [label]="'contract.fields.establishment' | translate"
     >
-      <ng-template csAdvancedFilterItem let-option>
+      <ng-template appAdvancedFilterItem let-option>
         <div class="cs-option-item">
           <div class="cs-option-item__label">{{ $any(option).pvNumber }}</div>
           <div class="cs-option-item__subtext">
@@ -212,18 +212,18 @@
             {{ $any(option).company?.fantasyName }}
           </div>
           <div class="cs-option-item__subtext">
-            <cs-tag
+            <app-tag
               [tone]="statusEnumSeverity($any(option).status)"
               [value]="('common.status' | translate) + ': ' + statusEnumLabel($any(option).status)"
             />
           </div>
         </div>
       </ng-template>
-    </cs-advanced-multiselect-filter>
+    </app-advanced-multiselect-filter>
   </div>
 
   <div class="grid formgrid gap-0 align-items-end">
-    <cs-advanced-multiselect-filter
+    <app-advanced-multiselect-filter
       inputId="createdBy"
       optionLabel="label"
       optionValue="value"
@@ -232,7 +232,7 @@
       class="col-12 md:col-4 p-1"
       (valueChange)="createdBy.set($event)"
       [label]="'contract.fields.createdBy' | translate"
-    ></cs-advanced-multiselect-filter>
+    ></app-advanced-multiselect-filter>
   </div>
 </cs-filters-panel>
 
@@ -294,28 +294,28 @@
   <ng-template pTemplate="header">
     <tr>
       <th
-        cs-selection-header
+        appSelectionHeader
         class="text-center"
         style="width: 44px"
         [checked]="headerChecked()"
         [enabled]="!!selectionStatus()"
         [indeterminate]="headerIndeterminate()"
-        (toggle)="toggleHeaderSelection($event)"
+        (selectionToggle)="toggleHeaderSelection($event)"
         [hintTooltip]="'contract.selection.pickOneFirst' | translate"
       ></th>
 
       <th
         matchMode="contains"
         [useGrouping]="false"
-        cs-table-column-header
+        appTableColumnHeader
         [showMatchModes]="true"
         sortField="description"
         filterField="description"
         pSortableColumn="description"
         [label]="'contract.columns.description' | translate"
       >
-        <ng-template csColumnFilterContent let-filter="filter" let-columnFilter="columnFilter">
-          <cs-column-filter-shell
+        <ng-template appColumnFilterContent let-filter="filter" let-columnFilter="columnFilter">
+          <app-column-filter-shell
             [clearLabel]="'common.clear' | translate"
             [applyLabel]="'common.apply' | translate"
             (clear)="clearTextColumnFilter(descriptionColumnDraft, filter, columnFilter)"
@@ -329,7 +329,7 @@
               [placeholder]="'contract.fields.description' | translate"
               (ngModelChange)="descriptionColumnDraft.set($event ?? '')"
             />
-          </cs-column-filter-shell>
+          </app-column-filter-shell>
         </ng-template>
       </th>
 
@@ -337,12 +337,12 @@
         matchMode="in"
         sortField="company"
         filterField="company"
-        cs-table-column-header
+        appTableColumnHeader
         pSortableColumn="company"
         [label]="'contract.columns.company' | translate"
       >
-        <ng-template csColumnFilterContent let-filter="filter" let-columnFilter="columnFilter">
-          <cs-column-filter-shell
+        <ng-template appColumnFilterContent let-filter="filter" let-columnFilter="columnFilter">
+          <app-column-filter-shell
             minWidth="20rem"
             [clearLabel]="'common.clear' | translate"
             [applyLabel]="'common.apply' | translate"
@@ -384,7 +384,7 @@
                 }
               </ng-template>
             </p-multiSelect>
-          </cs-column-filter-shell>
+          </app-column-filter-shell>
         </ng-template>
       </th>
 
@@ -392,12 +392,12 @@
         matchMode="in"
         sortField="acquirer"
         filterField="acquirer"
-        cs-table-column-header
+        appTableColumnHeader
         pSortableColumn="acquirer"
         [label]="'contract.columns.acquirer' | translate"
       >
-        <ng-template csColumnFilterContent let-filter="filter" let-columnFilter="columnFilter">
-          <cs-column-filter-shell
+        <ng-template appColumnFilterContent let-filter="filter" let-columnFilter="columnFilter">
+          <app-column-filter-shell
             minWidth="20rem"
             [clearLabel]="'common.clear' | translate"
             [applyLabel]="'common.apply' | translate"
@@ -439,20 +439,20 @@
                 }
               </ng-template>
             </p-multiSelect>
-          </cs-column-filter-shell>
+          </app-column-filter-shell>
         </ng-template>
       </th>
 
       <th
         matchMode="in"
-        cs-table-column-header
+        appTableColumnHeader
         sortField="establishment"
         filterField="establishment"
         pSortableColumn="establishment"
         [label]="'contract.columns.establishment' | translate"
       >
-        <ng-template csColumnFilterContent let-filter="filter" let-columnFilter="columnFilter">
-          <cs-column-filter-shell
+        <ng-template appColumnFilterContent let-filter="filter" let-columnFilter="columnFilter">
+          <app-column-filter-shell
             minWidth="22rem"
             [clearLabel]="'common.clear' | translate"
             [applyLabel]="'common.apply' | translate"
@@ -502,20 +502,20 @@
                 }
               </ng-template>
             </p-multiSelect>
-          </cs-column-filter-shell>
+          </app-column-filter-shell>
         </ng-template>
       </th>
 
       <th
         matchMode="in"
         sortField="status"
-        cs-table-column-header
+        appTableColumnHeader
         pSortableColumn="status"
         filterField="statusEnum"
         [label]="'contract.columns.statusEnum' | translate"
       >
-        <ng-template csColumnFilterContent let-filter="filter" let-columnFilter="columnFilter">
-          <cs-column-filter-shell
+        <ng-template appColumnFilterContent let-filter="filter" let-columnFilter="columnFilter">
+          <app-column-filter-shell
             [clearLabel]="'common.clear' | translate"
             [applyLabel]="'common.apply' | translate"
             (clear)="clearArrayColumnFilter(statusColumnDraft, filter, columnFilter)"
@@ -547,22 +547,22 @@
                 }
               </ng-template>
             </p-multiSelect>
-          </cs-column-filter-shell>
+          </app-column-filter-shell>
         </ng-template>
       </th>
 
-      <th cs-table-column-header [label]="'contract.columns.period' | translate"></th>
+      <th appTableColumnHeader [label]="'contract.columns.period' | translate"></th>
 
       <th
         matchMode="equals"
         sortField="createdAt"
-        cs-table-column-header
+        appTableColumnHeader
         filterField="createdAt"
         pSortableColumn="createdAt"
         [label]="'contract.columns.createdAt' | translate"
       >
-        <ng-template csColumnFilterContent let-filter="filter" let-columnFilter="columnFilter">
-          <cs-column-filter-shell
+        <ng-template appColumnFilterContent let-filter="filter" let-columnFilter="columnFilter">
+          <app-column-filter-shell
             [clearLabel]="'common.clear' | translate"
             [applyLabel]="'common.apply' | translate"
             [applyDisabled]="
@@ -626,20 +626,20 @@
                 {{ 'contract.columns.createdAt' | translate }}
               </label>
             </p-floatLabel>
-          </cs-column-filter-shell>
+          </app-column-filter-shell>
         </ng-template>
       </th>
 
       <th
         matchMode="in"
         sortField="createdBy"
-        cs-table-column-header
+        appTableColumnHeader
         filterField="createdBy"
         pSortableColumn="createdBy"
         [label]="'contract.columns.createdBy' | translate"
       >
-        <ng-template csColumnFilterContent let-filter="filter" let-columnFilter="columnFilter">
-          <cs-column-filter-shell
+        <ng-template appColumnFilterContent let-filter="filter" let-columnFilter="columnFilter">
+          <app-column-filter-shell
             [clearLabel]="'common.clear' | translate"
             [applyLabel]="'common.apply' | translate"
             (clear)="clearArrayColumnFilter(createdByColumnDraft, filter, columnFilter)"
@@ -671,14 +671,14 @@
                 }
               </ng-template>
             </p-multiSelect>
-          </cs-column-filter-shell>
+          </app-column-filter-shell>
         </ng-template>
       </th>
 
       <th
         [center]="true"
         class="text-center"
-        cs-table-column-header
+        appTableColumnHeader
         [label]="'contract.columns.flags' | translate"
       ></th>
 
@@ -686,7 +686,7 @@
         [center]="true"
         class="text-center"
         style="width: 170px"
-        cs-table-column-header
+        appTableColumnHeader
         [label]="'common.actions' | translate"
       ></th>
     </tr>
@@ -714,7 +714,7 @@
       <td>{{ row.establishment?.pvNumber || ('common.notInformed' | translate) }}</td>
 
       <td class="text-center">
-        <cs-tag [value]="statusLabel(row.status)" [tone]="statusSeverity(row.status)" />
+        <app-tag [value]="statusLabel(row.status)" [tone]="statusSeverity(row.status)" />
       </td>
 
       <td>
@@ -735,20 +735,20 @@
 
       <td class="text-center">
         <div class="table-actions justify-content-center">
-          <cs-row-action-button
+          <app-row-action-button
             icon="pi pi-eye"
             (clicked)="view(row)"
             [tooltip]="'common.view' | translate"
-          ></cs-row-action-button>
+          ></app-row-action-button>
 
-          <cs-row-action-button
+          <app-row-action-button
             icon="pi pi-pencil"
             (clicked)="edit(row)"
             [disabled]="!secPolicy.canEdit(row)"
             [tooltip]="!secPolicy.canEdit(row) ? undefined : ('common.edit' | translate)"
-          ></cs-row-action-button>
+          ></app-row-action-button>
 
-          <cs-row-action-button
+          <app-row-action-button
             icon="pi pi-check-circle"
             [disabled]="!secPolicy.canValidity(row)"
             [tooltip]="
@@ -757,9 +757,9 @@
                 : (secPolicy.validityDisabledReason(row) ?? '' | translate)
             "
             (clicked)="confirmValidity(row)"
-          ></cs-row-action-button>
+          ></app-row-action-button>
 
-          <cs-row-action-button
+          <app-row-action-button
             icon="pi pi-ban"
             [disabled]="!secPolicy.canExpired(row)"
             [tooltip]="
@@ -768,9 +768,9 @@
                 : (secPolicy.expiredDisabledReason(row) ?? '' | translate)
             "
             (clicked)="confirmExpired(row)"
-          ></cs-row-action-button>
+          ></app-row-action-button>
 
-          <cs-row-action-button
+          <app-row-action-button
             icon="pi pi-lock"
             [disabled]="!secPolicy.canClosed(row)"
             [tooltip]="
@@ -779,7 +779,7 @@
                 : (secPolicy.closedDisabledReason(row) ?? '' | translate)
             "
             (clicked)="confirmClosed(row)"
-          ></cs-row-action-button>
+          ></app-row-action-button>
         </div>
       </td>
     </tr>

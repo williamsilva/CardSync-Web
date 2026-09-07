@@ -166,7 +166,7 @@
       </td>
 
       <td class="cell-muted text-center">
-        <cs-tag [value]="statusLabel(row.status)" [tone]="statusEnumSeverity(row.status)" />
+        <app-tag [value]="statusLabel(row.status)" [tone]="statusEnumSeverity(row.status)" />
       </td>
 
       <td class="text-center">
@@ -178,6 +178,7 @@
             class="p-button-text p-button-sm"
             (click)="toggleCompanies.emit(row)"
             [pTooltip]="'flag.relationships.companies' | translate"
+            [attr.aria-label]="'flag.relationships.companies' | translate"
           ></button>
         </div>
       </td>
@@ -191,6 +192,7 @@
             class="p-button-text p-button-sm"
             (click)="toggleAcquirers.emit(row)"
             [pTooltip]="'flag.relationships.acquirers' | translate"
+            [attr.aria-label]="'flag.relationships.acquirers' | translate"
           ></button>
         </div>
       </td>

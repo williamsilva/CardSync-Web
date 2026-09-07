@@ -36,7 +36,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { DatePickerModule } from 'primeng/datepicker';
 
 import { CsTagComponent } from '@shared/ui';
-import { DateInputMaskDirective } from '@shared/directives/date-input-mask.directive';
+import { DateInputMaskDirective } from '@williamsilva/nimbus-web-commons';
 import { I18nService } from '@core/i18n/i18n.service';
 import { CompanyFacade } from '@features/facade/company.facade';
 import { CsDocumentPipe } from '@shared/pipes/cs-document.pipe';
@@ -94,10 +94,10 @@ type ContractForm = FormGroup<{
   establishmentId: FormControl<string | null>;
 }>;
 
-type ContractFlagFormValue = {
+interface ContractFlagFormValue {
   flagId?: string | null;
   contractRates?: Partial<ContractRateInput>[] | null;
-};
+}
 
 @Component({
   standalone: true,
@@ -205,7 +205,7 @@ export class ContractCreateDialogComponent {
   readonly selectedCompany = computed(() => {
     const companyId = this.form.controls.companyId.value;
     if (!companyId) return null;
-    return this.companyOptions().find((item: any) => item.id === companyId) ?? null;
+    return this.companyOptions().find((item) => item.id === companyId) ?? null;
   });
 
   readonly selectedAcquirer = computed(() => {

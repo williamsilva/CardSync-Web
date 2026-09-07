@@ -35,7 +35,7 @@ interface AuditFileGroup {
 
 @Component({
   standalone: true,
-  selector: 'cs-audit-dashboard',
+  selector: 'app-audit-dashboard',
   styleUrl: './audit-dashboard.component.scss',
   templateUrl: './audit-dashboard.component.html',
   imports: [TranslateModule],

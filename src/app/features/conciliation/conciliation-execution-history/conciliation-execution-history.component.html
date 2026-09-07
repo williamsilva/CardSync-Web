@@ -1,4 +1,4 @@
-<cs-page-header
+<app-page-header
   [compact]="false"
   [subtitle]="'conciliation.dashboard.history.title' | translate"
   [breadcrumb]="[
@@ -16,7 +16,7 @@
     class="p-button-text p-button-sm"
     [label]="'common.update' | translate"
   ></button>
-</cs-page-header>
+</app-page-header>
 
 <p-card>
   @if (loading()) {
@@ -34,14 +34,18 @@
       @for (exec of history(); track exec.id) {
         <div class="border-1 surface-border border-round overflow-hidden">
           <div
+            role="button"
+            tabindex="0"
             class="flex align-items-center justify-content-between px-3 py-2 cs-exec-row"
             (click)="toggleExec(exec.id)"
+            (keydown.enter)="toggleExec(exec.id)"
+            (keydown.space)="toggleExec(exec.id)"
           >
             <div class="flex align-items-center gap-3 flex-wrap">
-              <cs-tag
+              <app-tag
                 [value]="'conciliation.dashboard.history.trigger.' + exec.trigger | translate"
                 [tone]="triggerTone(exec.trigger)"
-              ></cs-tag>
+              ></app-tag>
               <span class="text-sm font-medium">{{ exec.startedAt | csDate: 'short' }}</span>
               <span class="text-sm text-color-secondary">
                 <i class="pi pi-clock mr-1"></i>{{ formatDuration(exec.startedAt, exec.finishedAt) }}
@@ -63,10 +67,10 @@
                   <strong class="text-orange-500">{{ exec.totalPending ?? 0 }}</strong>
                 </span>
               </div>
-              <cs-tag
+              <app-tag
                 [value]="'conciliation.dashboard.history.status.' + exec.overallStatus | translate"
                 [tone]="overallStatusTone(exec.overallStatus)"
-              ></cs-tag>
+              ></app-tag>
               <i
                 class="pi text-color-secondary"
                 [class.pi-chevron-down]="!isExpanded(exec.id)"
@@ -106,7 +110,7 @@
                         <span class="text-xs text-color-secondary">
                           {{ formatDuration(step.startedAt, step.finishedAt) }}
                         </span>
-                        <cs-tag [value]="'conciliation.dashboard.history.stepStatus.' + step.status | translate" [tone]="stepStatusTone(step.status)"></cs-tag>
+                        <app-tag [value]="'conciliation.dashboard.history.stepStatus.' + step.status | translate" [tone]="stepStatusTone(step.status)"></app-tag>
                       </div>
                     </div>
 

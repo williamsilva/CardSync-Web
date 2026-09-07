@@ -17,10 +17,16 @@ export class HolidayPermissionPolicy {
     return this.perms.hasSupportOr(PERMISSIONS.HOLIDAYS.CREATE);
   }
 
+  // row mantido pra uniformizar a assinatura com os outros métodos da policy (o
+  // chamador sempre passa a linha), mesmo sem uso aqui.
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   canEdit(_row: HolidayModel): boolean {
     return this.perms.hasSupportOr(PERMISSIONS.HOLIDAYS.CHANGE);
   }
 
+  // row mantido pra uniformizar a assinatura com os outros métodos da policy (o
+  // chamador sempre passa a linha), mesmo sem uso aqui.
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   canDelete(_row: HolidayModel): boolean {
     return this.perms.hasSupportOr(PERMISSIONS.HOLIDAYS.DELETE);
   }
@@ -55,7 +61,7 @@ export class HolidayPermissionPolicy {
     return this.selectableStatus(row) === status;
   }
 
-  canActivateBulk(rows: ReadonlyArray<HolidayModel> | null | undefined): boolean {
+  canActivateBulk(rows: readonly HolidayModel[] | null | undefined): boolean {
     return (
       !!rows?.length &&
       rows.every((row) => {
@@ -65,13 +71,13 @@ export class HolidayPermissionPolicy {
     );
   }
 
-  canDeactivateBulk(rows: ReadonlyArray<HolidayModel> | null | undefined): boolean {
+  canDeactivateBulk(rows: readonly HolidayModel[] | null | undefined): boolean {
     return (
       !!rows?.length && rows.every((row) => normalizeStatusEnum(row.status) === StatusEnum.ACTIVE)
     );
   }
 
-  canBlockBulk(rows: ReadonlyArray<HolidayModel> | null | undefined): boolean {
+  canBlockBulk(rows: readonly HolidayModel[] | null | undefined): boolean {
     return (
       !!rows?.length && rows.every((row) => normalizeStatusEnum(row.status) === StatusEnum.ACTIVE)
     );

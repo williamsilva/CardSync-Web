@@ -5,7 +5,7 @@ import { finalize, Observable, tap } from 'rxjs';
 import { StatusEnum } from '@models/enums/status.enum';
 import { AcquirerMinimalModel } from '@models/acquirer-minimal.models';
 import { AcquirerAdvancedFilters } from '@features/filter/acquirer.filters';
-import { ListQueryDto } from '@shared/features/list-query/list-query.types';
+import { ListQueryDto } from '@williamsilva/nimbus-web-commons';
 import { AcquirerApiService } from '@features/service/acquirer.api.service';
 import { AcquirerCreateInput, AcquirerModel, AcquirerUpdateInput } from '@models/acquirer.models';
 

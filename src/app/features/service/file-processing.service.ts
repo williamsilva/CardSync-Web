@@ -5,11 +5,12 @@ import { map, Observable } from 'rxjs';
 
 import { environment } from 'environments/environment';
 import { HalPagedResponse } from '@core/api/page.model';
-import { ListQueryDto } from '@shared/features/list-query/list-query.types';
+import { ListQueryDto } from '@williamsilva/nimbus-web-commons';
 import { ProcessedFilesAdvancedFilters } from '@features/filter/processed-files.filters';
 import {
   PageQuery,
   PageResponse,
+  RedeTotalizerModel,
   FileUploadSystem,
   FileBrowserFolder,
   ProcessedFileModel,
@@ -156,8 +157,8 @@ export class FileProcessingService {
     );
   }
 
-  listRedeTotalizers(query: PageQuery = {}): Observable<PageResponse<any>> {
-    return this.http.get<PageResponse<any>>(`${this.baseUrl}/rede/totalizers`, {
+  listRedeTotalizers(query: PageQuery = {}): Observable<PageResponse<RedeTotalizerModel>> {
+    return this.http.get<PageResponse<RedeTotalizerModel>>(`${this.baseUrl}/rede/totalizers`, {
       params: this.toParams(query),
       withCredentials: true,
     });

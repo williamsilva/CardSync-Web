@@ -7,7 +7,7 @@ import { API } from '@core/api/api.config';
 import { HalPagedResponse } from '@core/api/page.model';
 import type { EmailLogModel } from '../models/email-log.models';
 import { EmailLogsFilters } from '@features/filter/email-logs.filters';
-import { ListQueryDto } from '@shared/features/list-query/list-query.types';
+import { ListQueryDto } from '@williamsilva/nimbus-web-commons';
 
 @Injectable({ providedIn: 'root' })
 export class EmailLogsService {

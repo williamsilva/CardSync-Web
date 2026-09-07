@@ -9,7 +9,7 @@ import { SalesSummaryPreImplantationPreviewResultModel } from '@models/conciliat
 
 @Component({
   standalone: true,
-  selector: 'cs-sales-summary-pre-implantation-dialog',
+  selector: 'app-sales-summary-pre-implantation-dialog',
   templateUrl: './sales-summary-pre-implantation-dialog.component.html',
   imports: [ButtonModule, DialogModule, CsCurrencyPipe, TranslateModule],
 })

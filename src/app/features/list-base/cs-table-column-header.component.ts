@@ -7,7 +7,7 @@ import { CsColumnFilterTemplateDirective } from './cs-column-filter-template.dir
 
 @Component({
   standalone: true,
-  selector: 'th[cs-table-column-header]',
+  selector: 'th[appTableColumnHeader]',
   imports: [CommonModule, TableModule],
   template: `
     <div class="th-flex text-center" [class.justify-content-center]="center">

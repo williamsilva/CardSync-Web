@@ -2,7 +2,7 @@ import { Injectable, inject, signal } from '@angular/core';
 
 import { finalize, Observable, tap } from 'rxjs';
 
-import { ListQueryDto } from '@shared/features/list-query/list-query.types';
+import { ListQueryDto } from '@williamsilva/nimbus-web-commons';
 import { ContractAdvancedFilters } from '@features/filter/contract.filters';
 import { ContractApiService } from '@features/service/contract.api.service';
 import { ContractCreateInput, ContractModel, ContractUpdateInput } from '@models/contract.models';

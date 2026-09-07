@@ -1,7 +1,7 @@
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 
-import { AfterViewInit, Component, ViewChild, computed, inject, signal } from '@angular/core';
+import { AfterViewInit, Component, ViewChild, computed, inject, signal, OnInit } from '@angular/core';
 
 import { Table } from 'primeng/table';
 import { MenuItem } from 'primeng/api';
@@ -19,7 +19,7 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { I18nService } from '@core/i18n/i18n.service';
 import { CsTagComponent, CsTagTone } from '@shared/ui';
 import { CsDatePipe } from '@shared/pipes/cs-date.pipe';
-import { DateInputMaskDirective } from '@shared/directives/date-input-mask.directive';
+import { DateInputMaskDirective } from '@williamsilva/nimbus-web-commons';
 import { FlagFacade } from '@features/facade/flag.facade';
 import { STATE_KEY } from '@features/state-key.constants';
 import { CsCurrencyPipe } from '@shared/pipes/cs-currency.pipe';
@@ -27,17 +27,17 @@ import { CompanyFacade } from '@features/facade/company.facade';
 import { CsDocumentPipe } from '@shared/pipes/cs-document.pipe';
 import { AcquirerFacade } from '@features/facade/acquirer.facade';
 import { TransactionsErpModel } from '@models/transactions-erp.models';
-import { StatefulListPage } from '@features/list-base/stateful-list-page';
+import { StatefulListPage } from '@williamsilva/nimbus-web-commons';
 import { EstablishmentFacade } from '@features/facade/establishment.facade';
 import { TransactionsErpFacade } from '@features/facade/transaction-erp.facade';
-import { buildListQuery } from '@shared/features/list-query/list-query.builder';
+import { buildListQuery } from '@williamsilva/nimbus-web-commons';
 import { allPeriodEnum, PeriodEnum, periodEnumLabel } from '@models/enums/period.enum';
 import { StatusEnum, statusEnumLabel, statusEnumSeverity } from '@models/enums/status.enum';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
 import { statusTransactionReasonEnumLabel } from '@models/enums/status-transaction-reason.enum';
 import { CsColumnFilterShellComponent } from '@features/list-base/cs-column-filter-shell.component';
 import { CsAdvancedTextFilterComponent } from '@features/list-base/cs-advanced-text-filter.component';
-import { CsAdvancedPeriodDateFilterComponent } from '@features/list-base/cs-advanced-period-date-filter.component';
+import { CsAdvancedPeriodDateFilterComponent } from '@williamsilva/nimbus-web-commons';
 import { CsAdvancedMultiselectFilterComponent } from '@features/list-base/cs-advanced-multiselect-filter.component';
 import { CsAdvancedFilterItemTemplateDirective } from '@features/list-base/cs-advanced-filter-item-template.directive';
 import { TransactionsErpSalesInstallmentsTableComponent } from '../transactions-erp-sales-installments-table/transactions-erp-sales-installments-table.component';
@@ -68,7 +68,7 @@ import {
   readArrayFilterValues,
   readPeriodFilterValue,
   readSingleFilterValue,
-} from '@features/list-base/table-filter-readers';
+} from '@williamsilva/nimbus-web-commons';
 import {
   ModalityEnum,
   allModalityEnum,
@@ -79,7 +79,7 @@ import {
 import {
   ActiveFilterItem,
   FiltersPanelComponent,
-} from '@shared/features/filters-panel/filters-panel.component';
+} from '@williamsilva/nimbus-web-commons';
 import {
   TransactionsErpFiltersState,
   TransactionsErpAdvancedFilters,
@@ -130,7 +130,7 @@ import {
 })
 export class TransactionsErpSalesListComponent
   extends StatefulListPage<TransactionsErpFiltersState, TransactionsErpAdvancedFilters>
-  implements AfterViewInit
+  implements AfterViewInit, OnInit
 {
   @ViewChild('dt') private dt?: Table;
   protected override readonly i18n = inject(I18nService);
@@ -514,7 +514,7 @@ export class TransactionsErpSalesListComponent
     );
   }
 
-  protected override mapTableFiltersToActiveItems(filters: any): ActiveFilterItem[] {
+  protected override mapTableFiltersToActiveItems(filters: Record<string, unknown>): ActiveFilterItem[] {
     this.i18n.getAppliedLang();
     const items: ActiveFilterItem[] = [];
 
@@ -1034,10 +1034,15 @@ export class TransactionsErpSalesListComponent
   }
 
   /* Metodos Tooltip Tabela */
+  // row aqui é o objeto combinado da tabela (installment/venda + pagamento/cartão +
+  // domicílio bancário), mais rico que o modelo tipado desta tela - manter any evita
+  // estender o modelo com base em suposição sobre o shape real da API.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   protected hasCvNsu(row: any): boolean {
     return row?.cvNsu !== null && row?.cvNsu !== undefined && row?.cvNsu !== '';
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   protected discountTooltip(row: any): string {
     const flexRate = 0;
     const rate = row?.contractedFee ?? null;
@@ -1068,6 +1073,7 @@ export class TransactionsErpSalesListComponent
     ]);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   protected cvNsuTooltip(row: any): string {
     const tid = row?.tid || this.i18n.tUi('common.notInformed');
     const cardName = row?.cardName || this.i18n.tUi('common.notInformed');
@@ -1097,7 +1103,7 @@ export class TransactionsErpSalesListComponent
     ]);
   }
 
-  protected infoTooltip(rows: Array<{ label: string; value: string; nowrap?: boolean }>): string {
+  protected infoTooltip(rows: { label: string; value: string; nowrap?: boolean }[]): string {
     const content = rows
       .filter((row) => row.value !== null && row.value !== undefined && row.value !== '')
       .map((row) => this.infoTooltipRow(row.label, row.value, row.nowrap))
@@ -1118,6 +1124,7 @@ export class TransactionsErpSalesListComponent
   }
 
   /* Metodos Tooltip Status */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   protected installmentStatusTooltip(row: any): string {
     const statusTransaction = installmentTooltipStatusLabel(row?.statusTransaction, this.i18n);
     const reason = statusTransactionReasonEnumLabel(row?.statusTransactionReason, this.i18n);
@@ -1168,12 +1175,14 @@ export class TransactionsErpSalesListComponent
     ]);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   protected installmentStatusTooltipClass(row: any): string {
     const tone = installmentStatusTooltipTone(row?.statusTransaction);
 
     return `cs-info-tooltip cs-installment-tooltip cs-installment-tooltip-${tone}`;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   protected saleStatusIcon(row: any): string {
     const tone = installmentStatusTooltipTone(row?.statusTransaction);
 
@@ -1243,7 +1252,10 @@ export class TransactionsErpSalesListComponent
     this.openRouteInNewTab(['/documents/acq/sales']);
   }
 
-  protected buildTargetFileFilters(row: TransactionsErpModel): TransactionsErpFiltersState {
+  // row mantido pra bater com a assinatura de buildTargetFileFilters usada nas
+  // outras telas de lista, mesmo sem uso aqui.
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  protected buildTargetFileFilters(_row: TransactionsErpModel): TransactionsErpFiltersState {
     return {
       ...this.emptyFiltersState(),
     };

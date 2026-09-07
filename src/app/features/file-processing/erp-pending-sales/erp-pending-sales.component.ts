@@ -20,7 +20,7 @@ import {
 
 @Component({
   standalone: true,
-  selector: 'cs-erp-pending-sales',
+  selector: 'app-erp-pending-sales',
   styleUrl: './erp-pending-sales.component.scss',
   templateUrl: './erp-pending-sales.component.html',
   imports: [

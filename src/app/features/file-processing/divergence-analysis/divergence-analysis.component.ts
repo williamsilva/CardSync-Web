@@ -17,7 +17,7 @@ import {
 
 @Component({
   standalone: true,
-  selector: 'cs-divergence-analysis',
+  selector: 'app-divergence-analysis',
   styleUrl: './divergence-analysis.component.scss',
   templateUrl: './divergence-analysis.component.html',
   imports: [CommonModule, RouterLink, CardModule, TableModule, ButtonModule, CsTagComponent],
@@ -28,8 +28,8 @@ export class DivergenceAnalysisComponent {
   protected readonly loading = signal(false);
   protected readonly files = signal<ProcessedFileModel[]>([]);
   protected readonly erpPendings = signal<ErpPendingSaleModel[]>([]);
-  protected readonly creditOrders = signal<any[]>([]);
-  protected readonly adjustments = signal<any[]>([]);
+  protected readonly creditOrders = signal<{ releaseValue?: number }[]>([]);
+  protected readonly adjustments = signal<{ adjustmentValue?: number }[]>([]);
 
   protected readonly metrics = computed(() => {
     const files = this.files();

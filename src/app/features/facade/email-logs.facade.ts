@@ -6,7 +6,7 @@ import { EmailLogModel } from '../models/email-log.models';
 import { SelectOption } from '@models/select-option.model';
 import { EmailLogsService } from '../service/email-logs.service';
 import { EmailLogsFilters } from '@features/filter/email-logs.filters';
-import { ListQueryDto } from '@shared/features/list-query/list-query.types';
+import { ListQueryDto } from '@williamsilva/nimbus-web-commons';
 
 type LastQuery = ListQueryDto<EmailLogsFilters>;
 

@@ -1,7 +1,7 @@
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 
-import { AfterViewInit, Component, computed, inject, signal, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, computed, inject, signal, ViewChild, OnInit } from '@angular/core';
 
 import { Menu } from 'primeng/menu';
 import { MenuItem } from 'primeng/api';
@@ -24,16 +24,16 @@ import { CompanyFacade } from '@features/facade/company.facade';
 import { CsCurrencyPipe } from '@shared/pipes/cs-currency.pipe';
 import { CsDocumentPipe } from '@shared/pipes/cs-document.pipe';
 import { AcquirerFacade } from '@features/facade/acquirer.facade';
-import { StatefulListPage } from '@features/list-base/stateful-list-page';
+import { StatefulListPage } from '@williamsilva/nimbus-web-commons';
 import { EstablishmentFacade } from '@features/facade/establishment.facade';
-import { buildListQuery } from '@shared/features/list-query/list-query.builder';
+import { buildListQuery } from '@williamsilva/nimbus-web-commons';
 import { AdjustmentCancellationModel } from '@models/adjustment-cancellation.model';
 import { allPeriodEnum, PeriodEnum, periodEnumLabel } from '@models/enums/period.enum';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
 import { AdjustmentCancellationFacade } from '@features/facade/adjustment-cancellation.facade';
 import { CsColumnFilterShellComponent } from '@features/list-base/cs-column-filter-shell.component';
 import { CsAdvancedTextFilterComponent } from '@features/list-base/cs-advanced-text-filter.component';
-import { CsAdvancedPeriodDateFilterComponent } from '@features/list-base/cs-advanced-period-date-filter.component';
+import { CsAdvancedPeriodDateFilterComponent } from '@williamsilva/nimbus-web-commons';
 import { CsAdvancedMultiselectFilterComponent } from '@features/list-base/cs-advanced-multiselect-filter.component';
 import { CsAdvancedFilterItemTemplateDirective } from '@features/list-base/cs-advanced-filter-item-template.directive';
 import {
@@ -45,11 +45,11 @@ import {
   readArrayFilterValues,
   readPeriodFilterValue,
   readSingleFilterValue,
-} from '@features/list-base/table-filter-readers';
+} from '@williamsilva/nimbus-web-commons';
 import {
   ActiveFilterItem,
   FiltersPanelComponent,
-} from '@shared/features/filters-panel/filters-panel.component';
+} from '@williamsilva/nimbus-web-commons';
 import {
   CancellationAdvancedFilters,
   resetCancellationAdvancedFilters,
@@ -118,7 +118,7 @@ import { StatusEnum, statusEnumLabel, statusEnumSeverity } from '@models/enums/s
 })
 export class CancellationListComponent
   extends StatefulListPage<AdjustmentCancellationFiltersState, CancellationAdvancedFilters>
-  implements AfterViewInit
+  implements AfterViewInit, OnInit
 {
   @ViewChild('dt') private dt?: Table;
 
@@ -612,7 +612,7 @@ export class CancellationListComponent
    * Chamado pelo StatefulListPage quando a tabela emite evento de filtragem por coluna.
    * getAppliedLang() garante que os labels reavaliam ao trocar idioma.
    */
-  protected override mapTableFiltersToActiveItems(filters: any): ActiveFilterItem[] {
+  protected override mapTableFiltersToActiveItems(filters: Record<string, unknown>): ActiveFilterItem[] {
     this.i18n.getAppliedLang();
     const items: ActiveFilterItem[] = [];
 

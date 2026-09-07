@@ -40,10 +40,8 @@ export interface TransactionsErpModel {
   installments?: TransactionsErpInstallmentModel[] | null;
 }
 
-export interface TransactionsErpCreateInput {}
-
-export interface TransactionsErpUpdateInput {}
-
+export type TransactionsErpCreateInput = object;
+export type TransactionsErpUpdateInput = object;
 /**
  * Payload bruto vindo da API.
  * Aceita status numérico ou string para tolerar mudanças no backend.

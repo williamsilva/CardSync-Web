@@ -3,7 +3,7 @@ import { Injectable, inject, signal } from '@angular/core';
 import { finalize } from 'rxjs';
 
 import { TransactionsTotalsModel } from '@models/transactionsTotalsModel';
-import { ListQueryDto } from '@shared/features/list-query/list-query.types';
+import { ListQueryDto } from '@williamsilva/nimbus-web-commons';
 import { TransactionsAcqInstallmentModel } from '@models/transactions-acq-installment.models';
 import { TransactionsAcqInstallmentAdvancedFilters } from '../filter/transaction-acq-installment.filters';
 import { TransactionsAcqInstallmentApiService } from '@features/service/transaction-acq-installment.api.service';

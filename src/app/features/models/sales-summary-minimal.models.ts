@@ -12,10 +12,8 @@ export interface SalesSummaryMinimalModel {
   bankingDomicile: BankingDomicileMinimalModel;
 }
 
-export interface SalesSummaryMinimalCreateInput {}
-
-export interface SalesSummaryMinimalUpdateInput {}
-
+export type SalesSummaryMinimalCreateInput = object;
+export type SalesSummaryMinimalUpdateInput = object;
 /**
  * Payload bruto vindo da API.
  * Aceita status numérico ou string para tolerar mudanças no backend.

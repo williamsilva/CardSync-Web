@@ -1,4 +1,4 @@
-<cs-page-header
+<app-page-header
   [compact]="false"
   [subtitle]="'adjustment.subtitle' | translate"
   [breadcrumb]="[
@@ -14,7 +14,7 @@
     class="p-button-text p-button-sm"
     [label]="'common.update' | translate"
   ></button>
-</cs-page-header>
+</app-page-header>
 
 <cs-filters-panel
   (clear)="clear()"
@@ -60,7 +60,7 @@
       (periodChange)="onPeriodColumnChange(periodCreditDate, creditDate, $event)"
     ></cs-advanced-period-date-filter>
 
-    <cs-advanced-multiselect-filter
+    <app-advanced-multiselect-filter
       optionValue="id"
       inputId="acquirer"
       [value]="acquirers()"
@@ -70,23 +70,23 @@
       (valueChange)="acquirers.set($event)"
       [label]="'adjustment.fields.acquirer' | translate"
     >
-      <ng-template csAdvancedFilterItem let-option>
+      <ng-template appAdvancedFilterItem let-option>
         <div class="cs-option-item">
           <div class="cs-option-item__label">{{ option.fantasyName }}</div>
           <div class="cs-option-item__subtext">
             {{ 'common.registrationNumber' | translate }}: {{ option.cnpj | csDocument }}
           </div>
           <div class="cs-option-item__subtext">
-            <cs-tag
+            <app-tag
               [tone]="statusEnumSeverity(option.status)"
               [value]="('common.status' | translate) + ': ' + statusEnumLabel(option.status)"
             />
           </div>
         </div>
       </ng-template>
-    </cs-advanced-multiselect-filter>
+    </app-advanced-multiselect-filter>
 
-    <cs-advanced-multiselect-filter
+    <app-advanced-multiselect-filter
       inputId="flag"
       optionValue="id"
       [value]="flags()"
@@ -95,11 +95,11 @@
       class="col-12 md:col-3 xl:col-2 p-1"
       (valueChange)="flags.set($event)"
       [label]="'adjustment.fields.flag' | translate"
-    ></cs-advanced-multiselect-filter>
+    ></app-advanced-multiselect-filter>
   </div>
 
   <div class="grid formgrid gap-0 align-items-end">
-    <cs-advanced-multiselect-filter
+    <app-advanced-multiselect-filter
       optionValue="id"
       inputId="companies"
       [value]="companies()"
@@ -109,23 +109,23 @@
       (valueChange)="companies.set($event)"
       [label]="'adjustment.fields.company' | translate"
     >
-      <ng-template csAdvancedFilterItem let-option>
+      <ng-template appAdvancedFilterItem let-option>
         <div class="cs-option-item">
           <div class="cs-option-item__label">{{ option.fantasyName }}</div>
           <div class="cs-option-item__subtext">
             {{ 'common.registrationNumber' | translate }}: {{ option.cnpj | csDocument }}
           </div>
           <div class="cs-option-item__subtext">
-            <cs-tag
+            <app-tag
               [tone]="statusEnumSeverity(option.status)"
               [value]="('common.status' | translate) + ': ' + statusEnumLabel(option.status)"
             />
           </div>
         </div>
       </ng-template>
-    </cs-advanced-multiselect-filter>
+    </app-advanced-multiselect-filter>
 
-    <cs-advanced-multiselect-filter
+    <app-advanced-multiselect-filter
       optionValue="id"
       optionLabel="pvNumber"
       inputId="establishments"
@@ -135,7 +135,7 @@
       (valueChange)="establishments.set($event)"
       [label]="'adjustment.fields.establishment' | translate"
     >
-      <ng-template csAdvancedFilterItem let-option>
+      <ng-template appAdvancedFilterItem let-option>
         <div class="cs-option-item">
           <div class="cs-option-item__label">{{ option.pvNumber }}</div>
           <div class="cs-option-item__subtext">
@@ -148,24 +148,24 @@
             {{ 'common.acquirer' | translate }}: {{ option.acquirer.fantasyName }}
           </div>
           <div class="cs-option-item__subtext">
-            <cs-tag
+            <app-tag
               [tone]="statusEnumSeverity(option.status)"
               [value]="('common.status' | translate) + ': ' + statusEnumLabel(option.status)"
             />
           </div>
         </div>
       </ng-template>
-    </cs-advanced-multiselect-filter>
+    </app-advanced-multiselect-filter>
 
-    <cs-advanced-text-filter
+    <app-advanced-text-filter
       inputId="rvNumberAdjustment"
       [value]="rvNumberAdjustment()"
       class="col-12 md:col-3 xl:col-2 p-1"
       (valueChange)="rvNumberAdjustment.set($event)"
       [label]="'adjustment.fields.rvNumber' | translate"
-    ></cs-advanced-text-filter>
+    ></app-advanced-text-filter>
 
-    <cs-advanced-multiselect-filter
+    <app-advanced-multiselect-filter
       inputId="status"
       [value]="status()"
       optionLabel="label"
@@ -174,9 +174,9 @@
       [options]="adjustmentStatusOptions()"
       (valueChange)="status.set($event)"
       [label]="'adjustment.fields.status' | translate"
-    ></cs-advanced-multiselect-filter>
+    ></app-advanced-multiselect-filter>
 
-    <cs-advanced-multiselect-filter
+    <app-advanced-multiselect-filter
       optionLabel="label"
       optionValue="value"
       inputId="adjustmentReason"
@@ -185,19 +185,19 @@
       [options]="adjustmentReasonOptions()"
       (valueChange)="adjustmentReason.set($event)"
       [label]="'adjustment.fields.adjustmentReason' | translate"
-    ></cs-advanced-multiselect-filter>
+    ></app-advanced-multiselect-filter>
   </div>
 
   <!-- Linha 3: ranges de valor empresa -->
   <div class="grid formgrid gap-0 align-items-end">
-    <cs-currency-range-filter
+    <app-currency-range-filter
       inputId="adjustmentValueRange"
       [value]="adjustmentValueRange()"
       class="col-12 md:col-3 xl:col-3 p-2"
       (valueChange)="onAdjustmentValueRangeChange($event)"
       [endLabel]="'cancellation.fields.adjustmentValueEnd' | translate"
       [startLabel]="'cancellation.fields.adjustmentValueStart' | translate"
-    ></cs-currency-range-filter>
+    ></app-currency-range-filter>
   </div>
 </cs-filters-panel>
 
@@ -307,7 +307,7 @@
                 styleClass="cs-colfilter"
               >
                 <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                  <cs-column-filter-shell
+                  <app-column-filter-shell
                     minWidth="20rem"
                     [clearLabel]="'common.clear' | translate"
                     [applyLabel]="'common.apply' | translate"
@@ -356,7 +356,7 @@
                         }
                       </ng-template>
                     </p-multiSelect>
-                  </cs-column-filter-shell>
+                  </app-column-filter-shell>
                 </ng-template>
               </p-columnFilter>
             </span>
@@ -387,7 +387,7 @@
                 styleClass="cs-colfilter"
               >
                 <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                  <cs-column-filter-shell
+                  <app-column-filter-shell
                     minWidth="20rem"
                     [clearLabel]="'common.clear' | translate"
                     [applyLabel]="'common.apply' | translate"
@@ -439,7 +439,7 @@
                         }
                       </ng-template>
                     </p-multiSelect>
-                  </cs-column-filter-shell>
+                  </app-column-filter-shell>
                 </ng-template>
               </p-columnFilter>
             </span>
@@ -470,7 +470,7 @@
                 styleClass="cs-colfilter"
               >
                 <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                  <cs-column-filter-shell
+                  <app-column-filter-shell
                     minWidth="20rem"
                     [clearLabel]="'common.clear' | translate"
                     [applyLabel]="'common.apply' | translate"
@@ -503,7 +503,7 @@
                         </div>
                       </ng-template>
                     </p-multiSelect>
-                  </cs-column-filter-shell>
+                  </app-column-filter-shell>
                 </ng-template>
               </p-columnFilter>
             </span>
@@ -534,7 +534,7 @@
                 styleClass="cs-colfilter"
               >
                 <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                  <cs-column-filter-shell
+                  <app-column-filter-shell
                     minWidth="18rem"
                     [clearLabel]="'common.clear' | translate"
                     [applyLabel]="'common.apply' | translate"
@@ -566,7 +566,7 @@
                         }
                       </ng-template>
                     </p-multiSelect>
-                  </cs-column-filter-shell>
+                  </app-column-filter-shell>
                 </ng-template>
               </p-columnFilter>
             </span>
@@ -596,7 +596,7 @@
                 styleClass="cs-colfilter"
               >
                 <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                  <cs-column-filter-shell
+                  <app-column-filter-shell
                     minWidth="22rem"
                     [clearLabel]="'common.clear' | translate"
                     [applyLabel]="'common.apply' | translate"
@@ -640,7 +640,7 @@
                       [selectionMode]="setSelectionMode(adjustmentDateColumnPeriod())"
                       (ngModelChange)="adjustmentDateColumnDraft.set($event)"
                     ></p-datePicker>
-                  </cs-column-filter-shell>
+                  </app-column-filter-shell>
                 </ng-template>
               </p-columnFilter>
             </span>
@@ -670,7 +670,7 @@
                 styleClass="cs-colfilter"
               >
                 <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                  <cs-column-filter-shell
+                  <app-column-filter-shell
                     minWidth="22rem"
                     [clearLabel]="'common.clear' | translate"
                     [applyLabel]="'common.apply' | translate"
@@ -710,7 +710,7 @@
                       [selectionMode]="setSelectionMode(creditDateColumnPeriod())"
                       (ngModelChange)="creditDateColumnDraft.set($event)"
                     ></p-datePicker>
-                  </cs-column-filter-shell>
+                  </app-column-filter-shell>
                 </ng-template>
               </p-columnFilter>
             </span>
@@ -740,7 +740,7 @@
                 styleClass="cs-colfilter"
               >
                 <ng-template pTemplate="filter" let-filter="filterCallback">
-                  <cs-column-filter-shell
+                  <app-column-filter-shell
                     minWidth="18rem"
                     [clearLabel]="'common.clear' | translate"
                     [applyLabel]="'common.apply' | translate"
@@ -766,7 +766,7 @@
                       [ngModel]="rvNumberAdjustmentColumnDraft()"
                       (ngModelChange)="rvNumberAdjustmentColumnDraft.set($event)"
                     />
-                  </cs-column-filter-shell>
+                  </app-column-filter-shell>
                 </ng-template>
               </p-columnFilter>
             </span>
@@ -796,7 +796,7 @@
                 #adjustmentValueColumnFilter
               >
                 <ng-template pTemplate="filter" let-filter="filterCallback">
-                  <cs-column-filter-shell
+                  <app-column-filter-shell
                     minWidth="18rem"
                     [clearLabel]="'common.clear' | translate"
                     [applyLabel]="'common.apply' | translate"
@@ -822,7 +822,7 @@
                       [ngModel]="adjustmentValueColumnDraft()"
                       (ngModelChange)="adjustmentValueColumnDraft.set($event)"
                     />
-                  </cs-column-filter-shell>
+                  </app-column-filter-shell>
                 </ng-template>
               </p-columnFilter>
             </span>
@@ -853,7 +853,7 @@
                 styleClass="cs-colfilter"
               >
                 <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                  <cs-column-filter-shell
+                  <app-column-filter-shell
                     minWidth="20rem"
                     [clearLabel]="'common.clear' | translate"
                     [applyLabel]="'common.apply' | translate"
@@ -883,7 +883,7 @@
                       [placeholder]="'common.all' | translate"
                       (ngModelChange)="setArrayColumnDraft(adjustmentReasonColumnDraft, $event)"
                     ></p-multiSelect>
-                  </cs-column-filter-shell>
+                  </app-column-filter-shell>
                 </ng-template>
               </p-columnFilter>
             </span>
@@ -914,7 +914,7 @@
                 styleClass="cs-colfilter"
               >
                 <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                  <cs-column-filter-shell
+                  <app-column-filter-shell
                     minWidth="18rem"
                     [clearLabel]="'common.clear' | translate"
                     [applyLabel]="'common.apply' | translate"
@@ -932,7 +932,7 @@
                       [placeholder]="'common.all' | translate"
                       (ngModelChange)="setArrayColumnDraft(statusColumnDraft, $event)"
                     ></p-multiSelect>
-                  </cs-column-filter-shell>
+                  </app-column-filter-shell>
                 </ng-template>
               </p-columnFilter>
             </span>
@@ -1004,17 +1004,17 @@
         </td>
 
         <td class="text-center">
-          <cs-tag
+          <app-tag
             [tone]="adjustmentReasonSeverity(row.adjustmentReason)"
             [value]="adjustmentReasonLabel(row.adjustmentReason)"
-          ></cs-tag>
+          ></app-tag>
         </td>
 
         <td class="text-center">
-          <cs-tag
+          <app-tag
             [tone]="adjustmentStatusSeverity(row.adjustmentStatus)"
             [value]="adjustmentStatusLabel(row.adjustmentStatus)"
-          ></cs-tag>
+          ></app-tag>
         </td>
 
         <td class="text-center">
@@ -1038,6 +1038,7 @@
               class="p-button-text p-button-sm"
               (click)="searchMenu.toggle($event)"
               [pTooltip]="'common.search.title' | translate"
+              [attr.aria-label]="'common.search.title' | translate"
             ></button>
           </div>
         </td>

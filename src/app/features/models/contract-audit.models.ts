@@ -18,10 +18,8 @@ export interface ContractAuditModel {
   establishment: EstablishmentMinimalModel;
 }
 
-export interface ContractAuditModelCreateInput {}
-
-export interface ContractAuditModelUpdateInput {}
-
+export type ContractAuditModelCreateInput = object;
+export type ContractAuditModelUpdateInput = object;
 /**
  * Payload bruto vindo da API.
  * Aceita status numérico ou string para tolerar mudanças no backend.

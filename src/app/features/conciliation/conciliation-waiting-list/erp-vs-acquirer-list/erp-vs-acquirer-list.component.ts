@@ -20,7 +20,7 @@ const TAB_BY_VIEW_QUERY_PARAM: Record<string, ErpVsAcquirerTab> = {
 
 @Component({
   standalone: true,
-  selector: 'cs-erp-vs-acquirer-list',
+  selector: 'app-erp-vs-acquirer-list',
   templateUrl: './erp-vs-acquirer-list.component.html',
   imports: [
     RouterLink,

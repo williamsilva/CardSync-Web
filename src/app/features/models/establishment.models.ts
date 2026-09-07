@@ -37,7 +37,7 @@ export interface EstablishmentUpdateInput {
   type?: TypeEstablishmentEnum;
 }
 
-export type EstablishmentFiltersState = {
+export interface EstablishmentFiltersState {
   pvNumber: string | null;
 
   company: string[] | null;
@@ -48,7 +48,7 @@ export type EstablishmentFiltersState = {
 
   periodCreatedAt: PeriodEnum | null;
   createdAt: string | string[] | null;
-};
+}
 
 export interface EstablishmentBulkStatusInput {
   ids: string[];

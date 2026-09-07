@@ -5,7 +5,7 @@ import { Observable, finalize, tap } from 'rxjs';
 import { I18nService } from '@core/i18n/i18n.service';
 import { ToastService } from '@core/toast/toast.service';
 import { TransactionsTotalsModel } from '@models/transactionsTotalsModel';
-import { ListQueryDto } from '@shared/features/list-query/list-query.types';
+import { ListQueryDto } from '@williamsilva/nimbus-web-commons';
 import { ConciliationWaitingAdvancedFilters } from '@features/filter/conciliation-waiting.filter';
 import { ConciliationWaitingApiService } from '@features/service/conciliation-waiting.api.service';
 import {
@@ -173,7 +173,7 @@ export class ConciliationWaitingFacade {
 
   reconcileErpVsAcquirer(): Observable<ReconcileErpAcquirerResultModel> {
     return this.api.reconcileErpVsAcquirer().pipe(
-      tap((result) => {
+      tap(() => {
         //this.showReconciliationResultErpAcquirerToast(result);
       }),
     );
@@ -181,7 +181,7 @@ export class ConciliationWaitingFacade {
 
   reconcileManualSwapped(): Observable<ReconcileErpAcquirerResultModel> {
     return this.api.reconcileManualSwapped().pipe(
-      tap((result) => {
+      tap(() => {
         //this.showReconciliationResultErpAcquirerToast(result);
       }),
     );
@@ -189,7 +189,7 @@ export class ConciliationWaitingFacade {
 
   reconcileFees(): Observable<ReconcileFeesResultModel> {
     return this.api.reconcileFees().pipe(
-      tap((result) => {
+      tap(() => {
         //this.showReconciliationResultFeesToast(result);
       }),
     );
@@ -197,7 +197,7 @@ export class ConciliationWaitingFacade {
 
   reconcilingBank(): Observable<ReconcileBankResultModel> {
     return this.api.reconcilingBank().pipe(
-      tap((result) => {
+      tap(() => {
         // this.showReconciliationResultFeesToast(result);
       }),
     );
@@ -207,7 +207,7 @@ export class ConciliationWaitingFacade {
     request: ErpCancellationReprocessRequest,
   ): Observable<ErpCancellationReprocessResult> {
     return this.api.reprocessErpCancellations(request).pipe(
-      tap((result) => {
+      tap(() => {
         //this.showCancellationReprocessToast(result)
       }),
     );
@@ -215,7 +215,7 @@ export class ConciliationWaitingFacade {
 
   reconcileSalesSummaryCreditOrder(): Observable<ReconcileSalesSummaryCreditOrderResultModel> {
     return this.api.reconcileSalesSummaryCreditOrder().pipe(
-      tap((result) => {
+      tap(() => {
         // this.showSalesSummaryCreditOrderToast(result)
       }),
     );

@@ -6,7 +6,7 @@ import { ModalityEnum } from '@models/enums/modality.enum';
 import { StatusTransactionEnum } from '@models/enums/status-transaction.enum';
 import { StatusPaymentBankEnum } from '../models/enums/status-payment-bank.enum';
 
-export type TransactionsAcqFiltersState = {
+export interface TransactionsAcqFiltersState {
   tid: string;
   cvNsu: string;
   machine: string;
@@ -44,7 +44,7 @@ export type TransactionsAcqFiltersState = {
 
   periodConciliationDate: PeriodEnum | null;
   conciliationDate: string | string[] | null;
-};
+}
 
 export type TransactionsAcqAdvancedFilters = Partial<TransactionsAcqFiltersState>;
 

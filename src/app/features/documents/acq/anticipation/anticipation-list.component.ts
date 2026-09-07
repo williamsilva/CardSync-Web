@@ -1,7 +1,7 @@
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component, computed, inject, signal, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, computed, inject, signal, ViewChild, OnInit } from '@angular/core';
 
 import { Menu } from 'primeng/menu';
 import { MenuItem } from 'primeng/api';
@@ -18,7 +18,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { CsTagTone, CsTagComponent } from '@shared/ui';
 import { I18nService } from '@core/i18n/i18n.service';
 import { CsDatePipe } from '@shared/pipes/cs-date.pipe';
-import { DateInputMaskDirective } from '@shared/directives/date-input-mask.directive';
+import { DateInputMaskDirective } from '@williamsilva/nimbus-web-commons';
 import { STATE_KEY } from '@features/state-key.constants';
 import { FlagFacade } from '@features/facade/flag.facade';
 import { BankFacade } from '@features/facade/bank.facade';
@@ -26,16 +26,16 @@ import { CsDocumentPipe } from '@shared/pipes/cs-document.pipe';
 import { CompanyFacade } from '@features/facade/company.facade';
 import { CsCurrencyPipe } from '@shared/pipes/cs-currency.pipe';
 import { AcquirerFacade } from '@features/facade/acquirer.facade';
-import { StatefulListPage } from '@features/list-base/stateful-list-page';
+import { StatefulListPage } from '@williamsilva/nimbus-web-commons';
 import { AnticipationFacade } from '@features/facade/anticipation.facade';
 import { EstablishmentFacade } from '@features/facade/establishment.facade';
-import { buildListQuery } from '@shared/features/list-query/list-query.builder';
+import { buildListQuery } from '@williamsilva/nimbus-web-commons';
 import { allPeriodEnum, PeriodEnum, periodEnumLabel } from '@models/enums/period.enum';
 import { StatusEnum, statusEnumLabel, statusEnumSeverity } from '@models/enums/status.enum';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
 import { ModalityEnum, allModalityEnum, modalityEnumLabel } from '@models/enums/modality.enum';
 import { CsColumnFilterShellComponent } from '@features/list-base/cs-column-filter-shell.component';
-import { CsAdvancedPeriodDateFilterComponent } from '@features/list-base/cs-advanced-period-date-filter.component';
+import { CsAdvancedPeriodDateFilterComponent } from '@williamsilva/nimbus-web-commons';
 import { CsAdvancedMultiselectFilterComponent } from '@features/list-base/cs-advanced-multiselect-filter.component';
 import { CsAdvancedFilterItemTemplateDirective } from '@features/list-base/cs-advanced-filter-item-template.directive';
 import {
@@ -51,7 +51,7 @@ import {
   readArrayFilterValues,
   readPeriodFilterValue,
   readSingleFilterValue,
-} from '@features/list-base/table-filter-readers';
+} from '@williamsilva/nimbus-web-commons';
 import {
   currencyRangeLabel,
   CsCurrencyRangeValue,
@@ -60,7 +60,7 @@ import {
 import {
   ActiveFilterItem,
   FiltersPanelComponent,
-} from '@shared/features/filters-panel/filters-panel.component';
+} from '@williamsilva/nimbus-web-commons';
 import {
   AnticipationModel,
   createEmptyAnticipationAdvancedFilters,
@@ -112,7 +112,7 @@ import {
 })
 export class AnticipationListComponent
   extends StatefulListPage<AnticipationFiltersState, AnticipationAdvancedFilters>
-  implements AfterViewInit
+  implements AfterViewInit, OnInit
 {
   @ViewChild('dt') private dt?: Table;
 
@@ -676,7 +676,7 @@ export class AnticipationListComponent
     );
   }
 
-  protected override mapTableFiltersToActiveItems(filters: any): ActiveFilterItem[] {
+  protected override mapTableFiltersToActiveItems(filters: Record<string, unknown>): ActiveFilterItem[] {
     this.i18n.getAppliedLang();
     const items: ActiveFilterItem[] = [];
 
@@ -799,6 +799,10 @@ export class AnticipationListComponent
     this.advanceDiscountValueStart.set(s.advanceDiscountValueStart ?? null);
   }
 
+  // row aqui é o objeto combinado da tabela (venda + domicílio bancário), mais rico que o modelo
+  // tipado desta tela - manter any evita estender o modelo com base em suposição sobre o shape
+  // real da API.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   protected bankingDomicileTooltip(row: any): string {
     const agency = row.bankingDomicile?.agency ?? '-';
     const account = row.bankingDomicile?.currentAccount ?? '-';
@@ -835,7 +839,10 @@ export class AnticipationListComponent
     this.openRouteInNewTab(['/file-processing/files']);
   }
 
-  protected buildTargetFileFilters(row: AnticipationModel): AnticipationAdvancedFilters {
+  // row mantido pra bater com a assinatura de buildTargetFileFilters usada nas
+  // outras telas de lista, mesmo sem uso aqui.
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  protected buildTargetFileFilters(_row: AnticipationModel): AnticipationAdvancedFilters {
     return {
       ...createEmptyAnticipationAdvancedFilters,
     };

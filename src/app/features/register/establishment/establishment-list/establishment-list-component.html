@@ -1,4 +1,4 @@
-<cs-page-header
+<app-page-header
   [subtitle]="'establishment.subtitle' | translate"
   [breadcrumb]="[
     { label: ('breadcrumb.dashboard.title' | translate), url: '/' },
@@ -54,7 +54,7 @@
     [disabled]="!secPolicy.canCreate()"
     [label]="'establishment.new.title' | translate"
   ></button>
-</cs-page-header>
+</app-page-header>
 
 <app-establishment-create-dialog
   (saved)="onSaved()"
@@ -73,15 +73,15 @@
   [activeFilterGroups]="activeFilterGroups()"
 >
   <div class="grid formgrid gap-0 align-items-end">
-    <cs-advanced-text-filter
+    <app-advanced-text-filter
       inputId="pvNumber"
       [value]="pvNumber()"
       class="col-12 md:col-2 p-1"
       (valueChange)="pvNumber.set($event)"
       [label]="'establishment.fields.pvNumber' | translate"
-    ></cs-advanced-text-filter>
+    ></app-advanced-text-filter>
 
-    <cs-advanced-multiselect-filter
+    <app-advanced-multiselect-filter
       optionValue="value"
       optionLabel="label"
       inputId="statusEnum"
@@ -90,9 +90,9 @@
       [options]="statusEnumOptions()"
       (valueChange)="statusEnum.set($event)"
       [label]="'establishment.fields.statusEnum' | translate"
-    ></cs-advanced-multiselect-filter>
+    ></app-advanced-multiselect-filter>
 
-    <cs-advanced-multiselect-filter
+    <app-advanced-multiselect-filter
       optionLabel="label"
       optionValue="value"
       [value]="typeEnum()"
@@ -101,7 +101,7 @@
       inputId="typeEstablishmentEnum"
       (valueChange)="typeEnum.set($event)"
       [label]="'establishment.fields.typeEnum' | translate"
-    ></cs-advanced-multiselect-filter>
+    ></app-advanced-multiselect-filter>
 
     <cs-advanced-period-date-filter
       [value]="createdAt()"
@@ -121,7 +121,7 @@
   </div>
 
   <div class="grid formgrid gap-0 align-items-end">
-    <cs-advanced-multiselect-filter
+    <app-advanced-multiselect-filter
       optionValue="id"
       inputId="company"
       [value]="companies()"
@@ -131,23 +131,23 @@
       (valueChange)="companies.set($event)"
       [label]="'establishment.fields.company' | translate"
     >
-      <ng-template csAdvancedFilterItem let-option>
+      <ng-template appAdvancedFilterItem let-option>
         <div class="cs-option-item">
           <div class="cs-option-item__label">{{ option.fantasyName }}</div>
           <div class="cs-option-item__subtext">
             {{ 'common.registrationNumber' | translate }}: {{ option.cnpj | csDocument }}
           </div>
           <div class="cs-option-item__subtext">
-            <cs-tag
+            <app-tag
               [tone]="severityEnum(option.status)"
               [value]="('common.status' | translate) + ': ' + statusEnumLabel(option.status)"
             />
           </div>
         </div>
       </ng-template>
-    </cs-advanced-multiselect-filter>
+    </app-advanced-multiselect-filter>
 
-    <cs-advanced-multiselect-filter
+    <app-advanced-multiselect-filter
       optionValue="id"
       inputId="acquirer"
       [value]="acquirers()"
@@ -157,23 +157,23 @@
       (valueChange)="acquirers.set($event)"
       [label]="'establishment.fields.acquirer' | translate"
     >
-      <ng-template csAdvancedFilterItem let-option>
+      <ng-template appAdvancedFilterItem let-option>
         <div class="cs-option-item">
           <div class="cs-option-item__label">{{ option.fantasyName }}</div>
           <div class="cs-option-item__subtext">
             {{ 'common.registrationNumber' | translate }}: {{ option.cnpj | csDocument }}
           </div>
           <div class="cs-option-item__subtext">
-            <cs-tag
+            <app-tag
               [tone]="severityEnum(option.status)"
               [value]="('common.status' | translate) + ': ' + statusEnumLabel(option.status)"
             />
           </div>
         </div>
       </ng-template>
-    </cs-advanced-multiselect-filter>
+    </app-advanced-multiselect-filter>
 
-    <cs-advanced-multiselect-filter
+    <app-advanced-multiselect-filter
       inputId="createdBy"
       optionLabel="label"
       optionValue="value"
@@ -182,7 +182,7 @@
       class="col-12 md:col-4 p-1"
       (valueChange)="createdBy.set($event)"
       [label]="'establishment.fields.createdBy' | translate"
-    ></cs-advanced-multiselect-filter>
+    ></app-advanced-multiselect-filter>
   </div>
 </cs-filters-panel>
 
@@ -276,7 +276,7 @@
               styleClass="cs-colfilter"
             >
               <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                <cs-column-filter-shell
+                <app-column-filter-shell
                   minWidth="20rem"
                   [clearLabel]="'common.clear' | translate"
                   [applyLabel]="'common.apply' | translate"
@@ -321,7 +321,7 @@
                       }
                     </ng-template>
                   </p-multiSelect>
-                </cs-column-filter-shell>
+                </app-column-filter-shell>
               </ng-template>
             </p-columnFilter>
           </span>
@@ -346,7 +346,7 @@
               styleClass="cs-colfilter"
             >
               <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                <cs-column-filter-shell
+                <app-column-filter-shell
                   minWidth="20rem"
                   [clearLabel]="'common.clear' | translate"
                   [applyLabel]="'common.apply' | translate"
@@ -379,7 +379,7 @@
                       </div>
                     </ng-template>
                   </p-multiSelect>
-                </cs-column-filter-shell>
+                </app-column-filter-shell>
               </ng-template>
             </p-columnFilter>
           </span>
@@ -405,7 +405,7 @@
               styleClass="cs-colfilter"
             >
               <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                <cs-column-filter-shell
+                <app-column-filter-shell
                   [clearLabel]="'common.clear' | translate"
                   [applyLabel]="'common.apply' | translate"
                   (clear)="clearTextColumnFilter(pvNumberColumnDraft, filter, pvNumberColumnFilter)"
@@ -419,7 +419,7 @@
                     [placeholder]="'establishment.fields.pvNumber' | translate"
                     (ngModelChange)="pvNumberColumnDraft.set($event ?? '')"
                   />
-                </cs-column-filter-shell>
+                </app-column-filter-shell>
               </ng-template>
             </p-columnFilter>
           </span>
@@ -462,7 +462,7 @@
               styleClass="cs-colfilter"
             >
               <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                <cs-column-filter-shell
+                <app-column-filter-shell
                   [clearLabel]="'common.clear' | translate"
                   [applyLabel]="'common.apply' | translate"
                   (clear)="clearArrayColumnFilter(statusColumnDraft, filter, statusColumnFilter)"
@@ -494,7 +494,7 @@
                       }
                     </ng-template>
                   </p-multiSelect>
-                </cs-column-filter-shell>
+                </app-column-filter-shell>
               </ng-template>
             </p-columnFilter>
           </span>
@@ -519,7 +519,7 @@
               styleClass="cs-colfilter"
             >
               <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                <cs-column-filter-shell
+                <app-column-filter-shell
                   [clearLabel]="'common.clear' | translate"
                   [applyLabel]="'common.apply' | translate"
                   (clear)="clearArrayColumnFilter(typeColumnDraft, filter, typeColumnFilter)"
@@ -551,7 +551,7 @@
                       }
                     </ng-template>
                   </p-multiSelect>
-                </cs-column-filter-shell>
+                </app-column-filter-shell>
               </ng-template>
             </p-columnFilter>
           </span>
@@ -577,7 +577,7 @@
               styleClass="cs-colfilter"
             >
               <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                <cs-column-filter-shell
+                <app-column-filter-shell
                   [clearLabel]="'common.clear' | translate"
                   [applyLabel]="'common.apply' | translate"
                   [applyDisabled]="
@@ -649,7 +649,7 @@
                       {{ 'establishment.columns.createdAt' | translate }}
                     </label>
                   </p-floatLabel>
-                </cs-column-filter-shell>
+                </app-column-filter-shell>
               </ng-template>
             </p-columnFilter>
           </span>
@@ -674,7 +674,7 @@
               styleClass="cs-colfilter"
             >
               <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                <cs-column-filter-shell
+                <app-column-filter-shell
                   [clearLabel]="'common.clear' | translate"
                   [applyLabel]="'common.apply' | translate"
                   (clear)="
@@ -710,7 +710,7 @@
                       }
                     </ng-template>
                   </p-multiSelect>
-                </cs-column-filter-shell>
+                </app-column-filter-shell>
               </ng-template>
             </p-columnFilter>
           </span>
@@ -753,11 +753,11 @@
       </td>
 
       <td class="cell-muted text-center">
-        <cs-tag [value]="statusEnumLabel(row.status)" [tone]="severityEnum(row.status)" />
+        <app-tag [value]="statusEnumLabel(row.status)" [tone]="severityEnum(row.status)" />
       </td>
 
       <td class="cell-muted text-center">
-        <cs-tag
+        <app-tag
           [value]="typeEstablishmentEnumLabel(row.type)"
           [tone]="severityTypeEstablishmentEnum(row.type)"
         />
@@ -773,14 +773,14 @@
 
       <td class="text-center">
         <div class="table-actions">
-          <cs-row-action-button
+          <app-row-action-button
             icon="pi pi-pencil"
             [disabled]="!secPolicy.canEdit(row)"
             [tooltip]="!secPolicy.canEdit(row) ? undefined : ('common.edit' | translate)"
             (clicked)="edit(row)"
-          ></cs-row-action-button>
+          ></app-row-action-button>
 
-          <cs-row-action-button
+          <app-row-action-button
             icon="pi pi-check-circle"
             [disabled]="!secPolicy.canActivate(row)"
             [tooltip]="
@@ -789,9 +789,9 @@
                 : (secPolicy.activateDisabledReason(row) ?? '' | translate)
             "
             (clicked)="confirmActivate(row)"
-          ></cs-row-action-button>
+          ></app-row-action-button>
 
-          <cs-row-action-button
+          <app-row-action-button
             icon="pi pi-ban"
             [disabled]="!secPolicy.canDeactivate(row)"
             [tooltip]="
@@ -800,9 +800,9 @@
                 : (secPolicy.deactivateDisabledReason(row) ?? '' | translate)
             "
             (clicked)="confirmDeactivate(row)"
-          ></cs-row-action-button>
+          ></app-row-action-button>
 
-          <cs-row-action-button
+          <app-row-action-button
             icon="pi pi-lock"
             [disabled]="!secPolicy.canBlock(row)"
             [tooltip]="
@@ -811,9 +811,9 @@
                 : (secPolicy.blockDisabledReason(row) ?? '' | translate)
             "
             (clicked)="confirmBlock(row)"
-          ></cs-row-action-button>
+          ></app-row-action-button>
 
-          <cs-row-action-button
+          <app-row-action-button
             icon="pi pi-trash"
             [disabled]="!secPolicy.canDelete(row)"
             [tooltip]="
@@ -822,7 +822,7 @@
                 : (secPolicy.deleteDisabledReason(row) ?? '' | translate)
             "
             (clicked)="confirmDelete(row)"
-          ></cs-row-action-button>
+          ></app-row-action-button>
         </div>
       </td>
     </tr>

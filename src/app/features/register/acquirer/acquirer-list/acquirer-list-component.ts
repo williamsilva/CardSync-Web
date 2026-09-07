@@ -1,6 +1,6 @@
 import { FormsModule } from '@angular/forms';
 
-import { Component, ViewChild, computed, inject, signal } from '@angular/core';
+import { Component, ViewChild, computed, inject, signal, OnInit } from '@angular/core';
 
 import { Table } from 'primeng/table';
 import { TableModule } from 'primeng/table';
@@ -27,13 +27,13 @@ import { CsDocumentPipe } from '@shared/pipes/cs-document.pipe';
 import { AcquirerFacade } from '@features/facade/acquirer.facade';
 import { PermissionService } from '@core/auth/permission.service';
 import { STATE_KEY } from '@features/state-key.constants';
-import { StatefulListPage } from '@features/list-base/stateful-list-page';
+import { StatefulListPage } from '@williamsilva/nimbus-web-commons';
 import { AcquirerAdvancedFilters } from '@features/filter/acquirer.filters';
 import { AcquirerModel, AcquirerFiltersState } from '@models/acquirer.models';
 import { BulkActionListPage } from '@features/list-base/bulk-action-list-page';
-import { buildListQuery } from '@shared/features/list-query/list-query.builder';
+import { buildListQuery } from '@williamsilva/nimbus-web-commons';
 import { CpfCnpjMaskDirective } from '@shared/directives/cpf-cnpj-mask.directive';
-import { DateInputMaskDirective } from '@shared/directives/date-input-mask.directive';
+import { DateInputMaskDirective } from '@williamsilva/nimbus-web-commons';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
 import { AcquirerPermissionPolicy } from '@features/security/policy/acquirer-permission.policy';
 import { DATA_TABLE_SHELL_IMPORTS } from '@shared/features/data-table-shell/data-table-shell.component';
@@ -42,7 +42,7 @@ import { AcquirerEstablishmentRelationsComponent } from '../acquirer-relations/a
 import {
   ActiveFilterItem,
   FiltersPanelComponent,
-} from '@shared/features/filters-panel/filters-panel.component';
+} from '@williamsilva/nimbus-web-commons';
 
 import {
   StatusEnum,
@@ -54,7 +54,7 @@ import {
   readArrayFilterValues,
   readSingleFilterValue,
   readDateRangeFilterValue,
-} from '@features/list-base/table-filter-readers';
+} from '@williamsilva/nimbus-web-commons';
 
 @Component({
   standalone: true,
@@ -91,7 +91,7 @@ import {
 export class AcquirerListComponent extends StatefulListPage<
   AcquirerFiltersState,
   AcquirerAdvancedFilters
-> {
+> implements OnInit {
   @ViewChild('dt') private dt?: Table;
 
   readonly facade = inject(AcquirerFacade);
@@ -501,10 +501,7 @@ export class AcquirerListComponent extends StatefulListPage<
 
   protected loadFirstPage() {
     const tableQuery = { page: 0, size: this.rows };
-    const query = buildListQuery<AcquirerAdvancedFilters>(
-      tableQuery as any,
-      this.buildAdvancedFilters(),
-    );
+    const query = buildListQuery<AcquirerAdvancedFilters>(tableQuery, this.buildAdvancedFilters());
 
     this.clearSelection();
     this.facade.loadPage(query);
@@ -566,7 +563,7 @@ export class AcquirerListComponent extends StatefulListPage<
     };
   }
 
-  protected override mapTableFiltersToActiveItems(filters: any): ActiveFilterItem[] {
+  protected override mapTableFiltersToActiveItems(filters: Record<string, unknown>): ActiveFilterItem[] {
     this.i18n.getAppliedLang();
 
     const items: ActiveFilterItem[] = [];

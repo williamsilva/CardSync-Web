@@ -6,7 +6,7 @@ import { BankModel, BankCreateInput, BankUpdateInput } from '@models/bank.models
 import { BankMinimalModel } from '@models/bank-minimal.models';
 import { BankAdvancedFilters } from '@features/filter/bank.filters';
 import { BankApiService } from '@features/service/bank.api.service';
-import { ListQueryDto } from '@shared/features/list-query/list-query.types';
+import { ListQueryDto } from '@williamsilva/nimbus-web-commons';
 
 type LastQuery = ListQueryDto<BankAdvancedFilters>;
 

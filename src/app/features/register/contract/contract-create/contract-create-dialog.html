@@ -302,19 +302,21 @@
                                     }
                                   </div>
                                 </div>
+                                <!-- eslint-disable-next-line @angular-eslint/template/click-events-have-key-events, @angular-eslint/template/interactive-supports-focus -- só existe pra impedir que o clique nas ações propague pro card (que expande/colapsa ao clicar), não é uma interação em si -->
                                 <div class="contract-flag-card__header-actions" (click)="$event.stopPropagation()">
-                                  <cs-tag
+                                  <app-tag
                                     severity="contrast"
                   [value]="
                     'contract.flags.ratesCount' | translate: { count: ratesAt(flagIndex).length }
                   "
-                                  ></cs-tag>
+                                  ></app-tag>
                                   <button
                                     pButton
                                     type="button"
                                     tooltipPosition="top"
                                     (click)="toggleFlagCard(flagIndex)"
                                     [pTooltip]="'contract.flags.toggle' | translate"
+                                    [attr.aria-label]="'contract.flags.toggle' | translate"
                                     class="p-button-text p-button-sm contract-flag-card__toggle"
                   [icon]="
                     isFlagCardExpanded(flagIndex) ? 'pi pi-chevron-down' : 'pi pi-chevron-right'
@@ -328,6 +330,7 @@
                                     (click)="addRate(flagIndex)"
                                     [disabled]="!canAddRate(flagIndex)"
                                     [pTooltip]="'contract.rates.add' | translate"
+                                    [attr.aria-label]="'contract.rates.add' | translate"
                                     class="p-button-sm p-button-outlined contract-flag-card__icon-action"
                                   ></button>
                                   <button
@@ -337,6 +340,7 @@
                                     tooltipPosition="top"
                                     (click)="removeFlag(flagIndex)"
                                     [pTooltip]="'contract.flags.remove' | translate"
+                                    [attr.aria-label]="'contract.flags.remove' | translate"
                                     class="p-button-text p-button-sm p-button-danger contract-flag-card__icon-action"
                                   ></button>
                                 </div>
@@ -375,6 +379,7 @@
                                         [disabled]="false"
                                         (click)="removeRate(flagIndex, rateIndex)"
                                         class="p-button-text p-button-sm p-button-danger"
+                                        [attr.aria-label]="'common.remove' | translate"
                                       ></button>
                                     </div>
                                     <div class="grid formgrid align-items-end">

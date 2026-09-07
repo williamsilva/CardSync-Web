@@ -27,7 +27,7 @@ import { I18nService } from '@core/i18n/i18n.service';
 import { AcquirerFacade } from '@features/facade/acquirer.facade';
 import { NoFileDayFacade } from '@features/facade/no-file-day.facade';
 import { ErrorMsgComponent } from '@shared/error-msg/error-msg.component';
-import { DateInputMaskDirective } from '@shared/directives/date-input-mask.directive';
+import { DateInputMaskDirective } from '@williamsilva/nimbus-web-commons';
 import { BankingDomicileFacade } from '@features/facade/banking-domicile.facade';
 import { FileGroupEnum, allFileGroupEnum, fileGroupEnumLabel } from '@models/enums/file-group.enum';
 import {
@@ -276,7 +276,7 @@ export class NoFileDayCreateDialogComponent {
     if (this.form.invalid) return;
 
     const v = this.form.getRawValue();
-    const dateVal = v.noFileDate instanceof Date ? v.noFileDate : new Date(v.noFileDate as any);
+    const dateVal = v.noFileDate ?? new Date(0);
     const isoDate = `${dateVal.getFullYear()}-${String(dateVal.getMonth() + 1).padStart(2, '0')}-${String(dateVal.getDate()).padStart(2, '0')}`;
 
     const createPayload: NoFileDayCreateInput = {

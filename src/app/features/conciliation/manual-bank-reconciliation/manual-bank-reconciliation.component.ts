@@ -2,14 +2,14 @@
 import { Component, OnInit, WritableSignal, computed, inject, signal } from '@angular/core';
 
 import { MenuModule } from 'primeng/menu';
-import { TableModule } from 'primeng/table';
+import { TableModule, TableLazyLoadEvent, TablePageEvent } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
 import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
 import { CheckboxModule } from 'primeng/checkbox';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { ConfirmationService, MenuItem, MessageService } from 'primeng/api';
+import { ConfirmationService, MenuItem, MessageService, TableState } from 'primeng/api';
 
 import { I18nService } from '@core/i18n/i18n.service';
 import { CsTagComponent, CsTagTone } from '@shared/ui';
@@ -22,20 +22,20 @@ import { CsCurrencyPipe } from '@shared/pipes/cs-currency.pipe';
 import { CompanyFacade } from '@features/facade/company.facade';
 import { CreditOrderApiModel } from '@models/credit-order.model';
 import { AcquirerFacade } from '@features/facade/acquirer.facade';
-import { PersistedFilters } from '@shared/utils/persisted-filters';
+import { PersistedFilters } from '@williamsilva/nimbus-web-commons';
 import { BankStatementApiModel } from '@models/bank-statement.model';
-import { buildListQuery } from '@shared/features/list-query/list-query.builder';
+import { buildListQuery } from '@williamsilva/nimbus-web-commons';
 import { CreditOrderAdvancedFilters } from '@features/filter/credit-order.filters';
 import { CreditOrderApiService } from '@features/service/credit-order.api.service';
 import { BankStatementAdvancedFilters } from '@features/filter/bank-statement.filters';
 import { allPeriodEnum, PeriodEnum, periodEnumLabel } from '@models/enums/period.enum';
 import { ConciliationWaitingFacade } from '@features/facade/conciliation-waiting.facade';
-import { mapPrimeLazyToTableQuery } from '@shared/features/list-query/primeng-lazy.mapper';
+import { mapPrimeLazyToTableQuery } from '@williamsilva/nimbus-web-commons';
 import { StatusEnum, statusEnumLabel, statusEnumSeverity } from '@models/enums/status.enum';
 import { DivergenceDialogComponent } from './divergence-dialog/divergence-dialog.component';
 import { ManualBankReconciliationFacade } from '@features/facade/manual-bank-reconciliation.facade';
 import { ReconciliationSettingsApiService } from '@features/service/reconciliation-settings.api.service';
-import { CsAdvancedPeriodDateFilterComponent } from '@features/list-base/cs-advanced-period-date-filter.component';
+import { CsAdvancedPeriodDateFilterComponent } from '@williamsilva/nimbus-web-commons';
 import { CsAdvancedMultiselectFilterComponent } from '@features/list-base/cs-advanced-multiselect-filter.component';
 import { CsAdvancedFilterItemTemplateDirective } from '@features/list-base/cs-advanced-filter-item-template.directive';
 import { NoCreditOrderLegacyDialogComponent } from './no-credit-order-legacy-dialog/no-credit-order-legacy-dialog.component';
@@ -72,7 +72,7 @@ import {
   ActiveFilterItem,
   ActiveFilterGroup,
   FiltersPanelComponent,
-} from '@shared/features/filters-panel/filters-panel.component';
+} from '@williamsilva/nimbus-web-commons';
 
 type CreditOrderRow = CreditOrderApiModel & {
   rvDate?: string | null;
@@ -104,7 +104,7 @@ interface OrderFiltersState {
 
 @Component({
   standalone: true,
-  selector: 'cs-manual-bank-reconciliation',
+  selector: 'app-manual-bank-reconciliation',
   templateUrl: './manual-bank-reconciliation.component.html',
   providers: [ConfirmationService, MessageService, CsCurrencyPipe],
   styles: [
@@ -197,8 +197,8 @@ export class ManualBankReconciliationComponent implements OnInit {
   ordersRows = Number(localStorage.getItem(this.ordersTableRowsKey)) || 15;
   readonly rowsPerPageOptions = [15, 30, 50, 100];
 
-  private readonly lastOrdersEvent = signal<any>(null);
-  private readonly lastReleasesEvent = signal<any>(null);
+  private readonly lastOrdersEvent = signal<TableLazyLoadEvent | null>(null);
+  private readonly lastReleasesEvent = signal<TableLazyLoadEvent | null>(null);
 
   // Release filters
   readonly releaseBanks = signal<string[] | null>(null);
@@ -590,7 +590,7 @@ export class ManualBankReconciliationComponent implements OnInit {
     this.skipNextOrdersLazy = true;
   }
 
-  private readTableState(key: string): any | null {
+  private readTableState(key: string): TableState | null {
     const raw = localStorage.getItem(key);
     if (!raw) return null;
     try {
@@ -724,7 +724,7 @@ export class ManualBankReconciliationComponent implements OnInit {
     this.facade.clearOrders();
   }
 
-  onReleasesLazyLoad(event: any): void {
+  onReleasesLazyLoad(event: TableLazyLoadEvent): void {
     this.lastReleasesEvent.set(event);
     if (this.skipNextReleasesLazy) {
       this.skipNextReleasesLazy = false;
@@ -733,7 +733,7 @@ export class ManualBankReconciliationComponent implements OnInit {
     this.reloadReleases();
   }
 
-  onOrdersLazyLoad(event: any): void {
+  onOrdersLazyLoad(event: TableLazyLoadEvent): void {
     this.lastOrdersEvent.set(event);
     if (this.skipNextOrdersLazy) {
       this.skipNextOrdersLazy = false;
@@ -742,12 +742,12 @@ export class ManualBankReconciliationComponent implements OnInit {
     this.reloadOrders();
   }
 
-  onReleasesPageChange(event: any): void {
+  onReleasesPageChange(event: TablePageEvent): void {
     this.releasesRows = event.rows;
     localStorage.setItem(this.releasesTableRowsKey, String(this.releasesRows));
   }
 
-  onOrdersPageChange(event: any): void {
+  onOrdersPageChange(event: TablePageEvent): void {
     this.ordersRows = event.rows;
     localStorage.setItem(this.ordersTableRowsKey, String(this.ordersRows));
   }

@@ -26,7 +26,7 @@ import {
 
 @Component({
   standalone: true,
-  selector: 'cs-no-credit-order-legacy-dialog',
+  selector: 'app-no-credit-order-legacy-dialog',
   templateUrl: './no-credit-order-legacy-dialog.component.html',
   imports: [
     FormsModule,

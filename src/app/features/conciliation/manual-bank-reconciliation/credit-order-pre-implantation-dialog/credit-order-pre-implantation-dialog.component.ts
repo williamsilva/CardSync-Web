@@ -8,7 +8,7 @@ import { CreditOrderPreImplantationLinkingPreviewResult } from '@features/models
 
 @Component({
   standalone: true,
-  selector: 'cs-credit-order-pre-implantation-dialog',
+  selector: 'app-credit-order-pre-implantation-dialog',
   templateUrl: './credit-order-pre-implantation-dialog.component.html',
   imports: [ButtonModule, DialogModule, TranslateModule],
 })

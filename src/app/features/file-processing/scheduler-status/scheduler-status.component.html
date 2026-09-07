@@ -1,11 +1,11 @@
-<cs-page-header
+<app-page-header
   [compact]="false"
   [subtitle]="'scheduler.status.subtitle' | translate"
   [breadcrumb]="[
     { label: ('menu.dashboard' | translate), url: '/' },
     { label: ('scheduler.status.title' | translate) }
   ]"
-></cs-page-header>
+></app-page-header>
 
 <div class="flex justify-content-end gap-2 mb-3">
   <a pButton routerLink="../files" icon="pi pi-list" [label]="'scheduler.status.files' | translate" severity="secondary"></a>
@@ -32,11 +32,11 @@
         <div class="flex align-items-center justify-content-between">
           <span class="text-sm text-color-secondary">{{ 'scheduler.status.lastResult' | translate }}</span>
           @if (processingErp() || schedule()?.erp?.running) {
-            <cs-tag [value]="'scheduler.status.running' | translate" tone="info"></cs-tag>
+            <app-tag [value]="'scheduler.status.running' | translate" tone="info"></app-tag>
           } @else if (schedule()?.erp?.lastSuccess === true) {
-            <cs-tag [value]="'scheduler.status.success' | translate" tone="success"></cs-tag>
+            <app-tag [value]="'scheduler.status.success' | translate" tone="success"></app-tag>
           } @else if (schedule()?.erp?.lastSuccess === false) {
-            <cs-tag [value]="'scheduler.status.failed' | translate" tone="danger"></cs-tag>
+            <app-tag [value]="'scheduler.status.failed' | translate" tone="danger"></app-tag>
           } @else {
             <span class="text-sm text-color-secondary">{{ 'scheduler.status.noRun' | translate }}</span>
           }
@@ -86,11 +86,11 @@
         <div class="flex align-items-center justify-content-between">
           <span class="text-sm text-color-secondary">{{ 'scheduler.status.lastResult' | translate }}</span>
           @if (processingAcquirer() || schedule()?.acquirer?.running) {
-            <cs-tag [value]="'scheduler.status.running' | translate" tone="info"></cs-tag>
+            <app-tag [value]="'scheduler.status.running' | translate" tone="info"></app-tag>
           } @else if (schedule()?.acquirer?.lastSuccess === true) {
-            <cs-tag [value]="'scheduler.status.success' | translate" tone="success"></cs-tag>
+            <app-tag [value]="'scheduler.status.success' | translate" tone="success"></app-tag>
           } @else if (schedule()?.acquirer?.lastSuccess === false) {
-            <cs-tag [value]="'scheduler.status.failed' | translate" tone="danger"></cs-tag>
+            <app-tag [value]="'scheduler.status.failed' | translate" tone="danger"></app-tag>
           } @else {
             <span class="text-sm text-color-secondary">{{ 'scheduler.status.noRun' | translate }}</span>
           }
@@ -140,11 +140,11 @@
         <div class="flex align-items-center justify-content-between">
           <span class="text-sm text-color-secondary">{{ 'scheduler.status.lastResult' | translate }}</span>
           @if (processingBank() || schedule()?.bank?.running) {
-            <cs-tag [value]="'scheduler.status.running' | translate" tone="info"></cs-tag>
+            <app-tag [value]="'scheduler.status.running' | translate" tone="info"></app-tag>
           } @else if (schedule()?.bank?.lastSuccess === true) {
-            <cs-tag [value]="'scheduler.status.success' | translate" tone="success"></cs-tag>
+            <app-tag [value]="'scheduler.status.success' | translate" tone="success"></app-tag>
           } @else if (schedule()?.bank?.lastSuccess === false) {
-            <cs-tag [value]="'scheduler.status.failed' | translate" tone="danger"></cs-tag>
+            <app-tag [value]="'scheduler.status.failed' | translate" tone="danger"></app-tag>
           } @else {
             <span class="text-sm text-color-secondary">{{ 'scheduler.status.noRun' | translate }}</span>
           }

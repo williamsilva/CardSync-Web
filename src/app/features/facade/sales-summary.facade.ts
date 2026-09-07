@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 
 import { SaleSummaryApiModel, SalesSummaryManualCreateInput } from '@models/sales-summary.model';
 import { TransactionsTotalsModel } from '@models/transactionsTotalsModel';
-import { ListQueryDto } from '@shared/features/list-query/list-query.types';
+import { ListQueryDto } from '@williamsilva/nimbus-web-commons';
 import { SaleSummaryAdvancedFilters } from '@features/filter/sale-summary.filters';
 import { SaleSummaryApiService } from '@features/service/sales-summary.api.service';
 

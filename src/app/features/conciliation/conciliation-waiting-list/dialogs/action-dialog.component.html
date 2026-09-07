@@ -76,10 +76,11 @@
         </div>
 
         <div class="flex flex-column gap-1">
-          <label class="text-xs font-medium text-color-secondary">
+          <label for="actionObservations" class="text-xs font-medium text-color-secondary">
             {{ 'conciliation.actionDialog.deleteReason.observations' | translate }}
           </label>
           <textarea
+            id="actionObservations"
             [rows]="3"
             pInputTextarea
             [autoResize]="false"

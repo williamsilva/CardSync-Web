@@ -1,5 +1,5 @@
 <div class="cs-mgmt">
-  <cs-page-header
+  <app-page-header
     [compact]="false"
     [subtitle]="'breadcrumb.dashboard.management.subtitle' | translate"
     [breadcrumb]="[
@@ -7,7 +7,7 @@
       { label: 'breadcrumb.dashboard.management.title' | translate },
     ]"
   >
-  </cs-page-header>
+  </app-page-header>
 
   <cs-filters-panel
     (clear)="clear()"
@@ -37,7 +37,7 @@
         [periodLabel]="'managementDashboard.filter.period' | translate"
       />
 
-      <cs-advanced-multiselect-filter
+      <app-advanced-multiselect-filter
         optionValue="id"
         inputId="companyIds"
         optionLabel="fantasyName"
@@ -47,23 +47,23 @@
         [label]="'managementDashboard.filter.company' | translate"
         (valueChange)="selectedCompanyIds.set($event ?? [])"
       >
-        <ng-template csAdvancedFilterItem let-option>
+        <ng-template appAdvancedFilterItem let-option>
           <div class="cs-option-item">
             <div class="cs-option-item__label">{{ option.fantasyName }}</div>
             <div class="cs-option-item__subtext">
               {{ 'common.registrationNumber' | translate }}: {{ option.cnpj | csDocument }}
             </div>
             <div class="cs-option-item__subtext">
-              <cs-tag
+              <app-tag
                 [tone]="statusEnumSeverity(option.status)"
                 [value]="('common.status' | translate) + ': ' + statusEnumLabel(option.status)"
               />
             </div>
           </div>
         </ng-template>
-      </cs-advanced-multiselect-filter>
+      </app-advanced-multiselect-filter>
 
-      <cs-advanced-multiselect-filter
+      <app-advanced-multiselect-filter
         optionValue="id"
         inputId="acquirerIds"
         optionLabel="fantasyName"
@@ -73,23 +73,23 @@
         [label]="'managementDashboard.filter.acquirer' | translate"
         (valueChange)="selectedAcquirerIds.set($event ?? [])"
       >
-        <ng-template csAdvancedFilterItem let-option>
+        <ng-template appAdvancedFilterItem let-option>
           <div class="cs-option-item">
             <div class="cs-option-item__label">{{ option.fantasyName }}</div>
             <div class="cs-option-item__subtext">
               {{ 'common.registrationNumber' | translate }}: {{ option.cnpj | csDocument }}
             </div>
             <div class="cs-option-item__subtext">
-              <cs-tag
+              <app-tag
                 [tone]="statusEnumSeverity(option.status)"
                 [value]="('common.status' | translate) + ': ' + statusEnumLabel(option.status)"
               />
             </div>
           </div>
         </ng-template>
-      </cs-advanced-multiselect-filter>
+      </app-advanced-multiselect-filter>
 
-      <cs-advanced-multiselect-filter
+      <app-advanced-multiselect-filter
         inputId="flagIds"
         optionLabel="name"
         optionValue="id"
@@ -100,7 +100,7 @@
         (valueChange)="selectedFlagIds.set($event ?? [])"
       />
 
-      <cs-advanced-multiselect-filter
+      <app-advanced-multiselect-filter
         optionLabel="label"
         optionValue="value"
         inputId="modalities"

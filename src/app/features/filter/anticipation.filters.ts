@@ -5,7 +5,7 @@ import { ModalityEnum } from '@models/enums/modality.enum';
 import { StatusPaymentBankEnum } from '@models/enums/status-payment-bank.enum';
 import { StatusReconciliationEnum } from '@models/enums/status-reconciliation.enum';
 
-export type AnticipationFiltersState = {
+export interface AnticipationFiltersState {
   rvNumber: number | null;
 
   periodReleaseDate: PeriodEnum | null;
@@ -31,7 +31,7 @@ export type AnticipationFiltersState = {
   originalCreditValueEnd: number | null;
   advanceDiscountValueStart: number | null;
   advanceDiscountValueEnd: number | null;
-};
+}
 
 export type AnticipationAdvancedFilters = Partial<AnticipationFiltersState>;
 

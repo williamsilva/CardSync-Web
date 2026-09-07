@@ -3,7 +3,7 @@ import { Injectable, inject, signal } from '@angular/core';
 import { finalize } from 'rxjs';
 
 import { SaleSummaryApiModel } from '@models/sales-summary.model';
-import { ListQueryDto } from '@shared/features/list-query/list-query.types';
+import { ListQueryDto } from '@williamsilva/nimbus-web-commons';
 import { SaleSummaryAdvancedFilters } from '@features/filter/sale-summary.filters';
 import { SaleSummaryApiService } from '@features/service/sales-summary.api.service';
 

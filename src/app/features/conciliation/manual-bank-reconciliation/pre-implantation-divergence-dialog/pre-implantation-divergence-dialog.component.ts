@@ -26,7 +26,7 @@ import {
 
 @Component({
   standalone: true,
-  selector: 'cs-pre-implantation-divergence-dialog',
+  selector: 'app-pre-implantation-divergence-dialog',
   templateUrl: './pre-implantation-divergence-dialog.component.html',
   imports: [
     FormsModule,

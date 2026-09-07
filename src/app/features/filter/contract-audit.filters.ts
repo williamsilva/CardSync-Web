@@ -3,7 +3,7 @@ import { PeriodEnum } from '@models/enums/period.enum';
 import { CaptureEnum } from '@models/enums/capture.enum';
 import { ModalityEnum } from '@models/enums/modality.enum';
 
-export type ContractAuditFiltersState = {
+export interface ContractAuditFiltersState {
   cvNsu: string;
   authorization: string;
 
@@ -29,7 +29,7 @@ export type ContractAuditFiltersState = {
 
   periodSaleDate: PeriodEnum | null;
   saleDate: string | string[] | null;
-};
+}
 
 export type ContractAuditAdvancedFilters = Partial<ContractAuditFiltersState>;
 

@@ -47,13 +47,13 @@ export interface NoFileDayBulkStatusInput {
   ids: string[];
 }
 
-export type NoFileDayFiltersState = {
+export interface NoFileDayFiltersState {
   description: string;
   statusEnum: StatusEnum[] | null;
   noFileDateRange: [string, string] | null;
   dayType: NoFileDayTypeEnum[] | null;
   fileGroup: FileGroupEnum[] | null;
-};
+}
 
 export interface NoFileDayApiModel {
   id: string;

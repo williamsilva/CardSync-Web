@@ -52,14 +52,14 @@
         <td class="text-center">{{ item.pvNumber | csDocument }}</td>
 
         <td class="text-center">
-          <cs-tag
+          <app-tag
             [value]="statusLabel(item.status)"
             [tone]="severityTypeEstablishmentEnum(item.status)"
           />
         </td>
 
         <td class="text-center">
-          <cs-tag [value]="statusLabel(item.status)" [tone]="statusSeverity(item.status)" />
+          <app-tag [value]="statusLabel(item.status)" [tone]="statusSeverity(item.status)" />
         </td>
 
         <td class="text-center">
@@ -70,6 +70,7 @@
             [disabled]="!canRemoveRelations()"
             class="p-button-text p-button-sm p-button-danger"
             (click)="confirmRemoveEstablishment(item.establishmentId, item.pvNumber)"
+            [attr.aria-label]="'common.remove' | translate"
           ></button>
         </td>
       </tr>
@@ -281,6 +282,7 @@
             icon="pi pi-trash"
             class="p-button-text p-button-sm p-button-danger"
             (click)="removePendingRelation(item.pvNumber)"
+            [attr.aria-label]="'common.remove' | translate"
           ></button>
         </td>
       </tr>

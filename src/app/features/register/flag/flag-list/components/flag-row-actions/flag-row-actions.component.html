@@ -7,6 +7,7 @@
     tooltipPosition="top"
     [disabled]="!secPolicy().canEdit(row())"
     [pTooltip]="!secPolicy().canEdit(row()) ? undefined : ('common.edit' | translate)"
+    [attr.aria-label]="!secPolicy().canEdit(row()) ? undefined : ('common.edit' | translate)"
     (click)="onEdit()"
   ></button>
 
@@ -18,6 +19,11 @@
     tooltipPosition="top"
     [disabled]="!secPolicy().canActivate(row())"
     [pTooltip]="
+      secPolicy().canActivate(row())
+        ? ('flag.action.activate.label' | translate)
+        : (secPolicy().activateDisabledReason(row()) ?? '' | translate)
+    "
+    [attr.aria-label]="
       secPolicy().canActivate(row())
         ? ('flag.action.activate.label' | translate)
         : (secPolicy().activateDisabledReason(row()) ?? '' | translate)
@@ -37,6 +43,11 @@
         ? ('flag.action.deactivate.label' | translate)
         : (secPolicy().deactivateDisabledReason(row()) ?? '' | translate)
     "
+    [attr.aria-label]="
+      secPolicy().canDeactivate(row())
+        ? ('flag.action.deactivate.label' | translate)
+        : (secPolicy().deactivateDisabledReason(row()) ?? '' | translate)
+    "
     (click)="onDeactivate()"
   ></button>
 
@@ -48,6 +59,11 @@
     tooltipPosition="top"
     [disabled]="!secPolicy().canBlock(row())"
     [pTooltip]="
+      secPolicy().canBlock(row())
+        ? ('flag.action.block.label' | translate)
+        : (secPolicy().blockDisabledReason(row()) ?? '' | translate)
+    "
+    [attr.aria-label]="
       secPolicy().canBlock(row())
         ? ('flag.action.block.label' | translate)
         : (secPolicy().blockDisabledReason(row()) ?? '' | translate)

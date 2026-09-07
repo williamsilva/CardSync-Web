@@ -225,10 +225,8 @@ export interface ErpCancellationReprocessResult {
   skippedNoErpLinked: number;
 }
 
-export interface ConciliationWaitingCreateInput {}
-
-export interface ConciliationWaitingUpdateInput {}
-
+export type ConciliationWaitingCreateInput = object;
+export type ConciliationWaitingUpdateInput = object;
 /**
  * Payload bruto vindo da API.
  * Aceita o contrato antigo, o contrato flat e o novo contrato com erp/acquirerTransaction.

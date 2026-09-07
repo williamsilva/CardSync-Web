@@ -4,7 +4,7 @@ import { finalize } from 'rxjs';
 
 import { TransactionsAcqModel } from '@models/transactions-acq.models';
 import { TransactionsTotalsModel } from '@models/transactionsTotalsModel';
-import { ListQueryDto } from '@shared/features/list-query/list-query.types';
+import { ListQueryDto } from '@williamsilva/nimbus-web-commons';
 import { TransactionsAcqApiService } from '@features/service/transaction-acq.api.service';
 import { TransactionsAcqAdvancedFilters } from '@features/filter/transaction-acq.filters';
 

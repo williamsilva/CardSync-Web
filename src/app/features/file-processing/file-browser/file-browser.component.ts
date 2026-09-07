@@ -17,7 +17,7 @@ import {
   ActiveFilterItem,
   ActiveFilterGroup,
   FiltersPanelComponent,
-} from '@shared/features/filters-panel/filters-panel.component';
+} from '@williamsilva/nimbus-web-commons';
 import {
   FileBrowserFolder,
   FileUploadSystem,
@@ -41,7 +41,7 @@ interface FileBrowserFiltersState {
 
 @Component({
   standalone: true,
-  selector: 'cs-file-browser',
+  selector: 'app-file-browser',
   styleUrl: './file-browser.component.scss',
   templateUrl: './file-browser.component.html',
   providers: [CsDatePipe],

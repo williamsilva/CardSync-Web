@@ -14,29 +14,29 @@ import { I18nService } from '@core/i18n/i18n.service';
 import { CsDatePipe } from '@shared/pipes/cs-date.pipe';
 import { STATE_KEY } from '@features/state-key.constants';
 import { boolSeverity as getBoolSeverity } from '../file-processing-ui';
-import { StatefulListPage } from '@features/list-base/stateful-list-page';
-import { buildListQuery } from '@shared/features/list-query/list-query.builder';
+import { StatefulListPage } from '@williamsilva/nimbus-web-commons';
+import { buildListQuery } from '@williamsilva/nimbus-web-commons';
 import { FileProcessingService } from '@features/service/file-processing.service';
 import { allPeriodEnum, PeriodEnum, periodEnumLabel } from '@models/enums/period.enum';
 import { ProcessedFilesAdvancedFilters } from '@features/filter/processed-files.filters';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
 import { ScheduleStatusResponse, FileProcessingTotalsModel } from '@models/file-processing.models';
-import { CsAdvancedPeriodDateFilterComponent } from '@features/list-base/cs-advanced-period-date-filter.component';
+import { CsAdvancedPeriodDateFilterComponent } from '@williamsilva/nimbus-web-commons';
 import { CsAdvancedMultiselectFilterComponent } from '@features/list-base/cs-advanced-multiselect-filter.component';
 import {
   ActiveFilterItem,
   FiltersPanelComponent,
-} from '@shared/features/filters-panel/filters-panel.component';
+} from '@williamsilva/nimbus-web-commons';
 
-type DashboardFiltersState = {
+interface DashboardFiltersState {
   dateImport: string | string[] | null;
   periodDateImport: PeriodEnum | null;
   group: string[] | null;
-};
+}
 
 @Component({
   standalone: true,
-  selector: 'cs-file-processing-dashboard',
+  selector: 'app-file-processing-dashboard',
   styleUrl: './file-processing-dashboard.component.scss',
   templateUrl: './file-processing-dashboard.component.html',
   imports: [
@@ -141,6 +141,8 @@ export class FileProcessingDashboardComponent extends StatefulListPage<
   }
 
   protected override loadPage(
+    // query não é usado - este dashboard não pagina uma tabela, só recarrega os totais agregados.
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     _query: ReturnType<typeof buildListQuery<ProcessedFilesAdvancedFilters>>,
   ): void {
     this.loadTotals();
@@ -174,7 +176,9 @@ export class FileProcessingDashboardComponent extends StatefulListPage<
     return items;
   });
 
-  protected override mapTableFiltersToActiveItems(_filters: any): ActiveFilterItem[] {
+  // filters não é usado - este dashboard não tem tabela com filtros por coluna.
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  protected override mapTableFiltersToActiveItems(_filters: Record<string, unknown>): ActiveFilterItem[] {
     return [];
   }
 

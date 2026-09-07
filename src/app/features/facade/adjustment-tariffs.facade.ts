@@ -3,7 +3,7 @@ import { Injectable, inject, signal } from '@angular/core';
 import { finalize } from 'rxjs';
 
 import { ValueTotalsModel } from '@models/value-totals-model';
-import { ListQueryDto } from '@shared/features/list-query/list-query.types';
+import { ListQueryDto } from '@williamsilva/nimbus-web-commons';
 import { AdjustmentTariffsApiModel } from '@models/adjustment-tariffs.model';
 import { AdjustmentAdvancedFilters } from '@features/filter/adjustment-tariffs.filters';
 import { AdjustmentApiService } from '@features/service/adjustment-tariffs.api.service';

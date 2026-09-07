@@ -25,7 +25,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { I18nService } from '@core/i18n/i18n.service';
 import { CsTagComponent, CsTagTone } from '@shared/ui';
 import { CsDatePipe } from '@shared/pipes/cs-date.pipe';
-import { DateInputMaskDirective } from '@shared/directives/date-input-mask.directive';
+import { DateInputMaskDirective } from '@williamsilva/nimbus-web-commons';
 import { ToastService } from '@core/toast/toast.service';
 import { STATE_KEY } from '@features/state-key.constants';
 import { FlagFacade } from '@features/facade/flag.facade';
@@ -33,17 +33,17 @@ import { CompanyFacade } from '@features/facade/company.facade';
 import { CsDocumentPipe } from '@shared/pipes/cs-document.pipe';
 import { CsCurrencyPipe } from '@shared/pipes/cs-currency.pipe';
 import { AcquirerFacade } from '@features/facade/acquirer.facade';
-import { BatchDialogComponent } from '../dialogs/batch-dialog.component';
-import { StatefulListPage } from '@features/list-base/stateful-list-page';
+import { BatchAction, BatchDialogComponent } from '../dialogs/batch-dialog.component';
+import { StatefulListPage } from '@williamsilva/nimbus-web-commons';
 import { EstablishmentFacade } from '@features/facade/establishment.facade';
-import { buildListQuery } from '@shared/features/list-query/list-query.builder';
+import { buildListQuery } from '@williamsilva/nimbus-web-commons';
 import { allPeriodEnum, PeriodEnum, periodEnumLabel } from '@models/enums/period.enum';
 import { StatusEnum, statusEnumLabel, statusEnumSeverity } from '@models/enums/status.enum';
 import { ConciliationWaitingFacade } from '@features/facade/conciliation-waiting.facade';
 import { ErpVsAcquirerComparisonDialogComponent } from '../dialogs/comparison-dialog.component';
 import { CsColumnFilterShellComponent } from '@features/list-base/cs-column-filter-shell.component';
 import { CsAdvancedTextFilterComponent } from '@features/list-base/cs-advanced-text-filter.component';
-import { CsAdvancedPeriodDateFilterComponent } from '@features/list-base/cs-advanced-period-date-filter.component';
+import { CsAdvancedPeriodDateFilterComponent } from '@williamsilva/nimbus-web-commons';
 import { CsAdvancedMultiselectFilterComponent } from '@features/list-base/cs-advanced-multiselect-filter.component';
 import { CsAdvancedFilterItemTemplateDirective } from '@features/list-base/cs-advanced-filter-item-template.directive';
 import {
@@ -62,11 +62,11 @@ import {
   readArrayFilterValues,
   readPeriodFilterValue,
   readSingleFilterValue,
-} from '@features/list-base/table-filter-readers';
+} from '@williamsilva/nimbus-web-commons';
 import {
   ActiveFilterItem,
   FiltersPanelComponent,
-} from '@shared/features/filters-panel/filters-panel.component';
+} from '@williamsilva/nimbus-web-commons';
 import {
   StatusTransactionReasonEnum,
   allStatusTransactionReasonEnum,
@@ -100,7 +100,7 @@ import {
 @Component({
   standalone: true,
   providers: [CsDatePipe],
-  selector: 'cs-erp-vs-acquirer-other-divergences-list',
+  selector: 'app-erp-vs-acquirer-other-divergences-list',
   templateUrl: './other-divergences-list.component.html',
   imports: [
     Select,
@@ -145,7 +145,7 @@ export class ErpVsAcquirerOtherDivergencesListComponent
   protected readonly actionDialogVisible = signal(false);
   protected readonly comparisonDialogVisible = signal(false);
 
-  protected readonly pendingBatchAction = signal<any | null>(null);
+  protected readonly pendingBatchAction = signal<BatchAction>(null);
   protected readonly selectedRows = signal<ConciliationWaitingModel[]>([]);
   protected readonly selectedRow = signal<ConciliationWaitingModel | null>(null);
   protected readonly comparison = signal<ErpAcquirerComparisonModel | null>(null);
@@ -368,7 +368,7 @@ export class ErpVsAcquirerOtherDivergencesListComponent
     this.pendingBatchAction.set(null);
   }
 
-  protected confirmBatchAction(_payload?: any): void {
+  protected confirmBatchAction(): void {
     this.batchDialogVisible.set(false);
   }
 
@@ -715,7 +715,7 @@ export class ErpVsAcquirerOtherDivergencesListComponent
     };
   }
 
-  protected override mapTableFiltersToActiveItems(filters: any): ActiveFilterItem[] {
+  protected override mapTableFiltersToActiveItems(filters: Record<string, unknown>): ActiveFilterItem[] {
     this.i18n.getAppliedLang();
     const items: ActiveFilterItem[] = [];
 
@@ -967,6 +967,9 @@ export class ErpVsAcquirerOtherDivergencesListComponent
     return this.facade.loading();
   }
 
+  // row mantido pra bater com a assinatura usada em missing-erp-list (canCreateErp(row)), mesmo
+  // sem uso aqui.
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected canCreateErp(_row: ConciliationWaitingModel | null | undefined): boolean {
     // Na visão de outras divergências não existe ação de criação ERP.
     // A linha pode vir somente com ERP quando o backend ainda não encontrou/vinculou a adquirente.
@@ -1054,7 +1057,7 @@ export class ErpVsAcquirerOtherDivergencesListComponent
     this.pendingConfirmRow.set(null);
   }
 
-  protected confirmAction(_payload?: any): void {
+  protected confirmAction(): void {
     this.actionDialogVisible.set(false);
   }
 

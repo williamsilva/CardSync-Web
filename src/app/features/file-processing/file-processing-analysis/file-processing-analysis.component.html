@@ -1,4 +1,4 @@
-<cs-page-header
+<app-page-header
   [compact]="false"
   [subtitle]="'fileProcessingAnalysis.subtitle' | translate"
   [breadcrumb]="[
@@ -16,7 +16,7 @@
     class="p-button-text p-button-sm"
     [label]="'common.update' | translate"
   ></button>
-</cs-page-header>
+</app-page-header>
 
 <p-card>
   @if (loading()) {
@@ -34,14 +34,18 @@
       @for (file of files(); track file.id) {
         <div class="border-1 surface-border border-round overflow-hidden">
           <div
+            role="button"
+            tabindex="0"
             class="flex align-items-center justify-content-between px-3 py-2 cs-exec-row"
             (click)="toggleFile(file.id)"
+            (keydown.enter)="toggleFile(file.id)"
+            (keydown.space)="toggleFile(file.id)"
           >
             <div class="flex align-items-center gap-3 flex-wrap">
-              <cs-tag
+              <app-tag
                 [value]="file.group ?? '—'"
                 [tone]="groupTone(file.group)"
-              ></cs-tag>
+              ></app-tag>
               <span class="text-sm font-medium cs-filename">{{ file.file }}</span>
               @if (file.dateImport) {
                 <span class="text-sm text-color-secondary">{{ file.dateImport | csDate: 'short' }}</span>
@@ -74,10 +78,10 @@
                   </span>
                 }
               </div>
-              <cs-tag
+              <app-tag
                 [value]="'importedFilesCalendar.status.' + file.status | translate"
                 [tone]="fileStatusSeverity(file.status)"
-              ></cs-tag>
+              ></app-tag>
               <i
                 class="pi text-color-secondary"
                 [class.pi-chevron-down]="!isExpanded(file.id)"

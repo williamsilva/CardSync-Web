@@ -25,11 +25,11 @@ export interface HolidayBulkStatusInput {
   ids: string[];
 }
 
-export type HolidayFiltersState = {
+export interface HolidayFiltersState {
   name: string;
   statusEnum: StatusEnum[] | null;
   holidayDateRange: [string, string] | null;
-};
+}
 
 export interface HolidayApiModel {
   id: string;

@@ -1,6 +1,6 @@
 import { FormsModule } from '@angular/forms';
 
-import { Component, ViewChild, computed, inject, signal } from '@angular/core';
+import { Component, ViewChild, computed, inject, signal, OnInit } from '@angular/core';
 
 import { Table } from 'primeng/table';
 import { TableModule } from 'primeng/table';
@@ -19,15 +19,15 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService, MessageService } from 'primeng/api';
 
 import { CsTagComponent } from '@shared/ui';
-import { DateInputMaskDirective } from '@shared/directives/date-input-mask.directive';
+import { DateInputMaskDirective } from '@williamsilva/nimbus-web-commons';
 import { I18nService } from '@core/i18n/i18n.service';
 import { CsDatePipe } from '@shared/pipes/cs-date.pipe';
 import { STATE_KEY } from '@features/state-key.constants';
 import { NoFileDayFacade } from '@features/facade/no-file-day.facade';
-import { StatefulListPage } from '@features/list-base/stateful-list-page';
+import { StatefulListPage } from '@williamsilva/nimbus-web-commons';
 import { BulkActionListPage } from '@features/list-base/bulk-action-list-page';
 import { NoFileDayAdvancedFilters } from '@features/filter/no-file-day.filters';
-import { buildListQuery } from '@shared/features/list-query/list-query.builder';
+import { buildListQuery } from '@williamsilva/nimbus-web-commons';
 import { NoFileDayModel, NoFileDayFiltersState } from '@models/no-file-day.models';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
 import { NoFileDayPermissionPolicy } from '@features/security/policy/no-file-day-permission.policy';
@@ -36,7 +36,7 @@ import { NoFileDayCreateDialogComponent } from '../no-file-day-create/no-file-da
 import {
   ActiveFilterItem,
   FiltersPanelComponent,
-} from '@shared/features/filters-panel/filters-panel.component';
+} from '@williamsilva/nimbus-web-commons';
 import {
   StatusEnum,
   allStatusEnum,
@@ -59,7 +59,7 @@ import {
   readArrayFilterValues,
   readSingleFilterValue,
   readDateRangeFilterValue,
-} from '@features/list-base/table-filter-readers';
+} from '@williamsilva/nimbus-web-commons';
 
 @Component({
   standalone: true,
@@ -92,7 +92,7 @@ import {
 export class NoFileDayListComponent extends StatefulListPage<
   NoFileDayFiltersState,
   NoFileDayAdvancedFilters
-> {
+> implements OnInit {
   @ViewChild('dt') private dt?: Table;
 
   readonly facade = inject(NoFileDayFacade);
@@ -474,7 +474,7 @@ export class NoFileDayListComponent extends StatefulListPage<
 
   protected loadFirstPage() {
     const query = buildListQuery<NoFileDayAdvancedFilters>(
-      { page: 0, size: this.rows } as any,
+      { page: 0, size: this.rows },
       this.buildAdvancedFilters(),
     );
     this.clearSelection();
@@ -530,7 +530,7 @@ export class NoFileDayListComponent extends StatefulListPage<
     };
   }
 
-  protected override mapTableFiltersToActiveItems(filters: any): ActiveFilterItem[] {
+  protected override mapTableFiltersToActiveItems(filters: Record<string, unknown>): ActiveFilterItem[] {
     this.i18n.getAppliedLang();
     const items: ActiveFilterItem[] = [];
 

@@ -90,10 +90,8 @@ export interface ProcessedFileModel {
   errorMessage?: string | null;
 }
 
-export interface ProcessedFileCreateInput {}
-
-export interface ProcessedFileUpdateInput {}
-
+export type ProcessedFileCreateInput = object;
+export type ProcessedFileUpdateInput = object;
 /**
  * Payload bruto vindo da API.
  * Aceita status numérico ou string para tolerar mudanças no backend.
@@ -150,6 +148,25 @@ export interface PageQuery {
   page?: number;
   size?: number;
   sort?: string;
+}
+
+export interface RedeTotalizerModel {
+  processedFile?: string | null;
+  lineNumber?: number | null;
+  type?: string | null;
+  pvNumber?: string | null;
+  creditDate?: string | null;
+  company?: string | null;
+  acquirer?: string | null;
+  establishment?: string | null;
+  totalCreditValue?: number | null;
+  totalValueNormalCredits?: number | null;
+  totalValueAdvanceCredits?: number | null;
+  totalValueAnticipated?: number | null;
+  amountCreditAdjustments?: number | null;
+  totalValueCreditAdjustments?: number | null;
+  amountDebitAdjustments?: number | null;
+  totalValueDebitAdjustments?: number | null;
 }
 
 export type FileProcessingStatus =

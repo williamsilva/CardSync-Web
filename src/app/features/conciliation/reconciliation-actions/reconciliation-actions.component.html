@@ -1,11 +1,11 @@
-<cs-page-header
+<app-page-header
   [compact]="false"
   [subtitle]="'conciliation.reconciliationActions.subtitle' | translate"
   [breadcrumb]="[
     { label: ('breadcrumb.dashboard.title' | translate), url: '/' },
     { label: ('routes.conciliation.reconciliationActions.title' | translate) },
   ]"
-></cs-page-header>
+></app-page-header>
 
 <div class="surface-card border-round px-3 pt-2 pb-3 mt-2">
   <div>
@@ -183,12 +183,12 @@
       </div>
     </div>
 
-    <cs-cancellation-reprocess-dialog
+    <app-cancellation-reprocess-dialog
       [resolving]="reprocessingCancellations()"
       [visible]="cancellationReprocessDialogVisible()"
       (confirm)="confirmCancellationReprocess($event)"
       (closeDialog)="cancellationReprocessDialogVisible.set(false)"
       (visibleChange)="cancellationReprocessDialogVisible.set($event)"
-    ></cs-cancellation-reprocess-dialog>
+    ></app-cancellation-reprocess-dialog>
   </div>
 </div>

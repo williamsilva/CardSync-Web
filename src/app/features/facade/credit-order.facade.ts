@@ -3,7 +3,7 @@ import { Injectable, inject, signal } from '@angular/core';
 import { finalize, Observable } from 'rxjs';
 
 import { TransactionsTotalsModel } from '@models/transactionsTotalsModel';
-import { ListQueryDto } from '@shared/features/list-query/list-query.types';
+import { ListQueryDto } from '@williamsilva/nimbus-web-commons';
 import { CreditOrderAdvancedFilters } from '@features/filter/credit-order.filters';
 import { CreditOrderApiService } from '@features/service/credit-order.api.service';
 import {

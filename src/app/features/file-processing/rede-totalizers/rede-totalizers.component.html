@@ -55,7 +55,7 @@
             <strong>{{ row.processedFile || '-' }}</strong
             ><small>Linha {{ row.lineNumber || '-' }}</small>
           </td>
-          <td><cs-tag [value]="row.type || '-'" severity="secondary"></cs-tag></td>
+          <td><app-tag [value]="row.type || '-'" severity="secondary"></app-tag></td>
           <td>
             <strong>PV {{ row.pvNumber || '-' }}</strong
             ><small>{{ row.creditDate | date: 'shortDate' }}</small>

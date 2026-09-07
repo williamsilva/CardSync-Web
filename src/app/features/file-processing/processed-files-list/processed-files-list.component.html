@@ -1,4 +1,4 @@
-<cs-page-header
+<app-page-header
   [compact]="false"
   [subtitle]="'processedFiles.subtitle' | translate"
   [breadcrumb]="[
@@ -15,7 +15,7 @@
     class="p-button-text p-button-sm"
     [label]="'common.update' | translate"
   ></button>
-</cs-page-header>
+</app-page-header>
 
 <cs-filters-panel
   (clear)="clear()"
@@ -61,7 +61,7 @@
       (periodChange)="onPeriodColumnChange(periodDateImport, dateImport, $event)"
     ></cs-advanced-period-date-filter>
 
-    <cs-advanced-multiselect-filter
+    <app-advanced-multiselect-filter
       inputId="group"
       [value]="group()"
       optionLabel="label"
@@ -70,9 +70,9 @@
       class="col-12 md:col-3 xl:col-2 p-1"
       (valueChange)="group.set($event)"
       [label]="'processedFiles.fields.origin' | translate"
-    ></cs-advanced-multiselect-filter>
+    ></app-advanced-multiselect-filter>
 
-    <cs-advanced-multiselect-filter
+    <app-advanced-multiselect-filter
       inputId="status"
       [value]="status()"
       optionLabel="label"
@@ -81,15 +81,15 @@
       class="col-12 md:col-3 xl:col-2 p-1"
       (valueChange)="status.set($event)"
       [label]="'processedFiles.fields.status' | translate"
-    ></cs-advanced-multiselect-filter>
+    ></app-advanced-multiselect-filter>
 
-    <cs-advanced-text-filter
+    <app-advanced-text-filter
       inputId="fileName"
       [value]="fileName()"
       class="col-12 md:col-3 xl:col-2 p-1"
       (valueChange)="fileName.set($event)"
       [label]="'processedFiles.fields.fileName' | translate"
-    ></cs-advanced-text-filter>
+    ></app-advanced-text-filter>
   </div>
 </cs-filters-panel>
 
@@ -164,7 +164,7 @@
                 styleClass="cs-colfilter"
               >
                 <ng-template pTemplate="filter" let-filter="filterCallback">
-                  <cs-column-filter-shell
+                  <app-column-filter-shell
                     minWidth="20rem"
                     [clearLabel]="'common.clear' | translate"
                     [applyLabel]="'common.apply' | translate"
@@ -182,7 +182,7 @@
                       [ngModel]="fileNameColumnDraft()"
                       (ngModelChange)="fileNameColumnDraft.set($event)"
                     />
-                  </cs-column-filter-shell>
+                  </app-column-filter-shell>
                 </ng-template>
               </p-columnFilter>
             </span>
@@ -212,7 +212,7 @@
                 styleClass="cs-colfilter"
               >
                 <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                  <cs-column-filter-shell
+                  <app-column-filter-shell
                     minWidth="14rem"
                     [clearLabel]="'common.clear' | translate"
                     [applyLabel]="'common.apply' | translate"
@@ -230,7 +230,7 @@
                       [placeholder]="'common.all' | translate"
                       (ngModelChange)="setArrayColumnDraft(groupColumnDraft, $event)"
                     ></p-multiSelect>
-                  </cs-column-filter-shell>
+                  </app-column-filter-shell>
                 </ng-template>
               </p-columnFilter>
             </span>
@@ -261,7 +261,7 @@
                 styleClass="cs-colfilter"
               >
                 <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                  <cs-column-filter-shell
+                  <app-column-filter-shell
                     minWidth="16rem"
                     [clearLabel]="'common.clear' | translate"
                     [applyLabel]="'common.apply' | translate"
@@ -279,7 +279,7 @@
                       [placeholder]="'common.all' | translate"
                       (ngModelChange)="setArrayColumnDraft(statusColumnDraft, $event)"
                     ></p-multiSelect>
-                  </cs-column-filter-shell>
+                  </app-column-filter-shell>
                 </ng-template>
               </p-columnFilter>
             </span>
@@ -347,11 +347,11 @@
         </td>
 
         <td class="text-center">
-          <cs-tag tone="secondary" [value]="row.originFile || row.group || '-'"></cs-tag>
+          <app-tag tone="secondary" [value]="row.originFile || row.group || '-'"></app-tag>
         </td>
 
         <td class="text-center">
-          <cs-tag [value]="row.status" [tone]="fileStatusSeverity(row.status)"></cs-tag>
+          <app-tag [value]="row.status" [tone]="fileStatusSeverity(row.status)"></app-tag>
         </td>
 
         <td>
@@ -401,6 +401,7 @@
               class="p-button-text p-button-sm"
               [routerLink]="[row.id]"
               [pTooltip]="'common.view' | translate"
+              [attr.aria-label]="'common.view' | translate"
             ></a>
           </div>
         </td>

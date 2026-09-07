@@ -15,7 +15,7 @@ import { FloatLabelModule } from 'primeng/floatlabel';
 import { DatePickerModule } from 'primeng/datepicker';
 import { TranslateModule } from '@ngx-translate/core';
 
-import { DateInputMaskDirective } from '@shared/directives/date-input-mask.directive';
+import { DateInputMaskDirective } from '@williamsilva/nimbus-web-commons';
 
 export interface CancellationReprocessPayload {
   year: number;
@@ -24,7 +24,7 @@ export interface CancellationReprocessPayload {
 
 @Component({
   standalone: true,
-  selector: 'cs-cancellation-reprocess-dialog',
+  selector: 'app-cancellation-reprocess-dialog',
   templateUrl: './cancellation-reprocess-dialog.component.html',
   styleUrl: './cancellation-reprocess-dialog.component.scss',
   imports: [

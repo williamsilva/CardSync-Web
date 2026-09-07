@@ -31,7 +31,7 @@ export interface CompanyUpdateInput {
   type?: TypeCompanyEnum;
 }
 
-export type CompanyFiltersState = {
+export interface CompanyFiltersState {
   cnpj: string;
   fantasyName: string;
   socialReason: string;
@@ -40,7 +40,7 @@ export type CompanyFiltersState = {
   createdBy: string[] | null;
   statusEnum: StatusEnum[] | null;
   typeEnum: TypeCompanyEnum[] | null;
-};
+}
 
 export interface CompanyBulkStatusInput {
   ids: string[];

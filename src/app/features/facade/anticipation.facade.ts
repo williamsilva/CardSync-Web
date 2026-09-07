@@ -4,7 +4,7 @@ import { finalize } from 'rxjs';
 
 import { AnticipationApiModel } from '@models/anticipation.model';
 import { TransactionsTotalsModel } from '@models/transactionsTotalsModel';
-import { ListQueryDto } from '@shared/features/list-query/list-query.types';
+import { ListQueryDto } from '@williamsilva/nimbus-web-commons';
 import { AnticipationAdvancedFilters } from '@features/filter/anticipation.filters';
 import { AnticipationApiService } from '@features/service/anticipation.api.service';
 

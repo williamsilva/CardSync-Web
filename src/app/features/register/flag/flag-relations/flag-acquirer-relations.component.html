@@ -49,7 +49,7 @@
         <td class="text-center">{{ item.cnpj | csDocument }}</td>
 
         <td class="text-center">
-          <cs-tag [value]="statusLabel(item.status)" [tone]="statusSeverity(item.status)" />
+          <app-tag [value]="statusLabel(item.status)" [tone]="statusSeverity(item.status)" />
         </td>
 
         <td class="text-center">
@@ -60,6 +60,7 @@
             [disabled]="!canRemoveRelations()"
             class="p-button-text p-button-sm p-button-danger"
             (click)="confirmRemoveAcquirer(item.acquirerId, item.fantasyName)"
+            [attr.aria-label]="'common.remove' | translate"
           ></button>
         </td>
       </tr>
@@ -202,6 +203,7 @@
             icon="pi pi-trash"
             (click)="removePendingRelation(item.acquirerId)"
             class="p-button-text p-button-sm p-button-danger"
+            [attr.aria-label]="'common.remove' | translate"
           ></button>
         </td>
       </tr>

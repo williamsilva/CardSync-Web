@@ -1,4 +1,4 @@
-<cs-page-header
+<app-page-header
   [compact]="false"
   [subtitle]="subtitleKey() | translate"
   [breadcrumb]="[
@@ -87,22 +87,22 @@
       [label]="'common.update' | translate"
     ></button>
   }
-</cs-page-header>
+</app-page-header>
 
 @switch (activeTab()) {
   @case ('manualSalesSummary') {
-    <cs-manual-sales-summary />
+    <app-manual-sales-summary />
   }
   @case ('manualCreditOrder') {
-    <cs-manual-credit-order />
+    <app-manual-credit-order />
   }
   @case ('manualBankStatement') {
-    <cs-manual-bank-statement />
+    <app-manual-bank-statement />
   }
   @case ('manualAdjustment') {
-    <cs-manual-adjustment />
+    <app-manual-adjustment />
   }
   @case ('manualBankReconciliation') {
-    <cs-manual-bank-reconciliation />
+    <app-manual-bank-reconciliation />
   }
 }

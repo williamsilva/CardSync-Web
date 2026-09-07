@@ -1,11 +1,7 @@
-export interface FlagRelationsModel {}
-
-export interface FlagRelationsCreateInput {}
-
-export interface FlagRelationsUpdateInput {}
-
-export interface FlagRelationsApiModel {}
-
+export type FlagRelationsModel = object;
+export type FlagRelationsCreateInput = object;
+export type FlagRelationsUpdateInput = object;
+export type FlagRelationsApiModel = object;
 export function mapFlagApiModel(input: FlagRelationsApiModel): FlagRelationsModel {
   return {
     ...input,

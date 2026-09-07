@@ -1,10 +1,10 @@
-<cs-page-header
+<app-page-header
   [subtitle]="'conciliation.settings.subtitle' | translate"
   [breadcrumb]="[
     { label: ('menu.settings.title' | translate), url: '/settings' },
     { label: ('routes.settings.reconciliation.title' | translate) },
   ]"
-></cs-page-header>
+></app-page-header>
 
 <p-card class="mt-2 block">
   <form [formGroup]="form" (ngSubmit)="save()">

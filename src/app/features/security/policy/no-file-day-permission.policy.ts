@@ -17,6 +17,9 @@ export class NoFileDayPermissionPolicy {
     return this.perms.hasSupportOr(PERMISSIONS.NO_FILE_DAY.CREATE);
   }
 
+  // row mantido pra uniformizar a assinatura com os outros métodos da policy (o
+  // chamador sempre passa a linha), mesmo sem uso aqui.
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   canEdit(_row: NoFileDayModel): boolean {
     return this.perms.hasSupportOr(PERMISSIONS.NO_FILE_DAY.CHANGE);
   }
@@ -32,6 +35,9 @@ export class NoFileDayPermissionPolicy {
     return normalizeStatusEnum(row.status) === StatusEnum.ACTIVE;
   }
 
+  // row mantido pra uniformizar a assinatura com os outros métodos da policy (o
+  // chamador sempre passa a linha), mesmo sem uso aqui.
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   canDelete(_row: NoFileDayModel): boolean {
     return this.perms.hasSupportOr(PERMISSIONS.NO_FILE_DAY.DELETE);
   }
@@ -50,7 +56,7 @@ export class NoFileDayPermissionPolicy {
     return this.selectableStatus(row) === status;
   }
 
-  canActivateBulk(rows: ReadonlyArray<NoFileDayModel> | null | undefined): boolean {
+  canActivateBulk(rows: readonly NoFileDayModel[] | null | undefined): boolean {
     return (
       !!rows?.length &&
       rows.every((row) => {
@@ -60,13 +66,13 @@ export class NoFileDayPermissionPolicy {
     );
   }
 
-  canDeactivateBulk(rows: ReadonlyArray<NoFileDayModel> | null | undefined): boolean {
+  canDeactivateBulk(rows: readonly NoFileDayModel[] | null | undefined): boolean {
     return (
       !!rows?.length && rows.every((row) => normalizeStatusEnum(row.status) === StatusEnum.ACTIVE)
     );
   }
 
-  canDeleteBulk(rows: ReadonlyArray<NoFileDayModel> | null | undefined): boolean {
+  canDeleteBulk(rows: readonly NoFileDayModel[] | null | undefined): boolean {
     return !!rows?.length && this.perms.hasSupportOr(PERMISSIONS.NO_FILE_DAY.DELETE);
   }
 }
