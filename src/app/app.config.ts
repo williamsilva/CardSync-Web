@@ -22,6 +22,7 @@ import {
 import { appRoutes } from './app.routes';
 import { I18nService } from './core/i18n/i18n.service';
 import { csrfInterceptor } from './core/api/csrf.interceptor';
+import { provideNimbusLayoutHosts } from './core/layout/layout-providers';
 import { AppTitleStrategy } from './core/router/app-title.strategy';
 import { errorInterceptor } from './core/interceptors/error.interceptor';
 import { AssetsTranslateLoader } from './core/i18n/assets-translate.loader';
@@ -38,6 +39,10 @@ export const appConfig: ApplicationConfig = {
     // preserva a mesma chave de localStorage ("cardsync.theme"), senão quem já tinha escolhido
     // dark mode nesse navegador voltaria a ver light na próxima visita.
     { provide: NIMBUS_THEME_CONFIG, useValue: { appId: 'cardsync' } },
+
+    // NIMBUS_SIDEBAR_HOST/NIMBUS_TOPBAR_HOST (SidebarComponent/TopbarComponent compartilhados) -
+    // ver core/layout/layout-providers.ts.
+    ...provideNimbusLayoutHosts(),
 
     provideRouter(
       appRoutes,
