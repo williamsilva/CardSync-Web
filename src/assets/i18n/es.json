@@ -3093,6 +3093,7 @@
       "noneReceived": "ningún archivo recibido",
       "statusComplete": "Completo",
       "statusPartial": "Parcial",
+      "statusAttention": "Completo, verificar PV",
       "statusMissing": "Ausente",
       "received": "Recibidos",
       "pending": "Pendientes",

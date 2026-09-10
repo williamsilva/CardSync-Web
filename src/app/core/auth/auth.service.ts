@@ -52,18 +52,32 @@ export class AuthService {
         return me;
       }
 
+      // authenticated:false é uma resposta válida do BFF confirmando que não há sessão -
+      // aqui sim é seguro limpar o estado local.
       this.meStore.setMe(null);
       this.session.stop();
       return null;
     } catch (err) {
       const isConfirmedAuthRejection = err instanceof HttpErrorResponse && err.status === 401;
 
-      if (!isConfirmedAuthRejection && !swallowTransientErrors) {
+      if (isConfirmedAuthRejection) {
+        this.meStore.setMe(null);
+        this.session.stop();
+        return null;
+      }
+
+      if (!swallowTransientErrors) {
         throw err;
       }
 
-      this.meStore.setMe(null);
-      this.session.stop();
+      // Falha transitória (rede, CORS, 502/504, backend reiniciando em dev) durante um refresh
+      // em segundo plano (SessionPingService, botão "Renovar" do modal, ProfileComponent) - não
+      // é confirmação de que a sessão caiu. Diferente do caso acima, NÃO limpa meStore/session:
+      // um hiccup passageiro não pode derrubar uma sessão que continua válida no backend, senão
+      // a esteira de renovação automática (SessionPingService) mostra "Sessão expirada" pro
+      // usuário toda vez que o backend soltar uma resposta ruim por um instante (comum em dev,
+      // com o backend sendo reconstruído/reiniciado com frequência) - mesmo raciocínio já
+      // aplicado a ensureSessionChecked() acima, só que faltava aqui.
       return null;
     }
   }

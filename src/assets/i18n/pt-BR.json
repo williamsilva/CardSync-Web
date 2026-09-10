@@ -1555,6 +1555,7 @@
       "noneReceived": "nenhum arquivo recebido",
       "statusComplete": "Completo",
       "statusPartial": "Parcial",
+      "statusAttention": "Completo, verificar PV",
       "statusMissing": "Ausente",
       "received": "Recebidos",
       "pending": "Pendências",

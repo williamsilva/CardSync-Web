@@ -1,6 +1,9 @@
 export type ImportedFileGroup = 'ERP' | 'ADQ' | 'BANK';
 
-export type FileGroupStatus = 'complete' | 'partial' | 'missing';
+// 'attention': envelope completo (todos os arquivos esperados chegaram), mas algum PV ativo
+// do adquirente não aparece em nenhum deles - calendário mostra verde + interrogação laranja,
+// distinto de 'partial' (envelope incompleto, laranja total).
+export type FileGroupStatus = 'complete' | 'partial' | 'attention' | 'missing';
 
 export interface ImportedFileCalendarEntityStatus {
   name: string;

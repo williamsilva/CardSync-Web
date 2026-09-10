@@ -261,6 +261,7 @@
   flex-wrap: wrap;
 }
 .group-pill {
+  position: relative;
   padding: 0.12rem 0.38rem;
   border-radius: 4px;
   font-size: 0.58rem;
@@ -268,6 +269,23 @@
   letter-spacing: 0.04em;
   text-transform: uppercase;
   // color, background, border applied via [ngStyle] binding in template
+}
+// Grupo "completo" (envelope inteiro recebido) mas com PV/estabelecimento faltando dentro -
+// o pill continua verde (ver STATUS_STYLES.attention no component), só ganha este alerta.
+.pill-attention-icon {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  width: 11px;
+  height: 11px;
+  display: grid;
+  place-items: center;
+  font-size: 0.5rem;
+  line-height: 1;
+  color: #fff;
+  background: var(--p-orange-500);
+  border-radius: 50%;
+  box-shadow: 0 0 0 1.5px var(--p-content-background);
 }
 
 // Status dot for missing-list items — background-color applied via [style.background-color]

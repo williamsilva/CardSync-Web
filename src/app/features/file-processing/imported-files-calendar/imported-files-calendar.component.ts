@@ -226,6 +226,14 @@ export class ImportedFilesCalendarComponent {
       background: 'color-mix(in srgb, var(--p-green-500) 18%, var(--p-content-background))',
       border: '1px solid color-mix(in srgb, var(--p-green-500) 45%, transparent)',
     },
+    // Mesmo visual do 'complete' (verde) - a pendência de PV aparece como um ícone de
+    // interrogação laranja sobreposto ao pill (ver .pill-attention-icon), não trocando a cor
+    // de fundo/borda. dotColor() é quem usa laranja de fato, na lista "dias com pendência".
+    attention: {
+      color: 'var(--p-green-500)',
+      background: 'color-mix(in srgb, var(--p-green-500) 18%, var(--p-content-background))',
+      border: '1px solid color-mix(in srgb, var(--p-green-500) 45%, transparent)',
+    },
     partial: {
       color: 'var(--p-orange-500)',
       background: 'color-mix(in srgb, var(--p-orange-500) 18%, var(--p-content-background))',
@@ -252,9 +260,15 @@ export class ImportedFilesCalendarComponent {
   }
 
   protected dotColor(day: ImportedFileCalendarDayModel, group: 'erp' | 'adq' | 'bank'): string {
-    return (
-      this.STATUS_STYLES[this.dayGroupStatus(day, group)]?.color ?? 'var(--p-text-muted-color)'
-    );
+    const status = this.dayGroupStatus(day, group);
+    // Diferente do pill (verde igual 'complete'), o dot da lista "dias com pendência" precisa
+    // sinalizar o alerta em laranja - senão o dia com PV faltando não apareceria destacado ali.
+    if (status === 'attention') return 'var(--p-orange-500)';
+    return this.STATUS_STYLES[status]?.color ?? 'var(--p-text-muted-color)';
+  }
+
+  protected hasAttention(day: ImportedFileCalendarDayModel, group: 'erp' | 'adq' | 'bank'): boolean {
+    return this.dayGroupStatus(day, group) === 'attention';
   }
 
   private readonly GROUP_LABEL_KEYS: Record<string, string> = {
@@ -282,7 +296,9 @@ export class ImportedFilesCalendarComponent {
         ? t('statusComplete')
         : status === 'partial'
           ? t('statusPartial')
-          : t('statusMissing');
+          : status === 'attention'
+            ? t('statusAttention')
+            : t('statusMissing');
 
     const row = (content: string) =>
       `<div style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${content}</div>`;
@@ -302,21 +318,23 @@ export class ImportedFilesCalendarComponent {
       const fallbackColor =
         status === 'complete'
           ? 'var(--p-green-500)'
-          : status === 'partial'
+          : status === 'partial' || status === 'attention'
             ? 'var(--p-orange-500)'
             : 'var(--p-red-500)';
-      const fallbackIcon = status === 'complete' ? '✓' : status === 'partial' ? '◑' : '✗';
+      const fallbackIcon =
+        status === 'complete' ? '✓' : status === 'partial' ? '◑' : status === 'attention' ? '❓' : '✗';
       const fallbackDetail = info.received > 0 ? ` (${info.received} ${t('filesAbbrev')})` : '';
       rows.push(
         row(`<span style="color:${fallbackColor}">${fallbackIcon}${fallbackDetail}</span>`),
       );
     } else {
       for (const e of activeEntities) {
-        const icon = e.status === 'complete' ? '✓' : e.status === 'partial' ? '◑' : '✗';
+        const icon =
+          e.status === 'complete' ? '✓' : e.status === 'partial' ? '◑' : e.status === 'attention' ? '❓' : '✗';
         const color =
           e.status === 'complete'
             ? 'var(--p-green-500)'
-            : e.status === 'partial'
+            : e.status === 'partial' || e.status === 'attention'
               ? 'var(--p-orange-500)'
               : 'var(--p-red-500)';
         const recv = e.filesReceived ?? 0;
@@ -398,7 +416,11 @@ export class ImportedFilesCalendarComponent {
     const erp = this.dayGroupStatus(day, 'erp');
     const adq = this.dayGroupStatus(day, 'adq');
     const bank = this.dayGroupStatus(day, 'bank');
-    const allComplete = erp === 'complete' && adq === 'complete' && bank === 'complete';
+    // 'attention' (PV faltando dentro de um envelope completo) conta como "ok" pro estilo do
+    // card do dia inteiro - só o pill do grupo afetado ganha o alerta laranja, o card não vira
+    // "day-has-partial" por causa disso.
+    const isOk = (s: FileGroupStatus | 'future') => s === 'complete' || s === 'attention';
+    const allComplete = isOk(erp) && isOk(adq) && isOk(bank);
     const anyMissing = erp === 'missing' || adq === 'missing' || bank === 'missing';
     return {
       'day-all-complete': allComplete,
