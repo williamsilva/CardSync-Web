@@ -1,0 +1,18 @@
+# Sobe o frontend do CardSync sozinho (build de produção servido via nginx dentro do container).
+# Uso normal é via ../docker-compose.yml (na raiz do produto, "include:" deste arquivo + do
+# CardsyncServer/docker-compose.yml) - rode daqui direto só se já tiver o backend rodando de
+# outro jeito e só quiser o frontend em container.
+services:
+  frontend:
+    build:
+      context: .
+      # NODE_AUTH_TOKEN: mesmo achado do backend acima, versão npm - o .npmrc do projeto
+      # (@williamsilva:registry) precisa dessa var pra autenticar no GitHub Packages durante
+      # `npm ci`. Sete num .env (não commitado).
+      args:
+        NODE_AUTH_TOKEN: ${NODE_AUTH_TOKEN}
+    ports:
+      # 4201 - bate com cardsync.security.web.spa-base-url/allowed-origins no CardsyncServer e
+      # com o environment.ts (bffBaseUrl/apiBaseUrl apontando pra localhost:9091). Estrutura de
+      # portas do workspace: cardsync 9091/4201, nimbusflow 9092/4202, nimbusnovax 9093/4203.
+      - "127.0.0.1:4201:80"
