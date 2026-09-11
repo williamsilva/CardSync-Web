@@ -1,5 +1,9 @@
 ﻿<p-toast></p-toast>
-<p-confirmDialog></p-confirmDialog>
+<p-confirmDialog
+  key="bankReconciliation"
+  [style]="{ width: '560px' }"
+  [breakpoints]="{ '640px': '95vw' }"
+></p-confirmDialog>
 
 <app-divergence-dialog
   [visible]="showDivergenceDialog()"

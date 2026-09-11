@@ -881,6 +881,10 @@ export class ManualBankReconciliationComponent implements OnInit {
 
     const count = this.facade.selectedOrders().length;
     this.confirmationService.confirm({
+      // key dedicado (achado real 2026-09-11): sem isso, este dialog (sem key, `<p-confirmDialog>`
+      // puro no template) podia acionar simultaneamente o dialog global do app (também sem key,
+      // em app.html) - mesmo Subject do ConfirmationService, ambos casam com key undefined.
+      key: 'bankReconciliation',
       message: this.translateSvc.instant('conciliation.manualBankReconciliation.confirmMessage', {
         count,
       }),
@@ -915,6 +919,10 @@ export class ManualBankReconciliationComponent implements OnInit {
   confirmMarkLegacy(): void {
     const count = this.facade.selectedReleases().length;
     this.confirmationService.confirm({
+      // key dedicado (achado real 2026-09-11): sem isso, este dialog (sem key, `<p-confirmDialog>`
+      // puro no template) podia acionar simultaneamente o dialog global do app (também sem key,
+      // em app.html) - mesmo Subject do ConfirmationService, ambos casam com key undefined.
+      key: 'bankReconciliation',
       message: this.translateSvc.instant(
         'conciliation.manualBankReconciliation.markLegacyConfirmMessage',
         { count },
@@ -932,6 +940,10 @@ export class ManualBankReconciliationComponent implements OnInit {
 
   confirmReclassifyFlags(): void {
     this.confirmationService.confirm({
+      // key dedicado (achado real 2026-09-11): sem isso, este dialog (sem key, `<p-confirmDialog>`
+      // puro no template) podia acionar simultaneamente o dialog global do app (também sem key,
+      // em app.html) - mesmo Subject do ConfirmationService, ambos casam com key undefined.
+      key: 'bankReconciliation',
       message: this.translateSvc.instant(
         'conciliation.manualBankReconciliation.reclassifyFlagsConfirmMessage',
       ),
@@ -950,6 +962,10 @@ export class ManualBankReconciliationComponent implements OnInit {
 
   confirmReclassifyModality(): void {
     this.confirmationService.confirm({
+      // key dedicado (achado real 2026-09-11): sem isso, este dialog (sem key, `<p-confirmDialog>`
+      // puro no template) podia acionar simultaneamente o dialog global do app (também sem key,
+      // em app.html) - mesmo Subject do ConfirmationService, ambos casam com key undefined.
+      key: 'bankReconciliation',
       message: this.translateSvc.instant(
         'conciliation.manualBankReconciliation.reclassifyModalityConfirmMessage',
       ),
@@ -968,6 +984,10 @@ export class ManualBankReconciliationComponent implements OnInit {
 
   confirmReclassifyAcquirer(): void {
     this.confirmationService.confirm({
+      // key dedicado (achado real 2026-09-11): sem isso, este dialog (sem key, `<p-confirmDialog>`
+      // puro no template) podia acionar simultaneamente o dialog global do app (também sem key,
+      // em app.html) - mesmo Subject do ConfirmationService, ambos casam com key undefined.
+      key: 'bankReconciliation',
       message: this.translateSvc.instant(
         'conciliation.manualBankReconciliation.reclassifyAcquirerConfirmMessage',
       ),
@@ -986,6 +1006,10 @@ export class ManualBankReconciliationComponent implements OnInit {
 
   confirmReclassifyEstablishment(): void {
     this.confirmationService.confirm({
+      // key dedicado (achado real 2026-09-11): sem isso, este dialog (sem key, `<p-confirmDialog>`
+      // puro no template) podia acionar simultaneamente o dialog global do app (também sem key,
+      // em app.html) - mesmo Subject do ConfirmationService, ambos casam com key undefined.
+      key: 'bankReconciliation',
       message: this.translateSvc.instant(
         'conciliation.manualBankReconciliation.reclassifyEstablishmentConfirmMessage',
       ),
@@ -1130,6 +1154,10 @@ export class ManualBankReconciliationComponent implements OnInit {
   protected onApplyPreImplantationDivergence(releaseBankIds: string[]): void {
     const eligible = releaseBankIds.length;
     this.confirmationService.confirm({
+      // key dedicado (achado real 2026-09-11): sem isso, este dialog (sem key, `<p-confirmDialog>`
+      // puro no template) podia acionar simultaneamente o dialog global do app (também sem key,
+      // em app.html) - mesmo Subject do ConfirmationService, ambos casam com key undefined.
+      key: 'bankReconciliation',
       message: this.translateSvc.instant(
         'conciliation.manualBankReconciliation.preImplantationApplyConfirmMessage',
         { eligible },
@@ -1202,6 +1230,10 @@ export class ManualBankReconciliationComponent implements OnInit {
   protected onApplyNoCreditOrderLegacyMarking(releaseBankIds: string[]): void {
     const eligible = releaseBankIds.length;
     this.confirmationService.confirm({
+      // key dedicado (achado real 2026-09-11): sem isso, este dialog (sem key, `<p-confirmDialog>`
+      // puro no template) podia acionar simultaneamente o dialog global do app (também sem key,
+      // em app.html) - mesmo Subject do ConfirmationService, ambos casam com key undefined.
+      key: 'bankReconciliation',
       message: this.translateSvc.instant(
         'conciliation.manualBankReconciliation.noCreditOrderLegacyApplyConfirmMessage',
         { eligible },
@@ -1277,6 +1309,10 @@ export class ManualBankReconciliationComponent implements OnInit {
 
   protected confirmApplySalesSummaryPreImplantation(): void {
     this.confirmationService.confirm({
+      // key dedicado (achado real 2026-09-11): sem isso, este dialog (sem key, `<p-confirmDialog>`
+      // puro no template) podia acionar simultaneamente o dialog global do app (também sem key,
+      // em app.html) - mesmo Subject do ConfirmationService, ambos casam com key undefined.
+      key: 'bankReconciliation',
       message: this.translateSvc.instant(
         'conciliation.manualBankReconciliation.salesSummaryPreImplantationApplyConfirmMessage',
       ),
@@ -1356,6 +1392,10 @@ export class ManualBankReconciliationComponent implements OnInit {
   protected confirmApplyCreditOrderPreImplantation(): void {
     const preview = this.creditOrderPreImplantationPreview();
     this.confirmationService.confirm({
+      // key dedicado (achado real 2026-09-11): sem isso, este dialog (sem key, `<p-confirmDialog>`
+      // puro no template) podia acionar simultaneamente o dialog global do app (também sem key,
+      // em app.html) - mesmo Subject do ConfirmationService, ambos casam com key undefined.
+      key: 'bankReconciliation',
       message: this.translateSvc.instant(
         'conciliation.manualBankReconciliation.creditOrderPreImplantationApplyConfirmMessage',
         { eligible: preview?.exactMatch ?? 0 },
