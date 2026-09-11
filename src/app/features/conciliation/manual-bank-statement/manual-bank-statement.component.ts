@@ -260,6 +260,10 @@ export class ManualBankStatementComponent implements OnInit {
     const mismatch = this.findBankMismatch(files);
     if (mismatch) {
       this.confirmationService.confirm({
+        // key dedicado (achado real 2026-09-11, mesmo motivo de manual-bank-reconciliation): sem
+        // isso, este dialog sem key podia acionar junto com o dialog global do app (também sem
+        // key).
+        key: 'bankStatement',
         header: this.i18n.tUi('conciliation.manualBankStatement.csv.bankMismatchTitle'),
         message: this.translateSvc.instant(
           'conciliation.manualBankStatement.csv.bankMismatchMessage',
