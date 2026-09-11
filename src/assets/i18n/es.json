@@ -3275,7 +3275,10 @@
       "originalCreditValue": "Valor crédito original",
       "periodReleaseDate": "Período fecha lanzamiento",
       "statusPaymentBankEnum": "Estado pago banco",
-      "advanceDiscountValue": "Valor descuento anticipación"
+      "advanceDiscountValue": "Valor descuento anticipación",
+      "anticipationStatusPaymentBank": "Anticipación Pagada",
+      "anticipationStatusPaymentBankTooltip": "Estado de pago de esta anticipación específica con el banco (vía orden generada automáticamente) - diferente del estado del resumen de ventas entero",
+      "anticipationStatusPaymentBankPending": "Aún no generó una orden de pago para conciliar con el banco"
     },
     "columns": {
       "installmentNumber": "Cuota",

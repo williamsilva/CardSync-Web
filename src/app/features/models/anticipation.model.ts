@@ -12,6 +12,13 @@ export interface AnticipationModel {
   rvNumber: number;
   numberRvCorresponding: number;
 
+  // Status de pagamento da CreditOrder sintética gerada a partir DESTA antecipação (Etapa 4 do
+  // backend) - null enquanto a ordem ainda não foi gerada, ou (mais raro) se a geração falhou
+  // por falta de domicílio bancário. Não confundir com salesSummary.statusPaymentBank (status do
+  // resumo de vendas inteiro). Achado real 2026-09-10: sem isso não tinha como ver na tela se o
+  // valor antecipado já foi confirmado no banco.
+  anticipationStatusPaymentBank: string | null;
+
   flag: FlagMinimalModel;
   company: CompanyMinimalModel;
   acquirer: AcquirerMinimalModel;
@@ -30,6 +37,7 @@ export interface AnticipationApiModel {
   id: string;
   rvNumber: number;
   numberRvCorresponding: number;
+  anticipationStatusPaymentBank: string | null;
 
   flag: FlagMinimalModel;
   company: CompanyMinimalModel;

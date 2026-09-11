@@ -73,6 +73,7 @@ import {
 } from '@models/enums/status-reconciliation.enum';
 import {
   StatusPaymentBankEnum,
+  StatusPaymentBankInput,
   allStatusPaymentBankEnum,
   statusPaymentBankEnumLabel,
   statusPaymentBankEnumSeverity,
@@ -320,11 +321,11 @@ export class AnticipationListComponent
     return statusReconciliationEnumSeverity(value);
   }
 
-  statusPaymentBankEnumLabel(value: StatusPaymentBankEnum | null): string {
+  statusPaymentBankEnumLabel(value: StatusPaymentBankInput): string {
     return statusPaymentBankEnumLabel(value, this.i18n);
   }
 
-  statusPaymentBankSeverity(value: StatusPaymentBankEnum | null): CsTagTone {
+  statusPaymentBankSeverity(value: StatusPaymentBankInput): CsTagTone {
     return statusPaymentBankEnumSeverity(value);
   }
 

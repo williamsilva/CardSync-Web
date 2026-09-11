@@ -1842,7 +1842,10 @@
       "originalCreditValue":"Valor Original Crédito",
       "periodReleaseDate": "Período Data Lançamento",
       "statusPaymentBankEnum":"Status Pagamento Banco",
-      "advanceDiscountValue": "Valor Desconto Antcipação"
+      "advanceDiscountValue": "Valor Desconto Antcipação",
+      "anticipationStatusPaymentBank": "Antecipação Paga",
+      "anticipationStatusPaymentBankTooltip": "Status de pagamento da própria antecipação no banco (via ordem gerada automaticamente) - diferente do status do resumo de vendas inteiro",
+      "anticipationStatusPaymentBankPending": "Ainda não gerou ordem de pagamento para conciliar com o banco"
     },
     "columns": {
       "installmentNumber": "Parcela",

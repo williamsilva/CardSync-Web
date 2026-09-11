@@ -3275,7 +3275,10 @@
       "originalCreditValue": "Original credit value",
       "periodReleaseDate": "Release date period",
       "statusPaymentBankEnum": "Bank payment status",
-      "advanceDiscountValue": "Anticipation discount value"
+      "advanceDiscountValue": "Anticipation discount value",
+      "anticipationStatusPaymentBank": "Anticipation Paid",
+      "anticipationStatusPaymentBankTooltip": "Payment status of this specific anticipation with the bank (via auto-generated order) - different from the whole sales summary status",
+      "anticipationStatusPaymentBankPending": "Hasn't generated a payment order to reconcile with the bank yet"
     },
     "columns": {
       "installmentNumber": "Installment",
