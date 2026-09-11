@@ -8,11 +8,18 @@ services:
       context: .
       # NODE_AUTH_TOKEN: mesmo achado do backend acima, versão npm - o .npmrc do projeto
       # (@williamsilva:registry) precisa dessa var pra autenticar no GitHub Packages durante
-      # `npm ci`. Sete num .env (não commitado).
-      args:
-        NODE_AUTH_TOKEN: ${NODE_AUTH_TOKEN}
+      # `npm ci`. Sete num .env (não commitado). Via secrets (não args/build-arg) - achado real
+      # 2026-09-11: build-arg fica visível em texto puro no log de build/`docker history`; secret
+      # só existe durante o RUN que o monta explicitamente (ver Dockerfile), nunca gravado em
+      # nenhuma camada da imagem.
+      secrets:
+        - node_auth_token
     ports:
       # 4201 - bate com cardsync.security.web.spa-base-url/allowed-origins no CardsyncServer e
       # com o environment.ts (bffBaseUrl/apiBaseUrl apontando pra localhost:9091). Estrutura de
       # portas do workspace: cardsync 9091/4201, nimbusflow 9092/4202, nimbusnovax 9093/4203.
       - "127.0.0.1:4201:80"
+
+secrets:
+  node_auth_token:
+    environment: NODE_AUTH_TOKEN
