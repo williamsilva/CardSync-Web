@@ -340,8 +340,7 @@ export const APP_MENU: AppMenuItem[] = [
     children: [
       {
         labelKey: 'menu.audit.mail',
-        route: '/audit',
-        exact: false,
+        externalUrl: `${environment.nimbusAuthWebUrl}/apps-email-log?appKey=${APP_KEY}`,
         icon: 'pi pi-envelope text-sky-400',
         permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.AUDIT.VIEW],
       },

@@ -88,19 +88,6 @@ export const appRoutes: Routes = [
       },
 
       {
-        path: 'audit',
-        title: 'routes.audit.title',
-        canActivate: [permissionGuard],
-        data: {
-          requireAll: false,
-          redirectTo: '/forbidden',
-          permissions: [PERMISSIONS.AUDIT.VIEW],
-        },
-        loadComponent: () =>
-          import('./features/audit/email-logs.component').then((m) => m.EmailLogsComponent),
-      },
-
-      {
         path: 'forbidden',
         title: 'routes.forbidden.title',
         loadComponent: () =>
