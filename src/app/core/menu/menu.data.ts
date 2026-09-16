@@ -1,6 +1,5 @@
 import { environment } from 'environments/environment';
 
-import { APP_KEY } from '@core/api/api.config';
 import { PERMISSIONS } from '@core/auth/permissions.constants';
 
 import { AppMenuItem } from './menu.model';
@@ -333,38 +332,6 @@ export const APP_MENU: AppMenuItem[] = [
       },
     ],
   },
-  /* Audit — cor sky (diferente do cyan usado por ACQ) */
-  {
-    icon: 'pi pi-history text-sky-600',
-    labelKey: 'menu.audit.title',
-    children: [
-      {
-        labelKey: 'menu.audit.mail',
-        externalUrl: `${environment.nimbusAuthWebUrl}/apps-email-log?appKey=${APP_KEY}`,
-        icon: 'pi pi-envelope text-sky-400',
-        permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.AUDIT.VIEW],
-      },
-    ],
-  },
-  /* Security */
-  {
-    icon: 'pi pi-shield text-red-600',
-    labelKey: 'menu.security.title',
-    children: [
-      {
-        labelKey: 'menu.security.users',
-        icon: 'pi pi-user text-red-400',
-        externalUrl: `${environment.nimbusAuthWebUrl}/users?appKey=${APP_KEY}`,
-        permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.USERS.VIEW],
-      },
-      {
-        labelKey: 'menu.security.groups',
-        icon: 'pi pi-id-card text-red-400',
-        externalUrl: `${environment.nimbusAuthWebUrl}/groups?appKey=${APP_KEY}`,
-        permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.GROUPS.VIEW],
-      },
-    ],
-  },
   /* Settings — cor slate */
   {
     icon: 'pi pi-cog text-indigo-600',
@@ -383,12 +350,6 @@ export const APP_MENU: AppMenuItem[] = [
         labelKey: 'menu.settings.reconciliation',
         icon: 'pi pi-sliders-v text-indigo-400',
         permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.SETTINGS.RECONCILIATION_VIEW],
-      },
-      {
-        labelKey: 'menu.settings.email',
-        icon: 'pi pi-envelope text-indigo-400',
-        externalUrl: `${environment.nimbusAuthWebUrl}/apps-email-settings?appKey=${APP_KEY}`,
-        permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.SETTINGS.EMAIL_VIEW],
       },
       {
         labelKey: 'menu.settings.backup',
