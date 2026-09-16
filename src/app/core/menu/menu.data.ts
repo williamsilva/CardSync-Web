@@ -1,5 +1,3 @@
-import { environment } from 'environments/environment';
-
 import { PERMISSIONS } from '@core/auth/permissions.constants';
 
 import { AppMenuItem } from './menu.model';
@@ -350,12 +348,6 @@ export const APP_MENU: AppMenuItem[] = [
         labelKey: 'menu.settings.reconciliation',
         icon: 'pi pi-sliders-v text-indigo-400',
         permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.SETTINGS.RECONCILIATION_VIEW],
-      },
-      {
-        labelKey: 'menu.settings.backup',
-        icon: 'pi pi-database text-indigo-400',
-        externalUrl: `${environment.nimbusAuthWebUrl}/backup`,
-        permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.SETTINGS.BACKUP_PROCESS],
       },
     ],
   },
