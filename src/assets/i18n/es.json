@@ -2462,6 +2462,28 @@
         "importSuccess": "Todos los ajustes se importaron con éxito."
       }
     },
+    "manualAmbiguousCreditOrder": {
+      "title": "Vínculo Ambiguo",
+      "subtitle": "Lotes de liquidación con 2+ Resúmenes de Venta del mismo valor - vincule manualmente cada Orden de Crédito huérfana al resumen correcto.",
+      "filterPlaceholder": "Filtrar por PV o RV",
+      "batchCount": "{{ count }} lote(s)",
+      "empty": "Ningún lote ambiguo pendiente de revisión en este momento.",
+      "batchSummary": "{{ summaries }} resúmenes · {{ orders }} órdenes huérfanas",
+      "summariesTitle": "Resúmenes de Venta candidatos",
+      "liquidValue": "Valor líquido",
+      "rvDate": "Fecha RV",
+      "installments": "Cuotas",
+      "ordersTitle": "Órdenes de Crédito huérfanas",
+      "releaseValue": "Valor",
+      "releaseDate": "Fecha",
+      "installmentNumber": "Cuota",
+      "linkTo": "Vincular al resumen",
+      "selectPlaceholder": "Seleccione un resumen",
+      "linkTooltip": "Confirmar vínculo",
+      "loadError": "No fue posible cargar los lotes ambiguos.",
+      "linkSuccess": "Orden de Crédito vinculada con éxito.",
+      "linkError": "No fue posible vincular la Orden de Crédito."
+    },
     "manualBankReconciliation": {
       "title": "Conciliación Bancaria",
       "subtitle": "Vincule lanzamientos bancarios a órdenes de crédito manualmente.",

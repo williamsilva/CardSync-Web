@@ -77,6 +77,20 @@
     ></a>
   }
 
+  @if (isTabAccessible('manualAmbiguousCreditOrder')) {
+    <a
+      pButton
+      [routerLink]="[]"
+      icon="pi pi-sitemap"
+      [replaceUrl]="true"
+      class="p-button-sm"
+      queryParamsHandling="merge"
+      [queryParams]="{ view: 'manual-ambiguous-credit-order' }"
+      [label]="'conciliation.manualAmbiguousCreditOrder.title' | translate"
+      [class.p-button-outlined]="activeTab() !== 'manualAmbiguousCreditOrder'"
+    ></a>
+  }
+
   @if (canRefreshActiveTab()) {
     <button
       pButton
@@ -104,5 +118,8 @@
   }
   @case ('manualBankReconciliation') {
     <app-manual-bank-reconciliation />
+  }
+  @case ('manualAmbiguousCreditOrder') {
+    <app-manual-ambiguous-credit-order />
   }
 }

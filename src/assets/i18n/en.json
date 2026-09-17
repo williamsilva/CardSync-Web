@@ -2462,6 +2462,28 @@
         "importSuccess": "All adjustments were imported successfully."
       }
     },
+    "manualAmbiguousCreditOrder": {
+      "title": "Ambiguous Link",
+      "subtitle": "Settlement batches with 2+ Sales Summaries of the same value - manually link each orphan Credit Order to the correct summary.",
+      "filterPlaceholder": "Filter by PV or RV",
+      "batchCount": "{{ count }} batch(es)",
+      "empty": "No ambiguous batches pending review right now.",
+      "batchSummary": "{{ summaries }} summaries · {{ orders }} orphan orders",
+      "summariesTitle": "Candidate Sales Summaries",
+      "liquidValue": "Net value",
+      "rvDate": "RV date",
+      "installments": "Installments",
+      "ordersTitle": "Orphan Credit Orders",
+      "releaseValue": "Value",
+      "releaseDate": "Date",
+      "installmentNumber": "Installment",
+      "linkTo": "Link to summary",
+      "selectPlaceholder": "Select a summary",
+      "linkTooltip": "Confirm link",
+      "loadError": "Could not load ambiguous batches.",
+      "linkSuccess": "Credit Order linked successfully.",
+      "linkError": "Could not link the Credit Order."
+    },
     "manualBankReconciliation": {
       "title": "Bank Reconciliation",
       "subtitle": "Manually link bank releases to credit orders.",

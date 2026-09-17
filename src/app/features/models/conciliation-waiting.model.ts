@@ -344,3 +344,37 @@ export function mapConciliationWaitingApiModels(
 ): ConciliationWaitingModel[] {
   return (items ?? []).map(mapConciliationWaitingApiModel);
 }
+
+// Lote de liquidação (Cielo "Chave UR") com 2+ SalesSummary de mesmo valor - a vinculação
+// automática (CreditOrderOrphanLinkingService) nunca resolve esses com segurança, fica pra
+// revisão/vínculo manual (ver AmbiguousCreditOrderLinkingService no backend).
+export interface AmbiguousCreditOrderBatchModel {
+  acquirerId: string;
+  acquirerName: string | null;
+  pvNumber: number;
+  rvNumber: number;
+  summaries: AmbiguousSalesSummaryCandidateModel[];
+  orders: AmbiguousCreditOrderCandidateModel[];
+}
+
+export interface AmbiguousSalesSummaryCandidateModel {
+  id: string;
+  liquidValue: number | null;
+  grossValue: number | null;
+  rvDate: string | null;
+  installmentsLinked: number;
+  installmentTotal: number | null;
+}
+
+export interface AmbiguousCreditOrderCandidateModel {
+  id: string;
+  releaseValue: number | null;
+  releaseDate: string | null;
+  installmentNumber: number | null;
+  installmentTotal: number | null;
+}
+
+export interface ManualCreditOrderLinkInputModel {
+  creditOrderId: string;
+  salesSummaryId: string;
+}

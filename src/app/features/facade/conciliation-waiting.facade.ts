@@ -15,6 +15,8 @@ import {
   ReconcileFeesResultModel,
   ReconcileBankResultModel,
   ErpAcquirerComparisonModel,
+  AmbiguousCreditOrderBatchModel,
+  ManualCreditOrderLinkInputModel,
   ErpCancellationReprocessResult,
   ErpCancellationReprocessRequest,
   ReconcileErpAcquirerResultModel,
@@ -223,6 +225,14 @@ export class ConciliationWaitingFacade {
 
   reconcileSalesSummaryTransactions(): Observable<ReconcileSalesSummaryTransactionsResultModel> {
     return this.api.reconcileSalesSummaryTransactions();
+  }
+
+  listAmbiguousCreditOrderBatches(): Observable<AmbiguousCreditOrderBatchModel[]> {
+    return this.api.listAmbiguousCreditOrderBatches();
+  }
+
+  linkAmbiguousCreditOrder(input: ManualCreditOrderLinkInputModel): Observable<void> {
+    return this.api.linkAmbiguousCreditOrder(input);
   }
 
   previewSalesSummaryCreditOrderPreImplantation(): Observable<SalesSummaryPreImplantationPreviewResultModel> {

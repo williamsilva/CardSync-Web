@@ -17,6 +17,8 @@ import {
   ReconcileBankResultModel,
   ErpAcquirerComparisonModel,
   ConciliationWaitingApiModel,
+  AmbiguousCreditOrderBatchModel,
+  ManualCreditOrderLinkInputModel,
   ErpCancellationReprocessResult,
   ErpCancellationReprocessRequest,
   ReconcileErpAcquirerResultModel,
@@ -233,6 +235,21 @@ export class ConciliationWaitingApiService {
     return this.http.post<ReconcileSalesSummaryCreditOrderResultModel>(
       `${this.baseUrl}/reconcile-sales-summary-credit-order`,
       {},
+      { withCredentials: true },
+    );
+  }
+
+  listAmbiguousCreditOrderBatches(): Observable<AmbiguousCreditOrderBatchModel[]> {
+    return this.http.get<AmbiguousCreditOrderBatchModel[]>(
+      `${this.baseUrl}/sales-summary-credit-order/ambiguous-batches`,
+      { withCredentials: true },
+    );
+  }
+
+  linkAmbiguousCreditOrder(input: ManualCreditOrderLinkInputModel): Observable<void> {
+    return this.http.post<void>(
+      `${this.baseUrl}/sales-summary-credit-order/ambiguous-batches/link`,
+      input,
       { withCredentials: true },
     );
   }

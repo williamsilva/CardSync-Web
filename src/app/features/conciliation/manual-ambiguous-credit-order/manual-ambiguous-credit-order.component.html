@@ -1,0 +1,131 @@
+<div class="flex align-items-center gap-2 mb-3 cs-toolbar">
+  <span class="p-input-icon-left w-full md:w-20rem">
+    <i class="pi pi-search"></i>
+    <input
+      pInputText
+      type="text"
+      class="w-full"
+      [ngModel]="filterText()"
+      (ngModelChange)="filterText.set($event)"
+      [placeholder]="'conciliation.manualAmbiguousCreditOrder.filterPlaceholder' | translate"
+    />
+  </span>
+
+  <span class="cs-count">
+    {{
+      'conciliation.manualAmbiguousCreditOrder.batchCount'
+        | translate: { count: filteredBatches().length }
+    }}
+  </span>
+
+  <button
+    pButton
+    type="button"
+    icon="pi pi-refresh"
+    class="p-button-text p-button-sm ml-auto"
+    [loading]="loading()"
+    (click)="refresh()"
+    [label]="'common.update' | translate"
+  ></button>
+</div>
+
+@if (!loading() && filteredBatches().length === 0) {
+  <div class="cs-empty">
+    {{ 'conciliation.manualAmbiguousCreditOrder.empty' | translate }}
+  </div>
+}
+
+@for (batch of filteredBatches(); track batch.key) {
+  <div class="cs-batch">
+    <button type="button" class="cs-batch__header" (click)="toggle(batch.key)">
+      <i class="pi" [class.pi-chevron-right]="!isExpanded(batch.key)" [class.pi-chevron-down]="isExpanded(batch.key)"></i>
+      <span class="cs-batch__title">{{ batch.acquirerName ?? '-' }}</span>
+      <span class="cs-batch__meta">PV {{ batch.pvNumber }} · RV {{ batch.rvNumber }}</span>
+      <span class="cs-batch__badge">
+        {{
+          'conciliation.manualAmbiguousCreditOrder.batchSummary'
+            | translate: { summaries: batch.summaries.length, orders: batch.orders.length }
+        }}
+      </span>
+    </button>
+
+    @if (isExpanded(batch.key)) {
+      <div class="cs-batch__body">
+        <div class="cs-batch__col">
+          <div class="cs-section-label">
+            {{ 'conciliation.manualAmbiguousCreditOrder.summariesTitle' | translate }}
+          </div>
+          <p-table [value]="batch.summaries" styleClass="p-datatable-sm">
+            <ng-template pTemplate="header">
+              <tr>
+                <th>{{ 'conciliation.manualAmbiguousCreditOrder.liquidValue' | translate }}</th>
+                <th>{{ 'conciliation.manualAmbiguousCreditOrder.rvDate' | translate }}</th>
+                <th>{{ 'conciliation.manualAmbiguousCreditOrder.installments' | translate }}</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-summary>
+              <tr>
+                <td>{{ summary.liquidValue | csCurrency }}</td>
+                <td>{{ summary.rvDate | csDate }}</td>
+                <td>
+                  {{ summary.installmentsLinked }}{{ summary.installmentTotal ? '/' + summary.installmentTotal : '' }}
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+
+        <div class="cs-batch__col">
+          <div class="cs-section-label">
+            {{ 'conciliation.manualAmbiguousCreditOrder.ordersTitle' | translate }}
+          </div>
+          <p-table [value]="batch.orders" styleClass="p-datatable-sm">
+            <ng-template pTemplate="header">
+              <tr>
+                <th>{{ 'conciliation.manualAmbiguousCreditOrder.releaseValue' | translate }}</th>
+                <th>{{ 'conciliation.manualAmbiguousCreditOrder.releaseDate' | translate }}</th>
+                <th>{{ 'conciliation.manualAmbiguousCreditOrder.installmentNumber' | translate }}</th>
+                <th>{{ 'conciliation.manualAmbiguousCreditOrder.linkTo' | translate }}</th>
+                <th></th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-order>
+              <tr>
+                <td>{{ order.releaseValue | csCurrency }}</td>
+                <td>{{ order.releaseDate | csDate }}</td>
+                <td>
+                  {{ order.installmentNumber ?? '-' }}{{ order.installmentTotal ? '/' + order.installmentTotal : '' }}
+                </td>
+                <td>
+                  <p-select
+                    class="w-full"
+                    [showClear]="true"
+                    styleClass="w-full"
+                    optionLabel="label"
+                    optionValue="value"
+                    [options]="summaryOptions(batch)"
+                    [ngModel]="selectedSummaryByOrderId()[order.id]"
+                    (ngModelChange)="onSelectSummary(order.id, $event)"
+                    [placeholder]="'conciliation.manualAmbiguousCreditOrder.selectPlaceholder' | translate"
+                  ></p-select>
+                </td>
+                <td>
+                  <button
+                    pButton
+                    type="button"
+                    icon="pi pi-link"
+                    class="p-button-sm"
+                    [disabled]="!selectedSummaryByOrderId()[order.id]"
+                    [loading]="linkingOrderId() === order.id"
+                    (click)="link(batch, order)"
+                    [pTooltip]="'conciliation.manualAmbiguousCreditOrder.linkTooltip' | translate"
+                  ></button>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+      </div>
+    }
+  </div>
+}

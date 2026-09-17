@@ -734,6 +734,11 @@ export const UI_KEYS = {
         fileErrorDetail: 'conciliation.manualAdjustment.csv.fileErrorDetail',
       },
     },
+    manualAmbiguousCreditOrder: {
+      loadError: 'conciliation.manualAmbiguousCreditOrder.loadError',
+      linkSuccess: 'conciliation.manualAmbiguousCreditOrder.linkSuccess',
+      linkError: 'conciliation.manualAmbiguousCreditOrder.linkError',
+    },
     manualBankReconciliation: {
       reclassifyFlags: 'conciliation.manualBankReconciliation.reclassifyFlags',
       reclassifyModality: 'conciliation.manualBankReconciliation.reclassifyModality',

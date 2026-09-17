@@ -13,13 +13,15 @@ import { ManualCreditOrderComponent } from '../manual-credit-order/manual-credit
 import { ManualSalesSummaryComponent } from '../manual-sales-summary/manual-sales-summary.component';
 import { ManualBankStatementComponent } from '../manual-bank-statement/manual-bank-statement.component';
 import { ManualBankReconciliationComponent } from '../manual-bank-reconciliation/manual-bank-reconciliation.component';
+import { ManualAmbiguousCreditOrderComponent } from '../manual-ambiguous-credit-order/manual-ambiguous-credit-order.component';
 
 type ManualConciliationTab =
   | 'manualSalesSummary'
   | 'manualCreditOrder'
   | 'manualBankStatement'
   | 'manualAdjustment'
-  | 'manualBankReconciliation';
+  | 'manualBankReconciliation'
+  | 'manualAmbiguousCreditOrder';
 
 const TAB_ORDER: ManualConciliationTab[] = [
   'manualSalesSummary',
@@ -27,6 +29,7 @@ const TAB_ORDER: ManualConciliationTab[] = [
   'manualBankStatement',
   'manualAdjustment',
   'manualBankReconciliation',
+  'manualAmbiguousCreditOrder',
 ];
 
 const TAB_BY_VIEW_QUERY_PARAM: Record<string, ManualConciliationTab> = {
@@ -35,6 +38,7 @@ const TAB_BY_VIEW_QUERY_PARAM: Record<string, ManualConciliationTab> = {
   'manual-bank-statement': 'manualBankStatement',
   'manual-adjustment': 'manualAdjustment',
   'manual-bank-reconciliation': 'manualBankReconciliation',
+  'manual-ambiguous-credit-order': 'manualAmbiguousCreditOrder',
 };
 
 @Component({
@@ -51,6 +55,7 @@ const TAB_BY_VIEW_QUERY_PARAM: Record<string, ManualConciliationTab> = {
     ManualSalesSummaryComponent,
     ManualBankStatementComponent,
     ManualBankReconciliationComponent,
+    ManualAmbiguousCreditOrderComponent,
   ],
 })
 export class ManualConciliationComponent {
@@ -83,6 +88,8 @@ export class ManualConciliationComponent {
         return 'conciliation.manualAdjustment.subtitle';
       case 'manualBankReconciliation':
         return 'conciliation.manualBankReconciliation.subtitle';
+      case 'manualAmbiguousCreditOrder':
+        return 'conciliation.manualAmbiguousCreditOrder.subtitle';
       default:
         return 'conciliation.manualSalesSummary.subtitle';
     }
