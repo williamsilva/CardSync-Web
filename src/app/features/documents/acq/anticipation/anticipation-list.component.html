@@ -324,8 +324,6 @@
         <col style="width: 130px" />
         <!-- Bank -->
         <col style="width: 90px" />
-        <!-- bankingDomicile -->
-        <col style="width: 90px" />
         <!-- Establishment -->
         <col style="width: 90px" />
         <!-- originalDueDate -->
@@ -337,8 +335,6 @@
         <!-- Flag -->
         <col style="width: 90px" />
         <!-- numberRvCorresponding -->
-        <col style="width: 90px" />
-        <!-- numberCvNsu -->
         <col style="width: 90px" />
         <!-- installmentNumber -->
         <col style="width: 90px" />
@@ -354,7 +350,7 @@
         <col style="width: 100px" />
         <!-- transactionsStatus -->
         <col style="width: 130px" />
-        <!-- statusPaymentBank -->
+        <!-- anticipationStatusPaymentBank -->
         <col style="width: 110px" />
         <!--Actions-->
         <col style="width: 60px" />
@@ -515,21 +511,6 @@
                   </app-column-filter-shell>
                 </ng-template>
               </p-columnFilter>
-            </span>
-          </div>
-        </th>
-
-        <th pSortableColumn="bankingDomicile">
-          <div class="th-flex text-center">
-            <span
-              class="th-label"
-              tooltipPosition="top"
-              [pTooltip]="'anticipation.fields.bankingDomicile' | translate"
-            >
-              {{ 'anticipation.fields.bankingDomicile' | translate }}
-            </span>
-            <span class="th-icons">
-              <p-sortIcon field="bankingDomicile"></p-sortIcon>
             </span>
           </div>
         </th>
@@ -982,66 +963,6 @@
           </div>
         </th>
 
-        <th pSortableColumn="numberCvNsu">
-          <div class="th-flex text-center">
-            <span
-              class="th-label"
-              tooltipPosition="top"
-              [pTooltip]="'anticipation.columns.numberCvNsu' | translate"
-            >
-              {{ 'anticipation.columns.numberCvNsu' | translate }}
-            </span>
-            <span class="th-icons">
-              <p-sortIcon field="numberCvNsu"></p-sortIcon>
-              <p-columnFilter
-                display="menu"
-                matchMode="equals"
-                field="numberCvNsu"
-                [useGrouping]="false"
-                [showOperator]="false"
-                [showAddButton]="false"
-                [showMatchModes]="true"
-                [showClearButton]="false"
-                [showApplyButton]="false"
-                styleClass="cs-colfilter"
-                #numberCvNsuColumnFilter
-              >
-                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                  <app-column-filter-shell
-                    [clearLabel]="'common.clear' | translate"
-                    [applyLabel]="'common.apply' | translate"
-                    (clear)="
-                      clearIntegerColumnFilter(
-                        numberCvNsuColumnDraft,
-                        filter,
-                        numberCvNsuColumnFilter
-                      )
-                    "
-                    (apply)="
-                      applyIntegerColumnFilter(
-                        numberCvNsuColumnDraft,
-                        filter,
-                        numberCvNsuColumnFilter
-                      )
-                    "
-                  >
-                    <input
-                      pInputText
-                      type="text"
-                      pattern="[0-9]*"
-                      inputmode="numeric"
-                      class="w-full p-inputtext-sm"
-                      [ngModel]="numberCvNsuColumnDraft()"
-                      [placeholder]="'anticipation.fields.numberCvNsu' | translate"
-                      (ngModelChange)="setIntegerColumnDraft(numberCvNsuColumnDraft, $event)"
-                    />
-                  </app-column-filter-shell>
-                </ng-template>
-              </p-columnFilter>
-            </span>
-          </div>
-        </th>
-
         <th pSortableColumn="installmentNumber">
           <div class="th-flex text-center">
             <span
@@ -1477,85 +1398,11 @@
           </div>
         </th>
 
-        <th pSortableColumn="statusPaymentBank">
-          <div class="th-flex text-center">
-            <span
-              class="th-label"
-              tooltipPosition="top"
-              [pTooltip]="'anticipation.fields.statusPaymentBank' | translate"
-            >
-              {{ 'anticipation.fields.statusPayment' | translate }}
-            </span>
-            <span class="th-icons">
-              <p-sortIcon field="statusPaymentBank"></p-sortIcon>
-              <p-columnFilter
-                display="menu"
-                matchMode="in"
-                [showOperator]="false"
-                [showAddButton]="false"
-                [showMatchModes]="false"
-                [showClearButton]="false"
-                [showApplyButton]="false"
-                field="statusPaymentBank"
-                styleClass="cs-colfilter"
-                #statusPaymentBankColumnFilter
-              >
-                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                  <app-column-filter-shell
-                    [clearLabel]="'common.clear' | translate"
-                    [applyLabel]="'common.apply' | translate"
-                    (clear)="
-                      clearArrayColumnFilter(
-                        statusPaymentBankColumnDraft,
-                        filter,
-                        statusPaymentBankColumnFilter
-                      )
-                    "
-                    (apply)="
-                      applyArrayColumnFilter(
-                        statusPaymentBankColumnDraft,
-                        filter,
-                        statusPaymentBankColumnFilter
-                      )
-                    "
-                  >
-                    <p-multiSelect
-                      class="w-full"
-                      [filter]="true"
-                      [showClear]="true"
-                      optionLabel="label"
-                      optionValue="value"
-                      [showToggleAll]="false"
-                      [options]="statusPaymentBankOptions()"
-                      [placeholder]="'common.all' | translate"
-                      [ngModel]="statusPaymentBankColumnDraft()"
-                      (ngModelChange)="setArrayColumnDraft(statusPaymentBankColumnDraft, $event)"
-                    >
-                      <ng-template let-selectedOptions pTemplate="selectedItems">
-                        @if (selectedOptions?.length === 1) {
-                          <span>
-                            {{ selectedOptions[0]?.label }}
-                          </span>
-                        }
-
-                        @if ((selectedOptions?.length ?? 0) > 1) {
-                          <span>
-                            {{ 'common.selected' | translate: { count: selectedOptions.length } }}
-                          </span>
-                        }
-                      </ng-template>
-                    </p-multiSelect>
-                  </app-column-filter-shell>
-                </ng-template>
-              </p-columnFilter>
-            </span>
-          </div>
-        </th>
-
         <!-- anticipationStatusPaymentBank: status da PRÓPRIA antecipação (via CreditOrder sintética
-             gerada na Etapa 4), não confundir com a coluna acima (status do resumo de vendas inteiro).
-             Achado real 2026-09-10: sem essa coluna não tinha como ver na tela se o valor antecipado
-             já foi confirmado no banco. -->
+             gerada na Etapa 4) - diferente do status do resumo de vendas inteiro (coluna
+             "statusPaymentBank" removida da tabela em 2026-09-11 por ser redundante/confusa com
+             esta, mantida só no painel de filtros avançados). Achado real 2026-09-10: sem esta
+             coluna não tinha como ver na tela se o valor antecipado já foi confirmado no banco. -->
         <th class="text-center">
           <div class="th-flex">
             <span
@@ -1593,18 +1440,9 @@
           <span
             tooltipPosition="top"
             class="cs-table-cell-ellipsis"
-            [pTooltip]="row.bankingDomicile?.bank?.name"
+            [pTooltip]="bankTooltip(row)"
           >
             {{ row.bankingDomicile?.bank?.name | titlecase }}
-          </span>
-        </td>
-        <td>
-          <span
-            tooltipPosition="top"
-            class="cs-table-cell-ellipsis"
-            [pTooltip]="bankingDomicileTooltip(row)"
-          >
-            {{ bankingDomicileTooltip(row) }}
           </span>
         </td>
         <td>
@@ -1636,24 +1474,26 @@
             {{ row.flag?.name || '-' }}
           </span>
         </td>
-        <td class="text-center">{{ row.numberRvCorresponding }}</td>
-        <td class="text-center">{{ row.salesSummary?.numberCvNsu }}</td>
+        <td class="text-center">
+          <span
+            tooltipPosition="top"
+            [pTooltip]="
+              (('anticipation.columns.numberCvNsu' | translate) + ': ' + (row.salesSummary?.numberCvNsu ?? '-'))
+            "
+          >
+            {{ row.numberRvCorresponding }}
+          </span>
+        </td>
         <td class="text-center">{{ row.installmentNumber }}</td>
         <td class="text-right">{{ row.grossValue | csCurrency }}</td>
         <td class="text-right">{{ row.discountRateValue | csCurrency }}</td>
         <td class="text-right">{{ row.originalCreditValue | csCurrency }}</td>
-        <td class="text-right">{{ row.releaseValue | csCurrency }}</td>
         <td class="text-right">{{ row.advanceDiscountValue | csCurrency }}</td>
+        <td class="text-right">{{ row.releaseValue | csCurrency }}</td>
         <td class="cell-muted text-center">
           <app-tag
             [value]="statusReconciliationLabel(row.salesSummary?.transactionsStatus)"
             [tone]="statusReconciliationSeverity(row.salesSummary?.transactionsStatus)"
-          />
-        </td>
-        <td class="cell-muted text-center">
-          <app-tag
-            [value]="statusPaymentBankEnumLabel(row.salesSummary?.statusPaymentBank)"
-            [tone]="statusPaymentBankSeverity(row.salesSummary?.statusPaymentBank)"
           />
         </td>
         <td class="cell-muted text-center">
@@ -1701,7 +1541,7 @@
 
     <ng-template pTemplate="emptymessage">
       <tr>
-        <td colspan="20" class="text-center py-4 text-500">
+        <td colspan="17" class="text-center py-4 text-500">
           {{ 'common.noRecordsFound' | translate }}
         </td>
       </tr>

@@ -203,7 +203,6 @@ export class AnticipationListComponent
 
   /* Campos Tabela */
   readonly grossValueColumnDraft = signal('');
-  readonly numberCvNsuColumnDraft = signal('');
   readonly releaseValueColumnDraft = signal('');
   readonly discountRateValueColumnDraft = signal('');
   readonly installmentNumberColumnDraft = signal('');
@@ -220,7 +219,6 @@ export class AnticipationListComponent
   readonly originalDueDateColumnPeriod = signal<PeriodEnum | null>(null);
   readonly releaseDateColumnDraft = signal<string | string[] | null>(null);
   readonly originalDueDateColumnDraft = signal<string | string[] | null>(null);
-  readonly statusPaymentBankColumnDraft = signal<StatusPaymentBankEnum[] | null>(null);
   readonly transactionsStatusColumnDraft = signal<StatusReconciliationEnum[] | null>(null);
 
   protected readonly releaseDateColumnPickerValue = computed(() =>
@@ -281,7 +279,6 @@ export class AnticipationListComponent
 
     this.resetFilters();
     this.grossValueColumnDraft.set('');
-    this.numberCvNsuColumnDraft.set('');
     this.releaseValueColumnDraft.set('');
     this.installmentNumberColumnDraft.set('');
     this.discountRateValueColumnDraft.set('');
@@ -298,7 +295,6 @@ export class AnticipationListComponent
     this.establishmentColumnDraft.set(null);
     this.originalDueDateColumnDraft.set(null);
     this.originalDueDateColumnPeriod.set(null);
-    this.statusPaymentBankColumnDraft.set(null);
     this.transactionsStatusColumnDraft.set(null);
 
     this.dt?.clear();
@@ -557,13 +553,6 @@ export class AnticipationListComponent
 
     this.syncArrayColumnDraftFromTableState(
       filters,
-      'statusPaymentBank',
-      this.statusPaymentBankColumnDraft,
-      readArrayFilterValues,
-    );
-
-    this.syncArrayColumnDraftFromTableState(
-      filters,
       'transactionsStatus',
       this.transactionsStatusColumnDraft,
       readArrayFilterValues,
@@ -573,13 +562,6 @@ export class AnticipationListComponent
       filters,
       'numberRvCorresponding',
       this.numberRvCorrespondingColumnDraft,
-      readSingleFilterValue,
-    );
-
-    this.syncTextColumnDraftFromTableState(
-      filters,
-      'numberCvNsu',
-      this.numberCvNsuColumnDraft,
       readSingleFilterValue,
     );
 
@@ -804,11 +786,15 @@ export class AnticipationListComponent
   // tipado desta tela - manter any evita estender o modelo com base em suposição sobre o shape
   // real da API.
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  protected bankingDomicileTooltip(row: any): string {
+  protected bankTooltip(row: any): string {
+    const bankName = row.bankingDomicile?.bank?.name ?? '-';
     const agency = row.bankingDomicile?.agency ?? '-';
     const account = row.bankingDomicile?.currentAccount ?? '-';
 
-    return `Ag. ${agency} Cc. ${account}`;
+    // Domicílio bancário deixou de ter coluna própria na tabela (2026-09-11, redundante com o
+    // nome do banco já mostrado) — os dados de agência/conta continuam disponíveis aqui, no
+    // tooltip da própria coluna Banco.
+    return `${bankName} — Ag. ${agency} Cc. ${account}`;
   }
 
   /* Metodos busca */

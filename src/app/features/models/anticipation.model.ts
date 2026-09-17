@@ -19,6 +19,11 @@ export interface AnticipationModel {
   // valor antecipado já foi confirmado no banco.
   anticipationStatusPaymentBank: string | null;
 
+  // Custo da antecipação (originalCreditValue - releaseValue), calculado no backend
+  // (AnticipationModelAssembler) - não é coluna própria de Anticipation. Achado real
+  // 2026-09-11: nunca tinha sido calculado em lugar nenhum, a coluna sempre aparecia vazia.
+  advanceDiscountValue: number | null;
+
   flag: FlagMinimalModel;
   company: CompanyMinimalModel;
   acquirer: AcquirerMinimalModel;
@@ -38,6 +43,7 @@ export interface AnticipationApiModel {
   rvNumber: number;
   numberRvCorresponding: number;
   anticipationStatusPaymentBank: string | null;
+  advanceDiscountValue: number | null;
 
   flag: FlagMinimalModel;
   company: CompanyMinimalModel;
