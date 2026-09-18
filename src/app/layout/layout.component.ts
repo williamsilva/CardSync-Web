@@ -22,4 +22,5 @@ export class LayoutComponent {
 
   /** Exposto para template (signals) */
   readonly sidebarVisible = this.layout.sidebarVisible;
+  readonly layoutMode = this.layout.layoutMode;
 }
