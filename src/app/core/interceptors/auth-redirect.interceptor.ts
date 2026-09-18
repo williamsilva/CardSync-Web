@@ -60,7 +60,7 @@ export function isAutoReloginCandidate(
  * sessionFixation.migrateSession() no backend), enquanto a aba B - sem ver o lock da aba A -
  * disparava seu PRÓPRIO redirect concorrente, brigando pela mesma sessão/cookie e produzindo
  * "invalid session id" mesmo com a sessão HTTP ainda longe do timeout de 2h configurado.
- * 15s (não 3s) para cobrir o round-trip completo do redirect OAuth2 (BFF -> NimbusAuth -> BFF).
+ * 15s (não 3s) para cobrir o round-trip completo do redirect OAuth2 (BFF -> NimbusCore -> BFF).
  */
 function canTriggerLoginNow(): boolean {
   const key = 'cs_login_redirect_lock';

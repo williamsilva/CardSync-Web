@@ -2,5 +2,5 @@ export const environment = {
   production: true,
   bffBaseUrl: 'https://api.cardsync.com.br',
   apiBaseUrl: 'https://api.cardsync.com.br',
-  nimbusAuthWebUrl: 'https://nimbussystems.com.br',
+  nimbusCoreWebUrl: 'https://nimbussystems.com.br',
 }

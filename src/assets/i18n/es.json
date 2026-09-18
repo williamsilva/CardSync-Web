@@ -3535,7 +3535,7 @@
       "subtitle": "Genera un backup bajo demanda de los bancos de datos y/o de la carpeta de archivos, para descarga inmediata.",
       "targetsTitle": "Qué incluir en el backup",
       "cardsyncDb": "Base de datos Cardsync",
-      "nimbusauthDb": "Base de datos NimbusAuth",
+      "nimbusauthDb": "Base de datos NimbusCore",
       "files": "Carpeta de archivos (Volume)",
       "executeButton": "Ejecutar Backup",
       "executeHint": "Puede demorar algunos minutos, según el tamaño de los bancos de datos y de la carpeta de archivos. No cierre esta página mientras el backup esté en curso.",

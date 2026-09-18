@@ -3535,7 +3535,7 @@
       "subtitle": "Generates an on-demand backup of the databases and/or the files folder, for immediate download.",
       "targetsTitle": "What to include in the backup",
       "cardsyncDb": "Cardsync database",
-      "nimbusauthDb": "NimbusAuth database",
+      "nimbusauthDb": "NimbusCore database",
       "files": "Files folder (Volume)",
       "executeButton": "Run Backup",
       "executeHint": "May take a few minutes depending on the size of the databases and files folder. Do not close this page while the backup is running.",
