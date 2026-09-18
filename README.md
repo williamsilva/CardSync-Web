@@ -73,4 +73,4 @@ Arquivos já preparados para o deploy:
 - `public/_headers` para cache básico
 - `.nvmrc` para alinhar a versão do Node
 
-Antes de publicar em produção, confirme que o backend está acessível em `https://api.cardsync.com.br` e que o frontend final ficará em `https://cardsync.com.br`.
+Antes de publicar em produção, confirme que o backend está acessível em `https://cardsync-api.nimbussystems.com.br` e que o frontend final ficará em `https://cardsync.nimbussystems.com.br`.

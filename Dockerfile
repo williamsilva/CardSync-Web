@@ -20,7 +20,7 @@ RUN --mount=type=secret,id=node_auth_token \
     export NODE_AUTH_TOKEN="$(cat /run/secrets/node_auth_token)" && npm ci
 COPY . .
 # development (não production): environment.prod.ts aponta pro domínio real
-# (https://api.cardsync.com.br), inexistente neste setup local - environment.ts (usado pela
+# (https://cardsync-api.nimbussystems.com.br), inexistente neste setup local - environment.ts (usado pela
 # config "development", sem fileReplacement) já aponta pro CardsyncServer local
 # (http://localhost:9091), que é o que faz sentido rodando via docker compose no host dev.
 RUN npm run build -- --configuration development
