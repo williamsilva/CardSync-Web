@@ -119,6 +119,7 @@
                     [loading]="linkingOrderId() === order.id"
                     (click)="link(batch, order)"
                     [pTooltip]="'conciliation.manualAmbiguousCreditOrder.linkTooltip' | translate"
+                    [attr.aria-label]="'conciliation.manualAmbiguousCreditOrder.linkTooltip' | translate"
                   ></button>
                 </td>
               </tr>
